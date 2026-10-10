@@ -1446,6 +1446,11 @@ class EspEntitySurface {
     // Ends the call, cancels one still ringing or closes an announcement.
     // Answers so "no call" reaches the automation as an error.
     {'name': 'intercom_hangup', 'supportsResponse': true, 'args': []},
+    // Answer or decline the call ringing here, so a headless kiosk or one
+    // out of reach can be picked up from Home Assistant (issue #943).
+    // Answers so "nothing is ringing" reaches the automation as an error.
+    {'name': 'intercom_answer', 'supportsResponse': true, 'args': []},
+    {'name': 'intercom_decline', 'supportsResponse': true, 'args': []},
     // A web page over the dashboard, the surface a tapped dashboard link
     // or the Music Assistant entry gets: the dashboard stays alive under
     // it and the wake word keeps listening. Answers so a bad URL reaches
@@ -1657,6 +1662,14 @@ class EspEntitySurface {
         return data is Map ? data.cast<String, Object?>() : const {};
       case 'intercom_hangup':
         final result = await commands.execute('intercomHangup', const {});
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return const {};
+      case 'intercom_answer':
+        final result = await commands.execute('intercomAnswer', const {});
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return const {};
+      case 'intercom_decline':
+        final result = await commands.execute('intercomDecline', const {});
         if (!result.ok) throw StateError(result.error ?? 'refused');
         return const {};
       case 'open_url':

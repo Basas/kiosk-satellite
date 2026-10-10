@@ -1115,6 +1115,50 @@ void main() {
       expect(armed, [164]);
     });
 
+    test('the ESPHome actions answer and decline a ringing call', () async {
+      await build();
+      answers['POST /api/intercom/call/c1'] = (_) => {'ok': true};
+      answers['POST /api/intercom/call/c2'] = (_) => {'ok': true};
+      final surface = EspEntitySurface(bus, commands, log, settings);
+      await expectLater(
+        surface.handleService('intercom_answer', const {}),
+        throwsStateError,
+      );
+      await expectLater(
+        surface.handleService('intercom_decline', const {}),
+        throwsStateError,
+      );
+      await commands.execute('intercomIncoming', {
+        'call': 'c1',
+        'kind': 'call',
+        'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+        'address': '192.168.1.70',
+        'token': tokenFor('c1'),
+      });
+      expect(intercom.state, 'ringing');
+      expect(await surface.handleService('intercom_answer', const {}), {});
+      await settle(200);
+      expect(intercom.state, 'in_call');
+      final answered = sent.lastWhere((r) => r.url.path.endsWith('/call/c1'));
+      expect(jsonDecode(answered.body)['action'], 'answer');
+      await commands.execute('intercomHangup', const {});
+      await settle(400);
+
+      await commands.execute('intercomIncoming', {
+        'call': 'c2',
+        'kind': 'call',
+        'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+        'address': '192.168.1.70',
+        'token': tokenFor('c2'),
+      });
+      expect(intercom.state, 'ringing');
+      expect(await surface.handleService('intercom_decline', const {}), {});
+      expect(intercom.state, 'ended');
+      expect(intercom.call?.reason, 'declined');
+      final declined = sent.lastWhere((r) => r.url.path.endsWith('/call/c2'));
+      expect(jsonDecode(declined.body)['action'], 'decline');
+    });
+
     test('Answer automatically counts down and opens on its own', () async {
       await build(prefs: {'ks.intercom.answer_mode': 'auto'});
       answers['POST /api/intercom/call/c1'] = (_) => {'ok': true};

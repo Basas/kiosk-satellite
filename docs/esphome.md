@@ -419,7 +419,7 @@ Each announcement can override these options without changing the kiosk's settin
 
 ## Intercom actions
 
-Two actions run the [intercom](intercom.md#home-assistant) from an automation or a dashboard button, listed with **Expose kiosk entities**. `esphome.<node name>_intercom_call` rings another kiosk from this one, its `kiosk` argument the other kiosk's name, any case, or its IP address, and answers with the `id` and `kiosk` it rang. `esphome.<node name>_intercom_hangup` takes no arguments and ends the call, cancels one still ringing or closes an announcement. Both report an error when the intercom is off, the kiosk is unknown, this kiosk is already in a call, the other kiosk refused or there is no call to end.
+Four actions run the [intercom](intercom.md#home-assistant) from an automation or a dashboard button, listed with **Expose kiosk entities**. `esphome.<node name>_intercom_call` rings another kiosk from this one, its `kiosk` argument the other kiosk's name, any case, or its IP address, and answers with the `id` and `kiosk` it rang. `esphome.<node name>_intercom_hangup` takes no arguments and ends the call, cancels one still ringing or closes an announcement. `esphome.<node name>_intercom_answer` and `esphome.<node name>_intercom_decline` take no arguments and answer or decline the call ringing on this kiosk. All four report an error when the intercom is off, the kiosk is unknown, this kiosk is already in a call, the other kiosk refused, there is no call to end or nothing is ringing.
 
 ```yaml
 - action: esphome.kitchen_tablet_intercom_call

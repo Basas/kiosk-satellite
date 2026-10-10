@@ -1057,14 +1057,14 @@ class IntercomManager extends Manager {
       ..register(
         Command(
           name: 'intercomAnswer',
-          description: 'Answer the call ringing here (the kiosk screen only).',
+          description: 'Answer the call ringing here.',
           handler: (_) async => _answer(),
         ),
       )
       ..register(
         Command(
           name: 'intercomDecline',
-          description: 'Decline the call ringing here (the kiosk screen only).',
+          description: 'Decline the call ringing here.',
           handler: (_) async {
             if (_state != 'ringing') {
               return const CommandResult.fail('nothing is ringing');
