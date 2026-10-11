@@ -9594,8 +9594,33 @@ class UiStringsUk extends UiStrings {
       'Пробудження до заставки';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
-      'Після вимкнення екрана розпізнавання руху, обличчя, наближення чи людини та кнопка живлення відновлюють заставку, а не панель, із новим відліком вимкнення екрана. Дотик все одно відкриває панель керування.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      'Виберіть, що повертає заставку замість панелі після вимкнення екрана. Відлік «Вимкнути екран через» починається знову.';
+
+  @override
+  String get screensaverWakeSourcesAll => 'Усе';
+
+  @override
+  String get screensaverWakeSourceMotion => 'Рух';
+
+  @override
+  String get screensaverWakeSourceFace => 'Обличчя';
+
+  @override
+  String get screensaverWakeSourceProximity => 'Наближення';
+
+  @override
+  String get screensaverWakeSourcePerson => 'Людина';
+
+  @override
+  String get screensaverWakeSourcePower => 'Кнопка живлення';
+
+  @override
+  String get screensaverWakeSourceTouch => 'Дотик';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      'Потрібні обидва параметри: «Вимкнути екран через» і «Використовувати чорний екран замість вимкнення».';
 
   @override
   String get screensaverModeDim => 'Затемнення';

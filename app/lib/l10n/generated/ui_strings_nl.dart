@@ -9603,8 +9603,33 @@ class UiStringsNl extends UiStrings {
       'Schermbeveiliging tonen bij wekken';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
-      'Als na het uitschakelen van het scherm beweging, een gezicht of een persoon wordt gedetecteerd, de nabijheidssensor wordt geactiveerd of de aan/uit-knop wordt ingedrukt, verschijnt de schermbeveiliging opnieuw in plaats van het dashboard. De afteltijd voor \'Scherm uitschakelen na\' begint opnieuw. Aanraken opent nog steeds het dashboard.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      'Kies wat na het uitschakelen van het scherm de schermbeveiliging terugbrengt in plaats van het dashboard. De afteltijd voor \'Scherm uitschakelen na\' begint opnieuw.';
+
+  @override
+  String get screensaverWakeSourcesAll => 'Alles';
+
+  @override
+  String get screensaverWakeSourceMotion => 'Beweging';
+
+  @override
+  String get screensaverWakeSourceFace => 'Gezicht';
+
+  @override
+  String get screensaverWakeSourceProximity => 'Nabijheid';
+
+  @override
+  String get screensaverWakeSourcePerson => 'Persoon';
+
+  @override
+  String get screensaverWakeSourcePower => 'Aan/uit-knop';
+
+  @override
+  String get screensaverWakeSourceTouch => 'Aanraken';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      'Vereist zowel \'Scherm uitschakelen na\' als \'Een zwart scherm gebruiken\'.';
 
   @override
   String get screensaverModeDim => 'Dimmen';

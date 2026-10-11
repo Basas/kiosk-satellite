@@ -4264,26 +4264,95 @@ const screensaverScreenOffBlack = SettingDef<bool>(
   dependsOnValue: {'gt': 0},
 );
 
-// Every detection wake from a dark panel lands on the dashboard, which is
-// wrong for a photo frame: someone walking into the room wants the photos
-// back, and a touch is what asks for the dashboard. On, a detection under a
-// dark panel only powers the screen on, the way the ESPHome Screen light
-// does, so the session stays up and the screen-off countdown starts over.
-// Touch, the wake word and the ESPHome dismiss still land on the dashboard.
-// A wake the app did not ask for (power button, double-tap to wake) follows
-// the switch too, since Android does not say which one it was.
-const screensaverScreenOffWakeToScreensaver = SettingDef<bool>(
+// Every wake from a dark panel lands on the dashboard, which is wrong for a
+// photo frame: someone walking into the room wants the photos back. The
+// ways of waking picked here only light the screen, the way the ESPHome
+// Screen light does, so the session stays up and the screen-off countdown
+// starts over. The value is a JSON list of [wakeToScreensaverSources].
+// 'power' is every wake the app did not ask for (power button, double-tap
+// to wake), since Android does not say which one it was. 'touch' only
+// reaches a black screen (Use a black screen instead): a powered-off panel
+// takes no touches. The wake word and the ESPHome dismiss still land on
+// the dashboard.
+const screensaverScreenOffWakeToScreensaver = SettingDef<String>(
   key: 'screensaver.screen_off_wake_to_screensaver',
-  type: SettingType.boolean,
-  defaultValue: false,
+  type: SettingType.string,
+  defaultValue: '[]',
   title: 'Wake to screensaver',
   description:
-      'After the screen has turned off, motion, face, proximity or person '
-      'detection and the power button bring the screensaver back instead of '
-      'the dashboard, with a fresh Turn screen off after countdown. Touch '
-      'still opens the dashboard.',
+      'Choose what brings the screensaver back instead of the dashboard '
+      'after the screen has turned off. The Turn screen off after countdown '
+      'starts over.',
   category: 'Screensaver',
+  validator: _validateWakeToScreensaver,
+  normalizer: _normalizeWakeToScreensaver,
 );
+
+/// Everything Wake to screensaver can pick, in the order both pickers list
+/// them.
+const wakeToScreensaverSources = [
+  'motion',
+  'face',
+  'proximity',
+  'person',
+  'power',
+  'touch',
+];
+
+/// What the switch this setting used to be stood for when on: every
+/// detection and every wake the app did not start. Touch was never part of
+/// it, so an upgrade keeps touch opening the dashboard.
+const wakeToScreensaverSwitchedOn = [
+  'motion',
+  'face',
+  'proximity',
+  'person',
+  'power',
+];
+
+/// The picked sources, unknown ones and a malformed value dropped.
+Set<String> decodeWakeToScreensaver(String value) {
+  try {
+    final decoded = json.decode(value);
+    if (decoded is List) {
+      return decoded
+          .whereType<String>()
+          .where(wakeToScreensaverSources.contains)
+          .toSet();
+    }
+  } catch (_) {}
+  return {};
+}
+
+/// [sources] as stored: known ones only, in [wakeToScreensaverSources]
+/// order.
+String encodeWakeToScreensaver(Iterable<String> sources) => jsonEncode([
+  for (final source in wakeToScreensaverSources)
+    if (sources.contains(source)) source,
+]);
+
+/// The switch this setting used to be, as the list it stands for. Imports,
+/// fleet pushes and API calls from older versions still send a bool.
+String wakeToScreensaverFromSwitch(bool on) =>
+    encodeWakeToScreensaver(on ? wakeToScreensaverSwitchedOn : const []);
+
+String? _validateWakeToScreensaver(Object? value) {
+  try {
+    final decoded = json.decode(value as String);
+    if (decoded is List &&
+        decoded.every(
+          (source) =>
+              source is String && wakeToScreensaverSources.contains(source),
+        )) {
+      return null;
+    }
+  } catch (_) {}
+  return 'Choose from ${wakeToScreensaverSources.join(', ')}.';
+}
+
+Object _normalizeWakeToScreensaver(Object value) => value is String
+    ? encodeWakeToScreensaver(decodeWakeToScreensaver(value))
+    : value;
 
 /// The brightness to restore when the screensaver ends, persisted so a
 /// process death mid-screensaver cannot turn the dim level into the new

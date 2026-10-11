@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "b5e8794d7feb4e4d7ef52b190a72c1465d616037",
+  "revision": "28cb2bf843bd4b25fb6a3af1f7f60cffb6a5e25e",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -147,7 +147,7 @@
     "settings_screensaver_entity_picker_en.arb": "95f3f0519bcd315bac1cbffb9ccdf2c1fa9a67315fea45b2acf5a364de10d085",
     "settings_screensaver_face_detection_en.arb": "498665376d9b47d83f4932baf0952dfff3807f4510fea02f0a930f764f1dd932",
     "settings_screensaver_face_preview_en.arb": "9f75439ce71a8947426a0f382eb06632a74c2c145a5642918065e40ae91f9957",
-    "settings_screensaver_general_en.arb": "0fec74f5562a1520eaa5b561d4446cd4f2fe725bd352b38c537b07b3ebe13902",
+    "settings_screensaver_general_en.arb": "ccee5f551284b96b4e22fb39e93157546ed439fb4b3a547a2948648f649b108b",
     "settings_screensaver_glance_appearance_en.arb": "b574a776553d61438bb268830e45cdcb30aa79995d3a865aa3caab8c741d628e",
     "settings_screensaver_glance_en.arb": "c6c2806cd1be55d7ae9a1b671729a8fb22759456c025f9e3e3ec834e40f56f0d",
     "settings_screensaver_immich_connection_en.arb": "37d7fc4fcf77e70ee6ab180a6af3a6f703180ced7ea9e1e7037b6188b735f289",

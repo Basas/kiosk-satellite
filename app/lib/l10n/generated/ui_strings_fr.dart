@@ -9662,8 +9662,33 @@ class UiStringsFr extends UiStrings {
       'Réveiller vers l\'économiseur d\'écran';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
-      'Après l\'extinction de l\'écran, la détection de mouvement, de visage, de proximité ou de présence et le bouton d\'alimentation ramènent l\'économiseur d\'écran plutôt que le tableau de bord, avec un nouveau compte à rebours « Éteindre l\'écran après ». Toucher l\'écran ouvre toujours le tableau de bord.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      'Choisissez ce qui ramène l\'économiseur d\'écran plutôt que le tableau de bord après l\'extinction de l\'écran. Le compte à rebours « Éteindre l\'écran après » repart de zéro.';
+
+  @override
+  String get screensaverWakeSourcesAll => 'Tout';
+
+  @override
+  String get screensaverWakeSourceMotion => 'Mouvement';
+
+  @override
+  String get screensaverWakeSourceFace => 'Visage';
+
+  @override
+  String get screensaverWakeSourceProximity => 'Proximité';
+
+  @override
+  String get screensaverWakeSourcePerson => 'Présence';
+
+  @override
+  String get screensaverWakeSourcePower => 'Bouton d\'alimentation';
+
+  @override
+  String get screensaverWakeSourceTouch => 'Toucher';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      'Nécessite à la fois « Éteindre l\'écran après » et « Utiliser un écran noir à la place ».';
 
   @override
   String get screensaverModeDim => 'Tamisé';

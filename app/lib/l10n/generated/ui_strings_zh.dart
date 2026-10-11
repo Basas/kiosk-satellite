@@ -9034,8 +9034,33 @@ class UiStringsZh extends UiStrings {
   String get settingScreensaverScreenOffWakeToScreensaverTitle => '唤醒后打开屏保';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
-      '屏幕关闭后，运动、人脸、接近或人体检测以及电源键会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      '选择屏幕关闭后哪些方式会唤醒屏保，而不是打开仪表盘。屏保启动后关屏时间的倒计时会重新开始。';
+
+  @override
+  String get screensaverWakeSourcesAll => '全部';
+
+  @override
+  String get screensaverWakeSourceMotion => '运动';
+
+  @override
+  String get screensaverWakeSourceFace => '人脸';
+
+  @override
+  String get screensaverWakeSourceProximity => '接近';
+
+  @override
+  String get screensaverWakeSourcePerson => '人体';
+
+  @override
+  String get screensaverWakeSourcePower => '电源键';
+
+  @override
+  String get screensaverWakeSourceTouch => '触屏';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      '需要设置“屏保启动后关屏时间”并开启“用黑屏替代关屏”。';
 
   @override
   String get screensaverModeDim => '调暗';
@@ -21727,8 +21752,33 @@ class UiStringsZhCn extends UiStringsZh {
   String get settingScreensaverScreenOffWakeToScreensaverTitle => '唤醒后打开屏保';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
-      '屏幕关闭后，运动、人脸、接近或人体检测以及电源键会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      '选择屏幕关闭后哪些方式会唤醒屏保，而不是打开仪表盘。屏保启动后关屏时间的倒计时会重新开始。';
+
+  @override
+  String get screensaverWakeSourcesAll => '全部';
+
+  @override
+  String get screensaverWakeSourceMotion => '运动';
+
+  @override
+  String get screensaverWakeSourceFace => '人脸';
+
+  @override
+  String get screensaverWakeSourceProximity => '接近';
+
+  @override
+  String get screensaverWakeSourcePerson => '人体';
+
+  @override
+  String get screensaverWakeSourcePower => '电源键';
+
+  @override
+  String get screensaverWakeSourceTouch => '触屏';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      '需要设置“屏保启动后关屏时间”并开启“用黑屏替代关屏”。';
 
   @override
   String get screensaverModeDim => '调暗';

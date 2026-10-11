@@ -446,7 +446,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "screensaver.screen_off_wake_to_screensaver": {
     "title": "settingScreensaverScreenOffWakeToScreensaverTitle",
-    "description": "settingScreensaverScreenOffWakeToScreensaverDescriptionPower",
+    "description": "settingScreensaverScreenOffWakeToScreensaverDescriptionSources",
   },
   "screensaver.schedule_enabled": {
     "title": "settingScreensaverScheduleEnabledTitle",

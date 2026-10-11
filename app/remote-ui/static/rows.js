@@ -26,9 +26,13 @@ import {
   syncScreenOffAdminNotice,
 } from './notices.js';
 import {
+  WAKE_SOURCES,
+  decodeWakeSources,
   openImmichNamesPicker,
   openLauncherAppsPicker,
   openMediaBrowser,
+  openWakeSourcesPicker,
+  wakeSourcesText,
 } from './pickers.js';
 import { loadSettings, refreshRealMacNote, updatePersonSensorRows, updateRtspRows } from './settings.js';
 import { dashboardField } from './dashboard_picker.js';
@@ -470,6 +474,29 @@ export function settingRow(s) {
       'display:flex; gap:10px; align-items:center; min-width:0; max-width:60%; flex:0 1 auto';
     controls.append(val, btn);
     row.appendChild(controls);
+    return row;
+  }
+
+  // Wake to screensaver, mirroring the device's row: the picks at rest in
+  // a dropdown-style box that opens a checkbox dialog. Stored as a JSON
+  // list of sources (issue #954).
+  if (s.key === 'screensaver.screen_off_wake_to_screensaver') {
+    const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '[]';
+    const field = choiceBox(wakeSourcesText(decodeWakeSources(current())), async () => {
+      // A powered-off panel takes no touches: Touch can only wake the black
+      // screen that stands in for it.
+      const value = (key) => (state.settings || []).find((o) => o.key === key)?.value;
+      const touchReady = Number(value('screensaver.screen_off_minutes')) > 0
+        && value('screensaver.screen_off_black') === true;
+      const picked = await openWakeSourcesPicker(s.title, decodeWakeSources(current()), touchReady);
+      if (!picked) return;
+      field.setText(wakeSourcesText(picked));
+      await save(JSON.stringify(WAKE_SOURCES.filter((source) => picked.has(source))));
+      field.setText(wakeSourcesText(decodeWakeSources(current())));
+    });
+    bindUpdate(field.el, () => field.setText(wakeSourcesText(decodeWakeSources(current()))));
+    row.classList.add('dp-field-row');
+    row.appendChild(field.el);
     return row;
   }
 

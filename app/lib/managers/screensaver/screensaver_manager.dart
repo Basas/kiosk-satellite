@@ -455,8 +455,9 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     // to-wake: source system) is activity like a touch, so they land on
     // the dashboard rather than the screensaver — except under lockdown,
     // which keeps its screen locked here exactly like it does for motion,
-    // and with Wake to screensaver on, which brings the screensaver back
-    // for these wakes the same as for a detection (issue #952). Android
+    // and with Power button picked under Wake to screensaver, which brings
+    // the screensaver back for these wakes the same as for a detection
+    // (issue #952). Android
     // never tells an app which key or gesture woke the panel, so every
     // wake the app did not ask for counts here.
     // The app's own pokes (source app) are either part of a dismiss that
@@ -481,8 +482,7 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
         return;
       }
       _panelDark = false;
-      if (byHand &&
-          !_settings.get(defs.screensaverScreenOffWakeToScreensaver)) {
+      if (byHand && !_wakesToScreensaver('power')) {
         notifyActivity('screen on');
         return;
       }
@@ -978,17 +978,21 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
   /// relit by the app's own display (see [ScreensaverSlideChanged]).
   void notifySlideChanged() => bus.publish(const ScreensaverSlideChanged());
 
+  /// Whether [source] is picked under Wake to screensaver.
+  bool _wakesToScreensaver(String source) => defs
+      .decodeWakeToScreensaver(
+        _settings.get(defs.screensaverScreenOffWakeToScreensaver),
+      )
+      .contains(source);
+
   /// "Wake to screensaver": a detection under a dark panel powers the
   /// screen back on and nothing more. The app's own wake reaches the
   /// ScreenStateChanged listener as source app, which keeps the session
   /// and arms a fresh screen-off countdown, the same path the ESPHome
   /// Screen light takes. Returns whether it took the event; a lit panel
-  /// or the switch off leaves the dismiss to the caller.
+  /// or a source not picked leaves the dismiss to the caller.
   bool _wakeToScreensaver(String source) {
-    if (!_screenDark ||
-        !_settings.get(defs.screensaverScreenOffWakeToScreensaver)) {
-      return false;
-    }
+    if (!_screenDark || !_wakesToScreensaver(source)) return false;
     log.info(name, 'woken by $source; screen on, screensaver stays');
     if (_blanked && !_panelDark) {
       unawaited(_wakeFromBlank());
@@ -998,11 +1002,39 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     return true;
   }
 
+  /// When a touch last brought the screensaver back over a black screen
+  /// (Touch under Wake to screensaver, issue #954). One tap reports twice
+  /// (see [_tapChainStart]), and the lift of the waking tap must not be
+  /// the second touch that opens the dashboard: until the next finger
+  /// comes down, the echoes are dropped, and so are the other fingers of
+  /// the same gesture.
+  DateTime? _touchWokeAt;
+
+  static bool _isTouch(String source) =>
+      source == 'touch' ||
+      source == 'touch_page' ||
+      source == 'tap' ||
+      source == 'screensaver_touch';
+
   void notifyActivity(String source) {
     // A ringing alarm on this screensaver ends through its Snooze and Stop
     // buttons only: a brush of the hand, motion or a face never dismisses
     // it.
     if (alarmTakeover.value == 'ringing') return;
+    if (_isTouch(source)) {
+      final woke = _touchWokeAt;
+      if (woke != null) {
+        if (source != 'touch' || clock().difference(woke) < _tapDebounce) {
+          return;
+        }
+        _touchWokeAt = null;
+      }
+      // Only a black screen takes touches: a powered-off panel does not.
+      if (_active && _blanked && !_panelDark && _wakeToScreensaver('touch')) {
+        _touchWokeAt = clock();
+        return;
+      }
+    }
     // Overlay controls consume their touch without dismissing the view.
     if (_touchOnControl &&
         (source == 'touch' || source == 'touch_page' || source == 'tap')) {

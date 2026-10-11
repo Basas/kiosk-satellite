@@ -16502,8 +16502,56 @@ abstract class UiStrings {
   /// Help below the setting.
   ///
   /// In en, this message translates to:
-  /// **'After the screen has turned off, motion, face, proximity or person detection and the power button bring the screensaver back instead of the dashboard, with a fresh Turn screen off after countdown. Touch still opens the dashboard.'**
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower;
+  /// **'Choose what brings the screensaver back instead of the dashboard after the screen has turned off. The Turn screen off after countdown starts over.'**
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources;
+
+  /// Value of the Wake to screensaver row when every way of waking is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get screensaverWakeSourcesAll;
+
+  /// Choice in the Wake to screensaver dialog: motion detection wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion'**
+  String get screensaverWakeSourceMotion;
+
+  /// Choice in the Wake to screensaver dialog: face detection wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Face'**
+  String get screensaverWakeSourceFace;
+
+  /// Choice in the Wake to screensaver dialog: the proximity sensor wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Proximity'**
+  String get screensaverWakeSourceProximity;
+
+  /// Choice in the Wake to screensaver dialog: person detection wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get screensaverWakeSourcePerson;
+
+  /// Choice in the Wake to screensaver dialog: the device power button wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Power button'**
+  String get screensaverWakeSourcePower;
+
+  /// Choice in the Wake to screensaver dialog: touching the black screen brings the screensaver back.
+  ///
+  /// In en, this message translates to:
+  /// **'Touch'**
+  String get screensaverWakeSourceTouch;
+
+  /// Hint under the grayed-out Touch choice in the Wake to screensaver dialog. Both quoted names are other settings on the same page.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires both \"Turn screen off after\" and \"Use a black screen instead.\"'**
+  String get screensaverWakeSourceTouchRequires;
 
   /// Label, status or guidance in this section.
   ///

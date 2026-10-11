@@ -9669,8 +9669,33 @@ class UiStringsEs extends UiStrings {
       'Volver al protector de pantalla al despertar';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
-      'Tras apagarse la pantalla, la detección de movimiento, rostros, proximidad o personas y el botón de encendido muestran el protector de pantalla en lugar del panel de control y reinician el tiempo para apagar la pantalla. Tocar la pantalla sigue abriendo el panel de control.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      'Elige qué hace volver al protector de pantalla en lugar del panel de control después de apagarse la pantalla. El tiempo de Apagar la pantalla después de vuelve a empezar.';
+
+  @override
+  String get screensaverWakeSourcesAll => 'Todo';
+
+  @override
+  String get screensaverWakeSourceMotion => 'Movimiento';
+
+  @override
+  String get screensaverWakeSourceFace => 'Rostro';
+
+  @override
+  String get screensaverWakeSourceProximity => 'Proximidad';
+
+  @override
+  String get screensaverWakeSourcePerson => 'Persona';
+
+  @override
+  String get screensaverWakeSourcePower => 'Botón de encendido';
+
+  @override
+  String get screensaverWakeSourceTouch => 'Tocar';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      'Requiere tanto \"Apagar la pantalla después de\" como \"Usar una pantalla negra en su lugar\".';
 
   @override
   String get screensaverModeDim => 'Atenuar';

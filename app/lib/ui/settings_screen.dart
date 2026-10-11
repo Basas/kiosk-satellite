@@ -10666,6 +10666,16 @@ class SettingTile extends StatelessWidget {
             onTap: () => _pickImmichNamed(context, immichNamed),
           );
         }
+        // Wake to screensaver: what wakes to the screensaver, ticked off in a
+        // dialog from a dropdown-style box rather than typed as JSON.
+        if (def.key == screensaverScreenOffWakeToScreensaver.key) {
+          return _WakeToScreensaverRow(
+            container: c,
+            def: def,
+            value: value as String,
+            onChanged: onChanged,
+          );
+        }
         // The camera screensaver's views are picked from the ones configured
         // under Camera Streams, never typed — the value is a JSON list of
         // opaque view ids in rotation order.
@@ -12125,4 +12135,121 @@ String _subpageDisplayTitle(
     if (profile != null) return fleetProfileName(context, profile);
   }
   return settingsPageText(context, category, subpage);
+}
+
+/// The labels of Wake to screensaver's sources.
+String _wakeSourceLabel(BuildContext context, String source) =>
+    switch (source) {
+      'motion' => screensaverText(context, 'Motion'),
+      'face' => screensaverText(context, 'Face'),
+      'proximity' => screensaverText(context, 'Proximity'),
+      'person' => screensaverText(context, 'Person'),
+      'power' => screensaverText(context, 'Power button'),
+      _ => screensaverText(context, 'Touch'),
+    };
+
+/// Wake to screensaver as a settings row: the picks at rest in a
+/// dropdown-style box, opening a dialog of checkboxes.
+class _WakeToScreensaverRow extends StatelessWidget {
+  const _WakeToScreensaverRow({
+    required this.container,
+    required this.def,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final AppContainer container;
+  final SettingDef<Object> def;
+  final String value;
+  final VoidCallback onChanged;
+
+  Future<void> _open(BuildContext context) async {
+    final picked = decodeWakeToScreensaver(value);
+    // A powered-off panel takes no touches: Touch can only wake the black
+    // screen that stands in for it.
+    final settings = container.settings;
+    final touchReady =
+        settings.get(screensaverScreenOffMinutes) > 0 &&
+        settings.get(screensaverScreenOffBlack);
+    final hintColor = Theme.of(context).colorScheme.onSurfaceVariant;
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(def.localizedTitle(context)),
+          content: SizedBox(
+            width: 420,
+            child: EdgeFade(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final source in wakeToScreensaverSources)
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: picked.contains(source),
+                      title: Text(_wakeSourceLabel(context, source)),
+                      subtitle: source == 'touch' && !touchReady
+                          ? Text(
+                              screensaverText(
+                                context,
+                                'Requires both "Turn screen off after" and '
+                                '"Use a black screen instead."',
+                              ),
+                              style: TextStyle(color: hintColor),
+                            )
+                          : null,
+                      onChanged: source == 'touch' && !touchReady
+                          ? null
+                          : (on) => setState(() {
+                              if (on == true) {
+                                picked.add(source);
+                              } else {
+                                picked.remove(source);
+                              }
+                            }),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(screensaverText(context, 'Cancel')),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(screensaverText(context, 'Save')),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (saved != true) return;
+    await container.settings.setFromJson(
+      def.key,
+      encodeWakeToScreensaver(picked),
+    );
+    onChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final picked = decodeWakeToScreensaver(value);
+    final text = picked.isEmpty
+        ? screensaverText(context, 'Off')
+        : picked.length == wakeToScreensaverSources.length
+        ? screensaverText(context, 'All')
+        : [
+            for (final source in wakeToScreensaverSources)
+              if (picked.contains(source)) _wakeSourceLabel(context, source),
+          ].join(', ');
+    final field = ChoiceBox(text: text, onTap: () => _open(context));
+    return SettingsRow(
+      title: Text(def.localizedTitle(context)),
+      stack: true,
+      subtitle: Text(def.localizedDescription(context)),
+      trailing: tightPane(context) ? field : SizedBox(width: 300, child: field),
+    );
+  }
 }

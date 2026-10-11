@@ -19613,5 +19613,75 @@
     "source": "5589fbbe956a55ff5ac5d289b03b154aa969349f52fd7845488de7172820ed61",
     "translation": "bde3e3d90be937b2cbdab1ea008ace76d4b8c37e14df0a3dc7be98d668c17232",
     "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourcesAll": {
+    "source": "313333ba99acea31d4b423138db22c8d6737b6d8f6d2b9b356a4d1e93714861c",
+    "translation": "4ff402d768211082ae1a70ae586a4c7a907c57d66467279a71283219968c04bc",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceProximity": {
+    "source": "9ea7439789710831b304c84d647bf4b14c199d37920dc2c3ab36111c39ff1663",
+    "translation": "5f9a694fbb740a1f1ed8652b2d8d2902fc33426fedb4f84dcf68ca8b7ad42f7a",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceTouch": {
+    "source": "297a21158771a662fc25e6d97c7eefe07c97ee9bbcbd9bc8a71510e11de85b3f",
+    "translation": "6e11a30e8703bef826bdcbf15a654fa682c21f856e837c89e244e36836e3b452",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionSources": {
+    "source": "b05c496e46f16790247c2b74f4fa9fb50b36969862fb94505136f2cea3f77a6f",
+    "translation": "3f4441da8f1264832da05f0cedeebe258d9b76d9567f3ffe2b47f0cc935aa8c1",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceTouchHint": {
+    "source": "7de6ff9836a500a8924af0325b11d329ff14e93ab1ed81808bf54c1823c8145f",
+    "translation": "8454d88a7f50efbb31fd04be4fab33ea1dfa8aa91262d536672ea4ed53149f4c",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourcePowerHint": {
+    "source": "7ed7ee647e40e1570ff2d1001883910066310e36931b9d1b7976bd98b456af67",
+    "translation": "53a85d6cd8bb8281c0e2a6cf289d983ca8b58004db9d1dd2b0b39b4e27b0868c",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceMotion": {
+    "source": "9daae42f64c98634ae8bf8588fbe616b074dc4b86f06d6052fdbee09da6f3b55",
+    "translation": "83fc57feebacbf0ab41cb903519d53d566772d79030f6566247a44af7f3aa39b",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourcePower": {
+    "source": "894e9ef9f9f8bdcb524d6f90b2a9ea3b37326a6ae9df78918b429c9de199e1e8",
+    "translation": "218cc489c61d773992a95bff96ebcdf48765283a6a86f89a73d426e682a64e25",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourcePerson": {
+    "source": "27caf5c97ecded441a72c234ecc46850e22c3c608b1c1042111a7851b53d2e60",
+    "translation": "31bdeef94e7d9a9c9b0d65c97d049ac72fc2080d36f8bf73ad15ee3a5a23e86f",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourcesNote": {
+    "source": "c42c4804159ffce6004cfe633ba2b80fd76bb0953573afd8581de2a0b657a6e6",
+    "translation": "0e54542c27d10f7b8de274c2d6424f5d65976d3902b453a569cd6b4f9eed2057",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceFace": {
+    "source": "dac8b8d46110b0d17bfea6e2dd70e5aae956997a4e8f921ce69f0f41c05df034",
+    "translation": "6ae885dc679cfc0fb09dcda30fd285137a65a421a38fea3c2f817df81097fc39",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceTouchHintSecond": {
+    "source": "84f4e398683b1af161d1b7b4e3be7e28732290dca34ecf68168d16a30454da23",
+    "translation": "a0f21dac0aafb7f7187e876001e033dab5e17f6f1afe08682dc3cfe7b963e1ba",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourcePowerHintDoubleTap": {
+    "source": "c31707c2f9a83bd92a76c8dcfb8eb46bb289c4e64c2af2a30ca3dfc1cdc8bad5",
+    "translation": "ca864b6531643b05ae4d614507ce501b19163b8f0e95d95fe50a3cfe0046ba7e",
+    "author": "Xavier Larrea"
+  },
+  "screensaverWakeSourceTouchRequires": {
+    "source": "dcb7ac0a665ff3bcb0ea27a24574d336f104a4a2d157a70380915d2d6ce891a9",
+    "translation": "8adf4843d7a3139d8f542a5a047de0cc380b32c0686dfc895fe4214e0f76a83d",
+    "author": "Xavier Larrea"
   }
 }
