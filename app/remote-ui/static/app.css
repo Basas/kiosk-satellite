@@ -1498,8 +1498,7 @@
 .dp-pane-head { display: flex; align-items: baseline; gap: 10px; padding: 4px 0 14px; min-width: 0; }
 .dp-pane-title { font-size: 14px; font-weight: 600; color: var(--primary);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-@container (max-width: 420px) { .dp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.dp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .dp-views { container-type: inline-size; }
 .dp-tile { position: relative; min-width: 0; height: 118px; padding: 14px;
   display: flex; flex-direction: column; justify-content: space-between;
@@ -1547,7 +1546,7 @@
 .dp-skel-rows { flex: none; width: 236px; display: flex; flex-direction: column; gap: 10px; }
 .dp-skeleton:not(.wide) .dp-skel-rows { width: 100%; }
 .dp-skel-row { height: 46px; border-radius: 14px; background: var(--surface-2); opacity: .6; }
-.dp-skel-tiles { flex: 1 1 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+.dp-skel-tiles { flex: 1 1 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px; align-content: start; padding-top: 32px; }
 .dp-skel-tile { height: 118px; border-radius: 16px; border: 1px solid var(--border); }
 .dp-foot { flex: none; display: flex; align-items: center; gap: 10px; margin-top: 14px;

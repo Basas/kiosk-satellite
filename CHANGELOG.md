@@ -9,6 +9,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ### Changed
 - **Wake to screensaver picks what wakes to the screensaver.** **Wake to screensaver** was a switch that covered motion, face, proximity and person detection, while the power button and touch always opened the dashboard (#952, #954). It is now a box that opens a list to pick from: **Motion**, **Face**, **Proximity**, **Person**, **Power button** and **Touch**. A picked wake after the screen has turned off brings the screensaver back with a fresh **Turn screen off after** countdown, and anything not picked opens the dashboard. Android does not tell apps what woke the screen, so **Power button** covers every wake Kiosk Satellite did not start itself, including double-tap to wake and the mute button on an Echo Show running LineageOS, which acts as its power button. **Touch** works with **Use a black screen instead**: the first touch brings the screensaver back and a second touch opens the dashboard. A kiosk that had the switch on picks everything except **Touch**, so nothing changes on update.
+- **Wider view tiles in the dashboard picker.** The picker shows two views per row instead of three, on the device and in the remote admin, so a view's path is no longer cut off after a few letters.
 
 ## v2026.10.20 - 2026-10-10
 

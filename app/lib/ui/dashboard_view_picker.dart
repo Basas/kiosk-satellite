@@ -640,7 +640,7 @@ class _DashboardPickerState extends State<DashboardPicker> {
     final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, box) {
-        final columns = box.maxWidth >= 420 ? 3 : 2;
+        const columns = 2;
         SliverGrid grid(List<HaView?> views) => SliverGrid(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: columns,
