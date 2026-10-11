@@ -21,11 +21,12 @@ import 'dart:convert';
 /// panels is named this, so no real dashboard can take it.
 const customPagesDashboardPath = 'local';
 
-/// The icon every page wears in the pickers.
-const customPageIcon = 'mdi:language-html5';
+/// The icon every page wears in the pickers: a window with code in it.
+const customPageIcon = 'mdi:application-brackets-outline';
 
-/// The icon of the Custom Pages entry in the dashboard list.
-const customPagesIcon = 'mdi:folder-file-outline';
+/// The icon of the Custom Pages entry in the dashboard list and of its
+/// settings page, the same window.
+const customPagesIcon = 'mdi:application-brackets-outline';
 
 /// One page the person added.
 class CustomPage {

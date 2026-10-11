@@ -11975,11 +11975,11 @@ abstract class UiStrings {
   /// **'Custom Pages'**
   String get haCustomPages;
 
-  /// Hint under the Custom Pages entry row. www is the name of a folder in Home Assistant and stays as is.
+  /// Hint under the Custom Pages entry row: the person's own HTML pages, shown by the kiosk in place of a dashboard.
   ///
   /// In en, this message translates to:
-  /// **'Your own HTML pages from the www folder'**
-  String get haCustomPagesHint;
+  /// **'Your custom HTML pages served as a dashboard'**
+  String get haCustomPagesHintDashboard;
 
   /// Button that opens the dialog to add a custom page.
   ///

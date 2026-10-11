@@ -6939,7 +6939,8 @@ class UiStringsUk extends UiStrings {
   String get haCustomPages => 'Власні сторінки';
 
   @override
-  String get haCustomPagesHint => 'Ваші HTML-сторінки з теки www';
+  String get haCustomPagesHintDashboard =>
+      'Ваші власні HTML-сторінки як панель керування';
 
   @override
   String get haCustomPagesAdd => 'Додати сторінку';

@@ -81,7 +81,7 @@ class _CustomPagesCardState extends State<CustomPagesCard> {
                     name: customPageIcon,
                     size: 24,
                     color: scheme.primary,
-                    fallback: Icons.web_outlined,
+                    fallback: Icons.code,
                   ),
                   title: Text(page.name),
                   subtitle: Text(

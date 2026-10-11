@@ -1,7 +1,7 @@
 {
   "@@locale": "de",
   "haCustomPages": "Eigene Seiten",
-  "haCustomPagesHint": "Deine eigenen HTML-Seiten aus dem www-Ordner",
+  "haCustomPagesHintDashboard": "Deine eigenen HTML-Seiten als Dashboard",
   "haCustomPagesAdd": "Seite hinzufügen",
   "haCustomPagesEmpty": "Füge HTML-Seiten aus dem www-Ordner von Home Assistant hinzu, um sie wie ein Dashboard auszuwählen.",
   "haCustomPagesGuide": "Anleitung für eigene Seiten",

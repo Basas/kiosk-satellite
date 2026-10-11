@@ -6873,7 +6873,8 @@ class UiStringsEn extends UiStrings {
   String get haCustomPages => 'Custom Pages';
 
   @override
-  String get haCustomPagesHint => 'Your own HTML pages from the www folder';
+  String get haCustomPagesHintDashboard =>
+      'Your custom HTML pages served as a dashboard';
 
   @override
   String get haCustomPagesAdd => 'Add page';

@@ -6577,7 +6577,7 @@ class UiStringsZh extends UiStrings {
   String get haCustomPages => '自定义网页';
 
   @override
-  String get haCustomPagesHint => '来自 www 文件夹的自有 HTML 网页';
+  String get haCustomPagesHintDashboard => '作为仪表盘显示的自定义 HTML 网页';
 
   @override
   String get haCustomPagesAdd => '添加网页';
@@ -19172,7 +19172,7 @@ class UiStringsZhCn extends UiStringsZh {
   String get haCustomPages => '自定义网页';
 
   @override
-  String get haCustomPagesHint => '来自 www 文件夹的自有 HTML 网页';
+  String get haCustomPagesHintDashboard => '作为仪表盘显示的自定义 HTML 网页';
 
   @override
   String get haCustomPagesAdd => '添加网页';

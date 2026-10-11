@@ -6955,7 +6955,8 @@ class UiStringsNl extends UiStrings {
   String get haCustomPages => 'Eigen pagina\'s';
 
   @override
-  String get haCustomPagesHint => 'Je eigen HTML-pagina\'s uit de www-map';
+  String get haCustomPagesHintDashboard =>
+      'Je eigen HTML-pagina\'s als dashboard';
 
   @override
   String get haCustomPagesAdd => 'Pagina toevoegen';

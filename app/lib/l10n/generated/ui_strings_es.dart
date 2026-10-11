@@ -6999,7 +6999,8 @@ class UiStringsEs extends UiStrings {
   String get haCustomPages => 'Páginas personalizadas';
 
   @override
-  String get haCustomPagesHint => 'Tus propias páginas HTML de la carpeta www';
+  String get haCustomPagesHintDashboard =>
+      'Tus páginas HTML personalizadas mostradas como un panel de control';
 
   @override
   String get haCustomPagesAdd => 'Añadir página';

@@ -1,7 +1,7 @@
 {
   "@@locale": "zh_CN",
   "haCustomPages": "自定义网页",
-  "haCustomPagesHint": "来自 www 文件夹的自有 HTML 网页",
+  "haCustomPagesHintDashboard": "作为仪表盘显示的自定义 HTML 网页",
   "haCustomPagesAdd": "添加网页",
   "haCustomPagesEmpty": "添加 Home Assistant www 文件夹中的 HTML 网页，即可像仪表盘一样选择它们。",
   "haCustomPagesGuide": "自定义网页指南",

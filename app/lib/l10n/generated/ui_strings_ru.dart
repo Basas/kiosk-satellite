@@ -6916,7 +6916,8 @@ class UiStringsRu extends UiStrings {
   String get haCustomPages => 'Свои страницы';
 
   @override
-  String get haCustomPagesHint => 'Ваши HTML-страницы из папки www';
+  String get haCustomPagesHintDashboard =>
+      'Ваши HTML-страницы в качестве панели';
 
   @override
   String get haCustomPagesAdd => 'Добавить страницу';

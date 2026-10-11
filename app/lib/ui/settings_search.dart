@@ -68,7 +68,7 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
   SettingsSearchEntry(
     category: 'Home Assistant',
     title: 'Custom Pages',
-    description: 'Your own HTML pages from the www folder',
+    description: 'Your custom HTML pages served as a dashboard',
     anchorId: 'sub:Custom Pages',
     isPage: true,
   ),

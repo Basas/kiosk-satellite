@@ -6992,7 +6992,8 @@ class UiStringsFr extends UiStrings {
   String get haCustomPages => 'Pages personnalisées';
 
   @override
-  String get haCustomPagesHint => 'Vos propres pages HTML du dossier www';
+  String get haCustomPagesHintDashboard =>
+      'Vos pages HTML personnalisées affichées comme tableau de bord';
 
   @override
   String get haCustomPagesAdd => 'Ajouter une page';

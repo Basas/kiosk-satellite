@@ -26146,10 +26146,10 @@
       ]
     }
   },
-  "haCustomPagesHint": "来自 www 文件夹的自有 HTML 网页",
-  "@haCustomPagesHint": {
+  "haCustomPagesHintDashboard": "作为仪表盘显示的自定义 HTML 网页",
+  "@haCustomPagesHintDashboard": {
     "context": "Settings:Home Assistant:Custom Pages",
-    "description": "Hint under the Custom Pages entry row. www is the name of a folder in Home Assistant and stays as is.",
+    "description": "Hint under the Custom Pages entry row: the person's own HTML pages, shown by the kiosk in place of a dashboard.",
     "x-locations": {
       "device": [
         "Settings > Home Assistant"

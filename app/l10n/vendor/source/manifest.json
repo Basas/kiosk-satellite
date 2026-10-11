@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "2b6cb99b92ddf794d821d0c35109ee881b746c3f",
+  "revision": "38ff0be5fb401ce2a7badd91443ce78f64ec46c3",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -107,7 +107,7 @@
     "settings_esphome_setup_en.arb": "c4c7a944ea206ffc62f04ecfb5936b9d17eaf0a85abee2222cdd2ae74cf5bb90",
     "settings_footer_en.arb": "2b6279c9f3a304b5ad3fe7aec3e8dcd07ada7704de51489dc2f6866d147950a4",
     "settings_gestures_en.arb": "5099b6a177d8571b42075e9c9719b27004d91cc958ee89ca7d592bbecdbb483a",
-    "settings_home_assistant_custom_pages_en.arb": "d73729545efcdd70ba8dc63e6c6f90a57465439888160aa29b14d74c9651eb03",
+    "settings_home_assistant_custom_pages_en.arb": "16307292461fc34f730901708005fd73a03c7a58347a2f6a1ca2ddfa583e983f",
     "settings_home_assistant_hold_en.arb": "e8cd71bd923d73e86036647b3e06d953b0521c46f44ee317c1c810c34eb8cc97",
     "settings_home_assistant_optimizations_en.arb": "6848f403e77ebbe6a51c201b09cbc75c385debfbce96168830772418b7afdcf7",
     "settings_home_assistant_return_home_en.arb": "7ff2a4c54cf270b687747d34748ce8d965a690084ce78c3438ca6562f221992c",

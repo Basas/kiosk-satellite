@@ -1,7 +1,7 @@
 {
   "@@locale": "uk",
   "haCustomPages": "Власні сторінки",
-  "haCustomPagesHint": "Ваші HTML-сторінки з теки www",
+  "haCustomPagesHintDashboard": "Ваші власні HTML-сторінки як панель керування",
   "haCustomPagesAdd": "Додати сторінку",
   "haCustomPagesEmpty": "Додайте HTML-сторінки з теки www Home Assistant, щоб вибирати їх як панель керування.",
   "haCustomPagesGuide": "Посібник із власних сторінок",

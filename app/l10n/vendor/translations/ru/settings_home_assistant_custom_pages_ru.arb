@@ -1,7 +1,7 @@
 {
   "@@locale": "ru",
   "haCustomPages": "Свои страницы",
-  "haCustomPagesHint": "Ваши HTML-страницы из папки www",
+  "haCustomPagesHintDashboard": "Ваши HTML-страницы в качестве панели",
   "haCustomPagesAdd": "Добавить страницу",
   "haCustomPagesEmpty": "Добавьте HTML-страницы из папки www Home Assistant, чтобы выбирать их как панель.",
   "haCustomPagesGuide": "Руководство по своим страницам",

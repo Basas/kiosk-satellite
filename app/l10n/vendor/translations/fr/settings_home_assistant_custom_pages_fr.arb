@@ -1,7 +1,7 @@
 {
   "@@locale": "fr",
   "haCustomPages": "Pages personnalisées",
-  "haCustomPagesHint": "Vos propres pages HTML du dossier www",
+  "haCustomPagesHintDashboard": "Vos pages HTML personnalisées affichées comme tableau de bord",
   "haCustomPagesAdd": "Ajouter une page",
   "haCustomPagesEmpty": "Ajoutez des pages HTML du dossier www de Home Assistant pour les choisir comme un tableau de bord.",
   "haCustomPagesGuide": "Guide des pages personnalisées",

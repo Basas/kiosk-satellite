@@ -1965,7 +1965,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingHandGestureHoldSecondsDescription,
       'gestureHoldInstant' => strings.gestureHoldInstant,
       'haCustomPages' => strings.haCustomPages,
-      'haCustomPagesHint' => strings.haCustomPagesHint,
+      'haCustomPagesHintDashboard' => strings.haCustomPagesHintDashboard,
       'haCustomPagesAdd' => strings.haCustomPagesAdd,
       'haCustomPagesEmpty' => strings.haCustomPagesEmpty,
       'haCustomPagesGuide' => strings.haCustomPagesGuide,

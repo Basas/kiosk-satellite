@@ -26146,10 +26146,10 @@
       ]
     }
   },
-  "haCustomPagesHint": "Ваши HTML-страницы из папки www",
-  "@haCustomPagesHint": {
+  "haCustomPagesHintDashboard": "Ваши HTML-страницы в качестве панели",
+  "@haCustomPagesHintDashboard": {
     "context": "Settings:Home Assistant:Custom Pages",
-    "description": "Hint under the Custom Pages entry row. www is the name of a folder in Home Assistant and stays as is.",
+    "description": "Hint under the Custom Pages entry row: the person's own HTML pages, shown by the kiosk in place of a dashboard.",
     "x-locations": {
       "device": [
         "Settings > Home Assistant"

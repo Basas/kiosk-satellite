@@ -14,10 +14,11 @@ import { banner, modalShell } from './widgets.js';
 
 export const CUSTOM_PAGES_DOCS_URL = 'https://kiosksatellite.com/docs/custom-pages/';
 
-// mdi:language-html5, the icon every page wears in the pickers.
-const HTML_ICON = 'M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45'
-  + 'L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2'
-  + 'L12,21L5.5,19.2L4.07,3Z';
+// mdi:application-brackets-outline, the icon every page wears in the pickers
+// and the shape of the page's own entry row.
+const PAGE_ICON = 'M9.5,8.5L11,10L8,13L11,16L9.5,17.5L5,13L9.5,8.5M14.5,17.5L13,16L16,13L13,10L14.5,8.5L19,13'
+  + 'L14.5,17.5M21,2H3A2,2 0 0,0 1,4V20A2,2 0 0,0 3,22H21A2,2 0 0,0 23,20V4A2,2 0 0,0 21,2M21,2'
+  + '0H3V6H21V20Z';
 
 function storedPages() {
   const raw = (state.settings || []).find((s) => s.key === 'ha.custom_pages')?.value;
@@ -159,7 +160,7 @@ export function renderCustomPagesPage(panel) {
       row.querySelector('.desc')?.classList.add('mono');
       const icon = document.createElement('span');
       icon.className = 'camera-row-icon custom-page-icon';
-      icon.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="${HTML_ICON}"/></svg>`;
+      icon.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="${PAGE_ICON}"/></svg>`;
       row.querySelector('.camera-row-main')?.prepend(icon);
       list.appendChild(row);
     }

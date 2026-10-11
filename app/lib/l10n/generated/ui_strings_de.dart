@@ -7041,8 +7041,8 @@ class UiStringsDe extends UiStrings {
   String get haCustomPages => 'Eigene Seiten';
 
   @override
-  String get haCustomPagesHint =>
-      'Deine eigenen HTML-Seiten aus dem www-Ordner';
+  String get haCustomPagesHintDashboard =>
+      'Deine eigenen HTML-Seiten als Dashboard';
 
   @override
   String get haCustomPagesAdd => 'Seite hinzufügen';

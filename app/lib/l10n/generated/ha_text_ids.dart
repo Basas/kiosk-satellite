@@ -152,7 +152,7 @@ const haTextMessageIds = <String, String>{
   "Offline": "mediaOffline",
   "Search entities": "esphomeEntitySearch",
   "Custom Pages": "haCustomPages",
-  "Your own HTML pages from the www folder": "haCustomPagesHint",
+  "Your custom HTML pages served as a dashboard": "haCustomPagesHintDashboard",
   "Add page": "haCustomPagesAdd",
   "Add HTML pages from the Home Assistant www folder to pick them like a dashboard.": "haCustomPagesEmpty",
   "Custom page guide": "haCustomPagesGuide",
