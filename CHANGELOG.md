@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.20 - 2026-10-10
 
 ### Added
 - **Home Assistant can answer or decline an intercom call.** Two new ESPHome actions per kiosk, intercom_answer and intercom_decline, pick up or turn down the call ringing on that kiosk, the same as its on-screen buttons (#943). A kiosk without a screen can now take calls from a dashboard button, an automation or a sentence spoken to another voice device. Both report an error when nothing is ringing.
