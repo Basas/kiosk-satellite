@@ -48,6 +48,12 @@ import {
 // The Immich name-picker rows (albums, people, tags): which command lists
 // the choices, and the words for an empty pick and an empty list, the same
 // as the device's.
+// Mirrors cameraAutoDismissStops in definitions.dart.
+const CAMERA_DISMISS_STOPS = [
+  ...Array.from({length: 11}, (_, i) => i * 30),
+  ...Array.from({length: 11}, (_, i) => (i + 2) * 300),
+];
+
 const IMMICH_NAMED_ROWS = {
   'screensaver.immich_album': {
     command: 'immichAlbums', empty: 'All media',
@@ -1547,7 +1553,24 @@ export function settingRow(s) {
   // A bounded number is dragged, not typed, the same slider the device
   // shows. Label updates live; the value saves once, on release.
   if (s.type === 'number' && s.min != null && s.max != null) {
+    // Camera auto-dismiss moves through stops, not seconds: every 30 s up to
+    // 5 min, then every 5 min up to an hour. The slider holds the stop index
+    // and a stored value between stops sits on the nearest one.
+    const stops = s.key === 'camera.auto_dismiss_seconds' ? CAMERA_DISMISS_STOPS : null;
+    const toSlider = (v) => stops
+      ? stops.reduce((best, stop, i) => Math.abs(stop - v) < Math.abs(stops[best] - v) ? i : best, 0)
+      : v;
+    const fromSlider = (v) => stops ? stops[v] : v;
     const label = (v) => {
+      if (stops) {
+        const seconds = stops[v];
+        if (seconds <= 0) return t('cameraStreamsOff');
+        if (seconds < 60) return t('cameraStreamsSeconds', {seconds: String(seconds)});
+        if (seconds % 3600 === 0) return t('haHours', {hours: String(seconds / 3600)});
+        return t('haMinutes', {minutes: new Intl.NumberFormat(messageLanguage(), {
+          maximumFractionDigits: 1,
+        }).format(seconds / 60)});
+      }
       if (s.key === 'gestures.hand_hold_seconds') {
         return Number(v) === 0 ? t('gestureHoldInstant')
           : t('gestureHoldSeconds', {seconds: new Intl.NumberFormat(messageLanguage(), {
@@ -1570,12 +1593,13 @@ export function settingRow(s) {
         : `${v}${s.unit || ''}`;
     };
     const slider = attachSlider(row, {
-      min: s.min, max: s.max, step: s.step ?? 'any',
-      value: typeof s.value === 'number' ? s.value : s.min,
+      min: stops ? 0 : s.min, max: stops ? stops.length - 1 : s.max,
+      step: stops ? 1 : s.step ?? 'any',
+      value: toSlider(typeof s.value === 'number' ? s.value : s.min),
       label,
     });
     slider.input.addEventListener('change', async () => {
-      const next = Number(slider.input.value);
+      const next = fromSlider(Number(slider.input.value));
       // Enabling real screen-off gets a warning first: what a dark panel
       // does to Wi-Fi, the camera and the app itself is the manufacturer's
       // call, and the Black screensaver avoids the whole regime.
@@ -1595,7 +1619,7 @@ export function settingRow(s) {
       // it here first made a refused value snap "back" to itself.
       save(next);
     });
-    bindUpdate(slider.input, () => slider.set(s.value));
+    bindUpdate(slider.input, () => slider.set(toSlider(s.value)));
     if (s.key === 'sendspin.duck_percent') {
       const fragment = document.createDocumentFragment();
       fragment.append(row, albumArtCacheRow());

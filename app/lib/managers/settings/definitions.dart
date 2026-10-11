@@ -7558,7 +7558,7 @@ const cameraAutoDismissSeconds = SettingDef<num>(
   type: SettingType.number,
   defaultValue: 0,
   min: 0,
-  max: 300,
+  max: 3600,
   step: 30,
   unit: ' s',
   title: 'Auto-dismiss after',
@@ -7567,6 +7567,15 @@ const cameraAutoDismissSeconds = SettingDef<num>(
       'screensaver is unaffected.',
   category: 'Cameras',
 );
+
+/// The auto-dismiss slider's stops in seconds: every 30 s up to 5 min for a
+/// quick glance, then every 5 min up to an hour for a view left up on
+/// purpose, like a baby monitor. The remote admin keeps the same list in
+/// rows.js.
+final cameraAutoDismissStops = <int>[
+  for (var s = 0; s <= 300; s += 30) s,
+  for (var s = 600; s <= 3600; s += 300) s,
+];
 
 // Hidden because Cameras has a purpose-built editor on the device and in the
 // remote admin. Marking the versioned document secret keeps server credentials

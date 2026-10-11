@@ -12,6 +12,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Other apps' music ducks during voice interactions.** Kiosk Satellite now requests Android audio focus for voice turns, announcements, timers, alarms and intercom calls, then releases it when they end (#956). Music apps like Poweramp and Spotify lower their volume the way they do for any assistant and come back afterwards. How far they drop is up to Android or the app, so the Sendspin duck volume setting still applies only to Sendspin. Podcast and audiobook apps usually pause instead and resume on release.
 - **Wider view tiles in the dashboard picker.** The picker shows two views per row instead of three, on the device and in the remote admin, so a view's path is no longer cut off after a few letters.
 - **Softer text in the light theme.** Text in the light theme is now dark gray (#444444) instead of near black, on the device and in the remote admin.
+- **Camera views can auto-dismiss after up to an hour.** **Auto-dismiss after** in Camera Streams, Playback went up to 5 minutes, too short for a view left up on purpose, like a baby monitor (#958). It now reaches 1 hour. The slider keeps 30 second steps up to 5 minutes, then moves in 5 minute steps, so a saved time stays as it was.
 
 ## v2026.10.20 - 2026-10-10
 
