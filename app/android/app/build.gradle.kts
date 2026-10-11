@@ -41,7 +41,10 @@ android {
     // The wake word runtime comes from the onnxruntime plugin (ARM only) and
     // Microsoft's AAR (x86_64), see dependencies. Their ARM libraries are the
     // same 1.15.1 build, and the Dart bindings never use the Java JNI bridge.
-    packaging.jniLibs.pickFirsts.add("**/libonnxruntime.so")
+    // Only the ARM paths: a pickFirst match wins over excludes, so a wider
+    // pattern would bring the AAR's x86 library back past the rule above.
+    packaging.jniLibs.pickFirsts.add("**/arm64-v8a/libonnxruntime.so")
+    packaging.jniLibs.pickFirsts.add("**/armeabi-v7a/libonnxruntime.so")
     packaging.jniLibs.excludes.add("**/libonnxruntime4j_jni.so")
 
     // The face detection model (FaceDetector.kt) is memory-mapped straight
