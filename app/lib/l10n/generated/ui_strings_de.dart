@@ -9711,8 +9711,8 @@ class UiStringsDe extends UiStrings {
       'Nach dem Aufwecken zum Bildschirmschoner zurückkehren';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Nachdem der Bildschirm ausgeschaltet wurde, zeigen Bewegungs-, Gesichts-, Näherungs- oder Personenerkennung zunächst den Bildschirmschoner statt des Dashboards an und starten den Ausschalt-Timer neu. Durch Berühren des Bildschirms wird weiterhin das Dashboard geöffnet.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      'Nachdem der Bildschirm ausgeschaltet wurde, zeigen Bewegungs-, Gesichts-, Näherungs- oder Personenerkennung sowie die Ein/Aus-Taste zunächst den Bildschirmschoner statt des Dashboards an und starten den Ausschalt-Timer neu. Durch Berühren des Bildschirms wird weiterhin das Dashboard geöffnet.';
 
   @override
   String get screensaverModeDim => 'Dimmen';

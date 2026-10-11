@@ -36027,8 +36027,8 @@
       ]
     }
   },
-  "settingScreensaverScreenOffWakeToScreensaverDescription": "Als na het uitschakelen van het scherm beweging, een gezicht of een persoon wordt gedetecteerd, of de nabijheidssensor wordt geactiveerd, verschijnt de schermbeveiliging opnieuw in plaats van het dashboard. De afteltijd voor 'Scherm uitschakelen na' begint opnieuw. Aanraken opent nog steeds het dashboard.",
-  "@settingScreensaverScreenOffWakeToScreensaverDescription": {
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": "Als na het uitschakelen van het scherm beweging, een gezicht of een persoon wordt gedetecteerd, de nabijheidssensor wordt geactiveerd of de aan/uit-knop wordt ingedrukt, verschijnt de schermbeveiliging opnieuw in plaats van het dashboard. De afteltijd voor 'Scherm uitschakelen na' begint opnieuw. Aanraken opent nog steeds het dashboard.",
+  "@settingScreensaverScreenOffWakeToScreensaverDescriptionPower": {
     "context": "Settings:Screensaver",
     "description": "Help below the setting.",
     "x-locations": {

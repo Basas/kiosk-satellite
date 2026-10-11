@@ -445,7 +445,7 @@
   },
   "screensaver.screen_off_wake_to_screensaver": {
     "title": "settingScreensaverScreenOffWakeToScreensaverTitle",
-    "description": "settingScreensaverScreenOffWakeToScreensaverDescription"
+    "description": "settingScreensaverScreenOffWakeToScreensaverDescriptionPower"
   },
   "screensaver.schedule_enabled": {
     "title": "settingScreensaverScheduleEnabledTitle",

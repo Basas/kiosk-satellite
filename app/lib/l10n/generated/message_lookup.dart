@@ -2990,8 +2990,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreensaverScreenOffMinutesDescription,
       'settingScreensaverScreenOffWakeToScreensaverTitle' =>
         strings.settingScreensaverScreenOffWakeToScreensaverTitle,
-      'settingScreensaverScreenOffWakeToScreensaverDescription' =>
-        strings.settingScreensaverScreenOffWakeToScreensaverDescription,
+      'settingScreensaverScreenOffWakeToScreensaverDescriptionPower' =>
+        strings.settingScreensaverScreenOffWakeToScreensaverDescriptionPower,
       'screensaverModeDim' => strings.screensaverModeDim,
       'screensaverModeBlack' => strings.screensaverModeBlack,
       'screensaverModeClock' => strings.screensaverModeClock,

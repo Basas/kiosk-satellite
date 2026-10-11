@@ -36027,8 +36027,8 @@
       ]
     }
   },
-  "settingScreensaverScreenOffWakeToScreensaverDescription": "La détection de mouvement, de visage, de proximité ou de présence après l'extinction de l'écran ramène l'économiseur d'écran plutôt que le tableau de bord, avec un nouveau compte à rebours « Éteindre l'écran après ». Toucher l'écran ouvre toujours le tableau de bord.",
-  "@settingScreensaverScreenOffWakeToScreensaverDescription": {
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": "Après l'extinction de l'écran, la détection de mouvement, de visage, de proximité ou de présence et le bouton d'alimentation ramènent l'économiseur d'écran plutôt que le tableau de bord, avec un nouveau compte à rebours « Éteindre l'écran après ». Toucher l'écran ouvre toujours le tableau de bord.",
+  "@settingScreensaverScreenOffWakeToScreensaverDescriptionPower": {
     "context": "Settings:Screensaver",
     "description": "Help below the setting.",
     "x-locations": {

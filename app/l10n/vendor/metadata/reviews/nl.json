@@ -23384,5 +23384,11 @@
     "translation": "af806a6aaaa1fd613ee2367ddff04db63f89ea9a5b6e7592d993114d7275d3f5",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": {
+    "source": "f61a5bf7f41b6b0298b6f62f06fe4c50d07b0d3ca57c756d3e3ef6ea1f0220ce",
+    "translation": "c917a63171eb8a5c5129bde694bfd343547e4abba34a468e769a8e70575d08b2",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

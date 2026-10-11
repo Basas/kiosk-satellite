@@ -23,7 +23,7 @@
   "settingScreensaverScreenOffMinutesTitle": "Выключать экран через",
   "settingScreensaverScreenOffMinutesDescription": "Гасит панель дисплея, когда заставка отработала заданное время. 0: держать экран включённым неограниченно. Требуется разрешение администратора устройства.",
   "settingScreensaverScreenOffWakeToScreensaverTitle": "Пробуждать в заставку",
-  "settingScreensaverScreenOffWakeToScreensaverDescription": "Определение движения, лица, близости или присутствия после выключения экрана возвращает заставку вместо панели, с новым отсчётом «Выключать экран через». Касание всё равно открывает панель.",
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": "Определение движения, лица, близости или присутствия и кнопка питания после выключения экрана возвращают заставку вместо панели, с новым отсчётом «Выключать экран через». Касание всё равно открывает панель.",
   "screensaverModeDim": "Затемнение",
   "screensaverModeBlack": "Чёрная",
   "screensaverModeClock": "Часы",

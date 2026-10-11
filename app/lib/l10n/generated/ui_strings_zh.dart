@@ -9034,8 +9034,8 @@ class UiStringsZh extends UiStrings {
   String get settingScreensaverScreenOffWakeToScreensaverTitle => '唤醒后打开屏保';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      '屏幕关闭后，运动、人脸、接近或人体检测会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      '屏幕关闭后，运动、人脸、接近或人体检测以及电源键会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。';
 
   @override
   String get screensaverModeDim => '调暗';
@@ -21629,8 +21629,8 @@ class UiStringsZhCn extends UiStringsZh {
   String get settingScreensaverScreenOffWakeToScreensaverTitle => '唤醒后打开屏保';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      '屏幕关闭后，运动、人脸、接近或人体检测会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      '屏幕关闭后，运动、人脸、接近或人体检测以及电源键会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。';
 
   @override
   String get screensaverModeDim => '调暗';

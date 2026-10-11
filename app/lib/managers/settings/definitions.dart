@@ -4069,16 +4069,18 @@ const screensaverScreenOffBlack = SettingDef<bool>(
 // dark panel only powers the screen on, the way the ESPHome Screen light
 // does, so the session stays up and the screen-off countdown starts over.
 // Touch, the wake word and the ESPHome dismiss still land on the dashboard.
+// A wake the app did not ask for (power button, double-tap to wake) follows
+// the switch too, since Android does not say which one it was.
 const screensaverScreenOffWakeToScreensaver = SettingDef<bool>(
   key: 'screensaver.screen_off_wake_to_screensaver',
   type: SettingType.boolean,
   defaultValue: false,
   title: 'Wake to screensaver',
   description:
-      'Motion, face, proximity or person detection after the screen has '
-      'turned off brings the screensaver back instead of the dashboard, '
-      'with a fresh Turn screen off after countdown. Touch still opens the '
-      'dashboard.',
+      'After the screen has turned off, motion, face, proximity or person '
+      'detection and the power button bring the screensaver back instead of '
+      'the dashboard, with a fresh Turn screen off after countdown. Touch '
+      'still opens the dashboard.',
   category: 'Screensaver',
 );
 

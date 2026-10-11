@@ -36027,8 +36027,8 @@
       ]
     }
   },
-  "settingScreensaverScreenOffWakeToScreensaverDescription": "屏幕关闭后，运动、人脸、接近或人体检测会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。",
-  "@settingScreensaverScreenOffWakeToScreensaverDescription": {
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": "屏幕关闭后，运动、人脸、接近或人体检测以及电源键会唤醒屏保，而不是打开仪表盘，并重新开始关闭屏幕倒计时。触屏仍会打开仪表盘。",
+  "@settingScreensaverScreenOffWakeToScreensaverDescriptionPower": {
     "context": "Settings:Screensaver",
     "description": "Help below the setting.",
     "x-locations": {

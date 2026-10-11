@@ -184,6 +184,57 @@ void main() {
     });
   }
 
+  // A wake the app did not ask for (power button, the Echo Show's mute
+  // button, double-tap to wake) follows the switch too (issue #952).
+  test('a system wake under a dark panel relights the screensaver', () {
+    fakeAsync((async) {
+      build({
+        wakeKey: true,
+        'ks.screensaver.timeout_seconds': 60,
+        'ks.screensaver.screen_off_minutes': 5,
+      });
+      async.flushMicrotasks();
+      async.elapse(const Duration(minutes: 6));
+      expect(screenCalls, ['screenOff']);
+      expect(saver.isActive, isTrue);
+
+      bus.publish(const ScreenStateChanged(on: true));
+      async.flushMicrotasks();
+      expect(saver.isActive, isTrue);
+      expect(screenCalls, ['screenOff']);
+
+      // A fresh countdown runs from the wake.
+      async.elapse(const Duration(minutes: 4));
+      expect(screenCalls, ['screenOff']);
+      async.elapse(const Duration(minutes: 1));
+      expect(screenCalls, ['screenOff', 'screenOff']);
+      expect(saver.isActive, isTrue);
+
+      // Woken again, then a touch is what opens the dashboard.
+      bus.publish(const ScreenStateChanged(on: true));
+      async.flushMicrotasks();
+      expect(saver.isActive, isTrue);
+      bus.publish(const ActivityDetected(source: 'touch'));
+      async.flushMicrotasks();
+      expect(saver.isActive, isFalse);
+    });
+  });
+
+  test('a system wake under a dark panel opens the dashboard by default', () {
+    fakeAsync((async) {
+      build({
+        'ks.screensaver.timeout_seconds': 60,
+        'ks.screensaver.screen_off_minutes': 5,
+      });
+      async.flushMicrotasks();
+      async.elapse(const Duration(minutes: 6));
+      expect(screenCalls, ['screenOff']);
+      bus.publish(const ScreenStateChanged(on: true));
+      async.flushMicrotasks();
+      expect(saver.isActive, isFalse);
+    });
+  });
+
   test('the switch is exposed through the settings schema', () async {
     await build({});
     final def = defs.screensaverScreenOffWakeToScreensaver;

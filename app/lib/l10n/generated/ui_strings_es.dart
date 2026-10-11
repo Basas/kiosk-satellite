@@ -9669,8 +9669,8 @@ class UiStringsEs extends UiStrings {
       'Volver al protector de pantalla al despertar';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Tras apagarse la pantalla, la detección de movimiento, rostros, proximidad o personas muestra el protector de pantalla en lugar del panel de control y reinicia el tiempo para apagar la pantalla. Tocar la pantalla sigue abriendo el panel de control.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      'Tras apagarse la pantalla, la detección de movimiento, rostros, proximidad o personas y el botón de encendido muestran el protector de pantalla en lugar del panel de control y reinician el tiempo para apagar la pantalla. Tocar la pantalla sigue abriendo el panel de control.';
 
   @override
   String get screensaverModeDim => 'Atenuar';

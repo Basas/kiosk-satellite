@@ -9594,8 +9594,8 @@ class UiStringsUk extends UiStrings {
       'Пробудження до заставки';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Розпізнавання руху, обличчя чи наближення після вимкнення екрана відновлює заставку, а не панель, із новим відліком вимкнення екрана. Дотик все одно відкриває панель керування.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      'Після вимкнення екрана розпізнавання руху, обличчя, наближення чи людини та кнопка живлення відновлюють заставку, а не панель, із новим відліком вимкнення екрана. Дотик все одно відкриває панель керування.';
 
   @override
   String get screensaverModeDim => 'Затемнення';

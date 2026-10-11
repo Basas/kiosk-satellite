@@ -36027,8 +36027,8 @@
       ]
     }
   },
-  "settingScreensaverScreenOffWakeToScreensaverDescription": "Определение движения, лица, близости или присутствия после выключения экрана возвращает заставку вместо панели, с новым отсчётом «Выключать экран через». Касание всё равно открывает панель.",
-  "@settingScreensaverScreenOffWakeToScreensaverDescription": {
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": "Определение движения, лица, близости или присутствия и кнопка питания после выключения экрана возвращают заставку вместо панели, с новым отсчётом «Выключать экран через». Касание всё равно открывает панель.",
+  "@settingScreensaverScreenOffWakeToScreensaverDescriptionPower": {
     "context": "Settings:Screensaver",
     "description": "Help below the setting.",
     "x-locations": {

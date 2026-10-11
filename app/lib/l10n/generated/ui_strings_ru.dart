@@ -9554,8 +9554,8 @@ class UiStringsRu extends UiStrings {
       'Пробуждать в заставку';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Определение движения, лица, близости или присутствия после выключения экрана возвращает заставку вместо панели, с новым отсчётом «Выключать экран через». Касание всё равно открывает панель.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      'Определение движения, лица, близости или присутствия и кнопка питания после выключения экрана возвращают заставку вместо панели, с новым отсчётом «Выключать экран через». Касание всё равно открывает панель.';
 
   @override
   String get screensaverModeDim => 'Затемнение';

@@ -9483,8 +9483,8 @@ class UiStringsEn extends UiStrings {
       'Wake to screensaver';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Motion, face, proximity or person detection after the screen has turned off brings the screensaver back instead of the dashboard, with a fresh Turn screen off after countdown. Touch still opens the dashboard.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionPower =>
+      'After the screen has turned off, motion, face, proximity or person detection and the power button bring the screensaver back instead of the dashboard, with a fresh Turn screen off after countdown. Touch still opens the dashboard.';
 
   @override
   String get screensaverModeDim => 'Dim';

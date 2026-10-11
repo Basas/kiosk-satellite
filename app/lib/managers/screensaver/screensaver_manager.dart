@@ -454,7 +454,11 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     // whose hand it was. A person at the panel (power button, double-tap-
     // to-wake: source system) is activity like a touch, so they land on
     // the dashboard rather than the screensaver — except under lockdown,
-    // which keeps its screen locked here exactly like it does for motion.
+    // which keeps its screen locked here exactly like it does for motion,
+    // and with Wake to screensaver on, which brings the screensaver back
+    // for these wakes the same as for a detection (issue #952). Android
+    // never tells an app which key or gesture woke the panel, so every
+    // wake the app did not ask for counts here.
     // The app's own pokes (source app) are either part of a dismiss that
     // is already running or an automation switching the panel on to show
     // the screensaver (a photo frame's morning switch-on), so those keep
@@ -477,10 +481,12 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
         return;
       }
       _panelDark = false;
-      if (byHand) {
+      if (byHand &&
+          !_settings.get(defs.screensaverScreenOffWakeToScreensaver)) {
         notifyActivity('screen on');
         return;
       }
+      if (byHand) log.info(name, 'woken by the device; screensaver stays');
       if (_blanked) {
         unawaited(_wakeFromBlank());
       } else {

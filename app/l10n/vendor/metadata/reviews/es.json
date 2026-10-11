@@ -19448,5 +19448,10 @@
     "source": "2d3fba026f3fd9021b3c73ef3068cf4b576b1062a1b8b1344fdf3d44f074e843",
     "translation": "08f6a89d134ed6fc30c0b4d365fb1ca055613ba37efc070276adb6e14e8b6569",
     "author": "Xavier Larrea"
+  },
+  "settingScreensaverScreenOffWakeToScreensaverDescriptionPower": {
+    "source": "f61a5bf7f41b6b0298b6f62f06fe4c50d07b0d3ca57c756d3e3ef6ea1f0220ce",
+    "translation": "c7150e9b9c33decd28878970471cd5ec9549a330d102f77ac442c26abad5fb50",
+    "author": "Xavier Larrea"
   }
 }
