@@ -59,6 +59,9 @@ void main() {
   /// How long the fake audio takes to stop a ring, zero unless a test
   /// needs the teardown to take as long as it does on a device.
   var stopRingDelay = Duration.zero;
+
+  /// The rate the fake decoder answers a file's own rate with.
+  var decodedRate = 16000;
   late List<Uint8List> audioWritten;
   late StreamController<Uint8List> mic;
   late List<Map<String, Object?>> peers;
@@ -119,6 +122,7 @@ void main() {
     audioCalls = [];
     audioArgs = [];
     stopRingDelay = Duration.zero;
+    decodedRate = 16000;
     audioWritten = [];
     mic = StreamController<Uint8List>.broadcast();
     answers = {
@@ -195,8 +199,15 @@ void main() {
         if (method == 'stopRing') await Future<void>.delayed(stopRingDelay);
         if (method == 'write') audioWritten.add(args as Uint8List);
         if (method == 'start') return true;
-        if (method == 'decode') return Uint8List(32000);
-        if (method == 'chimePcm') return Uint8List(16000);
+        if (method == 'decode') {
+          // One second of PCM at the rate asked for, or the file's own.
+          final asked = (args as Map)['rate'] as int;
+          final rate = asked > 0 ? asked : decodedRate;
+          return {'pcm': Uint8List(rate * 2), 'rate': rate};
+        }
+        if (method == 'chimePcm') {
+          return Uint8List(((args as Map)['rate'] as int) ~/ 2 * 2);
+        }
         return null;
       };
     await intercom.init();
@@ -2162,8 +2173,10 @@ void main() {
             'chime': true,
             'chime_file': sound,
           });
-          final chime = audioArgs.lastWhere((a) => a.$1 == 'decode').$2;
-          expect(chime, [sound.trim() == 'custom.wav' ? 2 : 1]);
+          final chime = audioArgs.lastWhere((a) => a.$1 == 'decode').$2 as Map;
+          expect(chime['bytes'], [sound.trim() == 'custom.wav' ? 2 : 1]);
+          // At the words' rate, to share their track.
+          expect(chime['rate'], 16000);
           expect(audioCalls, isNot(contains('chimePcm')));
           await commands.execute('intercomHangup', const {});
           await commands.execute('intercomDismiss', const {});
@@ -2198,6 +2211,36 @@ void main() {
       });
       expect(paced.ok, isTrue, reason: paced.error);
       expect((paced.data as Map)['ms'], 2000 + 2500);
+      await commands.execute('intercomHangup', const {});
+    });
+
+    test('an announcement plays at the rate its file was made at', () async {
+      await build();
+      decodedRate = 24000;
+      answers['GET /a.mp3'] = (_) => http.Response.bytes([9], 200);
+      final r = await commands.execute('announce', {
+        'url': 'http://sounds.local/a.mp3',
+        'chime': true,
+      });
+      expect(r.ok, isTrue, reason: r.error);
+      expect((r.data as Map)['ms'], 1000);
+      // The words keep their 24 kHz, and the chime is made to match.
+      expect(audioArgs.firstWhere((a) => a.$1 == 'decode').$2, {
+        'bytes': [9],
+        'rate': 0,
+      });
+      expect(
+        (audioArgs.lastWhere((a) => a.$1 == 'chimePcm').$2 as Map)['rate'],
+        24000,
+      );
+      expect(
+        (audioArgs.lastWhere((a) => a.$1 == 'start').$2 as Map)['rate'],
+        24000,
+      );
+      await settle(300);
+      // 80 ms chunks at 24 kHz.
+      expect(audioWritten, isNotEmpty);
+      expect(audioWritten.first.length, 3840);
       await commands.execute('intercomHangup', const {});
     });
 
