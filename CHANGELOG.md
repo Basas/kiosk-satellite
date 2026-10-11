@@ -7,6 +7,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ### Added
 - **Home Assistant can answer or decline an intercom call.** Two new ESPHome actions per kiosk, intercom_answer and intercom_decline, pick up or turn down the call ringing on that kiosk, the same as its on-screen buttons (#943). A kiosk without a screen can now take calls from a dashboard button, an automation or a sentence spoken to another voice device. Both report an error when nothing is ringing.
 
+### Fixed
+- **vsWakeWord and openWakeWord start on x86_64 devices.** The x86_64 and universal APKs had no ONNX Runtime library, so on BlissOS, ChromeOS and other x86_64 Android devices both engines and custom wake models failed to start and only microWakeWord worked (#939). Both APKs now include it.
+
 ## v2026.10.19 - 2026-10-10
 
 ### Added
