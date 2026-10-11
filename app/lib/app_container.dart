@@ -18,6 +18,7 @@ import 'managers/gestures/gestures_manager.dart';
 import 'managers/glance/glance_manager.dart';
 import 'managers/home_assistant/home_assistant_manager.dart';
 import 'managers/js_api/js_api_manager.dart';
+import 'managers/js_api/page_state_manager.dart';
 import 'managers/kiosk/kiosk_manager.dart';
 import 'managers/launcher/app_launcher_manager.dart';
 import 'managers/launcher/home_launcher_manager.dart';
@@ -143,6 +144,21 @@ class AppContainer {
     intercom = IntercomManager(bus, commands, log, settings);
     alarms = AlarmManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);
+    // Composition-root wiring: it reads the state other managers own and
+    // reports it to pages (kioskSatellite.getTheme / getKioskState).
+    pageState = PageStateManager(
+      bus,
+      commands,
+      log,
+      settings,
+      dashboardDark: homeAssistant.dashboardDark,
+      kioskLocked: () => kiosk.locked,
+      lockdownActive: () => kiosk.lockdownActive,
+      screensaverActive: () => screensaver.isActive,
+      screensaverView: screensaver.activeView,
+      cameraView: camera.activeViewId,
+      mediaSummary: () => sendspin.mediaSummary,
+    );
   }
 
   final bus = EventBus();
@@ -194,6 +210,7 @@ class AppContainer {
   late final IntercomManager intercom;
   late final AlarmManager alarms;
   late final VoiceRequestsManager voiceRequests;
+  late final PageStateManager pageState;
 
   /// Built after [device.init] so it can carry the app version.
   late final JsApiManager jsApi;
@@ -267,6 +284,8 @@ class AppContainer {
     alarms,
     // After intercom and alarms: it runs their commands.
     voiceRequests,
+    // Last: it reads the state every manager above keeps.
+    pageState,
   ];
 
   Future<void> init() async {

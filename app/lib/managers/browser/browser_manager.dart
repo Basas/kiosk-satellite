@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart'
     show AppLifecycleState, WidgetsBinding, WidgetsBindingObserver;
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+import 'color_scheme_script.dart';
 import 'no_cache_script.dart';
 import 'dashboard_camera_script.dart';
 import 'dashboard_state.dart';
@@ -1444,6 +1445,33 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
     final mapped = urlMapper?.call(url) ?? url;
     await prepareLoad(mapped);
     await _controller?.loadUrl(urlRequest: URLRequest(url: WebUri(mapped)));
+  }
+
+  /// The document-start script group that answers a custom page's
+  /// `prefers-color-scheme` (see customPageColorSchemeJs).
+  static const customPageSchemeGroup = 'ks-custom-page-scheme';
+
+  /// A custom page's `prefers-color-scheme` follows [dark] from now on:
+  /// the page on screen flips at once, and the document-start script is
+  /// swapped so the next page starts on it too.
+  Future<void> setCustomPageDark(bool dark) async {
+    final controller = _controller;
+    if (controller == null) return;
+    try {
+      await controller.removeUserScriptsByGroupName(
+        groupName: customPageSchemeGroup,
+      );
+      await controller.addUserScript(
+        userScript: UserScript(
+          groupName: customPageSchemeGroup,
+          source: customPageColorSchemeJs(dark: dark),
+          injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+        ),
+      );
+    } catch (e) {
+      log.debug(name, 'custom page color scheme not swapped: $e');
+    }
+    await runJs(colorSchemeSetJs(dark: dark));
   }
 
   /// Whether the dashboard WebView skips the HTTP cache right now: always

@@ -44,6 +44,25 @@ Never put a long-lived access token in a file under `www`. Home Assistant serves
 
 The page can also use the [JavaScript API](js-api.md) through `window.kioskSatellite`, the same as a dashboard.
 
+## Follow the kiosk's theme
+
+On a custom page, `prefers-color-scheme` answers with the kiosk's light or dark: the one it sets on Home Assistant when the Home Assistant **Theme** settings choose one. Otherwise it answers with the app theme. It covers `window.matchMedia('(prefers-color-scheme: dark)')` with its `change` events. It also covers `@media (prefers-color-scheme: dark)` rules in the page's own stylesheets, `<style>` and `<link media>`. When the theme changes, the page follows at once without a reload. Stylesheets loaded from another host keep following Android's dark mode.
+
+```css
+body { background: #fff; color: #111; }
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #eee; }
+}
+```
+
+For more than light or dark, ask the [JavaScript API](js-api.md#theme-and-kiosk-state). `kioskSatellite.getTheme()` reports the app's and Home Assistant's themes. `kioskSatellite.getKioskState()` reports kiosk mode, Lockdown Mode, the screensaver, hold mode, the camera view and the media player. Both have events for every change:
+
+```js
+window.addEventListener('kiosksatellite:kiosk-state', (e) => {
+  document.body.classList.toggle('dimmed', e.detail.screensaver.active);
+});
+```
+
 ## Several layouts in one page
 
 A page can hold several layouts and pick one from the part of the address after `#`. Add each layout as its own custom page with the same file and a different ending, such as `/local/wall.html#kitchen` and `/local/wall.html#den`. When the kiosk moves between two of them, it only changes the `#` part, so the page does not reload. Listen for the change in your page:
@@ -55,5 +74,5 @@ window.addEventListener('hashchange', () => showLayout(location.hash.slice(1)));
 ## How custom pages differ from dashboards
 
 - **Moving between a page and a dashboard reloads.** Dashboard views switch inside Home Assistant's app without a reload. A custom page is its own document, so moving from a dashboard to a page, from a page to a dashboard or between two different pages loads the new one in full. On a slow device, a rotation that mixes dashboard views and custom pages spends a moment loading at each switch.
-- **Dashboard features do not apply.** HA kiosk mode, the dashboard carousel, the theme schedule and the update filter only act on Home Assistant's dashboards. On a custom page, **Filter dashboard updates** says **Not used on custom pages** in [Optimizations](optimizations.md) and on the remote admin Overview.
+- **Dashboard features do not apply.** HA kiosk mode, the dashboard carousel and the update filter only act on Home Assistant's dashboards. The theme reaches a custom page through `prefers-color-scheme` instead (see above). On a custom page, **Filter dashboard updates** says **Not used on custom pages** in [Optimizations](optimizations.md) and on the remote admin Overview.
 - **Edits show on the next load.** Home Assistant tells browsers to keep files from `/local/` for a month. Its service worker keeps copies of its own too. Kiosk Satellite skips both for custom pages, so a page and the files beside it load fresh every time the kiosk opens or reloads it. Pull down to refresh after you change a page. Dashboards keep their caches as usual.

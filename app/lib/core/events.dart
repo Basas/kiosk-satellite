@@ -140,6 +140,35 @@ class ScreensaverViewChanged extends AppEvent {
   final String? view;
 }
 
+/// The app's and Home Assistant's light or dark state moved (the page
+/// state the JS API reports, see PageStateManager). [state] is what
+/// `kioskSatellite.getTheme()` answers.
+class ThemeStateChanged extends AppEvent {
+  const ThemeStateChanged(this.state);
+  final Map<String, Object?> state;
+
+  @override
+  String get wireName => 'theme';
+
+  @override
+  Map<String, Object?> toJson() => state;
+}
+
+/// Something `kioskSatellite.getKioskState()` reports moved: kiosk mode,
+/// Lockdown Mode, Home Assistant kiosk mode, the screensaver, the screen,
+/// hold mode, rotation, the camera view or the media player. [state] is
+/// the whole snapshot.
+class KioskStateChanged extends AppEvent {
+  const KioskStateChanged(this.state);
+  final Map<String, Object?> state;
+
+  @override
+  String get wireName => 'kiosk-state';
+
+  @override
+  Map<String, Object?> toJson() => state;
+}
+
 /// A full screen view came up or went: the Now Playing view in the
 /// screensaver slot (`nowPlaying`) or the intercom's roster or call screen
 /// (`intercom`). Internal: the remote admin labels its screenshot by it and

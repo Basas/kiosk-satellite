@@ -774,6 +774,7 @@ class _KioskScreenState extends State<KioskScreen>
     // The volume key routing follows the player and the screensaver
     // slot (issue #544); the setting rides _onSettingChanged.
     c.sendspin.nowPlaying.addListener(_syncVolumeKeys);
+    c.pageState.pageDark.addListener(_pageDarkChanged);
     c.screensaver.activeView.addListener(_syncVolumeKeys);
     // The build and the native key routing both follow these surfaces.
     c.browser.overlayUrl.addListener(_onOverlayChanged);
@@ -887,6 +888,11 @@ class _KioskScreenState extends State<KioskScreen>
 
   String get _initialUrl => c.settings.get(defs.startUrl);
 
+  /// The kiosk went light or dark: a custom page on screen, and the next
+  /// one, follow.
+  void _pageDarkChanged() =>
+      unawaited(c.browser.setCustomPageDark(c.pageState.pageDark.value));
+
   /// The JS bridge is always injected at document start. Kiosk mode rides
   /// along as a document-start script too, and is re-asserted per load in
   /// [onLoadStop] so a page that outlived a toggle catches up.
@@ -918,6 +924,14 @@ class _KioskScreenState extends State<KioskScreen>
     // (frozen at WebView creation), corrected live in _onSettingChanged,
     // and re-asserted every load in onLoadStop for pages loaded after a
     // toggle.
+    // A custom page's prefers-color-scheme answers with the kiosk's light
+    // or dark (PageStateManager.pageDark), for matchMedia and its CSS. Acts
+    // only under /local/; swapped live by BrowserManager.setCustomPageDark.
+    UserScript(
+      groupName: BrowserManager.customPageSchemeGroup,
+      source: customPageColorSchemeJs(dark: c.pageState.pageDark.value),
+      injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+    ),
     UserScript(
       source: 'window.__ksPtrEnabled = $_ptrEnabled;',
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
@@ -1412,6 +1426,7 @@ class _KioskScreenState extends State<KioskScreen>
     _cameraSub?.cancel();
     _saverSub?.cancel();
     c.sendspin.nowPlaying.removeListener(_syncVolumeKeys);
+    c.pageState.pageDark.removeListener(_pageDarkChanged);
     c.screensaver.activeView.removeListener(_syncVolumeKeys);
     c.browser.overlayUrl.removeListener(_onOverlayChanged);
     c.launcher.visible.removeListener(_onOverlayChanged);
