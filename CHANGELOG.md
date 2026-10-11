@@ -4,6 +4,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ## Unreleased
 
+### Added
+- **Photo details on the Home Assistant Media and Local Media screensavers.** The metadata panel of the Immich Media screensaver now comes to Home Assistant Media and Local Media too, read from each photo's EXIF (#953). Turn on **Show metadata** on either screensaver's page to show when the photo was taken and the camera with its focal length, aperture and ISO in a corner. The panel has the same **Metadata position**, **Text drop shadow**, **Text scaling** and **Vignette strength** settings as Immich Media. Location stays an Immich Media feature, since turning GPS coordinates into a place name needs a lookup service.
+
 ### Changed
 - **Wake to screensaver covers the power button.** With **Wake to screensaver** on, waking a screen that **Turn screen off after** powered off with the power button opened the dashboard, while motion and the other detections brought the screensaver back (#952). The power button now brings the screensaver back too, with a fresh **Turn screen off after** countdown. Android does not tell apps what woke the screen, so this covers every wake Kiosk Satellite did not start itself, including double-tap to wake and the mute button on an Echo Show running LineageOS, which acts as its power button. Touch still opens the dashboard.
 

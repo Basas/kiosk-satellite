@@ -10476,12 +10476,70 @@ class UiStringsFr extends UiStrings {
       'Un appui sur le cinquième gauche ou droit de l\'écran affiche la diapositive précédente ou suivante au lieu de fermer l\'économiseur d\'écran.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Afficher les métadonnées';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Date et détails de l\'appareil photo par-dessus la photo.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Date de prise de vue';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Afficher la date de prise de vue de la photo.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle =>
+      'Détails de l\'appareil photo';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Afficher la focale, l\'ouverture et la sensibilité ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Position des métadonnées';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'Dans quel coin les détails apparaissent.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle =>
+      'Ombre portée du texte';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Ajouter une ombre portée au texte des métadonnées pour la lisibilité sur les photos.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle =>
+      'Mise à l\'échelle du texte';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Ajuste la taille des détails de la photo à votre écran.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle =>
+      'Intensité du vignettage';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Opacité de l\'ombrage sombre derrière les détails, pour la lisibilité sur les photos claires. 0 le désactive.';
+
+  @override
+  String get screensaverMediaHaMetadata =>
+      'Métadonnées du média Home Assistant';
+
+  @override
   String get screensaverMediaHaPage =>
       'Économiseur d\'écran média Home Assistant';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Source multimédia, cadence, aléatoire, remplissage';
+  String get screensaverMediaHaPageHint =>
+      'Source multimédia, cadence, aléatoire, remplissage, métadonnées';
 
   @override
   String get screensaverMediaChoose => 'Choisir un média';
@@ -10571,11 +10629,68 @@ class UiStringsFr extends UiStrings {
       'Un appui sur le cinquième gauche ou droit de l\'écran affiche la diapositive précédente ou suivante au lieu de fermer l\'économiseur d\'écran.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Afficher les métadonnées';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Date et détails de l\'appareil photo par-dessus la photo.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Date de prise de vue';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Afficher la date de prise de vue de la photo.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle =>
+      'Détails de l\'appareil photo';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Afficher la focale, l\'ouverture et la sensibilité ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Position des métadonnées';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'Dans quel coin les détails apparaissent.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle =>
+      'Ombre portée du texte';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Ajouter une ombre portée au texte des métadonnées pour la lisibilité sur les photos.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle =>
+      'Mise à l\'échelle du texte';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Ajuste la taille des détails de la photo à votre écran.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle =>
+      'Intensité du vignettage';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Opacité de l\'ombrage sombre derrière les détails, pour la lisibilité sur les photos claires. 0 le désactive.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Métadonnées du média local';
+
+  @override
   String get screensaverMediaLocalPage => 'Économiseur d\'écran média local';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Dossier, cadence, aléatoire, transition';
+  String get screensaverMediaLocalPageHint =>
+      'Dossier, cadence, aléatoire, transition, métadonnées';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Fermer sur mouvement';

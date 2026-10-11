@@ -39109,6 +39109,201 @@
       ]
     }
   },
+  "settingScreensaverMediaMetadataTitle": "Показувати метадані",
+  "@settingScreensaverMediaMetadataTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDescription": "Дата та параметри камери поверх фото.",
+  "@settingScreensaverMediaMetadataDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDateTitle": "Дата зйомки",
+  "@settingScreensaverMediaMetadataDateTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDateDescription": "Показувати, коли було зроблено фото.",
+  "@settingScreensaverMediaMetadataDateDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataCameraTitle": "Параметри камери",
+  "@settingScreensaverMediaMetadataCameraTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataCameraDescription": "Показувати фокусну відстань, діафрагму та ISO.",
+  "@settingScreensaverMediaMetadataCameraDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataPositionTitle": "Розташування метаданих",
+  "@settingScreensaverMediaMetadataPositionTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataPositionDescription": "У якому кутку показувати відомості.",
+  "@settingScreensaverMediaMetadataPositionDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataTextShadowTitle": "Тінь тексту",
+  "@settingScreensaverMediaMetadataTextShadowTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataTextShadowDescription": "Додати тінь до тексту метаданих для кращої читабельності на фотографіях.",
+  "@settingScreensaverMediaMetadataTextShadowDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataScaleTitle": "Масштаб тексту",
+  "@settingScreensaverMediaMetadataScaleTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataScaleDescription": "Масштабувати відомості фото відповідно до розміру екрана.",
+  "@settingScreensaverMediaMetadataScaleDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaVignetteStrengthTitle": "Інтенсивність віньєтування",
+  "@settingScreensaverMediaVignetteStrengthTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaVignetteStrengthDescription": "Затемнення фону за відомостями для читабельності на яскравих фото. 0 вимикає його.",
+  "@settingScreensaverMediaVignetteStrengthDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "screensaverMediaHaMetadata": "Метадані медіа Home Assistant",
+  "@screensaverMediaHaMetadata": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
   "screensaverMediaHaPage": "Заставка медіа Home Assistant",
   "@screensaverMediaHaPage": {
     "context": "Settings:Screensaver:Home Assistant Media screensaver",
@@ -39122,8 +39317,8 @@
       ]
     }
   },
-  "screensaverMediaHaHint": "Джерело медіа, тривалість, випадковий порядок, заповнення",
-  "@screensaverMediaHaHint": {
+  "screensaverMediaHaPageHint": "Джерело медіа, тривалість, випадковий порядок, заповнення, метадані",
+  "@screensaverMediaHaPageHint": {
     "context": "Settings:Screensaver:Home Assistant Media screensaver",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -39466,6 +39661,201 @@
       ]
     }
   },
+  "settingScreensaverLocalMetadataTitle": "Показувати метадані",
+  "@settingScreensaverLocalMetadataTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDescription": "Дата та параметри камери поверх фото.",
+  "@settingScreensaverLocalMetadataDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDateTitle": "Дата зйомки",
+  "@settingScreensaverLocalMetadataDateTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDateDescription": "Показувати, коли було зроблено фото.",
+  "@settingScreensaverLocalMetadataDateDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataCameraTitle": "Параметри камери",
+  "@settingScreensaverLocalMetadataCameraTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataCameraDescription": "Показувати фокусну відстань, діафрагму та ISO.",
+  "@settingScreensaverLocalMetadataCameraDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataPositionTitle": "Розташування метаданих",
+  "@settingScreensaverLocalMetadataPositionTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataPositionDescription": "У якому кутку показувати відомості.",
+  "@settingScreensaverLocalMetadataPositionDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataTextShadowTitle": "Тінь тексту",
+  "@settingScreensaverLocalMetadataTextShadowTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataTextShadowDescription": "Додати тінь до тексту метаданих для кращої читабельності на фотографіях.",
+  "@settingScreensaverLocalMetadataTextShadowDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataScaleTitle": "Масштаб тексту",
+  "@settingScreensaverLocalMetadataScaleTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataScaleDescription": "Масштабувати відомості фото відповідно до розміру екрана.",
+  "@settingScreensaverLocalMetadataScaleDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalVignetteStrengthTitle": "Інтенсивність віньєтування",
+  "@settingScreensaverLocalVignetteStrengthTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalVignetteStrengthDescription": "Затемнення фону за відомостями для читабельності на яскравих фото. 0 вимикає його.",
+  "@settingScreensaverLocalVignetteStrengthDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "screensaverMediaLocalMetadata": "Метадані локальних медіа",
+  "@screensaverMediaLocalMetadata": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
   "screensaverMediaLocalPage": "Заставка локальних медіа",
   "@screensaverMediaLocalPage": {
     "context": "Settings:Screensaver:Local Media screensaver",
@@ -39479,8 +39869,8 @@
       ]
     }
   },
-  "screensaverMediaLocalHint": "Папка, тривалість, випадковий порядок, перехід",
-  "@screensaverMediaLocalHint": {
+  "screensaverMediaLocalPageHint": "Папка, тривалість, випадковий порядок, перехід, метадані",
+  "@screensaverMediaLocalPageHint": {
     "context": "Settings:Screensaver:Local Media screensaver",
     "description": "Label or guidance in this section.",
     "x-locations": {

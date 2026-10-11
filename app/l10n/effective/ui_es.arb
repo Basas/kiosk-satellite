@@ -39109,6 +39109,201 @@
       ]
     }
   },
+  "settingScreensaverMediaMetadataTitle": "Mostrar metadatos",
+  "@settingScreensaverMediaMetadataTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDescription": "Muestra la fecha y los detalles de la cámara sobre la foto.",
+  "@settingScreensaverMediaMetadataDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDateTitle": "Fecha de captura",
+  "@settingScreensaverMediaMetadataDateTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDateDescription": "Muestra cuándo se tomó la foto.",
+  "@settingScreensaverMediaMetadataDateDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataCameraTitle": "Detalles de la cámara",
+  "@settingScreensaverMediaMetadataCameraTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataCameraDescription": "Muestra la distancia focal, la apertura y el ISO.",
+  "@settingScreensaverMediaMetadataCameraDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataPositionTitle": "Posición de los metadatos",
+  "@settingScreensaverMediaMetadataPositionTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataPositionDescription": "Esquina en la que se muestran los detalles.",
+  "@settingScreensaverMediaMetadataPositionDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataTextShadowTitle": "Sombra del texto",
+  "@settingScreensaverMediaMetadataTextShadowTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataTextShadowDescription": "Añade una sombra al texto de los metadatos para facilitar su lectura sobre las fotos.",
+  "@settingScreensaverMediaMetadataTextShadowDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataScaleTitle": "Tamaño del texto",
+  "@settingScreensaverMediaMetadataScaleTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataScaleDescription": "Ajusta el tamaño de los detalles de la foto a la pantalla.",
+  "@settingScreensaverMediaMetadataScaleDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaVignetteStrengthTitle": "Intensidad del sombreado",
+  "@settingScreensaverMediaVignetteStrengthTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaVignetteStrengthDescription": "Oscuridad del sombreado detrás de los detalles para facilitar la lectura sobre fotos claras. Con 0, se desactiva.",
+  "@settingScreensaverMediaVignetteStrengthDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "screensaverMediaHaMetadata": "Metadatos del contenido multimedia de Home Assistant",
+  "@screensaverMediaHaMetadata": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
   "screensaverMediaHaPage": "Protector de pantalla: Contenido multimedia de Home Assistant",
   "@screensaverMediaHaPage": {
     "context": "Settings:Screensaver:Home Assistant Media screensaver",
@@ -39122,8 +39317,8 @@
       ]
     }
   },
-  "screensaverMediaHaHint": "Origen multimedia, duración, orden aleatorio y ajuste a la pantalla",
-  "@screensaverMediaHaHint": {
+  "screensaverMediaHaPageHint": "Origen multimedia, duración, orden aleatorio, ajuste a la pantalla y metadatos",
+  "@screensaverMediaHaPageHint": {
     "context": "Settings:Screensaver:Home Assistant Media screensaver",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -39466,6 +39661,201 @@
       ]
     }
   },
+  "settingScreensaverLocalMetadataTitle": "Mostrar metadatos",
+  "@settingScreensaverLocalMetadataTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDescription": "Muestra la fecha y los detalles de la cámara sobre la foto.",
+  "@settingScreensaverLocalMetadataDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDateTitle": "Fecha de captura",
+  "@settingScreensaverLocalMetadataDateTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDateDescription": "Muestra cuándo se tomó la foto.",
+  "@settingScreensaverLocalMetadataDateDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataCameraTitle": "Detalles de la cámara",
+  "@settingScreensaverLocalMetadataCameraTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataCameraDescription": "Muestra la distancia focal, la apertura y el ISO.",
+  "@settingScreensaverLocalMetadataCameraDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataPositionTitle": "Posición de los metadatos",
+  "@settingScreensaverLocalMetadataPositionTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataPositionDescription": "Esquina en la que se muestran los detalles.",
+  "@settingScreensaverLocalMetadataPositionDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataTextShadowTitle": "Sombra del texto",
+  "@settingScreensaverLocalMetadataTextShadowTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataTextShadowDescription": "Añade una sombra al texto de los metadatos para facilitar su lectura sobre las fotos.",
+  "@settingScreensaverLocalMetadataTextShadowDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataScaleTitle": "Tamaño del texto",
+  "@settingScreensaverLocalMetadataScaleTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataScaleDescription": "Ajusta el tamaño de los detalles de la foto a la pantalla.",
+  "@settingScreensaverLocalMetadataScaleDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalVignetteStrengthTitle": "Intensidad del sombreado",
+  "@settingScreensaverLocalVignetteStrengthTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalVignetteStrengthDescription": "Oscuridad del sombreado detrás de los detalles para facilitar la lectura sobre fotos claras. Con 0, se desactiva.",
+  "@settingScreensaverLocalVignetteStrengthDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "screensaverMediaLocalMetadata": "Metadatos del contenido multimedia local",
+  "@screensaverMediaLocalMetadata": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
   "screensaverMediaLocalPage": "Protector de pantalla: Contenido multimedia local",
   "@screensaverMediaLocalPage": {
     "context": "Settings:Screensaver:Local Media screensaver",
@@ -39479,8 +39869,8 @@
       ]
     }
   },
-  "screensaverMediaLocalHint": "Carpeta, duración, orden aleatorio y transición",
-  "@screensaverMediaLocalHint": {
+  "screensaverMediaLocalPageHint": "Carpeta, duración, orden aleatorio, transición y metadatos",
+  "@screensaverMediaLocalPageHint": {
     "context": "Settings:Screensaver:Local Media screensaver",
     "description": "Label or guidance in this section.",
     "x-locations": {

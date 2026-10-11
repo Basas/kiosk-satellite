@@ -1291,6 +1291,13 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     const {},
   );
 
+  /// The photo the Home Assistant Media page shows, as its media id and the
+  /// URL it was loaded from, so the metadata panel drawn over the page can
+  /// read its EXIF (issue #953). Null for a video, a camera or nothing yet.
+  final ValueNotifier<({String id, String url})?> mediaSlide = ValueNotifier(
+    null,
+  );
+
   /// Records the metadata panel's size in [corner], keeping the largest
   /// seen this session.
   void reportMetadataFootprint(String corner, Size size) {
@@ -1811,6 +1818,7 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     claimedCorners.value = const {};
     weatherChipsHeight.value = 0;
     metadataFootprint.value = const {};
+    mediaSlide.value = null;
     _slides = null;
     bus.publish(const ScreensaverStateChanged(active: false));
   }

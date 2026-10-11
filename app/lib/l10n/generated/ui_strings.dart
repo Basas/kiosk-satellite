@@ -17855,6 +17855,96 @@ abstract class UiStrings {
   /// **'A tap on the left or right fifth of the screen shows the previous or next slide instead of dismissing.'**
   String get settingScreensaverMediaEdgeTapsDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show metadata'**
+  String get settingScreensaverMediaMetadataTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and camera details over the photo.'**
+  String get settingScreensaverMediaMetadataDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Date taken'**
+  String get settingScreensaverMediaMetadataDateTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show when the photo was taken.'**
+  String get settingScreensaverMediaMetadataDateDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera details'**
+  String get settingScreensaverMediaMetadataCameraTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show focal length, aperture and ISO.'**
+  String get settingScreensaverMediaMetadataCameraDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata position'**
+  String get settingScreensaverMediaMetadataPositionTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Which corner the details sit in.'**
+  String get settingScreensaverMediaMetadataPositionDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text drop shadow'**
+  String get settingScreensaverMediaMetadataTextShadowTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a drop shadow to metadata text for readability on photos.'**
+  String get settingScreensaverMediaMetadataTextShadowDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text scaling'**
+  String get settingScreensaverMediaMetadataScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the photo details to better fit your screen size.'**
+  String get settingScreensaverMediaMetadataScaleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Vignette strength'**
+  String get settingScreensaverMediaVignetteStrengthTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Darkness of the shading behind the details, for readability on bright photos. 0 turns it off.'**
+  String get settingScreensaverMediaVignetteStrengthDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant Media metadata'**
+  String get screensaverMediaHaMetadata;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -17864,8 +17954,8 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'Media source, timing, shuffle, fill'**
-  String get screensaverMediaHaHint;
+  /// **'Media source, timing, shuffle, fill, metadata'**
+  String get screensaverMediaHaPageHint;
 
   /// Label or guidance in this section.
   ///
@@ -18017,6 +18107,96 @@ abstract class UiStrings {
   /// **'A tap on the left or right fifth of the screen shows the previous or next slide instead of dismissing.'**
   String get settingScreensaverLocalEdgeTapsDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show metadata'**
+  String get settingScreensaverLocalMetadataTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and camera details over the photo.'**
+  String get settingScreensaverLocalMetadataDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Date taken'**
+  String get settingScreensaverLocalMetadataDateTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show when the photo was taken.'**
+  String get settingScreensaverLocalMetadataDateDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera details'**
+  String get settingScreensaverLocalMetadataCameraTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show focal length, aperture and ISO.'**
+  String get settingScreensaverLocalMetadataCameraDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata position'**
+  String get settingScreensaverLocalMetadataPositionTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Which corner the details sit in.'**
+  String get settingScreensaverLocalMetadataPositionDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text drop shadow'**
+  String get settingScreensaverLocalMetadataTextShadowTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a drop shadow to metadata text for readability on photos.'**
+  String get settingScreensaverLocalMetadataTextShadowDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text scaling'**
+  String get settingScreensaverLocalMetadataScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the photo details to better fit your screen size.'**
+  String get settingScreensaverLocalMetadataScaleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Vignette strength'**
+  String get settingScreensaverLocalVignetteStrengthTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Darkness of the shading behind the details, for readability on bright photos. 0 turns it off.'**
+  String get settingScreensaverLocalVignetteStrengthDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Media metadata'**
+  String get screensaverMediaLocalMetadata;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -18026,8 +18206,8 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'Folder, timing, shuffle, transition'**
-  String get screensaverMediaLocalHint;
+  /// **'Folder, timing, shuffle, transition, metadata'**
+  String get screensaverMediaLocalPageHint;
 
   /// Setting label.
   ///

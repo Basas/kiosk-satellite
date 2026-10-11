@@ -9774,10 +9774,59 @@ class UiStringsZh extends UiStrings {
       '点击屏幕左侧或右侧五分之一区域，显示上一张或下一张幻灯片，而非关闭屏保。';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => '显示元数据';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription => '在照片上显示日期和相机详情。';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => '拍摄日期';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription => '显示照片的拍摄时间。';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => '相机详情';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      '显示焦距、光圈和 ISO。';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle => '元数据位置';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription => '详情显示的屏幕角落。';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => '文字投影';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      '为元数据文字添加阴影，使其在照片上更清晰。';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => '文字缩放';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      '调整照片详情的大小以适应屏幕尺寸。';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle => '暗角强度';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      '调整照片详情下方阴影的深浅，使文字在明亮的照片上也能看清。设为 0 时不显示阴影。';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Home Assistant 媒体元数据';
+
+  @override
   String get screensaverMediaHaPage => 'Home Assistant 媒体屏保';
 
   @override
-  String get screensaverMediaHaHint => '媒体来源、时长、随机播放和填充';
+  String get screensaverMediaHaPageHint => '媒体来源、时长、随机播放、填充和元数据';
 
   @override
   String get screensaverMediaChoose => '选择媒体';
@@ -9862,10 +9911,59 @@ class UiStringsZh extends UiStrings {
       '点击屏幕左侧或右侧五分之一区域，显示上一张或下一张幻灯片，而非关闭屏保。';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => '显示元数据';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription => '在照片上显示日期和相机详情。';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => '拍摄日期';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription => '显示照片的拍摄时间。';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => '相机详情';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      '显示焦距、光圈和 ISO。';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle => '元数据位置';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription => '详情显示的屏幕角落。';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => '文字投影';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      '为元数据文字添加阴影，使其在照片上更清晰。';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => '文字缩放';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      '调整照片详情的大小以适应屏幕尺寸。';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle => '暗角强度';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      '调整照片详情下方阴影的深浅，使文字在明亮的照片上也能看清。设为 0 时不显示阴影。';
+
+  @override
+  String get screensaverMediaLocalMetadata => '本地媒体元数据';
+
+  @override
   String get screensaverMediaLocalPage => '本地媒体屏保';
 
   @override
-  String get screensaverMediaLocalHint => '文件夹、时长、随机播放和切换效果';
+  String get screensaverMediaLocalPageHint => '文件夹、时长、随机播放、切换效果和元数据';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => '检测到运动时关闭屏保';
@@ -22369,10 +22467,59 @@ class UiStringsZhCn extends UiStringsZh {
       '点击屏幕左侧或右侧五分之一区域，显示上一张或下一张幻灯片，而非关闭屏保。';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => '显示元数据';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription => '在照片上显示日期和相机详情。';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => '拍摄日期';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription => '显示照片的拍摄时间。';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => '相机详情';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      '显示焦距、光圈和 ISO。';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle => '元数据位置';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription => '详情显示的屏幕角落。';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => '文字投影';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      '为元数据文字添加阴影，使其在照片上更清晰。';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => '文字缩放';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      '调整照片详情的大小以适应屏幕尺寸。';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle => '暗角强度';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      '调整照片详情下方阴影的深浅，使文字在明亮的照片上也能看清。设为 0 时不显示阴影。';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Home Assistant 媒体元数据';
+
+  @override
   String get screensaverMediaHaPage => 'Home Assistant 媒体屏保';
 
   @override
-  String get screensaverMediaHaHint => '媒体来源、时长、随机播放和填充';
+  String get screensaverMediaHaPageHint => '媒体来源、时长、随机播放、填充和元数据';
 
   @override
   String get screensaverMediaChoose => '选择媒体';
@@ -22457,10 +22604,59 @@ class UiStringsZhCn extends UiStringsZh {
       '点击屏幕左侧或右侧五分之一区域，显示上一张或下一张幻灯片，而非关闭屏保。';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => '显示元数据';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription => '在照片上显示日期和相机详情。';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => '拍摄日期';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription => '显示照片的拍摄时间。';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => '相机详情';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      '显示焦距、光圈和 ISO。';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle => '元数据位置';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription => '详情显示的屏幕角落。';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => '文字投影';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      '为元数据文字添加阴影，使其在照片上更清晰。';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => '文字缩放';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      '调整照片详情的大小以适应屏幕尺寸。';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle => '暗角强度';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      '调整照片详情下方阴影的深浅，使文字在明亮的照片上也能看清。设为 0 时不显示阴影。';
+
+  @override
+  String get screensaverMediaLocalMetadata => '本地媒体元数据';
+
+  @override
   String get screensaverMediaLocalPage => '本地媒体屏保';
 
   @override
-  String get screensaverMediaLocalHint => '文件夹、时长、随机播放和切换效果';
+  String get screensaverMediaLocalPageHint => '文件夹、时长、随机播放、切换效果和元数据';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => '检测到运动时关闭屏保';

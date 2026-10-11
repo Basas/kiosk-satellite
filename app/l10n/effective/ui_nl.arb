@@ -39109,6 +39109,201 @@
       ]
     }
   },
+  "settingScreensaverMediaMetadataTitle": "Metadata tonen",
+  "@settingScreensaverMediaMetadataTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDescription": "Toon de datum en cameragegevens over de foto.",
+  "@settingScreensaverMediaMetadataDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDateTitle": "Opnamedatum",
+  "@settingScreensaverMediaMetadataDateTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataDateDescription": "Laat zien wanneer de foto is genomen.",
+  "@settingScreensaverMediaMetadataDateDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataCameraTitle": "Cameragegevens",
+  "@settingScreensaverMediaMetadataCameraTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataCameraDescription": "Toont brandpuntsafstand, diafragma en ISO.",
+  "@settingScreensaverMediaMetadataCameraDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataPositionTitle": "Positie van metagegevens",
+  "@settingScreensaverMediaMetadataPositionTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataPositionDescription": "In welke hoek de details worden weergegeven.",
+  "@settingScreensaverMediaMetadataPositionDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataTextShadowTitle": "Tekstschaduw",
+  "@settingScreensaverMediaMetadataTextShadowTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataTextShadowDescription": "Voeg een schaduw toe aan de tekst met metagegevens zodat deze op foto's beter leesbaar is.",
+  "@settingScreensaverMediaMetadataTextShadowDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataScaleTitle": "Tekstgrootte",
+  "@settingScreensaverMediaMetadataScaleTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaMetadataScaleDescription": "Pas de grootte van de fotogegevens aan zodat deze beter op het scherm past.",
+  "@settingScreensaverMediaMetadataScaleDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaVignetteStrengthTitle": "Vignettesterkte",
+  "@settingScreensaverMediaVignetteStrengthTitle": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverMediaVignetteStrengthDescription": "Bepaalt hoe donker de schaduw achter de details is, zodat deze op lichte foto's leesbaar blijven. Stel 0 in om dit uit te schakelen.",
+  "@settingScreensaverMediaVignetteStrengthDescription": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
+  "screensaverMediaHaMetadata": "Metadata van Home Assistant-media",
+  "@screensaverMediaHaMetadata": {
+    "context": "Settings:Screensaver:Home Assistant Media screensaver:Home Assistant Media metadata",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Media screensaver > Home Assistant Media metadata"
+      ]
+    }
+  },
   "screensaverMediaHaPage": "Home Assistant-media als schermbeveiliging",
   "@screensaverMediaHaPage": {
     "context": "Settings:Screensaver:Home Assistant Media screensaver",
@@ -39122,8 +39317,8 @@
       ]
     }
   },
-  "screensaverMediaHaHint": "Mediabron, timing, willekeurige volgorde en schermvulling",
-  "@screensaverMediaHaHint": {
+  "screensaverMediaHaPageHint": "Mediabron, timing, willekeurige volgorde, schermvulling en metadata",
+  "@screensaverMediaHaPageHint": {
     "context": "Settings:Screensaver:Home Assistant Media screensaver",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -39466,6 +39661,201 @@
       ]
     }
   },
+  "settingScreensaverLocalMetadataTitle": "Metadata tonen",
+  "@settingScreensaverLocalMetadataTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDescription": "Toon de datum en cameragegevens over de foto.",
+  "@settingScreensaverLocalMetadataDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDateTitle": "Opnamedatum",
+  "@settingScreensaverLocalMetadataDateTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataDateDescription": "Laat zien wanneer de foto is genomen.",
+  "@settingScreensaverLocalMetadataDateDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataCameraTitle": "Cameragegevens",
+  "@settingScreensaverLocalMetadataCameraTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataCameraDescription": "Toont brandpuntsafstand, diafragma en ISO.",
+  "@settingScreensaverLocalMetadataCameraDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataPositionTitle": "Positie van metagegevens",
+  "@settingScreensaverLocalMetadataPositionTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataPositionDescription": "In welke hoek de details worden weergegeven.",
+  "@settingScreensaverLocalMetadataPositionDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataTextShadowTitle": "Tekstschaduw",
+  "@settingScreensaverLocalMetadataTextShadowTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataTextShadowDescription": "Voeg een schaduw toe aan de tekst met metagegevens zodat deze op foto's beter leesbaar is.",
+  "@settingScreensaverLocalMetadataTextShadowDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataScaleTitle": "Tekstgrootte",
+  "@settingScreensaverLocalMetadataScaleTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalMetadataScaleDescription": "Pas de grootte van de fotogegevens aan zodat deze beter op het scherm past.",
+  "@settingScreensaverLocalMetadataScaleDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalVignetteStrengthTitle": "Vignettesterkte",
+  "@settingScreensaverLocalVignetteStrengthTitle": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "settingScreensaverLocalVignetteStrengthDescription": "Bepaalt hoe donker de schaduw achter de details is, zodat deze op lichte foto's leesbaar blijven. Stel 0 in om dit uit te schakelen.",
+  "@settingScreensaverLocalVignetteStrengthDescription": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
+  "screensaverMediaLocalMetadata": "Metadata van lokale media",
+  "@screensaverMediaLocalMetadata": {
+    "context": "Settings:Screensaver:Local Media screensaver:Local Media metadata",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Local Media screensaver > Local Media metadata"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Local Media screensaver > Local Media metadata"
+      ]
+    }
+  },
   "screensaverMediaLocalPage": "Lokale mediaschermbeveiliging",
   "@screensaverMediaLocalPage": {
     "context": "Settings:Screensaver:Local Media screensaver",
@@ -39479,8 +39869,8 @@
       ]
     }
   },
-  "screensaverMediaLocalHint": "Map, timing, willekeurige volgorde en overgangen",
-  "@screensaverMediaLocalHint": {
+  "screensaverMediaLocalPageHint": "Map, timing, willekeurige volgorde, overgangen en metadata",
+  "@screensaverMediaLocalPageHint": {
     "context": "Settings:Screensaver:Local Media screensaver",
     "description": "Label or guidance in this section.",
     "x-locations": {

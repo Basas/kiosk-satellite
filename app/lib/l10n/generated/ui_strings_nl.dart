@@ -10401,12 +10401,65 @@ class UiStringsNl extends UiStrings {
       'Tik in het linker- of rechtervijfde van het scherm om de vorige of volgende afbeelding te tonen in plaats van de schermbeveiliging af te sluiten.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Metadata tonen';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Toon de datum en cameragegevens over de foto.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Opnamedatum';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Laat zien wanneer de foto is genomen.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Cameragegevens';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Toont brandpuntsafstand, diafragma en ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Positie van metagegevens';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'In welke hoek de details worden weergegeven.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => 'Tekstschaduw';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Voeg een schaduw toe aan de tekst met metagegevens zodat deze op foto\'s beter leesbaar is.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Tekstgrootte';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Pas de grootte van de fotogegevens aan zodat deze beter op het scherm past.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle => 'Vignettesterkte';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Bepaalt hoe donker de schaduw achter de details is, zodat deze op lichte foto\'s leesbaar blijven. Stel 0 in om dit uit te schakelen.';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Metadata van Home Assistant-media';
+
+  @override
   String get screensaverMediaHaPage =>
       'Home Assistant-media als schermbeveiliging';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Mediabron, timing, willekeurige volgorde en schermvulling';
+  String get screensaverMediaHaPageHint =>
+      'Mediabron, timing, willekeurige volgorde, schermvulling en metadata';
 
   @override
   String get screensaverMediaChoose => 'Media kiezen';
@@ -10495,11 +10548,64 @@ class UiStringsNl extends UiStrings {
       'Tik in het linker- of rechtervijfde van het scherm om de vorige of volgende foto te tonen in plaats van de schermbeveiliging af te sluiten.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Metadata tonen';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Toon de datum en cameragegevens over de foto.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Opnamedatum';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Laat zien wanneer de foto is genomen.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Cameragegevens';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Toont brandpuntsafstand, diafragma en ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Positie van metagegevens';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'In welke hoek de details worden weergegeven.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => 'Tekstschaduw';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Voeg een schaduw toe aan de tekst met metagegevens zodat deze op foto\'s beter leesbaar is.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Tekstgrootte';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Pas de grootte van de fotogegevens aan zodat deze beter op het scherm past.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle => 'Vignettesterkte';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Bepaalt hoe donker de schaduw achter de details is, zodat deze op lichte foto\'s leesbaar blijven. Stel 0 in om dit uit te schakelen.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Metadata van lokale media';
+
+  @override
   String get screensaverMediaLocalPage => 'Lokale mediaschermbeveiliging';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Map, timing, willekeurige volgorde en overgangen';
+  String get screensaverMediaLocalPageHint =>
+      'Map, timing, willekeurige volgorde, overgangen en metadata';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Sluiten bij beweging';

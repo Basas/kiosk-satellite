@@ -36,15 +36,13 @@ import '../managers/screensaver/immich_manager.dart'
         ImmichPairing,
         arrangeImmichPairs,
         immichFiltersActive,
-        immichMetadataCorner,
-        immichMetadataFieldOn,
-        immichMetadataFields,
         immichMetadataVisible,
         immichPairPhoto,
         immichPairingFor;
 import '../managers/camera/models.dart'
     show CameraViewConfig, decodeCameraViewIds;
 import '../managers/device/haptics.dart';
+import '../managers/screensaver/photo_metadata.dart';
 import '../managers/screensaver/screensaver_widgets.dart';
 import '../managers/settings/definitions.dart' as defs;
 import '../managers/settings/settings_manager.dart';
@@ -122,7 +120,7 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
     // admin can) applies immediately: the widget list is read at build,
     // so a changed list needs this rebuild to mount or unmount overlays.
     // The scaling slider rides along and doubles as a live preview.
-    // The Immich metadata lines ride along for the same reason: their
+    // The photo metadata lines ride along for the same reason: their
     // toggles are read at build, so turning one off has to reach the
     // panel already on screen. So do the At a Glance switch and style,
     // read at build by the overlay row the photo and web modes carry.
@@ -136,12 +134,7 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
       defs.screensaverWidgetFont.key,
       defs.screensaverWidgetFontWeight.key,
       defs.screensaverWidgetTextShadow.key,
-      defs.screensaverImmichMetadataTextShadow.key,
-      defs.screensaverImmichMetadataScale.key,
       defs.screensaverVignetteStrength.key,
-      defs.screensaverImmichVignetteStrength.key,
-      defs.screensaverImmichMetadata.key,
-      defs.screensaverImmichMetadataPosition.key,
       defs.screensaverGlanceEnabled.key,
       defs.screensaverGlanceTextOnly.key,
       defs.screensaverGlanceBwIcons.key,
@@ -157,7 +150,8 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
       // The edge zones (issue #453), read at build by the row below the
       // mode, so the toggle mounts or unmounts them on the spot.
       for (final def in slideEdgeTapDefs.values) def.key,
-      for (final def in immichMetadataFields.values) def.key,
+      for (final metadata in photoMetadataDefs.values)
+        for (final def in metadata.all) def.key,
     };
     // The Night mode keys ride along so they can be tuned from the remote
     // admin against the live face: the decision is remade, since the
@@ -299,8 +293,36 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                     ),
                   ),
                   // Exempt from the Scale UI factor like every WebView: the
-                  // page renders at its own scale.
-                  'media' || 'website' => UiScaleExempt(
+                  // page renders at its own scale. The metadata panel is
+                  // Flutter's, over the page, and scales like Immich's. The
+                  // Stack stays put when the panel comes and goes, so the
+                  // page is never remounted for it.
+                  'media' => Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      UiScaleExempt(
+                        child: ScreensaverWebView(
+                          container: container,
+                          mode: view,
+                        ),
+                      ),
+                      if (photoMetadataVisible(container.settings, view))
+                        ValueListenableBuilder(
+                          valueListenable: container.screensaver.mediaSlide,
+                          builder: (context, slide, _) => _PhotoMetadata(
+                            container: container,
+                            mode: view,
+                            slide: slide?.id,
+                            // Only asked for while there is a slide.
+                            details: () => remotePhotoDetails(
+                              slide!.id,
+                              Uri.parse(slide.url),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  'website' => UiScaleExempt(
                     child: ScreensaverWebView(container: container, mode: view),
                   ),
                   'local' || 'gallery' => _Dismissable(
@@ -376,20 +398,21 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                       return ValueListenableBuilder<Set<String>>(
                         valueListenable: container.screensaver.claimedCorners,
                         builder: (context, claimed, _) {
-                          // Immich metadata in a bottom corner, whether
-                          // the pair's two panels (which claim theirs
-                          // live) or the single-photo panel's settled
-                          // spot, and the row narrows to portrait's two
-                          // columns so it wraps clear of the panels
-                          // instead of spreading into them.
-                          final metadata = view == 'immich'
-                              ? immichMetadataCorner(container.settings)
-                              : null;
+                          // Photo metadata in a bottom corner, whether
+                          // the Immich pair's two panels (which claim
+                          // theirs live) or the single-photo panel's
+                          // settled spot, and the row narrows to
+                          // portrait's two columns so it wraps clear of
+                          // the panels instead of spreading into them.
+                          final metadata = photoMetadataCorner(
+                            container.settings,
+                            view,
+                          );
                           final narrow =
                               claimed.any((c) => c.startsWith('bottom_')) ||
                               metadata == 'bottom_left' ||
                               metadata == 'bottom_right';
-                          if (!narrow || view != 'immich') {
+                          if (!narrow || !photoMetadataDefs.containsKey(view)) {
                             return _GlanceOverlay(
                               container: container,
                               narrow: narrow,
@@ -2889,6 +2912,17 @@ class _ScreensaverWebViewState extends State<ScreensaverWebView> {
     );
   }
 
+  /// A photo the Media page reported, or null for anything else.
+  static ({String id, String url})? _mediaPhoto(List<dynamic> args) {
+    final photo = args.isEmpty ? null : args.first;
+    if (photo is! Map) return null;
+    final id = photo['id'], url = photo['url'];
+    if (id is! String || url is! String || Uri.tryParse(url) == null) {
+      return null;
+    }
+    return (id: id, url: url);
+  }
+
   void _scheduleRetry(InAppWebViewController controller, String why) {
     if (_retry?.isActive ?? false) return;
     widget.container.log.warn('screensaver', '$why; retrying in 10s');
@@ -3111,6 +3145,29 @@ setInterval(function () {
               'screensaver',
               args.isNotEmpty ? '${args.first}' : '',
             );
+            return null;
+          },
+        );
+        // The Media page names each photo it loads and shows, so the
+        // metadata panel over it can read the photo's EXIF (issue #953):
+        // 'photo' as the image starts loading, a head start for the
+        // lookup, and 'slide' once it is on screen (null for a video or a
+        // camera).
+        controller.addJavaScriptHandler(
+          handlerName: 'photo',
+          callback: (args) {
+            final photo = _mediaPhoto(args);
+            if (photo != null &&
+                photoMetadataVisible(widget.container.settings, 'media')) {
+              unawaited(remotePhotoDetails(photo.id, Uri.parse(photo.url)));
+            }
+            return null;
+          },
+        );
+        controller.addJavaScriptHandler(
+          handlerName: 'slide',
+          callback: (args) {
+            widget.container.screensaver.mediaSlide.value = _mediaPhoto(args);
             return null;
           },
         );
@@ -3607,6 +3664,9 @@ class _LocalMediaScreensaverState extends State<LocalMediaScreensaver>
     final next = index % _files.length;
     if (_isVideo(_files[next])) return;
     _prepared.warm(_prepareKey(next), (valid) => _prepare(next, valid));
+    if (photoMetadataVisible(c.settings, widget.mode)) {
+      unawaited(localPhotoDetails(_files[next].path));
+    }
   }
 
   @override
@@ -3798,7 +3858,31 @@ class _LocalMediaScreensaverState extends State<LocalMediaScreensaver>
               ),
             );
     }
-    return ColoredBox(color: Colors.black, child: body);
+    // The photo's own EXIF in a corner (issue #953). Local Media only: the
+    // Photo Gallery shares this widget but has no metadata settings.
+    final showMetadata =
+        _problem == null &&
+        _files.isNotEmpty &&
+        (_image != null || _videoShowing(video)) &&
+        photoMetadataVisible(c.settings, widget.mode);
+    if (!showMetadata) return ColoredBox(color: Colors.black, child: body);
+    final path = _files[_index].path;
+    return ColoredBox(
+      color: Colors.black,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          body,
+          _PhotoMetadata(
+            container: c,
+            mode: widget.mode,
+            // A video carries no EXIF, so it clears the panel.
+            slide: _image != null ? '$_index:$path' : null,
+            details: () => localPhotoDetails(path),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -4555,6 +4639,15 @@ class _ImmichScreensaverState extends State<ImmichScreensaver>
     );
   }
 
+  /// The metadata panel for [asset], whose details the Immich server holds.
+  Widget _immichMetadata(ImmichAsset asset, {String? corner}) => _PhotoMetadata(
+    container: c,
+    mode: 'immich',
+    slide: asset.id,
+    details: () => c.immich.assetDetails(asset),
+    corner: corner,
+  );
+
   @override
   Widget build(BuildContext context) {
     final video = _video;
@@ -4670,7 +4763,7 @@ class _ImmichScreensaverState extends State<ImmichScreensaver>
                 // even be next to. The corners are fixed here (the widget
                 // layer stands down from both while the pair holds them).
                 if (pairIndex == null)
-                  _ImmichMetadata(container: c, asset: _assets[_index])
+                  _immichMetadata(_assets[_index])
                 else ...[
                   if (_pairing == ImmichPairing.stacked)
                     // The top photo's panel lives in the top half, so its
@@ -4682,23 +4775,14 @@ class _ImmichScreensaverState extends State<ImmichScreensaver>
                       top: 0,
                       right: 0,
                       height: MediaQuery.sizeOf(context).height / 2,
-                      child: _ImmichMetadata(
-                        container: c,
-                        asset: _assets[_index],
+                      child: _immichMetadata(
+                        _assets[_index],
                         corner: _pairCorners[0],
                       ),
                     )
                   else
-                    _ImmichMetadata(
-                      container: c,
-                      asset: _assets[_index],
-                      corner: _pairCorners[0],
-                    ),
-                  _ImmichMetadata(
-                    container: c,
-                    asset: _assets[pairIndex],
-                    corner: _pairCorners[1],
-                  ),
+                    _immichMetadata(_assets[_index], corner: _pairCorners[0]),
+                  _immichMetadata(_assets[pairIndex], corner: _pairCorners[1]),
                 ],
               ],
             )
@@ -4707,21 +4791,33 @@ class _ImmichScreensaverState extends State<ImmichScreensaver>
   }
 }
 
-/// The metadata panel in a corner of the Immich screensaver: album, date,
-/// camera and location, shadow-on-photo text like the small clock, and only
-/// the lines the asset actually carries. The panel outlives the slide: the
-/// vignette holds steady from photo to photo while the text fades out with
-/// the old one and back in with the new. Remounting the whole panel per
-/// slide read as a hard blink against the crossfading photos.
-class _ImmichMetadata extends StatefulWidget {
-  const _ImmichMetadata({
+/// The metadata panel in a corner of a photo screensaver: album, date,
+/// camera and location on Immich, the date and camera from the photo's EXIF
+/// elsewhere, shadow-on-photo text like the small clock, and only the lines
+/// the slide actually carries. The panel outlives the slide: the vignette
+/// holds steady from photo to photo while the text fades out with the old
+/// one and back in with the new. Remounting the whole panel per slide read
+/// as a hard blink against the crossfading photos.
+class _PhotoMetadata extends StatefulWidget {
+  const _PhotoMetadata({
     required this.container,
-    required this.asset,
+    required this.mode,
+    required this.slide,
+    required this.details,
     this.corner,
   });
 
   final AppContainer container;
-  final ImmichAsset asset;
+
+  /// The screensaver mode, which picks the settings the panel follows.
+  final String mode;
+
+  /// What identifies the slide on screen, or null for one with nothing to
+  /// say (a camera stream). A new value swaps the text.
+  final String? slide;
+
+  /// The slide's lines, looked up when [slide] changes.
+  final Future<Map<String, String>> Function() details;
 
   /// The corner this panel must sit in, overriding both the setting and the
   /// step-past-a-widget search: a pair's two panels belong under their own
@@ -4729,13 +4825,13 @@ class _ImmichMetadata extends StatefulWidget {
   final String? corner;
 
   @override
-  State<_ImmichMetadata> createState() => _ImmichMetadataState();
+  State<_PhotoMetadata> createState() => _PhotoMetadataState();
 }
 
-class _ImmichMetadataState extends State<_ImmichMetadata> {
-  /// The details on screen right now. They lag [_ImmichMetadata.asset] by
+class _PhotoMetadataState extends State<_PhotoMetadata> {
+  /// The details on screen right now. They lag [_PhotoMetadata.slide] by
   /// design: the old text holds through its fade-out, and the vignette
-  /// rides this map, so it only moves when an asset truly has no lines.
+  /// rides this map, so it only moves when a slide truly has no lines.
   Map<String, String> _details = const {};
   bool _textVisible = false;
 
@@ -4744,23 +4840,26 @@ class _ImmichMetadataState extends State<_ImmichMetadata> {
   @override
   void initState() {
     super.initState();
-    _swap(widget.asset, fadeOut: false);
+    _swap(fadeOut: false);
   }
 
   @override
-  void didUpdateWidget(_ImmichMetadata old) {
+  void didUpdateWidget(_PhotoMetadata old) {
     super.didUpdateWidget(old);
-    if (old.asset.id != widget.asset.id) _swap(widget.asset, fadeOut: true);
+    if (old.slide != widget.slide) _swap(fadeOut: true);
   }
 
-  /// Fade the old text out, look up the new asset's lines (already cached
-  /// when the prefetcher got there first), fade back in. A newer swap wins:
-  /// each continuation checks it still speaks for the current asset.
-  Future<void> _swap(ImmichAsset asset, {required bool fadeOut}) async {
+  /// Fade the old text out, look up the new slide's lines (already cached
+  /// when a prefetch got there first), fade back in. A newer swap wins:
+  /// each continuation checks it still speaks for the current slide.
+  Future<void> _swap({required bool fadeOut}) async {
+    final slide = widget.slide;
     if (fadeOut) setState(() => _textVisible = false);
-    final details = await widget.container.immich.assetDetails(asset);
+    final details = slide == null
+        ? const <String, String>{}
+        : await widget.details();
     if (fadeOut) await Future<void>.delayed(_fade);
-    if (!mounted || widget.asset.id != asset.id) return;
+    if (!mounted || widget.slide != slide) return;
     setState(() {
       _details = details;
       _textVisible = true;
@@ -4777,24 +4876,22 @@ class _ImmichMetadataState extends State<_ImmichMetadata> {
     // down entirely on the (unlikely) fully claimed screen. The helper
     // is shared with the At a Glance row, which narrows when this
     // settles in a bottom corner.
-    final spot = immichMetadataCorner(container.settings);
+    final spot = photoMetadataCorner(container.settings, widget.mode);
     if (spot == null) return const SizedBox.shrink();
     return _panel(_cornerAlignment(spot));
   }
 
   /// The panel itself, anchored to [corner].
   Widget _panel(Alignment corner) {
+    final metadata = photoMetadataDefs[widget.mode]!;
     final shadows = _overlayTextShadows(
       widget.container,
-      setting: defs.screensaverImmichMetadataTextShadow,
+      setting: metadata.textShadow,
     );
     // Fixed pixel sizes, then the Text scaling slider over every one of
     // them (text, icons and the gap between), the widgets' rule.
     final scale =
-        widget.container.settings
-            .get(defs.screensaverImmichMetadataScale)
-            .toDouble() /
-        100;
+        widget.container.settings.get(metadata.scale).toDouble() / 100;
     TextStyle style({double size = 16, FontWeight? weight, double alpha = 1}) =>
         TextStyle(
           fontFamily: 'Rubik',
@@ -4839,7 +4936,7 @@ class _ImmichMetadataState extends State<_ImmichMetadata> {
     // carries. An empty list takes the vignette with it: a corner darkened
     // for nothing reads as a smudge on the photo.
     String? kept(String field) =>
-        immichMetadataFieldOn(widget.container.settings, field)
+        photoMetadataFieldOn(widget.container.settings, widget.mode, field)
         ? details[field]
         : null;
     final album = kept('album');
@@ -4876,7 +4973,7 @@ class _ImmichMetadataState extends State<_ImmichMetadata> {
               corner,
               widget.container,
               radius: 0.6,
-              def: defs.screensaverImmichVignetteStrength,
+              def: metadata.vignette,
             ),
           ),
           AnimatedOpacity(

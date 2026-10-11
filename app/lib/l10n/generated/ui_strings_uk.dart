@@ -10390,11 +10390,65 @@ class UiStringsUk extends UiStrings {
       'Торкання лівої або правої п\'ятої частини екрана показує попередній або наступний слайд замість закриття заставки.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Показувати метадані';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Дата та параметри камери поверх фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Дата зйомки';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Показувати, коли було зроблено фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Параметри камери';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Показувати фокусну відстань, діафрагму та ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Розташування метаданих';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'У якому кутку показувати відомості.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => 'Тінь тексту';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Додати тінь до тексту метаданих для кращої читабельності на фотографіях.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Масштаб тексту';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Масштабувати відомості фото відповідно до розміру екрана.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle =>
+      'Інтенсивність віньєтування';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Затемнення фону за відомостями для читабельності на яскравих фото. 0 вимикає його.';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Метадані медіа Home Assistant';
+
+  @override
   String get screensaverMediaHaPage => 'Заставка медіа Home Assistant';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Джерело медіа, тривалість, випадковий порядок, заповнення';
+  String get screensaverMediaHaPageHint =>
+      'Джерело медіа, тривалість, випадковий порядок, заповнення, метадані';
 
   @override
   String get screensaverMediaChoose => 'Вибрати медіа';
@@ -10483,11 +10537,65 @@ class UiStringsUk extends UiStrings {
       'Торкання лівої або правої п\'ятої частини екрана показує попередній або наступний слайд замість закриття заставки.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Показувати метадані';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Дата та параметри камери поверх фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Дата зйомки';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Показувати, коли було зроблено фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Параметри камери';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Показувати фокусну відстань, діафрагму та ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Розташування метаданих';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'У якому кутку показувати відомості.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => 'Тінь тексту';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Додати тінь до тексту метаданих для кращої читабельності на фотографіях.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Масштаб тексту';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Масштабувати відомості фото відповідно до розміру екрана.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle =>
+      'Інтенсивність віньєтування';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Затемнення фону за відомостями для читабельності на яскравих фото. 0 вимикає його.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Метадані локальних медіа';
+
+  @override
   String get screensaverMediaLocalPage => 'Заставка локальних медіа';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Папка, тривалість, випадковий порядок, перехід';
+  String get screensaverMediaLocalPageHint =>
+      'Папка, тривалість, випадковий порядок, перехід, метадані';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Вихід за рухом';

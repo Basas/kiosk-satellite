@@ -250,7 +250,7 @@ export const screensaverTextMessageIds = {
   "Smart": "screensaverMediaFillSmart",
   "Always": "screensaverMediaFillAlways",
   "Home Assistant Media screensaver": "screensaverMediaHaPage",
-  "Media source, timing, shuffle, fill": "screensaverMediaHaHint",
+  "Media source, timing, shuffle, fill, metadata": "screensaverMediaHaPageHint",
   "Choose media": "screensaverMediaChoose",
   "Media": "screensaverMediaRoot",
   "Could not reach Home Assistant, or the token is missing.": "screensaverMediaHaUnavailable",
@@ -262,7 +262,7 @@ export const screensaverTextMessageIds = {
   "browse failed": "screensaverMediaBrowseFailed",
   "Not set": "screensaverMediaNotSet",
   "Local Media screensaver": "screensaverMediaLocalPage",
-  "Folder, timing, shuffle, transition": "screensaverMediaLocalHint",
+  "Folder, timing, shuffle, transition, metadata": "screensaverMediaLocalPageHint",
   "Photo Gallery screensaver": "screensaverMediaGalleryPage",
   "Photos, timing, shuffle, transition": "screensaverMediaGalleryHint",
   "Loading photos...": "screensaverMediaLoadingPhotos",
@@ -527,5 +527,8 @@ export const screensaverTextMessageIds = {
   "The Home Assistant dashboard view the screensaver shows.": "settingScreensaverDashboardViewDescription",
   "Home Assistant Dashboard": "screensaverModeDashboard",
   "Home Assistant Dashboard screensaver": "screensaverDashboardSection",
-  "Next alarm": "alarmsNextWidget"
+  "Next alarm": "alarmsNextWidget",
+  "Home Assistant Media metadata": "screensaverMediaHaMetadata",
+  "Date and camera details over the photo.": "settingScreensaverMediaMetadataDescription",
+  "Local Media metadata": "screensaverMediaLocalMetadata"
 };

@@ -10273,10 +10273,66 @@ class UiStringsEn extends UiStrings {
       'A tap on the left or right fifth of the screen shows the previous or next slide instead of dismissing.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Show metadata';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Date and camera details over the photo.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Date taken';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Show when the photo was taken.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Camera details';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Show focal length, aperture and ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Metadata position';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'Which corner the details sit in.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle =>
+      'Text drop shadow';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Add a drop shadow to metadata text for readability on photos.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Text scaling';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Scale the photo details to better fit your screen size.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle =>
+      'Vignette strength';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Darkness of the shading behind the details, for readability on bright photos. 0 turns it off.';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Home Assistant Media metadata';
+
+  @override
   String get screensaverMediaHaPage => 'Home Assistant Media screensaver';
 
   @override
-  String get screensaverMediaHaHint => 'Media source, timing, shuffle, fill';
+  String get screensaverMediaHaPageHint =>
+      'Media source, timing, shuffle, fill, metadata';
 
   @override
   String get screensaverMediaChoose => 'Choose media';
@@ -10365,10 +10421,66 @@ class UiStringsEn extends UiStrings {
       'A tap on the left or right fifth of the screen shows the previous or next slide instead of dismissing.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Show metadata';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Date and camera details over the photo.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Date taken';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Show when the photo was taken.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Camera details';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Show focal length, aperture and ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Metadata position';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'Which corner the details sit in.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle =>
+      'Text drop shadow';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Add a drop shadow to metadata text for readability on photos.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Text scaling';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Scale the photo details to better fit your screen size.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle =>
+      'Vignette strength';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Darkness of the shading behind the details, for readability on bright photos. 0 turns it off.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Local Media metadata';
+
+  @override
   String get screensaverMediaLocalPage => 'Local Media screensaver';
 
   @override
-  String get screensaverMediaLocalHint => 'Folder, timing, shuffle, transition';
+  String get screensaverMediaLocalPageHint =>
+      'Folder, timing, shuffle, transition, metadata';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Dismiss on motion';

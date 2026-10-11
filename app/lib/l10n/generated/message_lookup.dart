@@ -3331,8 +3331,37 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreensaverMediaEdgeTapsTitle,
       'settingScreensaverMediaEdgeTapsDescription' =>
         strings.settingScreensaverMediaEdgeTapsDescription,
+      'settingScreensaverMediaMetadataTitle' =>
+        strings.settingScreensaverMediaMetadataTitle,
+      'settingScreensaverMediaMetadataDescription' =>
+        strings.settingScreensaverMediaMetadataDescription,
+      'settingScreensaverMediaMetadataDateTitle' =>
+        strings.settingScreensaverMediaMetadataDateTitle,
+      'settingScreensaverMediaMetadataDateDescription' =>
+        strings.settingScreensaverMediaMetadataDateDescription,
+      'settingScreensaverMediaMetadataCameraTitle' =>
+        strings.settingScreensaverMediaMetadataCameraTitle,
+      'settingScreensaverMediaMetadataCameraDescription' =>
+        strings.settingScreensaverMediaMetadataCameraDescription,
+      'settingScreensaverMediaMetadataPositionTitle' =>
+        strings.settingScreensaverMediaMetadataPositionTitle,
+      'settingScreensaverMediaMetadataPositionDescription' =>
+        strings.settingScreensaverMediaMetadataPositionDescription,
+      'settingScreensaverMediaMetadataTextShadowTitle' =>
+        strings.settingScreensaverMediaMetadataTextShadowTitle,
+      'settingScreensaverMediaMetadataTextShadowDescription' =>
+        strings.settingScreensaverMediaMetadataTextShadowDescription,
+      'settingScreensaverMediaMetadataScaleTitle' =>
+        strings.settingScreensaverMediaMetadataScaleTitle,
+      'settingScreensaverMediaMetadataScaleDescription' =>
+        strings.settingScreensaverMediaMetadataScaleDescription,
+      'settingScreensaverMediaVignetteStrengthTitle' =>
+        strings.settingScreensaverMediaVignetteStrengthTitle,
+      'settingScreensaverMediaVignetteStrengthDescription' =>
+        strings.settingScreensaverMediaVignetteStrengthDescription,
+      'screensaverMediaHaMetadata' => strings.screensaverMediaHaMetadata,
       'screensaverMediaHaPage' => strings.screensaverMediaHaPage,
-      'screensaverMediaHaHint' => strings.screensaverMediaHaHint,
+      'screensaverMediaHaPageHint' => strings.screensaverMediaHaPageHint,
       'screensaverMediaChoose' => strings.screensaverMediaChoose,
       'screensaverMediaRoot' => strings.screensaverMediaRoot,
       'screensaverMediaHaUnavailable' => strings.screensaverMediaHaUnavailable,
@@ -3371,8 +3400,37 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreensaverLocalEdgeTapsTitle,
       'settingScreensaverLocalEdgeTapsDescription' =>
         strings.settingScreensaverLocalEdgeTapsDescription,
+      'settingScreensaverLocalMetadataTitle' =>
+        strings.settingScreensaverLocalMetadataTitle,
+      'settingScreensaverLocalMetadataDescription' =>
+        strings.settingScreensaverLocalMetadataDescription,
+      'settingScreensaverLocalMetadataDateTitle' =>
+        strings.settingScreensaverLocalMetadataDateTitle,
+      'settingScreensaverLocalMetadataDateDescription' =>
+        strings.settingScreensaverLocalMetadataDateDescription,
+      'settingScreensaverLocalMetadataCameraTitle' =>
+        strings.settingScreensaverLocalMetadataCameraTitle,
+      'settingScreensaverLocalMetadataCameraDescription' =>
+        strings.settingScreensaverLocalMetadataCameraDescription,
+      'settingScreensaverLocalMetadataPositionTitle' =>
+        strings.settingScreensaverLocalMetadataPositionTitle,
+      'settingScreensaverLocalMetadataPositionDescription' =>
+        strings.settingScreensaverLocalMetadataPositionDescription,
+      'settingScreensaverLocalMetadataTextShadowTitle' =>
+        strings.settingScreensaverLocalMetadataTextShadowTitle,
+      'settingScreensaverLocalMetadataTextShadowDescription' =>
+        strings.settingScreensaverLocalMetadataTextShadowDescription,
+      'settingScreensaverLocalMetadataScaleTitle' =>
+        strings.settingScreensaverLocalMetadataScaleTitle,
+      'settingScreensaverLocalMetadataScaleDescription' =>
+        strings.settingScreensaverLocalMetadataScaleDescription,
+      'settingScreensaverLocalVignetteStrengthTitle' =>
+        strings.settingScreensaverLocalVignetteStrengthTitle,
+      'settingScreensaverLocalVignetteStrengthDescription' =>
+        strings.settingScreensaverLocalVignetteStrengthDescription,
+      'screensaverMediaLocalMetadata' => strings.screensaverMediaLocalMetadata,
       'screensaverMediaLocalPage' => strings.screensaverMediaLocalPage,
-      'screensaverMediaLocalHint' => strings.screensaverMediaLocalHint,
+      'screensaverMediaLocalPageHint' => strings.screensaverMediaLocalPageHint,
       'settingScreensaverDismissOnMotionTitle' =>
         strings.settingScreensaverDismissOnMotionTitle,
       'settingScreensaverDismissOnMotionDescription' =>

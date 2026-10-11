@@ -10342,11 +10342,64 @@ class UiStringsRu extends UiStrings {
       'Касание левой или правой пятой части экрана показывает предыдущий или следующий слайд вместо закрытия.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Показывать метаданные';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Дата и детали камеры поверх фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Дата съёмки';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Показывать, когда снято фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Детали камеры';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Показывать фокусное расстояние, диафрагму и ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Позиция метаданных';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'В каком углу находятся детали.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => 'Тень текста';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Добавить тень тексту метаданных для читаемости на фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Масштаб текста';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Масштабируйте детали фото под размер экрана.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle => 'Сила виньетки';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Затемнение позади деталей для читаемости на светлых фото. 0 выключает.';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Метаданные «Медиа Home Assistant»';
+
+  @override
   String get screensaverMediaHaPage => 'Заставка «Медиа Home Assistant»';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Источник медиа, тайминг, перемешивание, заполнение';
+  String get screensaverMediaHaPageHint =>
+      'Источник медиа, тайминг, перемешивание, заполнение, метаданные';
 
   @override
   String get screensaverMediaChoose => 'Выберите медиа';
@@ -10435,11 +10488,64 @@ class UiStringsRu extends UiStrings {
       'Касание левой или правой пятой части экрана показывает предыдущий или следующий слайд вместо закрытия.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Показывать метаданные';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Дата и детали камеры поверх фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Дата съёмки';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Показывать, когда снято фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Детали камеры';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Показывать фокусное расстояние, диафрагму и ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Позиция метаданных';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'В каком углу находятся детали.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => 'Тень текста';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Добавить тень тексту метаданных для читаемости на фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Масштаб текста';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Масштабируйте детали фото под размер экрана.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle => 'Сила виньетки';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Затемнение позади деталей для читаемости на светлых фото. 0 выключает.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Метаданные «Локальные медиа»';
+
+  @override
   String get screensaverMediaLocalPage => 'Заставка «Локальные медиа»';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Папка, тайминг, перемешивание, переход';
+  String get screensaverMediaLocalPageHint =>
+      'Папка, тайминг, перемешивание, переход, метаданные';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Прятать при движении';

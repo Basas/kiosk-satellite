@@ -19453,5 +19453,165 @@
     "source": "f61a5bf7f41b6b0298b6f62f06fe4c50d07b0d3ca57c756d3e3ef6ea1f0220ce",
     "translation": "c7150e9b9c33decd28878970471cd5ec9549a330d102f77ac442c26abad5fb50",
     "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataScaleDescription": {
+    "source": "ea2eb9b36b01673699da0f9257c002abc60aba6593280b76cf2f9fc842b6a610",
+    "translation": "73bf631b671b7cce8cb380ee8fa2760d451a5beeedf28fc562578b0894bc9bb6",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataCameraDescription": {
+    "source": "31e348bef1447a4a5806035b24ab29a444e521123c039ef472b924c4a4cd5635",
+    "translation": "a93420adb57ba98ac6cf3159e7e769d9fcb0df02ff4628ef6f8a4c97d7ecd1f6",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataTitle": {
+    "source": "38a546ab0109aabbed66fbd52223bbdc1ef207e1969b71ec96073e82f0f4293a",
+    "translation": "036a1c1fad029d2e37e2d6c8a760ba3b8572b2e957354c25466d740fb3ab8a67",
+    "author": "Xavier Larrea"
+  },
+  "screensaverMediaLocalPageHint": {
+    "source": "946659e939baada182ff6eebd290d2a6cbad709d9514217f58280af331fe0b1f",
+    "translation": "c6e8d8e7cb99c2b11289378847db8f3a762aeae37b442cc6a51b327641c56fec",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalVignetteStrengthDescription": {
+    "source": "1ffa071a58d2fea3fd0dd40b9ef952c83f38892ea6e555367277e85427980c4b",
+    "translation": "5ba71f8c938de8281be72e1c4949219f3a48d5ecb0330e81ad8f87cce6d46ac9",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataCameraTitle": {
+    "source": "09ea4f75eda4a810f76a3f223cfb922d56780cc9556d13071efd86881686e637",
+    "translation": "f010b9bab99dea1517631d5593e8226efe9d5ae1cf2e5f74318d556a9ee13de2",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaVignetteStrengthTitle": {
+    "source": "a511ac41c2a8de34f87de7a7509236eb8634614285be7d4b73f99ab638ce11c8",
+    "translation": "770bd15f38477603ab0c5eab2fcc7ca607aebfdfc6f9670e06ba1d91867c31be",
+    "author": "Xavier Larrea"
+  },
+  "screensaverMediaLocalMetadata": {
+    "source": "150596e9b67924a6cd810634db74b720f93fbc338d13cc3ad433f3d380f0bd2a",
+    "translation": "7d4d67541515653aaad1de76d34ff4ed1302a3ecb1f4f2b023a2e1145af6d50d",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataPositionTitle": {
+    "source": "2d4a86a84550162d306ad282b6be9f2e404a5d3ff2739eba4954df26e836c1b1",
+    "translation": "ff08c4e70c98f611ccbcc2fe2d67a47484a4833602be429c31b1a0c6c9b40e4d",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataPositionDescription": {
+    "source": "53b106c15cb118c6e949e0a4d279056ac43d53eeb7050daebaf9591adadbe971",
+    "translation": "b17d966715d44f21ddd243cc6dba5abfc0d914a7bafcce2c0242fcfdffcc2da9",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataDescription": {
+    "source": "d5c263f37f875089e272d6b16f6535ebb01d4b01aaef42c9faf87e382146029f",
+    "translation": "a2940a6f73819550e3a4631f4b275c74083535f270f1d1a041284e0e72615684",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataTextShadowTitle": {
+    "source": "585b671336cd57cd6eda3f2252510b052652f2ef079a81dd8b5d09624f2c2065",
+    "translation": "f1a1e7f3cc356f710c5517b77cded3a5511ec6ed10ab2184b24794efc88ac3ee",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataPositionTitle": {
+    "source": "f13657e77375146afc56f3afc99b0fcf0f868a56e76c5152fc59041f7c832d3f",
+    "translation": "ff08c4e70c98f611ccbcc2fe2d67a47484a4833602be429c31b1a0c6c9b40e4d",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataDateDescription": {
+    "source": "95cddbd146f30ef93270bb2a0a74cd135b8587c5e9af0cab65ddd65024cdd88c",
+    "translation": "b4c33c8c1d9e05175d1074e36cc012949259dfb2a4953083ea711651fe8e0958",
+    "author": "Xavier Larrea"
+  },
+  "screensaverMediaHaPageHint": {
+    "source": "82a141560491708821301131624276a90a6734de0acf22be9127ae2c107255ab",
+    "translation": "cebef0a9620edb76cd36984ff11eeb5c0e88ff1594876871d9766e0ff9ed4cc6",
+    "author": "Xavier Larrea"
+  },
+  "screensaverMediaHaMetadata": {
+    "source": "5c04af7d0111f2d9f7f3d964332d506328e68598fb14bcd387b8cf653cb17d33",
+    "translation": "6b352731a91526a65f0e34d2ef33ee4e03f403c62266692d2a72dd53f5b0a261",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataTextShadowTitle": {
+    "source": "7fc495b9626b5c258a636bfc613a61653ae6e219a0bc34404284e17d7e1c4c05",
+    "translation": "f1a1e7f3cc356f710c5517b77cded3a5511ec6ed10ab2184b24794efc88ac3ee",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataTextShadowDescription": {
+    "source": "9b42a78c765442518854e5fabe146669138978a2d095494dcae1a5a89423edcc",
+    "translation": "34104e345224d9f225fa845f8a0f7e40b3dfa6287d8603e46626a47b597d4ce5",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataTextShadowDescription": {
+    "source": "dfcfee904ab84bedfc2d5e86f06590f8ffd5d02c8c85645d87ce8a325063631f",
+    "translation": "34104e345224d9f225fa845f8a0f7e40b3dfa6287d8603e46626a47b597d4ce5",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataScaleDescription": {
+    "source": "24a555e60f2478cdacb9a61a725f6d4f56db6006946c1b238ef535acb36b031b",
+    "translation": "73bf631b671b7cce8cb380ee8fa2760d451a5beeedf28fc562578b0894bc9bb6",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataCameraDescription": {
+    "source": "7ef365c80b382b8b8815649d9b64d829f9e1dbc6f5d0df832133ecd67f3e2e61",
+    "translation": "a93420adb57ba98ac6cf3159e7e769d9fcb0df02ff4628ef6f8a4c97d7ecd1f6",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataScaleTitle": {
+    "source": "40a705a664d1b4804caf0c0372f9cb02ab2863e7f7bfcbee1b220e9789874607",
+    "translation": "03af7bf27c68e7846cd22372735eb087ba05172fb95abd02f068189fa6633dfd",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaVignetteStrengthDescription": {
+    "source": "e2177f12675fc35bdfb5c421864afce56db81edacb24796339ed6163725a8984",
+    "translation": "5ba71f8c938de8281be72e1c4949219f3a48d5ecb0330e81ad8f87cce6d46ac9",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataCameraTitle": {
+    "source": "2dd9dce494b76d90650bfff9808d2887be7524139df50bda6b1ac0ade088c83f",
+    "translation": "f010b9bab99dea1517631d5593e8226efe9d5ae1cf2e5f74318d556a9ee13de2",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataTitle": {
+    "source": "b74386f2113ec74d00740832311a5db2aaefe7cf480e98d82eac7387c7b88b52",
+    "translation": "036a1c1fad029d2e37e2d6c8a760ba3b8572b2e957354c25466d740fb3ab8a67",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataDateDescription": {
+    "source": "3524234fd64b1d38b76f7b112661997393cd994c7edcc71f9184c006c7188ec4",
+    "translation": "b4c33c8c1d9e05175d1074e36cc012949259dfb2a4953083ea711651fe8e0958",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalVignetteStrengthTitle": {
+    "source": "b73a9fc766c25459f185a741f61ef911ca6ac6527478cf14a42f81460d844a9b",
+    "translation": "770bd15f38477603ab0c5eab2fcc7ca607aebfdfc6f9670e06ba1d91867c31be",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataDescription": {
+    "source": "c0d69e708b6dca5f4b50795ec25d339010e1ffcc6929414271704127cc49e7ff",
+    "translation": "a2940a6f73819550e3a4631f4b275c74083535f270f1d1a041284e0e72615684",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataScaleTitle": {
+    "source": "cabedcddd2db882b871b0129c18d7c588ab130d77cbd84e95476011fe896f47d",
+    "translation": "03af7bf27c68e7846cd22372735eb087ba05172fb95abd02f068189fa6633dfd",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataDateTitle": {
+    "source": "369a862180e90d0c255cfe30d1df5e7905b3bf714fbdb42d31c731df29319a87",
+    "translation": "bde3e3d90be937b2cbdab1ea008ace76d4b8c37e14df0a3dc7be98d668c17232",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverMediaMetadataPositionDescription": {
+    "source": "e78b181119503b45c6ffede021852021074f337e942223748848f796ab3895ce",
+    "translation": "b17d966715d44f21ddd243cc6dba5abfc0d914a7bafcce2c0242fcfdffcc2da9",
+    "author": "Xavier Larrea"
+  },
+  "settingScreensaverLocalMetadataDateTitle": {
+    "source": "5589fbbe956a55ff5ac5d289b03b154aa969349f52fd7845488de7172820ed61",
+    "translation": "bde3e3d90be937b2cbdab1ea008ace76d4b8c37e14df0a3dc7be98d668c17232",
+    "author": "Xavier Larrea"
   }
 }

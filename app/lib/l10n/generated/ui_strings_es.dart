@@ -10477,12 +10477,69 @@ class UiStringsEs extends UiStrings {
       'Tocar el quinto izquierdo o derecho de la pantalla muestra la imagen anterior o siguiente en lugar de cerrar el protector de pantalla.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Mostrar metadatos';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Muestra la fecha y los detalles de la cámara sobre la foto.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Fecha de captura';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Muestra cuándo se tomó la foto.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle =>
+      'Detalles de la cámara';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Muestra la distancia focal, la apertura y el ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Posición de los metadatos';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'Esquina en la que se muestran los detalles.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle =>
+      'Sombra del texto';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Añade una sombra al texto de los metadatos para facilitar su lectura sobre las fotos.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Tamaño del texto';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Ajusta el tamaño de los detalles de la foto a la pantalla.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle =>
+      'Intensidad del sombreado';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Oscuridad del sombreado detrás de los detalles para facilitar la lectura sobre fotos claras. Con 0, se desactiva.';
+
+  @override
+  String get screensaverMediaHaMetadata =>
+      'Metadatos del contenido multimedia de Home Assistant';
+
+  @override
   String get screensaverMediaHaPage =>
       'Protector de pantalla: Contenido multimedia de Home Assistant';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Origen multimedia, duración, orden aleatorio y ajuste a la pantalla';
+  String get screensaverMediaHaPageHint =>
+      'Origen multimedia, duración, orden aleatorio, ajuste a la pantalla y metadatos';
 
   @override
   String get screensaverMediaChoose => 'Elegir contenido multimedia';
@@ -10571,12 +10628,69 @@ class UiStringsEs extends UiStrings {
       'Tocar el quinto izquierdo o derecho de la pantalla muestra la imagen anterior o siguiente en lugar de cerrar el protector de pantalla.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Mostrar metadatos';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Muestra la fecha y los detalles de la cámara sobre la foto.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Fecha de captura';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Muestra cuándo se tomó la foto.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle =>
+      'Detalles de la cámara';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Muestra la distancia focal, la apertura y el ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Posición de los metadatos';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'Esquina en la que se muestran los detalles.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle =>
+      'Sombra del texto';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Añade una sombra al texto de los metadatos para facilitar su lectura sobre las fotos.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Tamaño del texto';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Ajusta el tamaño de los detalles de la foto a la pantalla.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle =>
+      'Intensidad del sombreado';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Oscuridad del sombreado detrás de los detalles para facilitar la lectura sobre fotos claras. Con 0, se desactiva.';
+
+  @override
+  String get screensaverMediaLocalMetadata =>
+      'Metadatos del contenido multimedia local';
+
+  @override
   String get screensaverMediaLocalPage =>
       'Protector de pantalla: Contenido multimedia local';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Carpeta, duración, orden aleatorio y transición';
+  String get screensaverMediaLocalPageHint =>
+      'Carpeta, duración, orden aleatorio, transición y metadatos';
 
   @override
   String get settingScreensaverDismissOnMotionTitle =>

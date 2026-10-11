@@ -96,9 +96,13 @@ Changes apply live while the clock is running, and writing an empty value clears
 
 Streams media served by Home Assistant's media browser, including single images, image folders, video files, or `camera.*` entities (which stream over WebRTC with an MJPEG fallback). **Media source** opens the picker. Selecting an image folder unlocks playlist controls (**Seconds per image**, **Shuffle**, **Include subfolders**, **Transition**, and **Tap edges to change slides**). Video assets play through to completion. Photos follow standard [Slideshow behavior](#slideshow-behavior) scaling rules, whereas videos and camera streams preserve their native aspect ratio.
 
+**Show metadata** puts each photo's details in a corner, read from the photo's own EXIF. **Date taken** shows when it was taken and **Camera details** shows the camera model with the focal length, aperture and ISO. **Metadata position**, **Text drop shadow**, **Text scaling** and **Vignette strength** work as they do on Immich Media. Location is left out because turning GPS coordinates into a place name needs an online lookup service. The details come from JPEG photos. Videos and camera streams show none.
+
 ### Local Media
 
 Displays an image slideshow loaded from a local folder on the device. Configuration options include **Local folder** (selected on device or typed into the remote admin), **Seconds per photo**, **Shuffle**, **Include subfolders**, **Transition**, **Fill the screen**, and **Tap edges to change slides**.
+
+**Show metadata** puts each photo's details in a corner, read from the photo's own EXIF. **Date taken** shows when it was taken and **Camera details** shows the camera model with the focal length, aperture and ISO. **Metadata position**, **Text drop shadow**, **Text scaling** and **Vignette strength** work as they do on Immich Media. Location is left out because turning GPS coordinates into a place name needs an online lookup service. The details come from JPEG photos. Videos show none.
 
 ### Photo Gallery
 
@@ -159,7 +163,7 @@ Widgets are small status overlays anchored to display corners, configured within
 
 Every widget has its own **Scale** slider (-50% to +50%) in its editor, which sizes that widget relative to the others. The **Global widget scaling** slider (50% to 200%) then scales all of them together for the display, keeping their relative sizes, and previews live while the screensaver is running. Widgets draw in Rubik unless the **Global font family** and **Global font weight** rows say otherwise, with the same choices as the Clock screensaver's Font Family and Font weight rows. Each widget's editor has its own **Font family** and **Font weight** pickers, Default following the global rows, so one widget can wear the clock's face while the rest stay in Rubik. When running over the Clock screensaver in Night mode, all active widgets inherit the clock's **Night color** to maintain low light levels. **Text drop shadow**, enabled by default, adds a defined shadow beneath widget text. Turn it off for text without a shadow. Changes preview live. Widgets render over a soft dark vignette to ensure text readability against bright background images. The **Vignette strength** slider (0% to 100%, 40% default) adjusts vignette opacity with live previewing. Setting this to 0% removes shading entirely for a clean frame look.
 
-Widgets hold corner priority over the Immich metadata overlay; if a widget claims a corner, the Immich overlay automatically moves to the next available corner. However, when Immich displays a side-by-side portrait pair, both bottom corners are reserved for photo details, temporarily hiding any widgets assigned to those corners until the next single slide displays. A stacked landscape pair only reserves the bottom corner on the overlay's side, since the top photo's details sit at the bottom of its own half, so the top corners stay free.
+Widgets hold corner priority over the photo metadata overlay of Immich Media, Home Assistant Media and Local Media. If a widget claims a corner, the overlay automatically moves to the next available corner. However, when Immich displays a side-by-side portrait pair, both bottom corners are reserved for photo details, temporarily hiding any widgets assigned to those corners until the next single slide displays. A stacked landscape pair only reserves the bottom corner on the overlay's side, since the top photo's details sit at the bottom of its own half, so the top corners stay free.
 
 ### Small Clock
 

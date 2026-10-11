@@ -10519,12 +10519,67 @@ class UiStringsDe extends UiStrings {
       'Ein Tippen auf das linke oder rechte Fünftel des Bildschirms zeigt das vorherige bzw. nächste Bild an, anstatt den Bildschirmschoner zu schließen.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Metadaten anzeigen';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Zeigt Aufnahmedatum und Kameradaten über dem Foto an.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Aufnahmedatum';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Zeigt an, wann das Foto aufgenommen wurde.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Kameradetails';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Zeigt Brennweite, Blende und ISO-Wert an.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Position der Metadaten';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'Die Ecke, in der die Details angezeigt werden.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => 'Textschatten';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Fügt dem Metadatentext einen Schatten hinzu, um die Lesbarkeit auf Fotos zu verbessern.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Textgröße';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Passt die Größe der Fotodetails an den Bildschirm an.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle =>
+      'Intensität der Abdunklung';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Stärke der Abdunklung hinter den Details, um die Lesbarkeit auf hellen Fotos zu verbessern. Bei 0 ist sie deaktiviert.';
+
+  @override
+  String get screensaverMediaHaMetadata =>
+      'Metadaten der Home-Assistant-Medien';
+
+  @override
   String get screensaverMediaHaPage =>
       'Bildschirmschoner: Home-Assistant-Medien';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Medienquelle, Anzeigedauer, Zufallswiedergabe und Bildanpassung';
+  String get screensaverMediaHaPageHint =>
+      'Medienquelle, Anzeigedauer, Zufallswiedergabe, Bildanpassung und Metadaten';
 
   @override
   String get screensaverMediaChoose => 'Medien auswählen';
@@ -10614,11 +10669,65 @@ class UiStringsDe extends UiStrings {
       'Ein Tippen auf das linke oder rechte Fünftel des Bildschirms zeigt das vorherige bzw. nächste Bild an, anstatt den Bildschirmschoner zu schließen.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Metadaten anzeigen';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Zeigt Aufnahmedatum und Kameradaten über dem Foto an.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Aufnahmedatum';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Zeigt an, wann das Foto aufgenommen wurde.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Kameradetails';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Zeigt Brennweite, Blende und ISO-Wert an.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Position der Metadaten';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'Die Ecke, in der die Details angezeigt werden.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => 'Textschatten';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Fügt dem Metadatentext einen Schatten hinzu, um die Lesbarkeit auf Fotos zu verbessern.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Textgröße';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Passt die Größe der Fotodetails an den Bildschirm an.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle =>
+      'Intensität der Abdunklung';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Stärke der Abdunklung hinter den Details, um die Lesbarkeit auf hellen Fotos zu verbessern. Bei 0 ist sie deaktiviert.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Metadaten der lokalen Medien';
+
+  @override
   String get screensaverMediaLocalPage => 'Bildschirmschoner: Lokale Medien';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Ordner, Anzeigedauer, Zufallswiedergabe und Übergänge';
+  String get screensaverMediaLocalPageHint =>
+      'Ordner, Anzeigedauer, Zufallswiedergabe, Übergänge und Metadaten';
 
   @override
   String get settingScreensaverDismissOnMotionTitle =>

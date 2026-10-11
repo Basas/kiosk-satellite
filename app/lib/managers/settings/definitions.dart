@@ -234,8 +234,9 @@ const Map<String, String> subpageHints = {
   // one selected, since every setting on them gates on it.
   'Clock screensaver':
       'Style, font, size, colors, night mode, background photo',
-  'Home Assistant Media screensaver': 'Media source, timing, shuffle, fill',
-  'Local Media screensaver': 'Folder, timing, shuffle, transition',
+  'Home Assistant Media screensaver':
+      'Media source, timing, shuffle, fill, metadata',
+  'Local Media screensaver': 'Folder, timing, shuffle, transition, metadata',
   'Photo Gallery screensaver': 'Photos, timing, shuffle, transition',
   'Immich Media screensaver': 'Server, media, slideshow, metadata, filters',
   'Camera Streams screensaver': 'Views to show, seconds per view, sound',
@@ -3091,6 +3092,108 @@ const screensaverMediaEdgeTaps = SettingDef<bool>(
   dependsOn: 'screensaver.media_is_folder',
 );
 
+// The photo details panel Immich has, read from the photo's own EXIF
+// (issue #953): the date and the camera, never the place, since turning
+// GPS coordinates into a place name takes a lookup service. The same rows
+// and look as the Immich panel, on their own page. Gated on the mode, not
+// the folder flag: a single photo carries its details too.
+const screensaverMediaMetadata = SettingDef<bool>(
+  key: 'screensaver.media_metadata',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show metadata',
+  description: 'Date and camera details over the photo.',
+  category: 'Screensaver',
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  dependsOn: 'screensaver.mode',
+  dependsOnValue: 'media',
+);
+
+const screensaverMediaMetadataDate = SettingDef<bool>(
+  key: 'screensaver.media_metadata_date',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Date taken',
+  description: 'Show when the photo was taken.',
+  category: 'Screensaver',
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  dependsOn: 'screensaver.media_metadata',
+);
+
+const screensaverMediaMetadataCamera = SettingDef<bool>(
+  key: 'screensaver.media_metadata_camera',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Camera details',
+  description: 'Show focal length, aperture and ISO.',
+  category: 'Screensaver',
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  dependsOn: 'screensaver.media_metadata',
+);
+
+const screensaverMediaMetadataPosition = SettingDef<String>(
+  key: 'screensaver.media_metadata_position',
+  type: SettingType.select,
+  defaultValue: 'bottom_left',
+  title: 'Metadata position',
+  description: 'Which corner the details sit in.',
+  category: 'Screensaver',
+  options: cornerOptions,
+  optionLabels: cornerLabels,
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  dependsOn: 'screensaver.media_metadata',
+);
+
+const screensaverMediaMetadataTextShadow = SettingDef<bool>(
+  key: 'screensaver.media_metadata_text_shadow',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Text drop shadow',
+  description: 'Add a drop shadow to metadata text for readability on photos.',
+  category: 'Screensaver',
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  dependsOn: 'screensaver.media_metadata',
+);
+
+const screensaverMediaMetadataScale = SettingDef<num>(
+  key: 'screensaver.media_metadata_scale',
+  type: SettingType.number,
+  defaultValue: 100,
+  title: 'Text scaling',
+  description: 'Scale the photo details to better fit your screen size.',
+  category: 'Screensaver',
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  min: 50,
+  max: 200,
+  step: 5,
+  unit: '%',
+  dependsOn: 'screensaver.media_metadata',
+);
+
+const screensaverMediaVignetteStrength = SettingDef<num>(
+  key: 'screensaver.media_vignette_strength',
+  type: SettingType.number,
+  defaultValue: 40,
+  title: 'Vignette strength',
+  description:
+      'Darkness of the shading behind the details, for readability on '
+      'bright photos. 0 turns it off.',
+  category: 'Screensaver',
+  section: 'Home Assistant Media metadata',
+  subpage: 'Home Assistant Media screensaver',
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  dependsOn: 'screensaver.media_metadata',
+);
+
 // ── Website (mode: website) ──
 
 const screensaverWebsiteUrl = SettingDef<String>(
@@ -3331,6 +3434,104 @@ const screensaverLocalEdgeTaps = SettingDef<bool>(
   subpage: 'Local Media screensaver',
   dependsOn: 'screensaver.mode',
   dependsOnValue: 'local',
+);
+
+// The same EXIF panel as Home Assistant Media's (issue #953).
+const screensaverLocalMetadata = SettingDef<bool>(
+  key: 'screensaver.local_metadata',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show metadata',
+  description: 'Date and camera details over the photo.',
+  category: 'Screensaver',
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  dependsOn: 'screensaver.mode',
+  dependsOnValue: 'local',
+);
+
+const screensaverLocalMetadataDate = SettingDef<bool>(
+  key: 'screensaver.local_metadata_date',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Date taken',
+  description: 'Show when the photo was taken.',
+  category: 'Screensaver',
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  dependsOn: 'screensaver.local_metadata',
+);
+
+const screensaverLocalMetadataCamera = SettingDef<bool>(
+  key: 'screensaver.local_metadata_camera',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Camera details',
+  description: 'Show focal length, aperture and ISO.',
+  category: 'Screensaver',
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  dependsOn: 'screensaver.local_metadata',
+);
+
+const screensaverLocalMetadataPosition = SettingDef<String>(
+  key: 'screensaver.local_metadata_position',
+  type: SettingType.select,
+  defaultValue: 'bottom_left',
+  title: 'Metadata position',
+  description: 'Which corner the details sit in.',
+  category: 'Screensaver',
+  options: cornerOptions,
+  optionLabels: cornerLabels,
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  dependsOn: 'screensaver.local_metadata',
+);
+
+const screensaverLocalMetadataTextShadow = SettingDef<bool>(
+  key: 'screensaver.local_metadata_text_shadow',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Text drop shadow',
+  description: 'Add a drop shadow to metadata text for readability on photos.',
+  category: 'Screensaver',
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  dependsOn: 'screensaver.local_metadata',
+);
+
+const screensaverLocalMetadataScale = SettingDef<num>(
+  key: 'screensaver.local_metadata_scale',
+  type: SettingType.number,
+  defaultValue: 100,
+  title: 'Text scaling',
+  description: 'Scale the photo details to better fit your screen size.',
+  category: 'Screensaver',
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  min: 50,
+  max: 200,
+  step: 5,
+  unit: '%',
+  dependsOn: 'screensaver.local_metadata',
+);
+
+const screensaverLocalVignetteStrength = SettingDef<num>(
+  key: 'screensaver.local_vignette_strength',
+  type: SettingType.number,
+  defaultValue: 40,
+  title: 'Vignette strength',
+  description:
+      'Darkness of the shading behind the details, for readability on '
+      'bright photos. 0 turns it off.',
+  category: 'Screensaver',
+  section: 'Local Media metadata',
+  subpage: 'Local Media screensaver',
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  dependsOn: 'screensaver.local_metadata',
 );
 
 // ── Immich Media (mode: immich) ──
@@ -10466,6 +10667,13 @@ const List<SettingDef<Object>> allSettings = [
   screensaverMediaTransition,
   screensaverMediaFill,
   screensaverMediaEdgeTaps,
+  screensaverMediaMetadata,
+  screensaverMediaMetadataDate,
+  screensaverMediaMetadataCamera,
+  screensaverMediaMetadataPosition,
+  screensaverMediaMetadataTextShadow,
+  screensaverMediaMetadataScale,
+  screensaverMediaVignetteStrength,
   screensaverLocalFolder,
   screensaverLocalInterval,
   screensaverLocalShuffle,
@@ -10473,6 +10681,13 @@ const List<SettingDef<Object>> allSettings = [
   screensaverLocalTransition,
   screensaverLocalFill,
   screensaverLocalEdgeTaps,
+  screensaverLocalMetadata,
+  screensaverLocalMetadataDate,
+  screensaverLocalMetadataCamera,
+  screensaverLocalMetadataPosition,
+  screensaverLocalMetadataTextShadow,
+  screensaverLocalMetadataScale,
+  screensaverLocalVignetteStrength,
   screensaverGalleryItems,
   screensaverGalleryInterval,
   screensaverGalleryShuffle,
