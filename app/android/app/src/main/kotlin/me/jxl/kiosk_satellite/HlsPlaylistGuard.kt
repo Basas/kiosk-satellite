@@ -94,11 +94,23 @@ object HlsPlaylistGuard {
     /** Whether [path] is one of Home Assistant's HLS playlists. */
     fun isPlaylist(path: String?): Boolean = path != null && PLAYLIST.matches(path)
 
+    /**
+     * Whether a request for [path] with [query] is one Home Assistant can
+     * hold forever: a playlist asked for while the stream starts. A
+     * low-latency reload (`_HLS_msn`, about once a second while a camera
+     * plays) is left to Chromium. Home Assistant answers those within a
+     * bounded time, and taking them over would put the quick wait in front
+     * of the dashboard's other requests every second.
+     */
+    fun guards(path: String?, query: String?): Boolean =
+        isPlaylist(path) &&
+            query.orEmpty().split('&').none { it.substringBefore('=') == "_HLS_msn" }
+
     private fun intercept(request: WebResourceRequest): WebResourceResponse? {
         if (request.method != "GET") return null
         val url = request.url ?: return null
         if (url.scheme != "http" && url.scheme != "https") return null
-        if (!isPlaylist(url.path)) return null
+        if (!guards(url.path, url.encodedQuery)) return null
         return fetch(url.toString(), request.requestHeaders ?: emptyMap())
     }
 

@@ -65,6 +65,19 @@ class HlsPlaylistGuardTest {
     }
 
     @Test
+    fun lowLatencyReloadsAreLeftToChromium() {
+        val master = "/api/hls/abc123/master_playlist.m3u8"
+        val media = "/api/hls/abc123/playlist.m3u8"
+        assertTrue(HlsPlaylistGuard.guards(master, null))
+        assertTrue(HlsPlaylistGuard.guards(media, ""))
+        assertTrue(HlsPlaylistGuard.guards(media, "token=x"))
+        assertFalse(HlsPlaylistGuard.guards(media, "_HLS_msn=12&_HLS_part=2"))
+        assertFalse(HlsPlaylistGuard.guards(media, "_HLS_part=2&_HLS_msn=12"))
+        assertTrue(HlsPlaylistGuard.guards(media, "x_HLS_msn=1"))
+        assertFalse(HlsPlaylistGuard.guards("/api/hls/abc123/segment/3.m4s", null))
+    }
+
+    @Test
     fun anAnswerGoesThroughUnchanged() {
         val body = "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1000\nplaylist.m3u8\n"
         val base = server(
