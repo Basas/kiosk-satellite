@@ -2048,6 +2048,16 @@ return n;
   }) async {
     if (_controller == null && evalOverride == null) return false;
     if (await _haConnected()) return true;
+    // A page with no Home Assistant frontend on it (a custom page, the
+    // login form) has no socket here to bring back, and waiting out the
+    // timeout for one held every wake word on a custom page for seconds.
+    // The launch screen still waits: its frontend is on the way.
+    switch (await _probePageState()) {
+      case 'other':
+        return true;
+      case 'error-page':
+        return false;
+    }
     await reconnectHaSocket();
     final deadline = DateTime.now().add(timeout);
     while (DateTime.now().isBefore(deadline)) {

@@ -14,6 +14,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Softer text in the light theme.** Text in the light theme is now dark gray (#444444) instead of near black, on the device and in the remote admin.
 - **Camera views can auto-dismiss after up to an hour.** **Auto-dismiss after** in Camera Streams, Playback went up to 5 minutes, too short for a view left up on purpose, like a baby monitor (#958). It now reaches 1 hour. The slider keeps 30 second steps up to 5 minutes, then moves in 5 minute steps, so a saved time stays as it was.
 
+### Fixed
+- **The wake word answers at once on a custom page.** With a custom page as the dashboard, every wake word waited about six seconds before listening started, with native Voice Satellite too (#959). Before each turn the kiosk makes sure the dashboard's Home Assistant connection is live, and a custom page has no Home Assistant frontend to check, so it waited out the full timeout. A page without one now skips the check.
+
 ## v2026.10.20 - 2026-10-10
 
 ### Added
