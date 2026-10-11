@@ -3625,7 +3625,7 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage => '不用于自定义网页';
+  String get overviewShowingCustomPages => '正在显示自定义网页';
 
   @override
   String get overviewNoScreenshot => '暂无截图';
@@ -16220,7 +16220,7 @@ class UiStringsZhCn extends UiStringsZh {
   }
 
   @override
-  String get overviewFilterCustomPage => '不用于自定义网页';
+  String get overviewShowingCustomPages => '正在显示自定义网页';
 
   @override
   String get overviewNoScreenshot => '暂无截图';

@@ -45,5 +45,5 @@
   "overviewMemoryFree": "{amount} GB frei",
   "overviewMetricPercent": "{value} %",
   "overviewMetricDegrees": "{value} °C",
-  "overviewFilterCustomPage": "Auf eigenen Seiten nicht verwendet"
+  "overviewShowingCustomPages": "Zeigt eigene Seiten"
 }

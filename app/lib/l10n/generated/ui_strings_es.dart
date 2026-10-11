@@ -3801,7 +3801,7 @@ class UiStringsEs extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage => 'No se usa en páginas personalizadas';
+  String get overviewShowingCustomPages => 'Mostrando páginas personalizadas';
 
   @override
   String get overviewNoScreenshot => 'Sin captura de pantalla';

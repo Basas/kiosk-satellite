@@ -50,7 +50,7 @@ test('shows filtered and unfiltered counts while preserving connection-only stat
     [{ enabled: true, built: true, allow: 42 }, 'Watching 42 entities', 'on'],
     [{ enabled: true, built: true, allow: 1 }, 'Watching 1 entity', 'on'],
     [{ enabled: true, built: true, allow: null }, 'Updates unfiltered', 'warn'],
-    [{ enabled: true, built: true, allow: null, customPage: true }, 'Not used on custom pages', 'on'],
+    [{ enabled: true, built: true, allow: null, customPage: true }, 'Showing custom pages', 'on'],
     [{ enabled: true, built: true, allow: null, standDown: { reads: 3902, total: 3902 } },
       'Filtering disabled, view uses 3902 entities', 'warn'],
     [{ enabled: false, built: true, allow: 42 }, 'Filter status unavailable', 'on'],

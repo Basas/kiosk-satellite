@@ -3828,7 +3828,7 @@ class UiStringsDe extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage => 'Auf eigenen Seiten nicht verwendet';
+  String get overviewShowingCustomPages => 'Zeigt eigene Seiten';
 
   @override
   String get overviewNoScreenshot => 'Kein Bildschirmfoto verfügbar';

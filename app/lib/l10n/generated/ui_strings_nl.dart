@@ -3788,7 +3788,7 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage => 'Niet gebruikt op eigen pagina\'s';
+  String get overviewShowingCustomPages => 'Toont eigen pagina\'s';
 
   @override
   String get overviewNoScreenshot => 'Geen schermafdruk';

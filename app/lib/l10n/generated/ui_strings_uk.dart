@@ -3776,8 +3776,7 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage =>
-      'Не використовується на власних сторінках';
+  String get overviewShowingCustomPages => 'Показ власних сторінок';
 
   @override
   String get overviewNoScreenshot => 'Немає знімка екрана';

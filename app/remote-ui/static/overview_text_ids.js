@@ -105,5 +105,5 @@ export const overviewTextMessageIds = {
   "CPU": "overviewCpu",
   "RAM": "overviewMemory",
   "Temp": "overviewTemperature",
-  "Not used on custom pages": "overviewFilterCustomPage"
+  "Showing custom pages": "overviewShowingCustomPages"
 };

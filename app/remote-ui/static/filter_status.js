@@ -28,9 +28,10 @@ export async function readFilterStatus(enabled) {
       let value = JSON.parse(result.data);
       if (typeof value === 'string') value = JSON.parse(value);
       if (!value?.enabled) return null;
-      // A custom page is on screen: the filter leaves it alone by design.
+      // A custom page is on screen: there is no Home Assistant dashboard
+      // to filter, so the chip says what is showing instead.
       if (value.customPage) {
-        return { unfiltered: false, label: 'Not used on custom pages' };
+        return { unfiltered: false, label: 'Showing custom pages' };
       }
       if (Number.isInteger(value.allow) && value.allow >= 0) {
         return { unfiltered: false,

@@ -45,5 +45,5 @@
   "overviewMemoryFree": "Свободно {amount} ГБ",
   "overviewMetricPercent": "{value}%",
   "overviewMetricDegrees": "{value}°C",
-  "overviewFilterCustomPage": "Не используется на своих страницах"
+  "overviewShowingCustomPages": "Показ своих страниц"
 }

@@ -3799,8 +3799,7 @@ class UiStringsFr extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage =>
-      'Non utilisé sur les pages personnalisées';
+  String get overviewShowingCustomPages => 'Affiche des pages personnalisées';
 
   @override
   String get overviewNoScreenshot => 'Aucune capture d\'écran';

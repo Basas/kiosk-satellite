@@ -3746,7 +3746,7 @@ class UiStringsEn extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage => 'Not used on custom pages';
+  String get overviewShowingCustomPages => 'Showing custom pages';
 
   @override
   String get overviewNoScreenshot => 'No screenshot';

@@ -6586,11 +6586,11 @@ abstract class UiStrings {
   /// **'{value}°C'**
   String overviewMetricDegrees(String value);
 
-  /// Home Assistant tile status while a custom page (a person's own HTML page) is on screen: the update filter leaves those pages alone.
+  /// Home Assistant chip status while a custom page (a person's own HTML page) is on screen instead of a Home Assistant dashboard.
   ///
   /// In en, this message translates to:
-  /// **'Not used on custom pages'**
-  String get overviewFilterCustomPage;
+  /// **'Showing custom pages'**
+  String get overviewShowingCustomPages;
 
   /// Translate the interface text. Keep external names, versions and technical details unchanged.
   ///

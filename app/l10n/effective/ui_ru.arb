@@ -14231,10 +14231,10 @@
       }
     }
   },
-  "overviewFilterCustomPage": "Не используется на своих страницах",
-  "@overviewFilterCustomPage": {
+  "overviewShowingCustomPages": "Показ своих страниц",
+  "@overviewShowingCustomPages": {
     "context": "Remote admin > Overview > Status",
-    "description": "Home Assistant tile status while a custom page (a person's own HTML page) is on screen: the update filter leaves those pages alone.",
+    "description": "Home Assistant chip status while a custom page (a person's own HTML page) is on screen instead of a Home Assistant dashboard.",
     "x-locations": {
       "device": [],
       "remoteAdmin": [

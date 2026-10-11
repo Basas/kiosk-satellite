@@ -3766,7 +3766,7 @@ class UiStringsRu extends UiStrings {
   }
 
   @override
-  String get overviewFilterCustomPage => 'Не используется на своих страницах';
+  String get overviewShowingCustomPages => 'Показ своих страниц';
 
   @override
   String get overviewNoScreenshot => 'Нет скриншота';
