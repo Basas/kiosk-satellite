@@ -609,6 +609,14 @@ class UiStringsNl extends UiStrings {
       'De weergave die de kiosk toont bij het starten.';
 
   @override
+  String get dashboardPickerOnePage => '1 pagina';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count pagina\'s';
+  }
+
+  @override
   String get dlnaCannotDecode => 'Dit apparaat kan deze video niet decoderen.';
 
   @override
@@ -3780,6 +3788,9 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get overviewFilterCustomPage => 'Niet gebruikt op eigen pagina\'s';
+
+  @override
   String get overviewNoScreenshot => 'Geen schermafdruk';
 
   @override
@@ -6941,6 +6952,64 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get haCustomPages => 'Eigen pagina\'s';
+
+  @override
+  String get haCustomPagesHint => 'Je eigen HTML-pagina\'s uit de www-map';
+
+  @override
+  String get haCustomPagesAdd => 'Pagina toevoegen';
+
+  @override
+  String get haCustomPagesEmpty =>
+      'Voeg HTML-pagina\'s uit de www-map van Home Assistant toe om ze als een dashboard te kiezen.';
+
+  @override
+  String get haCustomPagesGuide => 'Handleiding voor eigen pagina\'s';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'Zo bouw je een pagina die met Home Assistant praat.';
+
+  @override
+  String get haCustomPageAddTitle => 'Eigen pagina toevoegen';
+
+  @override
+  String get haCustomPageEditTitle => 'Eigen pagina bewerken';
+
+  @override
+  String get haCustomPageName => 'Naam';
+
+  @override
+  String get haCustomPagePath => 'Pad';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Een bestand in de www-map van Home Assistant, zoals /local/dashboard.html.';
+
+  @override
+  String get haCustomPageNameMissing => 'Voer een naam in.';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      'Voer een pad onder /local/ in, zoals /local/dashboard.html.';
+
+  @override
+  String get haCustomPageDuplicate => 'Een andere pagina gebruikt dit pad al.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'Home Assistant heeft geen bestand op dit pad.';
+
+  @override
+  String get haCustomPageUnreachable => 'Kan Home Assistant niet bereiken.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant antwoordde met HTTP $code.';
+  }
+
+  @override
   String get settingHaHoldModeTitle => 'Wachtstand';
 
   @override
@@ -7076,6 +7145,9 @@ class UiStringsNl extends UiStrings {
   String haThreshold(String count) {
     return 'Deze weergave gebruikt $count entiteiten en overschrijdt daarmee de filterdrempel. Filteren is uitgeschakeld.';
   }
+
+  @override
+  String get haCustomPageFilter => 'Niet gebruikt op eigen pagina\'s.';
 
   @override
   String get settingHaReturnHomeEnabledTitle =>

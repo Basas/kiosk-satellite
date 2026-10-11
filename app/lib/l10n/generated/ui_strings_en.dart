@@ -607,6 +607,14 @@ class UiStringsEn extends UiStrings {
       'The view the kiosk shows when it starts.';
 
   @override
+  String get dashboardPickerOnePage => '1 page';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count pages';
+  }
+
+  @override
   String get dlnaCannotDecode => 'This device cannot decode this video.';
 
   @override
@@ -3738,6 +3746,9 @@ class UiStringsEn extends UiStrings {
   }
 
   @override
+  String get overviewFilterCustomPage => 'Not used on custom pages';
+
+  @override
   String get overviewNoScreenshot => 'No screenshot';
 
   @override
@@ -6859,6 +6870,63 @@ class UiStringsEn extends UiStrings {
   }
 
   @override
+  String get haCustomPages => 'Custom Pages';
+
+  @override
+  String get haCustomPagesHint => 'Your own HTML pages from the www folder';
+
+  @override
+  String get haCustomPagesAdd => 'Add page';
+
+  @override
+  String get haCustomPagesEmpty =>
+      'Add HTML pages from the Home Assistant www folder to pick them like a dashboard.';
+
+  @override
+  String get haCustomPagesGuide => 'Custom page guide';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'How to build a page that talks to Home Assistant.';
+
+  @override
+  String get haCustomPageAddTitle => 'Add custom page';
+
+  @override
+  String get haCustomPageEditTitle => 'Edit custom page';
+
+  @override
+  String get haCustomPageName => 'Name';
+
+  @override
+  String get haCustomPagePath => 'Path';
+
+  @override
+  String get haCustomPagePathHint =>
+      'A file in the Home Assistant www folder, such as /local/dashboard.html.';
+
+  @override
+  String get haCustomPageNameMissing => 'Enter a name.';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      'Enter a path under /local/, such as /local/dashboard.html.';
+
+  @override
+  String get haCustomPageDuplicate => 'Another page already uses this path.';
+
+  @override
+  String get haCustomPageNotFound => 'Home Assistant has no file at this path.';
+
+  @override
+  String get haCustomPageUnreachable => 'Could not reach Home Assistant.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant answered with HTTP $code.';
+  }
+
+  @override
   String get settingHaHoldModeTitle => 'Hold mode';
 
   @override
@@ -6992,6 +7060,9 @@ class UiStringsEn extends UiStrings {
   String haThreshold(String count) {
     return 'This view uses $count entities, which crosses the filtering threshold. Filtering is disabled.';
   }
+
+  @override
+  String get haCustomPageFilter => 'Not used on custom pages.';
 
   @override
   String get settingHaReturnHomeEnabledTitle => 'Return to home dashboard view';

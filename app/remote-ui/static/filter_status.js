@@ -4,7 +4,8 @@ import { cmd } from './core.js';
 // store, which is unnecessary for the Overview label on a slow panel.
 export const filterStatusScript = '(function(){var S=window.__ksWs;'
   + 'return JSON.stringify(S?{enabled:S.enabled,built:S.built,'
-  + 'allow:S.allow?S.allow.size:null,standDown:S.standDown||null}:null);})()';
+  + 'allow:S.allow?S.allow.size:null,standDown:S.standDown||null,'
+  + 'customPage:S.customPage===true}:null);})()';
 
 let status = null, sampledAt = -Infinity, pending = null, revision = 0;
 
@@ -27,6 +28,10 @@ export async function readFilterStatus(enabled) {
       let value = JSON.parse(result.data);
       if (typeof value === 'string') value = JSON.parse(value);
       if (!value?.enabled) return null;
+      // A custom page is on screen: the filter leaves it alone by design.
+      if (value.customPage) {
+        return { unfiltered: false, label: 'Not used on custom pages' };
+      }
       if (Number.isInteger(value.allow) && value.allow >= 0) {
         return { unfiltered: false,
           label: `Watching ${value.allow} ${value.allow === 1 ? 'entity' : 'entities'}` };

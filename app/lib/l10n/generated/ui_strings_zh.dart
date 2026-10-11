@@ -595,6 +595,14 @@ class UiStringsZh extends UiStrings {
   String get dashboardPickerDefaultHelp => 'Kiosk 启动时显示的页面。';
 
   @override
+  String get dashboardPickerOnePage => '1 个网页';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count 个网页';
+  }
+
+  @override
   String get dlnaCannotDecode => '此设备无法解码此视频。';
 
   @override
@@ -3617,6 +3625,9 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String get overviewFilterCustomPage => '不用于自定义网页';
+
+  @override
   String get overviewNoScreenshot => '暂无截图';
 
   @override
@@ -6563,6 +6574,62 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String get haCustomPages => '自定义网页';
+
+  @override
+  String get haCustomPagesHint => '来自 www 文件夹的自有 HTML 网页';
+
+  @override
+  String get haCustomPagesAdd => '添加网页';
+
+  @override
+  String get haCustomPagesEmpty =>
+      '添加 Home Assistant www 文件夹中的 HTML 网页，即可像仪表盘一样选择它们。';
+
+  @override
+  String get haCustomPagesGuide => '自定义网页指南';
+
+  @override
+  String get haCustomPagesGuideHint => '如何构建与 Home Assistant 通信的网页。';
+
+  @override
+  String get haCustomPageAddTitle => '添加自定义网页';
+
+  @override
+  String get haCustomPageEditTitle => '编辑自定义网页';
+
+  @override
+  String get haCustomPageName => '名称';
+
+  @override
+  String get haCustomPagePath => '路径';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Home Assistant www 文件夹中的文件，例如 /local/dashboard.html。';
+
+  @override
+  String get haCustomPageNameMissing => '请输入名称。';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      '请输入 /local/ 下的路径，例如 /local/dashboard.html。';
+
+  @override
+  String get haCustomPageDuplicate => '另一个网页已在使用此路径。';
+
+  @override
+  String get haCustomPageNotFound => 'Home Assistant 在此路径下没有文件。';
+
+  @override
+  String get haCustomPageUnreachable => '无法连接 Home Assistant。';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant 返回了 HTTP $code。';
+  }
+
+  @override
   String get settingHaHoldModeTitle => '页面保持模式';
 
   @override
@@ -6686,6 +6753,9 @@ class UiStringsZh extends UiStrings {
   String haThreshold(String count) {
     return '此页面使用 $count 个实体，超过过滤阈值。过滤已禁用。';
   }
+
+  @override
+  String get haCustomPageFilter => '不用于自定义网页。';
 
   @override
   String get settingHaReturnHomeEnabledTitle => '返回默认仪表盘页面';
@@ -13120,6 +13190,14 @@ class UiStringsZhCn extends UiStringsZh {
   String get dashboardPickerDefaultHelp => 'Kiosk 启动时显示的页面。';
 
   @override
+  String get dashboardPickerOnePage => '1 个网页';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count 个网页';
+  }
+
+  @override
   String get dlnaCannotDecode => '此设备无法解码此视频。';
 
   @override
@@ -16142,6 +16220,9 @@ class UiStringsZhCn extends UiStringsZh {
   }
 
   @override
+  String get overviewFilterCustomPage => '不用于自定义网页';
+
+  @override
   String get overviewNoScreenshot => '暂无截图';
 
   @override
@@ -19088,6 +19169,62 @@ class UiStringsZhCn extends UiStringsZh {
   }
 
   @override
+  String get haCustomPages => '自定义网页';
+
+  @override
+  String get haCustomPagesHint => '来自 www 文件夹的自有 HTML 网页';
+
+  @override
+  String get haCustomPagesAdd => '添加网页';
+
+  @override
+  String get haCustomPagesEmpty =>
+      '添加 Home Assistant www 文件夹中的 HTML 网页，即可像仪表盘一样选择它们。';
+
+  @override
+  String get haCustomPagesGuide => '自定义网页指南';
+
+  @override
+  String get haCustomPagesGuideHint => '如何构建与 Home Assistant 通信的网页。';
+
+  @override
+  String get haCustomPageAddTitle => '添加自定义网页';
+
+  @override
+  String get haCustomPageEditTitle => '编辑自定义网页';
+
+  @override
+  String get haCustomPageName => '名称';
+
+  @override
+  String get haCustomPagePath => '路径';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Home Assistant www 文件夹中的文件，例如 /local/dashboard.html。';
+
+  @override
+  String get haCustomPageNameMissing => '请输入名称。';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      '请输入 /local/ 下的路径，例如 /local/dashboard.html。';
+
+  @override
+  String get haCustomPageDuplicate => '另一个网页已在使用此路径。';
+
+  @override
+  String get haCustomPageNotFound => 'Home Assistant 在此路径下没有文件。';
+
+  @override
+  String get haCustomPageUnreachable => '无法连接 Home Assistant。';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant 返回了 HTTP $code。';
+  }
+
+  @override
   String get settingHaHoldModeTitle => '页面保持模式';
 
   @override
@@ -19211,6 +19348,9 @@ class UiStringsZhCn extends UiStringsZh {
   String haThreshold(String count) {
     return '此页面使用 $count 个实体，超过过滤阈值。过滤已禁用。';
   }
+
+  @override
+  String get haCustomPageFilter => '不用于自定义网页。';
 
   @override
   String get settingHaReturnHomeEnabledTitle => '返回默认仪表盘页面';

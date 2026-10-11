@@ -611,6 +611,14 @@ class UiStringsRu extends UiStrings {
       'Вид, который киоск показывает при запуске.';
 
   @override
+  String get dashboardPickerOnePage => '1 страница';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return 'Страниц: $count';
+  }
+
+  @override
   String get dlnaCannotDecode =>
       'Это устройство не может декодировать это видео.';
 
@@ -3758,6 +3766,9 @@ class UiStringsRu extends UiStrings {
   }
 
   @override
+  String get overviewFilterCustomPage => 'Не используется на своих страницах';
+
+  @override
   String get overviewNoScreenshot => 'Нет скриншота';
 
   @override
@@ -6902,6 +6913,66 @@ class UiStringsRu extends UiStrings {
   }
 
   @override
+  String get haCustomPages => 'Свои страницы';
+
+  @override
+  String get haCustomPagesHint => 'Ваши HTML-страницы из папки www';
+
+  @override
+  String get haCustomPagesAdd => 'Добавить страницу';
+
+  @override
+  String get haCustomPagesEmpty =>
+      'Добавьте HTML-страницы из папки www Home Assistant, чтобы выбирать их как панель.';
+
+  @override
+  String get haCustomPagesGuide => 'Руководство по своим страницам';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'Как создать страницу, которая работает с Home Assistant.';
+
+  @override
+  String get haCustomPageAddTitle => 'Добавить свою страницу';
+
+  @override
+  String get haCustomPageEditTitle => 'Изменить свою страницу';
+
+  @override
+  String get haCustomPageName => 'Название';
+
+  @override
+  String get haCustomPagePath => 'Путь';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Файл в папке www Home Assistant, например /local/dashboard.html.';
+
+  @override
+  String get haCustomPageNameMissing => 'Введите название.';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      'Введите путь в /local/, например /local/dashboard.html.';
+
+  @override
+  String get haCustomPageDuplicate =>
+      'Этот путь уже использует другая страница.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'В Home Assistant нет файла по этому пути.';
+
+  @override
+  String get haCustomPageUnreachable =>
+      'Не удалось подключиться к Home Assistant.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant ответил кодом HTTP $code.';
+  }
+
+  @override
   String get settingHaHoldModeTitle => 'Режим удержания';
 
   @override
@@ -7034,6 +7105,9 @@ class UiStringsRu extends UiStrings {
   String haThreshold(String count) {
     return 'Этот вид использует сущностей: $count, что превышает порог фильтрации. Фильтрация выключена.';
   }
+
+  @override
+  String get haCustomPageFilter => 'Не используется на своих страницах.';
 
   @override
   String get settingHaReturnHomeEnabledTitle =>

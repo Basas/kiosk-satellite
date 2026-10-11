@@ -1725,15 +1725,23 @@ class _KioskScreenState extends State<KioskScreen>
     return fromStart ? _initialUrl : c.browser.currentUrl;
   }
 
-  Widget _webView() => InAppWebView(
+  Widget _webView() {
+    // unmap-then-map settles the URL on whichever origin the CURRENT
+    // proxy state calls for: a rebuild triggered by the proxy toggle
+    // moves a proxied currentUrl back to the real origin (or vice
+    // versa), and both calls pass everything else through untouched.
+    final initialUrl = c.proxy.mapUrl(c.proxy.unmapUrl(_rebuildUrl()));
+    // A custom page skips the HTTP cache from its very first load (see
+    // BrowserManager.prepareLoad), as everything does with Disable cache.
+    final freshLoads =
+        c.settings.get(defs.disableCache) ||
+        BrowserManager.isCustomPageUrl(initialUrl);
+    return _buildWebView(initialUrl, freshLoads);
+  }
+
+  Widget _buildWebView(String initialUrl, bool freshLoads) => InAppWebView(
     key: ValueKey(_webViewEpoch),
-    initialUrlRequest: URLRequest(
-      // unmap-then-map settles the URL on whichever origin the CURRENT
-      // proxy state calls for: a rebuild triggered by the proxy toggle
-      // moves a proxied currentUrl back to the real origin (or vice
-      // versa), and both calls pass everything else through untouched.
-      url: WebUri(c.proxy.mapUrl(c.proxy.unmapUrl(_rebuildUrl()))),
-    ),
+    initialUrlRequest: URLRequest(url: WebUri(initialUrl)),
     initialUserScripts: UnmodifiableListView(_userScripts),
     pullToRefreshController: _pullToRefresh,
     initialSettings: InAppWebViewSettings(
@@ -1783,9 +1791,7 @@ class _KioskScreenState extends State<KioskScreen>
       // on), so a page's saved config survives. Nothing is cleared;
       // only "Log out" deliberately wipes storage.
       cacheEnabled: !c.settings.get(defs.disableCache),
-      cacheMode: c.settings.get(defs.disableCache)
-          ? CacheMode.LOAD_NO_CACHE
-          : CacheMode.LOAD_DEFAULT,
+      cacheMode: freshLoads ? CacheMode.LOAD_NO_CACHE : CacheMode.LOAD_DEFAULT,
       // Downloads (an APK update from GitHub, a camera clip): without this
       // the WebView silently ignores them.
       useOnDownloadStart: true,
@@ -1855,6 +1861,12 @@ class _KioskScreenState extends State<KioskScreen>
         return NavigationActionPolicy.CANCEL;
       }
       if (url.scheme != 'app') {
+        // A link or script moving the page to or from a custom page sets
+        // the cache for it before the load starts.
+        if (action.isForMainFrame &&
+            (url.scheme == 'http' || url.scheme == 'https')) {
+          await c.browser.prepareLoad(url.toString());
+        }
         return NavigationActionPolicy.ALLOW;
       }
       final package = appLinkPackage(url.toString());
@@ -1877,7 +1889,7 @@ class _KioskScreenState extends State<KioskScreen>
       return NavigationActionPolicy.CANCEL;
     },
     onWebViewCreated: (controller) {
-      c.browser.attach(controller);
+      c.browser.attach(controller, freshLoads: freshLoads);
       c.jsApi.attach(controller);
       // Scrollable pages report their pulls here (see _pullToRefresh).
       controller.addJavaScriptHandler(

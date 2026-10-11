@@ -610,6 +610,14 @@ class UiStringsUk extends UiStrings {
       'Вид, який кіоск показує під час запуску.';
 
   @override
+  String get dashboardPickerOnePage => '1 сторінка';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return 'Сторінок: $count';
+  }
+
+  @override
   String get dlnaCannotDecode => 'Цей пристрій не може декодувати це відео.';
 
   @override
@@ -3768,6 +3776,10 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get overviewFilterCustomPage =>
+      'Не використовується на власних сторінках';
+
+  @override
   String get overviewNoScreenshot => 'Немає знімка екрана';
 
   @override
@@ -6924,6 +6936,66 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get haCustomPages => 'Власні сторінки';
+
+  @override
+  String get haCustomPagesHint => 'Ваші HTML-сторінки з теки www';
+
+  @override
+  String get haCustomPagesAdd => 'Додати сторінку';
+
+  @override
+  String get haCustomPagesEmpty =>
+      'Додайте HTML-сторінки з теки www Home Assistant, щоб вибирати їх як панель керування.';
+
+  @override
+  String get haCustomPagesGuide => 'Посібник із власних сторінок';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'Як створити сторінку, що працює з Home Assistant.';
+
+  @override
+  String get haCustomPageAddTitle => 'Додати власну сторінку';
+
+  @override
+  String get haCustomPageEditTitle => 'Змінити власну сторінку';
+
+  @override
+  String get haCustomPageName => 'Назва';
+
+  @override
+  String get haCustomPagePath => 'Шлях';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Файл у теці www Home Assistant, наприклад /local/dashboard.html.';
+
+  @override
+  String get haCustomPageNameMissing => 'Введіть назву.';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      'Введіть шлях у /local/, наприклад /local/dashboard.html.';
+
+  @override
+  String get haCustomPageDuplicate =>
+      'Цей шлях уже використовує інша сторінка.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'У Home Assistant немає файлу за цим шляхом.';
+
+  @override
+  String get haCustomPageUnreachable =>
+      'Не вдалося з\'єднатися з Home Assistant.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant відповів кодом HTTP $code.';
+  }
+
+  @override
   String get settingHaHoldModeTitle => 'Режим утримання';
 
   @override
@@ -7058,6 +7130,9 @@ class UiStringsUk extends UiStrings {
   String haThreshold(String count) {
     return 'Цей вид використовує $count сутностей, що перевищує поріг фільтрації. Фільтрацію вимкнено.';
   }
+
+  @override
+  String get haCustomPageFilter => 'Не використовується на власних сторінках.';
 
   @override
   String get settingHaReturnHomeEnabledTitle =>

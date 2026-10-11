@@ -18,6 +18,7 @@ const Map<String, Object> subpageIcons = {
   // Home Assistant.
   'User Interface': Icons.dashboard_customize_outlined,
   'Theme': Icons.palette_outlined,
+  'Custom Pages': Icons.web_outlined,
   'Dashboard View Rotation': Icons.autorenew,
   'Return to home dashboard view': Icons.home_outlined,
   'Hold mode': Icons.push_pin_outlined,

@@ -613,6 +613,14 @@ class UiStringsFr extends UiStrings {
       'La vue que le kiosque affiche à son démarrage.';
 
   @override
+  String get dashboardPickerOnePage => '1 page';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count pages';
+  }
+
+  @override
   String get dlnaCannotDecode =>
       'Cet appareil ne peut pas décoder cette vidéo.';
 
@@ -3789,6 +3797,10 @@ class UiStringsFr extends UiStrings {
   String overviewMetricDegrees(String value) {
     return '$value °C';
   }
+
+  @override
+  String get overviewFilterCustomPage =>
+      'Non utilisé sur les pages personnalisées';
 
   @override
   String get overviewNoScreenshot => 'Aucune capture d\'écran';
@@ -6977,6 +6989,64 @@ class UiStringsFr extends UiStrings {
   }
 
   @override
+  String get haCustomPages => 'Pages personnalisées';
+
+  @override
+  String get haCustomPagesHint => 'Vos propres pages HTML du dossier www';
+
+  @override
+  String get haCustomPagesAdd => 'Ajouter une page';
+
+  @override
+  String get haCustomPagesEmpty =>
+      'Ajoutez des pages HTML du dossier www de Home Assistant pour les choisir comme un tableau de bord.';
+
+  @override
+  String get haCustomPagesGuide => 'Guide des pages personnalisées';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'Comment créer une page qui communique avec Home Assistant.';
+
+  @override
+  String get haCustomPageAddTitle => 'Ajouter une page personnalisée';
+
+  @override
+  String get haCustomPageEditTitle => 'Modifier la page personnalisée';
+
+  @override
+  String get haCustomPageName => 'Nom';
+
+  @override
+  String get haCustomPagePath => 'Chemin';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Un fichier du dossier www de Home Assistant, par exemple /local/dashboard.html.';
+
+  @override
+  String get haCustomPageNameMissing => 'Saisissez un nom.';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      'Saisissez un chemin sous /local/, par exemple /local/dashboard.html.';
+
+  @override
+  String get haCustomPageDuplicate => 'Une autre page utilise déjà ce chemin.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'Home Assistant n\'a aucun fichier à ce chemin.';
+
+  @override
+  String get haCustomPageUnreachable => 'Impossible de joindre Home Assistant.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant a répondu avec le code HTTP $code.';
+  }
+
+  @override
   String get settingHaHoldModeTitle => 'Mode maintien';
 
   @override
@@ -7113,6 +7183,9 @@ class UiStringsFr extends UiStrings {
   String haThreshold(String count) {
     return 'Cette vue utilise $count entités, ce qui dépasse le seuil de filtrage. Le filtrage est désactivé.';
   }
+
+  @override
+  String get haCustomPageFilter => 'Non utilisé sur les pages personnalisées.';
 
   @override
   String get settingHaReturnHomeEnabledTitle =>

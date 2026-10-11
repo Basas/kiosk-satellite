@@ -1908,6 +1908,39 @@ void main() {
       ]);
     });
 
+    test('custom pages join the options and follow the setting', () async {
+      await surface.build();
+      await attach();
+      await settings.setFromJson(
+        defs.haCustomPages.key,
+        jsonEncode([
+          {'name': 'Wall', 'path': '/local/wall.html#den'},
+        ]),
+      );
+      await pumpEventQueue();
+      expect(catalogChanges, 1);
+      var select = (await surface.build()).firstWhere(
+        (d) => d['objectId'] == 'dashboard_view',
+      );
+      expect(select['options'], [
+        'lovelace/home',
+        'lovelace/cameras',
+        'local/wall.html#den',
+      ]);
+
+      // A re-read from the page keeps them, without a second restart.
+      await surface.relearnDashboardViews();
+      expect(catalogChanges, 1);
+
+      await settings.setFromJson(defs.haCustomPages.key, '[]');
+      await pumpEventQueue();
+      expect(catalogChanges, 2);
+      select = (await surface.build()).firstWhere(
+        (d) => d['objectId'] == 'dashboard_view',
+      );
+      expect(select['options'], ['lovelace/home', 'lovelace/cameras']);
+    });
+
     test('the page reporting a dashboard change re-reads the list, '
         'coalesced, from the page only', () {
       dashboardsUnreachable = true;

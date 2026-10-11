@@ -12,6 +12,7 @@ import '../../core/logging.dart';
 import '../device/ip_addresses.dart';
 import '../intercom/intercom_sensors.dart';
 import 'dashboard_views.dart';
+import '../home_assistant/custom_pages.dart';
 import 'interaction_stamp.dart';
 import '../sendspin/music_assistant_api.dart';
 import '../screensaver/screensaver_manager.dart'
@@ -2216,6 +2217,10 @@ class EspEntitySurface {
       _sendDefaultDashboard();
       return;
     }
+    if (e.key == defs.haCustomPages.key) {
+      unawaited(_followCustomPages());
+      return;
+    }
     for (final entry in _settingSwitches.entries) {
       if (entry.value.$3.key == e.key) {
         _send(entry.key, e.value == true);
@@ -2687,12 +2692,44 @@ class EspEntitySurface {
   /// which raced the same way (issue #362). A stale list is corrected by
   /// the re-reads that follow, with a restart only when it moved.
   Future<void> _refreshDashboardViews() async {
-    _dashboardViews = _rememberedDashboardViews();
-    if (_dashboardViews.isNotEmpty) return;
+    final remembered = _rememberedDashboardViews();
+    if (remembered.isNotEmpty) {
+      _dashboardViews = _withCustomPages(remembered);
+      return;
+    }
     final learned = await _learnDashboardViews();
-    if (learned.isEmpty) return;
+    if (learned.isEmpty) {
+      _dashboardViews = _withCustomPages(const []);
+      return;
+    }
     _dashboardViews = learned;
     await _settings.setInternal(_dashboardViewsKey, jsonEncode(learned));
+  }
+
+  /// [views] with the custom pages as they are in the settings now, last.
+  /// They are added here rather than learned with the views because the
+  /// list they come from is the kiosk's own: the re-read that learns the
+  /// views needs the Home Assistant page on screen and cannot run while a
+  /// custom page is showing.
+  List<String> _withCustomPages(List<String> views) => [
+    for (final v in views)
+      if (!isCustomPagePath(v)) v,
+    for (final p in parseCustomPages(_settings.get(defs.haCustomPages)))
+      p.navPath,
+  ];
+
+  /// A page added, changed or removed: the selects' options follow at
+  /// once, re-registering the device only when the list really moved.
+  Future<void> _followCustomPages() async {
+    final next = _withCustomPages(_dashboardViews);
+    if (jsonEncode(next) == jsonEncode(_dashboardViews)) return;
+    _dashboardViews = next;
+    if (next.any((v) => !isCustomPagePath(v))) {
+      await _settings.setInternal(_dashboardViewsKey, jsonEncode(next));
+    }
+    if (_push == null) return;
+    log.info('esphome', 'custom pages changed; re-listing entities');
+    onCatalogChanged?.call();
   }
 
   List<String> _rememberedDashboardViews() {
@@ -2772,7 +2809,8 @@ class EspEntitySurface {
     for (final d in dashboards.data as List) {
       if (d is! Map) continue;
       final urlPath = '${d['url_path'] ?? ''}';
-      if (urlPath.isEmpty) continue;
+      // The custom pages join after the read (see _withCustomPages).
+      if (urlPath.isEmpty || urlPath == customPagesDashboardPath) continue;
       final views = await commands.execute('haListDashboardViews', {
         'url_path': urlPath,
       });
@@ -2788,7 +2826,7 @@ class EspEntitySurface {
         options.add(urlPath);
       }
     }
-    return options;
+    return options.isEmpty ? options : _withCustomPages(options);
   }
 
   /// Re-reads the list while serving, when the page reports the dashboard

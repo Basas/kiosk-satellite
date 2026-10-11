@@ -207,6 +207,7 @@ const Map<String, String> subpageHints = {
   'Localization Credits': 'Contributors by language',
   'User Interface': 'Kiosk mode, dashboard carousel, haptics, tap sounds',
   'Theme': 'Match the app, or switch dark and light on a schedule',
+  'Custom Pages': 'Your own HTML pages from the www folder',
   'Dashboard View Rotation': 'Cycle through views, dwell time, fade',
   'Return to home dashboard view': 'Go back to the home view when left idle',
   'Hold mode': 'Pin the current view, automatic release, menu entry',
@@ -6703,6 +6704,21 @@ const haSatelliteEntity = SettingDef<String>(
   perDevice: true,
 );
 
+// Hidden: the Custom Pages page in both settings surfaces owns this value,
+// a JSON array of {name, path} for the person's own HTML pages under
+// /local/ (see custom_pages.dart). The pickers offer them as one more
+// dashboard. No subpage: both UIs place that page's entry row by hand,
+// under the Default dashboard card.
+const haCustomPages = SettingDef<String>(
+  key: 'ha.custom_pages',
+  type: SettingType.string,
+  defaultValue: '[]',
+  title: 'Custom Pages',
+  description: 'Your own HTML pages from the Home Assistant www folder.',
+  category: 'Home Assistant',
+  hidden: true,
+);
+
 const haKioskMode = SettingDef<bool>(
   key: 'ha.kiosk_mode',
   type: SettingType.boolean,
@@ -10656,6 +10672,7 @@ const List<SettingDef<Object>> allSettings = [
   haToken,
   haAutoLogin,
   haSatelliteEntity,
+  haCustomPages,
   haKioskMode,
   haKioskHideHeader,
   haKioskHideSidebar,

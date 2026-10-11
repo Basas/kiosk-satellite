@@ -1653,3 +1653,9 @@
 .ep-value-entity { cursor: default; padding-bottom: 12px; }
 .ep-option input[type=radio] { flex: none; pointer-events: none; }
 .ep-option .ep-option-name { flex: 1 1 0; min-width: 0; }
+
+/* Custom Pages (custom_pages.js): each page wears the picker's HTML mark
+   and shows its path in mono, the device's CustomPagesCard. */
+.custom-page-icon { color: var(--primary); }
+.row.camera-list-row .desc.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

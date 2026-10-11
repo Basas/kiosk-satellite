@@ -59,6 +59,7 @@ import 'camera_views_picker.dart';
 import 'dashboard_view_picker.dart';
 import 'import_options_dialog.dart';
 import 'intercom_settings.dart';
+import 'custom_pages_settings.dart';
 import 'custom_wake_models.dart';
 import 'kit.dart';
 import 'time_picker.dart';
@@ -2771,6 +2772,9 @@ class _CategoryContentState extends State<_CategoryContent> {
         id: 'x:dashboard_picker',
         child: _DashboardPickerCard(container: container),
       ),
+      // The person's own pages, offered by the picker above beside the
+      // dashboards. No setting draws the page, so its row is placed here.
+      _subpageEntryCard(container, 'Home Assistant', 'Custom Pages'),
       ..._sectionedCards(container, [
         for (final def in _defsFor('Home Assistant'))
           if (def.key != haUrl.key &&
@@ -3833,6 +3837,8 @@ class _CategoryContentState extends State<_CategoryContent> {
     }
 
     switch (subpage) {
+      case 'Custom Pages':
+        return [CustomPagesCard(container: container)];
       case 'Dashboard View Rotation':
         // Hand-built: the view checkboxes need the live dashboards from Home
         // Assistant, which the generic renderer cannot supply.
@@ -7607,8 +7613,9 @@ class _OptimizationsCardState extends State<_OptimizationsCard> {
   bool _runtimeAll = false;
 
   /// The wrapper's reported mode: 'filtering', 'passthrough' (this view's
-  /// entities cannot be determined, so it is deliberately unfiltered), or
-  /// 'boot' while the allowlist has not been built yet.
+  /// entities cannot be determined, so it is deliberately unfiltered),
+  /// 'custom-page' (a custom page is on screen, never filtered) or 'boot'
+  /// while the allowlist has not been built yet.
   String _mode = 'boot';
 
   /// Tap on the "Watching N entities" link: opens the watched-entities list.
@@ -7878,6 +7885,14 @@ class _OptimizationsCardState extends State<_OptimizationsCard> {
             ],
           ),
         ),
+      );
+    }
+    // The person's own page under /local/: nothing of Home Assistant's
+    // to filter.
+    if (_ready && _mode == 'custom-page') {
+      return _telemetryRow(
+        theme,
+        Text(haText(context, 'Not used on custom pages.'), style: base),
       );
     }
     final note = _rawFirehose ? _rawFirehoseNote : '';

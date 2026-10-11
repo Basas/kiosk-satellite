@@ -612,6 +612,14 @@ class UiStringsDe extends UiStrings {
       'Die Ansicht, die der Kiosk beim Start anzeigt.';
 
   @override
+  String get dashboardPickerOnePage => '1 Seite';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count Seiten';
+  }
+
+  @override
   String get dlnaCannotDecode =>
       'Dieses Gerät kann dieses Video nicht dekodieren.';
 
@@ -3818,6 +3826,9 @@ class UiStringsDe extends UiStrings {
   String overviewMetricDegrees(String value) {
     return '$value °C';
   }
+
+  @override
+  String get overviewFilterCustomPage => 'Auf eigenen Seiten nicht verwendet';
 
   @override
   String get overviewNoScreenshot => 'Kein Bildschirmfoto verfügbar';
@@ -7027,6 +7038,66 @@ class UiStringsDe extends UiStrings {
   }
 
   @override
+  String get haCustomPages => 'Eigene Seiten';
+
+  @override
+  String get haCustomPagesHint =>
+      'Deine eigenen HTML-Seiten aus dem www-Ordner';
+
+  @override
+  String get haCustomPagesAdd => 'Seite hinzufügen';
+
+  @override
+  String get haCustomPagesEmpty =>
+      'Füge HTML-Seiten aus dem www-Ordner von Home Assistant hinzu, um sie wie ein Dashboard auszuwählen.';
+
+  @override
+  String get haCustomPagesGuide => 'Anleitung für eigene Seiten';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'So erstellst du eine Seite, die mit Home Assistant spricht.';
+
+  @override
+  String get haCustomPageAddTitle => 'Eigene Seite hinzufügen';
+
+  @override
+  String get haCustomPageEditTitle => 'Eigene Seite bearbeiten';
+
+  @override
+  String get haCustomPageName => 'Name';
+
+  @override
+  String get haCustomPagePath => 'Pfad';
+
+  @override
+  String get haCustomPagePathHint =>
+      'Eine Datei im www-Ordner von Home Assistant, z. B. /local/dashboard.html.';
+
+  @override
+  String get haCustomPageNameMissing => 'Gib einen Namen ein.';
+
+  @override
+  String get haCustomPagePathInvalid =>
+      'Gib einen Pfad unter /local/ ein, z. B. /local/dashboard.html.';
+
+  @override
+  String get haCustomPageDuplicate =>
+      'Eine andere Seite verwendet diesen Pfad bereits.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'Home Assistant hat unter diesem Pfad keine Datei.';
+
+  @override
+  String get haCustomPageUnreachable => 'Home Assistant nicht erreichbar.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant hat mit HTTP $code geantwortet.';
+  }
+
+  @override
   String get settingHaHoldModeTitle => 'Pausenmodus';
 
   @override
@@ -7163,6 +7234,9 @@ class UiStringsDe extends UiStrings {
   String haThreshold(String count) {
     return 'Diese Ansicht verwendet $count Entitäten und überschreitet damit den Filter-Schwellenwert. Die Filterung ist deaktiviert.';
   }
+
+  @override
+  String get haCustomPageFilter => 'Wird auf eigenen Seiten nicht verwendet.';
 
   @override
   String get settingHaReturnHomeEnabledTitle =>

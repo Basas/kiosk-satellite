@@ -44,5 +44,6 @@
   "overviewTemperature": "Темп.",
   "overviewMemoryFree": "{amount} ГБ вільно",
   "overviewMetricPercent": "{value}%",
-  "overviewMetricDegrees": "{value}°C"
+  "overviewMetricDegrees": "{value}°C",
+  "overviewFilterCustomPage": "Не використовується на власних сторінках"
 }

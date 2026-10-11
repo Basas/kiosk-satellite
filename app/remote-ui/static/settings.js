@@ -43,6 +43,7 @@ import {
 import { applyManagedBanners, renderFleetPage } from './fleetsync.js';
 import { decorateAnnouncementsPage, renderIntercomPage } from './intercom.js';
 import { renderAlarmsPage } from './alarms.js';
+import { renderCustomPagesPage } from './custom_pages.js';
 import { askImportOptions } from './pickers.js';
 import { settingRow, syncGatedRows } from './rows.js';
 import { applySubpageView, currentPath, setCurrentPath, subpageEntry, refreshNavigationText } from './tabs.js';
@@ -314,6 +315,8 @@ async function flushSettingsUpdates() {
     // model list never rebuilds the page.
     if (!hasDependants && REALTIME_PROVIDER_SETTINGS.has(setting.key)) continue;
     if (!shapeChanged && !hasDependants && rotationListSettings.has(setting.key)) continue;
+    // The Custom Pages list repaints itself (custom_pages.js).
+    if (!shapeChanged && setting.key === 'ha.custom_pages') continue;
     // Only the choices of a dropdown moved (a provider's model list came
     // in): its row refreshes them in place rather than the page rebuilding
     // under whatever is being typed elsewhere on it.
@@ -1913,11 +1916,19 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
       const haPanels = render(
         restRoot,
         ['Home Assistant'].filter((c) => (byCat[c] || []).length),
-        { handBuilt: HAND_BUILT_PAGES });
+        { handBuilt: HAND_BUILT_PAGES, extra: ['Custom Pages'] });
       byCat['Home Assistant'] = savedHa;
       // Each hand-built group goes on the page its entry row opens. No
       // heading with it: the page title already carries the name.
       const panelFor = (sub) => haPanels.get(sub) || root;
+
+      // Custom Pages, which no setting draws: its entry row sits right
+      // under the Default dashboard card, as on the device.
+      {
+        const entry = restRoot.querySelector('[data-subpage-entry="Custom Pages"]');
+        if (entry) dcard.after(entry.closest('.card'));
+        renderCustomPagesPage(haPanels.get('Custom Pages'));
+      }
 
       // Theme, hand-built: the toggles re-render only this card, showing
       // or hiding their dependent rows in place.
@@ -2335,6 +2346,13 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
                   if (!st || !st.mode || st.mode === 'boot') {
                     hist.length = 0;
                     telemetryText.textContent = haText('Waiting for the dashboard to load…');
+                    return;
+                  }
+                  // The person's own page under /local/: nothing of Home
+                  // Assistant's to filter.
+                  if (st.mode === 'custom-page') {
+                    hist.length = 0;
+                    telemetryText.textContent = haText('Not used on custom pages.');
                     return;
                   }
                   if (st.mode === 'passthrough') {

@@ -1166,6 +1166,18 @@ abstract class UiStrings {
   /// **'The view the kiosk shows when it starts.'**
   String get dashboardPickerDefaultHelp;
 
+  /// How many custom pages the Custom Pages entry lists, exactly one.
+  ///
+  /// In en, this message translates to:
+  /// **'1 page'**
+  String get dashboardPickerOnePage;
+
+  /// How many custom pages the Custom Pages entry lists, two or more.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} pages'**
+  String dashboardPickerPageCount(String count);
+
   /// Playback failure caused by the device video decoder.
   ///
   /// In en, this message translates to:
@@ -6574,6 +6586,12 @@ abstract class UiStrings {
   /// **'{value}°C'**
   String overviewMetricDegrees(String value);
 
+  /// Home Assistant tile status while a custom page (a person's own HTML page) is on screen: the update filter leaves those pages alone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not used on custom pages'**
+  String get overviewFilterCustomPage;
+
   /// Translate the interface text. Keep external names, versions and technical details unchanged.
   ///
   /// In en, this message translates to:
@@ -11951,6 +11969,108 @@ abstract class UiStrings {
   /// **'{seconds} s'**
   String gestureHoldSeconds(String seconds);
 
+  /// Name of the settings page and of the dashboard picker entry that lists a person's own HTML pages hosted in Home Assistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Pages'**
+  String get haCustomPages;
+
+  /// Hint under the Custom Pages entry row. www is the name of a folder in Home Assistant and stays as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own HTML pages from the www folder'**
+  String get haCustomPagesHint;
+
+  /// Button that opens the dialog to add a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add page'**
+  String get haCustomPagesAdd;
+
+  /// Shown while no custom page is added yet. www is a folder name and stays as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Add HTML pages from the Home Assistant www folder to pick them like a dashboard.'**
+  String get haCustomPagesEmpty;
+
+  /// Row that opens the documentation about building a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom page guide'**
+  String get haCustomPagesGuide;
+
+  /// Description under the Custom page guide row.
+  ///
+  /// In en, this message translates to:
+  /// **'How to build a page that talks to Home Assistant.'**
+  String get haCustomPagesGuideHint;
+
+  /// Title of the dialog that adds a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add custom page'**
+  String get haCustomPageAddTitle;
+
+  /// Title of the dialog that changes a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit custom page'**
+  String get haCustomPageEditTitle;
+
+  /// Field label: the name the dashboard picker shows for the page.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get haCustomPageName;
+
+  /// Field label: the address of the page inside Home Assistant, such as /local/dashboard.html.
+  ///
+  /// In en, this message translates to:
+  /// **'Path'**
+  String get haCustomPagePath;
+
+  /// Help under the Path field. Keep www and /local/dashboard.html unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'A file in the Home Assistant www folder, such as /local/dashboard.html.'**
+  String get haCustomPagePathHint;
+
+  /// Error in the custom page dialog when the name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name.'**
+  String get haCustomPageNameMissing;
+
+  /// Error in the custom page dialog when the path is not under /local/. Keep /local/ and /local/dashboard.html unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a path under /local/, such as /local/dashboard.html.'**
+  String get haCustomPagePathInvalid;
+
+  /// Error in the custom page dialog when the path is already in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Another page already uses this path.'**
+  String get haCustomPageDuplicate;
+
+  /// Error in the custom page dialog when Home Assistant answers that the file does not exist.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant has no file at this path.'**
+  String get haCustomPageNotFound;
+
+  /// Error in the custom page dialog when Home Assistant does not answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach Home Assistant.'**
+  String get haCustomPageUnreachable;
+
+  /// Error in the custom page dialog when Home Assistant answers the page with an HTTP status other than 200. HTTP stays as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant answered with HTTP {code}.'**
+  String haCustomPageStatus(String code);
+
   /// Setting label.
   ///
   /// In en, this message translates to:
@@ -12160,6 +12280,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'This view uses {count} entities, which crosses the filtering threshold. Filtering is disabled.'**
   String haThreshold(String count);
+
+  /// Live update-filter status while a custom page (a person's own HTML page) is on screen: the filter leaves those pages alone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not used on custom pages.'**
+  String get haCustomPageFilter;
 
   /// Setting label.
   ///
