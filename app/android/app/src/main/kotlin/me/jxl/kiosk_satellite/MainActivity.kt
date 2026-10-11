@@ -240,6 +240,8 @@ class MainActivity : FlutterActivity() {
         screenCapture = ScreenCapture(this, messenger)
         kioskLock = KioskLock(this, messenger)
         webViewFreeze = WebViewFreeze(this, messenger)
+        // Home Assistant's HLS playlists get a deadline (see the class).
+        HlsPlaylistGuard.install()
         webViewRecovery = WebViewRecovery(flutterEngine)
         webViewBackdrop = WebViewBackdrop(this)
         provisionChannel = MethodChannel(messenger, "kiosk_satellite/provision")
