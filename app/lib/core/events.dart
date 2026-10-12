@@ -486,8 +486,12 @@ class VoiceInteractionChanged extends AppEvent {
 /// states: idle, listening, processing or responding. Covers Assist turns
 /// and realtime conversations alike.
 class VoiceSatelliteStateChanged extends AppEvent {
-  const VoiceSatelliteStateChanged(this.state);
+  const VoiceSatelliteStateChanged(this.state, {this.announcement = false});
   final String state;
+
+  /// Responding to an announcement rather than answering a turn. Home
+  /// Assistant calls both responding, the VS_ broadcasts tell them apart.
+  final bool announcement;
 }
 
 /// Native Voice Satellite's timers changed: one started, changed, was

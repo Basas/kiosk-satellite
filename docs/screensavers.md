@@ -400,3 +400,5 @@ When ESPHome **Expose kiosk entities** is enabled, the screensaver provides comp
 * **Screensaver next slide** and **Screensaver previous slide** buttons (steps active slideshows or camera rotation grids)
 
 All entities surface natively on the kiosk's primary ESPHome device.
+
+Apps on the kiosk itself, like Tasker or MacroDroid, can follow the screensaver through [Android Broadcasts](android-broadcasts.md#screensaver).

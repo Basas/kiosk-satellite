@@ -29,6 +29,7 @@ import 'managers/fleet/fleet_sync_manager.dart';
 import 'managers/intercom/intercom_manager.dart';
 import 'managers/alarms/alarm_manager.dart';
 import 'managers/analytics/analytics_manager.dart';
+import 'managers/broadcasts/event_broadcast_manager.dart';
 import 'managers/location/location_manager.dart';
 import 'managers/person/person_sensor_manager.dart';
 import 'managers/proximity/proximity_manager.dart';
@@ -144,6 +145,7 @@ class AppContainer {
     intercom = IntercomManager(bus, commands, log, settings);
     alarms = AlarmManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);
+    broadcasts = EventBroadcastManager(bus, commands, log);
     // Composition-root wiring: it reads the state other managers own and
     // reports it to pages (kioskSatellite.getTheme / getKioskState).
     pageState = PageStateManager(
@@ -189,6 +191,7 @@ class AppContainer {
   late final PersonSensorManager personSensor;
   late final HomeAssistantManager homeAssistant;
   late final AudioRoutingManager audio;
+  late final EventBroadcastManager broadcasts;
   late final WakeWordManager wakeWord;
   late final NoiseLevelManager noiseLevel;
   late final AssistPipelineManager pipeline;
@@ -218,6 +221,8 @@ class AppContainer {
   List<Manager> get _ordered => [
     settings,
     device,
+    // Before the managers whose events it mirrors start publishing them.
+    broadcasts,
     // After device, whose sensor it reads, and before screen, which starts
     // adaptive brightness from its reading.
     adaptiveLight,
