@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "0986b54f486d76a4b1e7421475c5d65c65528c9e",
+  "revision": "41c3352aa709edc618208b770ab6bdb99a43f94f",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -71,7 +71,7 @@
     "settings_app_launcher_en.arb": "bcfe4add767f2ac32d1abb99b4ff9fa035b2f48d30563630276ceba84aae1350",
     "settings_app_launcher_permissions_en.arb": "0be89fecc325751499b4709455ed64da9906b6678816c0eee73c71fc0243604d",
     "settings_camera_general_en.arb": "eea9a98c30ef60009c0c0a693d0073028785ceb81db6ab5d10b2eaa6ccc53f8f",
-    "settings_camera_motion_en.arb": "590c8a8e3e7afeef58fa10005949581fe4d77b46acaad9657f088a44c3bdbba4",
+    "settings_camera_motion_en.arb": "39ebe3fdcb6b7912976e889bba488426f16aeced9e2ef111fd7cc5b1319e82b1",
     "settings_camera_permissions_en.arb": "af1f4abccaf91497313d69f836cf52fad5396437ee97554c472c4949e7462cbb",
     "settings_camera_person_en.arb": "b0299cd3595782796067d5dcbe53ef5504a53a71e1772e5bc5d10bb99df6823f",
     "settings_camera_snapshot_en.arb": "df01d8263c7598d75619263228b9259db6823d2d0f744bc1c392bdbc32b2972e",
@@ -160,7 +160,7 @@
     "settings_screensaver_media_gallery_en.arb": "22d8025af7ee10cb2743592ef5d12560988a02a95784067782d6e247956412ec",
     "settings_screensaver_media_home_assistant_en.arb": "3bbcab97579bc177e5ae3c61830f5b7d6c84206394caebda9f5382087e70bc7c",
     "settings_screensaver_media_local_en.arb": "2cd1f4d2c8db86c88a8904ffe73de45384903945eedcd18b663953bf92ae7871",
-    "settings_screensaver_motion_detection_en.arb": "b16c416cda935c007b290487e18fade56150bfb797830f0e479ce3fbc3b0a0b7",
+    "settings_screensaver_motion_detection_en.arb": "bbbd12b9ae4bccdf20a80e9a8ca5bae51f7ea74ab4aeaf0dc1a63b58f9e729d3",
     "settings_screensaver_person_detection_en.arb": "b869eab974d2364ea71bb207a2fdcf31ccf427346f7f07d4dce190783e33df85",
     "settings_screensaver_person_permissions_en.arb": "7c430a8e3ce7c7e12ea0c14a54b708082b58eb0c230e0178e47279c2b84010c1",
     "settings_screensaver_proximity_detection_en.arb": "e87a5a64854466df9b18f48a036e7bccb01b24b80bf48bdcc05a352c04d0d783",

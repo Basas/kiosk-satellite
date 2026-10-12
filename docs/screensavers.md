@@ -288,9 +288,13 @@ When the [device camera](camera.md) is enabled, two Motion Detection settings co
 * **Only when screen is off**: Keeps the visible screensaver up when motion is detected. Once the display turns off, motion dismisses the screensaver and wakes the dashboard. Requires Dismiss on motion.
 * **Postpone screensaver on motion**: Monitors the camera between screensaver sessions, continuously resetting the idle timeout clock whenever room movement is detected. This keeps the camera active continuously and requires Dismiss on motion to be enabled.
 
-These settings can also follow a Home Assistant occupancy, motion or presence sensor instead of the camera, which needs no camera at all. See [External Motion Sensor](camera.md#external-motion-sensor).
-
 Motion analysis functions in total darkness, filters out whole-room light shifts (such as TV flashes or turning on a lamp), and suppresses detection for a few seconds during internal app brightness and slide transitions to prevent false wakes. Sensitivity, frame rates, and camera selection are configured in Camera settings (see [Device Camera](camera.md)). Under [Lockdown Mode](kiosk.md), motion events will neither dismiss nor postpone screensavers.
+
+### External Motion Sensor
+
+A Home Assistant sensor can detect motion in place of the camera, for a tablet whose camera does not work or a room that already has a motion sensor. Turn on **Use Home Assistant entity** under **Screensaver > Motion Detection > External Motion Sensor**, then pick the sensor in **Motion sensor entity**. The picker lists occupancy, motion and presence binary sensors. Once one is picked, the row shows whether it reads Detected or Clear.
+
+With the switch on, the entity drives **Dismiss on motion**, **Only when screen is off** and **Postpone screensaver on motion** above it, and the camera no longer runs for them. Neither the Camera switch nor a camera on the device is needed. The sensor turning on dismisses the screensaver. While it stays on, it postpones the screensaver the way movement does, but it never dismisses a screensaver that started while it was already on. When it clears, the idle timeout runs out as usual and the screensaver can turn the screen off after its own delay. The **Motion** `binary_sensor`, face detection and the Show fingers gesture keep using the camera. Dismiss on motion still takes precedence over Dismiss on face.
 
 ## Face Detection
 

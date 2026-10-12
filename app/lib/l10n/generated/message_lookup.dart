@@ -1127,13 +1127,6 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingMotionSensitivityDescription,
       'cameraMotionPage' => strings.cameraMotionPage,
       'cameraMotionHint' => strings.cameraMotionHint,
-      'settingMotionUseEntityTitle' => strings.settingMotionUseEntityTitle,
-      'settingMotionUseEntityDescription' =>
-        strings.settingMotionUseEntityDescription,
-      'settingMotionEntityTitle' => strings.settingMotionEntityTitle,
-      'settingMotionEntityDescription' =>
-        strings.settingMotionEntityDescription,
-      'cameraExternalMotionHeading' => strings.cameraExternalMotionHeading,
       'cameraNoCamera' => strings.cameraNoCamera,
       'cameraNoCameraHelp' => strings.cameraNoCameraHelp,
       'cameraCameraPermission' => strings.cameraCameraPermission,
@@ -3473,6 +3466,14 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.screensaverDetectionMotionHint,
       'screensaverDetectionMotionTuning' =>
         strings.screensaverDetectionMotionTuning,
+      'settingMotionUseEntityTitle' => strings.settingMotionUseEntityTitle,
+      'settingMotionUseEntityDescription' =>
+        strings.settingMotionUseEntityDescription,
+      'settingMotionEntityTitle' => strings.settingMotionEntityTitle,
+      'settingMotionEntityDescription' =>
+        strings.settingMotionEntityDescription,
+      'screensaverDetectionExternalMotionHeading' =>
+        strings.screensaverDetectionExternalMotionHeading,
       'settingScreensaverDismissOnPersonTitle' =>
         strings.settingScreensaverDismissOnPersonTitle,
       'settingScreensaverDismissOnPersonDescription' =>

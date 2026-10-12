@@ -156,7 +156,6 @@ List<Widget> _sectionedCards(
         final heading = current;
         out.add(
           (def.category == 'ESPHome' ||
-                  def.category == 'Camera' ||
                   def.category == 'Device' ||
                   def.category == 'Home Assistant' ||
                   def.category == 'Screen & Audio' ||
@@ -330,14 +329,6 @@ List<SettingDef<Object>> _defsFor(String category) => [
         !def.hidden &&
         !deviceHiddenKeys.contains(def.key))
       def,
-];
-
-/// The Camera page on a device without a camera: the master switch,
-/// shown disabled, and the external motion sensor (issue #973).
-const _cameralessDefs = <SettingDef<Object>>[
-  cameraEnabled,
-  motionUseEntity,
-  motionEntity,
 ];
 
 /// The definitions the category page renders in place. The Device page
@@ -2449,11 +2440,10 @@ class _CategoryContentState extends State<_CategoryContent> {
               // switch renders disabled (below) with the reason, instead of
               // lying enabled; its tuning rows live in the Camera section
               // now and hide with the master there. A camera-less device
-              // keeps only the disabled master switch, and the Motion
-              // Sensor page for its Home Assistant entity (issue #973).
+              // keeps only the disabled master switch.
               widget.category == 'Camera' &&
                       container.deviceCamera.cameraKnownAbsent
-                  ? _cameralessDefs
+                  ? const [cameraEnabled]
                   : _inlineDefsFor(widget.category),
               () => setState(() {}),
               replace: _rowReplacements(container),
@@ -3916,15 +3906,6 @@ class _CategoryContentState extends State<_CategoryContent> {
             ),
           ),
         ];
-      // Without a camera only the Home Assistant entity can detect motion
-      // (issue #973). Mirrored on the remote (updateNoCameraNotice).
-      case 'Motion Sensor'
-          when widget.category == 'Camera' &&
-              container.deviceCamera.cameraKnownAbsent:
-        return sectioned([
-          for (final def in _cameralessDefs)
-            if (def.subpage == subpage) def,
-        ]);
       default:
         return sectioned([
           for (final def in _defsFor(widget.category))

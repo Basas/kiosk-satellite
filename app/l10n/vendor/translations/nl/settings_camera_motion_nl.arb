@@ -11,10 +11,5 @@
   "settingMotionSensitivityTitle": "Bewegingsgevoeligheid",
   "settingMotionSensitivityDescription": "Een hogere waarde reageert op kleinere bewegingen. Bij 1 is een grote verandering in het beeld nodig; 100 reageert op de kleinste beweging.",
   "cameraMotionPage": "Bewegingssensor",
-  "cameraMotionHint": "Home Assistant-bewegingssensor en gedeelde detectieinstellingen",
-  "settingMotionUseEntityTitle": "Home Assistant-entiteit gebruiken",
-  "settingMotionUseEntityDescription": "Detecteer beweging met een Home Assistant-sensor in plaats van de camera.",
-  "settingMotionEntityTitle": "Bewegingssensor-entiteit",
-  "settingMotionEntityDescription": "De Home Assistant-sensor voor bezetting, beweging of aanwezigheid die gevolgd wordt.",
-  "cameraExternalMotionHeading": "Externe bewegingssensor"
+  "cameraMotionHint": "Home Assistant-bewegingssensor en gedeelde detectieinstellingen"
 }

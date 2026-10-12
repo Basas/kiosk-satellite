@@ -4100,23 +4100,6 @@ class UiStringsEn extends UiStrings {
       'Home Assistant motion sensor and shared detection settings';
 
   @override
-  String get settingMotionUseEntityTitle => 'Use Home Assistant entity';
-
-  @override
-  String get settingMotionUseEntityDescription =>
-      'Detect motion with a Home Assistant sensor instead of the camera.';
-
-  @override
-  String get settingMotionEntityTitle => 'Motion sensor entity';
-
-  @override
-  String get settingMotionEntityDescription =>
-      'The Home Assistant occupancy, motion or presence sensor to follow.';
-
-  @override
-  String get cameraExternalMotionHeading => 'External Motion Sensor';
-
-  @override
   String get cameraNoCamera => 'No camera detected';
 
   @override
@@ -10578,6 +10561,24 @@ class UiStringsEn extends UiStrings {
   @override
   String get screensaverDetectionMotionTuning =>
       'Motion detection is tuned in the Camera settings.';
+
+  @override
+  String get settingMotionUseEntityTitle => 'Use Home Assistant entity';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Detect motion with a Home Assistant sensor instead of the camera.';
+
+  @override
+  String get settingMotionEntityTitle => 'Motion sensor entity';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'The Home Assistant occupancy, motion or presence sensor to follow.';
+
+  @override
+  String get screensaverDetectionExternalMotionHeading =>
+      'External Motion Sensor';
 
   @override
   String get settingScreensaverDismissOnPersonTitle => 'Dismiss on person';

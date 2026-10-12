@@ -4644,6 +4644,40 @@ const motionCamera = SettingDef<String>(
   perDevice: true,
 );
 
+// ── Screensaver: External Motion Sensor ───────────────────────────────
+// Motion can come from a Home Assistant occupancy, motion or presence
+// sensor instead of the camera (issue #973): a tablet whose camera does
+// not work, or a room with a sensor already in it. With the switch on,
+// the entity drives Dismiss on motion and Postpone on motion in the
+// camera's place, and the camera no longer runs for them. The Motion
+// sensor entity, faces and hands stay on the camera. Not gated on the
+// Camera switch, since replacing the camera is the point.
+const motionUseEntity = SettingDef<bool>(
+  key: 'motion.use_entity',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Use Home Assistant entity',
+  description:
+      'Detect motion with a Home Assistant sensor instead of the camera.',
+  category: 'Screensaver',
+  section: 'External Motion Sensor',
+  subpage: 'Motion Detection',
+);
+
+// Picked with the entity search on both UIs, never typed.
+const motionEntity = SettingDef<String>(
+  key: 'motion.entity',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Motion sensor entity',
+  description:
+      'The Home Assistant occupancy, motion or presence sensor to follow.',
+  category: 'Screensaver',
+  section: 'External Motion Sensor',
+  subpage: 'Motion Detection',
+  dependsOn: 'motion.use_entity',
+);
+
 // ── Screensaver: Face Detection ────────────────────────────────────────
 // Fully Kiosk's "face detection" (issue #304): wake only when someone is
 // looking at the kiosk, so a room full of movement leaves the screensaver
@@ -5105,39 +5139,6 @@ const motionSensitivity = SettingDef<num>(
   min: 1,
   max: 100,
   step: 1,
-);
-
-// Motion can come from a Home Assistant occupancy, motion or presence
-// sensor instead of the camera (issue #973): a tablet whose camera does
-// not work, or a room with a sensor already in it. With the switch on,
-// the entity drives Dismiss on motion and Postpone on motion in the
-// camera's place, and the camera no longer runs for them. The Motion
-// sensor entity, faces and hands stay on the camera. Not gated on the
-// Camera switch, since replacing the camera is the point.
-const motionUseEntity = SettingDef<bool>(
-  key: 'motion.use_entity',
-  type: SettingType.boolean,
-  defaultValue: false,
-  title: 'Use Home Assistant entity',
-  description:
-      'Detect motion with a Home Assistant sensor instead of the camera.',
-  category: 'Camera',
-  section: 'External Motion Sensor',
-  subpage: 'Motion Sensor',
-);
-
-// Picked with the entity search on both UIs, never typed.
-const motionEntity = SettingDef<String>(
-  key: 'motion.entity',
-  type: SettingType.string,
-  defaultValue: '',
-  title: 'Motion sensor entity',
-  description:
-      'The Home Assistant occupancy, motion or presence sensor to follow.',
-  category: 'Camera',
-  section: 'External Motion Sensor',
-  subpage: 'Motion Sensor',
-  dependsOn: 'motion.use_entity',
 );
 
 // Camera: Person Sensor
@@ -10978,6 +10979,8 @@ const List<SettingDef<Object>> allSettings = [
   screensaverDismissOnMotionScreenOffOnly,
   screensaverPostponeOnMotion,
   motionCamera,
+  motionUseEntity,
+  motionEntity,
   screensaverDismissOnFace,
   screensaverDismissOnFaceScreenOffOnly,
   screensaverPostponeOnFace,
@@ -11004,8 +11007,6 @@ const List<SettingDef<Object>> allSettings = [
   motionFps,
   motionSensitivity,
   motionStartDelay,
-  motionUseEntity,
-  motionEntity,
   // The Person Sensor page (Meta Portal only) sits under Motion Sensor.
   personSensorEnabled,
   cameraRtspEnabled,

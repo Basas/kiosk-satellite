@@ -11,10 +11,5 @@
   "settingMotionSensitivityTitle": "Чутливість до руху",
   "settingMotionSensitivityDescription": "Більше значення реагує на менші рухи. 1 вимагає значних змін у кадрі; 100 реагує на найменший рух.",
   "cameraMotionPage": "Датчик руху",
-  "cameraMotionHint": "Датчик руху Home Assistant і спільні налаштування виявлення",
-  "settingMotionUseEntityTitle": "Використовувати сутність Home Assistant",
-  "settingMotionUseEntityDescription": "Визначає рух за датчиком Home Assistant замість камери.",
-  "settingMotionEntityTitle": "Сутність датчика руху",
-  "settingMotionEntityDescription": "Датчик зайнятості, руху або присутності Home Assistant, за яким слід стежити.",
-  "cameraExternalMotionHeading": "Зовнішній датчик руху"
+  "cameraMotionHint": "Датчик руху Home Assistant і спільні налаштування виявлення"
 }

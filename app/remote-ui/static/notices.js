@@ -7,9 +7,7 @@ import { readOnlyRow } from './device.js';
 /* No-camera notice: mirror of the device's page when the hardware has no
    camera at all (a ROM without a camera HAL, e.g. LineageOS on an Echo
    Show). The master switch renders off and disabled, its dependent rows
-   disappear, and the notice says why. The Motion Sensor page stays for
-   its Home Assistant entity (issue #973), the only motion such a device
-   can have. Runs (awaited) before the other
+   disappear, and the notice says why. Runs (awaited) before the other
 
    camera panels, which read state.cameraPresent to stand down. */
 export async function updateNoCameraNotice() {
@@ -37,7 +35,7 @@ export async function updateNoCameraNotice() {
     'motion.start_delay']) {
     tab.querySelector(`[data-key="${key}"]`)?.remove();
   }
-  tab.querySelectorAll('[data-key^="camera.rtsp."], [data-key^="camera.onvif."], .subpage[data-subpage="RTSP & ONVIF Streaming"], .subpage-entry[data-subpage-entry="RTSP & ONVIF Streaming"]')
+  tab.querySelectorAll('[data-key^="camera.rtsp."], [data-key^="camera.onvif."], .subpage[data-subpage="RTSP & ONVIF Streaming"], .subpage-entry[data-subpage-entry="RTSP & ONVIF Streaming"], .subpage[data-subpage="Motion Sensor"], .subpage-entry[data-subpage-entry="Motion Sensor"]')
     .forEach((row) => row.remove());
   // Remove empty cards and their headings too.
   for (const card of [...tab.querySelectorAll('.card')]) {

@@ -71,7 +71,7 @@ Settings that scale the UI, control screen brightness, or manage volume often de
 | `screen.default_brightness` Default brightness | Screen & Audio |
 | `screen.adaptive_min_brightness`, `screen.adaptive_max_brightness`, `screen.adaptive_dark_lux`, `screen.adaptive_bright_lux` (the curve's two middle points travel whenever Minimum brightness does) | Adaptive brightness |
 | `screen.adaptive_use_entity` Use Home Assistant entity, `screen.adaptive_light_entity` Light sensor entity | Adaptive brightness |
-| `motion.use_entity` Use Home Assistant entity, `motion.entity` Motion sensor entity | Motion Sensor |
+| `motion.use_entity` Use Home Assistant entity, `motion.entity` Motion sensor entity | Screensaver, Motion Detection |
 | `screensaver.brightness_level`, `screensaver.dim_level` | Screensaver |
 | `audio.media_volume` Media volume, `audio.assistant_volume` Assistant volume | Screen & Audio |
 | `notifications.volume` Notification volume | Notifications |

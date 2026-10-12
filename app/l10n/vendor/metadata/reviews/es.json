@@ -19715,17 +19715,17 @@
     "author": "Xavier Larrea"
   },
   "settingMotionUseEntityTitle": {
-    "source": "b09f708080738e0bcf0bb7fbe25ad144b46a6e7a7ef9fc9359462771b87f3128",
+    "source": "354470a22c4c154e5c32b836ea7728eda24398e459c494acf66746768c33a96d",
     "translation": "600a5ad797a6b883c926c7a5bc22ecc83ab3ccafed52581c874a5e1de14d7bf8",
     "author": "Xavier Larrea"
   },
   "settingMotionEntityTitle": {
-    "source": "ca8148d42a1a9e13b84a7c6feca5637433f121ac76d13b4e2515f407938717dc",
+    "source": "72ddd41cce28053cdfcfd1a4877ca73fb79529df460fcd48ff4492ba62fa765a",
     "translation": "258efdaba0d6b7909e8fae6d7441ed29da199900256e2ac6b2eb8c618c92e30e",
     "author": "Xavier Larrea"
   },
   "settingMotionUseEntityDescription": {
-    "source": "c954870e008a81ef6ea97f252db89f316743b47d615e59b5a92d3177aa973920",
+    "source": "239755bd3d8ecaf04960f84064a801981e5519f049035c8a9dc4b26567336a6a",
     "translation": "7990799c7df1349ee1373dc0eec74753491cac37c13649b89d91b27d02239f97",
     "author": "Xavier Larrea"
   },
@@ -19735,8 +19735,13 @@
     "author": "Xavier Larrea"
   },
   "settingMotionEntityDescription": {
-    "source": "3d1b2e55aafb93d680bb1aeb5db9e428e51de1a745a071c215a1e2732f9fd1ba",
+    "source": "f6d2865ae301cc3e022958cb7e59cab1364147ecbdc2e192ceac95c70d6bb91b",
     "translation": "03c7fd82dc8d0f1fc77e1bc2318e9b788e730c34669a5e24554f033ab860957e",
+    "author": "Xavier Larrea"
+  },
+  "screensaverDetectionExternalMotionHeading": {
+    "source": "229e0034562ce4c6445229744ed8ea51d92f0752fc8e4dceed283f1f47493f17",
+    "translation": "ec35463f257882a1a26ecdcdd367495e4aee11ca022e9709eaf3889ee575d9a7",
     "author": "Xavier Larrea"
   }
 }

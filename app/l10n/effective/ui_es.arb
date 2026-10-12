@@ -15522,71 +15522,6 @@
       ]
     }
   },
-  "settingMotionUseEntityTitle": "Usar entidad de Home Assistant",
-  "@settingMotionUseEntityTitle": {
-    "context": "Settings > Camera > Motion Sensor",
-    "description": "Setting label.",
-    "x-locations": {
-      "device": [
-        "Settings > Camera > Motion Sensor"
-      ],
-      "remoteAdmin": [
-        "Camera > Motion Sensor"
-      ]
-    }
-  },
-  "settingMotionUseEntityDescription": "Detecta el movimiento con un sensor de Home Assistant en lugar de la cámara.",
-  "@settingMotionUseEntityDescription": {
-    "context": "Settings > Camera > Motion Sensor",
-    "description": "Help below this setting.",
-    "x-locations": {
-      "device": [
-        "Settings > Camera > Motion Sensor"
-      ],
-      "remoteAdmin": [
-        "Camera > Motion Sensor"
-      ]
-    }
-  },
-  "settingMotionEntityTitle": "Entidad del sensor de movimiento",
-  "@settingMotionEntityTitle": {
-    "context": "Settings > Camera > Motion Sensor",
-    "description": "Setting label.",
-    "x-locations": {
-      "device": [
-        "Settings > Camera > Motion Sensor"
-      ],
-      "remoteAdmin": [
-        "Camera > Motion Sensor"
-      ]
-    }
-  },
-  "settingMotionEntityDescription": "El sensor de ocupación, movimiento o presencia de Home Assistant que se va a seguir.",
-  "@settingMotionEntityDescription": {
-    "context": "Settings > Camera > Motion Sensor",
-    "description": "Help below this setting.",
-    "x-locations": {
-      "device": [
-        "Settings > Camera > Motion Sensor"
-      ],
-      "remoteAdmin": [
-        "Camera > Motion Sensor"
-      ]
-    }
-  },
-  "cameraExternalMotionHeading": "Sensor de movimiento externo",
-  "@cameraExternalMotionHeading": {
-    "context": "Settings > Camera > Motion Sensor",
-    "description": "Section heading.",
-    "x-locations": {
-      "device": [
-        "Settings > Camera > Motion Sensor"
-      ],
-      "remoteAdmin": [
-        "Camera > Motion Sensor"
-      ]
-    }
-  },
   "cameraNoCamera": "No se detectó ninguna cámara",
   "@cameraNoCamera": {
     "context": "Settings > Camera > Enable camera",
@@ -40237,6 +40172,71 @@
   "@screensaverDetectionMotionTuning": {
     "context": "Settings > Screensaver > Motion Detection",
     "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Motion Detection"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Motion Detection"
+      ]
+    }
+  },
+  "settingMotionUseEntityTitle": "Usar entidad de Home Assistant",
+  "@settingMotionUseEntityTitle": {
+    "context": "Settings > Screensaver > Motion Detection",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Motion Detection"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Motion Detection"
+      ]
+    }
+  },
+  "settingMotionUseEntityDescription": "Detecta el movimiento con un sensor de Home Assistant en lugar de la cámara.",
+  "@settingMotionUseEntityDescription": {
+    "context": "Settings > Screensaver > Motion Detection",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Motion Detection"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Motion Detection"
+      ]
+    }
+  },
+  "settingMotionEntityTitle": "Entidad del sensor de movimiento",
+  "@settingMotionEntityTitle": {
+    "context": "Settings > Screensaver > Motion Detection",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Motion Detection"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Motion Detection"
+      ]
+    }
+  },
+  "settingMotionEntityDescription": "El sensor de ocupación, movimiento o presencia de Home Assistant que se va a seguir.",
+  "@settingMotionEntityDescription": {
+    "context": "Settings > Screensaver > Motion Detection",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Motion Detection"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Motion Detection"
+      ]
+    }
+  },
+  "screensaverDetectionExternalMotionHeading": "Sensor de movimiento externo",
+  "@screensaverDetectionExternalMotionHeading": {
+    "context": "Settings > Screensaver > Motion Detection",
+    "description": "Section heading.",
     "x-locations": {
       "device": [
         "Settings > Screensaver > Motion Detection"
