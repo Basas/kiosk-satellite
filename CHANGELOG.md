@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.22 - 2026-10-12
 
 ### Added
 - **Use a Home Assistant motion sensor in place of the camera.** A new **External Motion Sensor** group under **Settings > Screensaver > Motion Detection** has a **Use Home Assistant entity** switch that reveals **Motion sensor entity**, which lists occupancy, motion and presence binary sensors (#973). With it on, the sensor drives **Dismiss on motion**, **Only when screen is off** and **Postpone screensaver on motion**, and the camera no longer runs for them, so a tablet whose camera does not work, or has none, can still wake when someone walks up and stay on while they are around. The sensor turning on dismisses the screensaver. Staying on postpones it but never dismisses one that started with the sensor already on. Once it clears, the idle timeout and **Turn screen off after** take over as usual. The row shows whether the sensor reads Detected or Clear. The **Motion** entity, face detection and the Show fingers gesture keep using the camera. Both settings stay per device in new fleet profiles.
