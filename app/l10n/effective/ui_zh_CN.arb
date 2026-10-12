@@ -15522,6 +15522,71 @@
       ]
     }
   },
+  "settingMotionUseEntityTitle": "使用 Home Assistant 实体",
+  "@settingMotionUseEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionUseEntityDescription": "使用 Home Assistant 传感器代替摄像头检测运动。",
+  "@settingMotionUseEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityTitle": "运动传感器实体",
+  "@settingMotionEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityDescription": "要跟随的 Home Assistant 占用、运动或存在传感器。",
+  "@settingMotionEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "cameraExternalMotionHeading": "外部运动传感器",
+  "@cameraExternalMotionHeading": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Section heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
   "cameraNoCamera": "未检测到摄像头",
   "@cameraNoCamera": {
     "context": "Settings > Camera > Enable camera",

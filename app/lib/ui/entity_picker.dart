@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../app_container.dart';
 import '../core/command_registry.dart';
 import '../l10n/messages.dart';
+import '../managers/home_assistant/entity_list.dart';
 import 'kit.dart';
 import 'mdi_icon.dart';
 import 'picker_dialog.dart';
@@ -153,11 +154,7 @@ PickSpec entitySpec(
       ? null
       : (item) =>
             (domains.isEmpty || domains.contains(item.raw['domain'])) &&
-            (deviceClass == null ||
-                (deviceClass == 'illuminance'
-                    ? item.raw['device_class'] == 'illuminance' ||
-                          item.raw['unit'] == 'lx'
-                    : item.raw['device_class'] == deviceClass)),
+            (deviceClass == null || matchesDeviceClass(item.raw, deviceClass)),
 );
 
 /// Loads the entity list every entity picker shares, for a screen that

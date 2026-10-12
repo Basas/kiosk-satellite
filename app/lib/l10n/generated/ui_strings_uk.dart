@@ -4136,6 +4136,24 @@ class UiStringsUk extends UiStrings {
       'Датчик руху Home Assistant і спільні налаштування виявлення';
 
   @override
+  String get settingMotionUseEntityTitle =>
+      'Використовувати сутність Home Assistant';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Визначає рух за датчиком Home Assistant замість камери.';
+
+  @override
+  String get settingMotionEntityTitle => 'Сутність датчика руху';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'Датчик зайнятості, руху або присутності Home Assistant, за яким слід стежити.';
+
+  @override
+  String get cameraExternalMotionHeading => 'Зовнішній датчик руху';
+
+  @override
   String get cameraNoCamera => 'Камеру не виявлено';
 
   @override

@@ -288,6 +288,8 @@ When the [device camera](camera.md) is enabled, two Motion Detection settings co
 * **Only when screen is off**: Keeps the visible screensaver up when motion is detected. Once the display turns off, motion dismisses the screensaver and wakes the dashboard. Requires Dismiss on motion.
 * **Postpone screensaver on motion**: Monitors the camera between screensaver sessions, continuously resetting the idle timeout clock whenever room movement is detected. This keeps the camera active continuously and requires Dismiss on motion to be enabled.
 
+These settings can also follow a Home Assistant occupancy, motion or presence sensor instead of the camera, which needs no camera at all. See [External Motion Sensor](camera.md#external-motion-sensor).
+
 Motion analysis functions in total darkness, filters out whole-room light shifts (such as TV flashes or turning on a lamp), and suppresses detection for a few seconds during internal app brightness and slide transitions to prevent false wakes. Sensitivity, frame rates, and camera selection are configured in Camera settings (see [Device Camera](camera.md)). Under [Lockdown Mode](kiosk.md), motion events will neither dismiss nor postpone screensavers.
 
 ## Face Detection

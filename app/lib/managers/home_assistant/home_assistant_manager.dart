@@ -316,7 +316,8 @@ class HomeAssistantManager extends Manager {
             'domains': 'optional list of domains to keep',
             'device_class':
                 'optional device class to keep (illuminance also takes '
-                'readings in lux)',
+                'readings in lux, occupancy also takes motion and presence '
+                'binary sensors)',
             'icons':
                 'true to add icon_path, the SVG path of each icon, for '
                 "the remote admin's entity picker",

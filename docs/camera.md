@@ -86,6 +86,12 @@ Detection is engineered to be CPU efficient and to work effectively in the dark.
 
 **Startup delay** solves a specific hardware problem: devices whose camera physically moves as it opens (like a phone with a motorized pop up module). As the lens travels into position, that sweeping movement registers as a massive change across the whole frame, rather than a simple lighting shift. None of the standard discounting algorithms can filter it out, which causes the kiosk to immediately dismiss the screensaver that just started the camera. The delay counts from the very first frame and applies to every single path that starts the camera, not just screensavers. Schedule boundaries, the screen turning on, or a tuning change all trigger the same lens deployment. Frames are still tracked as a baseline while the delay runs, ensuring detection is fully sensitive the very second the delay expires. Leave it at 0 on a device with a fixed camera; a few seconds is usually enough for the hardware that requires it.
 
+### External Motion Sensor
+
+A Home Assistant sensor can detect motion in place of the camera, for a tablet whose camera does not work or a room that already has a motion sensor. Turn on **Use Home Assistant entity** under **Camera > Motion Sensor > External Motion Sensor**, then pick the sensor in **Motion sensor entity**. The picker lists occupancy, motion and presence binary sensors. Once one is picked, the row shows whether it reads Detected or Clear.
+
+With the switch on, the entity drives **Dismiss on motion**, **Only when screen is off** and **Postpone screensaver on motion** on the Screensaver page, and the camera no longer runs for them. Neither the Camera switch nor a camera on the device is needed. The sensor turning on dismisses the screensaver. While it stays on, it postpones the screensaver the way movement does, but it never dismisses a screensaver that started while it was already on. When it clears, the idle timeout runs out as usual and the screensaver can turn the screen off after its own delay. The **Motion** `binary_sensor`, face detection and the Show fingers gesture keep using the camera. Dismiss on motion still takes precedence over Dismiss on face.
+
 Two related switches are located elsewhere: with **Allow screensaver** turned on under [Lockdown Mode](kiosk.md), Dismiss on motion remains deactivated until the lock lifts. Additionally, the Sendspin player's full screen view only reacts to motion if its own **Dismiss "Now Playing" on motion** setting is enabled.
 
 ## Person Sensor
@@ -164,7 +170,7 @@ A few extremely low end devices cannot run motion analysis and JPEG capture in t
 
 ## Hardware Notes
 
-* **No usable camera:** Some custom ROMs (such as LineageOS ports on Echo Show hardware) have no camera support at all, even if the physical hardware is present. The Camera page will state this up front, and no camera entities will be published. If a device has a physical privacy shutter, closing it disconnects the camera completely and looks identical to the app.
+* **No usable camera:** Some custom ROMs (such as LineageOS ports on Echo Show hardware) have no camera support at all, even if the physical hardware is present. The Camera page will state this up front and keep only the [External Motion Sensor](#external-motion-sensor), and no camera entities will be published. If a device has a physical privacy shutter, closing it disconnects the camera completely and looks identical to the app.
 * **Single camera:** The Front/Back picker turns into a simple label naming the one camera the device has. A USB or monitor webcam, like the one built into a monitor on a Raspberry Pi, is named External. The app checks for cameras when it starts, so restart it after connecting one. The app automatically handles devices whose ROM falsely advertises cameras they do not possess. It also handles camera HALs that pad their lists with a phantom camera whose lens facing cannot be read (common on cheap Unisoc tablets) by skipping the phantom and using the real camera. Failed captures will report a real error instead of simply hanging.
 
 ## The Remote Admin

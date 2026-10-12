@@ -22,6 +22,7 @@ import 'managers/js_api/page_state_manager.dart';
 import 'managers/kiosk/kiosk_manager.dart';
 import 'managers/launcher/app_launcher_manager.dart';
 import 'managers/launcher/home_launcher_manager.dart';
+import 'managers/motion/motion_entity_manager.dart';
 import 'managers/motion/motion_manager.dart';
 import 'managers/notifications/notification_manager.dart';
 import 'managers/fleet/fleet_manager.dart';
@@ -88,6 +89,14 @@ class AppContainer {
     // motion manager's gate reads.
     deviceCamera = DeviceCameraManager(bus, commands, log, settings);
     motion = MotionManager(bus, commands, log, settings);
+    // It watches the motion sensor entity through homeAssistant.
+    motionEntity = MotionEntityManager(
+      bus,
+      commands,
+      log,
+      settings,
+      homeAssistant,
+    );
     proximity = ProximityManager(bus, commands, log, settings);
     location = LocationManager(bus, commands, log, settings);
     analytics = AnalyticsManager(bus, commands, log, settings);
@@ -185,6 +194,7 @@ class AppContainer {
   late final ImmichManager immich;
   late final DeviceCameraManager deviceCamera;
   late final MotionManager motion;
+  late final MotionEntityManager motionEntity;
   late final ProximityManager proximity;
   late final LocationManager location;
   late final AnalyticsManager analytics;
@@ -243,6 +253,8 @@ class AppContainer {
     immich,
     deviceCamera,
     motion,
+    // After screensaver, which takes its motion.
+    motionEntity,
     proximity,
     location,
     // After device (its info feeds every report) and settings; its first

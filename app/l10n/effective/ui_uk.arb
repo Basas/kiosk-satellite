@@ -15522,6 +15522,71 @@
       ]
     }
   },
+  "settingMotionUseEntityTitle": "Використовувати сутність Home Assistant",
+  "@settingMotionUseEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionUseEntityDescription": "Визначає рух за датчиком Home Assistant замість камери.",
+  "@settingMotionUseEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityTitle": "Сутність датчика руху",
+  "@settingMotionEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityDescription": "Датчик зайнятості, руху або присутності Home Assistant, за яким слід стежити.",
+  "@settingMotionEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "cameraExternalMotionHeading": "Зовнішній датчик руху",
+  "@cameraExternalMotionHeading": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Section heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
   "cameraNoCamera": "Камеру не виявлено",
   "@cameraNoCamera": {
     "context": "Settings > Camera > Enable camera",

@@ -4123,6 +4123,24 @@ class UiStringsRu extends UiStrings {
       'Датчик движения Home Assistant и общие настройки обнаружения';
 
   @override
+  String get settingMotionUseEntityTitle =>
+      'Использовать сущность Home Assistant';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Определять движение по датчику Home Assistant вместо камеры.';
+
+  @override
+  String get settingMotionEntityTitle => 'Сущность датчика движения';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'Датчик занятости, движения или присутствия Home Assistant, за которым нужно следить.';
+
+  @override
+  String get cameraExternalMotionHeading => 'Внешний датчик движения';
+
+  @override
   String get cameraNoCamera => 'Камера не обнаружена';
 
   @override

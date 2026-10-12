@@ -15522,6 +15522,71 @@
       ]
     }
   },
+  "settingMotionUseEntityTitle": "Utiliser une entité Home Assistant",
+  "@settingMotionUseEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionUseEntityDescription": "Détecter le mouvement avec un capteur Home Assistant au lieu de la caméra.",
+  "@settingMotionUseEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityTitle": "Entité du capteur de mouvement",
+  "@settingMotionEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityDescription": "Le capteur d'occupation, de mouvement ou de présence Home Assistant à suivre.",
+  "@settingMotionEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "cameraExternalMotionHeading": "Capteur de mouvement externe",
+  "@cameraExternalMotionHeading": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Section heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
   "cameraNoCamera": "Aucune caméra détectée",
   "@cameraNoCamera": {
     "context": "Settings > Camera > Enable camera",

@@ -156,6 +156,7 @@ List<Widget> _sectionedCards(
         final heading = current;
         out.add(
           (def.category == 'ESPHome' ||
+                  def.category == 'Camera' ||
                   def.category == 'Device' ||
                   def.category == 'Home Assistant' ||
                   def.category == 'Screen & Audio' ||
@@ -329,6 +330,14 @@ List<SettingDef<Object>> _defsFor(String category) => [
         !def.hidden &&
         !deviceHiddenKeys.contains(def.key))
       def,
+];
+
+/// The Camera page on a device without a camera: the master switch,
+/// shown disabled, and the external motion sensor (issue #973).
+const _cameralessDefs = <SettingDef<Object>>[
+  cameraEnabled,
+  motionUseEntity,
+  motionEntity,
 ];
 
 /// The definitions the category page renders in place. The Device page
@@ -2440,10 +2449,11 @@ class _CategoryContentState extends State<_CategoryContent> {
               // switch renders disabled (below) with the reason, instead of
               // lying enabled; its tuning rows live in the Camera section
               // now and hide with the master there. A camera-less device
-              // keeps only the disabled master switch.
+              // keeps only the disabled master switch, and the Motion
+              // Sensor page for its Home Assistant entity (issue #973).
               widget.category == 'Camera' &&
                       container.deviceCamera.cameraKnownAbsent
-                  ? const [cameraEnabled]
+                  ? _cameralessDefs
                   : _inlineDefsFor(widget.category),
               () => setState(() {}),
               replace: _rowReplacements(container),
@@ -2881,8 +2891,11 @@ class _CategoryContentState extends State<_CategoryContent> {
           onChanged: null,
         ),
       ),
+    // A Home Assistant entity in the camera's place (issue #973) keeps the
+    // switch usable without one.
     if (widget.category == 'Screensaver' &&
-        !container.deviceCamera.effectiveEnabled)
+        !container.deviceCamera.effectiveEnabled &&
+        !container.settings.get(motionUseEntity))
       screensaverDismissOnMotion.key: SearchLandingTarget(
         id: screensaverDismissOnMotion.key,
         child: SwitchListTile(
@@ -3903,6 +3916,15 @@ class _CategoryContentState extends State<_CategoryContent> {
             ),
           ),
         ];
+      // Without a camera only the Home Assistant entity can detect motion
+      // (issue #973). Mirrored on the remote (updateNoCameraNotice).
+      case 'Motion Sensor'
+          when widget.category == 'Camera' &&
+              container.deviceCamera.cameraKnownAbsent:
+        return sectioned([
+          for (final def in _cameralessDefs)
+            if (def.subpage == subpage) def,
+        ]);
       default:
         return sectioned([
           for (final def in _defsFor(widget.category))
@@ -6157,6 +6179,66 @@ class _LightEntityRowState extends State<_LightEntityRow> {
       title: def.localizedTitle(context),
       description: entity.isEmpty ? def.localizedDescription(context) : reading,
       spec: entitySpec(context, c.commands, deviceClass: 'illuminance'),
+      value: entity,
+      allowClear: true,
+      onPick: (id) async {
+        await c.settings.setFromJson(def.key, id ?? '');
+        widget.onChanged();
+      },
+    );
+  }
+}
+
+/// The Home Assistant motion sensor picked in the camera's place (issue
+/// #973): the field opens the entity picker on occupancy, motion and
+/// presence sensors, and once one is picked the line under it says what
+/// it reads, live. Mirrored on the remote (rows.js).
+class _MotionEntityRow extends StatefulWidget {
+  const _MotionEntityRow({
+    required this.container,
+    required this.def,
+    required this.onChanged,
+  });
+
+  final AppContainer container;
+  final SettingDef<Object> def;
+  final VoidCallback onChanged;
+
+  @override
+  State<_MotionEntityRow> createState() => _MotionEntityRowState();
+}
+
+class _MotionEntityRowState extends State<_MotionEntityRow> {
+  StreamSubscription<ExternalMotionChanged>? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _sub = widget.container.bus.on<ExternalMotionChanged>().listen((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.container;
+    final def = widget.def;
+    final entity = c.settings.get(motionEntity);
+    final reading = switch (c.motionEntity.detected) {
+      true => screensaverText(context, 'Detected'),
+      false => l10n(context).screensaverDetectionClear,
+      null => screenAudioText(context, 'No reading yet'),
+    };
+    return PickRow(
+      title: def.localizedTitle(context),
+      description: entity.isEmpty ? def.localizedDescription(context) : reading,
+      spec: entitySpec(context, c.commands, deviceClass: 'occupancy'),
       value: entity,
       allowClear: true,
       onPick: (id) async {
@@ -10582,6 +10664,10 @@ class SettingTile extends StatelessWidget {
         // with the entity search the plugins' entity fields use.
         if (def.key == adaptiveLightEntity.key) {
           return _LightEntityRow(container: c, def: def, onChanged: onChanged);
+        }
+        // The external motion sensor (issue #973), picked the same way.
+        if (def.key == motionEntity.key) {
+          return _MotionEntityRow(container: c, def: def, onChanged: onChanged);
         }
         // The Home Assistant Dashboard screensaver's view and Now Playing's
         // chosen view are picked from the instance's dashboards in the

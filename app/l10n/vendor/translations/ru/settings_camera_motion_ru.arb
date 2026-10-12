@@ -11,5 +11,10 @@
   "settingMotionSensitivityTitle": "Чувствительность к движению",
   "settingMotionSensitivityDescription": "Выше: срабатывает от меньших движений. 1 требует большого изменения по кадру; 100 реагирует на малейшее движение.",
   "cameraMotionPage": "Датчик движения",
-  "cameraMotionHint": "Датчик движения Home Assistant и общие настройки обнаружения"
+  "cameraMotionHint": "Датчик движения Home Assistant и общие настройки обнаружения",
+  "settingMotionUseEntityTitle": "Использовать сущность Home Assistant",
+  "settingMotionUseEntityDescription": "Определять движение по датчику Home Assistant вместо камеры.",
+  "settingMotionEntityTitle": "Сущность датчика движения",
+  "settingMotionEntityDescription": "Датчик занятости, движения или присутствия Home Assistant, за которым нужно следить.",
+  "cameraExternalMotionHeading": "Внешний датчик движения"
 }

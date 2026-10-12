@@ -4100,6 +4100,23 @@ class UiStringsEn extends UiStrings {
       'Home Assistant motion sensor and shared detection settings';
 
   @override
+  String get settingMotionUseEntityTitle => 'Use Home Assistant entity';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Detect motion with a Home Assistant sensor instead of the camera.';
+
+  @override
+  String get settingMotionEntityTitle => 'Motion sensor entity';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'The Home Assistant occupancy, motion or presence sensor to follow.';
+
+  @override
+  String get cameraExternalMotionHeading => 'External Motion Sensor';
+
+  @override
   String get cameraNoCamera => 'No camera detected';
 
   @override

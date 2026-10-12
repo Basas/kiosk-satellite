@@ -4192,6 +4192,23 @@ class UiStringsDe extends UiStrings {
       'Home-Assistant-Bewegungssensor und gemeinsame Erkennungseinstellungen';
 
   @override
+  String get settingMotionUseEntityTitle => 'Home Assistant-Entität verwenden';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Erkennt Bewegung mit einem Home Assistant-Sensor statt mit der Kamera.';
+
+  @override
+  String get settingMotionEntityTitle => 'Bewegungssensor-Entität';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'Der Belegungs-, Bewegungs- oder Anwesenheitssensor von Home Assistant, der verwendet wird.';
+
+  @override
+  String get cameraExternalMotionHeading => 'Externer Bewegungssensor';
+
+  @override
   String get cameraNoCamera => 'Keine Kamera erkannt';
 
   @override

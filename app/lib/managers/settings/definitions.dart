@@ -5107,6 +5107,39 @@ const motionSensitivity = SettingDef<num>(
   step: 1,
 );
 
+// Motion can come from a Home Assistant occupancy, motion or presence
+// sensor instead of the camera (issue #973): a tablet whose camera does
+// not work, or a room with a sensor already in it. With the switch on,
+// the entity drives Dismiss on motion and Postpone on motion in the
+// camera's place, and the camera no longer runs for them. The Motion
+// sensor entity, faces and hands stay on the camera. Not gated on the
+// Camera switch, since replacing the camera is the point.
+const motionUseEntity = SettingDef<bool>(
+  key: 'motion.use_entity',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Use Home Assistant entity',
+  description:
+      'Detect motion with a Home Assistant sensor instead of the camera.',
+  category: 'Camera',
+  section: 'External Motion Sensor',
+  subpage: 'Motion Sensor',
+);
+
+// Picked with the entity search on both UIs, never typed.
+const motionEntity = SettingDef<String>(
+  key: 'motion.entity',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Motion sensor entity',
+  description:
+      'The Home Assistant occupancy, motion or presence sensor to follow.',
+  category: 'Camera',
+  section: 'External Motion Sensor',
+  subpage: 'Motion Sensor',
+  dependsOn: 'motion.use_entity',
+);
+
 // Camera: Person Sensor
 // The device's own person sensor (today the Meta Portal's, see Person
 // Detection under Screensaver) exposed as a Home Assistant occupancy
@@ -10088,6 +10121,9 @@ const fleetDefaultExcluded = {
   'motion.fps',
   'face.sensitivity',
   'camera.snapshot_resolution',
+  // The room's own motion sensor, like adaptive brightness's light sensor.
+  'motion.use_entity',
+  'motion.entity',
   // The notch handling: a panel thing, but harmless to bring back.
   'browser.cutout_mode',
   // Which way the panel is mounted.
@@ -10286,6 +10322,45 @@ const fleetFormerDefaultExcluded = <Set<String>>[
     'screen.adaptive_max_brightness',
     'screen.adaptive_dark_lux',
     'screen.adaptive_bright_lux',
+    'screensaver.brightness_level',
+    'screensaver.dim_level',
+    'audio.media_volume',
+    'audio.assistant_volume',
+    'notifications.volume',
+    'ha.tap_sound_volume',
+    'screensaver.gallery_items',
+    'screensaver.local_folder',
+    'screensaver.clock_background',
+    'notifications.chime_file',
+    'launcher.apps',
+    'motion.sensitivity',
+    'motion.fps',
+    'face.sensitivity',
+    'camera.snapshot_resolution',
+    'browser.cutout_mode',
+    'screen.orientation',
+    'intercom.volume',
+    'intercom.answer_mode',
+    'voice.mute',
+    'voice.tts_output',
+  },
+  // Before the external motion sensor joined (issue #973).
+  {
+    'browser.zoom',
+    'screensaver.website_zoom',
+    'screensaver.clock_scale',
+    'screensaver.widget_scale',
+    'screensaver.immich_metadata_scale',
+    'screensaver.glance_scale',
+    'face.preview_scale',
+    'sendspin.player_size',
+    'screen.default_brightness',
+    'screen.adaptive_min_brightness',
+    'screen.adaptive_max_brightness',
+    'screen.adaptive_dark_lux',
+    'screen.adaptive_bright_lux',
+    'screen.adaptive_use_entity',
+    'screen.adaptive_light_entity',
     'screensaver.brightness_level',
     'screensaver.dim_level',
     'audio.media_volume',
@@ -10929,6 +11004,8 @@ const List<SettingDef<Object>> allSettings = [
   motionFps,
   motionSensitivity,
   motionStartDelay,
+  motionUseEntity,
+  motionEntity,
   // The Person Sensor page (Meta Portal only) sits under Motion Sensor.
   personSensorEnabled,
   cameraRtspEnabled,

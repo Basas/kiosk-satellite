@@ -840,6 +840,14 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingMotionStartDelayTitle",
     "description": "settingMotionStartDelayDescription",
   },
+  "motion.use_entity": {
+    "title": "settingMotionUseEntityTitle",
+    "description": "settingMotionUseEntityDescription",
+  },
+  "motion.entity": {
+    "title": "settingMotionEntityTitle",
+    "description": "settingMotionEntityDescription",
+  },
   "person.sensor": {
     "title": "settingPersonSensorTitle",
     "description": "settingPersonSensorDescription",

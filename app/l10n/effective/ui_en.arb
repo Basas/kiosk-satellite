@@ -15522,6 +15522,71 @@
       ]
     }
   },
+  "settingMotionUseEntityTitle": "Use Home Assistant entity",
+  "@settingMotionUseEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionUseEntityDescription": "Detect motion with a Home Assistant sensor instead of the camera.",
+  "@settingMotionUseEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityTitle": "Motion sensor entity",
+  "@settingMotionEntityTitle": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "settingMotionEntityDescription": "The Home Assistant occupancy, motion or presence sensor to follow.",
+  "@settingMotionEntityDescription": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
+  "cameraExternalMotionHeading": "External Motion Sensor",
+  "@cameraExternalMotionHeading": {
+    "context": "Settings > Camera > Motion Sensor",
+    "description": "Section heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Camera > Motion Sensor"
+      ],
+      "remoteAdmin": [
+        "Camera > Motion Sensor"
+      ]
+    }
+  },
   "cameraNoCamera": "No camera detected",
   "@cameraNoCamera": {
     "context": "Settings > Camera > Enable camera",

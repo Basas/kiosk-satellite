@@ -3956,6 +3956,23 @@ class UiStringsZh extends UiStrings {
   String get cameraMotionHint => 'Home Assistant 运动传感器及共用检测设置';
 
   @override
+  String get settingMotionUseEntityTitle => '使用 Home Assistant 实体';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      '使用 Home Assistant 传感器代替摄像头检测运动。';
+
+  @override
+  String get settingMotionEntityTitle => '运动传感器实体';
+
+  @override
+  String get settingMotionEntityDescription =>
+      '要跟随的 Home Assistant 占用、运动或存在传感器。';
+
+  @override
+  String get cameraExternalMotionHeading => '外部运动传感器';
+
+  @override
   String get cameraNoCamera => '未检测到摄像头';
 
   @override
@@ -16691,6 +16708,23 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get cameraMotionHint => 'Home Assistant 运动传感器及共用检测设置';
+
+  @override
+  String get settingMotionUseEntityTitle => '使用 Home Assistant 实体';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      '使用 Home Assistant 传感器代替摄像头检测运动。';
+
+  @override
+  String get settingMotionEntityTitle => '运动传感器实体';
+
+  @override
+  String get settingMotionEntityDescription =>
+      '要跟随的 Home Assistant 占用、运动或存在传感器。';
+
+  @override
+  String get cameraExternalMotionHeading => '外部运动传感器';
 
   @override
   String get cameraNoCamera => '未检测到摄像头';

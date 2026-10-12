@@ -11,5 +11,10 @@
   "settingMotionSensitivityTitle": "运动检测灵敏度",
   "settingMotionSensitivityDescription": "数值越高，越容易检测到细微运动。设为 1 时，需要画面发生大范围变化才会触发；设为 100 时，轻微运动也会触发。",
   "cameraMotionPage": "运动传感器",
-  "cameraMotionHint": "Home Assistant 运动传感器及共用检测设置"
+  "cameraMotionHint": "Home Assistant 运动传感器及共用检测设置",
+  "settingMotionUseEntityTitle": "使用 Home Assistant 实体",
+  "settingMotionUseEntityDescription": "使用 Home Assistant 传感器代替摄像头检测运动。",
+  "settingMotionEntityTitle": "运动传感器实体",
+  "settingMotionEntityDescription": "要跟随的 Home Assistant 占用、运动或存在传感器。",
+  "cameraExternalMotionHeading": "外部运动传感器"
 }

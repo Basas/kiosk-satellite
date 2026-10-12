@@ -591,6 +591,23 @@ class MotionDetected extends AppEvent {
   String get wireName => 'motion';
 }
 
+/// The Home Assistant motion entity picked in the camera's place (issue
+/// #973) reads detected: [held] false when it just turned on, true for
+/// the repeats while it stays on. The screensaver consumes it as motion,
+/// with the person sensor's rule: an arrival dismisses, a held one only
+/// postpones. Internal: Home Assistant already has the entity.
+class ExternalMotionDetected extends AppEvent {
+  const ExternalMotionDetected({this.held = false});
+  final bool held;
+}
+
+/// The motion entity's state moved (issue #973), for the settings rows:
+/// [detected] null while it has not reported or reads unavailable.
+class ExternalMotionChanged extends AppEvent {
+  const ExternalMotionChanged({required this.detected});
+  final bool? detected;
+}
+
 /// Someone is looking at the kiosk (issue #304): the motion camera's face
 /// detector found a camera-facing face at least as large as the Face
 /// sensitivity asks for. Rate-limited to one per second natively, like

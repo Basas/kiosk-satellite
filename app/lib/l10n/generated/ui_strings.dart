@@ -7192,6 +7192,36 @@ abstract class UiStrings {
   /// **'Home Assistant motion sensor and shared detection settings'**
   String get cameraMotionHint;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Home Assistant entity'**
+  String get settingMotionUseEntityTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Detect motion with a Home Assistant sensor instead of the camera.'**
+  String get settingMotionUseEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion sensor entity'**
+  String get settingMotionEntityTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The Home Assistant occupancy, motion or presence sensor to follow.'**
+  String get settingMotionEntityDescription;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'External Motion Sensor'**
+  String get cameraExternalMotionHeading;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:

@@ -4161,6 +4161,24 @@ class UiStringsFr extends UiStrings {
       'Capteur de mouvement Home Assistant et paramètres de détection partagés';
 
   @override
+  String get settingMotionUseEntityTitle =>
+      'Utiliser une entité Home Assistant';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Détecter le mouvement avec un capteur Home Assistant au lieu de la caméra.';
+
+  @override
+  String get settingMotionEntityTitle => 'Entité du capteur de mouvement';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'Le capteur d\'occupation, de mouvement ou de présence Home Assistant à suivre.';
+
+  @override
+  String get cameraExternalMotionHeading => 'Capteur de mouvement externe';
+
+  @override
   String get cameraNoCamera => 'Aucune caméra détectée';
 
   @override

@@ -11,5 +11,10 @@
   "settingMotionSensitivityTitle": "Bewegungsempfindlichkeit",
   "settingMotionSensitivityDescription": "Höhere Werte erkennen kleinere Bewegungen. Der Wert 1 erfordert eine große Bildänderung. Der Wert 100 reagiert bereits auf die kleinste Bewegung.",
   "cameraMotionPage": "Bewegungssensor",
-  "cameraMotionHint": "Home-Assistant-Bewegungssensor und gemeinsame Erkennungseinstellungen"
+  "cameraMotionHint": "Home-Assistant-Bewegungssensor und gemeinsame Erkennungseinstellungen",
+  "settingMotionUseEntityTitle": "Home Assistant-Entität verwenden",
+  "settingMotionUseEntityDescription": "Erkennt Bewegung mit einem Home Assistant-Sensor statt mit der Kamera.",
+  "settingMotionEntityTitle": "Bewegungssensor-Entität",
+  "settingMotionEntityDescription": "Der Belegungs-, Bewegungs- oder Anwesenheitssensor von Home Assistant, der verwendet wird.",
+  "cameraExternalMotionHeading": "Externer Bewegungssensor"
 }
