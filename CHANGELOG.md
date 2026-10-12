@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.21 - 2026-10-11
 
 ### Added
 - **Photo details on the Home Assistant Media and Local Media screensavers.** The metadata panel of the Immich Media screensaver now comes to Home Assistant Media and Local Media too, read from each photo's EXIF (#953). Turn on **Show metadata** on either screensaver's page to show when the photo was taken and the camera with its focal length, aperture and ISO in a corner. The panel has the same **Metadata position**, **Text drop shadow**, **Text scaling** and **Vignette strength** settings as Immich Media. Location stays an Immich Media feature, since turning GPS coordinates into a place name needs a lookup service.
