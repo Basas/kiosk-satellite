@@ -9562,6 +9562,30 @@ abstract class UiStrings {
   /// **'Announce this device on the network and list the other kiosks in the remote admin, to switch between them.'**
   String get settingRemoteFleetDiscoveryDescription;
 
+  /// Setting label. The web address used to open this kiosk's remote admin from other kiosks.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin URL'**
+  String get settingRemoteAdminUrlTitle;
+
+  /// Help below the Admin URL field. Switch kiosk is the name of the kiosk picker in the remote admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Address other kiosks open in Switch kiosk to reach this one, such as a reverse proxy name. Leave blank to use its network address.'**
+  String get settingRemoteAdminUrlDescription;
+
+  /// Error under the Admin URL field when the value is not a web address. Keep the example address as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid address, for example https://kiosk.example.com'**
+  String get deviceAdminUrlInvalid;
+
+  /// Error under the Admin URL field when the address has a path after the host. Keep the example address as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter only the address, without a path. Example: https://kiosk.example.com'**
+  String get deviceAdminUrlPath;
+
   /// Label or explanation on this Device settings page.
   ///
   /// In en, this message translates to:

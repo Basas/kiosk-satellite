@@ -20762,6 +20762,58 @@
       ]
     }
   },
+  "settingRemoteAdminUrlTitle": "URL адміністрування",
+  "@settingRemoteAdminUrlTitle": {
+    "context": "Settings:Device:Remote Administration",
+    "description": "Setting label. The web address used to open this kiosk's remote admin from other kiosks.",
+    "x-locations": {
+      "device": [
+        "Settings > Device > Remote Administration > Admin URL"
+      ],
+      "remoteAdmin": [
+        "Device > Remote Administration > Admin URL"
+      ]
+    }
+  },
+  "settingRemoteAdminUrlDescription": "Адреса, яку інші кіоски відкривають у «Перемкнути кіоск», щоб перейти до цього, наприклад ім'я зворотного проксі. Залиште порожнім, щоб використовувати його мережеву адресу.",
+  "@settingRemoteAdminUrlDescription": {
+    "context": "Settings:Device:Remote Administration",
+    "description": "Help below the Admin URL field. Switch kiosk is the name of the kiosk picker in the remote admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Device > Remote Administration > Admin URL"
+      ],
+      "remoteAdmin": [
+        "Device > Remote Administration > Admin URL"
+      ]
+    }
+  },
+  "deviceAdminUrlInvalid": "Введіть дійсну адресу, наприклад https://kiosk.example.com",
+  "@deviceAdminUrlInvalid": {
+    "context": "Settings:Device:Remote Administration",
+    "description": "Error under the Admin URL field when the value is not a web address. Keep the example address as is.",
+    "x-locations": {
+      "device": [
+        "Settings > Device > Remote Administration > Admin URL"
+      ],
+      "remoteAdmin": [
+        "Device > Remote Administration > Admin URL"
+      ]
+    }
+  },
+  "deviceAdminUrlPath": "Введіть лише адресу, без шляху. Приклад: https://kiosk.example.com",
+  "@deviceAdminUrlPath": {
+    "context": "Settings:Device:Remote Administration",
+    "description": "Error under the Admin URL field when the address has a path after the host. Keep the example address as is.",
+    "x-locations": {
+      "device": [
+        "Settings > Device > Remote Administration > Admin URL"
+      ],
+      "remoteAdmin": [
+        "Device > Remote Administration > Admin URL"
+      ]
+    }
+  },
   "deviceRemotePage": "Віддалене адміністрування",
   "@deviceRemotePage": {
     "context": "Settings:Device:Remote Administration",

@@ -5592,6 +5592,21 @@ class UiStringsDe extends UiStrings {
       'Macht dieses Gerät im Netzwerk sichtbar und zeigt andere Kiosks in der Fernverwaltung an, damit zwischen ihnen gewechselt werden kann.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'Admin-URL';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Adresse, die andere Kiosks unter „Kiosk wechseln“ öffnen, um diesen zu erreichen, etwa der Name eines Reverse-Proxys. Leer lassen, um seine Netzwerkadresse zu verwenden.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Gib eine gültige Adresse ein, z. B. https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Gib nur die Adresse ohne Pfad ein. Beispiel: https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Fernverwaltung';
 
   @override

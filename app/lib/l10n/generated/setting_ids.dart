@@ -52,6 +52,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingRemoteFleetDiscoveryTitle",
     "description": "settingRemoteFleetDiscoveryDescription",
   },
+  "remote.admin_url": {
+    "title": "settingRemoteAdminUrlTitle",
+    "description": "settingRemoteAdminUrlDescription",
+  },
   "service.cpu_awake": {
     "title": "settingServiceCpuAwakeTitle",
     "description": "settingServiceCpuAwakeDescription",

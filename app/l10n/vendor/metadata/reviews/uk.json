@@ -23705,5 +23705,29 @@
     "translation": "8fbce0ed043140a864103cb990d18575f5182941b0314ff41f05af485a149a76",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingRemoteAdminUrlTitle": {
+    "source": "a1810da39cd1863ca4d9194224c0271910b1fdca3529a7482492f83322c6aaf1",
+    "translation": "fcd58b67dff240112fb2683268636cd1f6552c49b9dcf750aad384339705e2fd",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "deviceAdminUrlInvalid": {
+    "source": "332003f0cf7095a722c7be89b5475ca33ec745a341e5541e55d6f92b0be2706b",
+    "translation": "8934c1c4fa4ce97a29b0e1e47cb800f6bb296974f86031261bce7e24916a671f",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "deviceAdminUrlPath": {
+    "source": "f45c3932e0007b3efcc9529223c15ab5b3c781bfb1bb3dffcc3f3e06e0784b02",
+    "translation": "65507b9117d636d3ee5a05654fab566b6d8d9da60abdb8d3211be4797c0b0a69",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingRemoteAdminUrlDescription": {
+    "source": "dfc34e57d69c030fe7f988c0400fa5e7e417efba7680badad2cd5404a02fcdfe",
+    "translation": "4ea105564b6f107cfdd5fe6e584e89fe8ee5dfe12e093c2e9be5650b26a2c82e",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

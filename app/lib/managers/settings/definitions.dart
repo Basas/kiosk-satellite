@@ -361,6 +361,51 @@ String normalizeUpdateSourceUrl(String value) {
 Object normalizeUpdateSourceUrlSetting(Object value) =>
     value is String ? normalizeUpdateSourceUrl(value) : value;
 
+final _adminHost = RegExp(
+  r'^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$',
+);
+
+/// The remote admin's address as another kiosk's switcher opens it, for
+/// a kiosk behind a reverse proxy: `http(s)://host[:port]` and nothing
+/// else, since the switcher appends the page itself. Null for anything
+/// else, including a value that would not fit the 255-byte mDNS TXT
+/// entry it travels in. Also checks what other kiosks announce.
+String? adminUrlOrigin(String value) {
+  final uri = Uri.tryParse(value.trim());
+  if (uri == null ||
+      (uri.scheme != 'http' && uri.scheme != 'https') ||
+      !_adminHost.hasMatch(uri.host) ||
+      uri.userInfo.isNotEmpty ||
+      (uri.path.isNotEmpty && uri.path != '/') ||
+      uri.hasQuery ||
+      uri.hasFragment) {
+    return null;
+  }
+  final origin = uri.hasPort
+      ? '${uri.scheme}://${uri.host}:${uri.port}'
+      : '${uri.scheme}://${uri.host}';
+  return origin.length > 240 ? null : origin;
+}
+
+String? validateAdminUrl(Object? value) {
+  if (value is! String || value.trim().isEmpty) return null; // empty = unset
+  if (adminUrlOrigin(value) != null) return null;
+  final uri = Uri.tryParse(value.trim());
+  if (uri != null &&
+      (uri.scheme == 'http' || uri.scheme == 'https') &&
+      uri.host.isNotEmpty &&
+      ((uri.path.isNotEmpty && uri.path != '/') ||
+          uri.hasQuery ||
+          uri.hasFragment)) {
+    return 'Enter only the address, without a path. Example: '
+        'https://kiosk.example.com';
+  }
+  return 'Enter a valid address, for example https://kiosk.example.com';
+}
+
+Object normalizeAdminUrlSetting(Object value) =>
+    value is String ? adminUrlOrigin(value) ?? value.trim() : value;
+
 /// The Immich album pick as the `[{id, name}]` list it is stored as. A
 /// bare album id is the shape the setting had while it held one album; it
 /// becomes a one-entry list, name left for the Immich manager to fill in
@@ -9345,6 +9390,28 @@ const remoteFleetDiscovery = SettingDef<bool>(
   perDevice: true,
 );
 
+/// For a kiosk whose admin sits behind a reverse proxy with its own name
+/// and certificate. Only the switcher's link uses it: fleet calls, the
+/// intercom and discovery keep to the IP address, which a proxy name may
+/// not lead back to.
+const remoteAdminUrl = SettingDef<String>(
+  key: 'remote.admin_url',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Admin URL',
+  description:
+      'Address other kiosks open in Switch kiosk to reach this one, such as '
+      'a reverse proxy name. Leave blank to use its network address.',
+  placeholder: 'https://kiosk.example.com',
+  category: 'Device',
+  section: 'Remote Administration',
+  subpage: 'Remote Administration',
+  dependsOn: 'remote.fleet_discovery',
+  validator: validateAdminUrl,
+  normalizer: normalizeAdminUrlSetting,
+  perDevice: true,
+);
+
 // ── Updates ────────────────────────────────────────────────────────────
 // Where releases come from. GitHub is the default and the only source
 // until now; a custom repository is a folder on the user's own web server
@@ -11118,6 +11185,7 @@ const List<SettingDef<Object>> allSettings = [
   remoteTls,
   remotePassword,
   remoteFleetDiscovery,
+  remoteAdminUrl,
   updateSource,
   updateSourceUrl,
   shizukuInstallUpdates,

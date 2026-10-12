@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Added
+- **Open kiosks behind a reverse proxy by name from Switch kiosk.** A new **Admin URL** setting under **Settings > Device > Remote Administration** takes the address other kiosks should open for this one, such as `https://kiosk.example.com` from Caddy or nginx (#967). The kiosk announces it to the others and shares it through the fleet directory, and **Switch kiosk** shows and opens it instead of the IP address. It accepts a scheme, a host and an optional port, with no path. Leave it blank to keep today's behavior. Fleet sync and the intercom keep using the IP address, since the proxy name may lead to a different server. Each kiosk keeps its own Admin URL, and it never syncs from a fleet leader.
+
 ## v2026.10.21 - 2026-10-11
 
 ### Added

@@ -5508,6 +5508,21 @@ class UiStringsUk extends UiStrings {
       'Оголошувати цей пристрій у мережі та відображати інші кіоски у віддаленому адмініструванні для перемикання між ними.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'URL адміністрування';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Адреса, яку інші кіоски відкривають у «Перемкнути кіоск», щоб перейти до цього, наприклад ім\'я зворотного проксі. Залиште порожнім, щоб використовувати його мережеву адресу.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Введіть дійсну адресу, наприклад https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Введіть лише адресу, без шляху. Приклад: https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Віддалене адміністрування';
 
   @override

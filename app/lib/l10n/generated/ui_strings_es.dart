@@ -5554,6 +5554,21 @@ class UiStringsEs extends UiStrings {
       'Anuncia este dispositivo en la red y muestra los otros kioskos en la administración remota para cambiar entre ellos.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'URL de administración';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Dirección que abren otros kioskos en Cambiar de kiosko para llegar a este, como el nombre de un proxy inverso. Déjala vacía para usar su dirección de red.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Introduce una dirección válida, por ejemplo https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Introduce solo la dirección, sin ruta. Ejemplo: https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Administración remota';
 
   @override

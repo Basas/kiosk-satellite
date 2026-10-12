@@ -5528,6 +5528,21 @@ class UiStringsNl extends UiStrings {
       'Maak dit apparaat vindbaar op het netwerk en toon andere kiosken in beheer op afstand, zodat je ertussen kunt wisselen.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'Beheer-URL';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Adres dat andere kiosken openen via Kiosk wisselen om deze te bereiken, zoals de naam van een reverse proxy. Laat leeg om het netwerkadres te gebruiken.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Voer een geldig adres in, bijvoorbeeld https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Voer alleen het adres in, zonder pad. Voorbeeld: https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Beheer op afstand';
 
   @override

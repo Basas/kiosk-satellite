@@ -5491,6 +5491,21 @@ class UiStringsRu extends UiStrings {
       'Объявлять это устройство в сети и показывать другие киоски в удалённом администрировании для переключения между ними.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'URL администрирования';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Адрес, который другие киоски открывают в «Сменить киоск», чтобы перейти к этому, например имя обратного прокси. Оставьте пустым, чтобы использовать его сетевой адрес.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Введите корректный адрес, например https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Введите только адрес, без пути. Пример: https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Удалённое администрирование';
 
   @override

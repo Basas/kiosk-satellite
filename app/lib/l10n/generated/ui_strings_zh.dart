@@ -5244,6 +5244,19 @@ class UiStringsZh extends UiStrings {
       '在网络中广播此设备，并在远程管理中列出其他 Kiosk 设备，方便切换。';
 
   @override
+  String get settingRemoteAdminUrlTitle => '管理地址';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      '其他 Kiosk 设备在“切换 Kiosk 设备”中打开此设备时使用的地址，例如反向代理名称。留空则使用其网络地址。';
+
+  @override
+  String get deviceAdminUrlInvalid => '请输入有效地址，例如 https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath => '仅填写地址，不要包含路径。例如：https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => '远程管理';
 
   @override
@@ -17960,6 +17973,19 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingRemoteFleetDiscoveryDescription =>
       '在网络中广播此设备，并在远程管理中列出其他 Kiosk 设备，方便切换。';
+
+  @override
+  String get settingRemoteAdminUrlTitle => '管理地址';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      '其他 Kiosk 设备在“切换 Kiosk 设备”中打开此设备时使用的地址，例如反向代理名称。留空则使用其网络地址。';
+
+  @override
+  String get deviceAdminUrlInvalid => '请输入有效地址，例如 https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath => '仅填写地址，不要包含路径。例如：https://kiosk.example.com';
 
   @override
   String get deviceRemotePage => '远程管理';

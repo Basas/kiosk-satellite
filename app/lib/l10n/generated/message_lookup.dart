@@ -1538,6 +1538,11 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingRemoteFleetDiscoveryTitle,
       'settingRemoteFleetDiscoveryDescription' =>
         strings.settingRemoteFleetDiscoveryDescription,
+      'settingRemoteAdminUrlTitle' => strings.settingRemoteAdminUrlTitle,
+      'settingRemoteAdminUrlDescription' =>
+        strings.settingRemoteAdminUrlDescription,
+      'deviceAdminUrlInvalid' => strings.deviceAdminUrlInvalid,
+      'deviceAdminUrlPath' => strings.deviceAdminUrlPath,
       'deviceRemotePage' => strings.deviceRemotePage,
       'deviceAdminAddress' => strings.deviceAdminAddress,
       'deviceAdminAddressHelp' => strings.deviceAdminAddressHelp,

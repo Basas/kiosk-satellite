@@ -5551,6 +5551,21 @@ class UiStringsFr extends UiStrings {
       'Annoncer cet appareil sur le réseau et lister les autres kiosques dans l\'administration à distance, pour basculer entre eux.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'URL d\'administration';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Adresse que les autres kiosques ouvrent dans Changer de kiosque pour atteindre celui-ci, par exemple le nom d\'un proxy inverse. Laissez vide pour utiliser son adresse réseau.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Saisissez une adresse valide, par exemple https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Saisissez uniquement l\'adresse, sans chemin. Exemple : https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Administration à distance';
 
   @override

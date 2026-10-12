@@ -5463,6 +5463,21 @@ class UiStringsEn extends UiStrings {
       'Announce this device on the network and list the other kiosks in the remote admin, to switch between them.';
 
   @override
+  String get settingRemoteAdminUrlTitle => 'Admin URL';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Address other kiosks open in Switch kiosk to reach this one, such as a reverse proxy name. Leave blank to use its network address.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Enter a valid address, for example https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Enter only the address, without a path. Example: https://kiosk.example.com';
+
+  @override
   String get deviceRemotePage => 'Remote Administration';
 
   @override
