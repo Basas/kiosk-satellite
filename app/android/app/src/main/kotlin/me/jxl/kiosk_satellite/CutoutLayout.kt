@@ -15,12 +15,18 @@ import android.view.WindowManager
  * Assistant's frontend pads its layout by it. Two independent rules decide
  * what survives:
  *
- *  - Status and navigation bar insets are withheld ALWAYS, on every mode.
- *    The app keeps the bars permanently hidden, so a page padding for them
- *    is never right; on healthy ROMs their insets are zero while hidden and
- *    this is a no-op. Lenovo's ZUI reports the status bar inset as occupied
- *    even while immersive mode has the bar hidden, which put a bar-height
- *    gap inside the page on a device with no cutout at all (discussion #102:
+ *  - System bar insets (status bar, navigation bar and caption bar) are
+ *    withheld ALWAYS, on every mode. The app keeps the bars permanently
+ *    hidden, so a page padding for them is never right; on healthy ROMs
+ *    their insets are zero while hidden and this is a no-op. The whole
+ *    systemBars group is stripped, not just status and navigation, because
+ *    Chromium's safe area is displayCutout plus systemBars, and that group
+ *    also holds the caption bar: Lenovo's Android 15 tablets put a
+ *    multi-window handle on top of fullscreen apps, and the gap came back
+ *    there with only status and navigation stripped (issue #961). Lenovo's
+ *    ZUI also reports the status bar inset as occupied even while immersive
+ *    mode has the bar hidden, which put a bar-height gap inside the page on
+ *    a device with no cutout at all (discussion #102:
  *    the reporter's photos show the page background full-bleed with the
  *    content padded down one bar height, and with Home Assistant's header
  *    shown the gap sits above the header, its own safe-area padding). Kept
@@ -88,8 +94,7 @@ object CutoutLayout {
 
     private fun stripped(insets: WindowInsets): WindowInsets =
         if (Build.VERSION.SDK_INT >= 30) {
-            var types = WindowInsets.Type.statusBars() or
-                WindowInsets.Type.navigationBars()
+            var types = WindowInsets.Type.systemBars()
             if (stripCutout) types = types or WindowInsets.Type.displayCutout()
             WindowInsets.Builder(insets)
                 .setInsets(types, Insets.NONE)

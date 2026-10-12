@@ -16,6 +16,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Camera views can auto-dismiss after up to an hour.** **Auto-dismiss after** in Camera Streams, Playback went up to 5 minutes, too short for a view left up on purpose, like a baby monitor (#958). It now reaches 1 hour. The slider keeps 30 second steps up to 5 minutes, then moves in 5 minute steps, so a saved time stays as it was.
 
 ### Fixed
+- **The dashboard reaches the top of the screen on Lenovo's Android 15 tablets.** On a Lenovo Tab One and similar ZUI tablets, Home Assistant's header sat one status bar lower than it should, whatever the **Display cutout** setting (#961). These tablets put a multi-window handle at the top of every full screen app and report its space to the page, which Home Assistant pads its header by. The kiosk now keeps that space from the page, as it already did for the hidden status and navigation bars.
 - **The wake word answers at once on a custom page.** With a custom page as the dashboard, every wake word waited about six seconds before listening started, with native Voice Satellite too (#959). Before each turn the kiosk makes sure the dashboard's Home Assistant connection is live, and a custom page has no Home Assistant frontend to check, so it waited out the full timeout. A page without one now skips the check.
 
 ## v2026.10.20 - 2026-10-10
