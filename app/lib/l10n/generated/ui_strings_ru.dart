@@ -2844,6 +2844,12 @@ class UiStringsRu extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Показать пароль';
+
+  @override
+  String get pluginHidePassword => 'Скрыть пароль';
+
+  @override
   String get pluginAddPlugin => 'Добавить плагин';
 
   @override

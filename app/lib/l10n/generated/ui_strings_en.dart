@@ -2832,6 +2832,12 @@ class UiStringsEn extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Show password';
+
+  @override
+  String get pluginHidePassword => 'Hide password';
+
+  @override
   String get pluginAddPlugin => 'Add plugin';
 
   @override

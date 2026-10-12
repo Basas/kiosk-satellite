@@ -5044,6 +5044,18 @@ abstract class UiStrings {
   /// **'Enable {name}'**
   String pluginEnableName(String name);
 
+  /// Tooltip of the button that shows or hides the text typed into a plugin's secret setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get pluginShowPassword;
+
+  /// Tooltip of the button that shows or hides the text typed into a plugin's secret setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get pluginHidePassword;
+
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:

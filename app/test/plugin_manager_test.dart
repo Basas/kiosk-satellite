@@ -1780,6 +1780,70 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('secret settings stay masked and are only replaced', (
+    tester,
+  ) async {
+    installed[0]['settings'] = [
+      {'key': 'token', 'title': 'Token', 'type': 'secret', 'default': ''},
+      {'key': 'host', 'title': 'Host', 'type': 'string', 'default': ''},
+    ];
+    installed[0]['values'] = {'token': '__set__', 'host': 'nas.local'};
+    await plugins.refresh();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: PluginDetailPanel(plugins: plugins, id: 'hello-world'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('••••••••'), findsOneWidget);
+    expect(find.text('__set__'), findsNothing);
+    await tester.tap(find.text('Token'));
+    await tester.pumpAndSettle();
+    final field = find.descendant(
+      of: find.byType(AlertDialog),
+      matching: find.byType(TextField),
+    );
+    expect(tester.widget<TextField>(field).obscureText, isTrue);
+    expect(tester.widget<TextField>(field).controller!.text, isEmpty);
+    expect(find.byTooltip('Show password'), findsNothing);
+    await tester.enterText(field, 'rotated');
+    await tester.pump();
+    // The eye shows what is typed and hides it again.
+    await tester.tap(find.byTooltip('Show password'));
+    await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(field).obscureText, isFalse);
+    expect(tester.widget<TextField>(field).controller!.text, 'rotated');
+    await tester.tap(find.byTooltip('Hide password'));
+    await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(field).obscureText, isTrue);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(
+      (calls.lastWhere((c) => c.method == 'configure').arguments
+          as Map)['values'],
+      {'token': 'rotated', 'host': 'nas.local'},
+    );
+    // Editing another setting echoes the mask, which the host keeps.
+    installed[0]['values'] = {'token': '__set__', 'host': 'nas.local'};
+    await plugins.refresh();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Host'));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Show password'), findsNothing);
+    await tester.enterText(field, 'nas.lan');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(
+      (calls.lastWhere((c) => c.method == 'configure').arguments
+          as Map)['values'],
+      {'token': '__set__', 'host': 'nas.lan'},
+    );
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('SDK 1 controls retain edits during runtime status updates', (
     tester,
   ) async {

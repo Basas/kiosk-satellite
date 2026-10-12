@@ -19703,5 +19703,15 @@
     "source": "a1810da39cd1863ca4d9194224c0271910b1fdca3529a7482492f83322c6aaf1",
     "translation": "f5953e7916324c9d70cd5768cf16f01d243618153755913325a0a3504bd3a73d",
     "author": "Xavier Larrea"
+  },
+  "pluginHidePassword": {
+    "source": "dd2d1effbf43e7cce22c4dff391e590a196c441516b4ef6d89e7634e8b78319e",
+    "translation": "20d93396e534a54cb5d83b37e87de4ac82b0feec509625aa4588d067705085e3",
+    "author": "Xavier Larrea"
+  },
+  "pluginShowPassword": {
+    "source": "4db5a10f1bf178df17e1afb1ad22f03e5548778ce1e9a902a926805374c1d743",
+    "translation": "5fe3b78d0838f45ffc24ff63a76970d1456dec2d7415873324d26b014266293f",
+    "author": "Xavier Larrea"
   }
 }

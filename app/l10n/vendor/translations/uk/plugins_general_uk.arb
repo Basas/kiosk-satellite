@@ -21,5 +21,7 @@
   "pluginThisPluginWasInstalledFromZipAndHasNo": "Цей плагін було встановлено з архіву ZIP, він не має опису README з репозиторію.",
   "pluginImageUnavailable": "Зображення недоступне",
   "pluginCouldNotOpenThisLink": "Не вдалося відкрити це посилання.",
-  "pluginEnableName": "Увімкнути {name}"
+  "pluginEnableName": "Увімкнути {name}",
+  "pluginShowPassword": "Показати пароль",
+  "pluginHidePassword": "Сховати пароль"
 }

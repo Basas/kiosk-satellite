@@ -36,6 +36,24 @@ class PluginPackageTest {
         assertFalse(PluginHostPolicy.validEvent("ha.entity."))
     }
 
+    @Test fun secretSettingsAreMaskedAndKeptWhenEditedUnchanged() {
+        val secret = JSONObject().put("key", "token").put("title", "Token").put("type", "secret").put("default", "")
+        val name = JSONObject().put("key", "name").put("title", "Name").put("type", "string").put("default", "")
+        val value = PluginManifest(manifest().put("settings", org.json.JSONArray().put(secret).put(name)))
+        rejects { PluginManifest(manifest().put("settings", org.json.JSONArray().put(JSONObject(secret.toString()).put("default", "hunter2")))) }
+        rejects { value.config(JSONObject().put("token", 42)) }
+        val saved = JSONObject(value.config(JSONObject().put("token", "hunter2").put("name", "Hall")))
+        val masked = value.masked(saved)
+        assertEquals(PluginManifest.SECRET_SET, masked.getString("token"))
+        assertEquals("Hall", masked.getString("name"))
+        assertEquals("", value.masked(JSONObject().put("token", "")).getString("token"))
+        // Echoing the masked listing back, or omitting the secret, keeps the saved value.
+        assertEquals("hunter2", value.config(value.unmasked(masked.put("name", "Den"), saved))["token"])
+        assertEquals("hunter2", value.config(value.unmasked(JSONObject().put("name", "Den"), saved))["token"])
+        assertEquals("rotated", value.config(value.unmasked(JSONObject().put("token", "rotated"), saved))["token"])
+        assertEquals("", value.config(value.unmasked(JSONObject().put("token", ""), saved))["token"])
+    }
+
     @Test fun keyEventsSkipTypedText() {
         val time = "2026-10-05T17:00:00.000Z"
         assertEquals(

@@ -754,6 +754,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.pluginThisPluginWasInstalledFromZipAndHasNo,
       'pluginImageUnavailable' => strings.pluginImageUnavailable,
       'pluginCouldNotOpenThisLink' => strings.pluginCouldNotOpenThisLink,
+      'pluginShowPassword' => strings.pluginShowPassword,
+      'pluginHidePassword' => strings.pluginHidePassword,
       'pluginAddPlugin' => strings.pluginAddPlugin,
       'pluginInstallFromAGithubRepository' =>
         strings.pluginInstallFromAGithubRepository,

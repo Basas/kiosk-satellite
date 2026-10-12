@@ -815,35 +815,61 @@ class _PluginSettingsState extends State<_PluginSettings> {
 
   Future<void> _editText(Map raw) async {
     final key = '${raw['key']}';
-    var draft = '${_values[key] ?? raw['default']}';
+    final secret = raw['type'] == 'secret';
+    // A secret is only ever replaced. Saving an empty field clears it.
+    // The eye shows what is being typed, never the saved value, so it
+    // appears only once there is text.
+    var draft = secret ? '' : '${_values[key] ?? raw['default']}';
+    var obscured = secret;
     final result = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('${raw['title']}'),
-        content: SizedBox(
-          width: 420,
-          child: TextFormField(
-            initialValue: draft,
-            autofocus: true,
-            maxLength: 512,
-            textInputAction: TextInputAction.done,
-            decoration: InputDecoration(
-              hintText: raw['description'] as String?,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text('${raw['title']}'),
+          content: SizedBox(
+            width: 420,
+            child: TextFormField(
+              initialValue: draft,
+              obscureText: obscured,
+              autofocus: true,
+              maxLength: 512,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                hintText: raw['description'] as String?,
+                suffixIcon: secret && draft.isNotEmpty
+                    ? IconButton(
+                        tooltip: pluginText(
+                          context,
+                          obscured ? 'Show password' : 'Hide password',
+                        ),
+                        icon: Icon(
+                          obscured
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () =>
+                            setDialogState(() => obscured = !obscured),
+                      )
+                    : null,
+              ),
+              onChanged: (value) => setDialogState(() {
+                draft = value;
+                if (value.isEmpty) obscured = secret;
+              }),
+              onFieldSubmitted: (value) => Navigator.pop(context, value),
             ),
-            onChanged: (value) => draft = value,
-            onFieldSubmitted: (value) => Navigator.pop(context, value),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(pluginText(context, 'Cancel')),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, draft),
+              child: Text(pluginText(context, 'Save')),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(pluginText(context, 'Cancel')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, draft),
-            child: Text(pluginText(context, 'Save')),
-          ),
-        ],
       ),
     );
     if (result != null && mounted && !_busy) {
@@ -876,13 +902,15 @@ class _PluginSettingsState extends State<_PluginSettings> {
         },
       );
     }
-    if (raw['type'] == 'string') {
+    if (raw['type'] == 'string' || raw['type'] == 'secret') {
       final value = '${_values[raw['key']] ?? raw['default']}';
       return SettingsRow(
         title: Text('${raw['title']}'),
         subtitle: Text(
           value.isEmpty
               ? raw['description']?.toString() ?? deviceText(context, 'Not set')
+              : raw['type'] == 'secret'
+              ? '••••••••'
               : value,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

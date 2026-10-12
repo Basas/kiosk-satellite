@@ -23694,5 +23694,17 @@
     "translation": "c60459d7ae3d5b69f92a9da634605b93851b444f957b77465a88cb9e628d99a9",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "pluginHidePassword": {
+    "source": "dd2d1effbf43e7cce22c4dff391e590a196c441516b4ef6d89e7634e8b78319e",
+    "translation": "4daad7c751cae0a52bb3a81f921b2eb8efd7532efb69c673ae9d2d7b314b2fc5",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginShowPassword": {
+    "source": "4db5a10f1bf178df17e1afb1ad22f03e5548778ce1e9a902a926805374c1d743",
+    "translation": "dad5ded70076f54c36a89f88977b9eeb77e926dfe236f5b0910f1461c76a9f52",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

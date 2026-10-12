@@ -21,5 +21,7 @@
   "pluginThisPluginWasInstalledFromZipAndHasNo": "Ce plugin a été installé depuis un ZIP et n'a pas de README de dépôt.",
   "pluginImageUnavailable": "Image indisponible",
   "pluginCouldNotOpenThisLink": "Impossible d'ouvrir ce lien.",
-  "pluginEnableName": "Activer {name}"
+  "pluginEnableName": "Activer {name}",
+  "pluginShowPassword": "Afficher le mot de passe",
+  "pluginHidePassword": "Masquer le mot de passe"
 }

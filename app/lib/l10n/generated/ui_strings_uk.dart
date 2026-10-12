@@ -2846,6 +2846,12 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Показати пароль';
+
+  @override
+  String get pluginHidePassword => 'Сховати пароль';
+
+  @override
   String get pluginAddPlugin => 'Додати плагін';
 
   @override

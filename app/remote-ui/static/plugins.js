@@ -1,5 +1,5 @@
 import { pluginError } from './localization.js';
-import { pluginText, t, messageLanguage } from './localization.js';
+import { deviceText, pluginText, t, messageLanguage } from './localization.js';
 import { preserveDraft } from './drafts.js';
 import { watchUpdates, receiveUpdate } from './live.js';
 import { entitySpec, pickField, pickItem } from './entity_picker.js';
@@ -140,6 +140,9 @@ async function zipBase64(file) {
   }
   return btoa(binary);
 }
+
+const EYE = 'M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z';
+const EYE_OFF = 'M3 3l18 18M10.6 5.6c.5-.1.9-.1 1.4-.1 6.5 0 10 6.5 10 6.5a16 16 0 0 1-3.2 4M6.6 6.6A16 16 0 0 0 2 12s3.5 6.5 10 6.5c2 0 3.8-.6 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2';
 
 function iconButton(label, path) {
   const button = element('button', undefined, 'icon-btn'); button.type = 'button';
@@ -435,6 +438,40 @@ function render(root, state) {
         settingRow.append(swatch(rgb, setting.title, (selected) => {
           saveSetting(setting.key, '#' + selected.split(',').map((c) => Number(c).toString(16).padStart(2, '0')).join('').toUpperCase(), settingRow.querySelector('button'));
         }));
+      } else if (setting.type === 'secret') {
+        // The listing reads __set__ for a saved secret, never the value.
+        // Typing replaces it. The eye shows what is being typed.
+        const saved = values[setting.key] === '__set__';
+        input.type = 'password'; input.maxLength = 512; input.autocomplete = 'new-password';
+        input.placeholder = saved ? deviceText('•••••• (set)') : deviceText('Not set');
+        const reveal = iconButton(pluginText('Show password'), EYE);
+        const show = (shown) => {
+          input.type = shown ? 'text' : 'password';
+          const label = pluginText(shown ? 'Hide password' : 'Show password');
+          reveal.title = label; reveal.setAttribute('aria-label', label);
+          reveal.querySelector('path').setAttribute('d', shown ? EYE_OFF : EYE);
+        };
+        // Blur saves, since switching the field's type drops its change
+        // event. A saved secret leaves the field empty and hidden again.
+        input.onblur = () => input.value && run(async () => {
+          try {
+            await command('configurePlugin', { id: plugin.id, values: { ...plugin.values, [setting.key]: input.value } });
+            input.value = ''; show(false); reveal.hidden = true;
+          } finally {
+            await refresh();
+          }
+        }, input);
+        input.onkeydown = (event) => { if (event.key === 'Enter') input.blur(); };
+        // Pressing the eye keeps focus in the field, so it does not save
+        // and redraw the row halfway through typing.
+        reveal.onmousedown = (event) => event.preventDefault();
+        reveal.onclick = () => show(input.type === 'password');
+        // The eye appears only with typed text, since the saved value is
+        // never shown. An emptied field hides its text again.
+        reveal.hidden = true;
+        input.oninput = () => { reveal.hidden = !input.value; if (!input.value) show(false); };
+        const control = element('div', undefined, 'plugin-secret'); control.append(input, reveal);
+        settingRow.append(control);
       } else {
         input.type = 'text'; input.maxLength = 512; input.value = values[setting.key] ?? setting.default;
         input.onchange = () => saveSetting(setting.key, input.value, input);

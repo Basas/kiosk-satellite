@@ -2854,6 +2854,12 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Wachtwoord tonen';
+
+  @override
+  String get pluginHidePassword => 'Wachtwoord verbergen';
+
+  @override
   String get pluginAddPlugin => 'Plug-in toevoegen';
 
   @override

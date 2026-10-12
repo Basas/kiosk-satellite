@@ -24105,5 +24105,17 @@
     "translation": "0297e7ab92842b0b0b15c6457c39a15d85b18141b836874bdc72b5d7322aa409",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "pluginShowPassword": {
+    "source": "4db5a10f1bf178df17e1afb1ad22f03e5548778ce1e9a902a926805374c1d743",
+    "translation": "4aa1465f1f84727046f9c72acc1f3823938615b8a4133d19298329a645759443",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginHidePassword": {
+    "source": "dd2d1effbf43e7cce22c4dff391e590a196c441516b4ef6d89e7634e8b78319e",
+    "translation": "6ea8f406d34fc6a05bf0a0094756ce485ce4f1cc3deaf8c67338e278c58c3bd3",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

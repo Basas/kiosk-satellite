@@ -2862,6 +2862,12 @@ class UiStringsFr extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Afficher le mot de passe';
+
+  @override
+  String get pluginHidePassword => 'Masquer le mot de passe';
+
+  @override
   String get pluginAddPlugin => 'Ajouter un plugin';
 
   @override

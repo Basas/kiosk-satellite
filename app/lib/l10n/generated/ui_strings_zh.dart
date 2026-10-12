@@ -2767,6 +2767,12 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => '显示密码';
+
+  @override
+  String get pluginHidePassword => '隐藏密码';
+
+  @override
   String get pluginAddPlugin => '添加插件';
 
   @override
@@ -15496,6 +15502,12 @@ class UiStringsZhCn extends UiStringsZh {
   String pluginEnableName(String name) {
     return '启用 $name';
   }
+
+  @override
+  String get pluginShowPassword => '显示密码';
+
+  @override
+  String get pluginHidePassword => '隐藏密码';
 
   @override
   String get pluginAddPlugin => '添加插件';

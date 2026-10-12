@@ -511,7 +511,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 .put("charts", org.json.JSONArray(sessions[id]?.charts?.snapshot() ?: emptyList<Any>()))
                 .put("statusTiles", org.json.JSONArray(sessions[id]?.statusTiles?.snapshot() ?: emptyList<Any>()))
                 .put("lights", org.json.JSONArray(sessions[id]?.lights?.values?.toList() ?: emptyList<Any>()))
-                .put("values", record.optJSONObject("config") ?: JSONObject())
+                .put("values", manifest.masked(record.optJSONObject("config") ?: JSONObject()))
                 .put("actionOptions", record.optJSONObject("actionOptions") ?: JSONObject())
                 .put("error", record.optString("error"))
             jsonValue(value)
@@ -790,7 +790,8 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     private fun configure(id: String, args: Map<String, Any?>) {
         val values = args["values"] as? Map<*, *> ?: throw IllegalArgumentException("Missing settings")
         val manifest = manifest(id)
-        val config = manifest.config(JSONObject(values))
+        val saved = records.getJSONObject(id).optJSONObject("config") ?: JSONObject()
+        val config = manifest.config(manifest.unmasked(JSONObject(values), saved))
         sessions[id]?.let { session ->
             try { session.call { session.plugin!!.configure(Collections.unmodifiableMap(config)) } }
             catch (error: Throwable) { fail(id, error); throw error }

@@ -21,5 +21,7 @@
   "pluginThisPluginWasInstalledFromZipAndHasNo": "Deze plug-in is vanuit een ZIP-bestand geïnstalleerd en heeft geen README uit een repository.",
   "pluginImageUnavailable": "Afbeelding niet beschikbaar",
   "pluginCouldNotOpenThisLink": "Kon deze link niet openen.",
-  "pluginEnableName": "{name} inschakelen"
+  "pluginEnableName": "{name} inschakelen",
+  "pluginShowPassword": "Wachtwoord tonen",
+  "pluginHidePassword": "Wachtwoord verbergen"
 }

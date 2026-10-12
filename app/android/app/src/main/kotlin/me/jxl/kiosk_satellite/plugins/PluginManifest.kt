@@ -46,6 +46,8 @@ class PluginManifest(val json: JSONObject) {
             if (setting.has("description")) text(setting, "description", 400)
             if (setting.has("group")) text(setting, "group", 80)
             validateValue(setting, setting.get("default"))
+            // A default in a published manifest is not a secret.
+            require(setting.getString("type") != "secret" || setting.get("default") == "") { "Secret settings must default to an empty string" }
         }
         require(!json.has("groups") || json.opt("groups") is JSONArray) { "Display groups must be an array" }
         val groups = json.optJSONArray("groups") ?: JSONArray()
@@ -100,12 +102,32 @@ class PluginManifest(val json: JSONObject) {
         }
     }
 
+    /** Keys of the settings that admin listings mask. */
+    val secretKeys: Set<String> = (0 until settings.length()).map { settings.getJSONObject(it) }
+        .filter { it.getString("type") == "secret" }.map { it.getString("key") }.toSet()
+
+    /** A saved config with each secret replaced by [SECRET_SET] or an empty string. */
+    fun masked(config: JSONObject): JSONObject = JSONObject(config.toString()).also { masked ->
+        for (key in secretKeys) if (masked.has(key)) masked.put(key, if (masked.optString(key).isEmpty()) "" else SECRET_SET)
+    }
+
+    /**
+     * Admin edits send the masked listing back. A secret that is omitted or
+     * still reads [SECRET_SET] keeps its saved value.
+     */
+    fun unmasked(values: JSONObject, saved: JSONObject): JSONObject = JSONObject(values.toString()).also { merged ->
+        for (key in secretKeys) {
+            if (merged.has(key) && merged.opt(key) != SECRET_SET) continue
+            if (saved.has(key)) merged.put(key, saved.get(key)) else merged.remove(key)
+        }
+    }
+
     fun hasCommand(id: String) = (0 until commands.length()).any { commands.getJSONObject(it).getString("id") == id }
     fun hasTrigger(id: String) = (0 until triggers.length()).any { triggers.getJSONObject(it).getString("id") == id }
 
     private fun validateValue(setting: JSONObject, value: Any) {
         when (setting.getString("type")) {
-            "string" -> require(value is String && value.length <= 512) { "Text settings must be at most 512 characters" }
+            "string", "secret" -> require(value is String && value.length <= 512) { "Text settings must be at most 512 characters" }
             "entity" -> require(value is String && (value.isEmpty() || (value.length <= 255 && value.matches(Regex("[a-z0-9_]+\\.[a-z0-9_]+"))))) { "Expected a Home Assistant entity ID" }
             "boolean" -> require(value is Boolean) { "Expected a boolean setting" }
             "color" -> require(value is String && value.matches(Regex("#[a-fA-F0-9]{6}"))) { "Expected an RGB hex color" }
@@ -134,6 +156,8 @@ class PluginManifest(val json: JSONObject) {
     companion object {
         /** Settings per plugin. Display groups keep a long list navigable. */
         const val MAX_SETTINGS = 50
+        /** Stands in for a saved secret, the same marker core password settings use. */
+        const val SECRET_SET = "__set__"
 
         fun text(json: JSONObject, key: String, limit: Int): String {
             val value = json.get(key)

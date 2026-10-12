@@ -2879,6 +2879,12 @@ class UiStringsDe extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Passwort anzeigen';
+
+  @override
+  String get pluginHidePassword => 'Passwort ausblenden';
+
+  @override
   String get pluginAddPlugin => 'Plugin hinzufügen';
 
   @override

@@ -176,5 +176,7 @@ const pluginTextMessageIds = <String, String>{
   "Installed plugin failed its integrity check. Reinstall it.": "pluginErrorInstalledIntegrity",
   "Android version is too old": "pluginErrorAndroidOld",
   "Installed native libraries failed their integrity check": "pluginErrorNativeIntegrity",
-  "Installed native library failed its integrity check": "pluginErrorNativeFileIntegrity"
+  "Installed native library failed its integrity check": "pluginErrorNativeFileIntegrity",
+  "Show password": "pluginShowPassword",
+  "Hide password": "pluginHidePassword"
 };
