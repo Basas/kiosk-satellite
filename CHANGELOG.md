@@ -10,6 +10,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Open kiosks behind a reverse proxy by name from Switch kiosk.** A new **Admin URL** setting under **Settings > Device > Remote Administration** takes the address other kiosks should open for this one, such as `https://kiosk.example.com` from Caddy or nginx (#967). The kiosk announces it to the others and shares it through the fleet directory, and **Switch kiosk** shows and opens it instead of the IP address. It accepts a scheme, a host and an optional port, with no path. Leave it blank to keep today's behavior. Fleet sync and the intercom keep using the IP address, since the proxy name may lead to a different server. Each kiosk keeps its own Admin URL, and it never syncs from a fleet leader.
 - **Secret settings for plugins.** Plugins can now declare a `secret` setting for a password, token or API key (#969). It works like a text setting and reaches the plugin as a string, but the Plugin Manager and Remote Admin mask it and only let you replace it. While you type, an eye button at the end of the field shows the text. The saved value is never shown. `listPlugins` and the other admin responses report a saved secret as `__set__` instead of its value. See [Creating plugins](https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world/blob/main/docs/creating-plugins.md#rich-settings-and-hardware).
 
+### Fixed
+- **The kiosk menu and settings reach the top of the screen on Lenovo's Android 15 tablets.** 2026.10.21 moved the dashboard up to the top edge on a Lenovo Tab One and similar ZUI tablets, but the kiosk menu and the settings screens still sat one status bar lower (#961). The app's own screens left room for the same multi-window handle at the top. They now ignore it too.
+
 ## v2026.10.21 - 2026-10-11
 
 ### Added

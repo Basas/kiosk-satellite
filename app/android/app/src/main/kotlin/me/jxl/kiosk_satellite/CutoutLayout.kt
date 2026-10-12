@@ -1,10 +1,14 @@
 package me.jxl.kiosk_satellite
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Insets
+import android.graphics.Rect
 import android.os.Build
 import android.view.WindowInsets
 import android.view.WindowManager
+import io.flutter.embedding.android.FlutterView
+import io.flutter.embedding.android.FlutterViewDelegate
 
 /**
  * Applies the "Display cutout" setting (browser.cutout_mode) to an
@@ -90,6 +94,23 @@ object CutoutLayout {
         // Re-dispatch so a runtime mode change reaches the page immediately;
         // the WebView re-evaluates env(safe-area-inset-*) on the spot.
         activity.window.decorView.requestApplyInsets()
+    }
+
+    /**
+     * Keeps the caption bar out of Flutter's padding too. On API 35+ the
+     * FlutterView grows its top padding to the caption bar's bounding rects,
+     * which it reads from the decor view's root insets rather than from the
+     * dispatch the listener above strips. On Lenovo's Android 15 tablets that
+     * left the drawer and settings one bar lower than the dashboard (issue
+     * #961). Called on every new FlutterView, from MainActivity.onCreate.
+     */
+    fun withholdCaptionBar(view: FlutterView) {
+        view.setDelegate(NoCaptionBar)
+    }
+
+    private object NoCaptionBar : FlutterViewDelegate() {
+        override fun getCaptionBarInsets(context: Context): List<Rect> =
+            emptyList()
     }
 
     private fun stripped(insets: WindowInsets): WindowInsets =
