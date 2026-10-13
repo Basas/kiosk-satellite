@@ -1,4 +1,4 @@
-import { pluginText, t } from './localization.js';
+import { haText, pluginText, t } from './localization.js';
 import { cmd } from './core.js';
 import { cameraIcon } from './cameras.js';
 import { dashboardField } from './dashboard_picker.js';
@@ -147,24 +147,82 @@ export function cameraViewSpec() {
 
 /* ------------------------------------------------------------ icons */
 
-// Searches the kiosk's icons as you type. Resolves to the picked name,
-// '' for Clear, null when dismissed.
+// Searches the kiosk's icons as you type, in the entity picker's frame:
+// the title and search box on top, a grid of icons, Clear and Cancel
+// below. Under 520 it fills the screen. Resolves to the picked name, ''
+// for Clear, null when dismissed.
 export function pickIcon({ title, value = '' }) {
   return new Promise((resolve) => {
-    const finish = (result) => { shell.close(); resolve(result); };
-    const shell = modalShell({ title, width: 640, onDismiss: () => finish(null) });
-    const search = el('input', 'field');
-    search.type = 'search'; search.placeholder = pluginText('Search icons');
+    const openedAt = Date.now();
+    const shell = modalShell({ title: '', width: 760,
+      onDismiss: () => { if (Date.now() - openedAt > 500) finish(null); } });
+    shell.card.classList.add('dash-picker-card');
+    shell.back.classList.add('dash-picker-back');
+    shell.body.classList.remove('edge-fade');
+    shell.head.remove();
+    shell.foot.remove();
+    const root = el('div', 'dp ep plugin-icon-picker');
+    const head = el('div', 'dp-head');
+    const bar = el('div', 'dp-bar');
+    const back = iconButton(t('commonBack'), BACK);
+    back.classList.add('dp-back');
+    back.onclick = () => finish(null);
+    const heading = el('div', 'dp-heading');
+    heading.appendChild(el('div', 'dp-name modal-title', title));
+    bar.append(back, heading);
+    const search = el('input', 'dp-search');
+    search.type = 'search'; search.autocomplete = 'off';
+    search.placeholder = pluginText('Search icons');
     search.setAttribute('aria-label', pluginText('Search icons'));
-    const grid = el('div', 'plugin-icon-grid');
-    shell.body.append(search, grid);
+    head.append(bar, search);
+    const content = el('div', 'dp-content');
+    const grid = el('div', 'plugin-icon-grid edge-fade');
+    content.appendChild(grid);
+    const foot = el('div', 'dp-foot');
+    if (value) {
+      const clear = el('button', 'btn-text', t('commonClear'));
+      clear.type = 'button';
+      clear.onclick = () => finish('');
+      foot.appendChild(clear);
+    }
+    foot.appendChild(el('span', 'dp-count'));
+    const cancel = el('button', 'btn-text', t('commonCancel'));
+    cancel.type = 'button';
+    cancel.onclick = () => finish(null);
+    foot.appendChild(cancel);
+    root.append(head, content, foot);
+    shell.body.appendChild(root);
+    const observer = new ResizeObserver(() => {
+      const narrow = root.clientWidth < 520;
+      root.classList.toggle('narrow', narrow);
+      back.hidden = !narrow;
+    });
+    observer.observe(root);
+    function finish(result) {
+      observer.disconnect();
+      shell.close();
+      resolve(result);
+    }
     let asked = 0;
     const show = async () => {
       const mine = ++asked;
       const r = await cmd('searchIcons', { query: search.value, limit: 120 }).catch(() => null);
       if (mine !== asked) return;
+      let icons = r?.ok && Array.isArray(r.data) ? r.data : [];
+      // The current icon leads while nothing is typed, even when it is
+      // not among the first ones.
+      if (value && !search.value.trim() && !icons.some((icon) => icon.name === value)) {
+        const [path] = await iconPaths([value]);
+        if (mine !== asked) return;
+        if (path) icons = [{ name: value, path }, ...icons.slice(0, 119)];
+      }
       grid.replaceChildren();
-      for (const icon of (r?.ok && Array.isArray(r.data) ? r.data : [])) {
+      if (!icons.length) {
+        const empty = el('div', 'dp-state');
+        empty.appendChild(el('div', 'dp-state-title', haText('Nothing matches')));
+        grid.appendChild(empty);
+      }
+      for (const icon of icons) {
         paths.set(icon.name, icon.path);
         const cell = el('button', 'plugin-icon-cell');
         cell.type = 'button'; cell.title = icon.name;
@@ -173,17 +231,10 @@ export function pickIcon({ title, value = '' }) {
         cell.onclick = () => finish(icon.name);
         grid.appendChild(cell);
       }
+      grid.scrollTop = 0;
     };
     let timer = 0;
     search.oninput = () => { clearTimeout(timer); timer = setTimeout(show, 200); };
-    if (value) {
-      const clear = el('button', 'btn-text', t('commonClear'));
-      clear.onclick = () => finish('');
-      shell.foot.append(clear);
-    }
-    const cancel = el('button', 'btn-text', t('commonCancel'));
-    cancel.onclick = () => finish(null);
-    shell.foot.append(cancel);
     show();
     search.focus();
   });

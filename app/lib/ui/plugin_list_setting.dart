@@ -149,8 +149,10 @@ String? _rowSubtitle(Map list, Map row, PluginFieldServices services) {
   return null;
 }
 
-/// Material Design Icons by name for icon settings. Names read as words,
-/// so "garage open" finds mdi:garage-open.
+/// Material Design Icons by name for icon settings, as a grid of tiles
+/// like the remote admin's. Names also read as words, so "garage open"
+/// finds mdi:garage-open. Like the remote, at most 120 show at a time:
+/// drawing all of them stalled even a fast tablet.
 PickSpec pluginIconSpec(BuildContext context) => PickSpec(
   key: 'mdiIcons',
   loader: () async => PickList([
@@ -158,8 +160,7 @@ PickSpec pluginIconSpec(BuildContext context) => PickSpec(
       PickItem(
         id: 'mdi:$name',
         name: name.replaceAll('-', ' '),
-        sub: 'mdi:$name',
-        subMono: true,
+        sub: name,
         icon: 'mdi:$name',
       ),
   ]),
@@ -167,6 +168,8 @@ PickSpec pluginIconSpec(BuildContext context) => PickSpec(
   noGroup: '',
   chips: false,
   headings: false,
+  grid: true,
+  limit: 120,
 );
 
 /// The kiosk's camera views for camera view settings.

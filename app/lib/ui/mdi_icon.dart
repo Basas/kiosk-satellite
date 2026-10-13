@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -85,21 +86,38 @@ abstract final class MdiIcons {
         byLetter.putIfAbsent(_letter(name), () => []).add(name);
       }
     }
-    for (final entry in byLetter.entries) {
-      if (entry.value.length == 1) {
-        final path = await MdiIcons.path(entry.value.single);
-        if (path != null) found[entry.value.single] = path;
-        continue;
+    if (byLetter.isEmpty) return found;
+    // The shards decode on a background isolate, which hands back only the
+    // asked-for values: a search touches many letters, and decoding them
+    // here stalled the kiosk while someone typed in the remote admin.
+    final raw = <String, String>{};
+    for (final letter in byLetter.keys) {
+      try {
+        raw[letter] = await readShard('assets/mdi/$letter.json');
+      } catch (_) {}
+    }
+    final values = await Isolate.run(() {
+      final out = <String, String?>{};
+      for (final MapEntry(key: letter, value: names) in byLetter.entries) {
+        final text = raw[letter];
+        Map<String, dynamic>? shard;
+        try {
+          shard = text == null
+              ? null
+              : jsonDecode(text) as Map<String, dynamic>;
+        } catch (_) {}
+        for (final name in names) {
+          out[name] = shard?[name] as String?;
+        }
       }
-      final shard = await _shard(entry.key);
-      for (final name in entry.value) {
-        final value = shard?[name] as String?;
-        // A renamed icon resolves on its own, under its new name's letter.
-        final path = value != null && value.startsWith('@')
-            ? await MdiIcons.path(name)
-            : _remember(name, value);
-        if (path != null) found[name] = path;
-      }
+      return out;
+    });
+    for (final MapEntry(key: name, :value) in values.entries) {
+      // A renamed icon resolves on its own, under its new name's letter.
+      final path = value != null && value.startsWith('@')
+          ? await MdiIcons.path(name)
+          : _remember(name, value);
+      if (path != null) found[name] = path;
     }
     return found;
   }
@@ -162,32 +180,38 @@ abstract final class MdiIcons {
 
   static Future<Map<String, String>>? _reading;
 
+  /// Reads every shard here, where the asset bundle lives, and decodes
+  /// them on a background isolate: three megabytes of JSON on the UI
+  /// thread stalled even a fast tablet for a beat.
   static Future<Map<String, String>> _scan() async {
-    final all = <String, String>{};
+    final raw = <String>[];
     for (final letter in [
       for (var c = 0x61; c <= 0x7a; c++) String.fromCharCode(c),
       '_',
     ]) {
-      final shard = await _shard(letter);
-      for (final entry in (shard ?? const {}).entries) {
-        final value = entry.value;
-        if (value is String && !value.startsWith('@')) all[entry.key] = value;
-      }
+      try {
+        raw.add(await readShard('assets/mdi/$letter.json'));
+      } catch (_) {}
     }
-    return all;
+    return Isolate.run(() {
+      final all = <String, String>{};
+      for (final text in raw) {
+        try {
+          final shard = jsonDecode(text) as Map<String, dynamic>;
+          for (final entry in shard.entries) {
+            final value = entry.value;
+            if (value is String && !value.startsWith('@')) {
+              all[entry.key] = value;
+            }
+          }
+        } catch (_) {}
+      }
+      return all;
+    });
   }
 
   static String _letter(String key) =>
       key.codeUnitAt(0) >= 0x61 && key.codeUnitAt(0) <= 0x7a ? key[0] : '_';
-
-  static Future<Map<String, dynamic>?> _shard(String letter) async {
-    try {
-      return jsonDecode(await readShard('assets/mdi/$letter.json'))
-          as Map<String, dynamic>;
-    } catch (_) {
-      return null;
-    }
-  }
 
   static Future<String?> _load(String key, {bool followAlias = true}) async {
     if (!looksLikeIcon(key)) return _remember(key, null);

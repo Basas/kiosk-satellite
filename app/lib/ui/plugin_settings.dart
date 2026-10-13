@@ -960,6 +960,23 @@ class _PluginSettingsState extends State<_PluginSettings> {
           },
         );
     }
+    if (raw['type'] == 'select') {
+      // The app's own dropdown row, so plugin choices look like every
+      // other setting's.
+      return DropdownRow<String>(
+        title: '${raw['title']}',
+        description: raw['description']?.toString(),
+        value: '$value',
+        options: [
+          for (final option in raw['options'] as List) ('$option', '$option'),
+        ],
+        onChanged: _busy
+            ? null
+            : (v) {
+                if (v != null && v != '$value') _saveValue(key, v);
+              },
+      );
+    }
     if (raw['type'] == 'entity') {
       final value = '${_values[raw['key']] ?? raw['default']}';
       // A plugin may narrow the picker to one domain or a few.
@@ -1132,20 +1149,6 @@ class _PluginSettingsState extends State<_PluginSettings> {
               ),
               Text('$value ${raw['unit'] ?? ''}'.trim()),
             ],
-          ),
-        );
-      case 'select':
-        return SizedBox(
-          width: 220,
-          child: DropdownButtonFormField<String>(
-            key: ValueKey('$key-$value'),
-            initialValue: '$value',
-            isExpanded: true,
-            items: [
-              for (final option in raw['options'] as List)
-                DropdownMenuItem(value: '$option', child: Text('$option')),
-            ],
-            onChanged: _busy ? null : (v) => _saveValue(key, v),
           ),
         );
       case 'color':

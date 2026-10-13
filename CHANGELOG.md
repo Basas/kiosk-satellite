@@ -13,6 +13,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Plugins can open views with a query string.** `haNavigate` now accepts paths such as `cameras/0?camera=garage`, which the Advanced Camera Card and similar cards read, and still navigates without reloading the page.
 
 ### Fixed
+- **Plugin dropdowns match the rest of Settings.** A plugin's choice settings on the kiosk now use the same dropdown as every other setting, with the same size, fill and remote focus highlight, and move under their title on narrow screens.
 - **`haNavigate` reported failure to plugins after a successful move.** It now returns true once the page is on the view, including when it already was.
 - **Custom Pages guide.** A leftover fragment at the end of the Dashboard features bullet is gone.
 

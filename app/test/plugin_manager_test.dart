@@ -1844,6 +1844,44 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+  testWidgets('select settings use the app dropdown and save the choice', (
+    tester,
+  ) async {
+    installed[0]['settings'] = [
+      {
+        'key': 'position',
+        'title': 'Position',
+        'type': 'select',
+        'options': ['Bottom', 'Top'],
+        'default': 'Bottom',
+      },
+    ];
+    installed[0]['values'] = {'position': 'Bottom'};
+    await plugins.refresh();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: PluginDetailPanel(plugins: plugins, id: 'hello-world'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(DropdownRow<String>), findsOneWidget);
+    expect(find.byType(KsDropdown<String>), findsOneWidget);
+    expect(find.byType(DropdownButtonFormField<String>), findsNothing);
+    await tester.tap(find.text('Bottom'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Top').last);
+    await tester.pumpAndSettle();
+    expect(
+      (calls.lastWhere((c) => c.method == 'configure').arguments
+          as Map)['values'],
+      {'position': 'Top'},
+    );
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('list settings edit rows in a modal and save the whole list', (
     tester,
   ) async {
