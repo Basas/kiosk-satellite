@@ -5056,6 +5056,60 @@ abstract class UiStrings {
   /// **'Hide password'**
   String get pluginHidePassword;
 
+  /// Name shown for a row of a plugin's list setting that has no name yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get pluginUntitled;
+
+  /// Placeholder of the search box in the icon picker of a plugin setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get pluginSearchIcons;
+
+  /// Placeholder of a plugin icon setting with no icon chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an icon'**
+  String get pluginChooseIcon;
+
+  /// Placeholder of the search box in the camera view picker of a plugin setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Search camera views'**
+  String get pluginSearchCameraViews;
+
+  /// Placeholder of a plugin camera view setting with no view chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a camera view'**
+  String get pluginChooseCameraView;
+
+  /// Shown under a plugin camera view setting whose saved view was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This camera view is gone. Choose another.'**
+  String get pluginCameraViewGone;
+
+  /// Label of the handle that drags a row of a plugin's list setting to a new position.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder'**
+  String get pluginDragToReorder;
+
+  /// Button that keeps the changes to a nested row and returns to the row that holds it, in the row editor of a plugin list setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get pluginDone;
+
+  /// Shown beside the label of an empty required field in the row editor of a plugin list setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get pluginRequired;
+
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
@@ -5895,6 +5949,60 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Invalid or duplicate trigger ID'**
   String get pluginErrorTriggerId;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid list setting'**
+  String get pluginErrorListSetting;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid setting condition'**
+  String get pluginErrorSettingCondition;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected an MDI icon name'**
+  String get pluginErrorIcon;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected a dashboard path'**
+  String get pluginErrorDashboard;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected a camera view ID'**
+  String get pluginErrorCameraView;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected a list setting'**
+  String get pluginErrorListValue;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many or too few list items'**
+  String get pluginErrorListCount;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in every required field'**
+  String get pluginErrorRequiredField;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'List settings must be at most 32 KB'**
+  String get pluginErrorListSize;
 
   /// Translate the visible message. Keep placeholders and any technical names unchanged.
   ///

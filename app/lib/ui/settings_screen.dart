@@ -3306,6 +3306,7 @@ class _CategoryContentState extends State<_CategoryContent> {
       return [
         PluginDetailPanel(
           plugins: container.plugins,
+          container: container,
           id: subpage,
           onDisabled: () => closeSettingsSubpage(context),
         ),

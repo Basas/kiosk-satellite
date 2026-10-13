@@ -8,10 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app_container.dart';
 import '../managers/plugins/plugin_manager.dart';
 import '../core/command_registry.dart';
+import 'dashboard_view_picker.dart';
 import 'entity_picker.dart';
 import 'kit.dart';
+import 'plugin_list_setting.dart';
 import 'plugin_chart.dart';
 import 'plugin_readings.dart';
 import 'plugin_shizuku.dart';
@@ -628,10 +631,15 @@ class PluginDetailPanel extends StatefulWidget {
     required this.plugins,
     required this.id,
     this.onDisabled,
+    this.container,
   });
   final PluginManager plugins;
   final String id;
   final VoidCallback? onDisabled;
+
+  /// For the dashboard and camera view pickers. Without it they stay
+  /// read-only.
+  final AppContainer? container;
   @override
   State<PluginDetailPanel> createState() => _PluginDetailPanelState();
 }
@@ -731,6 +739,7 @@ class _PluginDetailPanelState extends State<PluginDetailPanel> {
             key: ValueKey(widget.id),
             plugin: plugin,
             commands: widget.plugins.commands,
+            container: widget.container,
             plugins: widget.plugins,
             busy: _busy,
             run: _run,
@@ -749,9 +758,11 @@ class _PluginSettings extends StatefulWidget {
     required this.plugins,
     required this.busy,
     required this.run,
+    this.container,
   });
   final Map<String, Object?> plugin;
   final CommandRegistry commands;
+  final AppContainer? container;
   final PluginManager plugins;
   final bool busy;
   final Future<void> Function(String, Map<String, Object?>) run;
@@ -877,7 +888,78 @@ class _PluginSettingsState extends State<_PluginSettings> {
     }
   }
 
-  Widget _settingRow(Map raw) {
+  PluginFieldServices get _services => PluginFieldServices(
+    commands: widget.commands,
+    container: widget.container,
+  );
+
+  Widget _settingRow(Map raw, {bool alone = false}) {
+    final key = '${raw['key']}';
+    final value = _values[key] ?? raw['default'];
+    switch (raw['type']) {
+      case 'list':
+        return PluginListSetting(
+          setting: raw,
+          rows: (value as List? ?? const []).whereType<Map>().toList(),
+          services: _services,
+          enabled: !_busy,
+          showTitle: !alone,
+          onChanged: (rows) => _saveValue(key, rows),
+        );
+      case 'icon':
+        return SettingsRow(
+          title: Text('${raw['title']}'),
+          subtitle: raw['description'] == null
+              ? null
+              : Text('${raw['description']}'),
+          stack: true,
+          trailing: SizedBox(
+            width: tightPane(context) ? null : 300,
+            child: PluginIconBox(
+              value: '$value',
+              onTap: _busy
+                  ? null
+                  : () async {
+                      final picked = await pickPluginIcon(
+                        context,
+                        title: '${raw['title']}',
+                        value: '$value',
+                      );
+                      if (picked != null && mounted && !_busy) {
+                        await _saveValue(key, picked);
+                      }
+                    },
+            ),
+          ),
+        );
+      case 'dashboard' when widget.container != null:
+        return DashboardViewRow(
+          container: widget.container!,
+          title: '${raw['title']}',
+          description: raw['description']?.toString(),
+          value: '$value',
+          onPick: (path) {
+            if (mounted && !_busy) _saveValue(key, path);
+          },
+        );
+      case 'cameraView':
+        return PickRow(
+          title: '${raw['title']}',
+          description: raw['description']?.toString(),
+          spec: pluginCameraViewSpec(context, _services),
+          value: '$value',
+          placeholder: pluginText(context, 'Choose a camera view'),
+          missingText: pluginText(
+            context,
+            'This camera view is gone. Choose another.',
+          ),
+          allowClear: true,
+          enabled: !_busy && widget.container != null,
+          onPick: (id) async {
+            if (mounted && !_busy) await _saveValue(key, id ?? '');
+          },
+        );
+    }
     if (raw['type'] == 'entity') {
       final value = '${_values[raw['key']] ?? raw['default']}';
       // A plugin may narrow the picker to one domain or a few.
@@ -902,7 +984,9 @@ class _PluginSettingsState extends State<_PluginSettings> {
         },
       );
     }
-    if (raw['type'] == 'string' || raw['type'] == 'secret') {
+    if (raw['type'] == 'string' ||
+        raw['type'] == 'secret' ||
+        raw['type'] == 'dashboard') {
       final value = '${_values[raw['key']] ?? raw['default']}';
       return SettingsRow(
         title: Text('${raw['title']}'),
@@ -1107,7 +1191,13 @@ class _PluginSettingsState extends State<_PluginSettings> {
   @override
   Widget build(BuildContext context) {
     final plugin = widget.plugin;
-    final settings = plugin['settings'] as List? ?? const [];
+    final declared = plugin['settings'] as List? ?? const [];
+    // A setting whose condition does not hold stays out of the page. Its
+    // saved value is kept.
+    final settings = [
+      for (final raw in declared.whereType<Map>())
+        if (pluginFieldVisible(raw, _values, declared)) raw,
+    ];
     final commands = plugin['commands'] as List? ?? const [];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1123,16 +1213,23 @@ class _PluginSettingsState extends State<_PluginSettings> {
                   ? pluginText(context, 'Settings')
                   : group,
             ),
-            SettingsCard(
-              children: [
-                for (final raw in settings.where(
-                  (raw) => '${(raw as Map)['group'] ?? 'Settings'}' == group,
-                ))
-                  SearchLandingTarget(
-                    id: 'plugin:${plugin['id']}:setting:${(raw as Map)['key']}',
-                    child: _settingRow(raw),
-                  ),
-              ],
+            Builder(
+              builder: (context) {
+                final rows = [
+                  for (final raw in settings)
+                    if ('${raw['group'] ?? 'Settings'}' == group) raw,
+                ];
+                if (rows.isEmpty) return const SizedBox.shrink();
+                return SettingsCard(
+                  children: [
+                    for (final raw in rows)
+                      SearchLandingTarget(
+                        id: 'plugin:${plugin['id']}:setting:${raw['key']}',
+                        child: _settingRow(raw, alone: rows.length == 1),
+                      ),
+                  ],
+                );
+              },
             ),
             _PluginGroupOutput(
               plugins: widget.plugins,

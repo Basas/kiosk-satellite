@@ -23,5 +23,14 @@
   "pluginCouldNotOpenThisLink": "无法打开此链接。",
   "pluginEnableName": "启用 {name}",
   "pluginShowPassword": "显示密码",
-  "pluginHidePassword": "隐藏密码"
+  "pluginHidePassword": "隐藏密码",
+  "pluginUntitled": "未命名",
+  "pluginSearchIcons": "搜索图标",
+  "pluginChooseIcon": "选择图标",
+  "pluginSearchCameraViews": "搜索摄像头画面",
+  "pluginChooseCameraView": "选择摄像头画面",
+  "pluginCameraViewGone": "此摄像头画面已不存在，请另选一个。",
+  "pluginDragToReorder": "拖动排序",
+  "pluginDone": "完成",
+  "pluginRequired": "必填"
 }

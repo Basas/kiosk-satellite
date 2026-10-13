@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import '../../core/command_registry.dart';
 import '../../core/manager.dart';
 import '../../core/events.dart';
+import '../../ui/mdi_icon.dart';
 import 'plugin_repository.dart';
 import 'plugin_host_api.dart';
 
@@ -529,6 +530,29 @@ class PluginManager extends Manager {
       'Save validated plugin settings.',
       (p) => update('configure', p),
       const {'id': 'Plugin ID', 'values': 'Complete settings object'},
+    );
+    register(
+      'searchIcons',
+      'Find Material Design Icons by name, with their SVG paths, for icon settings.',
+      (p) async {
+        final names = p['names'];
+        final picked = names is List
+            ? [for (final name in names.take(100)) '$name']
+            : await MdiIcons.search(
+                '${p['query'] ?? ''}',
+                limit: ((p['limit'] as num?)?.toInt() ?? 60).clamp(1, 200),
+              );
+        final paths = await MdiIcons.paths(picked);
+        return [
+          for (final name in picked.map(MdiIcons.normalize))
+            if (paths[name] != null) {'name': 'mdi:$name', 'path': paths[name]},
+        ];
+      },
+      const {
+        'query': 'Words the icon name contains. Empty lists the first icons.',
+        'names': 'Exact icon names to resolve instead of a search, at most 100',
+        'limit': 'Most results to return, 60 unless set, at most 200',
+      },
     );
     register(
       'runPluginCommand',

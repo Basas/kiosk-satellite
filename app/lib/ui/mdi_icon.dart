@@ -65,11 +65,135 @@ abstract final class MdiIcons {
     });
   }
 
+  /// Every icon name, renamed ones left out, sorted, for the icon picker.
+  /// Only the names stay for the session: a few hundred kilobytes less
+  /// than the paths.
+  static Future<List<String>> names() =>
+      _names ??= _readAll().then((all) => all.keys.toList()..sort());
+  static Future<List<String>>? _names;
+
+  /// The paths of several icons at once, one shard read per letter rather
+  /// than per icon. Names without an icon are left out.
+  static Future<Map<String, String>> paths(Iterable<String> names) async {
+    final byLetter = <String, List<String>>{};
+    final found = <String, String>{};
+    for (final name in names.map(normalize).toSet()) {
+      final held = _all?[name] ?? _resolved[name];
+      if (held != null) {
+        found[name] = held;
+      } else if (looksLikeIcon(name) && !_resolved.containsKey(name)) {
+        byLetter.putIfAbsent(_letter(name), () => []).add(name);
+      }
+    }
+    for (final entry in byLetter.entries) {
+      if (entry.value.length == 1) {
+        final path = await MdiIcons.path(entry.value.single);
+        if (path != null) found[entry.value.single] = path;
+        continue;
+      }
+      final shard = await _shard(entry.key);
+      for (final name in entry.value) {
+        final value = shard?[name] as String?;
+        // A renamed icon resolves on its own, under its new name's letter.
+        final path = value != null && value.startsWith('@')
+            ? await MdiIcons.path(name)
+            : _remember(name, value);
+        if (path != null) found[name] = path;
+      }
+    }
+    return found;
+  }
+
+  /// Icon names containing every word of [query], best matches first: the
+  /// name itself, then names starting with it.
+  static Future<List<String>> search(String query, {int limit = 60}) async {
+    final words = normalize(query).split(RegExp(r'[\s-]+'))
+      ..removeWhere((w) => w.isEmpty);
+    final all = await names();
+    if (words.isEmpty) return all.take(limit).toList();
+    final joined = words.join('-');
+    int rank(String name) => name == joined
+        ? 0
+        : name.startsWith(joined)
+        ? 1
+        : 2;
+    final matches = [
+      for (final name in all)
+        if (words.every(name.contains)) name,
+    ]..sort((a, b) => rank(a).compareTo(rank(b)));
+    return matches.take(limit).toList();
+  }
+
+  /// Keeps every path in memory while an icon picker is open, so scrolling
+  /// through thousands of icons never reads a shard per row. [release]
+  /// drops them again.
+  static Future<void> hold() async {
+    _holds++;
+    final all = await _readAll();
+    if (_holds > 0) _all = all;
+  }
+
+  static void release() {
+    if (_holds > 0) _holds--;
+    if (_holds == 0) _all = null;
+  }
+
+  static int _holds = 0;
+  static Map<String, String>? _all;
+
+  /// Forgets everything read, for tests that swap [readShard].
+  @visibleForTesting
+  static void forget() {
+    _names = null;
+    _all = null;
+    _reading = null;
+    _holds = 0;
+    _resolved.clear();
+    _pending.clear();
+  }
+
+  /// One scan at a time: the names and a hold opened together share it.
+  static Future<Map<String, String>> _readAll() {
+    if (_all != null) return Future.value(_all!);
+    return _reading ??= _scan().whenComplete(() {
+      _reading = null;
+    });
+  }
+
+  static Future<Map<String, String>>? _reading;
+
+  static Future<Map<String, String>> _scan() async {
+    final all = <String, String>{};
+    for (final letter in [
+      for (var c = 0x61; c <= 0x7a; c++) String.fromCharCode(c),
+      '_',
+    ]) {
+      final shard = await _shard(letter);
+      for (final entry in (shard ?? const {}).entries) {
+        final value = entry.value;
+        if (value is String && !value.startsWith('@')) all[entry.key] = value;
+      }
+    }
+    return all;
+  }
+
+  static String _letter(String key) =>
+      key.codeUnitAt(0) >= 0x61 && key.codeUnitAt(0) <= 0x7a ? key[0] : '_';
+
+  static Future<Map<String, dynamic>?> _shard(String letter) async {
+    try {
+      return jsonDecode(await readShard('assets/mdi/$letter.json'))
+          as Map<String, dynamic>;
+    } catch (_) {
+      return null;
+    }
+  }
+
   static Future<String?> _load(String key, {bool followAlias = true}) async {
     if (!looksLikeIcon(key)) return _remember(key, null);
-    final letter = key.codeUnitAt(0) >= 0x61 && key.codeUnitAt(0) <= 0x7a
-        ? key[0]
-        : '_';
+    final held = _all?[key];
+    if (held != null) return held;
+    final letter = _letter(key);
     Map<String, dynamic> shard;
     try {
       // The read is uncached because the shard is up to half a megabyte

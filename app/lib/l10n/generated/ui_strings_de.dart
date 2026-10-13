@@ -2885,6 +2885,34 @@ class UiStringsDe extends UiStrings {
   String get pluginHidePassword => 'Passwort ausblenden';
 
   @override
+  String get pluginUntitled => 'Ohne Namen';
+
+  @override
+  String get pluginSearchIcons => 'Symbole suchen';
+
+  @override
+  String get pluginChooseIcon => 'Symbol auswählen';
+
+  @override
+  String get pluginSearchCameraViews => 'Kameraansichten suchen';
+
+  @override
+  String get pluginChooseCameraView => 'Kameraansicht auswählen';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Diese Kameraansicht gibt es nicht mehr. Wähle eine andere.';
+
+  @override
+  String get pluginDragToReorder => 'Zum Neuordnen ziehen';
+
+  @override
+  String get pluginDone => 'Fertig';
+
+  @override
+  String get pluginRequired => 'Erforderlich';
+
+  @override
   String get pluginAddPlugin => 'Plugin hinzufügen';
 
   @override
@@ -3409,6 +3437,37 @@ class UiStringsDe extends UiStrings {
   @override
   String get pluginErrorTriggerId =>
       'Die Auslöser-ID ist ungültig oder bereits vorhanden';
+
+  @override
+  String get pluginErrorListSetting => 'Die Listeneinstellung ist ungültig';
+
+  @override
+  String get pluginErrorSettingCondition =>
+      'Die Bedingung der Einstellung ist ungültig';
+
+  @override
+  String get pluginErrorIcon => 'Es wurde ein MDI-Symbolname erwartet';
+
+  @override
+  String get pluginErrorDashboard => 'Es wurde ein Dashboard-Pfad erwartet';
+
+  @override
+  String get pluginErrorCameraView =>
+      'Es wurde eine Kameraansichts-ID erwartet';
+
+  @override
+  String get pluginErrorListValue => 'Es wurde eine Listeneinstellung erwartet';
+
+  @override
+  String get pluginErrorListCount =>
+      'Die Liste hat zu viele oder zu wenige Einträge';
+
+  @override
+  String get pluginErrorRequiredField => 'Fülle alle Pflichtfelder aus';
+
+  @override
+  String get pluginErrorListSize =>
+      'Listeneinstellungen dürfen höchstens 32 KB groß sein';
 
   @override
   String get remoteDisableTitle => 'Fernverwaltung deaktivieren?';

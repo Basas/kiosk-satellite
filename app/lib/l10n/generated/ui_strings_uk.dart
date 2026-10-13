@@ -2852,6 +2852,34 @@ class UiStringsUk extends UiStrings {
   String get pluginHidePassword => 'Сховати пароль';
 
   @override
+  String get pluginUntitled => 'Без назви';
+
+  @override
+  String get pluginSearchIcons => 'Пошук піктограм';
+
+  @override
+  String get pluginChooseIcon => 'Виберіть піктограму';
+
+  @override
+  String get pluginSearchCameraViews => 'Пошук виглядів камер';
+
+  @override
+  String get pluginChooseCameraView => 'Виберіть вигляд камер';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Цього вигляду камер більше немає. Виберіть інший.';
+
+  @override
+  String get pluginDragToReorder => 'Перетягніть для зміни порядку';
+
+  @override
+  String get pluginDone => 'Готово';
+
+  @override
+  String get pluginRequired => 'Обов\'язково';
+
+  @override
   String get pluginAddPlugin => 'Додати плагін';
 
   @override
@@ -3358,6 +3386,34 @@ class UiStringsUk extends UiStrings {
   @override
   String get pluginErrorTriggerId =>
       'Недійсний або дубльований ідентифікатор тригера';
+
+  @override
+  String get pluginErrorListSetting => 'Недійсне налаштування списку';
+
+  @override
+  String get pluginErrorSettingCondition => 'Недійсна умова налаштування';
+
+  @override
+  String get pluginErrorIcon => 'Очікується назва піктограми MDI';
+
+  @override
+  String get pluginErrorDashboard => 'Очікується шлях до панелі керування';
+
+  @override
+  String get pluginErrorCameraView => 'Очікується ідентифікатор вигляду камер';
+
+  @override
+  String get pluginErrorListValue => 'Очікується налаштування списку';
+
+  @override
+  String get pluginErrorListCount => 'У списку забагато або замало елементів';
+
+  @override
+  String get pluginErrorRequiredField => 'Заповніть усі обов\'язкові поля';
+
+  @override
+  String get pluginErrorListSize =>
+      'Налаштування списку можуть займати не більше 32 КБ';
 
   @override
   String get remoteDisableTitle => 'Вимкнути віддалене керування?';

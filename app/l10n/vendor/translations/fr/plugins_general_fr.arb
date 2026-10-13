@@ -23,5 +23,14 @@
   "pluginCouldNotOpenThisLink": "Impossible d'ouvrir ce lien.",
   "pluginEnableName": "Activer {name}",
   "pluginShowPassword": "Afficher le mot de passe",
-  "pluginHidePassword": "Masquer le mot de passe"
+  "pluginHidePassword": "Masquer le mot de passe",
+  "pluginUntitled": "Sans nom",
+  "pluginSearchIcons": "Rechercher des icônes",
+  "pluginChooseIcon": "Choisir une icône",
+  "pluginSearchCameraViews": "Rechercher des vues caméra",
+  "pluginChooseCameraView": "Choisir une vue caméra",
+  "pluginCameraViewGone": "Cette vue caméra n'existe plus. Choisissez-en une autre.",
+  "pluginDragToReorder": "Glisser pour réorganiser",
+  "pluginDone": "Terminé",
+  "pluginRequired": "Obligatoire"
 }

@@ -7,6 +7,8 @@ import { cmd } from './core.js';
 import { updatePluginCharts } from './plugin-charts.js';
 import { updatePluginReadings } from './plugin-readings.js';
 import { currentPath, showTab, subpageEntry } from './tabs.js';
+import { dashboardField } from './dashboard_picker.js';
+import { cameraViewSpec, fieldVisible, iconField, listSetting } from './plugin_lists.js';
 import { hintRow, messageBox, modalShell, showToast, swatch } from './widgets.js';
 import { marked } from './vendor-marked.js';
 import DOMPurify from './vendor-purify.js';
@@ -388,9 +390,20 @@ function render(root, state) {
         await refresh();
       }
     }, trigger);
-    for (const setting of plugin.settings || []) {
+    // A setting whose condition does not hold stays off the page. Its
+    // saved value is kept.
+    const shown = (plugin.settings || []).filter((setting) => fieldVisible(setting, values, plugin.settings));
+    for (const setting of shown) {
       const group = setting.group || 'Settings';
       const panel = ensureGroup(group);
+      if (setting.type === 'list') {
+        const alone = shown.filter((entry) => (entry.group || 'Settings') === group).length === 1;
+        const block = listSetting({ setting, rows: values[setting.key] ?? setting.default ?? [], showTitle: !alone,
+          onChange: (rows) => saveSetting(setting.key, rows, block) });
+        block.dataset.searchId = `plugin:${plugin.id}:setting:${setting.key}`;
+        panel.append(block);
+        continue;
+      }
       const settingRow = element('div', undefined, 'row');
       settingRow.dataset.searchId = `plugin:${plugin.id}:setting:${setting.key}`;
       settingRow.append(info(setting.title, setting.description));
@@ -425,6 +438,29 @@ function render(root, state) {
             field.setValue(current);
           },
         });
+        settingRow.replaceChildren(info(setting.title, setting.description || ''), field.el);
+        settingRow.classList.add('dp-field-row');
+      } else if (setting.type === 'icon' || setting.type === 'dashboard' || setting.type === 'cameraView') {
+        const current = values[setting.key] ?? setting.default ?? '';
+        let field;
+        if (setting.type === 'icon') {
+          field = iconField({ value: current, title: setting.title, onPick: (picked) => saveSetting(setting.key, picked, field.el) });
+        } else if (setting.type === 'dashboard') {
+          field = dashboardField({ value: current, title: setting.title, onPick: (path) => saveSetting(setting.key, path, field.el) });
+        } else {
+          const spec = cameraViewSpec();
+          let picked = current;
+          field = pickField({
+            spec, value: current, placeholder: pluginText('Choose a camera view'),
+            onClick: async () => {
+              const out = await pickItem({ title: setting.title, spec, selected: picked || null, allowClear: true });
+              if (!out) return;
+              picked = out.id ?? '';
+              await saveSetting(setting.key, picked, field.el);
+              field.setValue(picked);
+            },
+          });
+        }
         settingRow.replaceChildren(info(setting.title, setting.description || ''), field.el);
         settingRow.classList.add('dp-field-row');
       } else if (setting.type === 'select') {

@@ -4,6 +4,11 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ## Unreleased
 
+### Added
+- **List settings for plugins.** Plugins can now declare a `list` setting, a set of rows you add, edit, reorder and delete, such as the items of a navigation bar. The rows show right on the plugin's page with their icon, name and a summary. Tap one to edit it in a modal, drag its handle to move it or tap the add row for a new one. Each row is a small form, and a row can hold a list of its own, like a menu's entries, which opens inside the same modal. Save stays off until every required field is filled in. Remote Admin works the same way and also moves rows with arrow buttons. The plugin receives the list as rows in the order you set. See [Creating plugins](https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world/blob/main/docs/creating-plugins.md#pickers-lists-and-conditions).
+- **Icon, dashboard and camera view pickers for plugin settings.** Plugins can now declare `icon`, `dashboard` and `cameraView` settings, on their own or inside a list. Each opens the app's own picker: every Material Design Icon searchable by name, the dashboard and view picker and the kiosk's camera views by name. You no longer type icon names, view paths or 32-character camera view IDs.
+- **Plugin settings that show only when they apply.** A plugin setting can now declare `visibleWhen`, so it shows only while another setting holds a certain value, such as a delay that only matters while its feature is on. Hidden settings keep their saved values.
+
 ### Fixed
 - **Custom Pages guide.** A leftover fragment at the end of the Dashboard features bullet is gone.
 

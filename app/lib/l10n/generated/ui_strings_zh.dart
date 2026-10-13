@@ -2773,6 +2773,33 @@ class UiStringsZh extends UiStrings {
   String get pluginHidePassword => '隐藏密码';
 
   @override
+  String get pluginUntitled => '未命名';
+
+  @override
+  String get pluginSearchIcons => '搜索图标';
+
+  @override
+  String get pluginChooseIcon => '选择图标';
+
+  @override
+  String get pluginSearchCameraViews => '搜索摄像头画面';
+
+  @override
+  String get pluginChooseCameraView => '选择摄像头画面';
+
+  @override
+  String get pluginCameraViewGone => '此摄像头画面已不存在，请另选一个。';
+
+  @override
+  String get pluginDragToReorder => '拖动排序';
+
+  @override
+  String get pluginDone => '完成';
+
+  @override
+  String get pluginRequired => '必填';
+
+  @override
   String get pluginAddPlugin => '添加插件';
 
   @override
@@ -3226,6 +3253,33 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get pluginErrorTriggerId => '触发器 ID 无效或重复';
+
+  @override
+  String get pluginErrorListSetting => '列表设置无效';
+
+  @override
+  String get pluginErrorSettingCondition => '设置的显示条件无效';
+
+  @override
+  String get pluginErrorIcon => '需要 MDI 图标名称';
+
+  @override
+  String get pluginErrorDashboard => '需要仪表盘路径';
+
+  @override
+  String get pluginErrorCameraView => '需要摄像头画面 ID';
+
+  @override
+  String get pluginErrorListValue => '此设置的值必须为列表';
+
+  @override
+  String get pluginErrorListCount => '列表的条目过多或过少';
+
+  @override
+  String get pluginErrorRequiredField => '请填写所有必填项';
+
+  @override
+  String get pluginErrorListSize => '列表设置不能超过 32 KB';
 
   @override
   String get remoteDisableTitle => '要关闭远程管理吗？';
@@ -15527,6 +15581,33 @@ class UiStringsZhCn extends UiStringsZh {
   String get pluginHidePassword => '隐藏密码';
 
   @override
+  String get pluginUntitled => '未命名';
+
+  @override
+  String get pluginSearchIcons => '搜索图标';
+
+  @override
+  String get pluginChooseIcon => '选择图标';
+
+  @override
+  String get pluginSearchCameraViews => '搜索摄像头画面';
+
+  @override
+  String get pluginChooseCameraView => '选择摄像头画面';
+
+  @override
+  String get pluginCameraViewGone => '此摄像头画面已不存在，请另选一个。';
+
+  @override
+  String get pluginDragToReorder => '拖动排序';
+
+  @override
+  String get pluginDone => '完成';
+
+  @override
+  String get pluginRequired => '必填';
+
+  @override
   String get pluginAddPlugin => '添加插件';
 
   @override
@@ -15980,6 +16061,33 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginErrorTriggerId => '触发器 ID 无效或重复';
+
+  @override
+  String get pluginErrorListSetting => '列表设置无效';
+
+  @override
+  String get pluginErrorSettingCondition => '设置的显示条件无效';
+
+  @override
+  String get pluginErrorIcon => '需要 MDI 图标名称';
+
+  @override
+  String get pluginErrorDashboard => '需要仪表盘路径';
+
+  @override
+  String get pluginErrorCameraView => '需要摄像头画面 ID';
+
+  @override
+  String get pluginErrorListValue => '此设置的值必须为列表';
+
+  @override
+  String get pluginErrorListCount => '列表的条目过多或过少';
+
+  @override
+  String get pluginErrorRequiredField => '请填写所有必填项';
+
+  @override
+  String get pluginErrorListSize => '列表设置不能超过 32 KB';
 
   @override
   String get remoteDisableTitle => '要关闭远程管理吗？';

@@ -19743,5 +19743,95 @@
     "source": "229e0034562ce4c6445229744ed8ea51d92f0752fc8e4dceed283f1f47493f17",
     "translation": "ec35463f257882a1a26ecdcdd367495e4aee11ca022e9709eaf3889ee575d9a7",
     "author": "Xavier Larrea"
+  },
+  "pluginSearchIcons": {
+    "source": "7b55a5e410cfdcfdd5dac90f34d77d52869d37cfff00f87c79a84b621b409f18",
+    "translation": "1bfdae6733e2ffcd6c51c242b210a5df0333786a7f6ac4d1e59eef4d1f64e722",
+    "author": "Xavier Larrea"
+  },
+  "pluginDragToReorder": {
+    "source": "10c80a05a70441661700321b49665b251de4337cee70fef7f4df14e01d763f1c",
+    "translation": "4b3cba0add8bc6c8f249c89d58c98fe733d1c71a515d1f0c6a305106dc629089",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorListValue": {
+    "source": "0b53710e7c26c0f39fcf78ca294669d451ee39041f229fcc9f5f5f5a30953942",
+    "translation": "738bfbb323f6e6b22cc05420845b11ee972831ff9b8af4da13ea8aaf0086d1bf",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorListCount": {
+    "source": "cc38416f7a7a19f6232aee5318139f0a7dda3c5b87fadd4c33e7850878938317",
+    "translation": "81359b9dbd988282d4fd4f70565087154a30ad94c863f6ec682fd9c770f00f52",
+    "author": "Xavier Larrea"
+  },
+  "pluginChooseIcon": {
+    "source": "44e2b05c90dc5c1dcc79df4401e54f7bac030fb5f1d794c47a68ebe6266f3cc5",
+    "translation": "ca0eb4594934f8bab33d1eebdd940f385117c031d040cdba399d2d2c2d59c17f",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorRequiredField": {
+    "source": "2c0a16b0ce36fc4e6332fa6fd38c5d9addff3ba43e49b8bdc5aed3064025a40d",
+    "translation": "97a8c9792cb51b918c66375f33edb4b8ffa55ba6c3339abe17b32b3af7fc07a7",
+    "author": "Xavier Larrea"
+  },
+  "pluginDone": {
+    "source": "d6965e15fdca9d777a37a18a5767827df507d021f3228c376044a771daeed2d7",
+    "translation": "13f79180a02ea4af53829441728cf674a758c1f30a095e4f10ddb33d40273c13",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorListSize": {
+    "source": "582b8aead5f2a782d95e12a859c67ed18ec0af5fcf3ae47b16ec6a3e5d77ebe5",
+    "translation": "1a0f9bc57012254171c48a750885a2e300f87d1d98060e877add871c6cce7814",
+    "author": "Xavier Larrea"
+  },
+  "pluginUntitled": {
+    "source": "2df2d5643f9fc2f38480651293334cc6109cc16da56fc1c7f83a655b3ce6ce00",
+    "translation": "c4dc040a07c5c3042018933380a57f92804d3a995cb239153433eb631772d00b",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorListSetting": {
+    "source": "ea73cb849f2e7155d4638d77f1fd1908e69fe17a2fa960df41ac7ee8cf3ccc2e",
+    "translation": "b9e43788badec1f49848c49b1735fae8bd12b220399d70b09629ae27c4ea6c87",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorSettingCondition": {
+    "source": "1b87f6e35b2c5bd32652a7a7ba12681f9434aa896afb5f290fd2796fbb9963a8",
+    "translation": "26983476af67f3f3b1b1d43bf71134aa50acbd1ccffd7cb535ff416a888512ac",
+    "author": "Xavier Larrea"
+  },
+  "pluginRequired": {
+    "source": "267fdda93f636503a3acbb855e9670d40f079d5c0e24930f202b1bc2ae2c112c",
+    "translation": "0304bdb3a0d93208c4cde9a2ff937ca789f2a9f4c03e3556436129acb45a792a",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorIcon": {
+    "source": "cdc39275b6c2262968ea3f18ffc0064763fb5eddfdd0aad7ce388dea7739effe",
+    "translation": "e3a18ac1762577f9961669261d06a45bc784850c26af033789a37f34a89af56a",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorCameraView": {
+    "source": "da6736c5b51ca7129f4a850fb09ec18a106349182fbdb8d7ebd88a070fba1cf7",
+    "translation": "4af93d2d317a6825de55226ebef5404030498530924950ea23c6f42e0bfd8701",
+    "author": "Xavier Larrea"
+  },
+  "pluginSearchCameraViews": {
+    "source": "80cbd1d985cbb6fde077ecbe07936d1a7e63c5304d966987e8d12a624399b6fa",
+    "translation": "3168d42134dbb8e239ae30b479c24ff3bb760b229d216d296e39e655b8b5533c",
+    "author": "Xavier Larrea"
+  },
+  "pluginErrorDashboard": {
+    "source": "efa2286a8bafc36a1caa378c950a8fb15f2502a61c2af9da4ed9d39e0edd3c52",
+    "translation": "d8307aa2e2acc01fca0c2bf93b23da827d21ddd5d6d09c64fff015d26deca123",
+    "author": "Xavier Larrea"
+  },
+  "pluginChooseCameraView": {
+    "source": "ca6341dea96f614ecaa63ce73f666ca84141412c3cd64990802829709a37b5c4",
+    "translation": "e72329a82baa4bde91fe5be7cfad4dadf5870e2a278db1c2ff5f71f51a1db474",
+    "author": "Xavier Larrea"
+  },
+  "pluginCameraViewGone": {
+    "source": "04b6165d390943e0adc93c45c8479f437ab5633996381c84949f20ac0113547b",
+    "translation": "60b2c65fe97e216e857c733d21e68a592e1a002d2993fda635b17e01012cc7da",
+    "author": "Xavier Larrea"
   }
 }

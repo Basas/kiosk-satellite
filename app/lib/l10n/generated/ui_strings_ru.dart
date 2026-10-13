@@ -2850,6 +2850,34 @@ class UiStringsRu extends UiStrings {
   String get pluginHidePassword => 'Скрыть пароль';
 
   @override
+  String get pluginUntitled => 'Без названия';
+
+  @override
+  String get pluginSearchIcons => 'Поиск значков';
+
+  @override
+  String get pluginChooseIcon => 'Выберите значок';
+
+  @override
+  String get pluginSearchCameraViews => 'Поиск видов камер';
+
+  @override
+  String get pluginChooseCameraView => 'Выберите вид камер';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Этого вида камер больше нет. Выберите другой.';
+
+  @override
+  String get pluginDragToReorder => 'Перетащите для изменения порядка';
+
+  @override
+  String get pluginDone => 'Готово';
+
+  @override
+  String get pluginRequired => 'Обязательно';
+
+  @override
   String get pluginAddPlugin => 'Добавить плагин';
 
   @override
@@ -3350,6 +3378,35 @@ class UiStringsRu extends UiStrings {
   @override
   String get pluginErrorTriggerId =>
       'Недопустимый или повторяющийся ID триггера';
+
+  @override
+  String get pluginErrorListSetting => 'Недопустимая настройка списка';
+
+  @override
+  String get pluginErrorSettingCondition => 'Недопустимое условие настройки';
+
+  @override
+  String get pluginErrorIcon => 'Ожидалось имя значка MDI';
+
+  @override
+  String get pluginErrorDashboard => 'Ожидался путь к панели';
+
+  @override
+  String get pluginErrorCameraView => 'Ожидался ID вида камер';
+
+  @override
+  String get pluginErrorListValue => 'Ожидалась настройка списка';
+
+  @override
+  String get pluginErrorListCount =>
+      'В списке слишком много или слишком мало элементов';
+
+  @override
+  String get pluginErrorRequiredField => 'Заполните все обязательные поля';
+
+  @override
+  String get pluginErrorListSize =>
+      'Настройки списка могут занимать не более 32 КБ';
 
   @override
   String get remoteDisableTitle => 'Выключить удалённое управление?';

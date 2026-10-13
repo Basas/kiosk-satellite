@@ -2868,6 +2868,34 @@ class UiStringsFr extends UiStrings {
   String get pluginHidePassword => 'Masquer le mot de passe';
 
   @override
+  String get pluginUntitled => 'Sans nom';
+
+  @override
+  String get pluginSearchIcons => 'Rechercher des icônes';
+
+  @override
+  String get pluginChooseIcon => 'Choisir une icône';
+
+  @override
+  String get pluginSearchCameraViews => 'Rechercher des vues caméra';
+
+  @override
+  String get pluginChooseCameraView => 'Choisir une vue caméra';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Cette vue caméra n\'existe plus. Choisissez-en une autre.';
+
+  @override
+  String get pluginDragToReorder => 'Glisser pour réorganiser';
+
+  @override
+  String get pluginDone => 'Terminé';
+
+  @override
+  String get pluginRequired => 'Obligatoire';
+
+  @override
   String get pluginAddPlugin => 'Ajouter un plugin';
 
   @override
@@ -3383,6 +3411,38 @@ class UiStringsFr extends UiStrings {
   @override
   String get pluginErrorTriggerId =>
       'Identifiant de déclencheur invalide ou en double';
+
+  @override
+  String get pluginErrorListSetting => 'Paramètre de liste invalide';
+
+  @override
+  String get pluginErrorSettingCondition => 'Condition de paramètre invalide';
+
+  @override
+  String get pluginErrorIcon => 'Un nom d\'icône MDI était attendu';
+
+  @override
+  String get pluginErrorDashboard =>
+      'Un chemin de tableau de bord était attendu';
+
+  @override
+  String get pluginErrorCameraView =>
+      'Un identifiant de vue caméra était attendu';
+
+  @override
+  String get pluginErrorListValue => 'Un paramètre de liste était attendu';
+
+  @override
+  String get pluginErrorListCount =>
+      'La liste contient trop ou trop peu d\'éléments';
+
+  @override
+  String get pluginErrorRequiredField =>
+      'Remplissez tous les champs obligatoires';
+
+  @override
+  String get pluginErrorListSize =>
+      'Les paramètres de liste ne doivent pas dépasser 32 Ko';
 
   @override
   String get remoteDisableTitle => 'Désactiver la gestion à distance ?';

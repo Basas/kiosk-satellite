@@ -1844,6 +1844,172 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+  testWidgets('list settings edit rows in a modal and save the whole list', (
+    tester,
+  ) async {
+    const entries = {
+      'key': 'entries',
+      'title': 'Entries',
+      'type': 'list',
+      'addTitle': 'Add entry',
+      'minItems': 1,
+      'visibleWhen': {'key': 'opens', 'equals': 'Menu'},
+      'fields': [
+        {'key': 'label', 'title': 'Label', 'type': 'string', 'required': true},
+        {'key': 'url', 'title': 'Address', 'type': 'string'},
+      ],
+    };
+    installed[0]['settings'] = [
+      {
+        'key': 'collapse',
+        'title': 'Collapse',
+        'type': 'select',
+        'options': ['Off', 'On'],
+        'default': 'Off',
+        'group': 'Behavior',
+      },
+      {
+        'key': 'after',
+        'title': 'Collapse after',
+        'type': 'number',
+        'min': 0,
+        'max': 60,
+        'default': 0,
+        'group': 'Behavior',
+        'visibleWhen': {'key': 'collapse', 'notEquals': 'Off'},
+      },
+      {
+        'key': 'items',
+        'title': 'Items',
+        'type': 'list',
+        'group': 'Items',
+        'addTitle': 'Add item',
+        'row': {
+          'title': 'label',
+          'subtitle': ['url', 'opens'],
+        },
+        'default': [],
+        'fields': [
+          {
+            'key': 'label',
+            'title': 'Label',
+            'type': 'string',
+            'required': true,
+          },
+          {
+            'key': 'opens',
+            'title': 'Opens',
+            'type': 'select',
+            'options': ['Web address', 'Menu'],
+          },
+          {
+            'key': 'url',
+            'title': 'Address',
+            'type': 'string',
+            'required': true,
+            'visibleWhen': {'key': 'opens', 'equals': 'Web address'},
+          },
+          entries,
+        ],
+      },
+    ];
+    installed[0]['values'] = {
+      'collapse': 'Off',
+      'after': 0,
+      'items': [
+        {
+          'label': 'Home',
+          'opens': 'Web address',
+          'url': 'https://example.com',
+          'entries': [],
+        },
+      ],
+    };
+    await plugins.refresh();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: PluginDetailPanel(plugins: plugins, id: 'hello-world'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    List<Object?> savedItems() =>
+        ((calls.lastWhere((c) => c.method == 'configure').arguments
+                    as Map)['values']
+                as Map)['items']
+            as List;
+    // A setting whose condition fails stays off the page, and the list,
+    // alone in its group, has no title row of its own.
+    expect(find.text('Collapse after'), findsNothing);
+    expect(find.text('Items'), findsOneWidget);
+    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('https://example.com'), findsOneWidget);
+
+    await tester.tap(find.text('Home'));
+    await tester.pumpAndSettle();
+    expect(find.text('Delete'), findsOneWidget);
+    await tester.enterText(find.widgetWithText(TextFormField, 'Home'), 'House');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect((savedItems().single as Map)['label'], 'House');
+    expect(find.text('House'), findsOneWidget);
+
+    // A new row waits for its required fields, including a nested row.
+    await tester.tap(find.text('Add item'));
+    await tester.pumpAndSettle();
+    expect(find.text('Delete'), findsNothing);
+    FilledButton save() =>
+        tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Save'));
+    expect(save().onPressed, isNull);
+    expect(find.textContaining('Required'), findsNWidgets(2));
+    await tester.enterText(find.byType(TextFormField).first, 'Cameras');
+    await tester.pump();
+    await tester.tap(find.text('Web address'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Menu').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Address'), findsNothing);
+    expect(save().onPressed, isNull);
+    await tester.tap(find.text('Add entry'));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Back'), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField).first, 'Front door');
+    await tester.pump();
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    expect(find.text('Front door'), findsOneWidget);
+    expect(save().onPressed, isNotNull);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(savedItems(), hasLength(2));
+    expect(savedItems().last, {
+      'label': 'Cameras',
+      'opens': 'Menu',
+      'url': '',
+      'entries': [
+        {'label': 'Front door', 'url': ''},
+      ],
+    });
+
+    await tester.tap(find.text('House'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+    expect((savedItems().single as Map)['label'], 'Cameras');
+
+    // Turning the condition's setting on brings its dependent back.
+    installed[0]['values'] = {
+      ...installed[0]['values'] as Map<String, Object?>,
+      'collapse': 'On',
+    };
+    await plugins.refresh();
+    await tester.pumpAndSettle();
+    expect(find.text('Collapse after'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets('SDK 1 controls retain edits during runtime status updates', (
     tester,
   ) async {

@@ -2838,6 +2838,34 @@ class UiStringsEn extends UiStrings {
   String get pluginHidePassword => 'Hide password';
 
   @override
+  String get pluginUntitled => 'Untitled';
+
+  @override
+  String get pluginSearchIcons => 'Search icons';
+
+  @override
+  String get pluginChooseIcon => 'Choose an icon';
+
+  @override
+  String get pluginSearchCameraViews => 'Search camera views';
+
+  @override
+  String get pluginChooseCameraView => 'Choose a camera view';
+
+  @override
+  String get pluginCameraViewGone =>
+      'This camera view is gone. Choose another.';
+
+  @override
+  String get pluginDragToReorder => 'Drag to reorder';
+
+  @override
+  String get pluginDone => 'Done';
+
+  @override
+  String get pluginRequired => 'Required';
+
+  @override
   String get pluginAddPlugin => 'Add plugin';
 
   @override
@@ -3332,6 +3360,33 @@ class UiStringsEn extends UiStrings {
 
   @override
   String get pluginErrorTriggerId => 'Invalid or duplicate trigger ID';
+
+  @override
+  String get pluginErrorListSetting => 'Invalid list setting';
+
+  @override
+  String get pluginErrorSettingCondition => 'Invalid setting condition';
+
+  @override
+  String get pluginErrorIcon => 'Expected an MDI icon name';
+
+  @override
+  String get pluginErrorDashboard => 'Expected a dashboard path';
+
+  @override
+  String get pluginErrorCameraView => 'Expected a camera view ID';
+
+  @override
+  String get pluginErrorListValue => 'Expected a list setting';
+
+  @override
+  String get pluginErrorListCount => 'Too many or too few list items';
+
+  @override
+  String get pluginErrorRequiredField => 'Fill in every required field';
+
+  @override
+  String get pluginErrorListSize => 'List settings must be at most 32 KB';
 
   @override
   String get remoteDisableTitle => 'Turn off remote management?';

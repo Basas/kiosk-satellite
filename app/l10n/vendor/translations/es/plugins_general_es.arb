@@ -23,5 +23,14 @@
   "pluginCouldNotOpenThisLink": "No se pudo abrir este enlace.",
   "pluginEnableName": "Activar {name}",
   "pluginShowPassword": "Mostrar contraseña",
-  "pluginHidePassword": "Ocultar contraseña"
+  "pluginHidePassword": "Ocultar contraseña",
+  "pluginUntitled": "Sin nombre",
+  "pluginSearchIcons": "Buscar iconos",
+  "pluginChooseIcon": "Elige un icono",
+  "pluginSearchCameraViews": "Buscar vistas de cámaras",
+  "pluginChooseCameraView": "Elige una vista de cámaras",
+  "pluginCameraViewGone": "Esta vista de cámaras ya no existe. Elige otra.",
+  "pluginDragToReorder": "Arrastra para reordenar",
+  "pluginDone": "Hecho",
+  "pluginRequired": "Obligatorio"
 }

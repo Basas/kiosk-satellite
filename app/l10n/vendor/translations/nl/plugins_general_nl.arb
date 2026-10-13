@@ -23,5 +23,14 @@
   "pluginCouldNotOpenThisLink": "Kon deze link niet openen.",
   "pluginEnableName": "{name} inschakelen",
   "pluginShowPassword": "Wachtwoord tonen",
-  "pluginHidePassword": "Wachtwoord verbergen"
+  "pluginHidePassword": "Wachtwoord verbergen",
+  "pluginUntitled": "Naamloos",
+  "pluginSearchIcons": "Pictogrammen zoeken",
+  "pluginChooseIcon": "Kies een pictogram",
+  "pluginSearchCameraViews": "Cameraweergaven zoeken",
+  "pluginChooseCameraView": "Kies een cameraweergave",
+  "pluginCameraViewGone": "Deze cameraweergave bestaat niet meer. Kies een andere.",
+  "pluginDragToReorder": "Sleep om de volgorde te wijzigen",
+  "pluginDone": "Klaar",
+  "pluginRequired": "Verplicht"
 }

@@ -2860,6 +2860,34 @@ class UiStringsNl extends UiStrings {
   String get pluginHidePassword => 'Wachtwoord verbergen';
 
   @override
+  String get pluginUntitled => 'Naamloos';
+
+  @override
+  String get pluginSearchIcons => 'Pictogrammen zoeken';
+
+  @override
+  String get pluginChooseIcon => 'Kies een pictogram';
+
+  @override
+  String get pluginSearchCameraViews => 'Cameraweergaven zoeken';
+
+  @override
+  String get pluginChooseCameraView => 'Kies een cameraweergave';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Deze cameraweergave bestaat niet meer. Kies een andere.';
+
+  @override
+  String get pluginDragToReorder => 'Sleep om de volgorde te wijzigen';
+
+  @override
+  String get pluginDone => 'Klaar';
+
+  @override
+  String get pluginRequired => 'Verplicht';
+
+  @override
   String get pluginAddPlugin => 'Plug-in toevoegen';
 
   @override
@@ -3370,6 +3398,36 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get pluginErrorTriggerId => 'Ongeldige of dubbele trigger-ID';
+
+  @override
+  String get pluginErrorListSetting => 'Ongeldige lijstinstelling';
+
+  @override
+  String get pluginErrorSettingCondition =>
+      'Ongeldige voorwaarde voor instelling';
+
+  @override
+  String get pluginErrorIcon => 'Er werd een MDI-pictogramnaam verwacht';
+
+  @override
+  String get pluginErrorDashboard => 'Er werd een dashboardpad verwacht';
+
+  @override
+  String get pluginErrorCameraView => 'Er werd een cameraweergave-ID verwacht';
+
+  @override
+  String get pluginErrorListValue => 'Er werd een lijstinstelling verwacht';
+
+  @override
+  String get pluginErrorListCount =>
+      'De lijst heeft te veel of te weinig items';
+
+  @override
+  String get pluginErrorRequiredField => 'Vul alle verplichte velden in';
+
+  @override
+  String get pluginErrorListSize =>
+      'Lijstinstellingen mogen maximaal 32 KB groot zijn';
 
   @override
   String get remoteDisableTitle => 'Beheer op afstand uitschakelen?';

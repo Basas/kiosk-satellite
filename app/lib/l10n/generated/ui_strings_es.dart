@@ -2866,6 +2866,34 @@ class UiStringsEs extends UiStrings {
   String get pluginHidePassword => 'Ocultar contraseña';
 
   @override
+  String get pluginUntitled => 'Sin nombre';
+
+  @override
+  String get pluginSearchIcons => 'Buscar iconos';
+
+  @override
+  String get pluginChooseIcon => 'Elige un icono';
+
+  @override
+  String get pluginSearchCameraViews => 'Buscar vistas de cámaras';
+
+  @override
+  String get pluginChooseCameraView => 'Elige una vista de cámaras';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Esta vista de cámaras ya no existe. Elige otra.';
+
+  @override
+  String get pluginDragToReorder => 'Arrastra para reordenar';
+
+  @override
+  String get pluginDone => 'Hecho';
+
+  @override
+  String get pluginRequired => 'Obligatorio';
+
+  @override
   String get pluginAddPlugin => 'Añadir plugin';
 
   @override
@@ -3384,6 +3412,38 @@ class UiStringsEs extends UiStrings {
   @override
   String get pluginErrorTriggerId =>
       'El ID del disparador no es válido o está duplicado';
+
+  @override
+  String get pluginErrorListSetting => 'El ajuste de lista no es válido';
+
+  @override
+  String get pluginErrorSettingCondition =>
+      'La condición del ajuste no es válida';
+
+  @override
+  String get pluginErrorIcon => 'Se esperaba un nombre de icono MDI';
+
+  @override
+  String get pluginErrorDashboard =>
+      'Se esperaba la ruta de un panel de control';
+
+  @override
+  String get pluginErrorCameraView => 'Se esperaba un ID de vista de cámaras';
+
+  @override
+  String get pluginErrorListValue => 'Se esperaba un ajuste de lista';
+
+  @override
+  String get pluginErrorListCount =>
+      'La lista tiene demasiados elementos o muy pocos';
+
+  @override
+  String get pluginErrorRequiredField =>
+      'Completa todos los campos obligatorios';
+
+  @override
+  String get pluginErrorListSize =>
+      'Los ajustes de lista pueden ocupar como máximo 32 KB';
 
   @override
   String get remoteDisableTitle => '¿Desactivar la administración remota?';
