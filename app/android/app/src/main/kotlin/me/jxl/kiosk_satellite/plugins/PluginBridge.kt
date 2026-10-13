@@ -290,7 +290,12 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             override fun hideWindow() = emit("hideWindow", mapOf("id" to id), alive)
             override fun showOverlay(key: String, spec: OverlaySpec, factory: OverlayFactory) {
                 check(alive.get() && "overlay" in manifest.capabilities) { "Plugin did not declare overlay access" }
-                overlays.show(key, spec.anchor(), spec.width(), spec.height(), spec.inset(), spec.closeOnBack(), spec.onTop(), spec.touchable(), factory)
+                overlays.show(key, PluginOverlays.Placement(
+                    spec.anchor() ?: "", spec.width(), spec.height(),
+                    listOf(spec.insetLeft(), spec.insetTop(), spec.insetRight(), spec.insetBottom()),
+                    spec.offsetX(), spec.offsetY(), spec.closeOnBack(), spec.onTop(), spec.touchable(),
+                    spec.closeOnOutsideTouch(), spec.passOutsideTouch(), spec.enter() ?: "", spec.exit() ?: "", spec.transitionDuration(),
+                ), factory)
                 notifyOverlays()
             }
             override fun hideOverlay(key: String) {

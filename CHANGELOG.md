@@ -10,6 +10,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Plugin settings that show only when they apply.** A plugin setting can now declare `visibleWhen`, so it shows only while another setting holds a certain value, such as a delay that only matters while its feature is on. Hidden settings keep their saved values.
 - **Plugins can list camera views and dashboards.** Two new reads, `getCameraViews` and `getDashboards`, give plugins the kiosk's camera views by name and Home Assistant's dashboards with their views, ready to pass to `showCameraView` and `haNavigate`. Neither includes stream URLs, credentials or card configuration.
 - **Plugins can read their own bundled files.** `host.assetPath` and `host.openAsset` give plugin code a verified file from its package's `assets/` folder, such as a font, so it no longer has to embed one in its code.
+- **Plugin overlays can sit anywhere and close like a popup.** A plugin overlay can now take a different inset from each edge and an offset from its anchor, which KS keeps on screen, so a menu can open right above the item that opened it. With `closeOnOutsideTouch` a tap anywhere else closes it, either taking the tap or passing it on to the dashboard.
+- **Plugin overlays can fade, slide and scale.** Overlays can now animate in when shown and out when hidden, replaced or closed. The view stays until its exit ends.
+- **Plugins can draw Material Design Icons natively.** `KsTheme.icon` gives native overlays any MDI icon from Kiosk Satellite's own set as a drawable in a theme color, so plugins no longer bundle an icon font.
 - **Plugins can open views with a query string.** `haNavigate` now accepts paths such as `cameras/0?camera=garage`, which the Advanced Camera Card and similar cards read, and still navigates without reloading the page.
 
 ### Fixed

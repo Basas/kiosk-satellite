@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart' show EdgeInsets;
 import 'package:flutter/services.dart';
 
 import '../../core/command_registry.dart';
@@ -37,10 +38,16 @@ class PluginNativeOverlay {
     required this.anchor,
     required this.width,
     required this.height,
-    required this.inset,
+    required this.insets,
     required this.closeOnBack,
     required this.onTop,
     required this.touchable,
+    this.offset = Offset.zero,
+    this.closeOnOutsideTouch = false,
+    this.passOutsideTouch = false,
+    this.enter = 'none',
+    this.exit = 'none',
+    this.duration = const Duration(milliseconds: 200),
     this.measured,
   });
 
@@ -54,10 +61,25 @@ class PluginNativeOverlay {
   final String anchor;
   final int width;
   final int height;
-  final int inset;
+
+  /// The distance from each kiosk edge, in logical pixels (dp).
+  final EdgeInsets insets;
+
+  /// Where the overlay moves from its anchored place, in dp.
+  final Offset offset;
   final bool closeOnBack;
   final bool onTop;
   final bool touchable;
+
+  /// A touch outside the overlay closes it. With [passOutsideTouch] that
+  /// touch also reaches what is under it.
+  final bool closeOnOutsideTouch;
+  final bool passOutsideTouch;
+
+  /// How it appears and leaves: none, fade, slide or scale.
+  final String enter;
+  final String exit;
+  final Duration duration;
   final Size? measured;
 
   /// A replaced overlay is a new view, so the generation is part of it.
@@ -73,10 +95,16 @@ class PluginNativeOverlay {
     anchor: anchor,
     width: width,
     height: height,
-    inset: inset,
+    insets: insets,
+    offset: offset,
     closeOnBack: closeOnBack,
     onTop: onTop,
     touchable: touchable,
+    closeOnOutsideTouch: closeOnOutsideTouch,
+    passOutsideTouch: passOutsideTouch,
+    enter: enter,
+    exit: exit,
+    duration: duration,
     measured: size,
   );
 }
@@ -839,10 +867,21 @@ class PluginManager extends Manager {
               anchor: raw['anchor'] as String,
               width: (raw['width'] as num).toInt(),
               height: (raw['height'] as num).toInt(),
-              inset: (raw['inset'] as num).toInt(),
+              insets: _insets(raw['insets']),
+              offset: Offset(
+                (raw['offsetX'] as num? ?? 0).toDouble(),
+                (raw['offsetY'] as num? ?? 0).toDouble(),
+              ),
               closeOnBack: raw['closeOnBack'] == true,
               onTop: raw['onTop'] == true,
               touchable: raw['touchable'] != false,
+              closeOnOutsideTouch: raw['closeOnOutsideTouch'] == true,
+              passOutsideTouch: raw['passOutsideTouch'] == true,
+              enter: raw['enter'] as String? ?? 'none',
+              exit: raw['exit'] as String? ?? 'none',
+              duration: Duration(
+                milliseconds: (raw['duration'] as num? ?? 200).toInt(),
+              ),
             ),
           ])
             overlay.id: overlay,
@@ -860,6 +899,20 @@ class PluginManager extends Manager {
       overlays.value = next;
     }
   }
+
+  static EdgeInsets _insets(Object? raw) {
+    final sides = [
+      for (final side in raw is List ? raw : const []) (side as num).toDouble(),
+    ];
+    return sides.length == 4
+        ? EdgeInsets.fromLTRB(sides[0], sides[1], sides[2], sides[3])
+        : EdgeInsets.zero;
+  }
+
+  /// Whether the session that showed [overlay] still runs. An overlay of
+  /// an ended session leaves at once, with no exit transition.
+  bool overlaySessionLive(PluginNativeOverlay overlay) =>
+      _runtimeSessions[overlay.pluginId] == overlay.session;
 
   /// The overlay a back press closes: the topmost that allows it.
   PluginNativeOverlay? get backOverlay =>

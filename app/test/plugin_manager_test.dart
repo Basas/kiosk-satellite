@@ -1126,19 +1126,34 @@ void main() {
     int width = PluginNativeOverlay.wrap,
     int height = PluginNativeOverlay.wrap,
     int inset = 0,
+    List<int>? insets,
+    int offsetX = 0,
+    int offsetY = 0,
     bool closeOnBack = true,
     bool onTop = false,
     bool touchable = true,
+    bool closeOnOutsideTouch = false,
+    bool passOutsideTouch = false,
+    String enter = 'none',
+    String exit = 'none',
+    int duration = 200,
   }) => {
     'key': key,
     'generation': generation,
     'anchor': anchor,
     'width': width,
     'height': height,
-    'inset': inset,
+    'insets': insets ?? [inset, inset, inset, inset],
+    'offsetX': offsetX,
+    'offsetY': offsetY,
     'closeOnBack': closeOnBack,
     'onTop': onTop,
     'touchable': touchable,
+    'closeOnOutsideTouch': closeOnOutsideTouch,
+    'passOutsideTouch': passOutsideTouch,
+    'enter': enter,
+    'exit': exit,
+    'duration': duration,
   };
   Future<void> overlays(String token, List<Map<String, Object?>> list) =>
       native('overlays', {
@@ -1214,6 +1229,160 @@ void main() {
     });
   });
 
+  testWidgets(
+    'native overlays take per-edge insets, offsets, outside touches and transitions',
+    (tester) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      messenger.setMockMethodCallHandler(SystemChannels.platform_views, (
+        call,
+      ) async {
+        final args = call.arguments;
+        return switch (call.method) {
+          'create' => 0,
+          'resize' => {
+            'width': (args as Map)['width'],
+            'height': args['height'],
+          },
+          _ => null,
+        };
+      });
+      addTearDown(
+        () => messenger.setMockMethodCallHandler(
+          SystemChannels.platform_views,
+          null,
+        ),
+      );
+      var dashboardTaps = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Stack(
+            fit: StackFit.expand,
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: (_) => dashboardTaps++,
+                child: const SizedBox.expand(),
+              ),
+              PluginNativeOverlays(plugins: plugins),
+            ],
+          ),
+        ),
+      );
+      await overlaySession('first');
+      Rect rect() => tester.getRect(find.byType(AndroidView));
+      // Clear of a 80 dp bar at the bottom, moved along it.
+      await overlays('first', [
+        overlay(
+          'menu',
+          1,
+          anchor: 'bottom-left',
+          width: 200,
+          height: 120,
+          insets: [0, 0, 0, 80],
+          offsetX: 150,
+        ),
+      ]);
+      await tester.pump();
+      expect(rect(), const Rect.fromLTWH(150, 400, 200, 120));
+      // An offset past the edge keeps the overlay on screen.
+      await overlays('first', [
+        overlay(
+          'menu',
+          2,
+          anchor: 'bottom-left',
+          width: 200,
+          height: 120,
+          insets: [0, 0, 0, 80],
+          offsetX: 5000,
+          offsetY: -40,
+        ),
+      ]);
+      await tester.pump();
+      expect(rect(), const Rect.fromLTWH(600, 360, 200, 120));
+
+      // A touch outside closes it and goes no further.
+      await overlays('first', [
+        overlay('menu', 3, width: 200, height: 120, closeOnOutsideTouch: true),
+      ]);
+      await tester.pump();
+      calls.clear();
+      await tester.tapAt(const Offset(700, 500));
+      await tester.pump();
+      expect(find.byType(AndroidView), findsNothing);
+      expect(dashboardTaps, 0);
+      expect(
+        (calls.singleWhere((c) => c.method == 'overlayClosed').arguments
+            as Map)['generation'],
+        3,
+      );
+      // Passed through, the same touch also reaches the dashboard.
+      await overlays('first', [
+        overlay(
+          'menu',
+          4,
+          width: 200,
+          height: 120,
+          closeOnOutsideTouch: true,
+          passOutsideTouch: true,
+        ),
+      ]);
+      await tester.pump();
+      await tester.tapAt(const Offset(700, 500));
+      await tester.pump();
+      expect(find.byType(AndroidView), findsNothing);
+      expect(dashboardTaps, 1);
+
+      // A fade in starts clear, and a fade out keeps the view until it ends.
+      await overlays('first', [
+        overlay(
+          'card',
+          5,
+          anchor: 'center',
+          width: 200,
+          height: 120,
+          enter: 'fade',
+          exit: 'fade',
+          duration: 300,
+        ),
+      ]);
+      await tester.pump();
+      double opacity() => tester
+          .widget<Opacity>(
+            find
+                .ancestor(
+                  of: find.byType(AndroidView),
+                  matching: find.byType(Opacity),
+                )
+                .last,
+          )
+          .opacity;
+      expect(opacity(), 0);
+      await tester.pump(const Duration(milliseconds: 150));
+      expect(opacity(), inExclusiveRange(0, 1));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(opacity(), 1);
+      await overlays('first', []);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 150));
+      expect(find.byType(AndroidView), findsOneWidget);
+      expect(opacity(), inExclusiveRange(0, 1));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(find.byType(AndroidView), findsNothing);
+
+      // An ended session leaves at once.
+      await overlays('first', [
+        overlay('card', 6, width: 200, height: 120, exit: 'slide'),
+      ]);
+      await tester.pump();
+      await overlaySession('second');
+      await tester.pump();
+      expect(find.byType(AndroidView), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('native overlays wait for their size and follow their anchor', (
     tester,
   ) async {
@@ -1285,7 +1454,7 @@ void main() {
             )
             as Map;
     expect(params['key'], 'bar');
-    expect(params['inset'], 12);
+    expect(params['insets'], [12, 12, 12, 12]);
     expect((params['theme'] as Map)['dark'], isTrue);
     expect(
       calls.where((c) => c.method == 'overlayTheme').single.arguments,
