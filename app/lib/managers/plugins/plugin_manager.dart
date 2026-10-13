@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -145,6 +146,30 @@ class PluginManager extends Manager {
   // to the old Activity. A new epoch rebuilds every overlay view on the new
   // one, so plugins get a live context and the old Activity can go.
   final overlayEpoch = ValueNotifier<int>(0);
+
+  /// The space running plugins asked the dashboard to keep clear, in dp:
+  /// the largest per edge. Zero when none asked.
+  final contentInsets = ValueNotifier<EdgeInsets>(EdgeInsets.zero);
+  final _contentInsets = <String, EdgeInsets>{};
+
+  void _setContentInsets(String pluginId, EdgeInsets? insets) {
+    if (insets == null || insets == EdgeInsets.zero) {
+      _contentInsets.remove(pluginId);
+    } else {
+      _contentInsets[pluginId] = insets;
+    }
+    var merged = EdgeInsets.zero;
+    for (final i in _contentInsets.values) {
+      merged = EdgeInsets.fromLTRB(
+        math.max(merged.left, i.left),
+        math.max(merged.top, i.top),
+        math.max(merged.right, i.right),
+        math.max(merged.bottom, i.bottom),
+      );
+    }
+    if (merged != contentInsets.value) contentInsets.value = merged;
+  }
+
   StreamSubscription<ActivityAttached>? _attachSub;
   Map<String, Object?>? _overlayTheme;
   final shizuku = ValueNotifier<Map<String, Object?>>(const {
@@ -251,6 +276,7 @@ class PluginManager extends Manager {
           _setStatusTiles(data['id'] as String, const []);
           _setEntities(data['id'] as String, const []);
           _setOverlays(data['id'] as String, const []);
+          _setContentInsets(data['id'] as String, null);
           _hostReads.open(call.arguments as Map);
         case 'hostSessionClosed':
           final data = call.arguments as Map;
@@ -261,6 +287,7 @@ class PluginManager extends Manager {
             _setStatusTiles(data['id'] as String, const []);
             _setEntities(data['id'] as String, const []);
             _setOverlays(data['id'] as String, const []);
+            _setContentInsets(data['id'] as String, null);
           }
           _hostReads.close(call.arguments as Map);
         case 'hostSubscription':
@@ -305,6 +332,12 @@ class PluginManager extends Manager {
               data['id'] as String,
               data['screensavers'] as List,
             );
+          }
+        case 'contentInsets':
+          final data = call.arguments as Map;
+          if (_runtimeSessions[data['id']] == data['session'] &&
+              data['session'] != null) {
+            _setContentInsets(data['id'] as String, _insets(data['insets']));
           }
         case 'overlays':
           final data = call.arguments as Map;
@@ -802,6 +835,7 @@ class PluginManager extends Manager {
           : const [];
       if (!enabled.value || item['running'] != true) {
         _runtimeSessions.remove(item['id']);
+        _setContentInsets(item['id'] as String, null);
       }
       _setCharts(
         item['id'] as String,
@@ -830,6 +864,9 @@ class PluginManager extends Manager {
         _runtimeSessions.remove(id);
         _setCharts(id, const []);
       }
+    }
+    for (final id in _contentInsets.keys.toList()) {
+      if (!items.any((p) => p['id'] == id)) _setContentInsets(id, null);
     }
     _runtimeEntities.removeWhere(
       (id, _) => !items.any(
@@ -1088,6 +1125,7 @@ class PluginManager extends Manager {
     windows.dispose();
     overlays.dispose();
     overlayEpoch.dispose();
+    contentInsets.dispose();
     shizuku.dispose();
     status.dispose();
     enabled.dispose();

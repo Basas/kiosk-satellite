@@ -301,6 +301,12 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             override fun hideOverlay(key: String) {
                 if (overlays.hide(key)) notifyOverlays()
             }
+            override fun setContentInsets(left: Int, top: Int, right: Int, bottom: Int) {
+                check(alive.get() && "overlay" in manifest.capabilities) { "Plugin did not declare overlay access" }
+                val insets = listOf(left, top, right, bottom)
+                require(insets.all { it in 0..PluginOverlays.MAX_INSET }) { "Content insets must be 0 to 4096 dp" }
+                emit("contentInsets", mapOf("id" to id, "session" to token, "insets" to insets), alive)
+            }
             override fun log(message: String) = emit("log", mapOf("id" to id, "message" to message.take(1000)), alive)
             override fun nativeLibraryPath(name: String): String {
                 check(alive.get() && "native" in manifest.capabilities)

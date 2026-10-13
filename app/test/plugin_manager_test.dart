@@ -1162,6 +1162,48 @@ void main() {
         'overlays': list,
       });
 
+  test(
+    'content insets merge across plugins and clear with their session',
+    () async {
+      Future<void> session(String id, String token) => native('hostSession', {
+        'id': id,
+        'session': token,
+        'capabilities': ['overlay'],
+      });
+      Future<void> insets(String id, String token, List<int> sides) => native(
+        'contentInsets',
+        {'id': id, 'session': token, 'insets': sides},
+      );
+      await session('hello-world', 'first');
+      await insets('hello-world', 'first', [0, 0, 0, 80]);
+      expect(plugins.contentInsets.value, const EdgeInsets.only(bottom: 80));
+      await session('navbar', 'one');
+      await insets('navbar', 'one', [72, 0, 0, 64]);
+      // Each edge keeps the largest.
+      expect(
+        plugins.contentInsets.value,
+        const EdgeInsets.fromLTRB(72, 0, 0, 80),
+      );
+      // A stale session is ignored.
+      await insets('navbar', 'old', [0, 300, 0, 0]);
+      expect(plugins.contentInsets.value.top, 0);
+      await native('hostSessionClosed', {
+        'id': 'hello-world',
+        'session': 'first',
+      });
+      expect(
+        plugins.contentInsets.value,
+        const EdgeInsets.fromLTRB(72, 0, 0, 64),
+      );
+      await insets('navbar', 'one', [0, 0, 0, 0]);
+      expect(plugins.contentInsets.value, EdgeInsets.zero);
+      // A restarted session starts with none.
+      await insets('navbar', 'one', [0, 0, 0, 48]);
+      await session('navbar', 'two');
+      expect(plugins.contentInsets.value, EdgeInsets.zero);
+    },
+  );
+
   test('native overlays are session scoped and keep their stacking', () async {
     await overlaySession('first');
     await overlays('first', [overlay('bar', 1), overlay('full', 2)]);

@@ -63,6 +63,16 @@ window.addEventListener('kiosksatellite:kiosk-state', (e) => {
 });
 ```
 
+## Leave room for plugin bars
+
+A plugin such as a navigation bar can reserve space along the screen edges. Home Assistant's dashboards pad themselves for it on their own. A custom page can do the same with four CSS variables that KS sets on every page, in CSS pixels: `--ks-content-inset-left`, `--ks-content-inset-top`, `--ks-content-inset-right` and `--ks-content-inset-bottom`. Each is `0px` while nothing is reserved and changes live when a plugin's bar appears or leaves.
+
+```css
+body {
+  padding-bottom: var(--ks-content-inset-bottom, 0px);
+}
+```
+
 ## Several layouts in one page
 
 A page can hold several layouts and pick one from the part of the address after `#`. Add each layout as its own custom page with the same file and a different ending, such as `/local/wall.html#kitchen` and `/local/wall.html#den`. When the kiosk moves between two of them, it only changes the `#` part, so the page does not reload. Listen for the change in your page:
