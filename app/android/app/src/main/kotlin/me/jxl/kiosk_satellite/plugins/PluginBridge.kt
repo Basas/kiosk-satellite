@@ -306,6 +306,12 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 check(alive.get() && "native" in manifest.capabilities)
                 return File(packageDir, "plugin.jar").absolutePath
             }
+            // Assets were checked against their digests when the session started.
+            override fun assetPath(name: String): String {
+                check(alive.get())
+                return PluginPackage.assetFile(packageDir, name).absolutePath
+            }
+            override fun openAsset(name: String): java.io.InputStream = File(assetPath(name)).inputStream()
             override fun status(message: String, error: Boolean) {
                 require(message.length <= 1000)
                 worker.execute { if (alive.get()) {
