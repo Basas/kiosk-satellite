@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.23 - 2026-10-13
 
 ### Added
 - **List settings for plugins.** Plugins can now declare a `list` setting, a set of rows you add, edit, reorder and delete, such as the items of a navigation bar. The rows show right on the plugin's page with their icon, name and a summary. Tap one to edit it in a modal, drag its handle to move it or tap the add row for a new one. Each row is a small form, and a row can hold a list of its own, like a menu's entries, which opens inside the same modal. Save stays off until every required field is filled in. Remote Admin works the same way and also moves rows with arrow buttons. The plugin receives the list as rows in the order you set. See [Creating plugins](https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world/blob/main/docs/creating-plugins.md#pickers-lists-and-conditions).
