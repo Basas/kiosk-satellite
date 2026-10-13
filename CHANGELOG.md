@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Fixed
+- **Custom Pages guide.** A leftover fragment at the end of the Dashboard features bullet is gone.
+
 ## v2026.10.22 - 2026-10-12
 
 ### Added
