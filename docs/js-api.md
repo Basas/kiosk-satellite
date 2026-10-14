@@ -165,16 +165,9 @@ Unlike the rest of this API, these methods reject on failure. A rejection carrie
 
 | Method | Returns | Description |
 |---|---|---|
-| `ha.createSocket()` | a socket | For [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket): pass it as `createConnection({createSocket: kioskSatellite.ha.createSocket})`. The library then runs unchanged, including its reconnects. A `not_allowed`, `not_configured` or `auth_invalid` answer stops them with the library's `ERR_INVALID_AUTH`. |
 | `ha.call(message)` | the result | Sends one command, such as `{type: 'get_states'}`, and resolves with its `result`. |
-| `ha.subscribe(message, callback)` | an unsubscribe function | Sends a subscription, such as `{type: 'subscribe_entities'}`, and calls `callback` with each `event`. The subscription is sent again after a reconnect. |
-
-```javascript
-import { createConnection, subscribeEntities } from 'https://cdn.jsdelivr.net/npm/home-assistant-js-websocket@9.4.0/+esm';
-
-const conn = await createConnection({ createSocket: kioskSatellite.ha.createSocket });
-subscribeEntities(conn, (entities) => render(entities));
-```
+| `ha.subscribe(message, callback)` | an unsubscribe function | Sends a subscription, such as `{type: 'subscribe_trigger', ...}`, and calls `callback` with each `event`. The subscription is sent again after a reconnect. |
+| `ha.createSocket()` | a socket | Only for pages built on [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket), which `call` and `subscribe` do not need. Pass it as `createConnection({createSocket: kioskSatellite.ha.createSocket})` and the library runs unchanged, including its reconnects. A `not_allowed`, `not_configured` or `auth_invalid` answer stops them with the library's `ERR_INVALID_AUTH`. |
 
 ```javascript
 const states = await kioskSatellite.ha.call({ type: 'get_states' });
@@ -182,6 +175,15 @@ const stop = await kioskSatellite.ha.subscribe(
   { type: 'subscribe_trigger', trigger: { platform: 'state', entity_id: 'binary_sensor.door' } },
   (event) => console.log(event.variables.trigger.to_state.state),
 );
+```
+
+With home-assistant-js-websocket:
+
+```javascript
+import { createConnection, subscribeEntities } from 'https://cdn.jsdelivr.net/npm/home-assistant-js-websocket@9.4.0/+esm';
+
+const conn = await createConnection({ createSocket: kioskSatellite.ha.createSocket });
+subscribeEntities(conn, (entities) => render(entities));
 ```
 
 ## Events

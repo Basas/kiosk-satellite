@@ -17,29 +17,59 @@ The page then appears under **Custom Pages** in the dashboard picker. Pick it as
 
 ### Share Home Assistant connection
 
-Turn on **Share Home Assistant connection** at the top of the Custom Pages page and every custom page can use the kiosk's own connection to Home Assistant through `kioskSatellite.ha`. The kiosk signs in with its long-lived access token, so the page needs no token and no sign-in of its own. This works the same for a page in Home Assistant and a page on another server, and it is the only way a page on another server reaches Home Assistant through the kiosk. Kiosk Satellite never gives a page on another server Home Assistant's session.
+Turn on **Share Home Assistant connection** at the top of the Custom Pages page and every custom page can talk to Home Assistant through `kioskSatellite.ha`. The kiosk opens the connection and signs in with its own long-lived access token, so the page needs no token, no sign-in and no library. It works the same for a page in Home Assistant and a page on another server.
 
-With [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket), pass the kiosk's socket to `createConnection`. Everything else in the library works as usual, including reconnects:
+`kioskSatellite.ha.call` sends one command to Home Assistant's [WebSocket API](https://developers.home-assistant.io/docs/api/websocket) and resolves with its result. `kioskSatellite.ha.subscribe` opens a subscription and calls you back with each event. That is all a page needs:
 
 ```html
+<button id="kitchen">Kitchen light</button>
 <script type="module">
-import { createConnection, subscribeEntities, callService } from 'https://cdn.jsdelivr.net/npm/home-assistant-js-websocket@9.4.0/+esm';
+const ha = kioskSatellite.ha;
+const button = document.getElementById('kitchen');
+const show = (state) => { button.textContent = `Kitchen light: ${state}`; };
 
-const conn = await createConnection({ createSocket: kioskSatellite.ha.createSocket });
-subscribeEntities(conn, (entities) => {
-  document.body.textContent = entities['light.kitchen']?.state;
+// The state now.
+const states = await ha.call({ type: 'get_states' });
+show(states.find((s) => s.entity_id === 'light.kitchen')?.state);
+
+// Every change from here on.
+await ha.subscribe(
+  { type: 'subscribe_trigger', trigger: { platform: 'state', entity_id: 'light.kitchen' } },
+  (event) => show(event.variables.trigger.to_state.state),
+);
+
+// A tap toggles it.
+button.onclick = () => ha.call({
+  type: 'call_service', domain: 'light', service: 'toggle',
+  target: { entity_id: 'light.kitchen' },
 });
-document.body.onclick = () => callService(conn, 'light', 'toggle', { entity_id: 'light.kitchen' });
 </script>
 ```
 
-Without the library, `kioskSatellite.ha.call(message)` sends one command and `kioskSatellite.ha.subscribe(message, callback)` opens a subscription. See the [JavaScript API](js-api.md#home-assistant-connection) for both and for the errors.
+Subscriptions come back on their own after the connection drops. See the [JavaScript API](js-api.md#home-assistant-connection) for the errors.
+
+#### Using home-assistant-js-websocket
+
+If your page uses [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket), give `createConnection` the kiosk's connection instead of a token. That is the only change:
+
+```javascript
+import { createConnection, subscribeEntities } from 'https://cdn.jsdelivr.net/npm/home-assistant-js-websocket@9.4.0/+esm';
+
+const conn = await createConnection({ createSocket: kioskSatellite.ha.createSocket });
+subscribeEntities(conn, (entities) => render(entities));
+```
+
+The library then runs over the kiosk's connection like it would over its own, reconnects included.
+
+The library also works without `kioskSatellite.ha.createSocket`, but then the page has to pass it a token itself, the usual way. A page in the `www` folder can pass the token from Home Assistant's session (see [Home Assistant's session](#home-assistants-session)). Any other page has to carry a long-lived access token and pass it through the library's `createLongLivedTokenAuth`, and anyone who can open the page can read that token.
+
+#### What the page can do
 
 The page can do anything the Home Assistant user that owns the kiosk's token can do. Only add pages you trust, from servers you control.
 
 ### Home Assistant's session
 
-A custom page in Home Assistant is served from the same address as your dashboards, so it shares the dashboard's sign-in. When **Log in automatically** is on or after you log in to the dashboard by hand, Home Assistant's session is stored in the page's `localStorage` under `hassTokens`. Your page can read it and connect to Home Assistant's WebSocket API without a token of its own.
+Without **Share Home Assistant connection**, a page in Home Assistant's `www` folder can still sign in on its own. It is served from the same address as your dashboards, so it shares the dashboard's sign-in. When **Log in automatically** is on or after you log in to the dashboard by hand, Home Assistant's session is stored in the page's `localStorage` under `hassTokens`. Your page can read it and connect to Home Assistant's WebSocket API without a token of its own.
 
 ```html
 <script>
