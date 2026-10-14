@@ -8369,20 +8369,42 @@ const sendspinFullscreenButtonScale = SettingDef<num>(
   dependsOn: 'sendspin.fullscreen_controls',
 );
 
-const sendspinFullscreenHorizontal = SettingDef<bool>(
-  key: 'sendspin.fullscreen_horizontal',
-  type: SettingType.boolean,
-  defaultValue: false,
-  title: 'Horizontal mode',
+/// How the standalone view arranges the cover, the track details and the
+/// transport. Horizontal and Centered replaced a Horizontal mode switch:
+/// [SettingsManager] rewrites a stored or imported switch to the matching
+/// layout. Album art only shows the cover alone and brings the details and
+/// transport up over it for a few seconds after a touch, which leaves no
+/// room for lyrics or the queue, so it shows the vertical layouts while
+/// either is open.
+const sendspinFullscreenLayout = SettingDef<String>(
+  key: 'sendspin.fullscreen_layout',
+  type: SettingType.select,
+  defaultValue: 'vertical',
+  title: 'Layout mode',
   description:
-      'Split artwork and controls into equal left and right halves. '
-      'With lyrics or the queue open, track details move below the artwork. '
-      'Ignored while Now Playing is shown alongside a screensaver.',
+      'How Now Playing arranges artwork, track details and controls. '
+      'Horizontal splits them into left and right halves. Album art only '
+      'fills the screen with artwork and shows track details and controls '
+      'for a few seconds after a tap, switching to Vertical while lyrics '
+      'or the queue are open. Ignored while Now Playing is shown alongside '
+      'a screensaver.',
   category: 'Sendspin',
   section: 'User Interface',
   subpage: 'Now Playing',
+  options: ['vertical', 'horizontal', 'art_only'],
+  optionLabels: {
+    'vertical': 'Vertical',
+    'horizontal': 'Horizontal',
+    'art_only': 'Album art only',
+  },
   dependsOn: 'sendspin.fullscreen',
 );
+
+/// The Horizontal mode switch [sendspinFullscreenLayout] replaced, as
+/// the layout it stands for. Backups, fleet pushes and API calls from
+/// older versions still send it.
+String sendspinLayoutFromSwitch(bool horizontal) =>
+    horizontal ? 'horizontal' : 'vertical';
 
 /// Dismiss the view with a double tap anywhere on it instead of the close
 /// button, which goes away (issue #409: hunting for the button on a
@@ -11251,7 +11273,7 @@ const List<SettingDef<Object>> allSettings = [
   sendspinFullscreenControls,
   sendspinFullscreenTextScale,
   sendspinFullscreenButtonScale,
-  sendspinFullscreenHorizontal,
+  sendspinFullscreenLayout,
   sendspinFullscreenDoubleTap,
   sendspinFullscreenMotion,
   sendspinFullscreenReturn,

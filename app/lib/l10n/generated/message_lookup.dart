@@ -2496,10 +2496,13 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingSendspinFullscreenButtonScaleTitle,
       'settingSendspinFullscreenButtonScaleDescription' =>
         strings.settingSendspinFullscreenButtonScaleDescription,
-      'settingSendspinFullscreenHorizontalTitle' =>
-        strings.settingSendspinFullscreenHorizontalTitle,
-      'settingSendspinFullscreenHorizontalDescription' =>
-        strings.settingSendspinFullscreenHorizontalDescription,
+      'settingSendspinFullscreenLayoutTitle' =>
+        strings.settingSendspinFullscreenLayoutTitle,
+      'settingSendspinFullscreenLayoutDescription' =>
+        strings.settingSendspinFullscreenLayoutDescription,
+      'mediaLayoutVertical' => strings.mediaLayoutVertical,
+      'mediaLayoutHorizontal' => strings.mediaLayoutHorizontal,
+      'mediaLayoutArtOnly' => strings.mediaLayoutArtOnly,
       'settingSendspinFullscreenDoubleTapTitle' =>
         strings.settingSendspinFullscreenDoubleTapTitle,
       'settingSendspinFullscreenDoubleTapDescription' =>

@@ -8457,11 +8457,20 @@ class UiStringsEs extends UiStrings {
       'Tamaño de los botones de reproducción y la barra de progreso, independiente del tamaño del texto. Se aplica en ambas distribuciones y junto al protector de pantalla. Los controles se adaptan al espacio disponible.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Modo horizontal';
+  String get settingSendspinFullscreenLayoutTitle => 'Modo de diseño';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Divide la portada y los controles en dos mitades iguales, izquierda y derecha. Con las letras o la cola abiertas, los datos de la pista pasan debajo de la portada. No se aplica cuando Reproduciendo Ahora se muestra junto al protector de pantalla.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Cómo Reproduciendo Ahora organiza la portada, los datos de la pista y los controles. Horizontal los divide en mitades izquierda y derecha. Solo portada llena la pantalla con la portada y muestra los datos de la pista y los controles durante unos segundos después de tocar la pantalla, y cambia a Vertical mientras las letras o la cola están abiertas. No se aplica cuando Reproduciendo Ahora se muestra junto al protector de pantalla.';
+
+  @override
+  String get mediaLayoutVertical => 'Vertical';
+
+  @override
+  String get mediaLayoutHorizontal => 'Horizontal';
+
+  @override
+  String get mediaLayoutArtOnly => 'Solo portada';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>

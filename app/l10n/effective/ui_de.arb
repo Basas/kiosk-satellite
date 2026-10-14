@@ -31488,8 +31488,8 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalTitle": "Horizontales Layout",
-  "@settingSendspinFullscreenHorizontalTitle": {
+  "settingSendspinFullscreenLayoutTitle": "Layout-Modus",
+  "@settingSendspinFullscreenLayoutTitle": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Setting label.",
     "x-locations": {
@@ -31501,10 +31501,49 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalDescription": "Teilt Cover und Bedienelemente in zwei gleich große Bereiche links und rechts auf. Wenn Songtexte oder die Warteschlange geöffnet sind, werden die Titelinformationen unter dem Cover angezeigt. Gilt nicht, wenn „Jetzt läuft“ neben dem Bildschirmschoner angezeigt wird.",
-  "@settingSendspinFullscreenHorizontalDescription": {
+  "settingSendspinFullscreenLayoutDescription": "Legt fest, wie „Jetzt läuft“ Cover, Titelinformationen und Bedienelemente anordnet. Horizontal teilt sie in eine linke und eine rechte Hälfte. Nur Cover füllt den Bildschirm mit dem Cover und zeigt Titelinformationen und Bedienelemente nach einem Tippen einige Sekunden lang an. Wenn Songtexte oder die Warteschlange geöffnet sind, wird Vertikal verwendet. Gilt nicht, wenn „Jetzt läuft“ neben dem Bildschirmschoner angezeigt wird.",
+  "@settingSendspinFullscreenLayoutDescription": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutVertical": "Vertikal",
+  "@mediaLayoutVertical": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork, track details and controls stacked from top to bottom.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutHorizontal": "Horizontal",
+  "@mediaLayoutHorizontal": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork in the left half of the screen, track details and controls in the right half.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutArtOnly": "Nur Cover",
+  "@mediaLayoutArtOnly": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.",
     "x-locations": {
       "device": [
         "Settings > Media Player > Now Playing > User Interface"

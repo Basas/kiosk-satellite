@@ -7922,11 +7922,20 @@ class UiStringsZh extends UiStrings {
       '播放按钮和进度条的大小，独立于文字大小。适用于两种布局及与屏保并排显示时。控件会适应播放器的可用空间。';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => '横向模式';
+  String get settingSendspinFullscreenLayoutTitle => '布局模式';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      '封面和控制区左右各占一半。打开歌词或播放队列时，曲目信息移到封面下方。“正在播放”与屏保同时显示时，此设置不生效。';
+  String get settingSendspinFullscreenLayoutDescription =>
+      '设置“正在播放”中封面、曲目信息和控制区的排列方式。横向将它们分为左右两半。仅封面让封面占满屏幕，轻触屏幕后显示曲目信息和控制区几秒钟；打开歌词或播放队列时切换为纵向。“正在播放”与屏保同时显示时，此设置不生效。';
+
+  @override
+  String get mediaLayoutVertical => '纵向';
+
+  @override
+  String get mediaLayoutHorizontal => '横向';
+
+  @override
+  String get mediaLayoutArtOnly => '仅封面';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle => '双击关闭';
@@ -20740,11 +20749,20 @@ class UiStringsZhCn extends UiStringsZh {
       '播放按钮和进度条的大小，独立于文字大小。适用于两种布局及与屏保并排显示时。控件会适应播放器的可用空间。';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => '横向模式';
+  String get settingSendspinFullscreenLayoutTitle => '布局模式';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      '封面和控制区左右各占一半。打开歌词或播放队列时，曲目信息移到封面下方。“正在播放”与屏保同时显示时，此设置不生效。';
+  String get settingSendspinFullscreenLayoutDescription =>
+      '设置“正在播放”中封面、曲目信息和控制区的排列方式。横向将它们分为左右两半。仅封面让封面占满屏幕，轻触屏幕后显示曲目信息和控制区几秒钟；打开歌词或播放队列时切换为纵向。“正在播放”与屏保同时显示时，此设置不生效。';
+
+  @override
+  String get mediaLayoutVertical => '纵向';
+
+  @override
+  String get mediaLayoutHorizontal => '横向';
+
+  @override
+  String get mediaLayoutArtOnly => '仅封面';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle => '双击关闭';

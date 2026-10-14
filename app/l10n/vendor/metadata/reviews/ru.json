@@ -24279,5 +24279,41 @@
     "translation": "d9e51da1821c57487320ee86143e19ee1c5451e3f4968fc11d284ebe68da7a1e",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "mediaLayoutVertical": {
+    "source": "83bab1a36aaec7e5dfe9eb5c8cf7948bef5cc3cc43aade5052af1b68cd9b0ddc",
+    "translation": "8cdcfc14b09807940f7d709cb398d0632a4975d3eb137e1f1db3bbe21b37a044",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingSendspinFullscreenLayoutDescription": {
+    "source": "3c5f58965e1d9c445605a4dfcf59ae11ba05619d8d8cc36b288b9d2c885936b6",
+    "translation": "d03e12c81a57c1e3b183d8c86b4300df042145e687ba759b5e2c092046bcd3ff",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaLayoutCentered": {
+    "source": "8685c8486673f8a327cb7252ca0e3cde5ac96d30883885262cd17da8a8519d7d",
+    "translation": "93f3d6b8dc129aff055d69a1d07385476da86325b9719f46654e13c912a718c4",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaLayoutHorizontal": {
+    "source": "ee6d2fdf10dfd9e397a2c379033b9aec5d8f99fe98909c347f7090ebadb048bb",
+    "translation": "bfa7e71875b9bb1ee331b984ae908195a838f4e9d6ec15bd4eaaf662d374da1c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingSendspinFullscreenLayoutTitle": {
+    "source": "1adb88b61716aa0b04cd555023ed79ff7f123b19f65d7c0cb083e4fe261ea9c0",
+    "translation": "228fa918113ee630b42d110372d3d8d4a2c507fe249f56a4ce5231ff18705e59",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaLayoutArtOnly": {
+    "source": "e1548f9ce0d84ac1ce993b93ede3002448574fbfc59010ada0112972f43333d5",
+    "translation": "c0ddeaa281555edb5e91c828d7648a41c12ad89b39f3df3e2665fe936e7e055d",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

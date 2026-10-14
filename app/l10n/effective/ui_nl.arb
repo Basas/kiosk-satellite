@@ -31488,8 +31488,8 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalTitle": "Horizontale modus",
-  "@settingSendspinFullscreenHorizontalTitle": {
+  "settingSendspinFullscreenLayoutTitle": "Indelingsmodus",
+  "@settingSendspinFullscreenLayoutTitle": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Setting label.",
     "x-locations": {
@@ -31501,10 +31501,49 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalDescription": "Verdeel de albumhoes en bediening over twee gelijke helften. Wanneer de songtekst of wachtrij geopend is, worden de nummergegevens onder de albumhoes geplaatst. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.",
-  "@settingSendspinFullscreenHorizontalDescription": {
+  "settingSendspinFullscreenLayoutDescription": "Hoe Speelt nu de albumhoes, nummergegevens en bediening indeelt. Horizontaal verdeelt ze over een linker- en rechterhelft. Alleen albumhoes vult het scherm met de albumhoes en toont de nummergegevens en bediening een paar seconden na een tik, en schakelt naar Verticaal zolang de songtekst of wachtrij geopend is. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.",
+  "@settingSendspinFullscreenLayoutDescription": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutVertical": "Verticaal",
+  "@mediaLayoutVertical": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork, track details and controls stacked from top to bottom.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutHorizontal": "Horizontaal",
+  "@mediaLayoutHorizontal": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork in the left half of the screen, track details and controls in the right half.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutArtOnly": "Alleen albumhoes",
+  "@mediaLayoutArtOnly": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.",
     "x-locations": {
       "device": [
         "Settings > Media Player > Now Playing > User Interface"

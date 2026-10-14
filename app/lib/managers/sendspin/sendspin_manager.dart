@@ -1165,7 +1165,7 @@ class SendspinManager extends Manager {
         'sendspin.fullscreen_controls',
         'sendspin.fullscreen_text_scale',
         'sendspin.fullscreen_button_scale',
-        'sendspin.fullscreen_horizontal',
+        'sendspin.fullscreen_layout',
         'sendspin.fullscreen_split',
         'sendspin.fullscreen_photo_fill',
         'sendspin.fullscreen_override_brightness',

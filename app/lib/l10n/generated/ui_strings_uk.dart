@@ -8380,11 +8380,20 @@ class UiStringsUk extends UiStrings {
       'Розмір кнопок відтворення і смуги прогресу, незалежно від розміру тексту. Стосується обох розкладок і режиму разом із заставкою. Елементи керування заповнюють доступний у плеєрі простір.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Горизонтальний режим';
+  String get settingSendspinFullscreenLayoutTitle => 'Режим макета';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Розділити обкладинку та елементи керування на рівні ліву й праву половини. З відкритим текстом пісні або чергою відомості про трек переміщуються під обкладинку. Ігнорується, коли «Зараз грає» показано поруч із заставкою.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Як «Зараз грає» розташовує обкладинку, відомості про трек та елементи керування. Горизонтальний розділяє їх на ліву й праву половини. Лише обкладинка заповнює екран обкладинкою й показує відомості про трек та елементи керування на кілька секунд після дотику, а з відкритим текстом пісні або чергою перемикається на Вертикальний. Ігнорується, коли «Зараз грає» показано поруч із заставкою.';
+
+  @override
+  String get mediaLayoutVertical => 'Вертикальний';
+
+  @override
+  String get mediaLayoutHorizontal => 'Горизонтальний';
+
+  @override
+  String get mediaLayoutArtOnly => 'Лише обкладинка';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>

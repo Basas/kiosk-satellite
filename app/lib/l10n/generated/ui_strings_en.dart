@@ -8295,11 +8295,20 @@ class UiStringsEn extends UiStrings {
       'Size of the playback buttons and progress bar, independent of text size. Applies in both layouts and alongside the screensaver. Controls fit the space available in the player.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Horizontal mode';
+  String get settingSendspinFullscreenLayoutTitle => 'Layout mode';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Split artwork and controls into equal left and right halves. With lyrics or the queue open, track details move below the artwork. Ignored while Now Playing is shown alongside a screensaver.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'How Now Playing arranges artwork, track details and controls. Horizontal splits them into left and right halves. Album art only fills the screen with artwork and shows track details and controls for a few seconds after a tap, switching to Vertical while lyrics or the queue are open. Ignored while Now Playing is shown alongside a screensaver.';
+
+  @override
+  String get mediaLayoutVertical => 'Vertical';
+
+  @override
+  String get mediaLayoutHorizontal => 'Horizontal';
+
+  @override
+  String get mediaLayoutArtOnly => 'Album art only';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle => 'Double tap to dismiss';

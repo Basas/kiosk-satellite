@@ -8354,11 +8354,20 @@ class UiStringsRu extends UiStrings {
       'Размер кнопок воспроизведения и полосы прогресса, независимо от текста. Применяется в обеих раскладках и рядом с заставкой. Кнопки вписываются в доступное место плеера.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Горизонтальный режим';
+  String get settingSendspinFullscreenLayoutTitle => 'Режим макета';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Разделить обложку и управление на равные левую и правую половины. С открытым текстом песни или очередью детали трека уходят под обложку. Игнорируется, пока «Сейчас играет» показан рядом с заставкой.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Как «Сейчас играет» располагает обложку, детали трека и управление. Горизонтальный делит их на левую и правую половины. Только обложка заполняет экран обложкой и показывает детали трека и управление на несколько секунд после касания, а с открытым текстом песни или очередью переключается на Вертикальный. Игнорируется, пока «Сейчас играет» показан рядом с заставкой.';
+
+  @override
+  String get mediaLayoutVertical => 'Вертикальный';
+
+  @override
+  String get mediaLayoutHorizontal => 'Горизонтальный';
+
+  @override
+  String get mediaLayoutArtOnly => 'Только обложка';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>

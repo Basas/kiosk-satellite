@@ -8450,11 +8450,20 @@ class UiStringsFr extends UiStrings {
       'Taille des boutons de lecture et de la barre de progression, indépendante de la taille du texte. S\'applique aux deux dispositions, y compris lorsque la vue est affichée à côté de l\'économiseur d\'écran. Les contrôles s\'adaptent à l\'espace disponible dans le lecteur.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Mode horizontal';
+  String get settingSendspinFullscreenLayoutTitle => 'Mode de disposition';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Diviser la pochette et les contrôles en deux moitiés égales, gauche et droite. Avec les paroles ou la file d\'attente ouvertes, les détails du morceau passent sous la pochette. Ignoré tant que Lecture en cours est affichée aux côtés d\'un économiseur d\'écran.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Façon dont Lecture en cours dispose la pochette, les détails du morceau et les contrôles. Horizontal les répartit en deux moitiés, gauche et droite. Pochette seule remplit l\'écran avec la pochette et affiche les détails du morceau et les contrôles pendant quelques secondes après un appui, puis passe en Vertical tant que les paroles ou la file d\'attente sont ouvertes. Ignoré tant que Lecture en cours est affichée aux côtés d\'un économiseur d\'écran.';
+
+  @override
+  String get mediaLayoutVertical => 'Vertical';
+
+  @override
+  String get mediaLayoutHorizontal => 'Horizontal';
+
+  @override
+  String get mediaLayoutArtOnly => 'Pochette seule';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>

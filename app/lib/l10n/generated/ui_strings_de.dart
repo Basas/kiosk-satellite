@@ -8500,11 +8500,20 @@ class UiStringsDe extends UiStrings {
       'Größe der Wiedergabeschaltflächen und der Fortschrittsleiste, unabhängig von der Textgröße. Gilt für beide Layouts sowie in Kombination mit dem Bildschirmschoner. Die Bedienelemente passen sich dem verfügbaren Platz an.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Horizontales Layout';
+  String get settingSendspinFullscreenLayoutTitle => 'Layout-Modus';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Teilt Cover und Bedienelemente in zwei gleich große Bereiche links und rechts auf. Wenn Songtexte oder die Warteschlange geöffnet sind, werden die Titelinformationen unter dem Cover angezeigt. Gilt nicht, wenn „Jetzt läuft“ neben dem Bildschirmschoner angezeigt wird.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Legt fest, wie „Jetzt läuft“ Cover, Titelinformationen und Bedienelemente anordnet. Horizontal teilt sie in eine linke und eine rechte Hälfte. Nur Cover füllt den Bildschirm mit dem Cover und zeigt Titelinformationen und Bedienelemente nach einem Tippen einige Sekunden lang an. Wenn Songtexte oder die Warteschlange geöffnet sind, wird Vertikal verwendet. Gilt nicht, wenn „Jetzt läuft“ neben dem Bildschirmschoner angezeigt wird.';
+
+  @override
+  String get mediaLayoutVertical => 'Vertikal';
+
+  @override
+  String get mediaLayoutHorizontal => 'Horizontal';
+
+  @override
+  String get mediaLayoutArtOnly => 'Nur Cover';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>

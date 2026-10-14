@@ -31488,8 +31488,8 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalTitle": "Mode horizontal",
-  "@settingSendspinFullscreenHorizontalTitle": {
+  "settingSendspinFullscreenLayoutTitle": "Mode de disposition",
+  "@settingSendspinFullscreenLayoutTitle": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Setting label.",
     "x-locations": {
@@ -31501,10 +31501,49 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalDescription": "Diviser la pochette et les contrôles en deux moitiés égales, gauche et droite. Avec les paroles ou la file d'attente ouvertes, les détails du morceau passent sous la pochette. Ignoré tant que Lecture en cours est affichée aux côtés d'un économiseur d'écran.",
-  "@settingSendspinFullscreenHorizontalDescription": {
+  "settingSendspinFullscreenLayoutDescription": "Façon dont Lecture en cours dispose la pochette, les détails du morceau et les contrôles. Horizontal les répartit en deux moitiés, gauche et droite. Pochette seule remplit l'écran avec la pochette et affiche les détails du morceau et les contrôles pendant quelques secondes après un appui, puis passe en Vertical tant que les paroles ou la file d'attente sont ouvertes. Ignoré tant que Lecture en cours est affichée aux côtés d'un économiseur d'écran.",
+  "@settingSendspinFullscreenLayoutDescription": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutVertical": "Vertical",
+  "@mediaLayoutVertical": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork, track details and controls stacked from top to bottom.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutHorizontal": "Horizontal",
+  "@mediaLayoutHorizontal": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork in the left half of the screen, track details and controls in the right half.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutArtOnly": "Pochette seule",
+  "@mediaLayoutArtOnly": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.",
     "x-locations": {
       "device": [
         "Settings > Media Player > Now Playing > User Interface"

@@ -31488,8 +31488,8 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalTitle": "横向模式",
-  "@settingSendspinFullscreenHorizontalTitle": {
+  "settingSendspinFullscreenLayoutTitle": "布局模式",
+  "@settingSendspinFullscreenLayoutTitle": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Setting label.",
     "x-locations": {
@@ -31501,10 +31501,49 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalDescription": "封面和控制区左右各占一半。打开歌词或播放队列时，曲目信息移到封面下方。“正在播放”与屏保同时显示时，此设置不生效。",
-  "@settingSendspinFullscreenHorizontalDescription": {
+  "settingSendspinFullscreenLayoutDescription": "设置“正在播放”中封面、曲目信息和控制区的排列方式。横向将它们分为左右两半。仅封面让封面占满屏幕，轻触屏幕后显示曲目信息和控制区几秒钟；打开歌词或播放队列时切换为纵向。“正在播放”与屏保同时显示时，此设置不生效。",
+  "@settingSendspinFullscreenLayoutDescription": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutVertical": "纵向",
+  "@mediaLayoutVertical": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork, track details and controls stacked from top to bottom.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutHorizontal": "横向",
+  "@mediaLayoutHorizontal": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork in the left half of the screen, track details and controls in the right half.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutArtOnly": "仅封面",
+  "@mediaLayoutArtOnly": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.",
     "x-locations": {
       "device": [
         "Settings > Media Player > Now Playing > User Interface"

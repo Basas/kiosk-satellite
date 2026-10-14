@@ -14444,14 +14444,32 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
-  /// **'Horizontal mode'**
-  String get settingSendspinFullscreenHorizontalTitle;
+  /// **'Layout mode'**
+  String get settingSendspinFullscreenLayoutTitle;
 
   /// Help below this setting.
   ///
   /// In en, this message translates to:
-  /// **'Split artwork and controls into equal left and right halves. With lyrics or the queue open, track details move below the artwork. Ignored while Now Playing is shown alongside a screensaver.'**
-  String get settingSendspinFullscreenHorizontalDescription;
+  /// **'How Now Playing arranges artwork, track details and controls. Horizontal splits them into left and right halves. Album art only fills the screen with artwork and shows track details and controls for a few seconds after a tap, switching to Vertical while lyrics or the queue are open. Ignored while Now Playing is shown alongside a screensaver.'**
+  String get settingSendspinFullscreenLayoutDescription;
+
+  /// Option: artwork, track details and controls stacked from top to bottom.
+  ///
+  /// In en, this message translates to:
+  /// **'Vertical'**
+  String get mediaLayoutVertical;
+
+  /// Option: artwork in the left half of the screen, track details and controls in the right half.
+  ///
+  /// In en, this message translates to:
+  /// **'Horizontal'**
+  String get mediaLayoutHorizontal;
+
+  /// Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Album art only'**
+  String get mediaLayoutArtOnly;
 
   /// Setting label.
   ///

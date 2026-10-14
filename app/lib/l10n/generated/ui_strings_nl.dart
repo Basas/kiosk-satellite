@@ -8396,11 +8396,20 @@ class UiStringsNl extends UiStrings {
       'Grootte van de afspeelknoppen en voortgangsbalk, onafhankelijk van de tekstgrootte. Geldt voor beide indelingen en naast de schermbeveiliging. De bediening past zich aan de beschikbare ruimte aan.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Horizontale modus';
+  String get settingSendspinFullscreenLayoutTitle => 'Indelingsmodus';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Verdeel de albumhoes en bediening over twee gelijke helften. Wanneer de songtekst of wachtrij geopend is, worden de nummergegevens onder de albumhoes geplaatst. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Hoe Speelt nu de albumhoes, nummergegevens en bediening indeelt. Horizontaal verdeelt ze over een linker- en rechterhelft. Alleen albumhoes vult het scherm met de albumhoes en toont de nummergegevens en bediening een paar seconden na een tik, en schakelt naar Verticaal zolang de songtekst of wachtrij geopend is. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.';
+
+  @override
+  String get mediaLayoutVertical => 'Verticaal';
+
+  @override
+  String get mediaLayoutHorizontal => 'Horizontaal';
+
+  @override
+  String get mediaLayoutArtOnly => 'Alleen albumhoes';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>

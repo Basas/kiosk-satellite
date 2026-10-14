@@ -31488,8 +31488,8 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalTitle": "Горизонтальний режим",
-  "@settingSendspinFullscreenHorizontalTitle": {
+  "settingSendspinFullscreenLayoutTitle": "Режим макета",
+  "@settingSendspinFullscreenLayoutTitle": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Setting label.",
     "x-locations": {
@@ -31501,10 +31501,49 @@
       ]
     }
   },
-  "settingSendspinFullscreenHorizontalDescription": "Розділити обкладинку та елементи керування на рівні ліву й праву половини. З відкритим текстом пісні або чергою відомості про трек переміщуються під обкладинку. Ігнорується, коли «Зараз грає» показано поруч із заставкою.",
-  "@settingSendspinFullscreenHorizontalDescription": {
+  "settingSendspinFullscreenLayoutDescription": "Як «Зараз грає» розташовує обкладинку, відомості про трек та елементи керування. Горизонтальний розділяє їх на ліву й праву половини. Лише обкладинка заповнює екран обкладинкою й показує відомості про трек та елементи керування на кілька секунд після дотику, а з відкритим текстом пісні або чергою перемикається на Вертикальний. Ігнорується, коли «Зараз грає» показано поруч із заставкою.",
+  "@settingSendspinFullscreenLayoutDescription": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutVertical": "Вертикальний",
+  "@mediaLayoutVertical": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork, track details and controls stacked from top to bottom.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutHorizontal": "Горизонтальний",
+  "@mediaLayoutHorizontal": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: artwork in the left half of the screen, track details and controls in the right half.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "mediaLayoutArtOnly": "Лише обкладинка",
+  "@mediaLayoutArtOnly": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.",
     "x-locations": {
       "device": [
         "Settings > Media Player > Now Playing > User Interface"

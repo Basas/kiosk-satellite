@@ -1112,9 +1112,9 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinFullscreenButtonScaleTitle",
     "description": "settingSendspinFullscreenButtonScaleDescription",
   },
-  "sendspin.fullscreen_horizontal": {
-    "title": "settingSendspinFullscreenHorizontalTitle",
-    "description": "settingSendspinFullscreenHorizontalDescription",
+  "sendspin.fullscreen_layout": {
+    "title": "settingSendspinFullscreenLayoutTitle",
+    "description": "settingSendspinFullscreenLayoutDescription",
   },
   "sendspin.fullscreen_double_tap": {
     "title": "settingSendspinFullscreenDoubleTapTitle",
