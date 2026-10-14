@@ -12,6 +12,7 @@ import '../../core/manager.dart';
 import '../../core/events.dart';
 import '../../ui/mdi_icon.dart';
 import 'plugin_repository.dart';
+import '../home_assistant/plugin_ha_socket.dart';
 import 'plugin_host_api.dart';
 
 class PluginWindow {
@@ -180,6 +181,10 @@ class PluginManager extends Manager {
   bool _disposed = false;
   late final PluginHostApi _hostReads;
 
+  /// The Home Assistant connection plugins with the `ha` capability share.
+  /// Set by the app container before [init].
+  HaPluginSocket? haSocket;
+
   List<Map<String, Object?>> get actions => [
     for (final plugin in installed.value)
       for (final command
@@ -264,6 +269,7 @@ class PluginManager extends Manager {
       commands,
       bus,
       (event) => channel.invokeMethod<void>('hostEvent', event),
+      ha: haSocket,
     );
     channel.setMethodCallHandler((call) async {
       if (_disposed) return null;
@@ -294,6 +300,12 @@ class PluginManager extends Manager {
           _hostReads.subscription(call.arguments as Map);
         case 'hostCommand':
           return _hostReads.execute(call.arguments as Map);
+        case 'haCall':
+          return _hostReads.haCall(call.arguments as Map);
+        case 'haSubscribe':
+          return _hostReads.haSubscribe(call.arguments as Map);
+        case 'haUnsubscribe':
+          _hostReads.haUnsubscribe(call.arguments as Map);
         case 'entities':
           final data = call.arguments as Map;
           if (_runtimeSessions[data['id']] == data['session'] &&
@@ -1110,6 +1122,7 @@ class PluginManager extends Manager {
     _disposed = true;
     await _attachSub?.cancel();
     await _hostReads.dispose();
+    haSocket?.dispose();
     repository.close();
     channel.setMethodCallHandler(null);
     try {

@@ -6,16 +6,22 @@ import '../../core/event_bus.dart';
 import '../../core/events.dart';
 import '../browser/dashboard_state.dart';
 import '../home_assistant/plugin_entities.dart';
+import '../home_assistant/plugin_ha_socket.dart';
 import '../intercom/intercom_sensors.dart';
 import '../settings/definitions.dart' as defs;
 
 /// Explicit SDK 1 host surface. Registry additions do not expand plugin access.
 class PluginHostApi {
-  PluginHostApi(this.commands, EventBus bus, this.sendEvent) {
+  PluginHostApi(this.commands, EventBus bus, this.sendEvent, {this.ha}) {
     _events = bus.stream.listen(_onEvent);
+    ha?.emit = _onHaEvent;
   }
 
   final CommandRegistry commands;
+
+  /// Home Assistant commands and subscriptions for sessions that declare
+  /// the `ha` capability.
+  final HaPluginSocket? ha;
   final Future<void> Function(Map<String, Object?>) sendEvent;
   late final StreamSubscription<AppEvent> _events;
   final _sessions = <String, _HostSession>{};
@@ -263,7 +269,9 @@ class PluginHostApi {
     if (id is! String || token is! String || token.isEmpty) return;
     final capabilities = args['capabilities'];
     if (capabilities is! List ||
-        !capabilities.any((c) => c == 'host.read' || c == 'host.control')) {
+        !capabilities.any(
+          (c) => c == 'host.read' || c == 'host.control' || c == 'ha',
+        )) {
       return;
     }
     final previous = _sessions.remove(id);
@@ -274,6 +282,7 @@ class PluginHostApi {
       capabilities.contains('host.read'),
       capabilities.contains('host.control'),
       canNoise: capabilities.contains('noise'),
+      canHa: capabilities.contains('ha'),
     );
   }
 
@@ -289,6 +298,7 @@ class PluginHostApi {
     unawaited(
       commands.execute('haPluginUnwatchEntity', {'owner': session.owner}),
     );
+    if (session.canHa) ha?.release(session.owner);
   }
 
   static String? entityEventId(String event) {
@@ -378,10 +388,17 @@ class PluginHostApi {
         'entitySubscriptions': session.canRead
             ? {'eventPrefix': 'ha.entity.', 'maxEntities': 16}
             : null,
+        'haSubscriptions': session.canHa && ha != null
+            ? {
+                'eventPrefix': 'ha.subscription.',
+                'maxSubscriptions': HaPluginSocket.maxSubscriptions,
+              }
+            : null,
         'capabilities': [
           if (session.canRead) 'host.read',
           if (session.canControl) 'host.control',
           if (session.canRead && session.canNoise) 'noise',
+          if (session.canHa && ha != null) 'ha',
         ],
         'commands': [
           'getHostApi',
@@ -529,6 +546,100 @@ class PluginHostApi {
       return const CommandResult.fail(
         'KS command failed or timed out',
       ).toJson();
+    }
+  }
+
+  /// Run one Home Assistant websocket command for a plugin. Answers
+  /// `{ok: true, data: result}` or `{ok: false, error, data: {code, message}}`.
+  Future<Map<String, Object?>> haCall(Map args) async {
+    final session = _haSession(args);
+    final message = _haMessage(args['message']);
+    if (session == null || message == null) return _haRefused(session);
+    final result = await ha!.call(session.owner, message);
+    if (_session(args) != session) return _haRefused(null);
+    return _haAnswer(result, data: result['result']);
+  }
+
+  /// Subscribe a plugin to a Home Assistant websocket subscription under
+  /// its own key. Events follow as `ha.subscription.KEY`.
+  Future<Map<String, Object?>> haSubscribe(Map args) async {
+    final session = _haSession(args);
+    final message = _haMessage(args['message']);
+    final key = args['key'];
+    if (session == null || message == null || key is! String) {
+      return _haRefused(session);
+    }
+    final result = await ha!.subscribe(session.owner, key, message);
+    if (_session(args) != session) {
+      ha!.unsubscribe(session.owner, key);
+      return _haRefused(null);
+    }
+    return _haAnswer(result);
+  }
+
+  void haUnsubscribe(Map args) {
+    final session = _haSession(args);
+    final key = args['key'];
+    if (session == null || key is! String) return;
+    ha!.unsubscribe(session.owner, key);
+    session.haQueue.removeWhere((e) => e.key == 'ha.subscription.$key');
+    session.haDropped.remove('ha.subscription.$key');
+  }
+
+  _HostSession? _haSession(Map args) {
+    final session = _session(args);
+    return session != null && session.canHa && ha != null ? session : null;
+  }
+
+  /// A detached copy of the plugin's message, when it is one.
+  static Map<String, Object?>? _haMessage(Object? message) =>
+      message is Map ? Map<String, Object?>.from(message) : null;
+
+  static Map<String, Object?> _haRefused(_HostSession? session) => _haAnswer({
+    'ok': false,
+    'error': {
+      'code': session == null ? 'not_allowed' : 'invalid_message',
+      'message': session == null
+          ? 'Home Assistant is not available through this plugin session'
+          : 'The message must be a JSON object',
+    },
+  });
+
+  static Map<String, Object?> _haAnswer(
+    Map<String, Object?> result, {
+    Object? data,
+  }) {
+    if (result['ok'] == true) return {'ok': true, 'data': data};
+    final error = result['error'] is Map
+        ? Map<String, Object?>.from(result['error'] as Map)
+        : <String, Object?>{'code': 'unknown_error', 'message': ''};
+    final message = '${error['message'] ?? ''}';
+    return {
+      'ok': false,
+      'error': message.isEmpty
+          ? '${error['code']}'
+          : '${error['code']}: $message',
+      'data': error,
+    };
+  }
+
+  /// A subscription's event, queued in order: unlike KS's own state
+  /// events, none of these may be merged into the next one.
+  void _onHaEvent(String owner, String key, Map<String, Object?> payload) {
+    final name = 'ha.subscription.$key';
+    for (final session in _sessions.values) {
+      if (session.owner != owner || !session.canHa) continue;
+      if (session.haQueue.length >= _HostSession.maxHaQueue) {
+        session.haDropped[name] = (session.haDropped[name] ?? 0) + 1;
+      } else {
+        session.haQueue.add(
+          MapEntry(name, {
+            ...payload,
+            'time': DateTime.now().toUtc().toIso8601String(),
+          }),
+        );
+      }
+      _schedule(session);
     }
   }
 
@@ -699,18 +810,37 @@ class PluginHostApi {
     if (session.closed ||
         session.sending ||
         session.timer != null ||
-        session.pending.isEmpty) {
+        (session.pending.isEmpty &&
+            session.haQueue.isEmpty &&
+            session.haDropped.isEmpty)) {
       return;
     }
     session.timer = Timer(const Duration(milliseconds: 100), () async {
       session.timer = null;
       session.sending = true;
-      final batch = Map.of(session.pending);
+      final batch = [
+        ...session.pending.entries,
+        ...session.haQueue,
+        // Events that did not fit: the plugin hears how many it missed.
+        for (final entry in session.haDropped.entries)
+          MapEntry(entry.key, {
+            'type': 'overflow',
+            'dropped': entry.value,
+            'time': DateTime.now().toUtc().toIso8601String(),
+          }),
+      ];
       session.pending.clear();
+      session.haQueue.clear();
+      session.haDropped.clear();
       try {
-        for (final entry in batch.entries) {
+        for (final entry in batch) {
           if (session.closed) break;
-          if (!session.subscriptions.contains(entry.key)) continue;
+          // Unsubscribed while the batch went out. The Android side drops
+          // events for ended Home Assistant subscriptions.
+          if (!entry.key.startsWith('ha.subscription.') &&
+              !session.subscriptions.contains(entry.key)) {
+            continue;
+          }
           await sendEvent({
             'id': session.id,
             'session': session.token,
@@ -750,15 +880,24 @@ class _HostSession {
     this.canRead,
     this.canControl, {
     this.canNoise = false,
+    this.canHa = false,
   });
+
+  /// Home Assistant events waiting for a slow plugin. Past this the newest
+  /// are dropped and counted.
+  static const maxHaQueue = 64;
+
   final bool canRead;
   final bool canControl;
   final bool canNoise;
+  final bool canHa;
   final String id;
   final String token;
   String get owner => '$id:$token';
   final subscriptions = <String>{};
   final pending = <String, Map<String, Object?>>{};
+  final haQueue = <MapEntry<String, Map<String, Object?>>>[];
+  final haDropped = <String, int>{};
   Timer? timer;
   bool sending = false;
   bool closed = false;
@@ -766,6 +905,8 @@ class _HostSession {
     closed = true;
     timer?.cancel();
     pending.clear();
+    haQueue.clear();
+    haDropped.clear();
     subscriptions.clear();
   }
 }

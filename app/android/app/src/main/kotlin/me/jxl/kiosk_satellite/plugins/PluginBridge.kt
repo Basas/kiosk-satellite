@@ -174,7 +174,45 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         }
         val token = UUID.randomUUID().toString()
         val subscriptions = ConcurrentHashMap.newKeySet<String>()
+        /** Keys of this session's Home Assistant subscriptions, so events for an ended one are dropped. */
+        val haSubscriptions = ConcurrentHashMap.newKeySet<String>()
         val commandBudget = PluginCommandBudget()
+        /**
+         * Send a Home Assistant request to the app. Unlike KS commands, a failure keeps its data: HA's {code, message}.
+         * Service calls can run a script to its end, so the wait is longer.
+         */
+        fun haRequest(method: String, arguments: Map<String, Any?>, callback: PluginHost.CommandCallback, done: (Boolean) -> Unit = {}) {
+            commandBudget.acquire()
+            val completed = AtomicBoolean(false)
+            lateinit var timeout: Runnable
+            fun finish(ok: Boolean, data: Any?, error: String?) {
+                if (!completed.compareAndSet(false, true)) return
+                main.removeCallbacks(timeout)
+                done(ok)
+                worker.execute {
+                    try {
+                        if (alive.get() && sessions[id] === this) {
+                            try { call { callback.onResult(ok, data, error) } }
+                            catch (failure: Throwable) { fail(id, failure); emit("changed", snapshot()) }
+                        }
+                    } finally { commandBudget.release() }
+                }
+            }
+            timeout = Runnable { finish(false, mapOf("code" to "timeout", "message" to ""), "timeout") }
+            main.post {
+                if (!alive.get()) { commandBudget.release(); done(false); return@post }
+                main.postDelayed(timeout, 30_000)
+                channel.invokeMethod(method, mapOf("id" to id, "session" to token) + arguments, object : MethodChannel.Result {
+                    override fun success(result: Any?) {
+                        val value = result as? Map<*, *>
+                        val ok = value?.get("ok") == true
+                        finish(ok, value?.get("data"), if (ok) null else (value?.get("error") as? String ?: "KS command bridge is unavailable"))
+                    }
+                    override fun error(code: String, message: String?, details: Any?) = finish(false, null, "KS command bridge is unavailable")
+                    override fun notImplemented() = finish(false, null, "KS command bridge is unavailable")
+                })
+            }
+        }
         private var shizukuClient: PluginShizuku.Client? = null
         @Synchronized fun closeShizuku() { shizukuClient?.close(); shizukuClient = null }
         @Synchronized fun shizukuClient(): PluginShizuku.Client {
@@ -233,6 +271,23 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                         override fun notImplemented() = finish(false, null, "KS command bridge is unavailable")
                     })
                 }
+            }
+            override fun haCall(message: Map<String, Any>, callback: PluginHost.CommandCallback) {
+                check(alive.get() && "ha" in manifest.capabilities) { "SDK 1 ha access is required" }
+                haRequest("haCall", mapOf("message" to PluginHostPolicy.haMessage(message)), callback)
+            }
+            override fun haSubscribe(key: String, message: Map<String, Any>, callback: PluginHost.CommandCallback) {
+                check(alive.get() && "ha" in manifest.capabilities) { "SDK 1 ha access is required" }
+                require(PluginHostPolicy.haKey(key)) { "Subscription keys are 1 to 64 letters, digits, dots, dashes or underscores" }
+                val copy = PluginHostPolicy.haMessage(message)
+                require(haSubscriptions.size < 16 || key in haSubscriptions) { "At most 16 Home Assistant subscriptions per plugin" }
+                require(haSubscriptions.add(key)) { "Subscription $key is already active" }
+                try { haRequest("haSubscribe", mapOf("key" to key, "message" to copy), callback) { ok -> if (!ok) haSubscriptions.remove(key) } }
+                catch (error: Throwable) { haSubscriptions.remove(key); throw error }
+            }
+            override fun haUnsubscribe(key: String) {
+                check(alive.get() && "ha" in manifest.capabilities) { "SDK 1 ha access is required" }
+                if (haSubscriptions.remove(key)) emit("haUnsubscribe", mapOf("id" to id, "session" to token, "key" to key), alive)
             }
             override fun subscribe(event: String) {
                 check(alive.get() && "host.read" in manifest.capabilities) { "SDK 1 host.read access is required" }
@@ -463,7 +518,9 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                         "hostEvent" -> {
                             val session = sessions[args["id"]]
                             val event = args["event"] as? String
-                            if (session != null && session.alive.get() && session.token == args["session"] && event in session.subscriptions) {
+                            val haKey = event?.let(PluginHostPolicy::haSubscriptionKey)
+                            if (session != null && session.alive.get() && session.token == args["session"] &&
+                                (event in session.subscriptions || (haKey != null && haKey in session.haSubscriptions))) {
                                 val payload = args["payload"] as? Map<String, Any?> ?: emptyMap()
                                 try { session.call { session.plugin!!.onEvent("ks.$event", payload) } }
                                 catch (error: Throwable) { fail(session.id, error); emit("changed", snapshot()); throw error }

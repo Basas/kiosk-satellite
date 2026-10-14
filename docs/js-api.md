@@ -152,6 +152,8 @@ This delegation negotiates completely transparently, just like the wake word han
 
 It only works on a custom page, in Home Assistant's `/local/` or on another server, and only while **Share Home Assistant connection** is on in Settings > Home Assistant > Custom Pages. A socket belongs to the page that opened it: when the kiosk navigates away, the connection closes and Home Assistant drops its subscriptions. The page acts as the Home Assistant user that owns the kiosk's token.
 
+Credential and user management commands never reach Home Assistant through this connection: `auth/long_lived_access_token`, the other `auth/` commands except `auth/current_user` and `auth/sign_path`, and the `config/auth` user and password commands. The page gets Home Assistant's usual error result with the code `not_allowed` instead, so the kiosk's token cannot be copied into a token of the page's own.
+
 Unlike the rest of this API, these methods reject on failure. A rejection carries `{code, message}`: Home Assistant's own error for a command it refused, or one of these codes from the kiosk.
 
 | Code | Meaning |

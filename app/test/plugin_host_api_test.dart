@@ -6,6 +6,7 @@ import 'package:kiosk_satellite/core/command_registry.dart';
 import 'package:kiosk_satellite/core/event_bus.dart';
 import 'package:kiosk_satellite/core/events.dart';
 import 'package:kiosk_satellite/core/logging.dart';
+import 'package:kiosk_satellite/managers/home_assistant/plugin_ha_socket.dart';
 import 'package:kiosk_satellite/managers/plugins/plugin_host_api.dart';
 
 void main() {
@@ -879,6 +880,137 @@ void main() {
     },
   );
 
+  group('Home Assistant access', () {
+    late _FakeHa ha;
+    late PluginHostApi haApi;
+    const haSession = {'id': 'ha-plugin', 'session': 'two'};
+
+    setUp(() {
+      ha = _FakeHa();
+      haApi = PluginHostApi(commands, bus, (event) async {
+        sent.add(event);
+      }, ha: ha);
+      haApi.open({
+        ...haSession,
+        'capabilities': ['ha'],
+      });
+      haApi.open({
+        ...session,
+        'capabilities': ['host.read'],
+      });
+    });
+
+    tearDown(() => haApi.dispose());
+
+    test('needs the ha capability', () async {
+      final refused = await haApi.haCall({
+        ...session,
+        'message': {'type': 'call_service'},
+      });
+      expect(refused['ok'], false);
+      expect((refused['data'] as Map)['code'], 'not_allowed');
+      expect(ha.calls, isEmpty);
+      final ok = await haApi.haCall({
+        ...haSession,
+        'message': {'type': 'call_service', 'domain': 'light'},
+      });
+      expect(ok, {
+        'ok': true,
+        'data': {'done': true},
+      });
+      expect(ha.calls.single.$1, 'ha-plugin:two');
+      expect(ha.calls.single.$2, {'type': 'call_service', 'domain': 'light'});
+    });
+
+    test("errors keep Home Assistant's code and message", () async {
+      ha.answer = {
+        'ok': false,
+        'error': {'code': 'service_not_found', 'message': 'Not found'},
+      };
+      expect(
+        await haApi.haCall({
+          ...haSession,
+          'message': {'type': 'call_service'},
+        }),
+        {
+          'ok': false,
+          'error': 'service_not_found: Not found',
+          'data': {'code': 'service_not_found', 'message': 'Not found'},
+        },
+      );
+    });
+
+    test('subscription events arrive in order, none merged', () async {
+      expect(
+        (await haApi.haSubscribe({
+          ...haSession,
+          'key': 'door',
+          'message': {'type': 'subscribe_trigger'},
+        }))['ok'],
+        true,
+      );
+      for (var i = 0; i < 3; i++) {
+        ha.emit!('ha-plugin:two', 'door', {
+          'type': 'event',
+          'event': {'n': i},
+        });
+      }
+      // Another session's owner hears nothing here.
+      ha.emit!('example:one', 'door', {'type': 'event'});
+      await Future<void>.delayed(const Duration(milliseconds: 180));
+      expect(sent.map((e) => e['event']), [
+        'ha.subscription.door',
+        'ha.subscription.door',
+        'ha.subscription.door',
+      ]);
+      expect(sent.map((e) => ((e['payload'] as Map)['event'] as Map)['n']), [
+        0,
+        1,
+        2,
+      ]);
+      expect(sent.every((e) => e['session'] == 'two'), true);
+    });
+
+    test('a slow plugin hears how many events it missed', () async {
+      for (var i = 0; i < 70; i++) {
+        ha.emit!('ha-plugin:two', 'busy', {'type': 'event', 'event': i});
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 180));
+      expect(sent, hasLength(65));
+      expect(sent.last['payload'], containsPair('type', 'overflow'));
+      expect(sent.last['payload'], containsPair('dropped', 6));
+    });
+
+    test('unsubscribing drops queued events and the end of a session '
+        'releases everything', () async {
+      ha.emit!('ha-plugin:two', 'door', {'type': 'event'});
+      haApi.haUnsubscribe({...haSession, 'key': 'door'});
+      expect(ha.unsubscribed, [('ha-plugin:two', 'door')]);
+      await Future<void>.delayed(const Duration(milliseconds: 180));
+      expect(sent, isEmpty);
+      haApi.close(haSession);
+      expect(ha.released, ['ha-plugin:two']);
+    });
+
+    test('getHostApi lists the capability', () async {
+      haApi.open({
+        ...haSession,
+        'capabilities': ['ha', 'host.read'],
+      });
+      final api = await haApi.execute({
+        ...haSession,
+        'command': 'getHostApi',
+        'arguments': const {},
+      });
+      final data = api['data'] as Map;
+      expect(data['capabilities'], ['host.read', 'ha']);
+      expect(data['haSubscriptions'], {
+        'eventPrefix': 'ha.subscription.',
+        'maxSubscriptions': 16,
+      });
+    });
+  });
+
   test('native and Flutter event contracts match', () {
     final source = File(
       'android/app/src/main/kotlin/me/jxl/kiosk_satellite/plugins/PluginHostPolicy.kt',
@@ -891,4 +1023,38 @@ void main() {
       ...PluginHostApi.noiseEventNames,
     });
   });
+}
+
+class _FakeHa extends HaPluginSocket {
+  _FakeHa() : super(baseUrl: () => '', token: () => '', log: Logger());
+
+  final calls = <(String, Map<String, Object?>)>[];
+  final unsubscribed = <(String, String)>[];
+  final released = <String>[];
+  Map<String, Object?> answer = {
+    'ok': true,
+    'result': {'done': true},
+  };
+
+  @override
+  Future<Map<String, Object?>> call(
+    String owner,
+    Map<String, Object?> message,
+  ) async {
+    calls.add((owner, message));
+    return answer;
+  }
+
+  @override
+  Future<Map<String, Object?>> subscribe(
+    String owner,
+    String key,
+    Map<String, Object?> message,
+  ) async => {'ok': true};
+
+  @override
+  void unsubscribe(String owner, String key) => unsubscribed.add((owner, key));
+
+  @override
+  void release(String owner) => released.add(owner);
 }

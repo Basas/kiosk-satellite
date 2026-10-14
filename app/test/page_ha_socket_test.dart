@@ -36,7 +36,9 @@ void main() {
       served.add(ws);
       ws.add(jsonEncode({'type': 'auth_required', 'ha_version': '2026.10.1'}));
       ws.listen((raw) {
-        final msg = jsonDecode(raw as String) as Map;
+        // Home Assistant also takes several commands in one frame.
+        final decoded = jsonDecode(raw as String);
+        final msg = (decoded is List ? decoded.first : decoded) as Map;
         if (msg['type'] == 'auth') {
           ws.add(
             jsonEncode(
@@ -96,6 +98,48 @@ void main() {
       'n': 2,
     });
   });
+
+  test(
+    'credential commands never reach Home Assistant, the page hears no',
+    () async {
+      await sockets.open('doc1', 's1');
+      expect(
+        sockets.send(
+          'doc1',
+          's1',
+          '{"id":2,"type":"auth/long_lived_access_token",'
+              '"client_name":"x","lifespan":3650}',
+        ),
+        isTrue,
+      );
+      // Spelled with an escape, in a list beside an allowed command.
+      sockets.send(
+        'doc1',
+        's1',
+        r'[{"id":3,"type":"\u0061uth/delete_refresh_token"},'
+            '{"id":4,"type":"auth/current_user"}]',
+      );
+      sockets.send('doc1', 's1', '{"id":5,"type":"config/auth/create"}');
+      await firstFrame.future;
+      await settle();
+      expect(received, ['[{"id":4,"type":"auth/current_user"}]']);
+      final refused = [
+        for (final call in delivered)
+          for (final frame
+              in (jsonDecode(
+                        RegExp(
+                          r'receive\("doc1", (.*)\);$',
+                        ).firstMatch(call)!.group(1)!,
+                      )
+                      as Map)['s1']
+                  as List)
+            jsonDecode(frame as String) as Map,
+      ].where((f) => f['type'] == 'result').toList();
+      expect(refused.map((f) => f['id']), [2, 3, 5]);
+      expect(refused.every((f) => f['success'] == false), isTrue);
+      expect((refused.first['error'] as Map)['code'], 'not_allowed');
+    },
+  );
 
   test('a wrong token, no token or the setting off open nothing', () async {
     acceptToken = 'other';

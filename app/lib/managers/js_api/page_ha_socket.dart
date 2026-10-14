@@ -6,6 +6,7 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../core/logging.dart';
+import '../home_assistant/ha_credential_commands.dart';
 
 /// The managed Home Assistant connection for custom pages (see
 /// docs/js-api.md, `kioskSatellite.ha`).
@@ -115,13 +116,46 @@ class PageHaSockets {
   }
 
   /// Pass one frame from the page to Home Assistant. False when the socket
-  /// is not open for [doc].
+  /// is not open for [doc]. Credential commands never go through: the page
+  /// hears Home Assistant's usual error for them instead.
   bool send(String doc, String sid, String frame) {
     if (doc != _doc) return false;
     final socket = _sockets[sid];
     if (socket == null || !socket.ready) return false;
-    socket.add(frame);
+    final allowed = _withoutCredentialCommands(socket, frame);
+    if (allowed != null) socket.add(allowed);
     return true;
+  }
+
+  /// [frame] minus its credential commands, or null when nothing is left.
+  /// Home Assistant also takes a list of commands in one frame, so each
+  /// one is checked.
+  String? _withoutCredentialCommands(_PageSocket socket, String frame) {
+    // Every credential command has "auth" in its type, so most frames
+    // never need decoding. A \u escape could spell it out of sight.
+    if (!frame.contains('auth') && !frame.contains(r'\u')) return frame;
+    Object? decoded;
+    try {
+      decoded = jsonDecode(frame);
+    } catch (_) {
+      return frame;
+    }
+    final commands = decoded is List ? decoded : [decoded];
+    final kept = <Object?>[];
+    for (final command in commands) {
+      if (command is Map && isHaCredentialCommand(command['type'])) {
+        log.warn(
+          'js_api',
+          'page socket ${socket.sid}: refused ${command['type']}',
+        );
+        _onFrame(socket, jsonEncode(haCredentialRefusal(command['id'])));
+      } else {
+        kept.add(command);
+      }
+    }
+    if (kept.length == commands.length) return frame;
+    if (kept.isEmpty) return null;
+    return jsonEncode(decoded is List ? kept : kept.single);
   }
 
   /// The page closed socket [sid] itself. Nothing is reported back.

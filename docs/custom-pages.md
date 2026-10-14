@@ -65,7 +65,7 @@ The library also works without `kioskSatellite.ha.createSocket`, but then the pa
 
 #### What the page can do
 
-The page can do anything the Home Assistant user that owns the kiosk's token can do. Only add pages you trust, from servers you control.
+The page can do anything the Home Assistant user that owns the kiosk's token can do, except manage credentials and users. It cannot make a long-lived access token of its own, list or revoke tokens, change a password or add a user over the shared connection. Only add pages you trust, from servers you control.
 
 ### Home Assistant's session
 
