@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Changed
+- **Proximity sensor details in the log.** When proximity detection starts, the log now shows the sensor's advertised range and resolution, and each resting, near and far entry carries the raw reading. This makes it easier to diagnose sensors that report proximity differently from Android's standard, such as the NSPanel Pro's (#980).
+
 ## v2026.10.24 - 2026-10-14
 
 ### Added

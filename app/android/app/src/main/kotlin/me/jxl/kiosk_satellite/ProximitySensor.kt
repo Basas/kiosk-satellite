@@ -26,6 +26,7 @@ import io.flutter.plugin.common.MethodChannel
  * 1 for far even though their advertised maximum range is larger. When
  * the resolution spans the whole range, treat the readings as flags.
  * Sensors with finer resolution keep their distance-based near test.
+ * Each event carries the raw reading so the log shows a sensor's shape.
  * The first sample after registering is the resting state (flagged
  * `initial`), not an approach: something resting on the sensor must not
  * wake the screensaver every time it starts.
@@ -85,7 +86,9 @@ class ProximitySensor(context: Context, messenger: BinaryMessenger) {
                         val initial = last == null
                         if (!initial && near == last) return
                         last = near
-                        sink.success(mapOf("near" to near, "initial" to initial))
+                        sink.success(
+                            mapOf("near" to near, "initial" to initial, "distance" to distance),
+                        )
                     }
 
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
