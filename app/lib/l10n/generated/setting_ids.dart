@@ -1024,6 +1024,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinMaTokenTitle",
     "description": "settingSendspinMaTokenDescription",
   },
+  "sendspin.ma_inputs": {
+    "title": "settingSendspinSonosInputsTitle",
+    "description": "settingSendspinSonosInputsDescription",
+  },
   "sendspin.ma_shortcut": {
     "title": "settingSendspinMaShortcutTitle",
     "description": "settingSendspinMaShortcutDescription",

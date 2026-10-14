@@ -305,6 +305,7 @@ class SendspinManager extends Manager {
     required void Function(Map<String, Object?>?) onSnapshot,
     required Logger log,
     String label,
+    bool showInputs,
   })
   remoteFactory = MaRemotePlayer.new;
 
@@ -1116,6 +1117,7 @@ class SendspinManager extends Manager {
           e.key == defs.sendspinSonosHosts.key ||
           e.key == defs.sendspinSonosGroupVolume.key ||
           e.key == defs.sendspinSonosInputs.key ||
+          e.key == defs.sendspinMaInputs.key ||
           e.key == defs.haUrl.key ||
           e.key == defs.haToken.key) {
         _syncRemote();
@@ -1185,6 +1187,7 @@ class SendspinManager extends Manager {
         'sendspin.sonos_group_volume',
         'sendspin.group_volume',
         'sendspin.sonos_inputs',
+        'sendspin.ma_inputs',
         'sendspin.speaker_pill',
         'sendspin.queue_art',
         'sendspin.lyrics_enabled',
@@ -1963,7 +1966,8 @@ class SendspinManager extends Manager {
     final key = want
         ? switch (source.kind) {
             PlayerSourceKind.musicAssistant =>
-              'ma|${source.id}|$maUrl|$maToken',
+              'ma|${source.id}|$maUrl|$maToken|'
+                  '${_settings.get(defs.sendspinMaInputs)}',
             PlayerSourceKind.homeAssistant => 'ha|${source.id}|$haUrl|$haToken',
             PlayerSourceKind.sonos =>
               'sonos|${source.id}|$sonosHost|'
@@ -2025,6 +2029,7 @@ class SendspinManager extends Manager {
         playerId: source.id,
         onSnapshot: snapshot,
         log: log,
+        showInputs: _settings.get(defs.sendspinMaInputs),
       ),
     };
     _remote = remote;

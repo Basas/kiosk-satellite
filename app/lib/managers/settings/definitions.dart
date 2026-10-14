@@ -8014,6 +8014,23 @@ const sendspinMaToken = SettingDef<String>(
   secret: true,
 );
 
+/// The Music Assistant follower's side of [sendspinSonosInputs]: Music
+/// Assistant names a Sonos input as the player's active source, `tv` or
+/// `line_in`, with the input's name for a title. Off, the followed room
+/// reads as idle while one plays, as it does on the Sonos source.
+const sendspinMaInputs = SettingDef<bool>(
+  key: 'sendspin.ma_inputs',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show TV and line-in',
+  description:
+      'Show activity in the media player when eARC or line-in inputs are '
+      'active.',
+  category: 'Sendspin',
+  subpage: 'Music Assistant',
+  section: 'Music Assistant',
+);
+
 /// The name the local player last registered with in Music Assistant —
 /// the device name or the hardware model when none is set. Stored by
 /// SendspinManager at every player start so the Music Assistant shortcut
@@ -11169,6 +11186,7 @@ const List<SettingDef<Object>> allSettings = [
   sendspinGroupVolume,
   sendspinMaUrl,
   sendspinMaToken,
+  sendspinMaInputs,
   sendspinMaShortcut,
   sendspinMaOpenFullscreen,
   sendspinMaAutoClose,

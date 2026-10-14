@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Added
+- **Show TV and line-in for Music Assistant players.** A Sonos followed through Music Assistant now reads as idle while it plays its TV (HDMI ARC or optical) or line-in input, the same way it does on the Sonos source, so a soundbar under a television no longer holds the screensaver off with a card named TV (#978). A new **Show TV and line-in** switch on the Music Assistant page, off by default, brings the card and the Now Playing view back for the input, named TV or Line-in, with stop and volume. Music played through Music Assistant to the same speaker, a turntable streamed through it included, still shows as before.
+
 ## v2026.10.23 - 2026-10-13
 
 ### Added

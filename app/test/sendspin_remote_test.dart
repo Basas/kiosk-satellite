@@ -120,6 +120,7 @@ class _FakeRemote extends MaRemotePlayer {
     required super.onSnapshot,
     required super.log,
     super.label,
+    super.showInputs,
   });
 
   final sent = <String>[];
@@ -494,6 +495,7 @@ void main() {
             required onSnapshot,
             required log,
             String label = 'remote player',
+            bool showInputs = false,
           }) => fake = _FakeRemote(
             baseUrl: baseUrl,
             token: token,
@@ -501,6 +503,7 @@ void main() {
             onSnapshot: onSnapshot,
             log: log,
             label: label,
+            showInputs: showInputs,
           );
       await sendspin.init();
       await Future<void>.delayed(Duration.zero);
@@ -617,6 +620,19 @@ void main() {
         expect(sendspin.lyrics.value, isEmpty);
         expect(_FakeLrclib.asks, 0);
       });
+    });
+
+    test('Show TV and line-in rebuilds the follower with it', () async {
+      await build();
+      final first = fake!;
+      expect(first.showInputs, isFalse);
+
+      await settings.set(defs.sendspinMaInputs, true);
+      await Future<void>.delayed(Duration.zero);
+      expect(first.stopped, isTrue);
+      expect(fake, isNot(same(first)));
+      expect(fake!.showInputs, isTrue);
+      expect(fake!.playerId, 'p1');
     });
 
     test('clearing the pick returns the card to the local player', () async {
