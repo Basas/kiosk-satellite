@@ -8513,8 +8513,9 @@ const sendspinSpeakerPill = SettingDef<bool>(
 /// picker ids (`ma:<player id>`, `sonos:<room id>`). Empty offers every
 /// player. Only the ids of the source the menu reads from count, and a
 /// player already in the group keeps its row so it can still leave. Its
-/// row is hand-built on each surface: a multiple pick over the source's
-/// players. A Home Assistant player has no menu, so no row.
+/// row is hand-built on each surface: a multiple pick over Music
+/// Assistant's players and the Sonos rooms, a chip per source. A Home
+/// Assistant player has no menu, so no row.
 const sendspinSpeakerPillPlayers = SettingDef<String>(
   key: 'sendspin.speaker_pill_players',
   type: SettingType.string,

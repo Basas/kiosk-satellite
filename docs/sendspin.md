@@ -232,7 +232,7 @@ For Music Assistant players, every player in the group also gets a volume slider
 | Sonos, direct | Every other room of the household, over the speakers' own interface. |
 | Home Assistant media player | No menu: grouping stays with the integration behind the entity. |
 
-**Filter the speaker selection pill** limits which players the menu offers, for example to keep bedroom speakers out of a kitchen tablet's menu. The picker lists the players of the source the menu reads from: Music Assistant players for this device and for a followed Music Assistant player, Sonos rooms for a Sonos room followed directly. A Sonos speaker that Music Assistant drives is picked as a Music Assistant player. Picks made under one source are kept when you switch to another but only apply to their own source. The filter is per kiosk and never synced by Fleet Management.
+**Filter the speaker selection pill** limits which players the menu offers, for example to keep bedroom speakers out of a kitchen tablet's menu. The picker lists Music Assistant players and Sonos rooms together, under a heading for each, with **All**, **Music Assistant** and **Sonos** chips to show one source at a time. Without any Sonos speakers set up it is a plain list of Music Assistant players. Each pick counts only for its own source: Music Assistant picks filter the menu for this device and for a followed Music Assistant player, Sonos picks filter it for a Sonos room followed directly. A Sonos speaker that Music Assistant drives appears under both, so pick it under the source the kiosk follows it through. The filter is per kiosk and never synced by Fleet Management.
 
 ### Lyrics
 

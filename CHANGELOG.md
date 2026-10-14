@@ -5,7 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Added
-- **Filter the speaker selection pill (#974).** A new row on the Now Playing page, under Show speaker selection pill, picks which speakers the pill's group menu offers, so a kitchen tablet can leave the bedroom speakers out. It lists Music Assistant players, or Sonos rooms when a Sonos room is followed directly. Speakers already in the group always show so they can be taken out, and leaving it empty offers every speaker as before. The filter is kept per kiosk.
+- **Filter the speaker selection pill (#974).** A new row on the Now Playing page, under Show speaker selection pill, picks which speakers the pill's group menu offers, so a kitchen tablet can leave the bedroom speakers out. It lists Music Assistant players and Sonos rooms together, with All, Music Assistant and Sonos chips to show one source at a time. Speakers already in the group always show so they can be taken out, and leaving it empty offers every speaker as before. The filter is kept per kiosk.
 - **Show TV and line-in for Music Assistant players.** A Sonos followed through Music Assistant now reads as idle while it plays its TV (HDMI ARC or optical) or line-in input, the same way it does on the Sonos source, so a soundbar under a television no longer holds the screensaver off with a card named TV (#978). A new **Show TV and line-in** switch on the Music Assistant page, off by default, brings the card and the Now Playing view back for the input, named TV or Line-in, with stop and volume. Music played through Music Assistant to the same speaker, a turntable streamed through it included, still shows as before.
 
 ## v2026.10.23 - 2026-10-13

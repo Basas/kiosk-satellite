@@ -7054,10 +7054,10 @@ class _PlayerRowState extends State<_PlayerRow> {
   }
 }
 
-/// The speakers the Now Playing pill offers (issue #974), ticked off the
-/// players of the source its menu reads from: Sonos rooms for a followed
-/// Sonos room, Music Assistant players otherwise. Picks of the other
-/// source stay stored and untouched. Mirrored on the remote (rows.js).
+/// The speakers the Now Playing pill offers (issue #974), ticked off
+/// Music Assistant's players and the Sonos rooms in one picker, with a
+/// chip per source. Each pick counts only for its own source's menu.
+/// Mirrored on the remote (rows.js).
 class _SpeakerPillPlayersRow extends StatefulWidget {
   const _SpeakerPillPlayersRow({
     required this.container,
@@ -7074,61 +7074,35 @@ class _SpeakerPillPlayersRow extends StatefulWidget {
 class _SpeakerPillPlayersRowState extends State<_SpeakerPillPlayersRow> {
   AppContainer get c => widget.container;
 
-  String get _source =>
-      c.settings.get(sendspinPlayerSource) == 'sonos' ? 'sonos' : 'ma';
-
-  PickSpec _spec(BuildContext context) => playerSpec(
-    context,
-    c.commands,
-    source: _source,
-    rooms: _source == 'sonos',
-  );
-
-  /// The list last asked for, so a source switch loads the other one once.
-  String? _loaded;
+  /// Whether the list was asked for yet.
+  bool _loaded = false;
 
   List<String> _stored() =>
       decodeSpeakerPillPlayers(c.settings.get(sendspinSpeakerPillPlayers));
 
   Future<void> _pick(PickSpec spec) async {
-    final stored = _stored();
-    final prefix = '$_source:';
     final ids = await showItemMultiPicker(
       context,
       title: sendspinSpeakerPillPlayers.localizedTitle(context),
       spec: spec,
-      selected: [
-        for (final id in stored)
-          if (id.startsWith(prefix)) id,
-      ],
+      selected: _stored(),
     );
     if (ids == null) return;
-    await c.settings.set(
-      sendspinSpeakerPillPlayers,
-      jsonEncode([
-        for (final id in stored)
-          if (!id.startsWith(prefix)) id,
-        ...ids,
-      ]),
-    );
+    await c.settings.set(sendspinSpeakerPillPlayers, jsonEncode(ids));
     if (mounted) setState(() {});
     widget.onChanged();
   }
 
   @override
   Widget build(BuildContext context) {
-    final spec = _spec(context);
-    if (_loaded != spec.key) {
-      _loaded = spec.key;
+    final spec = speakerPillSpec(context, c.commands);
+    if (!_loaded) {
+      _loaded = true;
       if (PickCatalog.of(spec.key).value == null) {
         PickCatalog.load(spec.key, spec.loader);
       }
     }
-    final prefix = '$_source:';
-    final picks = [
-      for (final id in _stored())
-        if (id.startsWith(prefix)) id,
-    ];
+    final picks = _stored();
     return ValueListenableBuilder<PickList?>(
       valueListenable: PickCatalog.of(spec.key),
       builder: (context, list, _) {
@@ -7136,7 +7110,7 @@ class _SpeakerPillPlayersRowState extends State<_SpeakerPillPlayersRow> {
         // A pick the list lacks (not loaded yet, or away) reads its id.
         final names = [
           for (final id in picks)
-            list?.find(id)?.name ?? id.substring(prefix.length),
+            list?.find(id)?.name ?? id.substring(id.indexOf(':') + 1),
         ];
         final field = ControlBox(
           onTap: () => _pick(spec),

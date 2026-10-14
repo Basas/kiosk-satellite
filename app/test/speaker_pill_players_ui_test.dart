@@ -10,9 +10,9 @@ import 'package:kiosk_satellite/ui/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The Now Playing page's Filter the speaker selection pill row (issue
-/// #974): the picks of the menu's source by name, All speakers with none,
-/// no row for a source without a menu, and a pick that keeps the other
-/// source's ids. Mirrored on the remote (rows.js).
+/// #974): the picks by name, All speakers with none, no row for a source
+/// without a menu, and one picker over Music Assistant's players and the
+/// Sonos rooms with a chip per source. Mirrored on the remote (rows.js).
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -20,6 +20,7 @@ void main() {
     WidgetTester tester, {
     String source = '',
     List<String> picks = const [],
+    bool sonos = true,
   }) async {
     SharedPreferences.setMockInitialValues({
       'ks.sendspin.enabled': true,
@@ -37,12 +38,16 @@ void main() {
         Command(
           name: 'mediaPlayers',
           description: 'fake',
-          handler: (p) async => const CommandResult.ok({
+          handler: (p) async => CommandResult.ok({
             'players': [
               {'id': 'ma:kitchen', 'name': 'Kitchen', 'group': 'ma'},
               {'id': 'ma:office', 'name': 'Office', 'group': 'ma'},
+              if (sonos && p['rooms'] == true) ...[
+                {'id': 'sonos:RINCON_A', 'name': 'Den', 'group': 'sonos'},
+                {'id': 'sonos:RINCON_B', 'name': 'Patio', 'group': 'sonos'},
+              ],
             ],
-            'notes': {},
+            'notes': {if (!sonos) 'sonos': 'No Sonos speakers known yet.'},
           }),
         ),
       );
@@ -69,10 +74,9 @@ void main() {
     expect(find.text('All speakers'), findsOneWidget);
   });
 
-  testWidgets('the picks of the menu source show by name', (tester) async {
+  testWidgets('the picks of every source show by name', (tester) async {
     await open(tester, picks: ['ma:kitchen', 'sonos:RINCON_A']);
-    expect(find.text('Kitchen'), findsOneWidget);
-    expect(find.textContaining('RINCON_A'), findsNothing);
+    expect(find.text('Kitchen, Den'), findsOneWidget);
   });
 
   testWidgets('a Home Assistant player has no menu, so no row', (tester) async {
@@ -81,27 +85,43 @@ void main() {
     expect(find.text('Filter the speaker selection pill'), findsNothing);
   });
 
-  testWidgets('a pick keeps the other source picks', (tester) async {
-    final container = await open(
-      tester,
-      picks: ['sonos:RINCON_A', 'ma:kitchen'],
-    );
-    await tester.tap(find.text('Kitchen'));
+  Future<void> settle(WidgetTester tester) async {
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 120));
     }
-    await tester.tap(find.text('Office').last);
+  }
+
+  testWidgets('one picker lists both sources, a chip for each', (tester) async {
+    final container = await open(tester, picks: ['ma:kitchen']);
+    await tester.tap(find.text('Kitchen'));
+    await settle(tester);
+    expect(find.text('All'), findsOneWidget);
+    expect(find.text('Music Assistant'), findsWidgets);
+    expect(find.text('Patio'), findsOneWidget);
+    // The Sonos chip shows its rooms alone.
+    await tester.tap(find.text('Sonos').first);
+    await settle(tester);
+    expect(find.text('Office'), findsNothing);
+    await tester.tap(find.text('Patio'));
     await tester.pump(const Duration(milliseconds: 120));
     await tester.tap(find.text('Done'));
-    for (var i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 120));
-    }
+    await settle(tester);
     expect(
       decodeSpeakerPillPlayers(
         container.settings.get(sendspinSpeakerPillPlayers),
       ),
-      ['sonos:RINCON_A', 'ma:kitchen', 'ma:office'],
+      ['ma:kitchen', 'sonos:RINCON_B'],
     );
-    expect(find.text('Kitchen, Office'), findsOneWidget);
+    expect(find.text('Kitchen, Patio'), findsOneWidget);
+  });
+
+  testWidgets('without Sonos the list is plain', (tester) async {
+    await open(tester, sonos: false);
+    await tester.tap(find.text('All speakers'));
+    await settle(tester);
+    expect(find.text('Office'), findsOneWidget);
+    expect(find.text('All'), findsNothing);
+    expect(find.text('Music Assistant'), findsNothing);
+    expect(find.textContaining('No Sonos speakers'), findsNothing);
   });
 }
