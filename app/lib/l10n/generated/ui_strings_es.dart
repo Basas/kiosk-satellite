@@ -8524,6 +8524,17 @@ class UiStringsEs extends UiStrings {
       'Muestra el selector de altavoces durante 5 segundos después de interactuar con la pantalla. Permite añadir o quitar altavoces del grupo actual.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Filtrar el selector de altavoces';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'Solo estos altavoces aparecen en el selector. Los altavoces que ya están en el grupo siempre aparecen.';
+
+  @override
+  String get mediaAllSpeakers => 'Todos los altavoces';
+
+  @override
   String get settingSendspinQueueArtTitle => 'Mostrar portadas en la cola';
 
   @override

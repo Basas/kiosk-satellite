@@ -236,17 +236,20 @@ List<String>? serviceEntityDomainsOf(String serviceId) {
 
 /// One source's players (`ma`, `ha`, `sonos`), from `mediaPlayers`: the
 /// Sendspin player and the voice satellite's speaker. [speakers] keeps
-/// Music Assistant's own entities in Home Assistant's list. The source's
-/// note (it could not be reached, it is not set up) shows above its rows.
+/// Music Assistant's own entities in Home Assistant's list. [rooms] lists
+/// every Sonos room on its own, as the speaker selection pill does. The
+/// source's note (it could not be reached, it is not set up) shows above
+/// its rows.
 PickSpec playerSpec(
   BuildContext context,
   CommandRegistry commands, {
   required String source,
   bool speakers = false,
+  bool rooms = false,
 }) {
   return PickSpec(
-    key: 'players:$source:$speakers',
-    loader: () => _loadPlayers(commands, source, speakers),
+    key: 'players:$source:$speakers${rooms ? ':rooms' : ''}',
+    loader: () => _loadPlayers(commands, source, speakers, rooms),
     searchHint: mediaText(context, 'Search players'),
     noGroup: '',
     byGroupName: false,
@@ -275,10 +278,12 @@ Future<PickList?> _loadPlayers(
   CommandRegistry commands,
   String source,
   bool speakers,
+  bool rooms,
 ) async {
   final result = await commands.execute('mediaPlayers', {
     'source': source,
     if (speakers) 'speakers': true,
+    if (rooms) 'rooms': true,
   });
   if (!result.ok) {
     return PickList(const [], notes: {source: result.error ?? ''});

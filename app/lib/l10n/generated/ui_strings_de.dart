@@ -8565,6 +8565,17 @@ class UiStringsDe extends UiStrings {
       'Zeigt die Lautsprecherauswahl 5 Sekunden lang nach einer Interaktion mit dem Bildschirm an. Damit können Lautsprecher zur aktuellen Gruppe hinzugefügt oder daraus entfernt werden.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Lautsprecherauswahl filtern';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'Nur diese Lautsprecher werden in der Lautsprecherauswahl angezeigt. Lautsprecher, die bereits in der Gruppe sind, werden immer angezeigt.';
+
+  @override
+  String get mediaAllSpeakers => 'Alle Lautsprecher';
+
+  @override
   String get settingSendspinQueueArtTitle =>
       'Coverbilder in der Warteschlange anzeigen';
 

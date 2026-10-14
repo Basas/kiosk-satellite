@@ -8461,6 +8461,17 @@ class UiStringsNl extends UiStrings {
       'Toon de luidsprekerkeuze 5 seconden nadat het scherm is aangeraakt. Voeg luidsprekers toe aan de huidige groep of verwijder ze eruit.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Luidsprekerkeuze filteren';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'Alleen deze luidsprekers verschijnen in de luidsprekerkeuze. Luidsprekers die al in de groep zitten, verschijnen altijd.';
+
+  @override
+  String get mediaAllSpeakers => 'Alle luidsprekers';
+
+  @override
   String get settingSendspinQueueArtTitle => 'Albumhoezen in de wachtrij tonen';
 
   @override

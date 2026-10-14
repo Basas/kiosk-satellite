@@ -8421,6 +8421,17 @@ class UiStringsRu extends UiStrings {
       'Показывает выбор динамиков на 5 секунд после касания экрана. Добавляйте или убирайте динамики из текущей группы.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Фильтр бейджа выбора динамиков';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'В бейдже показываются только эти динамики. Динамики, которые уже в группе, показываются всегда.';
+
+  @override
+  String get mediaAllSpeakers => 'Все динамики';
+
+  @override
   String get settingSendspinQueueArtTitle => 'Показывать обложки в очереди';
 
   @override

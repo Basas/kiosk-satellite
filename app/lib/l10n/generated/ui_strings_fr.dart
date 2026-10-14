@@ -8518,6 +8518,17 @@ class UiStringsFr extends UiStrings {
       'Affiche la sélection des enceintes pendant 5 secondes après une interaction avec l\'écran. Ajoutez ou retirez des enceintes du groupe actuel.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Filtrer la pastille de sélection des enceintes';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'Seules ces enceintes apparaissent dans la pastille. Les enceintes déjà dans le groupe apparaissent toujours.';
+
+  @override
+  String get mediaAllSpeakers => 'Toutes les enceintes';
+
+  @override
   String get settingSendspinQueueArtTitle =>
       'Afficher la pochette dans la file d\'attente';
 

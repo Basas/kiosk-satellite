@@ -178,6 +178,7 @@ const mediaTextMessageIds = <String, String>{
   "Add an entry in the kiosk menu that shows the Now Playing view. WARNING: If nothing is playing or there is no queue for this player, it won't show up.": "settingSendspinFullscreenShortcutDescription",
   "Show speaker selection pill": "settingSendspinSpeakerPillTitle",
   "Shows speaker selection for 5 seconds after screen interaction. Add or remove speakers from the current group.": "settingSendspinSpeakerPillDescription",
+  "All speakers": "mediaAllSpeakers",
   "Show album art in the queue": "settingSendspinQueueArtTitle",
   "A cover on every row of the queue panel.": "settingSendspinQueueArtDescription",
   "Enable lyrics": "settingSendspinLyricsEnabledTitle",

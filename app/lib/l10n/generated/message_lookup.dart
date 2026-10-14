@@ -2530,6 +2530,11 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingSendspinSpeakerPillTitle,
       'settingSendspinSpeakerPillDescription' =>
         strings.settingSendspinSpeakerPillDescription,
+      'settingSendspinSpeakerPillPlayersTitle' =>
+        strings.settingSendspinSpeakerPillPlayersTitle,
+      'settingSendspinSpeakerPillPlayersDescription' =>
+        strings.settingSendspinSpeakerPillPlayersDescription,
+      'mediaAllSpeakers' => strings.mediaAllSpeakers,
       'settingSendspinQueueArtTitle' => strings.settingSendspinQueueArtTitle,
       'settingSendspinQueueArtDescription' =>
         strings.settingSendspinQueueArtDescription,

@@ -8509,6 +8509,52 @@ const sendspinSpeakerPill = SettingDef<bool>(
   dependsOn: 'sendspin.fullscreen',
 );
 
+/// The speakers the pill's group menu offers (issue #974), a JSON list of
+/// picker ids (`ma:<player id>`, `sonos:<room id>`). Empty offers every
+/// player. Only the ids of the source the menu reads from count, and a
+/// player already in the group keeps its row so it can still leave. Its
+/// row is hand-built on each surface: a multiple pick over the source's
+/// players. A Home Assistant player has no menu, so no row.
+const sendspinSpeakerPillPlayers = SettingDef<String>(
+  key: 'sendspin.speaker_pill_players',
+  type: SettingType.string,
+  defaultValue: '[]',
+  title: 'Filter the speaker selection pill',
+  description:
+      'Only these speakers show in the pill. Speakers already in the group '
+      'always show.',
+  category: 'Sendspin',
+  subpage: 'Now Playing',
+  section: 'User Interface',
+  dependsOn: 'sendspin.speaker_pill',
+  alsoDependsOn: 'sendspin.player_source',
+  alsoDependsOnValue: ['', 'ma', 'sonos'],
+  perDevice: true,
+  normalizer: normalizeSpeakerPillPlayers,
+);
+
+/// Stores [sendspinSpeakerPillPlayers] as a clean list: strings only, each
+/// once, so a hand-written API value that is not a list reads as empty.
+Object normalizeSpeakerPillPlayers(Object value) => jsonEncode(
+  decodeSpeakerPillPlayers(value is String ? value : '').toSet().toList(),
+);
+
+/// [sendspinSpeakerPillPlayers] read back: the stored ids, in order, with
+/// anything that is not a string dropped. Empty for a value that does not
+/// parse.
+List<String> decodeSpeakerPillPlayers(String value) {
+  try {
+    final decoded = jsonDecode(value);
+    if (decoded is! List) return const [];
+    return [
+      for (final id in decoded)
+        if (id is String && id.isNotEmpty) id,
+    ];
+  } catch (_) {
+    return const [];
+  }
+}
+
 /// A cover on every row of the queue panel: the server's or the
 /// speaker's own thumbnail, fetched as the rows come into view.
 const sendspinQueueArt = SettingDef<bool>(
@@ -11211,6 +11257,7 @@ const List<SettingDef<Object>> allSettings = [
   sendspinFullscreenReturnView,
   sendspinFullscreenShortcut,
   sendspinSpeakerPill,
+  sendspinSpeakerPillPlayers,
   sendspinQueueArt,
   sendspinLyrics,
   sendspinFullscreenQueue,

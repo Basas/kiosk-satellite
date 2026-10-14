@@ -7984,6 +7984,16 @@ class UiStringsZh extends UiStrings {
       '操作屏幕后，显示扬声器选择按钮 5 秒。可将扬声器加入当前播放组，或从组中移除。';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle => '筛选扬声器选择按钮';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      '按钮中仅显示这些扬声器。已在播放组中的扬声器始终显示。';
+
+  @override
+  String get mediaAllSpeakers => '所有扬声器';
+
+  @override
   String get settingSendspinQueueArtTitle => '在队列中显示专辑封面';
 
   @override
@@ -20790,6 +20800,16 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingSendspinSpeakerPillDescription =>
       '操作屏幕后，显示扬声器选择按钮 5 秒。可将扬声器加入当前播放组，或从组中移除。';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersTitle => '筛选扬声器选择按钮';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      '按钮中仅显示这些扬声器。已在播放组中的扬声器始终显示。';
+
+  @override
+  String get mediaAllSpeakers => '所有扬声器';
 
   @override
   String get settingSendspinQueueArtTitle => '在队列中显示专辑封面';

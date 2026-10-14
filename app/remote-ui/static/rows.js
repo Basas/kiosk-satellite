@@ -16,8 +16,8 @@ import { api, depSatisfied, gatedOn, state } from './core.js';
 import { readOnlyRow } from './device.js';
 import { openEspHomeEntityPicker } from './esphome.js';
 import {
-  cachedList, choiceBox, entitySpec, loadEntityList, pickEntityValue, pickField, pickItem,
-  pickItems, pickListRow,
+  cachedList, choiceBox, entitySpec, loadEntityList, loadList, onListLoaded, pickEntityValue,
+  pickField, pickItem, pickItems, pickListRow, playerSpec,
 } from './entity_picker.js';
 import {
   entityLightReading,
@@ -532,6 +532,48 @@ export function settingRow(s) {
       field.setText(wakeSourcesText(decodeWakeSources(current())));
     });
     bindUpdate(field.el, () => field.setText(wakeSourcesText(decodeWakeSources(current()))));
+    row.classList.add('dp-field-row');
+    row.appendChild(field.el);
+    return row;
+  }
+
+  // The speakers the Now Playing pill offers, mirroring the device's row:
+  // the picks at rest in a dropdown-style box that opens the player picker
+  // for several. The list is the source's the menu reads from, Sonos rooms
+  // for a followed Sonos room and Music Assistant players otherwise. Picks
+  // of the other source stay stored and untouched.
+  if (s.key === 'sendspin.speaker_pill_players') {
+    const value = (key) => (state.settings || []).find((o) => o.key === key)?.value;
+    // Read on every paint: a source switched between Music Assistant and
+    // Sonos keeps this row on the page.
+    const source = () => (value('sendspin.player_source') === 'sonos' ? 'sonos' : 'ma');
+    const specs = { ma: playerSpec('ma'), sonos: playerSpec('sonos', { rooms: true }) };
+    const stored = () => {
+      try {
+        const list = JSON.parse(value(s.key) ?? s.value ?? '[]');
+        return Array.isArray(list) ? list.filter((id) => typeof id === 'string' && id) : [];
+      } catch (_) { return []; }
+    };
+    const picks = () => stored().filter((id) => id.startsWith(`${source()}:`));
+    // A pick the list lacks (not loaded yet, or away) reads its id.
+    const text = () => {
+      const spec = specs[source()];
+      if (!cachedList(spec.key)) loadList(spec);
+      const ids = picks();
+      if (!ids.length) return mediaText('All speakers');
+      const items = cachedList(spec.key)?.items || [];
+      return ids.map((id) => items.find((i) => i.id === id)?.name || id.slice(source().length + 1))
+        .join(', ');
+    };
+    const field = choiceBox(text(), async () => {
+      const prefix = `${source()}:`;
+      const ids = await pickItems({ title: s.title, spec: specs[source()], selected: picks() });
+      if (!ids) return;
+      await save(JSON.stringify([...stored().filter((id) => !id.startsWith(prefix)), ...ids]));
+      field.setText(text());
+    });
+    Object.values(specs).forEach((spec) => onListLoaded(spec.key, field.el, () => field.setText(text())));
+    bindUpdate(field.el, () => field.setText(text()));
     row.classList.add('dp-field-row');
     row.appendChild(field.el);
     return row;

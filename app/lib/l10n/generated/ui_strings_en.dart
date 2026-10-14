@@ -8359,6 +8359,17 @@ class UiStringsEn extends UiStrings {
       'Shows speaker selection for 5 seconds after screen interaction. Add or remove speakers from the current group.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Filter the speaker selection pill';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'Only these speakers show in the pill. Speakers already in the group always show.';
+
+  @override
+  String get mediaAllSpeakers => 'All speakers';
+
+  @override
   String get settingSendspinQueueArtTitle => 'Show album art in the queue';
 
   @override

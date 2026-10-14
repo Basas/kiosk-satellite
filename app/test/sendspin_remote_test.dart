@@ -954,6 +954,66 @@ void main() {
       expect((data['notes'] as Map)['ha'], isNotNull);
     });
 
+    test(
+      'the pill menu offers only the picked speakers (issue #974)',
+      () async {
+        await build(player: '', enabled: false);
+        sendspin.apiFactory = ({required baseUrl, required token}) => _FakeApi([
+          {
+            'player_id': 'abc123',
+            'display_name': 'Kitchen Tablet',
+            'provider': 'sendspin--1',
+            'type': 'player',
+            'group_members': ['bedroom'],
+            'can_group_with': ['sendspin--1', 'sonos--1'],
+          },
+          {
+            'player_id': 'bedroom',
+            'display_name': 'Bedroom',
+            'provider': 'sonos--1',
+            'type': 'player',
+            'synced_to': 'abc123',
+          },
+          {
+            'player_id': 'kids',
+            'display_name': 'Kids Room',
+            'provider': 'sonos--1',
+            'type': 'player',
+          },
+          {
+            'player_id': 'lounge',
+            'display_name': 'Lounge',
+            'provider': 'sonos--1',
+            'type': 'player',
+          },
+          {
+            'player_id': 'garden',
+            'display_name': 'Garden Room',
+            'provider': 'sendspin--1',
+            'type': 'player',
+          },
+        ]);
+        Future<List<String>> menu() async =>
+            (await sendspin.fetchGroup())!.members.map((m) => m.id).toList();
+
+        expect(await menu(), ['bedroom', 'garden', 'kids', 'lounge']);
+        // A Sonos room's id belongs to a followed Sonos room's menu, not to
+        // Music Assistant's.
+        await settings.set(
+          defs.sendspinSpeakerPillPlayers,
+          '["ma:lounge","ma:garden","sonos:RINCON_KIDS"]',
+        );
+        // Bedroom is in the group already, so it stays to be taken out.
+        expect(await menu(), ['bedroom', 'garden', 'lounge']);
+        // Picks made only for the other source leave the menu whole.
+        await settings.set(
+          defs.sendspinSpeakerPillPlayers,
+          '["sonos:RINCON_KIDS"]',
+        );
+        expect(await menu(), ['bedroom', 'garden', 'kids', 'lounge']);
+      },
+    );
+
     test('forgetting the picked Sonos room clears the pick', () async {
       await build(player: 'sonos:RINCON_A');
       await settings.set(defs.sendspinPlayerSource, 'sonos');

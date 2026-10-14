@@ -414,8 +414,27 @@ class SendspinManager extends Manager {
               _settings.get(defs.sendspinClientId).trim().isNotEmpty;
   }
 
-  /// The shown player's group and its candidates, for the chip's menu.
-  Future<RemoteGroup?> fetchGroup() async {
+  /// The shown player's group and its candidates, for the chip's menu,
+  /// down to the speakers the pill is set to offer.
+  Future<RemoteGroup?> fetchGroup() async =>
+      (await _fetchGroup())?.allowing(_pillAllowed());
+
+  /// The ids [defs.sendspinSpeakerPillPlayers] lets the menu offer, for
+  /// the source the menu reads from: a followed Sonos room lists Sonos
+  /// rooms, every other menu Music Assistant players. Picks made under
+  /// the other source are kept but do not count, so switching sources
+  /// never empties the menu.
+  Set<String> _pillAllowed() {
+    final prefix = _source.kind == PlayerSourceKind.sonos ? 'sonos:' : 'ma:';
+    return {
+      for (final id in defs.decodeSpeakerPillPlayers(
+        _settings.get(defs.sendspinSpeakerPillPlayers),
+      ))
+        if (id.startsWith(prefix)) id.substring(prefix.length),
+    };
+  }
+
+  Future<RemoteGroup?> _fetchGroup() async {
     final remote = _remote;
     if (remote != null) return remote.fetchGroup();
     if (!groupAvailable) return null;
@@ -1189,6 +1208,7 @@ class SendspinManager extends Manager {
         'sendspin.sonos_inputs',
         'sendspin.ma_inputs',
         'sendspin.speaker_pill',
+        'sendspin.speaker_pill_players',
         'sendspin.queue_art',
         'sendspin.lyrics_enabled',
         'sendspin.lyrics_source',
@@ -1429,10 +1449,13 @@ class SendspinManager extends Manager {
             'player and a note per group that could not be listed. With '
             'source set, only that group. With speakers true, the Home '
             'Assistant group keeps Music Assistant\'s own entities, for '
-            'pickers that play sounds on a player.',
+            'pickers that play sounds on a player. With rooms true, the '
+            'Sonos group lists every room on its own instead of one row '
+            'per group, the way the speaker selection pill lists them.',
         params: const {
           'source': 'ma | ha | sonos, default all',
           'speakers': 'true to keep Music Assistant entities in ha',
+          'rooms': 'true to list every Sonos room on its own',
         },
         handler: (p) async {
           final only = '${p['source'] ?? ''}'.trim();
@@ -1472,7 +1495,10 @@ class SendspinManager extends Manager {
           if (want('sonos')) {
             // The rooms of the speakers the Sonos page knows; the search
             // there finds new ones.
-            final sonos = await _sonosPlayers(discover: false);
+            final sonos = await _sonosPlayers(
+              discover: false,
+              rooms: p['rooms'] == true,
+            );
             if (sonos.isEmpty) {
               notes['sonos'] =
                   'No Sonos speakers known yet. Find or add one on the '
@@ -1704,12 +1730,33 @@ class SendspinManager extends Manager {
         ),
       );
 
+  /// Picker rows for every room of [groups] on its own, the rows the
+  /// speaker selection pill's menu shows for a followed Sonos room.
+  static List<Map<String, Object?>> _sonosRoomRows(List<SonosGroup> groups) =>
+      [
+        for (final g in groups)
+          for (final m in g.members)
+            {
+              'id': 'sonos:${m.uuid}',
+              'name': m.name,
+              'sub': m.host,
+              'group': 'sonos',
+              'available': true,
+            },
+      ]..sort(
+        (a, b) => '${a['name']}'.toLowerCase().compareTo(
+          '${b['name']}'.toLowerCase(),
+        ),
+      );
+
   /// The Sonos groups on the network: the households of every speaker
   /// this device knows, plus, with [discover], whatever answers a
   /// multicast search on the tablet's own VLAN. One topology read per
-  /// household answers for all its rooms.
+  /// household answers for all its rooms. With [rooms], a row per room
+  /// instead of per group.
   Future<List<Map<String, Object?>>> _sonosPlayers({
     required bool discover,
+    bool rooms = false,
   }) async {
     final hosts = <String>{
       for (final h in _sonosHosts.values)
@@ -1735,7 +1782,7 @@ class SendspinManager extends Manager {
       }
     }
     if (groups.isNotEmpty) await _rememberSonos(groups);
-    return _sonosRows(groups);
+    return rooms ? _sonosRoomRows(groups) : _sonosRows(groups);
   }
 
   /// Another source is picked, whether or not a player of it is yet, or

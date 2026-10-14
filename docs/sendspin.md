@@ -103,6 +103,7 @@ Configures direct integration with local Sonos hardware.
 | Show in the kiosk menu | off | Adds a menu shortcut to open the full screen view directly. Remains hidden if no media is playing or queued. |
 | Show album art in the queue | on | A cover on every row of the queue panel, the server's or the speaker's own thumbnail, fetched as the rows come into view. Off, the rows tighten back up. |
 | Show speaker selection pill | on | Floats in the top left corner without reserving space. Appears for 5 seconds after a touch or navigation key press, then fades out. Names the player and opens the speaker group menu. Off, the view shows neither. |
+| Filter the speaker selection pill | all speakers | Shown with the pill on and a source that has a group menu. Pick the speakers the menu offers to join the group. Speakers already in the group always show so they can be taken out. Leave it empty to offer every speaker. See [Speaker groups](#speaker-groups). |
 
 **Screensaver**
 
@@ -230,6 +231,8 @@ For Music Assistant players, every player in the group also gets a volume slider
 | Music Assistant player | Whatever Music Assistant lets that player sync with. |
 | Sonos, direct | Every other room of the household, over the speakers' own interface. |
 | Home Assistant media player | No menu: grouping stays with the integration behind the entity. |
+
+**Filter the speaker selection pill** limits which players the menu offers, for example to keep bedroom speakers out of a kitchen tablet's menu. The picker lists the players of the source the menu reads from: Music Assistant players for this device and for a followed Music Assistant player, Sonos rooms for a Sonos room followed directly. A Sonos speaker that Music Assistant drives is picked as a Music Assistant player. Picks made under one source are kept when you switch to another but only apply to their own source. The filter is per kiosk and never synced by Fleet Management.
 
 ### Lyrics
 

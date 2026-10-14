@@ -14552,6 +14552,24 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Filter the speaker selection pill'**
+  String get settingSendspinSpeakerPillPlayersTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Only these speakers show in the pill. Speakers already in the group always show.'**
+  String get settingSendspinSpeakerPillPlayersDescription;
+
+  /// Shown in the speaker filter when no speakers are picked: the pill offers every speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'All speakers'**
+  String get mediaAllSpeakers;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Show album art in the queue'**
   String get settingSendspinQueueArtTitle;
 

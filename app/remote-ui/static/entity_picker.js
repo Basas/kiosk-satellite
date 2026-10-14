@@ -161,12 +161,13 @@ export function serviceEntityDomains(serviceId) {
 // Calls [paint] each time [key]'s list loads, while [node] is on the page.
 export function onListLoaded(key, node, paint) { follow(key, node, paint); }
 
-// One source's players ('ma', 'ha', 'sonos') from mediaPlayers. The
-// source's note (not reachable, not set up) shows above its rows.
-export function playerSpec(source, { speakers = false } = {}) {
+// One source's players ('ma', 'ha', 'sonos') from mediaPlayers. rooms
+// lists every Sonos room on its own, as the speaker selection pill does.
+// The source's note (not reachable, not set up) shows above its rows.
+export function playerSpec(source, { speakers = false, rooms = false } = {}) {
   return {
-    key: `players:${source}:${speakers}`,
-    loader: () => loadPlayers(source, speakers),
+    key: `players:${source}:${speakers}${rooms ? ':rooms' : ''}`,
+    loader: () => loadPlayers(source, speakers, rooms),
     searchHint: mediaText('Search players'),
     noGroup: '', chips: false, headings: false, byGroupName: false, keep: null,
     noteText: mediaError,
@@ -185,9 +186,9 @@ export function fixedPlayerSpec(key, items) {
 
 export const PLAYER_ICONS = { speaker: ICONS.speaker, session: ICONS.session };
 
-async function loadPlayers(source, speakers) {
-  const r = await cmd('mediaPlayers', { source, ...(speakers ? { speakers: true } : {}) },
-    { timeoutMs: 15000 });
+async function loadPlayers(source, speakers, rooms) {
+  const r = await cmd('mediaPlayers', { source, ...(speakers ? { speakers: true } : {}),
+    ...(rooms ? { rooms: true } : {}) }, { timeoutMs: 15000 });
   if (!r?.ok) return { items: [], notes: { [source]: r?.error || '' } };
   const players = Array.isArray(r.data?.players) ? r.data.players : [];
   const notes = r.data?.notes || {};

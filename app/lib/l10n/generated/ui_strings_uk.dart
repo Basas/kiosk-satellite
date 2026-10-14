@@ -8448,6 +8448,17 @@ class UiStringsUk extends UiStrings {
       'Показує вибір гучномовців протягом 5 секунд після взаємодії з екраном. Дозволяє додати або вилучити гучномовці з поточної групи.';
 
   @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Фільтр панелі вибору гучномовців';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'На панелі показуються лише ці гучномовці. Гучномовці, які вже в групі, показуються завжди.';
+
+  @override
+  String get mediaAllSpeakers => 'Усі гучномовці';
+
+  @override
   String get settingSendspinQueueArtTitle => 'Показувати обкладинки у черзі';
 
   @override

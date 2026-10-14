@@ -23846,5 +23846,23 @@
     "translation": "ce3e7795d8015a67d5717c3e69e59b1552f54d152cedfc9780ac269c1986132d",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "mediaAllSpeakers": {
+    "source": "a348ba366c541dd20a1e7a0e75514550a02ccacbf1400254db8731a60cba1bfc",
+    "translation": "63eaa1702c953ff89cb14a3d55f4a236f0938d2ebf712ac4a88ed2606d4b9246",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingSendspinSpeakerPillPlayersTitle": {
+    "source": "ace534fbde0bc70e278e897015e4663f31d438c6cdb9bb33526dfa77fe018a99",
+    "translation": "b4cf8ff2c32e7fb36374eb79661e7f1e005f7d03400267b6ed45cbcfddf110b9",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingSendspinSpeakerPillPlayersDescription": {
+    "source": "8d510610b090ef9624a468ee7ce896159b059c8ac0b4b40ac6051a7d7fdf0d04",
+    "translation": "ccd6ec7d5a76dfa4ed982358b4c89c27fba34eee4d154218407eba5f7c10be3d",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }
