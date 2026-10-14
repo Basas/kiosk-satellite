@@ -35,6 +35,7 @@ const _actionGroups = <(String, List<(String, String, IconData)>)>[
     'Kiosk Satellite',
     [
       ('navigate', 'Go to a dashboard view', Icons.dashboard_outlined),
+      ('refresh', 'Refresh the dashboard', Icons.refresh),
       ('url', 'Open a web page', Icons.public),
       ('camera_view', 'Show a camera view', Icons.videocam_outlined),
       ('sendspin_player', 'Show the floating player', Icons.speaker_outlined),
@@ -775,6 +776,7 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
       'plugin_action' => _configurePluginAction(),
       // Actions with nothing to configure skip the second dialog.
       'android_settings' ||
+      'refresh' ||
       'sendspin_player' ||
       'now_playing' ||
       'music_assistant' ||

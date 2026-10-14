@@ -221,6 +221,7 @@ void main() {
       for (final name in [
         'haNavigate',
         'showLinkPage',
+        'reload',
         'startScreensaver',
         'stopScreensaver',
         'screenOff',
@@ -502,6 +503,21 @@ void main() {
         expect(executed.single.$2, isEmpty);
       },
     );
+
+    test('refresh reloads the page', () async {
+      await build(
+        '[{"id":"g1","trigger":{"type":"finger_taps","fingers":3,"taps":2},'
+        '"action":{"type":"refresh"}}]',
+      );
+      await fire('g1');
+      expect(executed, hasLength(1));
+      expect(executed.single.$1, 'reload');
+      expect(outcomes, isEmpty);
+      expect(
+        describeGestureAction(const {'type': 'refresh'}),
+        'Refresh the dashboard',
+      );
+    });
 
     test('media_play_pause toggles the player through one command', () async {
       await build(

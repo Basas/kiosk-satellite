@@ -23954,5 +23954,11 @@
     "translation": "bfe88c3680e7134bbe84dda7c81d9c34fc046de30771fa0ed7392ea20d251fd5",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "gestureRefresh": {
+    "source": "09acdc3380eabe9cbf01e04a8b1a2df5dbcf1849000f6bb226e8248cb77ec6c0",
+    "translation": "0a25a8fa05c0b8f2ca9d4517bd7dc7835e1d625bbb704f200e6f870c2675f2fc",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

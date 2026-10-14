@@ -122,6 +122,7 @@ export const gestureTextMessageIds = {
   "Action": "gestureAction",
   "Go to a dashboard view": "gestureNavigate",
   "Open a web page": "gestureUrl",
+  "Refresh the dashboard": "gestureRefresh",
   "Show a camera view": "gestureCameraView",
   "Open the app launcher": "gestureLauncher",
   "Open Call a kiosk": "gestureIntercomOpen",

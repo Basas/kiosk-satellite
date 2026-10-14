@@ -34,6 +34,7 @@
 /// Action types (run in GesturesManager):
 ///  - plugin_action:    pluginId, command (a declared plugin command)
 ///  - navigate:         path (a dashboard view, via haNavigate)
+///  - refresh:          reload the dashboard, like pull to refresh (#983)
 ///  - url:              url (opened in the external link overlay)
 ///  - camera_view:      mode (show|hide), viewId (empty = default view);
 ///                      show toggles: the same gesture again closes the view
@@ -214,6 +215,8 @@ String describeGestureAction(Map<String, Object?> action) {
       return 'Go to ${action['path']}';
     case 'url':
       return 'Open ${action['url']}';
+    case 'refresh':
+      return 'Refresh the dashboard';
     case 'camera_view':
       if (action['mode'] == 'hide') return 'Close the camera view';
       final name = '${action['viewName'] ?? ''}';

@@ -3,6 +3,7 @@
   "gestureAction": "Actie",
   "gestureNavigate": "Ga naar een dashboardweergave",
   "gestureUrl": "Een webpagina openen",
+  "gestureRefresh": "Dashboard vernieuwen",
   "gestureCameraView": "Een cameraweergave tonen",
   "gestureLauncher": "De appstarter openen",
   "gestureIntercomOpen": "Een kiosk bellen openen",

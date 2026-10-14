@@ -1666,6 +1666,9 @@ class UiStringsEs extends UiStrings {
   String get gestureHoldMode => 'Activar o desactivar el modo de pausa';
 
   @override
+  String get gestureRefresh => 'Actualizar el panel de control';
+
+  @override
   String get gestureMediaPlayPause =>
       'Reproducir o pausar el contenido multimedia';
 

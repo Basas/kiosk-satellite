@@ -1604,6 +1604,9 @@ class UiStringsZh extends UiStrings {
   String get gestureHoldMode => '切换页面保持模式';
 
   @override
+  String get gestureRefresh => '刷新仪表盘';
+
+  @override
   String get gestureMediaPlayPause => '播放或暂停媒体';
 
   @override
@@ -14447,6 +14450,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get gestureHoldMode => '切换页面保持模式';
+
+  @override
+  String get gestureRefresh => '刷新仪表盘';
 
   @override
   String get gestureMediaPlayPause => '播放或暂停媒体';

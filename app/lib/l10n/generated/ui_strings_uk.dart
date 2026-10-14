@@ -1657,6 +1657,9 @@ class UiStringsUk extends UiStrings {
   String get gestureHoldMode => 'Перемкнути режим блокування';
 
   @override
+  String get gestureRefresh => 'Оновити панель керування';
+
+  @override
   String get gestureMediaPlayPause => 'Відтворити або призупинити медіа';
 
   @override

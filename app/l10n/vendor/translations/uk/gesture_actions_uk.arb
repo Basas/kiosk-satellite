@@ -3,6 +3,7 @@
   "gestureAction": "Дія",
   "gestureNavigate": "Перейти до вигляду панелі керування",
   "gestureUrl": "Відкрити веб-сторінку",
+  "gestureRefresh": "Оновити панель керування",
   "gestureCameraView": "Показати перегляд камери",
   "gestureLauncher": "Відкрити панель запуску програм",
   "gestureIntercomOpen": "Відкрити \"Виклик кіоска\"",

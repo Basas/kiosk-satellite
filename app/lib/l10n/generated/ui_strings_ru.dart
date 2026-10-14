@@ -1657,6 +1657,9 @@ class UiStringsRu extends UiStrings {
   String get gestureHoldMode => 'Переключить режим удержания';
 
   @override
+  String get gestureRefresh => 'Обновить панель';
+
+  @override
   String get gestureMediaPlayPause => 'Воспроизвести или приостановить медиа';
 
   @override

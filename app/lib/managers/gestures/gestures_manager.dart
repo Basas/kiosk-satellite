@@ -350,6 +350,11 @@ class GesturesManager extends Manager {
         return _run('haNavigate', {'path': a['path']});
       case 'url':
         return _run('showLinkPage', {'url': a['url']});
+      case 'refresh':
+        // The plain pull's reload (issue #983), for a dashboard where the
+        // pull itself is turned off because a card such as a map takes
+        // downward drags.
+        return _run('reload', const {});
       case 'camera_view':
         if (a['mode'] == 'hide') {
           return _run('hideCameraView', const {});

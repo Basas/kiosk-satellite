@@ -42,6 +42,7 @@ export const GESTURE_TRIGGERS = [
 export const GESTURE_ACTION_GROUPS = [
   ['Kiosk Satellite', [
     ['navigate', 'Go to a dashboard view', 'grid'],
+    ['refresh', 'Refresh the dashboard', 'refresh'],
     ['url', 'Open a web page', 'globe'],
     ['camera_view', 'Show a camera view', 'video'],
     ['sendspin_player', 'Show the floating player', 'speaker'],
@@ -110,6 +111,7 @@ export function describeGestureAction(a) {
   switch (a.type) {
     case 'navigate': return t('gestureGoTo', {value: a.path});
     case 'url': return t('gestureOpen', {value: a.url});
+    case 'refresh': return gestureText('Refresh the dashboard');
     case 'camera_view':
       if (a.mode === 'hide') return gestureText('Close the camera view');
       return a.viewName ? t('gestureCameraToggleName', {name: a.viewName}) : gestureText('Toggle the camera view');
@@ -480,7 +482,7 @@ export async function pickGestureAction(current) {
     case 'screensaver': case 'screensaver_stop': case 'hold_mode':
     case 'ha_kiosk': case 'now_playing': case 'music_assistant':
     case 'media_play_pause': case 'intercom_open': case 'intercom_hangup':
-    case 'alarm_stop': case 'alarm_snooze':
+    case 'alarm_stop': case 'alarm_snooze': case 'refresh':
       return { type };
     case 'navigate': return configureGestureNavigate(carried);
     case 'url': return configureGestureText(carried, {

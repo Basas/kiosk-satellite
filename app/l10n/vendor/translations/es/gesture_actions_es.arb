@@ -3,6 +3,7 @@
   "gestureAction": "Acción",
   "gestureNavigate": "Ir a una vista del panel de control",
   "gestureUrl": "Abrir una página web",
+  "gestureRefresh": "Actualizar el panel de control",
   "gestureCameraView": "Mostrar una vista de cámaras",
   "gestureLauncher": "Abrir el lanzador de aplicaciones",
   "gestureIntercomOpen": "Abrir Llamar a un kiosko",

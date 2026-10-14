@@ -1661,6 +1661,9 @@ class UiStringsNl extends UiStrings {
   String get gestureHoldMode => 'Wachtstand aan/uit';
 
   @override
+  String get gestureRefresh => 'Dashboard vernieuwen';
+
+  @override
   String get gestureMediaPlayPause => 'Media afspelen of pauzeren';
 
   @override

@@ -3,6 +3,7 @@
   "gestureAction": "操作",
   "gestureNavigate": "前往仪表盘页面",
   "gestureUrl": "打开网页",
+  "gestureRefresh": "刷新仪表盘",
   "gestureCameraView": "显示摄像头画面",
   "gestureLauncher": "打开应用启动器",
   "gestureIntercomOpen": "打开“呼叫 Kiosk 设备”",

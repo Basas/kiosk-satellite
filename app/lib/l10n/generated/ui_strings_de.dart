@@ -1674,6 +1674,9 @@ class UiStringsDe extends UiStrings {
   String get gestureHoldMode => 'Pausenmodus ein- oder ausschalten';
 
   @override
+  String get gestureRefresh => 'Dashboard aktualisieren';
+
+  @override
   String get gestureMediaPlayPause => 'Medien abspielen oder pausieren';
 
   @override

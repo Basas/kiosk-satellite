@@ -6394,6 +6394,19 @@
       ]
     }
   },
+  "gestureRefresh": "Refresh the dashboard",
+  "@gestureRefresh": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
   "gestureMediaPlayPause": "Play or pause media",
   "@gestureMediaPlayPause": {
     "context": "Settings > Gestures > Add gesture > Choose an action",

@@ -457,6 +457,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'gestureScreensaver' => strings.gestureScreensaver,
       'gestureScreensaverStop' => strings.gestureScreensaverStop,
       'gestureHoldMode' => strings.gestureHoldMode,
+      'gestureRefresh' => strings.gestureRefresh,
       'gestureMediaPlayPause' => strings.gestureMediaPlayPause,
       'gestureHaKiosk' => strings.gestureHaKiosk,
       'gesturePluginRun' => strings.gesturePluginRun,

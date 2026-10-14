@@ -3,6 +3,7 @@
   "gestureAction": "Aktion",
   "gestureNavigate": "Zu einer Dashboard-Ansicht wechseln",
   "gestureUrl": "Eine Webseite öffnen",
+  "gestureRefresh": "Dashboard aktualisieren",
   "gestureCameraView": "Eine Kameraansicht anzeigen",
   "gestureLauncher": "Den App-Launcher öffnen",
   "gestureIntercomOpen": "„Kiosk anrufen“ öffnen",

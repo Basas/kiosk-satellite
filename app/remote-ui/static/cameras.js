@@ -109,6 +109,8 @@ export const CAMERA_ICONS = {
   pauseCircle: '<circle cx="12" cy="12" r="9"/>'
     + '<path d="M10 9v6M14 9v6"/>',
   playPause: '<path d="m3 6 8 6-8 6z"/><path d="M15 6v12M20 6v12"/>',
+  // A circular arrow: the refresh action.
+  refresh: '<path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v5h-5"/>',
   // A handset laid on its side: the hang up action.
   callEnd: '<path transform="rotate(135 12 12)" d="M22 16.9v3a2 2 0 0 1-2.2 2'
     + 'A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7'

@@ -39,6 +39,7 @@ The action chooser groups options into three categories: Kiosk Satellite, Androi
 | --- | --- |
 | Go to a dashboard view | Select from a dynamic list of your instance's dashboards and views. |
 | Open a web page | Opens an external URL in an overlay (the same type used for dashboard links), complete with a close button. |
+| Refresh the dashboard | Reloads the page, like pull to refresh without its cache clearing. Handy when you leave **Browser > Enable pull to refresh** off because a card such as a map takes downward drags. |
 | Show a camera view | Displays any configured camera view. This action toggles: performing the exact same gesture again will close the view it just opened. A separate, dedicated close action exists if you simply want to close whatever view is currently visible. |
 | Show the floating player | Displays the floating media player card. You can hide it by simply flinging the card away. |
 | Show Now Playing | Opens the full-screen Now Playing view for the selected media player, including a paused track. Requires Now Playing to be enabled and a track to be loaded. |

@@ -19923,5 +19923,10 @@
     "source": "729560f76706906d724485602684398e38af8a916ecfd078ea97deddf04dd2a5",
     "translation": "7a87b3d7c3c9a362f6a8bba7fd1dcff6fe24e43757850670b6e15f4abbb8b0ff",
     "author": "Xavier Larrea"
+  },
+  "gestureRefresh": {
+    "source": "09acdc3380eabe9cbf01e04a8b1a2df5dbcf1849000f6bb226e8248cb77ec6c0",
+    "translation": "8384358708bb063a7cf5f1bbaeedfd0636089bfb0ec76f74cad93b71bfae7bd9",
+    "author": "Xavier Larrea"
   }
 }

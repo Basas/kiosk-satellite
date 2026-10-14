@@ -3,6 +3,7 @@
   "gestureAction": "Action",
   "gestureNavigate": "Aller à une vue du tableau de bord",
   "gestureUrl": "Ouvrir une page web",
+  "gestureRefresh": "Actualiser le tableau de bord",
   "gestureCameraView": "Afficher une vue caméra",
   "gestureLauncher": "Ouvrir le lanceur d'applications",
   "gestureIntercomOpen": "Ouvrir Appeler un kiosque",

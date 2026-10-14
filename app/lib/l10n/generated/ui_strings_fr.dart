@@ -1666,6 +1666,9 @@ class UiStringsFr extends UiStrings {
   String get gestureHoldMode => 'Basculer le mode maintien';
 
   @override
+  String get gestureRefresh => 'Actualiser le tableau de bord';
+
+  @override
   String get gestureMediaPlayPause => 'Lire ou mettre en pause le média';
 
   @override
