@@ -9168,14 +9168,14 @@ class _DevicePermissionsTileState extends State<_DevicePermissionsTile>
   Widget build(BuildContext context) {
     final settings = widget.container.settings;
     final perms = _perms;
-    final background =
-        settings.get(wakeWordEnabled) && settings.get(wakeWordBackground);
+    final listening = widget.container.wakeWord.inUse;
+    final background = listening && settings.get(wakeWordBackground);
     final micBlocked = perms?.microphoneBlocked == true;
     return Column(
       children: separatedRows([
         _row(
           granted: perms?.microphone,
-          needed: settings.get(wakeWordEnabled),
+          needed: listening,
           missingIcon: Icons.mic_off_outlined,
           title: devicePermissionDescriptions['microphone']!.title,
           held: devicePermissionDescriptions['microphone']!.description,

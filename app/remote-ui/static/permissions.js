@@ -6,10 +6,14 @@
    `on(key)` answers whether a boolean setting is on, `value(key)` reads
    any setting. */
 export function permissionSpecs(on, value = () => undefined) {
-  const background = on('wake_word.enabled') && on('wake_word.background');
+  // Nothing listens for the wake word with the native satellite switched
+  // off. A dashboard runtime starts the engine from the page instead.
+  const listening = on('wake_word.enabled')
+    && (value('voice.runtime') === 'dashboard' || on('voice.enabled'));
+  const background = listening && on('wake_word.background');
   return [
     { key: 'microphone', name: 'Microphone', ask: 'microphone',
-      needed: on('wake_word.enabled'),
+      needed: listening,
       held: 'Allows microphone usage for wake word detection, speech to text and intercom calls.',
       missing: 'Wake word detection is on and nothing is listening.',
       idle: 'Needed by wake word detection, the intercom and pages that ask for the microphone.' },

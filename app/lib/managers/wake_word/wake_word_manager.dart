@@ -426,6 +426,15 @@ class WakeWordManager extends Manager
 
   bool get enabled => _settings.get(defs.wakeWordEnabled);
 
+  /// Something can start the engine: the native satellite while it is
+  /// switched on, or the integration's engine on a dashboard runtime. With
+  /// the native satellite off nothing listens, so the microphone and the
+  /// background listening grants are not needed.
+  bool get inUse =>
+      enabled &&
+      (_settings.get(defs.voiceRuntime) == 'dashboard' ||
+          _settings.get(defs.voiceEnabled));
+
   /// The satellite is muted (the card said so when it released the mic).
   /// Carried on [WakeWordStateChanged] so the clap detector goes quiet too.
   bool get _muted => _released && _releaseReason == 'muted';
@@ -1016,13 +1025,13 @@ class WakeWordManager extends Manager
           description:
               'OS grants native wake-word detection needs, and whether '
               'this device holds them. Read-only: they can only be given on the '
-              'device itself. `required` is false when wake word detection is '
-              'off, where the browser asks for the microphone on its own and '
-              'none of this applies.',
+              'device itself. `required` is false when nothing listens for '
+              'the wake word, as with Voice Satellite switched off, and none '
+              'of this applies.',
           handler: (_) async {
             final perms = await SystemPermissions.read();
             return CommandResult.ok({
-              'required': enabled,
+              'required': inUse,
               'background': _settings.get(defs.wakeWordBackground),
               ...perms.toJson(),
             });
