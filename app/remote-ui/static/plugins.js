@@ -9,7 +9,8 @@ import { updatePluginReadings } from './plugin-readings.js';
 import { currentPath, showTab, subpageEntry } from './tabs.js';
 import { dashboardField } from './dashboard_picker.js';
 import { cameraViewSpec, fieldVisible, iconField, listSetting } from './plugin_lists.js';
-import { hintRow, messageBox, modalShell, showToast, swatch } from './widgets.js';
+import { hintRow, introRow, messageBox, modalShell, showToast, swatch } from './widgets.js';
+import { SUBPAGE_ICONS } from './icons.js';
 import { marked } from './vendor-marked.js';
 import DOMPurify from './vendor-purify.js';
 
@@ -337,10 +338,9 @@ function render(root, state) {
     list.append(row);
     const page = element('div', undefined, 'subpage'); page.dataset.subpage = plugin.id; page.dataset.title = plugin.name;
     const description = element('div', undefined, 'card');
-    const introRow = element('div', undefined, 'row');
-    introRow.dataset.searchId = `plugin:${plugin.id}:intro`;
-    introRow.append(info(plugin.description || ''));
-    description.append(introRow);
+    const intro = introRow(SUBPAGE_ICONS.Plugins, plugin.name || plugin.id, plugin.description || '');
+    intro.dataset.searchId = `plugin:${plugin.id}:intro`;
+    description.append(intro);
     if (plugin.status) {
       const status = hintRow(plugin.status, { warn: plugin.statusError === true });
       status.classList.add('plugin-runtime-status'); description.append(status);

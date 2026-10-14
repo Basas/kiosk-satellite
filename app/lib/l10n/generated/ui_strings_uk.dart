@@ -13142,8 +13142,11 @@ class UiStringsUk extends UiStrings {
       'Блокування сторінок за шаблоном адреси або регулярним виразом';
 
   @override
-  String get urlBlacklistEmpty =>
-      'Додайте правила, щоб блокувати адреси на панелі та зовнішніх сторінках, наприклад історію Home Assistant.';
+  String get urlBlacklistIntroTitle => 'Блокування сторінок за адресою';
+
+  @override
+  String get urlBlacklistIntroSub =>
+      'Посилання або сторінки, що відповідають правилам нижче, не завантажуються.';
 
   @override
   String get urlBlacklistAdd => 'Додати правило';

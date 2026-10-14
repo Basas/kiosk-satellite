@@ -1,7 +1,8 @@
 import { t } from './localization.js';
 import { cmd, state } from './core.js';
 import { cameraAction, cameraListRow } from './cameras.js';
-import { banner, modalShell } from './widgets.js';
+import { SUBPAGE_ICONS } from './icons.js';
+import { banner, introRow, modalShell } from './widgets.js';
 
 /* ---- URL Blacklist ----
    Web Browsing > URL Blacklist, the device's UrlBlacklistCard: the
@@ -155,10 +156,16 @@ export function openUrlBlacklistEditor(index, rule, onSaved) {
   name.focus();
 }
 
-/* The page itself: the list card with its Add rule row. */
+/* The page itself: the intro card, then the list card with its Add rule
+   row. */
 export function renderUrlBlacklistPage(panel) {
   if (!panel) return;
   panel.replaceChildren();
+  const intro = document.createElement('div');
+  intro.className = 'card';
+  intro.appendChild(introRow(SUBPAGE_ICONS['URL Blacklist'],
+    t('urlBlacklistIntroTitle'), t('urlBlacklistIntroSub')));
+  panel.appendChild(intro);
   const card = document.createElement('div');
   card.className = 'card';
   card.dataset.searchId = 'x:url_blacklist';
@@ -169,13 +176,6 @@ export function renderUrlBlacklistPage(panel) {
     const rules = storedRules();
     shown = JSON.stringify(rules);
     list.replaceChildren();
-    if (!rules.length) {
-      const note = document.createElement('div');
-      note.className = 'group-note';
-      note.style.padding = '12px 0 4px';
-      note.textContent = t('urlBlacklistEmpty');
-      list.appendChild(note);
-    }
     rules.forEach((rule, index) => {
       const remove = cameraAction(t('commonRemove'), async () => {
         await cmd('removeUrlBlacklistRule', { index });

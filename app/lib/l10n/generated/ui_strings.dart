@@ -22583,11 +22583,17 @@ abstract class UiStrings {
   /// **'Block pages by address pattern or regular expression'**
   String get urlBlacklistHint;
 
-  /// Shown in the URL Blacklist list while it has no rules. History is Home Assistant's History page.
+  /// Headline of the intro at the top of the URL Blacklist page.
   ///
   /// In en, this message translates to:
-  /// **'Add rules to block addresses on the dashboard and external pages, such as Home Assistant\'s history.'**
-  String get urlBlacklistEmpty;
+  /// **'Block pages by address'**
+  String get urlBlacklistIntroTitle;
+
+  /// Text under the URL Blacklist intro headline. The rules are the list of rules shown below it on the page.
+  ///
+  /// In en, this message translates to:
+  /// **'Links or pages that match the rules below are blocked from loading.'**
+  String get urlBlacklistIntroSub;
 
   /// Row at the end of the URL Blacklist list that opens the editor for a new rule.
   ///

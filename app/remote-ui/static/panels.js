@@ -4,7 +4,7 @@ import { mediaText, mediaError, deviceText, t, screenAudioText, screensaverText,
 import { receiveUpdate, watchUpdates } from './live.js';
 import { $, api, cmd, state } from './core.js';
 import { readOnlyRow } from './device.js';
-import { hintRow, showToast } from './widgets.js';
+import { INTRO_INFO_ICON, hintRow, introRow, showToast } from './widgets.js';
 import { loadSettings } from './settings.js';
 import { radioRow } from './views.js';
 import { currentDashboardPath, dashboardField } from './dashboard_picker.js';
@@ -130,12 +130,11 @@ export async function updatePlayerRow() {
   if (!tab) return;
   // What every source has in common, said once at the top of the page.
   if (!tab.querySelector('.media-player-intro')) {
-    const intro = hintRow(mediaText('The floating player and Now Playing show only while '
+    const intro = document.createElement('div');
+    intro.className = 'card media-player-intro';
+    intro.appendChild(introRow(INTRO_INFO_ICON, '', mediaText('The floating player and Now Playing show only while '
       + 'the picked player has a track playing or a queue loaded. With nothing '
-      + 'playing or queued, neither appears.'));
-    intro.classList.add('media-player-intro');
-    // On the page title's line: the title sits 4 in from the card edge.
-    intro.style.cssText = 'margin: 0 0 4px 4px;';
+      + 'playing or queued, neither appears.')));
     tab.prepend(intro);
   }
   const byKey = Object.fromEntries(

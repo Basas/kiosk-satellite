@@ -24092,5 +24092,17 @@
     "translation": "9c3aee89e8c5da6281cea5e2eedf215a419a502e6ac34d8a7b17aabfe77d2be6",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "urlBlacklistIntroSub": {
+    "source": "4469805a6cd73e2ba7c832a782f54f10ad0ea115d8093c6952326bdaec74d69f",
+    "translation": "201ddcae26798a1829fe16b3d1885491c14debb537bc3b39a60ee12e36d29156",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "urlBlacklistIntroTitle": {
+    "source": "c2e58c7b3dbdf90b1d9742667717d162ed38fbb69f894afa80d7f93df14beb50",
+    "translation": "cdd813a094717f9965abafa0ada40da1da5ffd308aef4e047ace440ef2a59b52",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

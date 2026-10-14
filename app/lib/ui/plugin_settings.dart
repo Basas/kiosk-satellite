@@ -707,8 +707,10 @@ class _PluginDetailPanelState extends State<PluginDetailPanel> {
             children: [
               SearchLandingTarget(
                 id: 'plugin:${widget.id}:intro',
-                child: SettingsRow(
-                  title: Text('${plugin['description'] ?? ''}'),
+                child: IntroRow(
+                  icon: const Icon(Icons.extension_rounded),
+                  title: '${plugin['name'] ?? widget.id}',
+                  subtitle: '${plugin['description'] ?? ''}',
                 ),
               ),
               if ('${plugin['status'] ?? ''}'.isNotEmpty)

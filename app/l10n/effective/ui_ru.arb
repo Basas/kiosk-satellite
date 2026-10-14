@@ -47330,10 +47330,23 @@
       ]
     }
   },
-  "urlBlacklistEmpty": "Добавьте правила, чтобы блокировать адреса на панели и внешних страницах, например историю Home Assistant.",
-  "@urlBlacklistEmpty": {
+  "urlBlacklistIntroTitle": "Блокировка страниц по адресу",
+  "@urlBlacklistIntroTitle": {
     "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Shown in the URL Blacklist list while it has no rules. History is Home Assistant's History page.",
+    "description": "Headline of the intro at the top of the URL Blacklist page.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Blacklist"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Blacklist"
+      ]
+    }
+  },
+  "urlBlacklistIntroSub": "Ссылки или страницы, подходящие под правила ниже, не загружаются.",
+  "@urlBlacklistIntroSub": {
+    "context": "Settings:Web Browsing:URL Blacklist",
+    "description": "Text under the URL Blacklist intro headline. The rules are the list of rules shown below it on the page.",
     "x-locations": {
       "device": [
         "Settings > Web Browsing > URL Blacklist"

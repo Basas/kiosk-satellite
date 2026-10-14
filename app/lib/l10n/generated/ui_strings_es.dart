@@ -13268,8 +13268,11 @@ class UiStringsEs extends UiStrings {
       'Bloquea páginas por patrón de dirección o expresión regular';
 
   @override
-  String get urlBlacklistEmpty =>
-      'Añade reglas para bloquear direcciones en el panel de control y en las páginas externas, como el historial de Home Assistant.';
+  String get urlBlacklistIntroTitle => 'Bloquear páginas por dirección';
+
+  @override
+  String get urlBlacklistIntroSub =>
+      'Los enlaces o páginas que coincidan con las reglas de abajo no se cargan.';
 
   @override
   String get urlBlacklistAdd => 'Añadir regla';

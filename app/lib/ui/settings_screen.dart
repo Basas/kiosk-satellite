@@ -2425,15 +2425,14 @@ class _CategoryContentState extends State<_CategoryContent> {
         ] else ...[
           // What every source has in common, said once at the top: the
           // surfaces only show for a player with something to show.
-          // Its icon on the page title's line: the title sits 4 in from
-          // the card edge, so the hint does too.
           if (widget.category == 'Sendspin')
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: HintRow(
-                mediaText(context, _mediaPlayerIntro),
-                inset: false,
-              ),
+            SettingsCard(
+              children: [
+                IntroRow(
+                  icon: const Icon(Icons.info_outline),
+                  subtitle: mediaText(context, _mediaPlayerIntro),
+                ),
+              ],
             ),
           ..._withEsphomeStartError(
             _sectionedCards(

@@ -12313,8 +12313,10 @@ class UiStringsZh extends UiStrings {
   String get urlBlacklistHint => '按地址模式或正则表达式屏蔽页面';
 
   @override
-  String get urlBlacklistEmpty =>
-      '添加规则以在仪表盘和外部页面上屏蔽地址，例如 Home Assistant 的历史记录。';
+  String get urlBlacklistIntroTitle => '按地址屏蔽页面';
+
+  @override
+  String get urlBlacklistIntroSub => '与下方规则匹配的链接或页面将被阻止加载。';
 
   @override
   String get urlBlacklistAdd => '添加规则';
@@ -25229,8 +25231,10 @@ class UiStringsZhCn extends UiStringsZh {
   String get urlBlacklistHint => '按地址模式或正则表达式屏蔽页面';
 
   @override
-  String get urlBlacklistEmpty =>
-      '添加规则以在仪表盘和外部页面上屏蔽地址，例如 Home Assistant 的历史记录。';
+  String get urlBlacklistIntroTitle => '按地址屏蔽页面';
+
+  @override
+  String get urlBlacklistIntroSub => '与下方规则匹配的链接或页面将被阻止加载。';
 
   @override
   String get urlBlacklistAdd => '添加规则';

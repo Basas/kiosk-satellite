@@ -123,7 +123,7 @@ const BROWSER_PAGE_TEXT = {
   'URL Blacklist': 'urlBlacklistTitle',
   'Block pages by address pattern or regular expression': 'urlBlacklistHint',
   'Add rule': 'urlBlacklistAdd',
-  "Add rules to block addresses on the dashboard and external pages, such as Home Assistant's history.": 'urlBlacklistEmpty',
+  "Links or pages that match the rules below are blocked from loading.": 'urlBlacklistIntroSub',
 };
 
 function browserPageText(english) {

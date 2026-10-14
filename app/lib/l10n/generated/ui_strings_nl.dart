@@ -13155,8 +13155,11 @@ class UiStringsNl extends UiStrings {
       'Pagina\'s blokkeren op adrespatroon of reguliere expressie';
 
   @override
-  String get urlBlacklistEmpty =>
-      'Voeg regels toe om adressen op het dashboard en externe pagina\'s te blokkeren, zoals de geschiedenis van Home Assistant.';
+  String get urlBlacklistIntroTitle => 'Pagina\'s blokkeren op adres';
+
+  @override
+  String get urlBlacklistIntroSub =>
+      'Links of pagina\'s die overeenkomen met de regels hieronder worden niet geladen.';
 
   @override
   String get urlBlacklistAdd => 'Regel toevoegen';

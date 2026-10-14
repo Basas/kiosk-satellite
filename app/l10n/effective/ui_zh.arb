@@ -47330,10 +47330,23 @@
       ]
     }
   },
-  "urlBlacklistEmpty": "添加规则以在仪表盘和外部页面上屏蔽地址，例如 Home Assistant 的历史记录。",
-  "@urlBlacklistEmpty": {
+  "urlBlacklistIntroTitle": "按地址屏蔽页面",
+  "@urlBlacklistIntroTitle": {
     "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Shown in the URL Blacklist list while it has no rules. History is Home Assistant's History page.",
+    "description": "Headline of the intro at the top of the URL Blacklist page.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Blacklist"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Blacklist"
+      ]
+    }
+  },
+  "urlBlacklistIntroSub": "与下方规则匹配的链接或页面将被阻止加载。",
+  "@urlBlacklistIntroSub": {
+    "context": "Settings:Web Browsing:URL Blacklist",
+    "description": "Text under the URL Blacklist intro headline. The rules are the list of rules shown below it on the page.",
     "x-locations": {
       "device": [
         "Settings > Web Browsing > URL Blacklist"

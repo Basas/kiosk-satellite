@@ -13256,8 +13256,11 @@ class UiStringsFr extends UiStrings {
       'Bloquer des pages par modèle d\'adresse ou expression régulière';
 
   @override
-  String get urlBlacklistEmpty =>
-      'Ajoutez des règles pour bloquer des adresses sur le tableau de bord et les pages externes, comme l\'historique de Home Assistant.';
+  String get urlBlacklistIntroTitle => 'Bloquer des pages par adresse';
+
+  @override
+  String get urlBlacklistIntroSub =>
+      'Les liens ou pages correspondant aux règles ci-dessous ne se chargent pas.';
 
   @override
   String get urlBlacklistAdd => 'Ajouter une règle';

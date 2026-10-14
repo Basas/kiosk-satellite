@@ -18,6 +18,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **No microphone warning while Voice Satellite is off.** With Enable Voice Satellite off and no microphone permission, the remote admin Overview still listed "Permission missing: Microphone" and said wake word detection was on, and the Voice Satellite page listed the microphone as missing (#987). The microphone now counts as needed only while Voice Satellite is on, or while the kiosk still runs Voice Satellite in the dashboard. The same goes for Display over other apps when background listening is on, and the Device page's Permissions Manager on the device and in the remote admin follows the same rule.
 
 ### Changed
+- **Intro cards on plugin pages and Media Player.** Each plugin's page now starts with the plugin's name and description on an intro card, the same intro the new URL Blacklist page uses, and the note at the top of Media Player moves onto one too. The device settings and Remote Admin look alike.
 - **Proximity sensor details in the log.** When proximity detection starts, the log now shows the sensor's advertised range and resolution, and each resting, near and far entry carries the raw reading. This makes it easier to diagnose sensors that report proximity differently from Android's standard, such as the NSPanel Pro's (#980).
 
 ## v2026.10.24 - 2026-10-14

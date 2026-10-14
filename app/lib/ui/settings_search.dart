@@ -110,8 +110,7 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
     category: 'Browser',
     title: 'Add rule',
     description:
-        'Add rules to block addresses on the dashboard and external pages, '
-        "such as Home Assistant's history.",
+        'Links or pages that match the rules below are blocked from loading.',
     subpage: 'URL Blacklist',
     anchorId: 'x:url_blacklist',
   ),

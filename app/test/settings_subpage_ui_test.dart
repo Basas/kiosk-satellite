@@ -249,6 +249,7 @@ void main() {
       await settle(tester);
       await tester.tap(entry);
       await settle(tester);
+      expect(find.text('Block pages by address'), findsOneWidget);
       expect(find.text('History'), findsOneWidget);
       expect(find.text('/history*'), findsOneWidget);
       expect(find.text('Dashboard'), findsOneWidget);

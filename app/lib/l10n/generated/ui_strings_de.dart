@@ -13294,8 +13294,11 @@ class UiStringsDe extends UiStrings {
       'Seiten nach Adressmuster oder regulärem Ausdruck sperren';
 
   @override
-  String get urlBlacklistEmpty =>
-      'Füge Regeln hinzu, um Adressen im Dashboard und auf externen Seiten zu sperren, etwa den Verlauf von Home Assistant.';
+  String get urlBlacklistIntroTitle => 'Seiten nach Adresse sperren';
+
+  @override
+  String get urlBlacklistIntroSub =>
+      'Links oder Seiten, die zu den Regeln unten passen, werden nicht geladen.';
 
   @override
   String get urlBlacklistAdd => 'Regel hinzufügen';

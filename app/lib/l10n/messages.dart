@@ -458,9 +458,8 @@ String settingsPageText(
       context,
     ).urlBlacklistHint,
     'Add rule' => l10n(context).urlBlacklistAdd,
-    "Add rules to block addresses on the dashboard and external pages, such "
-        "as Home Assistant's history." =>
-      l10n(context).urlBlacklistEmpty,
+    'Links or pages that match the rules below are blocked from loading.' =>
+      l10n(context).urlBlacklistIntroSub,
     _ => english,
   },
   'Intercom' => switch (english) {

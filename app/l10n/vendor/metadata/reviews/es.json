@@ -20038,5 +20038,15 @@
     "source": "7c2975c2baaae8caab82a1415282adab7445cf178fd72acc0a53ee0a5f0b3b9f",
     "translation": "7de677ef1620f5c02edb3e6867e6a6bfce70e2d22cee1738721198e21c31c1bc",
     "author": "Xavier Larrea"
+  },
+  "urlBlacklistIntroSub": {
+    "source": "4469805a6cd73e2ba7c832a782f54f10ad0ea115d8093c6952326bdaec74d69f",
+    "translation": "af135af7864f804bd59d0ebd58ae1627c1f1d59ae5c58ce0b4bb1a603c3f2314",
+    "author": "Xavier Larrea"
+  },
+  "urlBlacklistIntroTitle": {
+    "source": "c2e58c7b3dbdf90b1d9742667717d162ed38fbb69f894afa80d7f93df14beb50",
+    "translation": "1117810713fda64925b29465a08e623ecede9a33e219aa7096b8e709da9bdc03",
+    "author": "Xavier Larrea"
   }
 }

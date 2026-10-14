@@ -38,7 +38,7 @@ export const SEARCH_EXTRAS = [
   { tab: 'homeassistant', title: 'Custom page guide', sub: 'Custom Pages', anchor: 'x:custom_pages_docs',
     desc: 'How to build a page that talks to Home Assistant.' },
   { tab: 'browser', title: 'Add rule', sub: 'URL Blacklist', anchor: 'x:url_blacklist',
-    desc: "Add rules to block addresses on the dashboard and external pages, such as Home Assistant's history." },
+    desc: "Links or pages that match the rules below are blocked from loading." },
   { tab: 'plugins', title: 'Enable Plugins',
     desc: 'Plugins add additional community developed features to Kiosk Satellite.', anchor: 'x:plugins:master' },
   { tab: 'plugins', title: 'Add plugin',

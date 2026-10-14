@@ -9,6 +9,7 @@ import '../managers/browser/url_blacklist.dart';
 import '../managers/settings/definitions.dart';
 import 'kit.dart';
 import 'settings_search.dart';
+import 'subpage_icons.dart';
 
 /// Settings > Web Browsing > URL Blacklist: the addresses the dashboard and
 /// external pages cannot open, each rule with its name, pattern and where
@@ -57,56 +58,69 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
     final strings = l10n(context);
     final scheme = Theme.of(context).colorScheme;
     final rules = c.browser.urlBlacklist;
-    return SearchLandingTarget(
-      id: 'x:url_blacklist',
-      child: SettingsCard(
-        children: [
-          if (rules.isEmpty) HintRow(strings.urlBlacklistEmpty),
-          for (final (index, rule) in rules.indexed)
-            SettingsRow(
-              leading: Icon(Icons.block, color: scheme.primary),
-              title: Text(rule.name),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    rule.pattern,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12.5,
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                  Text(
-                    [
-                      urlBlacklistScopeLabel(context, rule.scope),
-                      if (rule.isRegex) strings.urlBlacklistTypeRegex,
-                    ].join(' · '),
-                  ),
-                ],
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete_outline),
-                tooltip: strings.commonRemove,
-                onPressed: () => _remove(index),
-              ),
-              onTap: () => _edit(index),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SettingsCard(
+          children: [
+            IntroRow(
+              icon: const SubpageGlyph('URL Blacklist'),
+              title: strings.urlBlacklistIntroTitle,
+              subtitle: strings.urlBlacklistIntroSub,
             ),
-          ListTile(
-            leading: Icon(Icons.add_circle_outline, color: scheme.primary),
-            title: Text(
-              strings.urlBlacklistAdd,
-              style: TextStyle(
-                color: scheme.primary,
-                fontWeight: FontWeight.w600,
+          ],
+        ),
+        SearchLandingTarget(
+          id: 'x:url_blacklist',
+          child: SettingsCard(
+            children: [
+              for (final (index, rule) in rules.indexed)
+                SettingsRow(
+                  leading: Icon(Icons.block, color: scheme.primary),
+                  title: Text(rule.name),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        rule.pattern,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 12.5,
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                      Text(
+                        [
+                          urlBlacklistScopeLabel(context, rule.scope),
+                          if (rule.isRegex) strings.urlBlacklistTypeRegex,
+                        ].join(' · '),
+                      ),
+                    ],
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    tooltip: strings.commonRemove,
+                    onPressed: () => _remove(index),
+                  ),
+                  onTap: () => _edit(index),
+                ),
+              ListTile(
+                leading: Icon(Icons.add_circle_outline, color: scheme.primary),
+                title: Text(
+                  strings.urlBlacklistAdd,
+                  style: TextStyle(
+                    color: scheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                onTap: () => _edit(),
               ),
-            ),
-            onTap: () => _edit(),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
