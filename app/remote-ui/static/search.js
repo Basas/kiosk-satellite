@@ -26,6 +26,7 @@ export const SEARCH_CATEGORY_TABS = {
 // them names them. Mirrors the two pages VsControlsSection places on the
 // device.
 export const DEFLESS_SUBPAGES = [['homeassistant', 'Custom Pages'],
+  ['browser', 'URL Blacklist'],
   ['voicesatellite', 'Appearance'],
   ['device', 'Hardware'], ['device', 'Home Assistant'], ['device', 'WebView']];
 export const SEARCH_EXTRAS = [
@@ -36,6 +37,8 @@ export const SEARCH_EXTRAS = [
     desc: 'Add HTML pages from the Home Assistant www folder or another server to pick them like a dashboard.' },
   { tab: 'homeassistant', title: 'Custom page guide', sub: 'Custom Pages', anchor: 'x:custom_pages_docs',
     desc: 'How to build a page that talks to Home Assistant.' },
+  { tab: 'browser', title: 'Add rule', sub: 'URL Blacklist', anchor: 'x:url_blacklist',
+    desc: "Add rules to block addresses on the dashboard and external pages, such as Home Assistant's history." },
   { tab: 'plugins', title: 'Enable Plugins',
     desc: 'Plugins add additional community developed features to Kiosk Satellite.', anchor: 'x:plugins:master' },
   { tab: 'plugins', title: 'Add plugin',

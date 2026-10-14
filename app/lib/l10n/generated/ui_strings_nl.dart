@@ -13148,6 +13148,77 @@ class UiStringsNl extends UiStrings {
       '// Voorbeeld: zoom een site die het zoomniveau van het dashboard negeert\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlBlacklistTitle => 'URL-blokkeerlijst';
+
+  @override
+  String get urlBlacklistHint =>
+      'Pagina\'s blokkeren op adrespatroon of reguliere expressie';
+
+  @override
+  String get urlBlacklistEmpty =>
+      'Voeg regels toe om adressen op het dashboard en externe pagina\'s te blokkeren, zoals de geschiedenis van Home Assistant.';
+
+  @override
+  String get urlBlacklistAdd => 'Regel toevoegen';
+
+  @override
+  String get urlBlacklistAddTitle => 'Blokkeerregel toevoegen';
+
+  @override
+  String get urlBlacklistEditTitle => 'Blokkeerregel bewerken';
+
+  @override
+  String get urlBlacklistName => 'Naam';
+
+  @override
+  String get urlBlacklistPattern => 'Patroon';
+
+  @override
+  String get urlBlacklistPatternWildcardHint =>
+      'Gebruik * voor willekeurige tekens. Een patroon dat met / begint, komt overeen met het pad op elke server, zoals /history*.';
+
+  @override
+  String get urlBlacklistPatternRegexHint =>
+      'Een reguliere expressie die overal in het adres wordt gezocht, ongeacht hoofdletters.';
+
+  @override
+  String get urlBlacklistType => 'Patroontype';
+
+  @override
+  String get urlBlacklistTypeWildcard => 'Jokerteken';
+
+  @override
+  String get urlBlacklistTypeRegex => 'Reguliere expressie';
+
+  @override
+  String get urlBlacklistScope => 'Geldt voor';
+
+  @override
+  String get urlBlacklistScopeAll => 'Dashboard en externe pagina\'s';
+
+  @override
+  String get urlBlacklistScopeDashboard => 'Dashboard';
+
+  @override
+  String get urlBlacklistScopeExternal => 'Externe pagina\'s';
+
+  @override
+  String get urlBlacklistScopeHint =>
+      'Externe pagina\'s zijn links die vanaf het dashboard worden geopend en pagina\'s voor dashboardrotatie.';
+
+  @override
+  String get urlBlacklistErrorName => 'Voer een naam in.';
+
+  @override
+  String get urlBlacklistErrorPattern => 'Voer een patroon in.';
+
+  @override
+  String get urlBlacklistErrorRegex => 'Deze reguliere expressie is ongeldig.';
+
+  @override
+  String get urlBlacklistBlocked => 'Pagina geblokkeerd';
+
+  @override
   String get setupConnectHeading => 'Verbinden met Home Assistant';
 
   @override

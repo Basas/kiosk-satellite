@@ -830,7 +830,8 @@ export async function loadGestures() {
 // Satellite shares the Home Assistant tab, as it shares that pane on the
 // device.
 export const CATEGORY_TABS = [
-  ['tab-browser', ['Browser']],
+  // The URL Blacklist page, which no setting draws (url_blacklist.js).
+  ['tab-browser', ['Browser'], { extra: ['URL Blacklist'] }],
   ['tab-kiosk', ['Kiosk']],
   ['tab-lockdown', ['Lockdown']],
   ['tab-launcher', ['Launcher']],

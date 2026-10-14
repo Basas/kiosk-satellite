@@ -452,6 +452,17 @@ String settingsPageText(
       l10n(context).alarmsVoiceHint,
     _ => english,
   },
+  'Browser' => switch (english) {
+    'URL Blacklist' => l10n(context).urlBlacklistTitle,
+    'Block pages by address pattern or regular expression' => l10n(
+      context,
+    ).urlBlacklistHint,
+    'Add rule' => l10n(context).urlBlacklistAdd,
+    "Add rules to block addresses on the dashboard and external pages, such "
+        "as Home Assistant's history." =>
+      l10n(context).urlBlacklistEmpty,
+    _ => english,
+  },
   'Intercom' => switch (english) {
     'Answer' => l10n(context).intercomAnswerSection,
     'Talk' => l10n(context).intercomTalkSection,

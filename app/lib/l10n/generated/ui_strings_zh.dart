@@ -12307,6 +12307,74 @@ class UiStringsZh extends UiStrings {
       '// 示例：缩放不遵循仪表盘缩放级别的网站\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlBlacklistTitle => 'URL 黑名单';
+
+  @override
+  String get urlBlacklistHint => '按地址模式或正则表达式屏蔽页面';
+
+  @override
+  String get urlBlacklistEmpty =>
+      '添加规则以在仪表盘和外部页面上屏蔽地址，例如 Home Assistant 的历史记录。';
+
+  @override
+  String get urlBlacklistAdd => '添加规则';
+
+  @override
+  String get urlBlacklistAddTitle => '添加黑名单规则';
+
+  @override
+  String get urlBlacklistEditTitle => '编辑黑名单规则';
+
+  @override
+  String get urlBlacklistName => '名称';
+
+  @override
+  String get urlBlacklistPattern => '模式';
+
+  @override
+  String get urlBlacklistPatternWildcardHint =>
+      '使用 * 匹配任意内容。以 / 开头的模式匹配任意服务器上的路径，例如 /history*。';
+
+  @override
+  String get urlBlacklistPatternRegexHint => '在地址任意位置查找的正则表达式，不区分大小写。';
+
+  @override
+  String get urlBlacklistType => '模式类型';
+
+  @override
+  String get urlBlacklistTypeWildcard => '通配符';
+
+  @override
+  String get urlBlacklistTypeRegex => '正则表达式';
+
+  @override
+  String get urlBlacklistScope => '适用于';
+
+  @override
+  String get urlBlacklistScopeAll => '仪表盘和外部页面';
+
+  @override
+  String get urlBlacklistScopeDashboard => '仪表盘';
+
+  @override
+  String get urlBlacklistScopeExternal => '外部页面';
+
+  @override
+  String get urlBlacklistScopeHint => '外部页面指从仪表盘打开的链接和仪表盘轮播页面。';
+
+  @override
+  String get urlBlacklistErrorName => '请输入名称。';
+
+  @override
+  String get urlBlacklistErrorPattern => '请输入模式。';
+
+  @override
+  String get urlBlacklistErrorRegex => '此正则表达式无效。';
+
+  @override
+  String get urlBlacklistBlocked => '页面已屏蔽';
+
+  @override
   String get setupConnectHeading => '连接 Home Assistant';
 
   @override
@@ -25153,6 +25221,74 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get browserInjectJsExternalPlaceholder =>
       '// 示例：缩放不遵循仪表盘缩放级别的网站\ndocument.documentElement.style.zoom = \'1.25\';';
+
+  @override
+  String get urlBlacklistTitle => 'URL 黑名单';
+
+  @override
+  String get urlBlacklistHint => '按地址模式或正则表达式屏蔽页面';
+
+  @override
+  String get urlBlacklistEmpty =>
+      '添加规则以在仪表盘和外部页面上屏蔽地址，例如 Home Assistant 的历史记录。';
+
+  @override
+  String get urlBlacklistAdd => '添加规则';
+
+  @override
+  String get urlBlacklistAddTitle => '添加黑名单规则';
+
+  @override
+  String get urlBlacklistEditTitle => '编辑黑名单规则';
+
+  @override
+  String get urlBlacklistName => '名称';
+
+  @override
+  String get urlBlacklistPattern => '模式';
+
+  @override
+  String get urlBlacklistPatternWildcardHint =>
+      '使用 * 匹配任意内容。以 / 开头的模式匹配任意服务器上的路径，例如 /history*。';
+
+  @override
+  String get urlBlacklistPatternRegexHint => '在地址任意位置查找的正则表达式，不区分大小写。';
+
+  @override
+  String get urlBlacklistType => '模式类型';
+
+  @override
+  String get urlBlacklistTypeWildcard => '通配符';
+
+  @override
+  String get urlBlacklistTypeRegex => '正则表达式';
+
+  @override
+  String get urlBlacklistScope => '适用于';
+
+  @override
+  String get urlBlacklistScopeAll => '仪表盘和外部页面';
+
+  @override
+  String get urlBlacklistScopeDashboard => '仪表盘';
+
+  @override
+  String get urlBlacklistScopeExternal => '外部页面';
+
+  @override
+  String get urlBlacklistScopeHint => '外部页面指从仪表盘打开的链接和仪表盘轮播页面。';
+
+  @override
+  String get urlBlacklistErrorName => '请输入名称。';
+
+  @override
+  String get urlBlacklistErrorPattern => '请输入模式。';
+
+  @override
+  String get urlBlacklistErrorRegex => '此正则表达式无效。';
+
+  @override
+  String get urlBlacklistBlocked => '页面已屏蔽';
 
   @override
   String get setupConnectHeading => '连接 Home Assistant';

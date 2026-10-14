@@ -13287,6 +13287,77 @@ class UiStringsDe extends UiStrings {
       '// Beispiel: eine Website vergrößern, die die Zoomstufe des Dashboards ignoriert\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlBlacklistTitle => 'URL-Sperrliste';
+
+  @override
+  String get urlBlacklistHint =>
+      'Seiten nach Adressmuster oder regulärem Ausdruck sperren';
+
+  @override
+  String get urlBlacklistEmpty =>
+      'Füge Regeln hinzu, um Adressen im Dashboard und auf externen Seiten zu sperren, etwa den Verlauf von Home Assistant.';
+
+  @override
+  String get urlBlacklistAdd => 'Regel hinzufügen';
+
+  @override
+  String get urlBlacklistAddTitle => 'Sperrregel hinzufügen';
+
+  @override
+  String get urlBlacklistEditTitle => 'Sperrregel bearbeiten';
+
+  @override
+  String get urlBlacklistName => 'Name';
+
+  @override
+  String get urlBlacklistPattern => 'Muster';
+
+  @override
+  String get urlBlacklistPatternWildcardHint =>
+      'Verwende * als Platzhalter für beliebige Zeichen. Ein Muster, das mit / beginnt, passt auf den Pfad auf jedem Server, etwa /history*.';
+
+  @override
+  String get urlBlacklistPatternRegexHint =>
+      'Ein regulärer Ausdruck, der irgendwo in der Adresse gesucht wird, ohne Beachtung der Groß- und Kleinschreibung.';
+
+  @override
+  String get urlBlacklistType => 'Mustertyp';
+
+  @override
+  String get urlBlacklistTypeWildcard => 'Platzhalter';
+
+  @override
+  String get urlBlacklistTypeRegex => 'Regulärer Ausdruck';
+
+  @override
+  String get urlBlacklistScope => 'Gilt für';
+
+  @override
+  String get urlBlacklistScopeAll => 'Dashboard und externe Seiten';
+
+  @override
+  String get urlBlacklistScopeDashboard => 'Dashboard';
+
+  @override
+  String get urlBlacklistScopeExternal => 'Externe Seiten';
+
+  @override
+  String get urlBlacklistScopeHint =>
+      'Externe Seiten sind Links, die aus dem Dashboard geöffnet werden, und Seiten der Dashboard-Rotation.';
+
+  @override
+  String get urlBlacklistErrorName => 'Gib einen Namen ein.';
+
+  @override
+  String get urlBlacklistErrorPattern => 'Gib ein Muster ein.';
+
+  @override
+  String get urlBlacklistErrorRegex => 'Dieser reguläre Ausdruck ist ungültig.';
+
+  @override
+  String get urlBlacklistBlocked => 'Seite gesperrt';
+
+  @override
   String get setupConnectHeading => 'Mit Home Assistant verbinden';
 
   @override

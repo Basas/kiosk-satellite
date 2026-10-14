@@ -44,6 +44,7 @@ import { applyManagedBanners, renderFleetPage } from './fleetsync.js';
 import { decorateAnnouncementsPage, renderIntercomPage } from './intercom.js';
 import { renderAlarmsPage } from './alarms.js';
 import { renderCustomPagesPage } from './custom_pages.js';
+import { renderUrlBlacklistPage } from './url_blacklist.js';
 import { askImportOptions } from './pickers.js';
 import { settingRow, syncGatedRows } from './rows.js';
 import { applySubpageView, currentPath, setCurrentPath, subpageEntry, refreshNavigationText } from './tabs.js';
@@ -335,6 +336,8 @@ async function flushSettingsUpdates() {
     if (!shapeChanged && rotationCardSettings.has(setting.key)) continue;
     // The Custom Pages list repaints itself (custom_pages.js).
     if (!shapeChanged && setting.key === 'ha.custom_pages') continue;
+    // So does the URL Blacklist (url_blacklist.js).
+    if (!shapeChanged && setting.key === 'browser.url_blacklist') continue;
     // Only the choices of a dropdown moved (a provider's model list came
     // in): its row refreshes them in place rather than the page rebuilding
     // under whatever is being typed elsewhere on it.
@@ -578,6 +581,7 @@ async function renderSettings({ cached = false } = {}) {
       renderUpdateSourceDocs(panels.get('Updates'));
     }
     if (helperPage) renderUpdateHelper(panels.get('Optional update helper'), helperStatus);
+    if (tabId === 'tab-browser') renderUrlBlacklistPage(panels.get('URL Blacklist'));
   }
 
   // ── Required system permissions (Kiosk and Lockdown tabs) ────────────

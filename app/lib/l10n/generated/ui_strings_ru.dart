@@ -13066,6 +13066,77 @@ class UiStringsRu extends UiStrings {
       '// Пример: приблизить сайт, игнорирующий масштаб панели\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlBlacklistTitle => 'Чёрный список URL';
+
+  @override
+  String get urlBlacklistHint =>
+      'Блокировка страниц по шаблону адреса или регулярному выражению';
+
+  @override
+  String get urlBlacklistEmpty =>
+      'Добавьте правила, чтобы блокировать адреса на панели и внешних страницах, например историю Home Assistant.';
+
+  @override
+  String get urlBlacklistAdd => 'Добавить правило';
+
+  @override
+  String get urlBlacklistAddTitle => 'Добавить правило чёрного списка';
+
+  @override
+  String get urlBlacklistEditTitle => 'Изменить правило чёрного списка';
+
+  @override
+  String get urlBlacklistName => 'Название';
+
+  @override
+  String get urlBlacklistPattern => 'Шаблон';
+
+  @override
+  String get urlBlacklistPatternWildcardHint =>
+      'Используйте * для совпадения с чем угодно. Шаблон, начинающийся с /, совпадает с путём на любом сервере, например /history*.';
+
+  @override
+  String get urlBlacklistPatternRegexHint =>
+      'Регулярное выражение, которое ищется в любом месте адреса без учёта регистра.';
+
+  @override
+  String get urlBlacklistType => 'Тип шаблона';
+
+  @override
+  String get urlBlacklistTypeWildcard => 'Подстановочный знак';
+
+  @override
+  String get urlBlacklistTypeRegex => 'Регулярное выражение';
+
+  @override
+  String get urlBlacklistScope => 'Применяется к';
+
+  @override
+  String get urlBlacklistScopeAll => 'Панель и внешние страницы';
+
+  @override
+  String get urlBlacklistScopeDashboard => 'Панель';
+
+  @override
+  String get urlBlacklistScopeExternal => 'Внешние страницы';
+
+  @override
+  String get urlBlacklistScopeHint =>
+      'Внешние страницы: ссылки, открытые с панели, и страницы ротации панели.';
+
+  @override
+  String get urlBlacklistErrorName => 'Введите название.';
+
+  @override
+  String get urlBlacklistErrorPattern => 'Введите шаблон.';
+
+  @override
+  String get urlBlacklistErrorRegex => 'Это регулярное выражение недопустимо.';
+
+  @override
+  String get urlBlacklistBlocked => 'Страница заблокирована';
+
+  @override
   String get setupConnectHeading => 'Подключение к Home Assistant';
 
   @override

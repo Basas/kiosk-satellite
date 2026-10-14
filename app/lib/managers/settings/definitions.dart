@@ -208,6 +208,8 @@ const Map<String, String> subpageHints = {
   'User Interface': 'Kiosk mode, dashboard carousel, haptics, tap sounds',
   'Theme': 'Match the app, or switch dark and light on a schedule',
   'Custom Pages': 'Your custom HTML pages served as a dashboard',
+  // Web Browsing.
+  'URL Blacklist': 'Block pages by address pattern or regular expression',
   'Dashboard View Rotation': 'Cycle through views, dwell time, fade',
   'Return to home dashboard view': 'Go back to the home view when left idle',
   'Hold mode': 'Pin the current view, automatic release, menu entry',
@@ -724,6 +726,20 @@ const ignoreSslErrors = SettingDef<bool>(
       'Accept untrusted or self-signed certificates. Use only on your own '
       'network, since it disables certificate verification.',
   category: 'Browser',
+);
+
+// Hidden: the URL Blacklist page in both settings surfaces owns this value,
+// a JSON array of {name, pattern, type, scope} rules for the addresses the
+// web views do not navigate to (see url_blacklist.dart). No subpage: both
+// UIs place that page's entry row by hand, at the end of Web Browsing.
+const browserUrlBlacklist = SettingDef<String>(
+  key: 'browser.url_blacklist',
+  type: SettingType.string,
+  defaultValue: '[]',
+  title: 'URL Blacklist',
+  description: 'Addresses the dashboard and external pages cannot open.',
+  category: 'Browser',
+  hidden: true,
 );
 
 // ── Web content (permissions, à la Fully Kiosk) ────────────────────────
@@ -10824,6 +10840,7 @@ const List<SettingDef<Object>> allSettings = [
   browserInjectJsExternal,
   allowMixedContent,
   ignoreSslErrors,
+  browserUrlBlacklist,
   webMicrophone,
   webCamera,
   webGeolocation,

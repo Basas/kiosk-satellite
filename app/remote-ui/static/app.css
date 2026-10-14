@@ -1664,6 +1664,11 @@
 .row.camera-list-row .desc.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* URL Blacklist (url_blacklist.js): each rule wears the device's block
+   glyph and shows its pattern in mono, in the list and in the editor. */
+.url-rule-icon { color: var(--primary); }
+.modal-form input.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
 /* Plugin list settings: the rows inline on the plugin page, the editor's
    nested list in a bordered box, and the icon picker's grid. */
 .plugin-list-row { cursor: pointer; }

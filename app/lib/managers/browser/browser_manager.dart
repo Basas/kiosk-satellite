@@ -10,6 +10,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'color_scheme_script.dart';
 import 'content_insets_script.dart';
 import 'no_cache_script.dart';
+import 'url_blacklist.dart';
 import 'dashboard_camera_script.dart';
 import 'dashboard_state.dart';
 import 'visibility_mask_script.dart';
@@ -352,6 +353,11 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
       if (e.key == defs.haUrl.key) unawaited(_migrateStartUrlOrigin(e));
     });
     bus.on<SettingChanged>().listen((e) {
+      if (e.key == defs.browserUrlBlacklist.key) {
+        unawaited(_applyUrlBlacklist());
+      }
+    });
+    bus.on<SettingChanged>().listen((e) {
       if (e.key == defs.pauseDashboardCameras.key) {
         _scheduleDashboardCameraSync();
       }
@@ -391,6 +397,70 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
             _screensaverActive = false;
             _freezeDelay?.cancel();
             await _syncFreeze();
+            return const CommandResult.ok();
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'saveUrlBlacklistRule',
+          description:
+              'Add a URL Blacklist rule or change one. Backs Save in the URL '
+              'Blacklist editors on both settings surfaces. Fails with name, '
+              'pattern or regex when that field is not usable.',
+          params: const {
+            'name': 'the name the list and the blocked notice show',
+            'pattern': 'a wildcard pattern or a regular expression',
+            'type': 'wildcard (default) or regex',
+            'scope': 'all (default), dashboard or external',
+            'index':
+                'optional: the position of the rule being changed, absent '
+                'for a new one',
+          },
+          handler: (p) async {
+            final rule = UrlBlacklistRule(
+              name: '${p['name'] ?? ''}'.trim(),
+              pattern: '${p['pattern'] ?? ''}'.trim(),
+              type: urlBlacklistTypes.contains(p['type'])
+                  ? p['type'] as String
+                  : urlBlacklistWildcard,
+              scope: urlBlacklistScopes.contains(p['scope'])
+                  ? p['scope'] as String
+                  : urlBlacklistAll,
+            );
+            final error = urlBlacklistRuleError(rule);
+            if (error != null) return CommandResult.fail(error);
+            final rules = [...urlBlacklist];
+            final index = p['index'] is num ? (p['index'] as num).toInt() : -1;
+            if (index >= 0 && index < rules.length) {
+              rules[index] = rule;
+            } else {
+              rules.add(rule);
+            }
+            await _settings.setFromJson(
+              defs.browserUrlBlacklist.key,
+              encodeUrlBlacklist(rules),
+            );
+            return const CommandResult.ok();
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'removeUrlBlacklistRule',
+          description: 'Remove a URL Blacklist rule.',
+          params: const {'index': 'the position of the rule in the list'},
+          handler: (p) async {
+            final rules = [...urlBlacklist];
+            final index = p['index'] is num ? (p['index'] as num).toInt() : -1;
+            if (index < 0 || index >= rules.length) {
+              return const CommandResult.fail('no such rule');
+            }
+            rules.removeAt(index);
+            await _settings.setFromJson(
+              defs.browserUrlBlacklist.key,
+              encodeUrlBlacklist(rules),
+            );
             return const CommandResult.ok();
           },
         ),
@@ -1504,6 +1574,63 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
     right: _contentInsets.right,
     bottom: _contentInsets.bottom,
   );
+
+  /// The document-start script group that hands every page the URL
+  /// Blacklist rules for the dashboard (see urlBlacklistJs).
+  static const urlBlacklistGroup = 'ks-url-blacklist';
+
+  String _urlBlacklistRaw = '';
+  List<UrlBlacklistRule> _urlBlacklist = const [];
+
+  /// The URL Blacklist rules, parsed once per change of the setting.
+  List<UrlBlacklistRule> get urlBlacklist {
+    final raw = _settings.get(defs.browserUrlBlacklist);
+    if (raw != _urlBlacklistRaw) {
+      _urlBlacklistRaw = raw;
+      _urlBlacklist = parseUrlBlacklist(raw);
+    }
+    return _urlBlacklist;
+  }
+
+  /// The rule that blocks [url] on any of [surfaces] (urlBlacklistDashboard,
+  /// urlBlacklistExternal), or null when it may open. Logged when it is
+  /// blocked, so the reason for a dead link is in the log.
+  UrlBlacklistRule? urlBlockedBy(String url, Set<String> surfaces) {
+    final rule = urlBlacklistMatch(urlBlacklist, url, surfaces);
+    if (rule != null) {
+      log.info(name, 'blocked $url (URL Blacklist rule "${rule.name}")');
+    }
+    return rule;
+  }
+
+  /// The page script for the rules covering [surface].
+  String urlBlacklistSource(String surface) => urlBlacklistJs([
+    for (final r in urlBlacklist)
+      if (r.appliesTo({surface})) r,
+  ]);
+
+  /// The rules changed: the page on screen follows at once, and the
+  /// document-start script is swapped so the next page starts with them.
+  Future<void> _applyUrlBlacklist() async {
+    final controller = _controller;
+    if (controller == null) return;
+    final source = urlBlacklistSource(urlBlacklistDashboard);
+    try {
+      await controller.removeUserScriptsByGroupName(
+        groupName: urlBlacklistGroup,
+      );
+      await controller.addUserScript(
+        userScript: UserScript(
+          groupName: urlBlacklistGroup,
+          source: source,
+          injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+        ),
+      );
+    } catch (e) {
+      log.debug(name, 'URL Blacklist script not swapped: $e');
+    }
+    await runJs(source);
+  }
 
   /// The document-start script group that answers a custom page's
   /// `prefers-color-scheme` (see customPageColorSchemeJs).

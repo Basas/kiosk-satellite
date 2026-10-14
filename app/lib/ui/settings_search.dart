@@ -97,6 +97,24 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
     subpage: 'Custom Pages',
     anchorId: 'x:custom_pages_docs',
   ),
+  // No setting draws the URL Blacklist either (remote: DEFLESS_SUBPAGES and
+  // SEARCH_EXTRAS).
+  SettingsSearchEntry(
+    category: 'Browser',
+    title: 'URL Blacklist',
+    description: 'Block pages by address pattern or regular expression',
+    anchorId: 'sub:URL Blacklist',
+    isPage: true,
+  ),
+  SettingsSearchEntry(
+    category: 'Browser',
+    title: 'Add rule',
+    description:
+        'Add rules to block addresses on the dashboard and external pages, '
+        "such as Home Assistant's history.",
+    subpage: 'URL Blacklist',
+    anchorId: 'x:url_blacklist',
+  ),
   SettingsSearchEntry(
     category: 'Device',
     title: 'TLS',
@@ -668,6 +686,7 @@ List<SettingsSearchEntry> buildSettingsSearchIndex(
   String Function(String)? mediaTextFor,
   String Function(String)? cameraStreamsTextFor,
   String Function(String)? cameraTextFor,
+  String Function(String)? browserTextFor,
   String Function(SettingDef<Object>)? titleFor,
   String Function(SettingDef<Object>)? descriptionFor,
 }) {
@@ -759,6 +778,8 @@ List<SettingsSearchEntry> buildSettingsSearchIndex(
         ? cameraStreamsTextFor
         : entry.category == 'Camera'
         ? cameraTextFor
+        : entry.category == 'Browser'
+        ? browserTextFor
         : null;
     if (translate == null) return entry;
     return SettingsSearchEntry(

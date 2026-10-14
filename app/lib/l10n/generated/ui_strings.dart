@@ -22571,6 +22571,138 @@ abstract class UiStrings {
   /// **'// Example: zoom a site that ignores the dashboard zoom level\ndocument.documentElement.style.zoom = \'1.25\';'**
   String get browserInjectJsExternalPlaceholder;
 
+  /// Name of the settings page that lists addresses the dashboard and external pages cannot open, and of its entry row.
+  ///
+  /// In en, this message translates to:
+  /// **'URL Blacklist'**
+  String get urlBlacklistTitle;
+
+  /// Hint under the URL Blacklist entry row.
+  ///
+  /// In en, this message translates to:
+  /// **'Block pages by address pattern or regular expression'**
+  String get urlBlacklistHint;
+
+  /// Shown in the URL Blacklist list while it has no rules. History is Home Assistant's History page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add rules to block addresses on the dashboard and external pages, such as Home Assistant\'s history.'**
+  String get urlBlacklistEmpty;
+
+  /// Row at the end of the URL Blacklist list that opens the editor for a new rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Add rule'**
+  String get urlBlacklistAdd;
+
+  /// Title of the editor dialog for a new URL Blacklist rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Add blacklist rule'**
+  String get urlBlacklistAddTitle;
+
+  /// Title of the editor dialog for an existing URL Blacklist rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit blacklist rule'**
+  String get urlBlacklistEditTitle;
+
+  /// Label of the rule's name field in the URL Blacklist editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get urlBlacklistName;
+
+  /// Label of the field holding the address pattern or regular expression a rule blocks.
+  ///
+  /// In en, this message translates to:
+  /// **'Pattern'**
+  String get urlBlacklistPattern;
+
+  /// Help under the Pattern field for a wildcard rule. Keep * and /history* as they are.
+  ///
+  /// In en, this message translates to:
+  /// **'Use * to match anything. A pattern starting with / matches the path on any server, such as /history*.'**
+  String get urlBlacklistPatternWildcardHint;
+
+  /// Help under the Pattern field for a regular expression rule.
+  ///
+  /// In en, this message translates to:
+  /// **'A regular expression matched anywhere in the address, ignoring case.'**
+  String get urlBlacklistPatternRegexHint;
+
+  /// Label of the choice between a wildcard pattern and a regular expression.
+  ///
+  /// In en, this message translates to:
+  /// **'Pattern type'**
+  String get urlBlacklistType;
+
+  /// Pattern type option: a pattern where * matches anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Wildcard'**
+  String get urlBlacklistTypeWildcard;
+
+  /// Pattern type option: a regular expression.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular expression'**
+  String get urlBlacklistTypeRegex;
+
+  /// Label of the choice of where a rule blocks addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to'**
+  String get urlBlacklistScope;
+
+  /// Applies to option: both the dashboard and external pages.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard and external pages'**
+  String get urlBlacklistScopeAll;
+
+  /// Applies to option: the dashboard and custom pages.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get urlBlacklistScopeDashboard;
+
+  /// Applies to option: pages opened from dashboard links and dashboard rotation pages, shown over the dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'External pages'**
+  String get urlBlacklistScopeExternal;
+
+  /// Help under the Applies to choice.
+  ///
+  /// In en, this message translates to:
+  /// **'External pages are links opened from the dashboard and dashboard rotation pages.'**
+  String get urlBlacklistScopeHint;
+
+  /// Error in the URL Blacklist editor when the name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name.'**
+  String get urlBlacklistErrorName;
+
+  /// Error in the URL Blacklist editor when the pattern is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a pattern.'**
+  String get urlBlacklistErrorPattern;
+
+  /// Error in the URL Blacklist editor when the regular expression has a syntax error.
+  ///
+  /// In en, this message translates to:
+  /// **'This regular expression is not valid.'**
+  String get urlBlacklistErrorRegex;
+
+  /// Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Blacklist rule blocks. The rule's name shows under it.
+  ///
+  /// In en, this message translates to:
+  /// **'Page blocked'**
+  String get urlBlacklistBlocked;
+
   /// Page heading.
   ///
   /// In en, this message translates to:

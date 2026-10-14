@@ -12988,6 +12988,77 @@ class UiStringsEn extends UiStrings {
       '// Example: zoom a site that ignores the dashboard zoom level\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlBlacklistTitle => 'URL Blacklist';
+
+  @override
+  String get urlBlacklistHint =>
+      'Block pages by address pattern or regular expression';
+
+  @override
+  String get urlBlacklistEmpty =>
+      'Add rules to block addresses on the dashboard and external pages, such as Home Assistant\'s history.';
+
+  @override
+  String get urlBlacklistAdd => 'Add rule';
+
+  @override
+  String get urlBlacklistAddTitle => 'Add blacklist rule';
+
+  @override
+  String get urlBlacklistEditTitle => 'Edit blacklist rule';
+
+  @override
+  String get urlBlacklistName => 'Name';
+
+  @override
+  String get urlBlacklistPattern => 'Pattern';
+
+  @override
+  String get urlBlacklistPatternWildcardHint =>
+      'Use * to match anything. A pattern starting with / matches the path on any server, such as /history*.';
+
+  @override
+  String get urlBlacklistPatternRegexHint =>
+      'A regular expression matched anywhere in the address, ignoring case.';
+
+  @override
+  String get urlBlacklistType => 'Pattern type';
+
+  @override
+  String get urlBlacklistTypeWildcard => 'Wildcard';
+
+  @override
+  String get urlBlacklistTypeRegex => 'Regular expression';
+
+  @override
+  String get urlBlacklistScope => 'Applies to';
+
+  @override
+  String get urlBlacklistScopeAll => 'Dashboard and external pages';
+
+  @override
+  String get urlBlacklistScopeDashboard => 'Dashboard';
+
+  @override
+  String get urlBlacklistScopeExternal => 'External pages';
+
+  @override
+  String get urlBlacklistScopeHint =>
+      'External pages are links opened from the dashboard and dashboard rotation pages.';
+
+  @override
+  String get urlBlacklistErrorName => 'Enter a name.';
+
+  @override
+  String get urlBlacklistErrorPattern => 'Enter a pattern.';
+
+  @override
+  String get urlBlacklistErrorRegex => 'This regular expression is not valid.';
+
+  @override
+  String get urlBlacklistBlocked => 'Page blocked';
+
+  @override
   String get setupConnectHeading => 'Connect to Home Assistant';
 
   @override

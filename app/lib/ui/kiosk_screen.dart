@@ -35,6 +35,7 @@ import '../managers/browser/dashboards_watch_script.dart';
 import '../managers/browser/socket_watch_script.dart';
 import '../managers/browser/viewport_zoom_script.dart';
 import '../managers/browser/visibility_mask_script.dart';
+import '../managers/browser/url_blacklist.dart';
 import '../managers/browser/ws_filter_script.dart';
 import '../managers/kiosk/app_link.dart';
 import '../managers/kiosk/kiosk_link.dart';
@@ -991,6 +992,14 @@ class _KioskScreenState extends State<KioskScreen>
       source: c.browser.contentInsetsSource,
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
     ),
+    // The URL Blacklist's rules for the dashboard, which keep Home
+    // Assistant's own routing (pushState) off the blocked pages. A group of
+    // its own, swapped by BrowserManager when the rules change.
+    UserScript(
+      groupName: BrowserManager.urlBlacklistGroup,
+      source: c.browser.urlBlacklistSource(urlBlacklistDashboard),
+      injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+    ),
     UserScript(
       source: kioskModeApplyJs(
         apply: c.settings.get(defs.haKioskMode),
@@ -1864,6 +1873,24 @@ class _KioskScreenState extends State<KioskScreen>
     shouldOverrideUrlLoading: (controller, action) async {
       final url = action.request.url;
       if (url == null) return NavigationActionPolicy.ALLOW;
+      // The URL Blacklist (issue #989). A link leaving for an external page
+      // answers to the external rules as well as the dashboard's.
+      if ((url.scheme == 'http' || url.scheme == 'https') &&
+          action.isForMainFrame) {
+        final leaving =
+            !c.browser.isDashboardOrigin(url) &&
+            !c.browser.isCustomPageOrigin(url);
+        final rule = c.browser.urlBlockedBy(
+          url.toString(),
+          leaving
+              ? const {urlBlacklistDashboard, urlBlacklistExternal}
+              : const {urlBlacklistDashboard},
+        );
+        if (rule != null) {
+          if (mounted) showUrlBlockedToast(context, rule.name);
+          return NavigationActionPolicy.CANCEL;
+        }
+      }
       // A link leaving the dashboard's origin must not replace the dashboard
       // page: pagehide would tear down the Voice Satellite session, and the
       // wake word and the device's HA entities die with it (issue #86). The
@@ -1947,6 +1974,20 @@ class _KioskScreenState extends State<KioskScreen>
       controller.addJavaScriptHandler(
         handlerName: 'ksHaSocketClosed',
         callback: (_) => c.browser.onHaSocketClosed(),
+      );
+      // Home Assistant tried to route to a blacklisted page and stayed put
+      // (see urlBlacklistJs).
+      controller.addJavaScriptHandler(
+        handlerName: 'ksUrlBlocked',
+        callback: (args) {
+          final rule = args.length > 1 ? '${args[1]}' : '';
+          c.log.info(
+            'browser',
+            'blocked ${args.isNotEmpty ? args.first : ''} '
+                '(URL Blacklist rule "$rule")',
+          );
+          if (mounted) showUrlBlockedToast(context, rule);
+        },
       );
       // The dashboard set may have moved (see dashboards_watch_script).
       controller.addJavaScriptHandler(
@@ -2447,6 +2488,14 @@ class _IdleDismissState extends State<_IdleDismiss> {
   );
 }
 
+/// The notice for a navigation the URL Blacklist stopped, naming the rule.
+void showUrlBlockedToast(BuildContext context, String rule) => showToast(
+  context,
+  title: l10n(context).urlBlacklistBlocked,
+  message: rule.isEmpty ? null : rule,
+  kind: ToastKind.warning,
+);
+
 /// A bare WebView for a rotation external page, layered over the dashboard.
 ///
 /// Deliberately minimal: no JS bridge, no wake-word or kiosk scripts,
@@ -2489,18 +2538,38 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   /// error until the rotation moved on, a link overlay until dismissed).
   Timer? _retry;
 
-  /// Live updates for the Music Assistant page: the zoom level setting.
+  /// Live updates: the Music Assistant page's zoom level, and the URL
+  /// Blacklist's rules for external pages.
   StreamSubscription<SettingChanged>? _settingsSub;
+
+  /// Whether URL Blacklist rules covered external pages when this view was
+  /// built. Only then are full loads routed through shouldOverrideUrlLoading:
+  /// the plugin cancels and reissues every load it is asked about, which
+  /// nothing else on this page needs.
+  late final bool _blacklisted = widget.container.browser.urlBlacklist.any(
+    (r) => r.appliesTo(const {urlBlacklistExternal}),
+  );
 
   @override
   void initState() {
     super.initState();
-    if (!_isMusicAssistant) return;
-    widget.container.homeAssistant.dashboardDark.addListener(_darkChanged);
+    if (_isMusicAssistant) {
+      widget.container.homeAssistant.dashboardDark.addListener(_darkChanged);
+    }
     _settingsSub = widget.container.bus.on<SettingChanged>().listen((e) {
       final controller = _controller;
-      if (controller != null && e.key == defs.sendspinMaZoom.key) {
+      if (controller == null) return;
+      if (_isMusicAssistant && e.key == defs.sendspinMaZoom.key) {
         unawaited(_applyMaZoom(controller));
+      }
+      if (e.key == defs.browserUrlBlacklist.key) {
+        unawaited(
+          controller.evaluateJavascript(
+            source: widget.container.browser.urlBlacklistSource(
+              urlBlacklistExternal,
+            ),
+          ),
+        );
       }
     });
   }
@@ -2573,6 +2642,22 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   /// A Home Assistant page opened here signs in from the dashboard's own
   /// session instead of asking again (discussion #225).
   UnmodifiableListView<UserScript>? get _seedScripts {
+    final own = _ownSeedScripts;
+    if (!_blacklisted) return own;
+    // The URL Blacklist's rules for external pages, which keep a page's
+    // own routing (pushState) off the blocked addresses.
+    return UnmodifiableListView([
+      ...?own,
+      UserScript(
+        source: widget.container.browser.urlBlacklistSource(
+          urlBlacklistExternal,
+        ),
+        injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+      ),
+    ]);
+  }
+
+  UnmodifiableListView<UserScript>? get _ownSeedScripts {
     final token = widget.container.settings.get(defs.sendspinMaToken).trim();
     if (_isMusicAssistant) {
       // Music Assistant's Auto theme follows the dashboard's light or dark
@@ -2661,10 +2746,42 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
           ),
           allowsInlineMediaPlayback: true,
           iframeAllow: 'camera; microphone',
+          useShouldOverrideUrlLoading: _blacklisted,
         ),
         onWebViewCreated: (controller) {
           _controller = controller;
           if (widget.paused) controller.pause();
+          // The page's own routing tried a blacklisted address and stayed
+          // put (see urlBlacklistJs).
+          controller.addJavaScriptHandler(
+            handlerName: 'ksUrlBlocked',
+            callback: (args) {
+              final rule = args.length > 1 ? '${args[1]}' : '';
+              widget.container.log.info(
+                'browser',
+                'blocked ${args.isNotEmpty ? args.first : ''} '
+                    '(URL Blacklist rule "$rule")',
+              );
+              if (mounted) showUrlBlockedToast(context, rule);
+            },
+          );
+        },
+        // The URL Blacklist's external rules, for links and scripts moving
+        // this page. Called only while [_blacklisted].
+        shouldOverrideUrlLoading: (controller, action) async {
+          final url = action.request.url;
+          if (url == null ||
+              !action.isForMainFrame ||
+              (url.scheme != 'http' && url.scheme != 'https')) {
+            return NavigationActionPolicy.ALLOW;
+          }
+          final rule = widget.container.browser.urlBlockedBy(
+            url.toString(),
+            const {urlBlacklistExternal},
+          );
+          if (rule == null) return NavigationActionPolicy.ALLOW;
+          if (mounted) showUrlBlockedToast(context, rule.name);
+          return NavigationActionPolicy.CANCEL;
         },
         // The user's pasted JavaScript for external pages, after every load
         // (issue #224). The Music Assistant page is the app's own shortcut
