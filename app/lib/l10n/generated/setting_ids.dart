@@ -2032,4 +2032,8 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingHaCustomPagesSocketTitle",
     "description": "settingHaCustomPagesSocketDescription",
   },
+  "browser.url_filter_notice": {
+    "title": "settingBrowserUrlFilterNoticeTitle",
+    "description": "settingBrowserUrlFilterNoticeDescription",
+  },
 };

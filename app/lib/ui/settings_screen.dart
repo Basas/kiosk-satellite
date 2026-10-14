@@ -61,7 +61,7 @@ import 'import_options_dialog.dart';
 import 'intercom_settings.dart';
 import '../managers/home_assistant/custom_pages.dart' show viewPathUrl;
 import 'custom_pages_settings.dart';
-import 'url_blacklist_settings.dart';
+import 'url_filter_settings.dart';
 import 'custom_wake_models.dart';
 import 'kit.dart';
 import 'time_picker.dart';
@@ -2452,10 +2452,10 @@ class _CategoryContentState extends State<_CategoryContent> {
               after: _rowExtras(container),
             ),
           ),
-          // No setting draws the URL Blacklist, so its row is placed here,
+          // No setting draws the URL Filter, so its row is placed here,
           // last on the page.
           if (widget.category == 'Browser')
-            _subpageEntryCard(container, 'Browser', 'URL Blacklist'),
+            _subpageEntryCard(container, 'Browser', 'URL Filter'),
         ],
         // Last and on their own card, like the Voice Satellite permissions:
         // the OS's to give, not ours to set. Always shown - Lockdown Mode
@@ -3849,8 +3849,8 @@ class _CategoryContentState extends State<_CategoryContent> {
     switch (subpage) {
       case 'Custom Pages':
         return [CustomPagesCard(container: container)];
-      case 'URL Blacklist':
-        return [UrlBlacklistCard(container: container)];
+      case 'URL Filter':
+        return [UrlFilterCard(container: container)];
       case 'Dashboard View Rotation':
         // Hand-built: the view checkboxes need the live dashboards from Home
         // Assistant, which the generic renderer cannot supply.

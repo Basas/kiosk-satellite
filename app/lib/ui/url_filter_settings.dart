@@ -5,27 +5,28 @@ import 'package:flutter/material.dart';
 import '../app_container.dart';
 import '../core/events.dart';
 import '../l10n/messages.dart';
-import '../managers/browser/url_blacklist.dart';
+import '../managers/browser/url_filter.dart';
 import '../managers/settings/definitions.dart';
 import 'kit.dart';
+import 'settings_screen.dart' show SettingTile;
 import 'settings_search.dart';
 import 'subpage_icons.dart';
 
-/// Settings > Web Browsing > URL Blacklist: the addresses the dashboard and
-/// external pages cannot open, each rule with its name, pattern and where
-/// it applies. Tapping a rule edits it, Add rule opens the same dialog
-/// empty. The page follows changes made in the remote admin while it is
-/// open.
-class UrlBlacklistCard extends StatefulWidget {
-  const UrlBlacklistCard({super.key, required this.container});
+/// Settings > Web Browsing > URL Filter: the addresses the dashboard and
+/// external pages may not open, or the only ones they may, each rule with
+/// its name, action, pattern and where it applies. Tapping a rule edits it,
+/// Add rule opens the same dialog empty. The page follows changes made in
+/// the remote admin while it is open.
+class UrlFilterCard extends StatefulWidget {
+  const UrlFilterCard({super.key, required this.container});
 
   final AppContainer container;
 
   @override
-  State<UrlBlacklistCard> createState() => _UrlBlacklistCardState();
+  State<UrlFilterCard> createState() => _UrlFilterCardState();
 }
 
-class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
+class _UrlFilterCardState extends State<UrlFilterCard> {
   AppContainer get c => widget.container;
   StreamSubscription<SettingChanged>? _echo;
 
@@ -33,7 +34,11 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
   void initState() {
     super.initState();
     _echo = c.bus.on<SettingChanged>().listen((e) {
-      if (e.key == browserUrlBlacklist.key && mounted) setState(() {});
+      if ((e.key == browserUrlFilter.key ||
+              e.key == browserUrlFilterNotice.key) &&
+          mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -44,12 +49,12 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
   }
 
   Future<void> _edit([int? index]) async {
-    await showUrlBlacklistRuleDialog(context, c, index: index);
+    await showUrlFilterRuleDialog(context, c, index: index);
     if (mounted) setState(() {});
   }
 
   Future<void> _remove(int index) async {
-    await c.commands.execute('removeUrlBlacklistRule', {'index': index});
+    await c.commands.execute('removeUrlFilterRule', {'index': index});
     if (mounted) setState(() {});
   }
 
@@ -57,26 +62,29 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
   Widget build(BuildContext context) {
     final strings = l10n(context);
     final scheme = Theme.of(context).colorScheme;
-    final rules = c.browser.urlBlacklist;
+    final rules = c.browser.urlFilter;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SettingsCard(
           children: [
             IntroRow(
-              icon: const SubpageGlyph('URL Blacklist'),
-              title: strings.urlBlacklistIntroTitle,
-              subtitle: strings.urlBlacklistIntroSub,
+              icon: const SubpageGlyph('URL Filter'),
+              title: strings.urlFilterIntroTitle,
+              subtitle: strings.urlFilterIntroSub,
             ),
           ],
         ),
         SearchLandingTarget(
-          id: 'x:url_blacklist',
+          id: 'x:url_filter',
           child: SettingsCard(
             children: [
               for (final (index, rule) in rules.indexed)
                 SettingsRow(
-                  leading: Icon(Icons.block, color: scheme.primary),
+                  leading: Icon(
+                    rule.isAllow ? Icons.check_circle_outline : Icons.block,
+                    color: scheme.primary,
+                  ),
                   title: Text(rule.name),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,8 +101,9 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
                       ),
                       Text(
                         [
-                          urlBlacklistScopeLabel(context, rule.scope),
-                          if (rule.isRegex) strings.urlBlacklistTypeRegex,
+                          if (rule.isAllow) strings.urlFilterActionAllow,
+                          urlFilterScopeLabel(context, rule.scope),
+                          if (rule.isRegex) strings.urlFilterTypeRegex,
                         ].join(' · '),
                       ),
                     ],
@@ -109,7 +118,7 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
               ListTile(
                 leading: Icon(Icons.add_circle_outline, color: scheme.primary),
                 title: Text(
-                  strings.urlBlacklistAdd,
+                  strings.urlFilterAdd,
                   style: TextStyle(
                     color: scheme.primary,
                     fontWeight: FontWeight.w600,
@@ -120,42 +129,52 @@ class _UrlBlacklistCardState extends State<UrlBlacklistCard> {
             ],
           ),
         ),
+        SettingsCard(
+          children: [
+            SettingTile(
+              container: c,
+              def: browserUrlFilterNotice,
+              onChanged: () => setState(() {}),
+            ),
+          ],
+        ),
       ],
     );
   }
 }
 
 /// The Applies to choice of a rule, in the kiosk's language.
-String urlBlacklistScopeLabel(BuildContext context, String scope) =>
+String urlFilterScopeLabel(BuildContext context, String scope) =>
     switch (scope) {
-      urlBlacklistDashboard => l10n(context).urlBlacklistScopeDashboard,
-      urlBlacklistExternal => l10n(context).urlBlacklistScopeExternal,
-      _ => l10n(context).urlBlacklistScopeAll,
+      urlFilterDashboard => l10n(context).urlFilterScopeDashboard,
+      urlFilterExternal => l10n(context).urlFilterScopeExternal,
+      _ => l10n(context).urlFilterScopeAll,
     };
 
 /// Why Save refused, in the kiosk's language (see the
-/// saveUrlBlacklistRule command for the codes).
-String urlBlacklistError(BuildContext context, String code) => switch (code) {
-  'name' => l10n(context).urlBlacklistErrorName,
-  'pattern' => l10n(context).urlBlacklistErrorPattern,
-  'regex' => l10n(context).urlBlacklistErrorRegex,
+/// saveUrlFilterRule command for the codes).
+String urlFilterError(BuildContext context, String code) => switch (code) {
+  'name' => l10n(context).urlFilterErrorName,
+  'pattern' => l10n(context).urlFilterErrorPattern,
+  'regex' => l10n(context).urlFilterErrorRegex,
   _ => l10n(context).commonSaveFailed,
 };
 
 /// Add a rule, or change the one at [index]. Save checks the rule on the
 /// device: a usable one saves and closes, anything else shows why and keeps
 /// the dialog open. Answers true when it saved.
-Future<bool> showUrlBlacklistRuleDialog(
+Future<bool> showUrlFilterRuleDialog(
   BuildContext context,
   AppContainer container, {
   int? index,
 }) async {
-  final rules = container.browser.urlBlacklist;
+  final rules = container.browser.urlFilter;
   final rule = index != null && index < rules.length ? rules[index] : null;
   final name = TextEditingController(text: rule?.name ?? '');
   final pattern = TextEditingController(text: rule?.pattern ?? '');
-  var type = rule?.type ?? urlBlacklistWildcard;
-  var scope = rule?.scope ?? urlBlacklistAll;
+  var type = rule?.type ?? urlFilterWildcard;
+  var scope = rule?.scope ?? urlFilterAll;
+  var action = rule?.action ?? urlFilterBlock;
   var saving = false;
   String? error;
 
@@ -171,14 +190,14 @@ Future<bool> showUrlBlacklistRuleDialog(
             saving = true;
             error = null;
           });
-          final result = await container.commands
-              .execute('saveUrlBlacklistRule', {
-                'name': name.text,
-                'pattern': pattern.text,
-                'type': type,
-                'scope': scope,
-                if (rule != null) 'index': index,
-              });
+          final result = await container.commands.execute('saveUrlFilterRule', {
+            'name': name.text,
+            'pattern': pattern.text,
+            'type': type,
+            'scope': scope,
+            'action': action,
+            if (rule != null) 'index': index,
+          });
           if (!ctx.mounted) return;
           if (result.ok) {
             Navigator.pop(ctx, true);
@@ -186,15 +205,15 @@ Future<bool> showUrlBlacklistRuleDialog(
           }
           setDialogState(() {
             saving = false;
-            error = urlBlacklistError(ctx, result.error ?? '');
+            error = urlFilterError(ctx, result.error ?? '');
           });
         }
 
         return AlertDialog(
           title: Text(
             rule == null
-                ? strings.urlBlacklistAddTitle
-                : strings.urlBlacklistEditTitle,
+                ? strings.urlFilterAddTitle
+                : strings.urlFilterEditTitle,
           ),
           content: SizedBox(
             width: 480,
@@ -206,7 +225,7 @@ Future<bool> showUrlBlacklistRuleDialog(
                   spacing: 16,
                   children: [
                     LabeledField(
-                      label: strings.urlBlacklistName,
+                      label: strings.urlFilterName,
                       child: TextField(
                         controller: name,
                         enabled: !saving,
@@ -216,18 +235,41 @@ Future<bool> showUrlBlacklistRuleDialog(
                       ),
                     ),
                     LabeledField(
-                      label: strings.urlBlacklistType,
+                      label: strings.urlFilterAction,
+                      helper: action == urlFilterAllow
+                          ? strings.urlFilterActionAllowHint
+                          : null,
+                      child: KsDropdown<String>(
+                        value: action,
+                        expand: true,
+                        items: [
+                          DropdownMenuItem(
+                            value: urlFilterBlock,
+                            child: Text(strings.urlFilterActionBlock),
+                          ),
+                          DropdownMenuItem(
+                            value: urlFilterAllow,
+                            child: Text(strings.urlFilterActionAllow),
+                          ),
+                        ],
+                        onChanged: saving
+                            ? null
+                            : (v) => setDialogState(() => action = v ?? action),
+                      ),
+                    ),
+                    LabeledField(
+                      label: strings.urlFilterType,
                       child: KsDropdown<String>(
                         value: type,
                         expand: true,
                         items: [
                           DropdownMenuItem(
-                            value: urlBlacklistWildcard,
-                            child: Text(strings.urlBlacklistTypeWildcard),
+                            value: urlFilterWildcard,
+                            child: Text(strings.urlFilterTypeWildcard),
                           ),
                           DropdownMenuItem(
-                            value: urlBlacklistRegex,
-                            child: Text(strings.urlBlacklistTypeRegex),
+                            value: urlFilterRegex,
+                            child: Text(strings.urlFilterTypeRegex),
                           ),
                         ],
                         onChanged: saving
@@ -236,10 +278,10 @@ Future<bool> showUrlBlacklistRuleDialog(
                       ),
                     ),
                     LabeledField(
-                      label: strings.urlBlacklistPattern,
-                      helper: type == urlBlacklistRegex
-                          ? strings.urlBlacklistPatternRegexHint
-                          : strings.urlBlacklistPatternWildcardHint,
+                      label: strings.urlFilterPattern,
+                      helper: type == urlFilterRegex
+                          ? strings.urlFilterPatternRegexHint
+                          : strings.urlFilterPatternWildcardHint,
                       child: TextField(
                         controller: pattern,
                         enabled: !saving,
@@ -252,16 +294,16 @@ Future<bool> showUrlBlacklistRuleDialog(
                       ),
                     ),
                     LabeledField(
-                      label: strings.urlBlacklistScope,
-                      helper: strings.urlBlacklistScopeHint,
+                      label: strings.urlFilterScope,
+                      helper: strings.urlFilterScopeHint,
                       child: KsDropdown<String>(
                         value: scope,
                         expand: true,
                         items: [
-                          for (final s in urlBlacklistScopes)
+                          for (final s in urlFilterScopes)
                             DropdownMenuItem(
                               value: s,
-                              child: Text(urlBlacklistScopeLabel(ctx, s)),
+                              child: Text(urlFilterScopeLabel(ctx, s)),
                             ),
                         ],
                         onChanged: saving

@@ -22613,143 +22613,185 @@ abstract class UiStrings {
   /// **'// Example: zoom a site that ignores the dashboard zoom level\ndocument.documentElement.style.zoom = \'1.25\';'**
   String get browserInjectJsExternalPlaceholder;
 
-  /// Name of the settings page that lists addresses the dashboard and external pages cannot open, and of its entry row.
+  /// Name of the settings page that blocks or allows the addresses the dashboard and external pages open, and of its entry row.
   ///
   /// In en, this message translates to:
-  /// **'URL Blacklist'**
-  String get urlBlacklistTitle;
+  /// **'URL Filter'**
+  String get urlFilterTitle;
 
-  /// Hint under the URL Blacklist entry row.
+  /// Hint under the URL Filter entry row.
   ///
   /// In en, this message translates to:
-  /// **'Block pages by address pattern or regular expression'**
-  String get urlBlacklistHint;
+  /// **'Block or allow pages by address pattern or regular expression'**
+  String get urlFilterHint;
 
-  /// Headline of the intro at the top of the URL Blacklist page.
+  /// Headline of the intro at the top of the URL Filter page.
   ///
   /// In en, this message translates to:
-  /// **'Block pages by address'**
-  String get urlBlacklistIntroTitle;
+  /// **'Control which pages open'**
+  String get urlFilterIntroTitle;
 
-  /// Text under the URL Blacklist intro headline. The rules are the list of rules shown below it on the page.
+  /// Text under the URL Filter intro headline. Block and Allow only are the two choices of a rule's Action field.
   ///
   /// In en, this message translates to:
-  /// **'Links or pages that match the rules below are blocked from loading.'**
-  String get urlBlacklistIntroSub;
+  /// **'Links or pages that match a Block rule don\'t load. Add an Allow only rule to load only the pages it matches.'**
+  String get urlFilterIntroSub;
 
-  /// Row at the end of the URL Blacklist list that opens the editor for a new rule.
+  /// Row at the end of the URL Filter list that opens the editor for a new rule.
   ///
   /// In en, this message translates to:
   /// **'Add rule'**
-  String get urlBlacklistAdd;
+  String get urlFilterAdd;
 
-  /// Title of the editor dialog for a new URL Blacklist rule.
+  /// Title of the editor dialog for a new URL Filter rule.
   ///
   /// In en, this message translates to:
-  /// **'Add blacklist rule'**
-  String get urlBlacklistAddTitle;
+  /// **'Add filter rule'**
+  String get urlFilterAddTitle;
 
-  /// Title of the editor dialog for an existing URL Blacklist rule.
+  /// Title of the editor dialog for an existing URL Filter rule.
   ///
   /// In en, this message translates to:
-  /// **'Edit blacklist rule'**
-  String get urlBlacklistEditTitle;
+  /// **'Edit filter rule'**
+  String get urlFilterEditTitle;
 
-  /// Label of the rule's name field in the URL Blacklist editor.
+  /// Label of the rule's name field in the URL Filter editor.
   ///
   /// In en, this message translates to:
   /// **'Name'**
-  String get urlBlacklistName;
+  String get urlFilterName;
 
   /// Label of the field holding the address pattern or regular expression a rule blocks.
   ///
   /// In en, this message translates to:
   /// **'Pattern'**
-  String get urlBlacklistPattern;
+  String get urlFilterPattern;
 
   /// Help under the Pattern field for a wildcard rule. Keep * and /history* as they are.
   ///
   /// In en, this message translates to:
   /// **'Use * to match anything. A pattern starting with / matches the path on any server, such as /history*.'**
-  String get urlBlacklistPatternWildcardHint;
+  String get urlFilterPatternWildcardHint;
 
   /// Help under the Pattern field for a regular expression rule.
   ///
   /// In en, this message translates to:
   /// **'A regular expression matched anywhere in the address, ignoring case.'**
-  String get urlBlacklistPatternRegexHint;
+  String get urlFilterPatternRegexHint;
 
   /// Label of the choice between a wildcard pattern and a regular expression.
   ///
   /// In en, this message translates to:
   /// **'Pattern type'**
-  String get urlBlacklistType;
+  String get urlFilterType;
 
   /// Pattern type option: a pattern where * matches anything.
   ///
   /// In en, this message translates to:
   /// **'Wildcard'**
-  String get urlBlacklistTypeWildcard;
+  String get urlFilterTypeWildcard;
 
   /// Pattern type option: a regular expression.
   ///
   /// In en, this message translates to:
   /// **'Regular expression'**
-  String get urlBlacklistTypeRegex;
+  String get urlFilterTypeRegex;
+
+  /// Label of the choice between blocking the pages a rule matches and allowing only them.
+  ///
+  /// In en, this message translates to:
+  /// **'Action'**
+  String get urlFilterAction;
+
+  /// Action option: pages that match the rule do not load.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get urlFilterActionBlock;
+
+  /// Action option: only pages that match an Allow only rule load where the rule applies. Also shown on the rule's row in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow only'**
+  String get urlFilterActionAllow;
+
+  /// Help under the Action field when Allow only is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Where this rule applies, only pages that match an Allow only rule load. Home Assistant sign-in and the start dashboard always load.'**
+  String get urlFilterActionAllowHint;
 
   /// Label of the choice of where a rule blocks addresses.
   ///
   /// In en, this message translates to:
   /// **'Applies to'**
-  String get urlBlacklistScope;
+  String get urlFilterScope;
 
   /// Applies to option: both the dashboard and external pages.
   ///
   /// In en, this message translates to:
   /// **'Dashboard and external pages'**
-  String get urlBlacklistScopeAll;
+  String get urlFilterScopeAll;
 
   /// Applies to option: the dashboard and custom pages.
   ///
   /// In en, this message translates to:
   /// **'Dashboard'**
-  String get urlBlacklistScopeDashboard;
+  String get urlFilterScopeDashboard;
 
   /// Applies to option: pages opened from dashboard links and dashboard rotation pages, shown over the dashboard.
   ///
   /// In en, this message translates to:
   /// **'External pages'**
-  String get urlBlacklistScopeExternal;
+  String get urlFilterScopeExternal;
 
   /// Help under the Applies to choice.
   ///
   /// In en, this message translates to:
   /// **'External pages are links opened from the dashboard and dashboard rotation pages.'**
-  String get urlBlacklistScopeHint;
+  String get urlFilterScopeHint;
 
-  /// Error in the URL Blacklist editor when the name is empty.
+  /// Error in the URL Filter editor when the name is empty.
   ///
   /// In en, this message translates to:
   /// **'Enter a name.'**
-  String get urlBlacklistErrorName;
+  String get urlFilterErrorName;
 
-  /// Error in the URL Blacklist editor when the pattern is empty.
+  /// Error in the URL Filter editor when the pattern is empty.
   ///
   /// In en, this message translates to:
   /// **'Enter a pattern.'**
-  String get urlBlacklistErrorPattern;
+  String get urlFilterErrorPattern;
 
-  /// Error in the URL Blacklist editor when the regular expression has a syntax error.
+  /// Error in the URL Filter editor when the regular expression has a syntax error.
   ///
   /// In en, this message translates to:
   /// **'This regular expression is not valid.'**
-  String get urlBlacklistErrorRegex;
+  String get urlFilterErrorRegex;
 
-  /// Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Blacklist rule blocks. The rule's name shows under it.
+  /// Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Filter rule blocks. The rule's name shows under it.
   ///
   /// In en, this message translates to:
   /// **'Page blocked'**
-  String get urlBlacklistBlocked;
+  String get urlFilterBlocked;
+
+  /// Shown under Page blocked when a page is blocked because no Allow only rule matches it.
+  ///
+  /// In en, this message translates to:
+  /// **'Not on the allowed pages'**
+  String get urlFilterNotAllowed;
+
+  /// Title of the switch that shows a notice on the kiosk when a URL Filter rule blocks a page.
+  ///
+  /// In en, this message translates to:
+  /// **'Show blocked page notice'**
+  String get settingBrowserUrlFilterNoticeTitle;
+
+  /// Description under Show blocked page notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Show a short notice with the rule\'s name when a page is blocked.'**
+  String get settingBrowserUrlFilterNoticeDescription;
 
   /// Page heading.
   ///

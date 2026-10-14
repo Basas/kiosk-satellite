@@ -13285,78 +13285,102 @@ class UiStringsEs extends UiStrings {
       '// Ejemplo: ampliar un sitio que ignora el nivel de zoom del panel de control\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'Lista negra de URL';
+  String get urlFilterTitle => 'Filtro de URL';
 
   @override
-  String get urlBlacklistHint =>
-      'Bloquea páginas por patrón de dirección o expresión regular';
+  String get urlFilterHint =>
+      'Bloquea o permite páginas por patrón de dirección o expresión regular';
 
   @override
-  String get urlBlacklistIntroTitle => 'Bloquear páginas por dirección';
+  String get urlFilterIntroTitle => 'Controla qué páginas se abren';
 
   @override
-  String get urlBlacklistIntroSub =>
-      'Los enlaces o páginas que coincidan con las reglas de abajo no se cargan.';
+  String get urlFilterIntroSub =>
+      'Los enlaces o páginas que coincidan con una regla Bloquear no se cargan. Añade una regla Permitir solo para cargar únicamente las páginas que coincidan.';
 
   @override
-  String get urlBlacklistAdd => 'Añadir regla';
+  String get urlFilterAdd => 'Añadir regla';
 
   @override
-  String get urlBlacklistAddTitle => 'Añadir regla de la lista negra';
+  String get urlFilterAddTitle => 'Añadir regla de filtro';
 
   @override
-  String get urlBlacklistEditTitle => 'Editar regla de la lista negra';
+  String get urlFilterEditTitle => 'Editar regla de filtro';
 
   @override
-  String get urlBlacklistName => 'Nombre';
+  String get urlFilterName => 'Nombre';
 
   @override
-  String get urlBlacklistPattern => 'Patrón';
+  String get urlFilterPattern => 'Patrón';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       'Usa * para coincidir con cualquier cosa. Un patrón que empieza por / coincide con la ruta en cualquier servidor, como /history*.';
 
   @override
-  String get urlBlacklistPatternRegexHint =>
+  String get urlFilterPatternRegexHint =>
       'Una expresión regular que se busca en cualquier parte de la dirección, sin distinguir mayúsculas y minúsculas.';
 
   @override
-  String get urlBlacklistType => 'Tipo de patrón';
+  String get urlFilterType => 'Tipo de patrón';
 
   @override
-  String get urlBlacklistTypeWildcard => 'Comodín';
+  String get urlFilterTypeWildcard => 'Comodín';
 
   @override
-  String get urlBlacklistTypeRegex => 'Expresión regular';
+  String get urlFilterTypeRegex => 'Expresión regular';
 
   @override
-  String get urlBlacklistScope => 'Se aplica a';
+  String get urlFilterAction => 'Acción';
 
   @override
-  String get urlBlacklistScopeAll => 'Panel de control y páginas externas';
+  String get urlFilterActionBlock => 'Bloquear';
 
   @override
-  String get urlBlacklistScopeDashboard => 'Panel de control';
+  String get urlFilterActionAllow => 'Permitir solo';
 
   @override
-  String get urlBlacklistScopeExternal => 'Páginas externas';
+  String get urlFilterActionAllowHint =>
+      'Donde se aplica esta regla, solo se cargan las páginas que coincidan con una regla Permitir solo. El inicio de sesión de Home Assistant y el panel de control de inicio siempre se cargan.';
 
   @override
-  String get urlBlacklistScopeHint =>
+  String get urlFilterScope => 'Se aplica a';
+
+  @override
+  String get urlFilterScopeAll => 'Panel de control y páginas externas';
+
+  @override
+  String get urlFilterScopeDashboard => 'Panel de control';
+
+  @override
+  String get urlFilterScopeExternal => 'Páginas externas';
+
+  @override
+  String get urlFilterScopeHint =>
       'Las páginas externas son los enlaces abiertos desde el panel de control y las páginas de la rotación de paneles de control.';
 
   @override
-  String get urlBlacklistErrorName => 'Introduce un nombre.';
+  String get urlFilterErrorName => 'Introduce un nombre.';
 
   @override
-  String get urlBlacklistErrorPattern => 'Introduce un patrón.';
+  String get urlFilterErrorPattern => 'Introduce un patrón.';
 
   @override
-  String get urlBlacklistErrorRegex => 'Esta expresión regular no es válida.';
+  String get urlFilterErrorRegex => 'Esta expresión regular no es válida.';
 
   @override
-  String get urlBlacklistBlocked => 'Página bloqueada';
+  String get urlFilterBlocked => 'Página bloqueada';
+
+  @override
+  String get urlFilterNotAllowed => 'No está en las páginas permitidas';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle =>
+      'Mostrar aviso de página bloqueada';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Muestra un breve aviso con el nombre de la regla cuando se bloquea una página.';
 
   @override
   String get setupConnectHeading => 'Conectar con Home Assistant';

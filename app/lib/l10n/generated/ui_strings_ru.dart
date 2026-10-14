@@ -13089,78 +13089,102 @@ class UiStringsRu extends UiStrings {
       '// Пример: приблизить сайт, игнорирующий масштаб панели\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'Чёрный список URL';
+  String get urlFilterTitle => 'Фильтр URL';
 
   @override
-  String get urlBlacklistHint =>
-      'Блокировка страниц по шаблону адреса или регулярному выражению';
+  String get urlFilterHint =>
+      'Блокировка или разрешение страниц по шаблону адреса или регулярному выражению';
 
   @override
-  String get urlBlacklistIntroTitle => 'Блокировка страниц по адресу';
+  String get urlFilterIntroTitle => 'Какие страницы открываются';
 
   @override
-  String get urlBlacklistIntroSub =>
-      'Ссылки или страницы, подходящие под правила ниже, не загружаются.';
+  String get urlFilterIntroSub =>
+      'Ссылки или страницы, подходящие под правило «Блокировать», не загружаются. Добавьте правило «Только разрешить», чтобы загружались только подходящие под него страницы.';
 
   @override
-  String get urlBlacklistAdd => 'Добавить правило';
+  String get urlFilterAdd => 'Добавить правило';
 
   @override
-  String get urlBlacklistAddTitle => 'Добавить правило чёрного списка';
+  String get urlFilterAddTitle => 'Добавить правило фильтра';
 
   @override
-  String get urlBlacklistEditTitle => 'Изменить правило чёрного списка';
+  String get urlFilterEditTitle => 'Изменить правило фильтра';
 
   @override
-  String get urlBlacklistName => 'Название';
+  String get urlFilterName => 'Название';
 
   @override
-  String get urlBlacklistPattern => 'Шаблон';
+  String get urlFilterPattern => 'Шаблон';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       'Используйте * для совпадения с чем угодно. Шаблон, начинающийся с /, совпадает с путём на любом сервере, например /history*.';
 
   @override
-  String get urlBlacklistPatternRegexHint =>
+  String get urlFilterPatternRegexHint =>
       'Регулярное выражение, которое ищется в любом месте адреса без учёта регистра.';
 
   @override
-  String get urlBlacklistType => 'Тип шаблона';
+  String get urlFilterType => 'Тип шаблона';
 
   @override
-  String get urlBlacklistTypeWildcard => 'Подстановочный знак';
+  String get urlFilterTypeWildcard => 'Подстановочный знак';
 
   @override
-  String get urlBlacklistTypeRegex => 'Регулярное выражение';
+  String get urlFilterTypeRegex => 'Регулярное выражение';
 
   @override
-  String get urlBlacklistScope => 'Применяется к';
+  String get urlFilterAction => 'Действие';
 
   @override
-  String get urlBlacklistScopeAll => 'Панель и внешние страницы';
+  String get urlFilterActionBlock => 'Блокировать';
 
   @override
-  String get urlBlacklistScopeDashboard => 'Панель';
+  String get urlFilterActionAllow => 'Только разрешить';
 
   @override
-  String get urlBlacklistScopeExternal => 'Внешние страницы';
+  String get urlFilterActionAllowHint =>
+      'Там, где действует это правило, загружаются только страницы, подходящие под правило «Только разрешить». Вход в Home Assistant и стартовая панель загружаются всегда.';
 
   @override
-  String get urlBlacklistScopeHint =>
+  String get urlFilterScope => 'Применяется к';
+
+  @override
+  String get urlFilterScopeAll => 'Панель и внешние страницы';
+
+  @override
+  String get urlFilterScopeDashboard => 'Панель';
+
+  @override
+  String get urlFilterScopeExternal => 'Внешние страницы';
+
+  @override
+  String get urlFilterScopeHint =>
       'Внешние страницы: ссылки, открытые с панели, и страницы ротации панели.';
 
   @override
-  String get urlBlacklistErrorName => 'Введите название.';
+  String get urlFilterErrorName => 'Введите название.';
 
   @override
-  String get urlBlacklistErrorPattern => 'Введите шаблон.';
+  String get urlFilterErrorPattern => 'Введите шаблон.';
 
   @override
-  String get urlBlacklistErrorRegex => 'Это регулярное выражение недопустимо.';
+  String get urlFilterErrorRegex => 'Это регулярное выражение недопустимо.';
 
   @override
-  String get urlBlacklistBlocked => 'Страница заблокирована';
+  String get urlFilterBlocked => 'Страница заблокирована';
+
+  @override
+  String get urlFilterNotAllowed => 'Нет среди разрешённых страниц';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle =>
+      'Показывать уведомление о блокировке';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Показывать короткое уведомление с названием правила, когда страница заблокирована.';
 
   @override
   String get setupConnectHeading => 'Подключение к Home Assistant';

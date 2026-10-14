@@ -12328,74 +12328,96 @@ class UiStringsZh extends UiStrings {
       '// 示例：缩放不遵循仪表盘缩放级别的网站\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'URL 黑名单';
+  String get urlFilterTitle => 'URL 过滤';
 
   @override
-  String get urlBlacklistHint => '按地址模式或正则表达式屏蔽页面';
+  String get urlFilterHint => '按地址模式或正则表达式屏蔽或允许页面';
 
   @override
-  String get urlBlacklistIntroTitle => '按地址屏蔽页面';
+  String get urlFilterIntroTitle => '控制可以打开哪些页面';
 
   @override
-  String get urlBlacklistIntroSub => '与下方规则匹配的链接或页面将被阻止加载。';
+  String get urlFilterIntroSub => '与“屏蔽”规则匹配的链接或页面不会加载。添加“仅允许”规则后，只加载与其匹配的页面。';
 
   @override
-  String get urlBlacklistAdd => '添加规则';
+  String get urlFilterAdd => '添加规则';
 
   @override
-  String get urlBlacklistAddTitle => '添加黑名单规则';
+  String get urlFilterAddTitle => '添加过滤规则';
 
   @override
-  String get urlBlacklistEditTitle => '编辑黑名单规则';
+  String get urlFilterEditTitle => '编辑过滤规则';
 
   @override
-  String get urlBlacklistName => '名称';
+  String get urlFilterName => '名称';
 
   @override
-  String get urlBlacklistPattern => '模式';
+  String get urlFilterPattern => '模式';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       '使用 * 匹配任意内容。以 / 开头的模式匹配任意服务器上的路径，例如 /history*。';
 
   @override
-  String get urlBlacklistPatternRegexHint => '在地址任意位置查找的正则表达式，不区分大小写。';
+  String get urlFilterPatternRegexHint => '在地址任意位置查找的正则表达式，不区分大小写。';
 
   @override
-  String get urlBlacklistType => '模式类型';
+  String get urlFilterType => '模式类型';
 
   @override
-  String get urlBlacklistTypeWildcard => '通配符';
+  String get urlFilterTypeWildcard => '通配符';
 
   @override
-  String get urlBlacklistTypeRegex => '正则表达式';
+  String get urlFilterTypeRegex => '正则表达式';
 
   @override
-  String get urlBlacklistScope => '适用于';
+  String get urlFilterAction => '操作';
 
   @override
-  String get urlBlacklistScopeAll => '仪表盘和外部页面';
+  String get urlFilterActionBlock => '屏蔽';
 
   @override
-  String get urlBlacklistScopeDashboard => '仪表盘';
+  String get urlFilterActionAllow => '仅允许';
 
   @override
-  String get urlBlacklistScopeExternal => '外部页面';
+  String get urlFilterActionAllowHint =>
+      '在此规则适用的位置，只加载与“仅允许”规则匹配的页面。Home Assistant 登录页和起始仪表盘始终会加载。';
 
   @override
-  String get urlBlacklistScopeHint => '外部页面指从仪表盘打开的链接和仪表盘轮播页面。';
+  String get urlFilterScope => '适用于';
 
   @override
-  String get urlBlacklistErrorName => '请输入名称。';
+  String get urlFilterScopeAll => '仪表盘和外部页面';
 
   @override
-  String get urlBlacklistErrorPattern => '请输入模式。';
+  String get urlFilterScopeDashboard => '仪表盘';
 
   @override
-  String get urlBlacklistErrorRegex => '此正则表达式无效。';
+  String get urlFilterScopeExternal => '外部页面';
 
   @override
-  String get urlBlacklistBlocked => '页面已屏蔽';
+  String get urlFilterScopeHint => '外部页面指从仪表盘打开的链接和仪表盘轮播页面。';
+
+  @override
+  String get urlFilterErrorName => '请输入名称。';
+
+  @override
+  String get urlFilterErrorPattern => '请输入模式。';
+
+  @override
+  String get urlFilterErrorRegex => '此正则表达式无效。';
+
+  @override
+  String get urlFilterBlocked => '页面已屏蔽';
+
+  @override
+  String get urlFilterNotAllowed => '不在允许的页面中';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle => '显示页面屏蔽提示';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription => '页面被屏蔽时显示带有规则名称的简短提示。';
 
   @override
   String get setupConnectHeading => '连接 Home Assistant';
@@ -25267,74 +25289,96 @@ class UiStringsZhCn extends UiStringsZh {
       '// 示例：缩放不遵循仪表盘缩放级别的网站\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'URL 黑名单';
+  String get urlFilterTitle => 'URL 过滤';
 
   @override
-  String get urlBlacklistHint => '按地址模式或正则表达式屏蔽页面';
+  String get urlFilterHint => '按地址模式或正则表达式屏蔽或允许页面';
 
   @override
-  String get urlBlacklistIntroTitle => '按地址屏蔽页面';
+  String get urlFilterIntroTitle => '控制可以打开哪些页面';
 
   @override
-  String get urlBlacklistIntroSub => '与下方规则匹配的链接或页面将被阻止加载。';
+  String get urlFilterIntroSub => '与“屏蔽”规则匹配的链接或页面不会加载。添加“仅允许”规则后，只加载与其匹配的页面。';
 
   @override
-  String get urlBlacklistAdd => '添加规则';
+  String get urlFilterAdd => '添加规则';
 
   @override
-  String get urlBlacklistAddTitle => '添加黑名单规则';
+  String get urlFilterAddTitle => '添加过滤规则';
 
   @override
-  String get urlBlacklistEditTitle => '编辑黑名单规则';
+  String get urlFilterEditTitle => '编辑过滤规则';
 
   @override
-  String get urlBlacklistName => '名称';
+  String get urlFilterName => '名称';
 
   @override
-  String get urlBlacklistPattern => '模式';
+  String get urlFilterPattern => '模式';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       '使用 * 匹配任意内容。以 / 开头的模式匹配任意服务器上的路径，例如 /history*。';
 
   @override
-  String get urlBlacklistPatternRegexHint => '在地址任意位置查找的正则表达式，不区分大小写。';
+  String get urlFilterPatternRegexHint => '在地址任意位置查找的正则表达式，不区分大小写。';
 
   @override
-  String get urlBlacklistType => '模式类型';
+  String get urlFilterType => '模式类型';
 
   @override
-  String get urlBlacklistTypeWildcard => '通配符';
+  String get urlFilterTypeWildcard => '通配符';
 
   @override
-  String get urlBlacklistTypeRegex => '正则表达式';
+  String get urlFilterTypeRegex => '正则表达式';
 
   @override
-  String get urlBlacklistScope => '适用于';
+  String get urlFilterAction => '操作';
 
   @override
-  String get urlBlacklistScopeAll => '仪表盘和外部页面';
+  String get urlFilterActionBlock => '屏蔽';
 
   @override
-  String get urlBlacklistScopeDashboard => '仪表盘';
+  String get urlFilterActionAllow => '仅允许';
 
   @override
-  String get urlBlacklistScopeExternal => '外部页面';
+  String get urlFilterActionAllowHint =>
+      '在此规则适用的位置，只加载与“仅允许”规则匹配的页面。Home Assistant 登录页和起始仪表盘始终会加载。';
 
   @override
-  String get urlBlacklistScopeHint => '外部页面指从仪表盘打开的链接和仪表盘轮播页面。';
+  String get urlFilterScope => '适用于';
 
   @override
-  String get urlBlacklistErrorName => '请输入名称。';
+  String get urlFilterScopeAll => '仪表盘和外部页面';
 
   @override
-  String get urlBlacklistErrorPattern => '请输入模式。';
+  String get urlFilterScopeDashboard => '仪表盘';
 
   @override
-  String get urlBlacklistErrorRegex => '此正则表达式无效。';
+  String get urlFilterScopeExternal => '外部页面';
 
   @override
-  String get urlBlacklistBlocked => '页面已屏蔽';
+  String get urlFilterScopeHint => '外部页面指从仪表盘打开的链接和仪表盘轮播页面。';
+
+  @override
+  String get urlFilterErrorName => '请输入名称。';
+
+  @override
+  String get urlFilterErrorPattern => '请输入模式。';
+
+  @override
+  String get urlFilterErrorRegex => '此正则表达式无效。';
+
+  @override
+  String get urlFilterBlocked => '页面已屏蔽';
+
+  @override
+  String get urlFilterNotAllowed => '不在允许的页面中';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle => '显示页面屏蔽提示';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription => '页面被屏蔽时显示带有规则名称的简短提示。';
 
   @override
   String get setupConnectHeading => '连接 Home Assistant';

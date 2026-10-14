@@ -13158,78 +13158,102 @@ class UiStringsUk extends UiStrings {
       '// Приклад: масштабувати сайт, який ігнорує масштаб панелі керування\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'Чорний список URL';
+  String get urlFilterTitle => 'Фільтр URL';
 
   @override
-  String get urlBlacklistHint =>
-      'Блокування сторінок за шаблоном адреси або регулярним виразом';
+  String get urlFilterHint =>
+      'Блокування або дозвіл сторінок за шаблоном адреси чи регулярним виразом';
 
   @override
-  String get urlBlacklistIntroTitle => 'Блокування сторінок за адресою';
+  String get urlFilterIntroTitle => 'Керування тим, які сторінки відкриваються';
 
   @override
-  String get urlBlacklistIntroSub =>
-      'Посилання або сторінки, що відповідають правилам нижче, не завантажуються.';
+  String get urlFilterIntroSub =>
+      'Посилання або сторінки, що відповідають правилу «Блокувати», не завантажуються. Додайте правило «Лише дозволити», щоб завантажувалися тільки сторінки, які йому відповідають.';
 
   @override
-  String get urlBlacklistAdd => 'Додати правило';
+  String get urlFilterAdd => 'Додати правило';
 
   @override
-  String get urlBlacklistAddTitle => 'Додати правило чорного списку';
+  String get urlFilterAddTitle => 'Додати правило фільтра';
 
   @override
-  String get urlBlacklistEditTitle => 'Редагувати правило чорного списку';
+  String get urlFilterEditTitle => 'Редагувати правило фільтра';
 
   @override
-  String get urlBlacklistName => 'Назва';
+  String get urlFilterName => 'Назва';
 
   @override
-  String get urlBlacklistPattern => 'Шаблон';
+  String get urlFilterPattern => 'Шаблон';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       'Використовуйте * для збігу з будь-чим. Шаблон, що починається з /, збігається зі шляхом на будь-якому сервері, наприклад /history*.';
 
   @override
-  String get urlBlacklistPatternRegexHint =>
+  String get urlFilterPatternRegexHint =>
       'Регулярний вираз, який шукається в будь-якому місці адреси без урахування регістру.';
 
   @override
-  String get urlBlacklistType => 'Тип шаблону';
+  String get urlFilterType => 'Тип шаблону';
 
   @override
-  String get urlBlacklistTypeWildcard => 'Шаблон із *';
+  String get urlFilterTypeWildcard => 'Шаблон із *';
 
   @override
-  String get urlBlacklistTypeRegex => 'Регулярний вираз';
+  String get urlFilterTypeRegex => 'Регулярний вираз';
 
   @override
-  String get urlBlacklistScope => 'Застосовується до';
+  String get urlFilterAction => 'Дія';
 
   @override
-  String get urlBlacklistScopeAll => 'Панель і зовнішні сторінки';
+  String get urlFilterActionBlock => 'Блокувати';
 
   @override
-  String get urlBlacklistScopeDashboard => 'Панель';
+  String get urlFilterActionAllow => 'Лише дозволити';
 
   @override
-  String get urlBlacklistScopeExternal => 'Зовнішні сторінки';
+  String get urlFilterActionAllowHint =>
+      'Там, де діє це правило, завантажуються лише сторінки, що відповідають правилу «Лише дозволити». Вхід у Home Assistant і стартова панель завантажуються завжди.';
 
   @override
-  String get urlBlacklistScopeHint =>
+  String get urlFilterScope => 'Застосовується до';
+
+  @override
+  String get urlFilterScopeAll => 'Панель і зовнішні сторінки';
+
+  @override
+  String get urlFilterScopeDashboard => 'Панель';
+
+  @override
+  String get urlFilterScopeExternal => 'Зовнішні сторінки';
+
+  @override
+  String get urlFilterScopeHint =>
       'Зовнішні сторінки: посилання, відкриті з панелі, та сторінки ротації панелі.';
 
   @override
-  String get urlBlacklistErrorName => 'Введіть назву.';
+  String get urlFilterErrorName => 'Введіть назву.';
 
   @override
-  String get urlBlacklistErrorPattern => 'Введіть шаблон.';
+  String get urlFilterErrorPattern => 'Введіть шаблон.';
 
   @override
-  String get urlBlacklistErrorRegex => 'Цей регулярний вираз недійсний.';
+  String get urlFilterErrorRegex => 'Цей регулярний вираз недійсний.';
 
   @override
-  String get urlBlacklistBlocked => 'Сторінку заблоковано';
+  String get urlFilterBlocked => 'Сторінку заблоковано';
+
+  @override
+  String get urlFilterNotAllowed => 'Немає серед дозволених сторінок';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle =>
+      'Показувати сповіщення про блокування';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Показувати коротке сповіщення з назвою правила, коли сторінку заблоковано.';
 
   @override
   String get setupConnectHeading => 'Підключення до Home Assistant';

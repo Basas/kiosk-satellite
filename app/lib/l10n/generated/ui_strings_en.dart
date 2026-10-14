@@ -13011,78 +13011,101 @@ class UiStringsEn extends UiStrings {
       '// Example: zoom a site that ignores the dashboard zoom level\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'URL Blacklist';
+  String get urlFilterTitle => 'URL Filter';
 
   @override
-  String get urlBlacklistHint =>
-      'Block pages by address pattern or regular expression';
+  String get urlFilterHint =>
+      'Block or allow pages by address pattern or regular expression';
 
   @override
-  String get urlBlacklistIntroTitle => 'Block pages by address';
+  String get urlFilterIntroTitle => 'Control which pages open';
 
   @override
-  String get urlBlacklistIntroSub =>
-      'Links or pages that match the rules below are blocked from loading.';
+  String get urlFilterIntroSub =>
+      'Links or pages that match a Block rule don\'t load. Add an Allow only rule to load only the pages it matches.';
 
   @override
-  String get urlBlacklistAdd => 'Add rule';
+  String get urlFilterAdd => 'Add rule';
 
   @override
-  String get urlBlacklistAddTitle => 'Add blacklist rule';
+  String get urlFilterAddTitle => 'Add filter rule';
 
   @override
-  String get urlBlacklistEditTitle => 'Edit blacklist rule';
+  String get urlFilterEditTitle => 'Edit filter rule';
 
   @override
-  String get urlBlacklistName => 'Name';
+  String get urlFilterName => 'Name';
 
   @override
-  String get urlBlacklistPattern => 'Pattern';
+  String get urlFilterPattern => 'Pattern';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       'Use * to match anything. A pattern starting with / matches the path on any server, such as /history*.';
 
   @override
-  String get urlBlacklistPatternRegexHint =>
+  String get urlFilterPatternRegexHint =>
       'A regular expression matched anywhere in the address, ignoring case.';
 
   @override
-  String get urlBlacklistType => 'Pattern type';
+  String get urlFilterType => 'Pattern type';
 
   @override
-  String get urlBlacklistTypeWildcard => 'Wildcard';
+  String get urlFilterTypeWildcard => 'Wildcard';
 
   @override
-  String get urlBlacklistTypeRegex => 'Regular expression';
+  String get urlFilterTypeRegex => 'Regular expression';
 
   @override
-  String get urlBlacklistScope => 'Applies to';
+  String get urlFilterAction => 'Action';
 
   @override
-  String get urlBlacklistScopeAll => 'Dashboard and external pages';
+  String get urlFilterActionBlock => 'Block';
 
   @override
-  String get urlBlacklistScopeDashboard => 'Dashboard';
+  String get urlFilterActionAllow => 'Allow only';
 
   @override
-  String get urlBlacklistScopeExternal => 'External pages';
+  String get urlFilterActionAllowHint =>
+      'Where this rule applies, only pages that match an Allow only rule load. Home Assistant sign-in and the start dashboard always load.';
 
   @override
-  String get urlBlacklistScopeHint =>
+  String get urlFilterScope => 'Applies to';
+
+  @override
+  String get urlFilterScopeAll => 'Dashboard and external pages';
+
+  @override
+  String get urlFilterScopeDashboard => 'Dashboard';
+
+  @override
+  String get urlFilterScopeExternal => 'External pages';
+
+  @override
+  String get urlFilterScopeHint =>
       'External pages are links opened from the dashboard and dashboard rotation pages.';
 
   @override
-  String get urlBlacklistErrorName => 'Enter a name.';
+  String get urlFilterErrorName => 'Enter a name.';
 
   @override
-  String get urlBlacklistErrorPattern => 'Enter a pattern.';
+  String get urlFilterErrorPattern => 'Enter a pattern.';
 
   @override
-  String get urlBlacklistErrorRegex => 'This regular expression is not valid.';
+  String get urlFilterErrorRegex => 'This regular expression is not valid.';
 
   @override
-  String get urlBlacklistBlocked => 'Page blocked';
+  String get urlFilterBlocked => 'Page blocked';
+
+  @override
+  String get urlFilterNotAllowed => 'Not on the allowed pages';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle => 'Show blocked page notice';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Show a short notice with the rule\'s name when a page is blocked.';
 
   @override
   String get setupConnectHeading => 'Connect to Home Assistant';

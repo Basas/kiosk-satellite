@@ -47393,25 +47393,25 @@
     },
     "x-notes": "Translate only the comment on the first line. Preserve the executable JavaScript on the second line exactly."
   },
-  "urlBlacklistTitle": "Чорний список URL",
-  "@urlBlacklistTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Name of the settings page that lists addresses the dashboard and external pages cannot open, and of its entry row.",
+  "urlFilterTitle": "Фільтр URL",
+  "@urlFilterTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Name of the settings page that blocks or allows the addresses the dashboard and external pages open, and of its entry row.",
     "x-locations": {
       "device": [
         "Settings > Web Browsing",
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
         "Web Browsing",
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistHint": "Блокування сторінок за шаблоном адреси або регулярним виразом",
-  "@urlBlacklistHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Hint under the URL Blacklist entry row.",
+  "urlFilterHint": "Блокування або дозвіл сторінок за шаблоном адреси чи регулярним виразом",
+  "@urlFilterHint": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Hint under the URL Filter entry row.",
     "x-locations": {
       "device": [
         "Settings > Web Browsing"
@@ -47421,274 +47421,363 @@
       ]
     }
   },
-  "urlBlacklistIntroTitle": "Блокування сторінок за адресою",
-  "@urlBlacklistIntroTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Headline of the intro at the top of the URL Blacklist page.",
+  "urlFilterIntroTitle": "Керування тим, які сторінки відкриваються",
+  "@urlFilterIntroTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Headline of the intro at the top of the URL Filter page.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistIntroSub": "Посилання або сторінки, що відповідають правилам нижче, не завантажуються.",
-  "@urlBlacklistIntroSub": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Text under the URL Blacklist intro headline. The rules are the list of rules shown below it on the page.",
+  "urlFilterIntroSub": "Посилання або сторінки, що відповідають правилу «Блокувати», не завантажуються. Додайте правило «Лише дозволити», щоб завантажувалися тільки сторінки, які йому відповідають.",
+  "@urlFilterIntroSub": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Text under the URL Filter intro headline. Block and Allow only are the two choices of a rule's Action field.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistAdd": "Додати правило",
-  "@urlBlacklistAdd": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Row at the end of the URL Blacklist list that opens the editor for a new rule.",
+  "urlFilterAdd": "Додати правило",
+  "@urlFilterAdd": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Row at the end of the URL Filter list that opens the editor for a new rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistAddTitle": "Додати правило чорного списку",
-  "@urlBlacklistAddTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Title of the editor dialog for a new URL Blacklist rule.",
+  "urlFilterAddTitle": "Додати правило фільтра",
+  "@urlFilterAddTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the editor dialog for a new URL Filter rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistEditTitle": "Редагувати правило чорного списку",
-  "@urlBlacklistEditTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Title of the editor dialog for an existing URL Blacklist rule.",
+  "urlFilterEditTitle": "Редагувати правило фільтра",
+  "@urlFilterEditTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the editor dialog for an existing URL Filter rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistName": "Назва",
-  "@urlBlacklistName": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Label of the rule's name field in the URL Blacklist editor.",
+  "urlFilterName": "Назва",
+  "@urlFilterName": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Label of the rule's name field in the URL Filter editor.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistPattern": "Шаблон",
-  "@urlBlacklistPattern": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterPattern": "Шаблон",
+  "@urlFilterPattern": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Label of the field holding the address pattern or regular expression a rule blocks.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistPatternWildcardHint": "Використовуйте * для збігу з будь-чим. Шаблон, що починається з /, збігається зі шляхом на будь-якому сервері, наприклад /history*.",
-  "@urlBlacklistPatternWildcardHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterPatternWildcardHint": "Використовуйте * для збігу з будь-чим. Шаблон, що починається з /, збігається зі шляхом на будь-якому сервері, наприклад /history*.",
+  "@urlFilterPatternWildcardHint": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Help under the Pattern field for a wildcard rule. Keep * and /history* as they are.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistPatternRegexHint": "Регулярний вираз, який шукається в будь-якому місці адреси без урахування регістру.",
-  "@urlBlacklistPatternRegexHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterPatternRegexHint": "Регулярний вираз, який шукається в будь-якому місці адреси без урахування регістру.",
+  "@urlFilterPatternRegexHint": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Help under the Pattern field for a regular expression rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistType": "Тип шаблону",
-  "@urlBlacklistType": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterType": "Тип шаблону",
+  "@urlFilterType": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Label of the choice between a wildcard pattern and a regular expression.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistTypeWildcard": "Шаблон із *",
-  "@urlBlacklistTypeWildcard": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterTypeWildcard": "Шаблон із *",
+  "@urlFilterTypeWildcard": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Pattern type option: a pattern where * matches anything.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistTypeRegex": "Регулярний вираз",
-  "@urlBlacklistTypeRegex": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterTypeRegex": "Регулярний вираз",
+  "@urlFilterTypeRegex": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Pattern type option: a regular expression.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScope": "Застосовується до",
-  "@urlBlacklistScope": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterAction": "Дія",
+  "@urlFilterAction": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Label of the choice between blocking the pages a rule matches and allowing only them.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterActionBlock": "Блокувати",
+  "@urlFilterActionBlock": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Action option: pages that match the rule do not load.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterActionAllow": "Лише дозволити",
+  "@urlFilterActionAllow": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Action option: only pages that match an Allow only rule load where the rule applies. Also shown on the rule's row in the list.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterActionAllowHint": "Там, де діє це правило, завантажуються лише сторінки, що відповідають правилу «Лише дозволити». Вхід у Home Assistant і стартова панель завантажуються завжди.",
+  "@urlFilterActionAllowHint": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Help under the Action field when Allow only is picked.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterScope": "Застосовується до",
+  "@urlFilterScope": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Label of the choice of where a rule blocks addresses.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeAll": "Панель і зовнішні сторінки",
-  "@urlBlacklistScopeAll": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeAll": "Панель і зовнішні сторінки",
+  "@urlFilterScopeAll": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Applies to option: both the dashboard and external pages.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeDashboard": "Панель",
-  "@urlBlacklistScopeDashboard": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeDashboard": "Панель",
+  "@urlFilterScopeDashboard": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Applies to option: the dashboard and custom pages.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeExternal": "Зовнішні сторінки",
-  "@urlBlacklistScopeExternal": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeExternal": "Зовнішні сторінки",
+  "@urlFilterScopeExternal": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Applies to option: pages opened from dashboard links and dashboard rotation pages, shown over the dashboard.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeHint": "Зовнішні сторінки: посилання, відкриті з панелі, та сторінки ротації панелі.",
-  "@urlBlacklistScopeHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeHint": "Зовнішні сторінки: посилання, відкриті з панелі, та сторінки ротації панелі.",
+  "@urlFilterScopeHint": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Help under the Applies to choice.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistErrorName": "Введіть назву.",
-  "@urlBlacklistErrorName": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Error in the URL Blacklist editor when the name is empty.",
+  "urlFilterErrorName": "Введіть назву.",
+  "@urlFilterErrorName": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Error in the URL Filter editor when the name is empty.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistErrorPattern": "Введіть шаблон.",
-  "@urlBlacklistErrorPattern": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Error in the URL Blacklist editor when the pattern is empty.",
+  "urlFilterErrorPattern": "Введіть шаблон.",
+  "@urlFilterErrorPattern": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Error in the URL Filter editor when the pattern is empty.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistErrorRegex": "Цей регулярний вираз недійсний.",
-  "@urlBlacklistErrorRegex": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Error in the URL Blacklist editor when the regular expression has a syntax error.",
+  "urlFilterErrorRegex": "Цей регулярний вираз недійсний.",
+  "@urlFilterErrorRegex": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Error in the URL Filter editor when the regular expression has a syntax error.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistBlocked": "Сторінку заблоковано",
-  "@urlBlacklistBlocked": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Blacklist rule blocks. The rule's name shows under it.",
+  "urlFilterBlocked": "Сторінку заблоковано",
+  "@urlFilterBlocked": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Filter rule blocks. The rule's name shows under it.",
     "x-locations": {
       "device": [
         "Dashboard",
         "External pages"
+      ]
+    }
+  },
+  "urlFilterNotAllowed": "Немає серед дозволених сторінок",
+  "@urlFilterNotAllowed": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Shown under Page blocked when a page is blocked because no Allow only rule matches it.",
+    "x-locations": {
+      "device": [
+        "Dashboard",
+        "External pages"
+      ]
+    }
+  },
+  "settingBrowserUrlFilterNoticeTitle": "Показувати сповіщення про блокування",
+  "@settingBrowserUrlFilterNoticeTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the switch that shows a notice on the kiosk when a URL Filter rule blocks a page.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "settingBrowserUrlFilterNoticeDescription": "Показувати коротке сповіщення з назвою правила, коли сторінку заблоковано.",
+  "@settingBrowserUrlFilterNoticeDescription": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Description under Show blocked page notice.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
       ]
     }
   },

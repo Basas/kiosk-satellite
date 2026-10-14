@@ -209,7 +209,7 @@ const Map<String, String> subpageHints = {
   'Theme': 'Match the app, or switch dark and light on a schedule',
   'Custom Pages': 'Your custom HTML pages served as a dashboard',
   // Web Browsing.
-  'URL Blacklist': 'Block pages by address pattern or regular expression',
+  'URL Filter': 'Block or allow pages by address pattern or regular expression',
   'Dashboard View Rotation': 'Cycle through views, dwell time, fade',
   'Return to home dashboard view': 'Go back to the home view when left idle',
   'Hold mode': 'Pin the current view, automatic release, menu entry',
@@ -728,16 +728,32 @@ const ignoreSslErrors = SettingDef<bool>(
   category: 'Browser',
 );
 
-// Hidden: the URL Blacklist page in both settings surfaces owns this value,
-// a JSON array of {name, pattern, type, scope} rules for the addresses the
-// web views do not navigate to (see url_blacklist.dart). No subpage: both
-// UIs place that page's entry row by hand, at the end of Web Browsing.
-const browserUrlBlacklist = SettingDef<String>(
-  key: 'browser.url_blacklist',
+// Hidden: the URL Filter page in both settings surfaces owns this value,
+// a JSON array of {name, pattern, type, scope, action} rules for the
+// addresses the web views block, or the only ones they open (see
+// url_filter.dart). No subpage: both UIs place that page's entry row by
+// hand, at the end of Web Browsing.
+const browserUrlFilter = SettingDef<String>(
+  key: 'browser.url_filter',
   type: SettingType.string,
   defaultValue: '[]',
-  title: 'URL Blacklist',
-  description: 'Addresses the dashboard and external pages cannot open.',
+  title: 'URL Filter',
+  description:
+      'Addresses the dashboard and external pages block, or the only ones '
+      'they open.',
+  category: 'Browser',
+  hidden: true,
+);
+
+// Hidden: drawn by hand as the switch on the URL Filter page on both
+// surfaces. Off, a blocked navigation is only logged.
+const browserUrlFilterNotice = SettingDef<bool>(
+  key: 'browser.url_filter_notice',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show blocked page notice',
+  description:
+      "Show a short notice with the rule's name when a page is blocked.",
   category: 'Browser',
   hidden: true,
 );
@@ -10857,7 +10873,8 @@ const List<SettingDef<Object>> allSettings = [
   browserInjectJsExternal,
   allowMixedContent,
   ignoreSslErrors,
-  browserUrlBlacklist,
+  browserUrlFilter,
+  browserUrlFilterNotice,
   webMicrophone,
   webCamera,
   webGeolocation,

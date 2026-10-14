@@ -13310,78 +13310,102 @@ class UiStringsDe extends UiStrings {
       '// Beispiel: eine Website vergrößern, die die Zoomstufe des Dashboards ignoriert\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
-  String get urlBlacklistTitle => 'URL-Sperrliste';
+  String get urlFilterTitle => 'URL-Filter';
 
   @override
-  String get urlBlacklistHint =>
-      'Seiten nach Adressmuster oder regulärem Ausdruck sperren';
+  String get urlFilterHint =>
+      'Seiten nach Adressmuster oder regulärem Ausdruck sperren oder erlauben';
 
   @override
-  String get urlBlacklistIntroTitle => 'Seiten nach Adresse sperren';
+  String get urlFilterIntroTitle => 'Festlegen, welche Seiten sich öffnen';
 
   @override
-  String get urlBlacklistIntroSub =>
-      'Links oder Seiten, die zu den Regeln unten passen, werden nicht geladen.';
+  String get urlFilterIntroSub =>
+      'Links oder Seiten, die zu einer Sperren-Regel passen, werden nicht geladen. Füge eine Nur erlauben-Regel hinzu, damit nur passende Seiten laden.';
 
   @override
-  String get urlBlacklistAdd => 'Regel hinzufügen';
+  String get urlFilterAdd => 'Regel hinzufügen';
 
   @override
-  String get urlBlacklistAddTitle => 'Sperrregel hinzufügen';
+  String get urlFilterAddTitle => 'Filterregel hinzufügen';
 
   @override
-  String get urlBlacklistEditTitle => 'Sperrregel bearbeiten';
+  String get urlFilterEditTitle => 'Filterregel bearbeiten';
 
   @override
-  String get urlBlacklistName => 'Name';
+  String get urlFilterName => 'Name';
 
   @override
-  String get urlBlacklistPattern => 'Muster';
+  String get urlFilterPattern => 'Muster';
 
   @override
-  String get urlBlacklistPatternWildcardHint =>
+  String get urlFilterPatternWildcardHint =>
       'Verwende * als Platzhalter für beliebige Zeichen. Ein Muster, das mit / beginnt, passt auf den Pfad auf jedem Server, etwa /history*.';
 
   @override
-  String get urlBlacklistPatternRegexHint =>
+  String get urlFilterPatternRegexHint =>
       'Ein regulärer Ausdruck, der irgendwo in der Adresse gesucht wird, ohne Beachtung der Groß- und Kleinschreibung.';
 
   @override
-  String get urlBlacklistType => 'Mustertyp';
+  String get urlFilterType => 'Mustertyp';
 
   @override
-  String get urlBlacklistTypeWildcard => 'Platzhalter';
+  String get urlFilterTypeWildcard => 'Platzhalter';
 
   @override
-  String get urlBlacklistTypeRegex => 'Regulärer Ausdruck';
+  String get urlFilterTypeRegex => 'Regulärer Ausdruck';
 
   @override
-  String get urlBlacklistScope => 'Gilt für';
+  String get urlFilterAction => 'Aktion';
 
   @override
-  String get urlBlacklistScopeAll => 'Dashboard und externe Seiten';
+  String get urlFilterActionBlock => 'Sperren';
 
   @override
-  String get urlBlacklistScopeDashboard => 'Dashboard';
+  String get urlFilterActionAllow => 'Nur erlauben';
 
   @override
-  String get urlBlacklistScopeExternal => 'Externe Seiten';
+  String get urlFilterActionAllowHint =>
+      'Wo diese Regel gilt, laden nur Seiten, die zu einer Nur erlauben-Regel passen. Die Anmeldung bei Home Assistant und das Start-Dashboard laden immer.';
 
   @override
-  String get urlBlacklistScopeHint =>
+  String get urlFilterScope => 'Gilt für';
+
+  @override
+  String get urlFilterScopeAll => 'Dashboard und externe Seiten';
+
+  @override
+  String get urlFilterScopeDashboard => 'Dashboard';
+
+  @override
+  String get urlFilterScopeExternal => 'Externe Seiten';
+
+  @override
+  String get urlFilterScopeHint =>
       'Externe Seiten sind Links, die aus dem Dashboard geöffnet werden, und Seiten der Dashboard-Rotation.';
 
   @override
-  String get urlBlacklistErrorName => 'Gib einen Namen ein.';
+  String get urlFilterErrorName => 'Gib einen Namen ein.';
 
   @override
-  String get urlBlacklistErrorPattern => 'Gib ein Muster ein.';
+  String get urlFilterErrorPattern => 'Gib ein Muster ein.';
 
   @override
-  String get urlBlacklistErrorRegex => 'Dieser reguläre Ausdruck ist ungültig.';
+  String get urlFilterErrorRegex => 'Dieser reguläre Ausdruck ist ungültig.';
 
   @override
-  String get urlBlacklistBlocked => 'Seite gesperrt';
+  String get urlFilterBlocked => 'Seite gesperrt';
+
+  @override
+  String get urlFilterNotAllowed => 'Nicht unter den erlaubten Seiten';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle =>
+      'Hinweis bei gesperrter Seite anzeigen';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Zeigt einen kurzen Hinweis mit dem Namen der Regel, wenn eine Seite gesperrt wird.';
 
   @override
   String get setupConnectHeading => 'Mit Home Assistant verbinden';

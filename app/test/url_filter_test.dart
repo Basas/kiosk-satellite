@@ -2,19 +2,27 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kiosk_satellite/managers/browser/url_blacklist.dart';
+import 'package:kiosk_satellite/managers/browser/url_filter.dart';
 
-UrlBlacklistRule wildcard(String pattern, {String scope = urlBlacklistAll}) =>
-    UrlBlacklistRule(name: pattern, pattern: pattern, scope: scope);
+UrlFilterRule wildcard(String pattern, {String scope = urlFilterAll}) =>
+    UrlFilterRule(name: pattern, pattern: pattern, scope: scope);
 
-UrlBlacklistRule regex(String pattern) =>
-    UrlBlacklistRule(name: pattern, pattern: pattern, type: urlBlacklistRegex);
+UrlFilterRule allow(String pattern, {String scope = urlFilterAll}) =>
+    UrlFilterRule(
+      name: pattern,
+      pattern: pattern,
+      scope: scope,
+      action: urlFilterAllow,
+    );
+
+UrlFilterRule regex(String pattern) =>
+    UrlFilterRule(name: pattern, pattern: pattern, type: urlFilterRegex);
 
 const ha = 'http://ha.lan:8123';
 
 // Addresses and whether each rule should block them, shared by the Dart
 // matcher and the page script so the two never disagree.
-final cases = <(UrlBlacklistRule, String, bool)>[
+final cases = <(UrlFilterRule, String, bool)>[
   (wildcard('/history*'), '$ha/history', true),
   (wildcard('/history*'), '$ha/history?entity_id=light.den', true),
   (wildcard('/history*'), '$ha/lovelace/history', false),
@@ -46,81 +54,153 @@ void main() {
   });
 
   test('a rule covers only the surfaces it names', () {
-    final dashboard = wildcard('/history*', scope: urlBlacklistDashboard);
-    final external = wildcard('*youtube*', scope: urlBlacklistExternal);
+    final dashboard = wildcard('/history*', scope: urlFilterDashboard);
+    final external = wildcard('*youtube*', scope: urlFilterExternal);
     final rules = [dashboard, external];
     expect(
-      urlBlacklistMatch(rules, '$ha/history', {urlBlacklistDashboard}),
-      dashboard,
+      urlFilterBlockedBy(rules, '$ha/history', {urlFilterDashboard}),
+      '/history*',
     );
     expect(
-      urlBlacklistMatch(rules, '$ha/history', {urlBlacklistExternal}),
+      urlFilterBlockedBy(rules, '$ha/history', {urlFilterExternal}),
       isNull,
     );
     expect(
-      urlBlacklistMatch(rules, 'https://youtube.com', {urlBlacklistDashboard}),
+      urlFilterBlockedBy(rules, 'https://youtube.com', {urlFilterDashboard}),
       isNull,
     );
     // A dashboard link leaving for an external page answers to both.
     expect(
-      urlBlacklistMatch(rules, 'https://youtube.com', {
-        urlBlacklistDashboard,
-        urlBlacklistExternal,
+      urlFilterBlockedBy(rules, 'https://youtube.com', {
+        urlFilterDashboard,
+        urlFilterExternal,
       }),
-      external,
+      '*youtube*',
     );
+  });
+
+  test('an Allow only rule lets only its matches through where it applies', () {
+    final exemptions = urlFilterExemptions('$ha/kiosk/0');
+    String? check(List<UrlFilterRule> rules, String url, Set<String> on) =>
+        urlFilterBlockedBy(rules, url, on, exemptions: exemptions);
+    final lovelace = allow('/lovelace/*', scope: urlFilterDashboard);
+    const dash = {urlFilterDashboard};
+    expect(check([lovelace], '$ha/lovelace/1', dash), isNull);
+    expect(check([lovelace], '$ha/history', dash), '');
+    // Sign-in, its return and the start page always open.
+    expect(check([lovelace], '$ha/auth/authorize?client_id=x', dash), isNull);
+    expect(check([lovelace], '$ha/?auth_callback=1&code=x', dash), isNull);
+    expect(check([lovelace], '$ha/kiosk/0', dash), isNull);
+    // A Block rule wins over an Allow only rule.
+    expect(
+      check(
+        [lovelace, wildcard('/lovelace/admin')],
+        '$ha/lovelace/admin',
+        dash,
+      ),
+      '/lovelace/admin',
+    );
+    // External pages are untouched by a dashboard allow list.
+    expect(
+      check([lovelace], 'https://example.com/', {urlFilterExternal}),
+      isNull,
+    );
+    // A link leaving the dashboard answers to the external allow list.
+    final example = allow('*example.com*', scope: urlFilterExternal);
+    const leaving = {urlFilterDashboard, urlFilterExternal};
+    expect(check([example], 'https://example.com/a', leaving), isNull);
+    expect(check([example], 'https://youtube.com/', leaving), '');
+    // The built-in allowances never turn an allow list on by themselves.
+    expect(check(const [], '$ha/history', dash), isNull);
   });
 
   test('the stored list round-trips and skips what is malformed', () {
     final rules = [
-      wildcard('/history*', scope: urlBlacklistDashboard),
+      wildcard('/history*', scope: urlFilterDashboard),
       regex('logbook'),
+      allow('/lovelace/*'),
     ];
-    final parsed = parseUrlBlacklist(encodeUrlBlacklist(rules));
+    final parsed = parseUrlFilter(encodeUrlFilter(rules));
     expect(
       [for (final r in parsed) r.toJson()],
       [for (final r in rules) r.toJson()],
     );
     expect(
-      parseUrlBlacklist(
+      parseUrlFilter(
         jsonEncode([
           {'name': '', 'pattern': '/x'},
           {'name': 'x', 'pattern': ' '},
           'junk',
-          {'name': 'ok', 'pattern': '/ok', 'type': 'bogus', 'scope': 'bogus'},
+          {
+            'name': 'ok',
+            'pattern': '/ok',
+            'type': 'bogus',
+            'scope': 'bogus',
+            'action': 'bogus',
+          },
         ]),
       ).map((r) => r.toJson()),
       [
-        {'name': 'ok', 'pattern': '/ok', 'type': 'wildcard', 'scope': 'all'},
+        {
+          'name': 'ok',
+          'pattern': '/ok',
+          'type': 'wildcard',
+          'scope': 'all',
+          'action': 'block',
+        },
       ],
     );
-    expect(parseUrlBlacklist('not json'), isEmpty);
+    expect(parseUrlFilter('not json'), isEmpty);
   });
 
   test('a rule that cannot be used says why', () {
-    expect(urlBlacklistRuleError(wildcard('/x')), isNull);
+    expect(urlFilterRuleError(wildcard('/x')), isNull);
+    expect(urlFilterRuleError(UrlFilterRule(name: ' ', pattern: '/x')), 'name');
     expect(
-      urlBlacklistRuleError(UrlBlacklistRule(name: ' ', pattern: '/x')),
-      'name',
-    );
-    expect(
-      urlBlacklistRuleError(UrlBlacklistRule(name: 'x', pattern: '')),
+      urlFilterRuleError(UrlFilterRule(name: 'x', pattern: '')),
       'pattern',
     );
-    expect(urlBlacklistRuleError(regex('(unclosed')), 'regex');
-    expect(urlBlacklistRuleError(wildcard('(unclosed')), isNull);
+    expect(urlFilterRuleError(regex('(unclosed')), 'regex');
+    expect(urlFilterRuleError(wildcard('(unclosed')), isNull);
   });
 
   test('the page script blocks exactly what the matcher blocks', () async {
-    final dir = await Directory.systemTemp.createTemp('url_blacklist');
+    final dir = await Directory.systemTemp.createTemp('url_filter');
     addTearDown(() => dir.delete(recursive: true));
+    final exemptions = urlFilterExemptions('$ha/kiosk/0');
+    final lists = [
+      [allow('/lovelace/*')],
+      [allow('/lovelace/*'), wildcard('/lovelace/admin')],
+      [regex('energy'), allow(r'/(lovelace|map)')],
+    ];
+    const urls = [
+      '/lovelace/1',
+      '/lovelace/admin',
+      '/history',
+      '/map',
+      '/energy',
+      '/auth/authorize?client_id=x',
+      '/?auth_callback=1&code=x',
+      '/kiosk/0',
+    ];
     final checks = [
       for (final (rule, url, blocked) in cases)
         {
-          'script': urlBlacklistJs([rule]),
+          'script': urlFilterJs([rule]),
           'url': url,
           'blocked': blocked,
         },
+      for (final rules in lists)
+        for (final path in urls)
+          {
+            'script': urlFilterJs(rules, exemptions: exemptions),
+            'url': '$ha$path',
+            'blocked':
+                urlFilterBlockedBy(rules, '$ha$path', {
+                  urlFilterDashboard,
+                }, exemptions: exemptions) !=
+                null,
+          },
     ];
     final harness = File('${dir.path}/harness.mjs');
     await harness.writeAsString('''
@@ -155,7 +235,7 @@ for (const c of checks) {
   const context = { window, history, location, URL };
   runInNewContext(checks[0].script, context);
   history.pushState(null, '', '/history');
-  runInNewContext(${jsonEncode(urlBlacklistJs(const []))}, context);
+  runInNewContext(${jsonEncode(urlFilterJs(const []))}, context);
   history.pushState(null, '', '/history');
   if (pushed.length !== 1) failures.push('cleared rules still block');
 }

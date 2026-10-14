@@ -47393,25 +47393,25 @@
     },
     "x-notes": "Translate only the comment on the first line. Preserve the executable JavaScript on the second line exactly."
   },
-  "urlBlacklistTitle": "URL-Sperrliste",
-  "@urlBlacklistTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Name of the settings page that lists addresses the dashboard and external pages cannot open, and of its entry row.",
+  "urlFilterTitle": "URL-Filter",
+  "@urlFilterTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Name of the settings page that blocks or allows the addresses the dashboard and external pages open, and of its entry row.",
     "x-locations": {
       "device": [
         "Settings > Web Browsing",
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
         "Web Browsing",
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistHint": "Seiten nach Adressmuster oder regulärem Ausdruck sperren",
-  "@urlBlacklistHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Hint under the URL Blacklist entry row.",
+  "urlFilterHint": "Seiten nach Adressmuster oder regulärem Ausdruck sperren oder erlauben",
+  "@urlFilterHint": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Hint under the URL Filter entry row.",
     "x-locations": {
       "device": [
         "Settings > Web Browsing"
@@ -47421,274 +47421,363 @@
       ]
     }
   },
-  "urlBlacklistIntroTitle": "Seiten nach Adresse sperren",
-  "@urlBlacklistIntroTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Headline of the intro at the top of the URL Blacklist page.",
+  "urlFilterIntroTitle": "Festlegen, welche Seiten sich öffnen",
+  "@urlFilterIntroTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Headline of the intro at the top of the URL Filter page.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistIntroSub": "Links oder Seiten, die zu den Regeln unten passen, werden nicht geladen.",
-  "@urlBlacklistIntroSub": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Text under the URL Blacklist intro headline. The rules are the list of rules shown below it on the page.",
+  "urlFilterIntroSub": "Links oder Seiten, die zu einer Sperren-Regel passen, werden nicht geladen. Füge eine Nur erlauben-Regel hinzu, damit nur passende Seiten laden.",
+  "@urlFilterIntroSub": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Text under the URL Filter intro headline. Block and Allow only are the two choices of a rule's Action field.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistAdd": "Regel hinzufügen",
-  "@urlBlacklistAdd": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Row at the end of the URL Blacklist list that opens the editor for a new rule.",
+  "urlFilterAdd": "Regel hinzufügen",
+  "@urlFilterAdd": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Row at the end of the URL Filter list that opens the editor for a new rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistAddTitle": "Sperrregel hinzufügen",
-  "@urlBlacklistAddTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Title of the editor dialog for a new URL Blacklist rule.",
+  "urlFilterAddTitle": "Filterregel hinzufügen",
+  "@urlFilterAddTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the editor dialog for a new URL Filter rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistEditTitle": "Sperrregel bearbeiten",
-  "@urlBlacklistEditTitle": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Title of the editor dialog for an existing URL Blacklist rule.",
+  "urlFilterEditTitle": "Filterregel bearbeiten",
+  "@urlFilterEditTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the editor dialog for an existing URL Filter rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistName": "Name",
-  "@urlBlacklistName": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Label of the rule's name field in the URL Blacklist editor.",
+  "urlFilterName": "Name",
+  "@urlFilterName": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Label of the rule's name field in the URL Filter editor.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistPattern": "Muster",
-  "@urlBlacklistPattern": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterPattern": "Muster",
+  "@urlFilterPattern": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Label of the field holding the address pattern or regular expression a rule blocks.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistPatternWildcardHint": "Verwende * als Platzhalter für beliebige Zeichen. Ein Muster, das mit / beginnt, passt auf den Pfad auf jedem Server, etwa /history*.",
-  "@urlBlacklistPatternWildcardHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterPatternWildcardHint": "Verwende * als Platzhalter für beliebige Zeichen. Ein Muster, das mit / beginnt, passt auf den Pfad auf jedem Server, etwa /history*.",
+  "@urlFilterPatternWildcardHint": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Help under the Pattern field for a wildcard rule. Keep * and /history* as they are.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistPatternRegexHint": "Ein regulärer Ausdruck, der irgendwo in der Adresse gesucht wird, ohne Beachtung der Groß- und Kleinschreibung.",
-  "@urlBlacklistPatternRegexHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterPatternRegexHint": "Ein regulärer Ausdruck, der irgendwo in der Adresse gesucht wird, ohne Beachtung der Groß- und Kleinschreibung.",
+  "@urlFilterPatternRegexHint": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Help under the Pattern field for a regular expression rule.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistType": "Mustertyp",
-  "@urlBlacklistType": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterType": "Mustertyp",
+  "@urlFilterType": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Label of the choice between a wildcard pattern and a regular expression.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistTypeWildcard": "Platzhalter",
-  "@urlBlacklistTypeWildcard": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterTypeWildcard": "Platzhalter",
+  "@urlFilterTypeWildcard": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Pattern type option: a pattern where * matches anything.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistTypeRegex": "Regulärer Ausdruck",
-  "@urlBlacklistTypeRegex": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterTypeRegex": "Regulärer Ausdruck",
+  "@urlFilterTypeRegex": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Pattern type option: a regular expression.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScope": "Gilt für",
-  "@urlBlacklistScope": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterAction": "Aktion",
+  "@urlFilterAction": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Label of the choice between blocking the pages a rule matches and allowing only them.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterActionBlock": "Sperren",
+  "@urlFilterActionBlock": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Action option: pages that match the rule do not load.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterActionAllow": "Nur erlauben",
+  "@urlFilterActionAllow": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Action option: only pages that match an Allow only rule load where the rule applies. Also shown on the rule's row in the list.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterActionAllowHint": "Wo diese Regel gilt, laden nur Seiten, die zu einer Nur erlauben-Regel passen. Die Anmeldung bei Home Assistant und das Start-Dashboard laden immer.",
+  "@urlFilterActionAllowHint": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Help under the Action field when Allow only is picked.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "urlFilterScope": "Gilt für",
+  "@urlFilterScope": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Label of the choice of where a rule blocks addresses.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeAll": "Dashboard und externe Seiten",
-  "@urlBlacklistScopeAll": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeAll": "Dashboard und externe Seiten",
+  "@urlFilterScopeAll": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Applies to option: both the dashboard and external pages.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeDashboard": "Dashboard",
-  "@urlBlacklistScopeDashboard": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeDashboard": "Dashboard",
+  "@urlFilterScopeDashboard": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Applies to option: the dashboard and custom pages.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeExternal": "Externe Seiten",
-  "@urlBlacklistScopeExternal": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeExternal": "Externe Seiten",
+  "@urlFilterScopeExternal": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Applies to option: pages opened from dashboard links and dashboard rotation pages, shown over the dashboard.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistScopeHint": "Externe Seiten sind Links, die aus dem Dashboard geöffnet werden, und Seiten der Dashboard-Rotation.",
-  "@urlBlacklistScopeHint": {
-    "context": "Settings:Web Browsing:URL Blacklist",
+  "urlFilterScopeHint": "Externe Seiten sind Links, die aus dem Dashboard geöffnet werden, und Seiten der Dashboard-Rotation.",
+  "@urlFilterScopeHint": {
+    "context": "Settings:Web Browsing:URL Filter",
     "description": "Help under the Applies to choice.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistErrorName": "Gib einen Namen ein.",
-  "@urlBlacklistErrorName": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Error in the URL Blacklist editor when the name is empty.",
+  "urlFilterErrorName": "Gib einen Namen ein.",
+  "@urlFilterErrorName": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Error in the URL Filter editor when the name is empty.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistErrorPattern": "Gib ein Muster ein.",
-  "@urlBlacklistErrorPattern": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Error in the URL Blacklist editor when the pattern is empty.",
+  "urlFilterErrorPattern": "Gib ein Muster ein.",
+  "@urlFilterErrorPattern": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Error in the URL Filter editor when the pattern is empty.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistErrorRegex": "Dieser reguläre Ausdruck ist ungültig.",
-  "@urlBlacklistErrorRegex": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Error in the URL Blacklist editor when the regular expression has a syntax error.",
+  "urlFilterErrorRegex": "Dieser reguläre Ausdruck ist ungültig.",
+  "@urlFilterErrorRegex": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Error in the URL Filter editor when the regular expression has a syntax error.",
     "x-locations": {
       "device": [
-        "Settings > Web Browsing > URL Blacklist"
+        "Settings > Web Browsing > URL Filter"
       ],
       "remoteAdmin": [
-        "Web Browsing > URL Blacklist"
+        "Web Browsing > URL Filter"
       ]
     }
   },
-  "urlBlacklistBlocked": "Seite gesperrt",
-  "@urlBlacklistBlocked": {
-    "context": "Settings:Web Browsing:URL Blacklist",
-    "description": "Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Blacklist rule blocks. The rule's name shows under it.",
+  "urlFilterBlocked": "Seite gesperrt",
+  "@urlFilterBlocked": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Filter rule blocks. The rule's name shows under it.",
     "x-locations": {
       "device": [
         "Dashboard",
         "External pages"
+      ]
+    }
+  },
+  "urlFilterNotAllowed": "Nicht unter den erlaubten Seiten",
+  "@urlFilterNotAllowed": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Shown under Page blocked when a page is blocked because no Allow only rule matches it.",
+    "x-locations": {
+      "device": [
+        "Dashboard",
+        "External pages"
+      ]
+    }
+  },
+  "settingBrowserUrlFilterNoticeTitle": "Hinweis bei gesperrter Seite anzeigen",
+  "@settingBrowserUrlFilterNoticeTitle": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Title of the switch that shows a notice on the kiosk when a URL Filter rule blocks a page.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
+      ]
+    }
+  },
+  "settingBrowserUrlFilterNoticeDescription": "Zeigt einen kurzen Hinweis mit dem Namen der Regel, wenn eine Seite gesperrt wird.",
+  "@settingBrowserUrlFilterNoticeDescription": {
+    "context": "Settings:Web Browsing:URL Filter",
+    "description": "Description under Show blocked page notice.",
+    "x-locations": {
+      "device": [
+        "Settings > Web Browsing > URL Filter"
+      ],
+      "remoteAdmin": [
+        "Web Browsing > URL Filter"
       ]
     }
   },

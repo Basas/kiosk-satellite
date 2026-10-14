@@ -117,13 +117,15 @@ export function settingsPageText(category, english) {
     : category === 'Sendspin' || category === 'sendspin' ? mediaText(english) : english;
 }
 
-// The URL Blacklist page's name, hint and hand-built rows, Settings > Web
+// The URL Filter page's name, hint and hand-built rows, Settings > Web
 // Browsing on the device (settingsPageText in messages.dart).
 const BROWSER_PAGE_TEXT = {
-  'URL Blacklist': 'urlBlacklistTitle',
-  'Block pages by address pattern or regular expression': 'urlBlacklistHint',
-  'Add rule': 'urlBlacklistAdd',
-  "Links or pages that match the rules below are blocked from loading.": 'urlBlacklistIntroSub',
+  'URL Filter': 'urlFilterTitle',
+  'Block or allow pages by address pattern or regular expression': 'urlFilterHint',
+  'Add rule': 'urlFilterAdd',
+  'Show blocked page notice': 'settingBrowserUrlFilterNoticeTitle',
+  "Show a short notice with the rule's name when a page is blocked.": 'settingBrowserUrlFilterNoticeDescription',
+  "Links or pages that match a Block rule don't load. Add an Allow only rule to load only the pages it matches.": 'urlFilterIntroSub',
 };
 
 function browserPageText(english) {

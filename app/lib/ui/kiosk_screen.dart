@@ -35,7 +35,7 @@ import '../managers/browser/dashboards_watch_script.dart';
 import '../managers/browser/socket_watch_script.dart';
 import '../managers/browser/viewport_zoom_script.dart';
 import '../managers/browser/visibility_mask_script.dart';
-import '../managers/browser/url_blacklist.dart';
+import '../managers/browser/url_filter.dart';
 import '../managers/browser/ws_filter_script.dart';
 import '../managers/kiosk/app_link.dart';
 import '../managers/kiosk/kiosk_link.dart';
@@ -992,12 +992,12 @@ class _KioskScreenState extends State<KioskScreen>
       source: c.browser.contentInsetsSource,
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
     ),
-    // The URL Blacklist's rules for the dashboard, which keep Home
+    // The URL Filter's rules for the dashboard, which keep Home
     // Assistant's own routing (pushState) off the blocked pages. A group of
     // its own, swapped by BrowserManager when the rules change.
     UserScript(
-      groupName: BrowserManager.urlBlacklistGroup,
-      source: c.browser.urlBlacklistSource(urlBlacklistDashboard),
+      groupName: BrowserManager.urlFilterGroup,
+      source: c.browser.urlFilterSource(urlFilterDashboard),
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
     ),
     UserScript(
@@ -1873,7 +1873,7 @@ class _KioskScreenState extends State<KioskScreen>
     shouldOverrideUrlLoading: (controller, action) async {
       final url = action.request.url;
       if (url == null) return NavigationActionPolicy.ALLOW;
-      // The URL Blacklist (issue #989). A link leaving for an external page
+      // The URL Filter (issue #989). A link leaving for an external page
       // answers to the external rules as well as the dashboard's.
       if ((url.scheme == 'http' || url.scheme == 'https') &&
           action.isForMainFrame) {
@@ -1883,11 +1883,11 @@ class _KioskScreenState extends State<KioskScreen>
         final rule = c.browser.urlBlockedBy(
           url.toString(),
           leaving
-              ? const {urlBlacklistDashboard, urlBlacklistExternal}
-              : const {urlBlacklistDashboard},
+              ? const {urlFilterDashboard, urlFilterExternal}
+              : const {urlFilterDashboard},
         );
         if (rule != null) {
-          if (mounted) showUrlBlockedToast(context, rule.name);
+          if (mounted) showUrlBlockedToast(context, c, rule);
           return NavigationActionPolicy.CANCEL;
         }
       }
@@ -1975,18 +1975,16 @@ class _KioskScreenState extends State<KioskScreen>
         handlerName: 'ksHaSocketClosed',
         callback: (_) => c.browser.onHaSocketClosed(),
       );
-      // Home Assistant tried to route to a blacklisted page and stayed put
-      // (see urlBlacklistJs).
+      // Home Assistant tried to route to a blocked page and stayed put
+      // (see urlFilterJs).
       controller.addJavaScriptHandler(
         handlerName: 'ksUrlBlocked',
         callback: (args) {
-          final rule = args.length > 1 ? '${args[1]}' : '';
-          c.log.info(
-            'browser',
-            'blocked ${args.isNotEmpty ? args.first : ''} '
-                '(URL Blacklist rule "$rule")',
-          );
-          if (mounted) showUrlBlockedToast(context, rule);
+          final rule = args.length > 1 && args[1] is String
+              ? args[1] as String
+              : '';
+          c.browser.logUrlBlocked(args.isNotEmpty ? '${args.first}' : '', rule);
+          if (mounted) showUrlBlockedToast(context, c, rule);
         },
       );
       // The dashboard set may have moved (see dashboards_watch_script).
@@ -2488,13 +2486,18 @@ class _IdleDismissState extends State<_IdleDismiss> {
   );
 }
 
-/// The notice for a navigation the URL Blacklist stopped, naming the rule.
-void showUrlBlockedToast(BuildContext context, String rule) => showToast(
-  context,
-  title: l10n(context).urlBlacklistBlocked,
-  message: rule.isEmpty ? null : rule,
-  kind: ToastKind.warning,
-);
+/// The notice for a navigation the URL Filter stopped, naming the Block
+/// rule, or saying the page is not on the allow list when [rule] is empty.
+/// Nothing while Show blocked page notice is off.
+void showUrlBlockedToast(BuildContext context, AppContainer c, String rule) {
+  if (!c.settings.get(defs.browserUrlFilterNotice)) return;
+  showToast(
+    context,
+    title: l10n(context).urlFilterBlocked,
+    message: rule.isEmpty ? l10n(context).urlFilterNotAllowed : rule,
+    kind: ToastKind.warning,
+  );
+}
 
 /// A bare WebView for a rotation external page, layered over the dashboard.
 ///
@@ -2539,15 +2542,15 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   Timer? _retry;
 
   /// Live updates: the Music Assistant page's zoom level, and the URL
-  /// Blacklist's rules for external pages.
+  /// Filter's rules for external pages.
   StreamSubscription<SettingChanged>? _settingsSub;
 
-  /// Whether URL Blacklist rules covered external pages when this view was
+  /// Whether URL Filter rules covered external pages when this view was
   /// built. Only then are full loads routed through shouldOverrideUrlLoading:
   /// the plugin cancels and reissues every load it is asked about, which
   /// nothing else on this page needs.
-  late final bool _blacklisted = widget.container.browser.urlBlacklist.any(
-    (r) => r.appliesTo(const {urlBlacklistExternal}),
+  late final bool _filtered = widget.container.browser.urlFilter.any(
+    (r) => r.appliesTo(const {urlFilterExternal}),
   );
 
   @override
@@ -2562,12 +2565,10 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
       if (_isMusicAssistant && e.key == defs.sendspinMaZoom.key) {
         unawaited(_applyMaZoom(controller));
       }
-      if (e.key == defs.browserUrlBlacklist.key) {
+      if (e.key == defs.browserUrlFilter.key) {
         unawaited(
           controller.evaluateJavascript(
-            source: widget.container.browser.urlBlacklistSource(
-              urlBlacklistExternal,
-            ),
+            source: widget.container.browser.urlFilterSource(urlFilterExternal),
           ),
         );
       }
@@ -2643,15 +2644,13 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   /// session instead of asking again (discussion #225).
   UnmodifiableListView<UserScript>? get _seedScripts {
     final own = _ownSeedScripts;
-    if (!_blacklisted) return own;
-    // The URL Blacklist's rules for external pages, which keep a page's
+    if (!_filtered) return own;
+    // The URL Filter's rules for external pages, which keep a page's
     // own routing (pushState) off the blocked addresses.
     return UnmodifiableListView([
       ...?own,
       UserScript(
-        source: widget.container.browser.urlBlacklistSource(
-          urlBlacklistExternal,
-        ),
+        source: widget.container.browser.urlFilterSource(urlFilterExternal),
         injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
       ),
     ]);
@@ -2746,28 +2745,29 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
           ),
           allowsInlineMediaPlayback: true,
           iframeAllow: 'camera; microphone',
-          useShouldOverrideUrlLoading: _blacklisted,
+          useShouldOverrideUrlLoading: _filtered,
         ),
         onWebViewCreated: (controller) {
           _controller = controller;
           if (widget.paused) controller.pause();
-          // The page's own routing tried a blacklisted address and stayed
-          // put (see urlBlacklistJs).
+          // The page's own routing tried a blocked address and stayed
+          // put (see urlFilterJs).
           controller.addJavaScriptHandler(
             handlerName: 'ksUrlBlocked',
             callback: (args) {
-              final rule = args.length > 1 ? '${args[1]}' : '';
-              widget.container.log.info(
-                'browser',
-                'blocked ${args.isNotEmpty ? args.first : ''} '
-                    '(URL Blacklist rule "$rule")',
+              final rule = args.length > 1 && args[1] is String
+                  ? args[1] as String
+                  : '';
+              widget.container.browser.logUrlBlocked(
+                args.isNotEmpty ? '${args.first}' : '',
+                rule,
               );
-              if (mounted) showUrlBlockedToast(context, rule);
+              if (mounted) showUrlBlockedToast(context, widget.container, rule);
             },
           );
         },
-        // The URL Blacklist's external rules, for links and scripts moving
-        // this page. Called only while [_blacklisted].
+        // The URL Filter's external rules, for links and scripts moving
+        // this page. Called only while [_filtered].
         shouldOverrideUrlLoading: (controller, action) async {
           final url = action.request.url;
           if (url == null ||
@@ -2777,10 +2777,12 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
           }
           final rule = widget.container.browser.urlBlockedBy(
             url.toString(),
-            const {urlBlacklistExternal},
+            const {urlFilterExternal},
           );
           if (rule == null) return NavigationActionPolicy.ALLOW;
-          if (mounted) showUrlBlockedToast(context, rule.name);
+          if (mounted) {
+            showUrlBlockedToast(context, widget.container, rule);
+          }
           return NavigationActionPolicy.CANCEL;
         },
         // The user's pasted JavaScript for external pages, after every load

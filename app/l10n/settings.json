@@ -2030,5 +2030,9 @@
   "ha.custom_pages_socket": {
     "title": "settingHaCustomPagesSocketTitle",
     "description": "settingHaCustomPagesSocketDescription"
+  },
+  "browser.url_filter_notice": {
+    "title": "settingBrowserUrlFilterNoticeTitle",
+    "description": "settingBrowserUrlFilterNoticeDescription"
   }
 }

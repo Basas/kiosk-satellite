@@ -1536,7 +1536,7 @@ class HomeAssistantManager extends Manager {
   // A path with a query or fragment is there only when they match too.
   if (location.pathname === route &&
       (!rest || location.search + location.hash === rest)) return 'already';
-  // Around the URL Blacklist's check (urlBlacklistJs).
+  // Around the URL Filter's check (urlFilterJs).
   (history.__ksPushState || history.pushState).call(history, null, '', path);
   window.dispatchEvent(new CustomEvent('location-changed'));
   return 'navigated';
