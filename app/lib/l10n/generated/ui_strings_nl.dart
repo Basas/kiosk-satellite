@@ -1646,6 +1646,12 @@ class UiStringsNl extends UiStrings {
   String get gestureIntercomHangup => 'Intercomgesprek beëindigen';
 
   @override
+  String get gestureIntercomAnswer => 'Intercomgesprek aannemen';
+
+  @override
+  String get gestureIntercomDecline => 'Intercomgesprek afwijzen';
+
+  @override
   String get gestureAlarmStop => 'Stop het alarm';
 
   @override
@@ -7849,6 +7855,23 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Hulp';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Ophangknop tijdens overgaan';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Wat de knop doet als hier een gesprek binnenkomt.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Aannemen';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Afwijzen';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Negeren';
 
   @override
   String get intercomTalkSection => 'Praten';

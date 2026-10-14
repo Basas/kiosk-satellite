@@ -6329,6 +6329,32 @@
       ]
     }
   },
+  "gestureIntercomAnswer": "Gegensprechanruf annehmen",
+  "@gestureIntercomAnswer": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureIntercomDecline": "Gegensprechanruf ablehnen",
+  "@gestureIntercomDecline": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
   "gestureAlarmStop": "Wecker stoppen",
   "@gestureAlarmStop": {
     "context": "Settings > Gestures > Add gesture > Choose an action",
@@ -29500,6 +29526,71 @@
   "@intercomOptionHangupHelp": {
     "context": "Settings > Intercom > Talk",
     "description": "Visible option, the hardware help button. Its stored value stays unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Intercom > Talk"
+      ],
+      "remoteAdmin": [
+        "Intercom > Talk"
+      ]
+    }
+  },
+  "settingIntercomHangupKeyRingingTitle": "Auflegetaste beim Klingeln",
+  "@settingIntercomHangupKeyRingingTitle": {
+    "context": "Settings > Intercom > Talk",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Intercom > Talk"
+      ],
+      "remoteAdmin": [
+        "Intercom > Talk"
+      ]
+    }
+  },
+  "settingIntercomHangupKeyRingingDescription": "Was die Taste tut, wenn hier ein Anruf klingelt.",
+  "@settingIntercomHangupKeyRingingDescription": {
+    "context": "Settings > Intercom > Talk",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Intercom > Talk"
+      ],
+      "remoteAdmin": [
+        "Intercom > Talk"
+      ]
+    }
+  },
+  "intercomOptionHangupRingingAnswer": "Annehmen",
+  "@intercomOptionHangupRingingAnswer": {
+    "context": "Settings > Intercom > Talk",
+    "description": "Visible option, the button answers the ringing call. Its stored value stays unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Intercom > Talk"
+      ],
+      "remoteAdmin": [
+        "Intercom > Talk"
+      ]
+    }
+  },
+  "intercomOptionHangupRingingDecline": "Ablehnen",
+  "@intercomOptionHangupRingingDecline": {
+    "context": "Settings > Intercom > Talk",
+    "description": "Visible option, the button declines the ringing call. Its stored value stays unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Intercom > Talk"
+      ],
+      "remoteAdmin": [
+        "Intercom > Talk"
+      ]
+    }
+  },
+  "intercomOptionHangupRingingIgnore": "Ignorieren",
+  "@intercomOptionHangupRingingIgnore": {
+    "context": "Settings > Intercom > Talk",
+    "description": "Visible option, the button keeps its usual action while a call rings. Its stored value stays unchanged.",
     "x-locations": {
       "device": [
         "Settings > Intercom > Talk"

@@ -20048,5 +20048,40 @@
     "source": "c2e58c7b3dbdf90b1d9742667717d162ed38fbb69f894afa80d7f93df14beb50",
     "translation": "1117810713fda64925b29465a08e623ecede9a33e219aa7096b8e709da9bdc03",
     "author": "Xavier Larrea"
+  },
+  "intercomOptionHangupRingingAnswer": {
+    "source": "2bd9e29255625e74cc32b5763c2973358fe5cc30a5c1d81fdeb1763942bca8f3",
+    "translation": "640d6761c178f2ad81e2a8cdb44c589bdc879396563118f96ebba2de686efefa",
+    "author": "Xavier Larrea"
+  },
+  "gestureIntercomAnswer": {
+    "source": "6c49b69c1cee076c26c8df2c90a722e3ba3d59e1fc73f835ff8519216077e4f7",
+    "translation": "635eba584a103fee3332fa71837337fc5c6c4848780ed000a16481f9a7e6f4c4",
+    "author": "Xavier Larrea"
+  },
+  "intercomOptionHangupRingingDecline": {
+    "source": "a4a0965ca7a7a5f3927ac9a33ddcf92e3bf8cf6e0237d836248ce6488498bd63",
+    "translation": "2a0515602d3158761b6018d3ffc0d34173eb2f66f68bd077e62d84f4d891f26b",
+    "author": "Xavier Larrea"
+  },
+  "settingIntercomHangupKeyRingingDescription": {
+    "source": "f191dd4d2f10e9db8157626bd63bd4ac42796aaddd3eef6ab7373c75fbbb4e65",
+    "translation": "4d7dae8a696618b53ccf9aa9908d0de34d21493736ba8d5e834d8dcb8b52571d",
+    "author": "Xavier Larrea"
+  },
+  "gestureIntercomDecline": {
+    "source": "a20024d79eb3b9bcbb8f34812850f74a847973ef53e4279750ca8a85ad159697",
+    "translation": "f103b2bb3ee7f35d891cb5537ece301a4dc9522b857e0a1ba7b7947d8a8b92a4",
+    "author": "Xavier Larrea"
+  },
+  "intercomOptionHangupRingingIgnore": {
+    "source": "fac2afe880179d50edf5c0da8a1c49e85bb0266e7fe2f6f1b5b3299439c5876f",
+    "translation": "574dbd0a39edf1777014c6320aed11158a5064691c4bd8c966c0eef9bcbcdc95",
+    "author": "Xavier Larrea"
+  },
+  "settingIntercomHangupKeyRingingTitle": {
+    "source": "327b806d4a27c7106cf7da9f6c294d8a4dc9bf9b509a2f737ff9d5747e67f3fc",
+    "translation": "b925e47ad83c436dfe8af1d1e2af0ce5e71cd8c81ef031acc2d312c889329f8f",
+    "author": "Xavier Larrea"
   }
 }

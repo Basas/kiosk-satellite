@@ -53,6 +53,8 @@ export const GESTURE_ACTION_GROUPS = [
     ['intercom_open', 'Open Call a kiosk', 'speaker'],
     ['intercom_call', 'Call a kiosk', 'speaker'],
     ['intercom_hangup', 'End the intercom call', 'callEnd'],
+    ['intercom_answer', 'Accept intercom call', 'call'],
+    ['intercom_decline', 'Decline intercom call', 'callOff'],
     ['alarm_stop', 'Stop the alarm', 'alarmOff'],
     ['alarm_snooze', 'Snooze the alarm', 'snooze'],
     ['screensaver', 'Start the screensaver', 'moon'],
@@ -123,6 +125,8 @@ export function describeGestureAction(a) {
     case 'intercom_open': return gestureText('Open Call a kiosk');
     case 'intercom_call': return t('gestureCall', {value: a.kioskName || a.kioskId});
     case 'intercom_hangup': return gestureText('End the intercom call');
+    case 'intercom_answer': return gestureText('Accept intercom call');
+    case 'intercom_decline': return gestureText('Decline intercom call');
     case 'alarm_stop': return gestureText('Stop the alarm');
     case 'alarm_snooze': return gestureText('Snooze the alarm');
     case 'screensaver': return gestureText('Start the screensaver');
@@ -482,6 +486,7 @@ export async function pickGestureAction(current) {
     case 'screensaver': case 'screensaver_stop': case 'hold_mode':
     case 'ha_kiosk': case 'now_playing': case 'music_assistant':
     case 'media_play_pause': case 'intercom_open': case 'intercom_hangup':
+    case 'intercom_answer': case 'intercom_decline':
     case 'alarm_stop': case 'alarm_snooze': case 'refresh':
       return { type };
     case 'navigate': return configureGestureNavigate(carried);

@@ -1659,6 +1659,12 @@ class UiStringsDe extends UiStrings {
   String get gestureIntercomHangup => 'Gegensprechanruf beenden';
 
   @override
+  String get gestureIntercomAnswer => 'Gegensprechanruf annehmen';
+
+  @override
+  String get gestureIntercomDecline => 'Gegensprechanruf ablehnen';
+
+  @override
   String get gestureAlarmStop => 'Wecker stoppen';
 
   @override
@@ -7943,6 +7949,23 @@ class UiStringsDe extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Hilfe';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Auflegetaste beim Klingeln';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Was die Taste tut, wenn hier ein Anruf klingelt.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Annehmen';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Ablehnen';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Ignorieren';
 
   @override
   String get intercomTalkSection => 'Gespräch';

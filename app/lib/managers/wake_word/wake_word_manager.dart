@@ -759,6 +759,7 @@ class WakeWordManager extends Manager
     'canRetry': canRetry,
     'released': _released,
     'releaseReason': _releaseReason,
+    'muted': _muted,
     'needsAppSettings': needsAppSettings,
     'stopWord': _config?.stopModel?.wakeWord,
     'nativePipeline': nativePipelineSupported,

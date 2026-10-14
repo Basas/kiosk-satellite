@@ -9843,6 +9843,23 @@ const intercomHangupKey = SettingDef<String>(
   perDevice: true,
 );
 
+/// What [intercomHangupKey] does while a call rings here: answer it,
+/// decline it or leave the button its usual job until the call is live.
+const intercomHangupKeyRinging = SettingDef<String>(
+  key: 'intercom.hangup_key_ringing',
+  type: SettingType.select,
+  defaultValue: 'ignore',
+  title: 'Hang up button while ringing',
+  description: 'What the button does when a call rings here.',
+  category: 'Intercom',
+  section: 'Talk',
+  options: ['answer', 'decline', 'ignore'],
+  optionLabels: {'answer': 'Accept', 'decline': 'Decline', 'ignore': 'Ignore'},
+  dependsOn: 'intercom.hangup_key',
+  dependsOnValue: {'ne': 'off'},
+  perDevice: true,
+);
+
 /// Android KeyEvent codes for [intercomHangupKey]'s options.
 const intercomHangupKeyCodes = {
   'volume_up': 24,
@@ -11417,6 +11434,7 @@ const List<SettingDef<Object>> allSettings = [
   intercomTalkMode,
   intercomMaxCallMinutes,
   intercomHangupKey,
+  intercomHangupKeyRinging,
   intercomTls,
   alarmsList,
   alarmsRuntime,

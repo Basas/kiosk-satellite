@@ -1637,6 +1637,12 @@ class UiStringsEn extends UiStrings {
   String get gestureIntercomHangup => 'End the intercom call';
 
   @override
+  String get gestureIntercomAnswer => 'Accept intercom call';
+
+  @override
+  String get gestureIntercomDecline => 'Decline intercom call';
+
+  @override
   String get gestureAlarmStop => 'Stop the alarm';
 
   @override
@@ -7754,6 +7760,23 @@ class UiStringsEn extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Help';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Hang up button while ringing';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'What the button does when a call rings here.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Accept';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Decline';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Ignore';
 
   @override
   String get intercomTalkSection => 'Talk';

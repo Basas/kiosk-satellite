@@ -9,6 +9,8 @@
   "gestureIntercomOpen": "„Kiosk anrufen“ öffnen",
   "gestureIntercomCall": "Einen Kiosk anrufen",
   "gestureIntercomHangup": "Gegensprechanruf beenden",
+  "gestureIntercomAnswer": "Gegensprechanruf annehmen",
+  "gestureIntercomDecline": "Gegensprechanruf ablehnen",
   "gestureAlarmStop": "Wecker stoppen",
   "gestureAlarmSnooze": "Wecker schlummern lassen",
   "gestureScreensaver": "Bildschirmschoner starten",

@@ -303,6 +303,16 @@ async function flushSettingsUpdates() {
         continue;
       }
     }
+    // Hang up call when pressing this button reveals Hang up button while
+    // ringing in its own card (issue #991), in place like the switches
+    // above.
+    if (!shapeChanged && setting.key === 'intercom.hangup_key') {
+      const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
+      if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
+          && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        continue;
+      }
+    }
     // The same for the external motion sensor's switch (issue #973), which
     // also frees Dismiss on motion from the camera on the Screensaver tab.
     if (!shapeChanged && setting.key === 'motion.use_entity') {

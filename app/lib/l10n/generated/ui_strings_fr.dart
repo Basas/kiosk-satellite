@@ -1651,6 +1651,12 @@ class UiStringsFr extends UiStrings {
   String get gestureIntercomHangup => 'Terminer l\'appel d\'interphone';
 
   @override
+  String get gestureIntercomAnswer => 'Accepter l\'appel d\'interphone';
+
+  @override
+  String get gestureIntercomDecline => 'Refuser l\'appel d\'interphone';
+
+  @override
   String get gestureAlarmStop => 'Arrêter l\'alarme';
 
   @override
@@ -7889,6 +7895,23 @@ class UiStringsFr extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Aide';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Bouton de raccrochage pendant la sonnerie';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Ce que fait le bouton quand un appel sonne ici.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Accepter';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Refuser';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Ignorer';
 
   @override
   String get intercomTalkSection => 'Conversation';

@@ -47,6 +47,8 @@
 ///  - intercom_open:    open the intercom's Call a kiosk sheet
 ///  - intercom_call:    kioskId, kioskName: call that kiosk straight away
 ///  - intercom_hangup:  end the intercom call, like the hang up button
+///  - intercom_answer:  answer the call ringing here (#991)
+///  - intercom_decline: decline the call ringing here
 ///  - alarm_stop:       stop the ringing, snoozed or sunrise alarm (#872)
 ///  - alarm_snooze:     snooze the ringing alarm
 ///  - screensaver:      start the screensaver
@@ -239,6 +241,10 @@ String describeGestureAction(Map<String, Object?> action) {
       return 'Call ${action['kioskName'] ?? action['kioskId']}';
     case 'intercom_hangup':
       return 'End the intercom call';
+    case 'intercom_answer':
+      return 'Accept intercom call';
+    case 'intercom_decline':
+      return 'Decline intercom call';
     case 'alarm_stop':
       return 'Stop the alarm';
     case 'alarm_snooze':

@@ -1651,6 +1651,13 @@ class UiStringsEs extends UiStrings {
       'Finalizar la llamada del intercomunicador';
 
   @override
+  String get gestureIntercomAnswer => 'Aceptar la llamada del intercomunicador';
+
+  @override
+  String get gestureIntercomDecline =>
+      'Rechazar la llamada del intercomunicador';
+
+  @override
   String get gestureAlarmStop => 'Detener la alarma';
 
   @override
@@ -7903,6 +7910,23 @@ class UiStringsEs extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Ayuda';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Botón de colgar mientras suena';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Lo que hace el botón cuando entra una llamada.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Aceptar';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Rechazar';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Ignorar';
 
   @override
   String get intercomTalkSection => 'Conversación';

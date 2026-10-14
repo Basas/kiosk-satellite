@@ -9,6 +9,8 @@
   "gestureIntercomOpen": "Ouvrir Appeler un kiosque",
   "gestureIntercomCall": "Appeler un kiosque",
   "gestureIntercomHangup": "Terminer l'appel d'interphone",
+  "gestureIntercomAnswer": "Accepter l'appel d'interphone",
+  "gestureIntercomDecline": "Refuser l'appel d'interphone",
   "gestureAlarmStop": "Arrêter l'alarme",
   "gestureAlarmSnooze": "Reporter l'alarme",
   "gestureScreensaver": "Démarrer l'économiseur d'écran",

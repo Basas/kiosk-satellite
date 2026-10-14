@@ -1589,6 +1589,12 @@ class UiStringsZh extends UiStrings {
   String get gestureIntercomHangup => '结束对讲通话';
 
   @override
+  String get gestureIntercomAnswer => '接听对讲通话';
+
+  @override
+  String get gestureIntercomDecline => '拒绝对讲通话';
+
+  @override
   String get gestureAlarmStop => '停止闹钟';
 
   @override
@@ -7407,6 +7413,21 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => '帮助';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle => '来电响铃时的挂断按钮';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription => '有来电响铃时此按钮的作用。';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => '接听';
+
+  @override
+  String get intercomOptionHangupRingingDecline => '拒绝';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => '忽略';
 
   @override
   String get intercomTalkSection => '讲话';
@@ -14507,6 +14528,12 @@ class UiStringsZhCn extends UiStringsZh {
   String get gestureIntercomHangup => '结束对讲通话';
 
   @override
+  String get gestureIntercomAnswer => '接听对讲通话';
+
+  @override
+  String get gestureIntercomDecline => '拒绝对讲通话';
+
+  @override
   String get gestureAlarmStop => '停止闹钟';
 
   @override
@@ -20325,6 +20352,21 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get intercomOptionHangupHelp => '帮助';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle => '来电响铃时的挂断按钮';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription => '有来电响铃时此按钮的作用。';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => '接听';
+
+  @override
+  String get intercomOptionHangupRingingDecline => '拒绝';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => '忽略';
 
   @override
   String get intercomTalkSection => '讲话';

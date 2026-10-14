@@ -69,6 +69,7 @@ class PluginHostApi {
     'hideNowPlaying',
     'sendspinControl',
     'setVolume',
+    'setWakeWordMuted',
     'showAppLauncher',
     'hideAppLauncher',
     'showOverlayPage',
@@ -155,6 +156,8 @@ class PluginHostApi {
             value != null &&
             value >= 0 &&
             value <= 100;
+      case 'setWakeWordMuted':
+        return params.length == 1 && params['muted'] is bool;
       case 'sendspinControl':
         return keys({'command'}) &&
             const [
@@ -250,6 +253,7 @@ class PluginHostApi {
       'engineLabel',
       'status',
       'statusLabel',
+      'muted',
     ],
     'getVoiceState': ['enabled', 'state'],
     'getIntercomState': ['enabled', 'state', 'kiosk', 'dnd'],
@@ -471,6 +475,9 @@ class PluginHostApi {
           // counts as arrived.
           'haNavigate' =>
             result.data == 'navigated' || result.data == 'already',
+          // The muted state it set. Home Assistant may still be applying it
+          // on the dashboard runtime; wakeword.state follows.
+          'setWakeWordMuted' => result.data == true,
           _ => null,
         }).toJson();
       }

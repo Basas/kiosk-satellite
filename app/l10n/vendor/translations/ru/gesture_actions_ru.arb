@@ -9,6 +9,8 @@
   "gestureIntercomOpen": "Открыть «Позвонить киоску»",
   "gestureIntercomCall": "Позвонить киоску",
   "gestureIntercomHangup": "Завершить звонок интеркома",
+  "gestureIntercomAnswer": "Принять звонок интеркома",
+  "gestureIntercomDecline": "Отклонить звонок интеркома",
   "gestureAlarmStop": "Остановить будильник",
   "gestureAlarmSnooze": "Отложить будильник",
   "gestureScreensaver": "Запустить заставку",

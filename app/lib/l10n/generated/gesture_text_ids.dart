@@ -127,6 +127,8 @@ const gestureTextMessageIds = <String, String>{
   "Open the app launcher": "gestureLauncher",
   "Open Call a kiosk": "gestureIntercomOpen",
   "End the intercom call": "gestureIntercomHangup",
+  "Accept intercom call": "gestureIntercomAnswer",
+  "Decline intercom call": "gestureIntercomDecline",
   "Stop the alarm": "gestureAlarmStop",
   "Snooze the alarm": "gestureAlarmSnooze",
   "Call a kiosk": "gestureIntercomCall",

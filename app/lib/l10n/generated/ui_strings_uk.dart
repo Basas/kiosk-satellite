@@ -1642,6 +1642,12 @@ class UiStringsUk extends UiStrings {
   String get gestureIntercomHangup => 'Завершити виклик інтеркому';
 
   @override
+  String get gestureIntercomAnswer => 'Прийняти виклик інтеркому';
+
+  @override
+  String get gestureIntercomDecline => 'Відхилити виклик інтеркому';
+
+  @override
   String get gestureAlarmStop => 'Зупинити будильник';
 
   @override
@@ -7833,6 +7839,23 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Довідка';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Кнопка завершення під час вхідного виклику';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Що робить кнопка, коли сюди надходить виклик.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Прийняти';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Відхилити';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Ігнорувати';
 
   @override
   String get intercomTalkSection => 'Розмова';

@@ -563,7 +563,8 @@ class IntercomManager extends Manager {
         } else if (e.key == defs.intercomEnabled.key) {
           if (e.value != true) rosterVisible.value = false;
           unawaited(_onEnabledChanged());
-        } else if (e.key == defs.intercomHangupKey.key) {
+        } else if (e.key == defs.intercomHangupKey.key ||
+            e.key == defs.intercomHangupKeyRinging.key) {
           _syncHangupKey();
         } else if (e.key == defs.intercomVolume.key) {
           unawaited(audio.setVolume(_playbackGain()));
@@ -585,8 +586,17 @@ class IntercomManager extends Manager {
     // the call: the page holds the microphone exclusively.
     micHub.browserCapturing.addListener(_onBrowserCapture);
     _subs.add(
-      bus.on<IntercomHangupRequested>().listen((_) {
-        if (_hangupStates.contains(_state)) unawaited(hangup());
+      bus.on<IntercomHangupRequested>().listen((e) {
+        if (_hangupStates.contains(_state)) {
+          unawaited(hangup());
+        } else if (e.button && _state == 'ringing') {
+          switch (_settings.get(defs.intercomHangupKeyRinging)) {
+            case 'answer':
+              unawaited(_answer());
+            case 'decline':
+              unawaited(_decline());
+          }
+        }
       }),
     );
     await _readFleet();
@@ -1065,14 +1075,7 @@ class IntercomManager extends Manager {
         Command(
           name: 'intercomDecline',
           description: 'Decline the call ringing here.',
-          handler: (_) async {
-            if (_state != 'ringing') {
-              return const CommandResult.fail('nothing is ringing');
-            }
-            await _signalPeer('decline');
-            await _finish('declined');
-            return const CommandResult.ok();
-          },
+          handler: (_) async => _decline(),
         ),
       )
       ..register(
@@ -2070,6 +2073,15 @@ class IntercomManager extends Manager {
     return const CommandResult.ok();
   }
 
+  Future<CommandResult> _decline() async {
+    if (_state != 'ringing') {
+      return const CommandResult.fail('nothing is ringing');
+    }
+    await _signalPeer('decline');
+    await _finish('declined');
+    return const CommandResult.ok();
+  }
+
   /// Nothing came over the socket in time: the caller went away.
   void _armConnectTimeout() {
     _connectTimer?.cancel();
@@ -2561,8 +2573,8 @@ class IntercomManager extends Manager {
   }
 
   /// The states the hang up button ends: a call being placed, a live call
-  /// and either end of a broadcast. A ringing call is answered or declined
-  /// on the screen.
+  /// and either end of a broadcast. A ringing call arms it only when Hang
+  /// up button while ringing picks Accept or Decline.
   static const _hangupStates = {
     'calling',
     'in_call',
@@ -2571,7 +2583,11 @@ class IntercomManager extends Manager {
   };
 
   void _syncHangupKey() {
-    final code = _hangupStates.contains(_state)
+    final armed =
+        _hangupStates.contains(_state) ||
+        (_state == 'ringing' &&
+            _settings.get(defs.intercomHangupKeyRinging) != 'ignore');
+    final code = armed
         ? defs.intercomHangupKeyCodes[_settings.get(defs.intercomHangupKey)] ??
               0
         : 0;

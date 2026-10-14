@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "3aa99e69e0792ce84a1bad82f4ec346aed1e5f6e",
+  "revision": "f00defac5558b7e3345fb9f771e2ab97fbe96de3",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -29,7 +29,7 @@
     "fleet_switcher_en.arb": "5991593bdda40d6869f6e2c3402a626b4b2ed8846c3c74135a0b7608cdd374d0",
     "fleet_sync_selection_en.arb": "8635dd198f45f4b4172dfdf2110571f758950bde9ffb7f6e5a856ba03d7a6336",
     "fleet_updates_en.arb": "3b5463bf3e7e96ff4554b313bcfdf836e38df61b1a0a848dc8d386a55615c954",
-    "gesture_actions_en.arb": "fe3a8f6fe439f6afefebf24e822219432199b95aac17f29290cbcf83fc7728a8",
+    "gesture_actions_en.arb": "0f2d3155bfb0f6ea9103eb9f0259832879933872b6bbde54947b7110a1c48189",
     "gesture_descriptions_en.arb": "62e19ccb44fdbbd1bba1d738de9a5f25716920a896774c11e9fc2177aa253f8c",
     "gesture_ha_actions_en.arb": "818613d55f55ab71c1743c7029cdf5e670effc0ecff6a6b274411e45fb400730",
     "gesture_hand_tester_en.arb": "fe0cd4b66d32658f05ca0f2eb0e1fe3ccadecdd9b277407ee317c4aa4e2aab27",
@@ -120,7 +120,7 @@
     "settings_intercom_answer_en.arb": "22a2819b9f429e82d7d5b4942301d942a60b743f9b4916c0942784a71dc89339",
     "settings_intercom_general_en.arb": "4724e41f91236bc05669438cdd8489e165f2f2c67e541f83a7e6f02c7372b439",
     "settings_intercom_kiosks_en.arb": "135b6b4da593ab57a523e70d84494c604d036d6da47d869407d3c03a20ba072e",
-    "settings_intercom_talk_en.arb": "28c742d4d80f1d8fbef774a54b8c12013896abc40f06ac6c7e03330b5ca83e18",
+    "settings_intercom_talk_en.arb": "837b2a00849853470ef0741e19fa2d552a7d8902148ad09e86f4b00167b566cb",
     "settings_kiosk_allowed_actions_en.arb": "b8e75e7a59104299e40f0ce16c09465a2af55c8773b069f9f065be2c44c5d405",
     "settings_kiosk_general_en.arb": "a45e0a0510b43f5a2f6f0deb5a508ddd31e2fb9ce5a69a1af9f2e4f1a4fe11a3",
     "settings_kiosk_permissions_en.arb": "686c9c49e03d50ec06070dbbf9717bccf2916fc68464d2ac12c4de3cd7f2e337",

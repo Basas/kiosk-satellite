@@ -243,6 +243,11 @@
     "volume_mute": "intercomOptionHangupMute",
     "help": "intercomOptionHangupHelp"
   },
+  "intercom.hangup_key_ringing": {
+    "answer": "intercomOptionHangupRingingAnswer",
+    "decline": "intercomOptionHangupRingingDecline",
+    "ignore": "intercomOptionHangupRingingIgnore"
+  },
   "kiosk.exit_gesture": {
     "taps5": "kioskGestureTaps5",
     "taps7": "kioskGestureTaps7",

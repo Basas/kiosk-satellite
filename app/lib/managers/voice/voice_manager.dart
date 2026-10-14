@@ -494,6 +494,47 @@ class VoiceManager extends Manager {
       )
       ..register(
         Command(
+          name: 'setWakeWordMuted',
+          description:
+              'Mute or unmute wake word detection, the same mute as the '
+              'Voice Satellite Mute switch in Home Assistant (issue #991). '
+              'Answers the muted state it set',
+          params: const {'muted': 'true to mute, false to unmute'},
+          handler: (p) async {
+            final muted = p['muted'];
+            if (muted is! bool) {
+              return const CommandResult.fail('muted must be true or false');
+            }
+            if (nativeRuntime) {
+              if (!enabled) {
+                return const CommandResult.fail('Voice Satellite is off');
+              }
+              await _settings.set(defs.voiceMute, muted, source: 'command');
+              return CommandResult.ok(muted);
+            }
+            // The dashboard runtime: the mute is the integration's own
+            // switch in Home Assistant.
+            final controls = await commands.execute('vsControls', const {});
+            final data = controls.ok ? controls.data : null;
+            final entities = data is Map ? data['entities'] : null;
+            final mute = entities is Map ? entities['mute'] : null;
+            final id = mute is Map ? mute['entity_id'] : null;
+            if (id is! String || id.isEmpty) {
+              return const CommandResult.fail(
+                'Voice Satellite has no mute switch',
+              );
+            }
+            final result = await commands.execute('haCallService', {
+              'domain': 'switch',
+              'service': muted ? 'turn_on' : 'turn_off',
+              'entity_id': id,
+            });
+            return result.ok ? CommandResult.ok(muted) : result;
+          },
+        ),
+      )
+      ..register(
+        Command(
           name: 'voiceCancel',
           description: 'End the voice turn or announcement on screen',
           handler: (_) async {

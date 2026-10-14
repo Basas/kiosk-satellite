@@ -1212,6 +1212,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingIntercomHangupKeyTitle",
     "description": "settingIntercomHangupKeyDescription",
   },
+  "intercom.hangup_key_ringing": {
+    "title": "settingIntercomHangupKeyRingingTitle",
+    "description": "settingIntercomHangupKeyRingingDescription",
+  },
   "kiosk.enabled": {
     "title": "settingKioskEnabledTitle",
     "description": "settingKioskEnabledDescription",

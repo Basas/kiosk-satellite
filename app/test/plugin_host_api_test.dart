@@ -115,6 +115,7 @@ void main() {
         'focusCamera': {'cameraId': 'front'},
         'sendspinControl': {'command': 'pause'},
         'setVolume': {'percent': '40', 'channel': 'assistant'},
+        'setWakeWordMuted': {'muted': true},
         'showOverlayPage': {'url': 'https://example.com'},
         'showLinkPage': {'url': 'http://example.com'},
         'loadUrl': {'url': 'https://example.com'},
@@ -186,6 +187,11 @@ void main() {
         'getVolume': [
           {'channel': 'alarm'},
           {'channel': true},
+        ],
+        'setWakeWordMuted': [
+          {},
+          {'muted': 'true'},
+          {'muted': true, 'extra': true},
         ],
         'haNavigate': [
           {'path': '../config'},
@@ -567,6 +573,42 @@ void main() {
       ),
       isNull,
     );
+  });
+
+  test('setWakeWordMuted answers the muted state it set', () async {
+    api.open({
+      ...session,
+      'capabilities': ['host.read', 'host.control'],
+    });
+    final seen = <Map<String, Object?>>[];
+    register('setWakeWordMuted', (p) async {
+      seen.add(p);
+      return CommandResult.ok(p['muted']);
+    });
+    expect(
+      await read('setWakeWordMuted', params: {'muted': true}),
+      containsPair('data', true),
+    );
+    expect(
+      await read('setWakeWordMuted', params: {'muted': false}),
+      containsPair('data', false),
+    );
+    expect(seen, [
+      {'muted': true},
+      {'muted': false},
+    ]);
+    register(
+      'getWakeWordState',
+      (_) async => const CommandResult.ok({
+        'enabled': true,
+        'listening': false,
+        'muted': true,
+        'releaseReason': 'muted',
+      }),
+    );
+    final state = (await read('getWakeWordState'))['data'] as Map;
+    expect(state['muted'], true);
+    expect(state.containsKey('releaseReason'), false);
   });
 
   test('errors do not expose internal response details', () async {

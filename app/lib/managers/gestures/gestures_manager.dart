@@ -406,10 +406,17 @@ class GesturesManager extends Manager {
       case 'intercom_hangup':
         // The hang up button's path: ends a call being placed, a live
         // call or an announcement, so a call can end from across the room
-        // with claps or a hand. A ringing call is left to Answer and
+        // with claps or a hand. A ringing call is left to Accept and
         // Decline, and with no call the gesture does nothing.
         bus.publish(const IntercomHangupRequested());
         return const CommandResult.ok();
+      case 'intercom_answer':
+        // The Answer and Decline buttons' paths (issue #991), so a kiosk
+        // without a usable screen can take a call. With nothing ringing
+        // the command refuses and the gesture does nothing.
+        return _run('intercomAnswer', const {});
+      case 'intercom_decline':
+        return _run('intercomDecline', const {});
       case 'alarm_stop':
         // The Stop button's path (issue #872): ends a ring, a snooze or a
         // sunrise, so claps or a hand can silence an alarm from bed.

@@ -1642,6 +1642,12 @@ class UiStringsRu extends UiStrings {
   String get gestureIntercomHangup => 'Завершить звонок интеркома';
 
   @override
+  String get gestureIntercomAnswer => 'Принять звонок интеркома';
+
+  @override
+  String get gestureIntercomDecline => 'Отклонить звонок интеркома';
+
+  @override
   String get gestureAlarmStop => 'Остановить будильник';
 
   @override
@@ -7803,6 +7809,23 @@ class UiStringsRu extends UiStrings {
 
   @override
   String get intercomOptionHangupHelp => 'Справка';
+
+  @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Кнопка завершения при входящем звонке';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Что делает кнопка, когда сюда поступает звонок.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Принять';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Отклонить';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Игнорировать';
 
   @override
   String get intercomTalkSection => 'Разговор';

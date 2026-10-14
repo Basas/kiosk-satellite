@@ -107,6 +107,7 @@ Wake word configuration is strictly **inherited from Voice Satellite**. It is ne
   needsAppSettings: false,   // True if the microphone is blocked and requires OS settings to fix
   released: true,
   releaseReason: 'muted',
+  muted: true,               // The satellite is muted (releaseReason is 'muted')
   stopWord: 'Stop',
   nativePipeline: false,     // True if voice turns will run their transport natively (the card announced it via `nativePipeline: true` and the app accepted it)
   models: [{ id, wakeWord, manifestUrl, confidenceScale, cutoff }],

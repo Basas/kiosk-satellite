@@ -2952,6 +2952,18 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'Accept intercom call'**
+  String get gestureIntercomAnswer;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline intercom call'**
+  String get gestureIntercomDecline;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Stop the alarm'**
   String get gestureAlarmStop;
 
@@ -13510,6 +13522,36 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Help'**
   String get intercomOptionHangupHelp;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Hang up button while ringing'**
+  String get settingIntercomHangupKeyRingingTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'What the button does when a call rings here.'**
+  String get settingIntercomHangupKeyRingingDescription;
+
+  /// Visible option, the button answers the ringing call. Its stored value stays unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get intercomOptionHangupRingingAnswer;
+
+  /// Visible option, the button declines the ringing call. Its stored value stays unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get intercomOptionHangupRingingDecline;
+
+  /// Visible option, the button keeps its usual action while a call rings. Its stored value stays unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore'**
+  String get intercomOptionHangupRingingIgnore;
 
   /// Section heading.
   ///

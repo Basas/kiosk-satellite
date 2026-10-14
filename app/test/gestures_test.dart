@@ -233,6 +233,8 @@ void main() {
         'sendspinControl',
         'alarmStop',
         'alarmSnooze',
+        'intercomAnswer',
+        'intercomDecline',
         'launchApp',
         'openUri',
         'openSystemSettings',
@@ -550,6 +552,27 @@ void main() {
       expect(
         describeGestureAction(const {'type': 'intercom_hangup'}),
         'End the intercom call',
+      );
+    });
+
+    test('intercom_answer and intercom_decline run the call buttons', () async {
+      await build(
+        '[{"id":"g1","trigger":{"type":"claps","claps":2},'
+        '"action":{"type":"intercom_answer"}},'
+        '{"id":"g2","trigger":{"type":"fingers","fingers":5},'
+        '"action":{"type":"intercom_decline"}}]',
+      );
+      await fire('g1');
+      await fire('g2');
+      expect(executed.map((e) => e.$1), ['intercomAnswer', 'intercomDecline']);
+      expect(outcomes, isEmpty);
+      expect(
+        describeGestureAction(const {'type': 'intercom_answer'}),
+        'Accept intercom call',
+      );
+      expect(
+        describeGestureAction(const {'type': 'intercom_decline'}),
+        'Decline intercom call',
       );
     });
 

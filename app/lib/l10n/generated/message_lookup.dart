@@ -452,6 +452,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'gestureIntercomOpen' => strings.gestureIntercomOpen,
       'gestureIntercomCall' => strings.gestureIntercomCall,
       'gestureIntercomHangup' => strings.gestureIntercomHangup,
+      'gestureIntercomAnswer' => strings.gestureIntercomAnswer,
+      'gestureIntercomDecline' => strings.gestureIntercomDecline,
       'gestureAlarmStop' => strings.gestureAlarmStop,
       'gestureAlarmSnooze' => strings.gestureAlarmSnooze,
       'gestureScreensaver' => strings.gestureScreensaver,
@@ -2261,6 +2263,16 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.intercomOptionHangupVolumeDown,
       'intercomOptionHangupMute' => strings.intercomOptionHangupMute,
       'intercomOptionHangupHelp' => strings.intercomOptionHangupHelp,
+      'settingIntercomHangupKeyRingingTitle' =>
+        strings.settingIntercomHangupKeyRingingTitle,
+      'settingIntercomHangupKeyRingingDescription' =>
+        strings.settingIntercomHangupKeyRingingDescription,
+      'intercomOptionHangupRingingAnswer' =>
+        strings.intercomOptionHangupRingingAnswer,
+      'intercomOptionHangupRingingDecline' =>
+        strings.intercomOptionHangupRingingDecline,
+      'intercomOptionHangupRingingIgnore' =>
+        strings.intercomOptionHangupRingingIgnore,
       'intercomTalkSection' => strings.intercomTalkSection,
       'settingKioskAllowDrawerTitle' => strings.settingKioskAllowDrawerTitle,
       'settingKioskAllowDrawerDescription' =>
