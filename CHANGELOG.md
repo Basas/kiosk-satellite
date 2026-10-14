@@ -4,6 +4,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ## Unreleased
 
+### Fixed
+- **Proximity detection on the NSPanel Pro.** The NSPanel Pro reports its proximity sensor as a raw reading that rises as something comes closer, around 50 at rest and several hundred for a hand, instead of a distance. Kiosk Satellite read every one of those as far, so Dismiss on proximity never reacted (#980). Sensors whose readings land well past their advertised range are now read this way, and a clear rise over the resting reading counts as an approach, which on the NSPanel Pro reaches about 20 cm. The resting level follows slow drift, so drift alone never dismisses the screensaver.
+
 ### Changed
 - **Proximity sensor details in the log.** When proximity detection starts, the log now shows the sensor's advertised range and resolution, and each resting, near and far entry carries the raw reading. This makes it easier to diagnose sensors that report proximity differently from Android's standard, such as the NSPanel Pro's (#980).
 
