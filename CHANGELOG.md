@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.25 - 2026-10-14
 
 ### Added
 - **Plugins can mute the wake word (#991).** Plugins with `host.control` can call `setWakeWordMuted` to mute or unmute wake word detection, the same mute as Voice Satellite's Mute switch in Home Assistant. A plugin that reads a hardware mute button can keep the kiosk in step without a round trip through Home Assistant. `getWakeWordState` now also reports `muted`.
