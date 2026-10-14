@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.24 - 2026-10-14
 
 ### Added
 - **Album art only Now Playing layout.** Horizontal mode under Now Playing > User Interface is now **Layout mode**, a choice of Vertical, Horizontal and Album art only. Album art only shows just the album art, centered and filling the screen. A tap dims the view and brings up the track details, controls and close button, the controls docked to the bottom of the screen, and they fade out again 5 seconds after the last touch, like the speaker pill. Opening lyrics or the queue switches to the Vertical layout until the panel closes. Kiosks that had Horizontal mode on keep the Horizontal layout, and the rest keep Vertical. In every layout, the volume, favorite, shuffle, repeat, lyrics and queue buttons are brighter while off, so they no longer fade into the artwork.
