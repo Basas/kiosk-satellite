@@ -63,6 +63,41 @@ export function refreshPluginSearchState() {
   return searchStateRequest;
 }
 
+// The entry to the selected plugin screensaver's settings, above Widgets
+// where the stock modes put theirs. A plugin's settings live on its Plugin
+// Manager page, so the row opens that page. Left out while Enable Plugins
+// is off, which closes that page. Mirrors the device (settings_screen.dart,
+// _pluginScreensaverEntry).
+let screensaverEntryRender = 0;
+export function renderPluginScreensaverEntry(root, mode) {
+  const render = ++screensaverEntryRender;
+  const id = /^plugin:([^:]+):/.exec(mode || '')?.[1];
+  const place = (pluginState) => {
+    if (render !== screensaverEntryRender) return;
+    root?.querySelectorAll('[data-plugin-screensaver]').forEach((card) => card.remove());
+    const plugin = id && pluginState?.enabled === true && (pluginState.plugins || []).find((p) => p.id === id);
+    const anchor = root?.querySelector('[data-subpage-entry="Widgets"]')?.closest('.card');
+    if (!plugin || !anchor) return;
+    const row = subpageEntry('plugins', plugin.id, { iconName: 'Plugins' });
+    row.querySelector('.name').textContent = plugin.name;
+    row.querySelector('.desc').textContent = plugin.description || '';
+    // The plugin pages are built on first visit: build them before opening one.
+    row.addEventListener('click', async (event) => {
+      event.stopImmediatePropagation();
+      await loadPlugins();
+      showTab(`plugins/${plugin.id}`, { refresh: false });
+    }, true);
+    const card = element('div', undefined, 'card');
+    card.dataset.pluginScreensaver = plugin.id;
+    card.append(row);
+    anchor.before(card);
+  };
+  // The cached list draws the row at once, then a fresh read catches a
+  // plugin or the master switch changed on the device since.
+  place(pluginSearchState);
+  if (id) refreshPluginSearchState().then(place).catch(() => {});
+}
+
 export async function loadPlugins() {
   const root = document.getElementById('tab-plugins');
   if (!root || busy) return;

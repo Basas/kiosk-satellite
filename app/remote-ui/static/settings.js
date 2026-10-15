@@ -45,6 +45,7 @@ import { decorateAnnouncementsPage, renderIntercomPage } from './intercom.js';
 import { renderAlarmsPage } from './alarms.js';
 import { renderCustomPagesPage } from './custom_pages.js';
 import { renderUrlFilterPage } from './url_filter.js';
+import { renderPluginScreensaverEntry } from './plugins.js';
 import { askImportOptions } from './pickers.js';
 import { settingRow, syncGatedRows } from './rows.js';
 import { applySubpageView, currentPath, setCurrentPath, subpageEntry, refreshNavigationText } from './tabs.js';
@@ -592,6 +593,7 @@ async function renderSettings({ cached = false } = {}) {
     }
     if (helperPage) renderUpdateHelper(panels.get('Optional update helper'), helperStatus);
     if (tabId === 'tab-browser') renderUrlFilterPage(panels.get('URL Filter'));
+    if (tabId === 'tab-screensaver') renderPluginScreensaverEntry(document.getElementById(tabId), byKey['screensaver.mode']?.value);
   }
 
   // ── Required system permissions (Kiosk and Lockdown tabs) ────────────

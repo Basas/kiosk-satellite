@@ -95,6 +95,10 @@ List<Widget> _sectionedCards(
   // the generic tile (the motion switch shown disabled while the Camera
   // section's master switch is off).
   Map<String, Widget> replace = const {},
+  // Cards keyed by setting key, placed on their own just ahead of that
+  // setting's row or page entry (a plugin screensaver's page entry above
+  // Widgets).
+  Map<String, Widget> before = const {},
   // The second-level page being rendered, if any. Definitions declaring a
   // *different* subpage collapse into one entry card here (the row that
   // opens their page); definitions declaring *this* subpage render normally.
@@ -120,6 +124,12 @@ List<Widget> _sectionedCards(
 
   final subpagesEmitted = <String>{};
   for (final def in visible) {
+    if (before[def.key] case final card?) {
+      flush();
+      current = null;
+      entryRun = true;
+      out.add(card);
+    }
     if (def.subpage != subpage) {
       // Lives on a second-level page: the first def of each subpage puts
       // the entry row where the group used to sit; the rest add nothing.
@@ -1016,7 +1026,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _openSubpage(String category, String subpage) {
+    // A page of another category (a plugin screensaver's plugin page) moves
+    // the rail there too, as a search result does.
+    final index = _categories.indexWhere((c) => c.$1 == category);
     setState(() {
+      if (index >= 0) _selected = index;
       _subpage = subpage;
       _landing = null;
     });
@@ -1333,6 +1347,37 @@ Widget _subpageEntryCard(
   ],
 );
 
+/// The entry to the selected plugin screensaver's settings, where the stock
+/// modes put theirs. A plugin's settings live on its Plugin Manager page, so
+/// the row opens that page. Null while the mode is not a plugin's, its
+/// plugin is gone or Enable Plugins is off, which closes that page.
+/// Mirrored on the remote (plugins.js, renderPluginScreensaverEntry).
+Widget? _pluginScreensaverEntry(AppContainer container) {
+  final mode = container.settings.get(screensaverMode);
+  if (!isPluginScreensaver(mode) || !container.plugins.enabled.value) {
+    return null;
+  }
+  final id = mode.split(':')[1];
+  final plugin = container.plugins.installed.value
+      .where((p) => p['id'] == id)
+      .firstOrNull;
+  if (plugin == null) return null;
+  final description = '${plugin['description'] ?? ''}';
+  return SettingsCard(
+    children: [
+      Builder(
+        builder: (context) => ListTile(
+          leading: const Icon(Icons.extension_rounded),
+          title: Text('${plugin['name']}'),
+          subtitle: description.isEmpty ? null : Text(description),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => openSettingsSubpage(context, container, 'Plugins', id),
+        ),
+      ),
+    ],
+  );
+}
+
 /// The One UI second-level entry: one row standing in for every setting that
 /// declares this subpage, with a hint listing what moved inside. Tapping
 /// opens the page; Back (arrow or gesture) returns to this row.
@@ -1568,6 +1613,9 @@ class _CategoryContentState extends State<_CategoryContent> {
     widget.container.plugins.screensavers.addListener(
       _pluginScreensaversChanged,
     );
+    // The plugin screensaver's entry row comes and goes with the plugins.
+    widget.container.plugins.installed.addListener(_pluginScreensaversChanged);
+    widget.container.plugins.enabled.addListener(_pluginScreensaversChanged);
     // The Managed banner comes and goes with the leader's pushes.
     _fleetEcho = widget.container.bus.on<FleetSyncChanged>().listen((_) {
       if (mounted) setState(() {});
@@ -1645,6 +1693,10 @@ class _CategoryContentState extends State<_CategoryContent> {
     widget.container.plugins.screensavers.removeListener(
       _pluginScreensaversChanged,
     );
+    widget.container.plugins.installed.removeListener(
+      _pluginScreensaversChanged,
+    );
+    widget.container.plugins.enabled.removeListener(_pluginScreensaversChanged);
     _btAdapterTimer?.cancel();
     _fleetEcho?.cancel();
     _settingsEcho?.cancel();
@@ -2450,6 +2502,10 @@ class _CategoryContentState extends State<_CategoryContent> {
               () => setState(() {}),
               replace: _rowReplacements(container),
               after: _rowExtras(container),
+              before: {
+                if (widget.category == 'Screensaver')
+                  screensaverWidgets.key: ?_pluginScreensaverEntry(container),
+              },
             ),
           ),
           // No setting draws the URL Filter, so its row is placed here,
