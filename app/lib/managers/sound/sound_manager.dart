@@ -41,10 +41,10 @@ class SoundManager extends Manager {
   StreamSubscription<SettingChanged>? _settingsSub;
   final _voiceDurations = <String, (int, int, double)>{};
   static const _voiceDefaults = <String, double>{
-    'wake': 0.29,
-    'done': 0.29,
-    'error': 0.19,
-    'alert': 0.63,
+    'wake': 0.31,
+    'done': 0.31,
+    'error': 0.21,
+    'alert': 0.65,
     'announce': 1.0,
   };
 

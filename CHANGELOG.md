@@ -5,7 +5,10 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Added
-- **A volume for each chime (#998).** The **Chimes** page under Voice Satellite has a volume slider under each sound: wake, done, error, timer and announcement. Each one is a share of the **Assistant volume**, so a chime that plays louder than the voice responses can be turned down without turning those down too. They apply to chimes the kiosk plays itself, including previews, and default to 100%, which keeps today's levels.
+- **A volume for each chime (#998).** The **Chimes** page under Voice Satellite has a volume slider under each sound: wake, done, error, timer and announcement. Each one is a share of the **Assistant volume**, so a chime that plays louder than the voice responses can be turned down without turning those down too. They apply to chimes the kiosk plays itself, including previews, and default to 100%.
+
+### Changed
+- **Louder built-in chimes.** The built-in wake, done, error, timer and announcement sounds play about 15% louder. With a volume for each chime, they can now be turned down but not up, so they start higher.
 
 ## v2026.10.26 - 2026-10-15
 
