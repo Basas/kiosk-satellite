@@ -1348,6 +1348,9 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
     _loadErrorThisLoad = false;
     _httpErrorThisLoad = false;
     if (!loadFailed.value) _clearErrorReload();
+    if (!loadFailed.value && isCustomPage(url)) {
+      unawaited(UsageCounters.bump(_settings, 'custom_page_loads'));
+    }
     _currentUrl = url;
     log.info(name, 'loaded $url');
     // A page reached without passing through prepareLoad (Back, a reload
@@ -1616,12 +1619,15 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
 
   /// One line in the log for a navigation the URL Filter stopped, by the
   /// Block rule's [rule] name or '' for the allow list.
-  void logUrlBlocked(String url, String rule) => log.info(
-    name,
-    rule.isEmpty
-        ? 'blocked $url (not on the URL Filter allow list)'
-        : 'blocked $url (URL Filter rule "$rule")',
-  );
+  void logUrlBlocked(String url, String rule) {
+    log.info(
+      name,
+      rule.isEmpty
+          ? 'blocked $url (not on the URL Filter allow list)'
+          : 'blocked $url (URL Filter rule "$rule")',
+    );
+    unawaited(UsageCounters.bump(_settings, 'url_filter_blocked'));
+  }
 
   /// The page script for the rules covering [surface].
   String urlFilterSource(String surface) => urlFilterJs([

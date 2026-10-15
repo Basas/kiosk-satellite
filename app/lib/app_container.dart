@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'core/command_registry.dart';
 import 'core/event_bus.dart';
 import 'core/events.dart';
@@ -33,6 +35,7 @@ import 'managers/fleet/fleet_sync_manager.dart';
 import 'managers/intercom/intercom_manager.dart';
 import 'managers/alarms/alarm_manager.dart';
 import 'managers/analytics/analytics_manager.dart';
+import 'managers/analytics/usage_counters.dart';
 import 'managers/broadcasts/event_broadcast_manager.dart';
 import 'managers/location/location_manager.dart';
 import 'managers/person/person_sensor_manager.dart';
@@ -322,6 +325,8 @@ class AppContainer {
             settings.get(haCustomPagesSocket) &&
             browser.isCustomPage(await browser.liveUrl()),
         log: log,
+        onOpen: () =>
+            unawaited(UsageCounters.bump(settings, 'custom_page_ha_sockets')),
       );
     plugins.haSocket = HaPluginSocket(
       baseUrl: () => homeAssistant.baseUrl,
