@@ -11157,6 +11157,24 @@ class UiStringsZh extends UiStrings {
   String get settingVoiceWakeSoundDescription => '唤醒、完成和错误提示音。';
 
   @override
+  String get voiceChimeWakeVolumeTitle => '唤醒提示音音量';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => '完成提示音音量';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => '错误提示音音量';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => '计时器提示音音量';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => '播报提示音音量';
+
+  @override
+  String get voiceChimeVolumeDescription => '占助手音量的百分比。';
+
+  @override
   String get settingVoiceShowCommandTitle => '显示你说的内容';
 
   @override
@@ -24147,6 +24165,24 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get settingVoiceWakeSoundDescription => '唤醒、完成和错误提示音。';
+
+  @override
+  String get voiceChimeWakeVolumeTitle => '唤醒提示音音量';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => '完成提示音音量';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => '错误提示音音量';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => '计时器提示音音量';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => '播报提示音音量';
+
+  @override
+  String get voiceChimeVolumeDescription => '占助手音量的百分比。';
 
   @override
   String get settingVoiceShowCommandTitle => '显示你说的内容';

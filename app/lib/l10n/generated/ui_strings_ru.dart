@@ -11835,6 +11835,24 @@ class UiStringsRu extends UiStrings {
       'Звуки пробуждения, готовности и ошибки.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Громкость звука пробуждения';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Громкость звука готовности';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Громкость звука ошибки';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Громкость звука таймера';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Громкость звука объявления';
+
+  @override
+  String get voiceChimeVolumeDescription => 'Доля громкости ассистента.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Показывать сказанное';
 
   @override

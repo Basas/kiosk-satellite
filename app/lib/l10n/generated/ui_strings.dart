@@ -20459,6 +20459,42 @@ abstract class UiStrings {
   /// **'The wake, done and error sounds.'**
   String get settingVoiceWakeSoundDescription;
 
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Wake sound volume'**
+  String get voiceChimeWakeVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Done sound volume'**
+  String get voiceChimeDoneVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Error sound volume'**
+  String get voiceChimeErrorVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer sound volume'**
+  String get voiceChimeTimerVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Announcement sound volume'**
+  String get voiceChimeAnnounceVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'A share of the assistant volume.'**
+  String get voiceChimeVolumeDescription;
+
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:

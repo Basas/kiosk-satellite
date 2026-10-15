@@ -11998,6 +11998,25 @@ class UiStringsFr extends UiStrings {
       'Les sons de réveil, de fin et d\'erreur.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Volume du son de réveil';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Volume du son de fin';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Volume du son d\'erreur';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Volume du son du minuteur';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Volume du son d\'annonce';
+
+  @override
+  String get voiceChimeVolumeDescription =>
+      'Une proportion du volume de l\'assistant.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Afficher ce que vous avez dit';
 
   @override

@@ -44451,6 +44451,84 @@
     "context": "Settings > Voice Satellite > Chimes",
     "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged."
   },
+  "voiceChimeWakeVolumeTitle": "唤醒提示音音量",
+  "@voiceChimeWakeVolumeTitle": {
+    "context": "Settings > Voice Satellite > Chimes",
+    "description": "Chime selection, playback or help shown on the device and in Remote Admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Chimes"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Chimes"
+      ]
+    }
+  },
+  "voiceChimeDoneVolumeTitle": "完成提示音音量",
+  "@voiceChimeDoneVolumeTitle": {
+    "context": "Settings > Voice Satellite > Chimes",
+    "description": "Chime selection, playback or help shown on the device and in Remote Admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Chimes"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Chimes"
+      ]
+    }
+  },
+  "voiceChimeErrorVolumeTitle": "错误提示音音量",
+  "@voiceChimeErrorVolumeTitle": {
+    "context": "Settings > Voice Satellite > Chimes",
+    "description": "Chime selection, playback or help shown on the device and in Remote Admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Chimes"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Chimes"
+      ]
+    }
+  },
+  "voiceChimeTimerVolumeTitle": "计时器提示音音量",
+  "@voiceChimeTimerVolumeTitle": {
+    "context": "Settings > Voice Satellite > Chimes",
+    "description": "Chime selection, playback or help shown on the device and in Remote Admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Chimes"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Chimes"
+      ]
+    }
+  },
+  "voiceChimeAnnounceVolumeTitle": "播报提示音音量",
+  "@voiceChimeAnnounceVolumeTitle": {
+    "context": "Settings > Voice Satellite > Chimes",
+    "description": "Chime selection, playback or help shown on the device and in Remote Admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Chimes"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Chimes"
+      ]
+    }
+  },
+  "voiceChimeVolumeDescription": "占助手音量的百分比。",
+  "@voiceChimeVolumeDescription": {
+    "context": "Settings > Voice Satellite > Chimes",
+    "description": "Chime selection, playback or help shown on the device and in Remote Admin.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Chimes"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Chimes"
+      ]
+    }
+  },
   "settingVoiceShowCommandTitle": "显示你说的内容",
   "@settingVoiceShowCommandTitle": {
     "context": "Settings > Voice Satellite > Conversation",

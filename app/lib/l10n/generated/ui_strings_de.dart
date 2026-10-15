@@ -12038,6 +12038,25 @@ class UiStringsDe extends UiStrings {
       'Die Aktivierungs-, Fertig- und Fehlertöne.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Lautstärke des Aktivierungstons';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Lautstärke des Abschlusstons';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Lautstärke des Fehlertons';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Lautstärke des Timer-Tons';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Lautstärke des Ansagetons';
+
+  @override
+  String get voiceChimeVolumeDescription =>
+      'Ein Anteil der Assistentenlautstärke.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Zeigen, was du gesagt hast';
 
   @override

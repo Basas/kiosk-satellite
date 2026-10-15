@@ -20283,5 +20283,35 @@
     "source": "0902e533c3c4d88d25e886a4f6f3ff80f886ce567f0ab75575f21f9320f945fe",
     "translation": "0ced74c707e3aee4ac45fc039158e16c8835c581bf5376ac105641a60dc82ee8",
     "author": "Xavier Larrea"
+  },
+  "voiceChimeTimerVolumeTitle": {
+    "source": "6847ad971e5d0548fbe60ad756403d74ef868d4e882ba2cefd36a60e1c2266ea",
+    "translation": "e3d9a81094d11f738bc72b48ad0c271f7389b1f758c4700d4e5e7e389d1516ad",
+    "author": "Xavier Larrea"
+  },
+  "voiceChimeAnnounceVolumeTitle": {
+    "source": "0298ca75d6555165723008474acfb92cc6b53f437c18cd009e38e16645197998",
+    "translation": "d84bfb0029ff02ce99f244526f823544bc58889828b90cfed41df741a1d63e98",
+    "author": "Xavier Larrea"
+  },
+  "voiceChimeDoneVolumeTitle": {
+    "source": "b82a2e6effcd6f19e2282cd25ff23fa47f4b410260b63af36aa28f2691816ca7",
+    "translation": "7dc7823174029b9fb7cacf231d2fb29ae5d41bbb772c1dcf1da55a9817017f2e",
+    "author": "Xavier Larrea"
+  },
+  "voiceChimeErrorVolumeTitle": {
+    "source": "40e76bd90089acbbaff9693ab463c2e92d8742be006124c8a72cbd4ee3137784",
+    "translation": "999a6275e24f384d3cd79e83be175c47f69147e5b044475a7f9364e01c317d6c",
+    "author": "Xavier Larrea"
+  },
+  "voiceChimeWakeVolumeTitle": {
+    "source": "f5bcd59802be69ffc0a6542d6a626371165d3ed47839a1fe3e1928f9d634c440",
+    "translation": "827ea66943513c3391a52204f0c03a4614eb15f61f7e5e792bdd9ba91cd7a1b8",
+    "author": "Xavier Larrea"
+  },
+  "voiceChimeVolumeDescription": {
+    "source": "d27c23e23491ed2dbd8f027d935c4edcd47e1db8641de7d98bbb55a4dde78d31",
+    "translation": "2616446b2aaf40749b9988ba547bff91d2dc21cf2b5a367b7304a935ae1821a6",
+    "author": "Xavier Larrea"
   }
 }

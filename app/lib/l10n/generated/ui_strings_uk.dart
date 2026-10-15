@@ -11893,6 +11893,24 @@ class UiStringsUk extends UiStrings {
       'Звуки активації, завершення та помилки.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Гучність звуку активації';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Гучність звуку завершення';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Гучність звуку помилки';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Гучність звуку таймера';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Гучність звуку оголошення';
+
+  @override
+  String get voiceChimeVolumeDescription => 'Частка гучності асистента.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Показувати, що ви сказали';
 
   @override

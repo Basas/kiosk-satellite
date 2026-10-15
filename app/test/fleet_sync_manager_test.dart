@@ -922,7 +922,7 @@ void main() {
             'categories': [],
             'credentials': ['ha.token', 'bogus'],
           })!.describe(),
-          'Categories: 0 of 18. Credentials: 1 of 8. Excluded: 38.',
+          'Categories: 0 of 18. Credentials: 1 of 8. Excluded: 43.',
         );
         expect(
           withCreds['browser.start_url'],
@@ -2158,13 +2158,16 @@ void main() {
       expect(former.containsAll(previous), isTrue);
       previous = former;
     }
-    // The external motion sensor joined last (issue #973): the newest
-    // former list is the current one without it.
+    // The per-chime volumes joined last (issue #998): the newest former
+    // list is the current one without them.
     expect(
       defs.fleetFormerDefaultExcluded.last,
       defs.fleetDefaultExcluded.difference({
-        'motion.use_entity',
-        'motion.entity',
+        'voice_chimes.wake_volume',
+        'voice_chimes.done_volume',
+        'voice_chimes.error_volume',
+        'voice_chimes.alert_volume',
+        'voice_chimes.announce_volume',
       }),
     );
   });

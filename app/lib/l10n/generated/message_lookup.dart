@@ -3944,6 +3944,12 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'settingVoiceWakeSoundTitle' => strings.settingVoiceWakeSoundTitle,
       'settingVoiceWakeSoundDescription' =>
         strings.settingVoiceWakeSoundDescription,
+      'voiceChimeWakeVolumeTitle' => strings.voiceChimeWakeVolumeTitle,
+      'voiceChimeDoneVolumeTitle' => strings.voiceChimeDoneVolumeTitle,
+      'voiceChimeErrorVolumeTitle' => strings.voiceChimeErrorVolumeTitle,
+      'voiceChimeTimerVolumeTitle' => strings.voiceChimeTimerVolumeTitle,
+      'voiceChimeAnnounceVolumeTitle' => strings.voiceChimeAnnounceVolumeTitle,
+      'voiceChimeVolumeDescription' => strings.voiceChimeVolumeDescription,
       'settingVoiceShowCommandTitle' => strings.settingVoiceShowCommandTitle,
       'settingVoiceShowCommandDescription' =>
         strings.settingVoiceShowCommandDescription,

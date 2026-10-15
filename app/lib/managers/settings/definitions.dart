@@ -6984,6 +6984,86 @@ const voiceChimeSettings = <String, SettingDef<String>>{
   'announce': voiceChimeAnnounce,
 };
 
+// Each chime's level as a share of the assistant volume (issue #998), so a
+// loud custom sound can sit under the voice responses.
+const voiceChimeWakeVolume = SettingDef<num>(
+  key: 'voice_chimes.wake_volume',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Wake sound volume',
+  description: 'A share of the assistant volume.',
+  category: 'Voice Satellite',
+  subpage: 'Chimes',
+);
+
+const voiceChimeDoneVolume = SettingDef<num>(
+  key: 'voice_chimes.done_volume',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Done sound volume',
+  description: 'A share of the assistant volume.',
+  category: 'Voice Satellite',
+  subpage: 'Chimes',
+);
+
+const voiceChimeErrorVolume = SettingDef<num>(
+  key: 'voice_chimes.error_volume',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Error sound volume',
+  description: 'A share of the assistant volume.',
+  category: 'Voice Satellite',
+  subpage: 'Chimes',
+);
+
+const voiceChimeTimerVolume = SettingDef<num>(
+  key: 'voice_chimes.alert_volume',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Timer sound volume',
+  description: 'A share of the assistant volume.',
+  category: 'Voice Satellite',
+  subpage: 'Chimes',
+);
+
+const voiceChimeAnnounceVolume = SettingDef<num>(
+  key: 'voice_chimes.announce_volume',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 0,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Announcement sound volume',
+  description: 'A share of the assistant volume.',
+  category: 'Voice Satellite',
+  subpage: 'Chimes',
+);
+
+const voiceChimeVolumes = <String, SettingDef<num>>{
+  'wake': voiceChimeWakeVolume,
+  'done': voiceChimeDoneVolume,
+  'error': voiceChimeErrorVolume,
+  'alert': voiceChimeTimerVolume,
+  'announce': voiceChimeAnnounceVolume,
+};
+
 // Hidden: rendered as hand-built dropdowns (device settings screen and the
 // remote UI both) because the option lists are live hardware, not constants.
 // Value is AudioRouting's stable selector "type|address|name"; empty means
@@ -10284,6 +10364,11 @@ const fleetDefaultExcluded = {
   'audio.assistant_volume',
   'notifications.volume',
   'ha.tap_sound_volume',
+  'voice_chimes.wake_volume',
+  'voice_chimes.done_volume',
+  'voice_chimes.error_volume',
+  'voice_chimes.alert_volume',
+  'voice_chimes.announce_volume',
   // Files and picks that only resolve on the device that made them.
   'screensaver.gallery_items',
   'screensaver.local_folder',
@@ -10550,6 +10635,47 @@ const fleetFormerDefaultExcluded = <Set<String>>[
     'motion.fps',
     'face.sensitivity',
     'camera.snapshot_resolution',
+    'browser.cutout_mode',
+    'screen.orientation',
+    'intercom.volume',
+    'intercom.answer_mode',
+    'voice.mute',
+    'voice.tts_output',
+  },
+  // Before the per-chime volumes joined (issue #998).
+  {
+    'browser.zoom',
+    'screensaver.website_zoom',
+    'screensaver.clock_scale',
+    'screensaver.widget_scale',
+    'screensaver.immich_metadata_scale',
+    'screensaver.glance_scale',
+    'face.preview_scale',
+    'sendspin.player_size',
+    'screen.default_brightness',
+    'screen.adaptive_min_brightness',
+    'screen.adaptive_max_brightness',
+    'screen.adaptive_dark_lux',
+    'screen.adaptive_bright_lux',
+    'screen.adaptive_use_entity',
+    'screen.adaptive_light_entity',
+    'screensaver.brightness_level',
+    'screensaver.dim_level',
+    'audio.media_volume',
+    'audio.assistant_volume',
+    'notifications.volume',
+    'ha.tap_sound_volume',
+    'screensaver.gallery_items',
+    'screensaver.local_folder',
+    'screensaver.clock_background',
+    'notifications.chime_file',
+    'launcher.apps',
+    'motion.sensitivity',
+    'motion.fps',
+    'face.sensitivity',
+    'camera.snapshot_resolution',
+    'motion.use_entity',
+    'motion.entity',
     'browser.cutout_mode',
     'screen.orientation',
     'intercom.volume',
@@ -11402,10 +11528,15 @@ const List<SettingDef<Object>> allSettings = [
   notificationsBlur,
   voiceWakeSound,
   voiceChimeWake,
+  voiceChimeWakeVolume,
   voiceChimeDone,
+  voiceChimeDoneVolume,
   voiceChimeError,
+  voiceChimeErrorVolume,
   voiceChimeTimer,
+  voiceChimeTimerVolume,
   voiceChimeAnnounce,
+  voiceChimeAnnounceVolume,
   notificationsChimeFile,
   notificationsVolume,
   announcementsEnabled,

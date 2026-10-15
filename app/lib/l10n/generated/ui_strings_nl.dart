@@ -11903,6 +11903,26 @@ class UiStringsNl extends UiStrings {
       'De wek-, gereed- en foutgeluiden.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Volume van het wekgeluid';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Volume van het gereedgeluid';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Volume van het foutgeluid';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Volume van het timergeluid';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle =>
+      'Volume van het aankondigingsgeluid';
+
+  @override
+  String get voiceChimeVolumeDescription =>
+      'Een aandeel van het assistentvolume.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Tonen wat je hebt gezegd';
 
   @override

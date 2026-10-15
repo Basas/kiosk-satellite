@@ -12006,6 +12006,26 @@ class UiStringsEs extends UiStrings {
       'Los sonidos de activación, fin y error.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Volumen del sonido de activación';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Volumen del sonido de finalización';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Volumen del sonido de error';
+
+  @override
+  String get voiceChimeTimerVolumeTitle =>
+      'Volumen del sonido del temporizador';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Volumen del sonido de anuncio';
+
+  @override
+  String get voiceChimeVolumeDescription =>
+      'Una proporción del volumen del asistente.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Mostrar lo que dijiste';
 
   @override

@@ -335,6 +335,14 @@ const _railGroups = <String, String>{
   'Device': 'System',
 };
 
+/// The Chimes page: each sound with its volume under it.
+final List<SettingDef<Object>> _chimeRows = [
+  for (final kind in voiceChimeSettings.keys) ...[
+    voiceChimeSettings[kind]!,
+    voiceChimeVolumes[kind]!,
+  ],
+];
+
 List<SettingDef<Object>> _defsFor(String category) => [
   for (final def in allSettings)
     if (def.category == category &&
@@ -3865,7 +3873,7 @@ class _CategoryContentState extends State<_CategoryContent> {
         case 'Chimes':
           return [
             ...sectioned([voiceWakeSound]),
-            ...sectioned(voiceChimeSettings.values.toList()),
+            ...sectioned(_chimeRows),
           ];
         case 'Wake word diagnostics':
           break;
@@ -3875,7 +3883,7 @@ class _CategoryContentState extends State<_CategoryContent> {
     }
 
     if (widget.category == 'Voice Satellite' && subpage == 'Chimes') {
-      return [...sectioned(voiceChimeSettings.values.toList())];
+      return [...sectioned(_chimeRows)];
     }
 
     // The dashboard runtime's Timers page holds only what the kiosk draws

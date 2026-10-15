@@ -1524,6 +1524,26 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "voiceChimeAnnounceTitle",
     "description": "voiceChimeAnnounceDescription",
   },
+  "voice_chimes.wake_volume": {
+    "title": "voiceChimeWakeVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.done_volume": {
+    "title": "voiceChimeDoneVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.error_volume": {
+    "title": "voiceChimeErrorVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.alert_volume": {
+    "title": "voiceChimeTimerVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.announce_volume": {
+    "title": "voiceChimeAnnounceVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
   "screensaver.weather_entity": {
     "title": "settingScreensaverWeatherEntityTitle",
     "description": "settingScreensaverWeatherEntityDescription",

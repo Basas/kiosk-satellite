@@ -81,7 +81,7 @@ When Home Assistant runs the integration, onboarding offers the same migration i
 | | Keep the answer on screen, Keep results on screen, Announcement time | How long each stays. Results at 0 stay until dismissed. |
 | Timers | Show timer pills, Show the timer name, Timer pill scale | Running timers float over the screen. Drag them anywhere. |
 | | Show finished timer pills, Mute timer alerts, Show the name on the alert, Speak when a timer ends | What a finished timer does. Without its pill, the stop word still ends the alert. |
-| Chimes | Play chimes, per-event sounds | The wake, done, error, timer and announcement sounds, built in or from the sounds folder. |
+| Chimes | Play chimes, per-event sounds and volumes | The wake, done, error, timer and announcement sounds, built in or from the sounds folder, each with its own volume under the assistant volume. |
 
 The **Wake Word Tester** and **Wake word diagnostics** are covered in [Microphone settings](microphone.md).
 

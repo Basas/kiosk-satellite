@@ -11766,6 +11766,24 @@ class UiStringsEn extends UiStrings {
       'The wake, done and error sounds.';
 
   @override
+  String get voiceChimeWakeVolumeTitle => 'Wake sound volume';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Done sound volume';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Error sound volume';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Timer sound volume';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Announcement sound volume';
+
+  @override
+  String get voiceChimeVolumeDescription => 'A share of the assistant volume.';
+
+  @override
   String get settingVoiceShowCommandTitle => 'Show what you said';
 
   @override
