@@ -2,6 +2,14 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Added
+- **Show audio quality on Now Playing.** A new **Show audio quality** switch under **Now Playing > User Interface**, off by default, adds a row of pills along the bottom edge of the Now Playing view with the current track's quality: **Hi-Res**, **CD quality** or **Lossy**, then the codec, bit depth, sample rate, bitrate and the Music Assistant provider it streams from, such as Qobuz, Tidal or Spotify. Hi-Res marks lossless audio above 16 bits or 48 kHz and CD quality lossless audio at 16 bits and 44.1 or 48 kHz. The pills show in every layout and alongside a screensaver. They work for this device's own player and any player followed through Music Assistant, and need the server address and token on the Music Assistant page. Sonos speakers followed directly and Home Assistant media players do not report this, so no pills show for them.
+
+### Fixed
+- **Tracks with a version on the local player.** Music Assistant keeps a remix, live or remastered version apart from the track name, while the Sendspin stream joins them, as in "Red (Document One Remix)". The local player never matched such a track to its Music Assistant queue, so audiobook chapters, the hidden progress bar for radio stations and position corrections from Music Assistant did not apply to it. The queue's title now includes the version, which also shows the full title for a followed Music Assistant player.
+
 ## v2026.10.25 - 2026-10-14
 
 ### Added

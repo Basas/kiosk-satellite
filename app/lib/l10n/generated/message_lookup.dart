@@ -714,6 +714,9 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'mediaShowFloatingPlayer' => strings.mediaShowFloatingPlayer,
       'mediaOpenMusicAssistant' => strings.mediaOpenMusicAssistant,
       'mediaCannotControl' => strings.mediaCannotControl,
+      'mediaAudioHiRes' => strings.mediaAudioHiRes,
+      'mediaAudioCdQuality' => strings.mediaAudioCdQuality,
+      'mediaAudioLossy' => strings.mediaAudioLossy,
       'mediaNothingQueued' => strings.mediaNothingQueued,
       'mediaChapters' => strings.mediaChapters,
       'mediaNowPlaying' => strings.mediaNowPlaying,
@@ -2556,6 +2559,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingSendspinSpeakerPillPlayersTitle,
       'settingSendspinSpeakerPillPlayersDescription' =>
         strings.settingSendspinSpeakerPillPlayersDescription,
+      'settingSendspinAudioQualityTitle' =>
+        strings.settingSendspinAudioQualityTitle,
+      'settingSendspinAudioQualityDescription' =>
+        strings.settingSendspinAudioQualityDescription,
       'mediaAllSpeakers' => strings.mediaAllSpeakers,
       'settingSendspinQueueArtTitle' => strings.settingSendspinQueueArtTitle,
       'settingSendspinQueueArtDescription' =>

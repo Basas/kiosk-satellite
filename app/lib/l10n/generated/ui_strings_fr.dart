@@ -2722,6 +2722,30 @@ class UiStringsFr extends UiStrings {
       'commande non prise en charge ou non envoyée';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'Qualité CD';
+
+  @override
+  String get mediaAudioLossy => 'Avec perte';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits bits';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kb/s';
+  }
+
+  @override
   String get mediaNothingQueued => 'Rien dans la file d\'attente';
 
   @override
@@ -8579,6 +8603,13 @@ class UiStringsFr extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'Seules ces enceintes apparaissent dans la pastille. Les enceintes déjà dans le groupe apparaissent toujours.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Afficher la qualité audio';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Affiche le format, la profondeur de bits, la fréquence d\'échantillonnage, le débit et la source du titre en cours en bas de Lecture en cours. Nécessite Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'Toutes les enceintes';

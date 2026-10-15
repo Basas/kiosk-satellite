@@ -731,8 +731,9 @@ class SendspinManager extends Manager {
 
   void _setNowPlaying(Map<String, Object?>? value) {
     if (_remote == null && value != null) {
-      // Sendspin omits chapters. Match the queue to the audible title so
-      // chapter metadata survives progress deltas and leaves with the book.
+      // Sendspin omits chapters and the source's audio format. Match the
+      // queue to the audible title so both survive progress deltas and
+      // leave with the track.
       final queue = _localQueueSnapshot;
       final matches = queue != null && queue['title'] == value['title'];
       // The engine's progress for a radio station counts from the moment
@@ -746,6 +747,7 @@ class SendspinManager extends Manager {
         'mediaType': matches ? queue['mediaType'] : null,
         'mediaUri': matches ? queue['mediaUri'] : null,
         'chapters': matches ? queue['chapters'] : null,
+        'audioQuality': matches ? queue['audioQuality'] : null,
         // The group this device plays in, whatever the track.
         'groupVolume': queue?['groupVolume'],
         'groupMuted': queue?['groupMuted'],

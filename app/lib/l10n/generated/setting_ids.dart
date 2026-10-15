@@ -1140,6 +1140,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinSpeakerPillPlayersTitle",
     "description": "settingSendspinSpeakerPillPlayersDescription",
   },
+  "sendspin.audio_quality": {
+    "title": "settingSendspinAudioQualityTitle",
+    "description": "settingSendspinAudioQualityDescription",
+  },
   "sendspin.queue_art": {
     "title": "settingSendspinQueueArtTitle",
     "description": "settingSendspinQueueArtDescription",

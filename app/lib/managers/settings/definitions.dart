@@ -8607,6 +8607,25 @@ const sendspinSpeakerPillPlayers = SettingDef<String>(
   normalizer: normalizeSpeakerPillPlayers,
 );
 
+/// Pills along the bottom edge of the Now Playing view with the current
+/// track's audio quality: Hi-Res or CD quality, codec, bit depth, sample
+/// rate, bitrate and source. Music Assistant is the only source that
+/// reports them, so the row stays empty for other players.
+const sendspinAudioQuality = SettingDef<bool>(
+  key: 'sendspin.audio_quality',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show audio quality',
+  description:
+      'Shows the format, bit depth, sample rate, bitrate and source of the '
+      'current track at the bottom of Now Playing. Requires Music '
+      'Assistant.',
+  category: 'Sendspin',
+  subpage: 'Now Playing',
+  section: 'User Interface',
+  dependsOn: 'sendspin.fullscreen',
+);
+
 /// Stores [sendspinSpeakerPillPlayers] as a clean list: strings only, each
 /// once, so a hand-written API value that is not a list reads as empty.
 Object normalizeSpeakerPillPlayers(Object value) => jsonEncode(
@@ -11352,6 +11371,7 @@ const List<SettingDef<Object>> allSettings = [
   sendspinFullscreenShortcut,
   sendspinSpeakerPill,
   sendspinSpeakerPillPlayers,
+  sendspinAudioQuality,
   sendspinQueueArt,
   sendspinLyrics,
   sendspinFullscreenQueue,

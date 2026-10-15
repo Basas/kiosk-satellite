@@ -2722,6 +2722,30 @@ class UiStringsEs extends UiStrings {
       'El comando no es compatible o no se pudo enviar.';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'Calidad CD';
+
+  @override
+  String get mediaAudioLossy => 'Con pérdida';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits bits';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbps';
+  }
+
+  @override
   String get mediaNothingQueued => 'No hay nada en cola';
 
   @override
@@ -8587,6 +8611,13 @@ class UiStringsEs extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'Solo estos altavoces aparecen en el selector. Los altavoces que ya están en el grupo siempre aparecen.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Mostrar calidad de audio';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Muestra el formato, la profundidad de bits, la frecuencia de muestreo, la tasa de bits y el origen de la pista actual en la parte inferior de Reproduciendo Ahora. Requiere Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'Todos los altavoces';

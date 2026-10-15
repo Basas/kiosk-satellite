@@ -24342,5 +24342,53 @@
     "translation": "b1f7c8d518866fd5e1576a3c8ecb081998693c867e06809be2c61cb9e00b870b",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "mediaAudioCdQuality": {
+    "source": "e78dc1463524f4c4f40b8853d9d9499a50b30bc63a6ccc1c4dedbe3d15fdafbe",
+    "translation": "c4dfce84607742a7059178c1a179dc2a18e790823c8ddd4b1165a82cb63bf9f9",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingSendspinAudioQualityTitle": {
+    "source": "115da0d0f6f7bb68d6068071b51eb9b87859183f8249a64d98aedb56a1eaff4a",
+    "translation": "5f1694bf46af1b9eee84268cf030eda5134becf4fee005475a32b0e694b37950",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaAudioHiRes": {
+    "source": "13e0ef329677607612482d15d0a0a420e455b863394a30660417d86d1f088017",
+    "translation": "e60db00055df77b2af112f6657fa37d11591e5d09455fe847a5f79a7553594d4",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingSendspinAudioQualityDescription": {
+    "source": "c2e3706e969655ed856257764316207aeb293f75d611af1ac22a8cd46188ee73",
+    "translation": "8308ad91f810cc107a38c282f9d7ed9bfecf75c644dea7f29b64f2a1eaa2b4e2",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaAudioBitDepth": {
+    "source": "d0351a6a15367107b36a346981a05faddc4f8076d5d2830e290de7978fa7099d",
+    "translation": "d89d765c4a7469c9c7d4465c18cca50cae931d109ff78aef92852844751dc7d8",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaAudioSampleRate": {
+    "source": "e2edbf11a1e67655a2bf5875afc6d7d907a0867f8c21acb6e22c4daa7c648917",
+    "translation": "dd661247bb789dbfd0e131d5084f29c08926bf729d15224e7c88bc2ca9e08bdb",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaAudioBitRate": {
+    "source": "0a7fc0165e30c0d812741ee7b84ebc3628662d595c237e85a956b870ed48ed25",
+    "translation": "9e6e9b0fec8aa33834dacb489da183aa6f64e556446003ff8dcf9ca46091320b",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaAudioLossy": {
+    "source": "0902e533c3c4d88d25e886a4f6f3ff80f886ce567f0ab75575f21f9320f945fe",
+    "translation": "8fc469daff86629f71f17bb81591e5316ece185cad5f3e07de682bc02fadd3d7",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

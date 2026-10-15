@@ -104,6 +104,7 @@ Configures direct integration with local Sonos hardware.
 | Show album art in the queue | on | A cover on every row of the queue panel, the server's or the speaker's own thumbnail, fetched as the rows come into view. Off, the rows tighten back up. |
 | Show speaker selection pill | on | Floats in the top left corner without reserving space. Appears for 5 seconds after a touch or navigation key press, then fades out. Names the player and opens the speaker group menu. Off, the view shows neither. |
 | Filter the speaker selection pill | all speakers | Shown with the pill on and a source that has a group menu. Pick the speakers the menu offers to join the group. Speakers already in the group always show so they can be taken out. Leave it empty to offer every speaker. See [Speaker groups](#speaker-groups). |
+| Show audio quality | off | Pills along the bottom edge of the view show the current track's audio format, bit depth, sample rate, bitrate and source. Requires Music Assistant. See [Audio quality](#audio-quality). |
 
 **Screensaver**
 
@@ -113,6 +114,18 @@ Configures direct integration with local Sonos hardware.
 | Show alongside screensaver | on | Keeps the screensaver on the left and Now Playing on the right. Portrait screens stack the two views. Small screens keep the full screen player. |
 | Fill the screen | Always | Overrides photo filling while sharing the display with Now Playing. Default follows each screensaver's setting. Off, Smart and Always use the same rules as the photo screensavers. |
 | Override screensaver brightness | off | Uses normal brightness while Now Playing is shown alongside a screensaver, overriding its brightness and any scheduled brightness. |
+
+### Audio quality
+
+With **Show audio quality** on, a row of pills along the bottom edge of the Now Playing view shows the audio Music Assistant streams for the current track, in every layout and alongside a screensaver:
+
+* **Hi-Res** for lossless audio above 16 bits or 48 kHz, **CD quality** for lossless audio at 16 bits and 44.1 or 48 kHz, or **Lossy** for compressed audio such as AAC, Vorbis or MP3.
+* The codec, such as FLAC, ALAC, AAC, Vorbis or MP3.
+* The bit depth. For lossy audio this is the depth Music Assistant decodes the stream to.
+* The sample rate and the bitrate, when Music Assistant knows them.
+* The source, the name of the Music Assistant provider the track streams from, such as Qobuz, Tidal or Spotify.
+
+The pills describe the source as Music Assistant reads it from the provider, before Music Assistant converts it for the player. They work for this device's own player and for any player the kiosk follows through Music Assistant, and need the server address and token on the Music Assistant page. A Sonos followed directly or a Home Assistant media player reports none of this, so the row stays empty for them. Music Assistant fills in the details once the stream starts, so the pills can arrive a moment after a new track.
 
 ### Lyrics
 

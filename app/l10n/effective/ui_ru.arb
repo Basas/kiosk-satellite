@@ -10431,6 +10431,84 @@
       ]
     }
   },
+  "mediaAudioHiRes": "Hi-Res",
+  "@mediaAudioHiRes": {
+    "context": "Now Playing > Audio quality",
+    "description": "Badge for lossless audio above CD quality (more than 16 bits or 48 kHz).",
+    "x-locations": {
+      "device": [
+        "Now Playing > Audio quality"
+      ]
+    }
+  },
+  "mediaAudioCdQuality": "CD-качество",
+  "@mediaAudioCdQuality": {
+    "context": "Now Playing > Audio quality",
+    "description": "Badge for lossless audio at 16 bits and 44.1 or 48 kHz.",
+    "x-locations": {
+      "device": [
+        "Now Playing > Audio quality"
+      ]
+    }
+  },
+  "mediaAudioLossy": "С потерями",
+  "@mediaAudioLossy": {
+    "context": "Now Playing > Audio quality",
+    "description": "Badge for compressed audio such as AAC, Vorbis or MP3.",
+    "x-locations": {
+      "device": [
+        "Now Playing > Audio quality"
+      ]
+    }
+  },
+  "mediaAudioBitDepth": "{bits} бит",
+  "@mediaAudioBitDepth": {
+    "context": "Now Playing > Audio quality",
+    "description": "Bit depth of the playing audio, for example 24-bit.",
+    "x-locations": {
+      "device": [
+        "Now Playing > Audio quality"
+      ]
+    },
+    "placeholders": {
+      "bits": {
+        "type": "String",
+        "description": "Value supplied by the app. Keep numbers, names and technical details unchanged."
+      }
+    }
+  },
+  "mediaAudioSampleRate": "{rate} кГц",
+  "@mediaAudioSampleRate": {
+    "context": "Now Playing > Audio quality",
+    "description": "Sample rate of the playing audio, for example 96 kHz.",
+    "x-locations": {
+      "device": [
+        "Now Playing > Audio quality"
+      ]
+    },
+    "placeholders": {
+      "rate": {
+        "type": "String",
+        "description": "Value supplied by the app. Keep numbers, names and technical details unchanged."
+      }
+    }
+  },
+  "mediaAudioBitRate": "{rate} кбит/с",
+  "@mediaAudioBitRate": {
+    "context": "Now Playing > Audio quality",
+    "description": "Bitrate of the playing audio, for example 320 kbps.",
+    "x-locations": {
+      "device": [
+        "Now Playing > Audio quality"
+      ]
+    },
+    "placeholders": {
+      "rate": {
+        "type": "String",
+        "description": "Value supplied by the app. Keep numbers, names and technical details unchanged."
+      }
+    }
+  },
   "mediaNothingQueued": "Очередь пуста",
   "@mediaNothingQueued": {
     "context": "Now Playing > Queue and audiobook chapters",
@@ -31951,6 +32029,32 @@
   },
   "settingSendspinSpeakerPillPlayersDescription": "В бейдже показываются только эти динамики. Динамики, которые уже в группе, показываются всегда.",
   "@settingSendspinSpeakerPillPlayersDescription": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "settingSendspinAudioQualityTitle": "Показывать качество звука",
+  "@settingSendspinAudioQualityTitle": {
+    "context": "Settings > Media Player > Now Playing > User Interface",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > Now Playing > User Interface"
+      ],
+      "remoteAdmin": [
+        "Media Player > Now Playing > User Interface"
+      ]
+    }
+  },
+  "settingSendspinAudioQualityDescription": "Показывает формат, разрядность, частоту дискретизации, битрейт и источник текущего трека внизу вида «Сейчас играет». Требуется Music Assistant.",
+  "@settingSendspinAudioQualityDescription": {
     "context": "Settings > Media Player > Now Playing > User Interface",
     "description": "Help below this setting.",
     "x-locations": {

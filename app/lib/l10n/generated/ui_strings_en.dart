@@ -2693,6 +2693,30 @@ class UiStringsEn extends UiStrings {
   String get mediaCannotControl => 'command not supported or not sent';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD quality';
+
+  @override
+  String get mediaAudioLossy => 'Lossy';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits-bit';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbps';
+  }
+
+  @override
   String get mediaNothingQueued => 'Nothing queued';
 
   @override
@@ -8419,6 +8443,13 @@ class UiStringsEn extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'Only these speakers show in the pill. Speakers already in the group always show.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Show audio quality';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Shows the format, bit depth, sample rate, bitrate and source of the current track at the bottom of Now Playing. Requires Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'All speakers';

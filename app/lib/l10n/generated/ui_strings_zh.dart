@@ -2631,6 +2631,30 @@ class UiStringsZh extends UiStrings {
   String get mediaCannotControl => '命令不受支持或未发送';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD 音质';
+
+  @override
+  String get mediaAudioLossy => '有损';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits 位';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbps';
+  }
+
+  @override
   String get mediaNothingQueued => '播放队列为空';
 
   @override
@@ -8040,6 +8064,13 @@ class UiStringsZh extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       '按钮中仅显示这些扬声器。已在播放组中的扬声器始终显示。';
+
+  @override
+  String get settingSendspinAudioQualityTitle => '显示音质';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      '在“正在播放”底部显示当前曲目的格式、位深、采样率、码率和来源。需要 Music Assistant。';
 
   @override
   String get mediaAllSpeakers => '所有扬声器';
@@ -15592,6 +15623,30 @@ class UiStringsZhCn extends UiStringsZh {
   String get mediaCannotControl => '命令不受支持或未发送';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD 音质';
+
+  @override
+  String get mediaAudioLossy => '有损';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits 位';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbps';
+  }
+
+  @override
   String get mediaNothingQueued => '播放队列为空';
 
   @override
@@ -21001,6 +21056,13 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       '按钮中仅显示这些扬声器。已在播放组中的扬声器始终显示。';
+
+  @override
+  String get settingSendspinAudioQualityTitle => '显示音质';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      '在“正在播放”底部显示当前曲目的格式、位深、采样率、码率和来源。需要 Music Assistant。';
 
   @override
   String get mediaAllSpeakers => '所有扬声器';

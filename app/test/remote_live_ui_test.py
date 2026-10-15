@@ -185,6 +185,7 @@ with sync_playwright() as playwright:
         ('sendspin/floating-player', 'sendspin.player_size', 'large', 'select'),
         ('sendspin/now-playing', 'sendspin.fullscreen', True, 'checkbox'),
         ('sendspin/now-playing', 'sendspin.fullscreen_text_scale', 120, 'range'),
+        ('sendspin/now-playing', 'sendspin.audio_quality', True, 'checkbox'),
         ('sendspin/music-assistant', 'sendspin.ma_open_fullscreen', True, 'checkbox'),
         ('sendspin/music-assistant', 'sendspin.ma_inputs', True, 'checkbox'),
         ('sendspin/lyrics', 'sendspin.lyrics_enabled', True, 'checkbox'),

@@ -2737,6 +2737,30 @@ class UiStringsDe extends UiStrings {
       'Der Befehl wird nicht unterstützt oder konnte nicht gesendet werden.';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD-Qualität';
+
+  @override
+  String get mediaAudioLossy => 'Verlustbehaftet';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits Bit';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbit/s';
+  }
+
+  @override
   String get mediaNothingQueued => 'Nichts in der Warteschlange';
 
   @override
@@ -8626,6 +8650,13 @@ class UiStringsDe extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'Nur diese Lautsprecher werden in der Lautsprecherauswahl angezeigt. Lautsprecher, die bereits in der Gruppe sind, werden immer angezeigt.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Audioqualität anzeigen';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Zeigt Format, Bittiefe, Abtastrate, Bitrate und Quelle des aktuellen Titels unten in „Jetzt läuft“ an. Erfordert Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'Alle Lautsprecher';

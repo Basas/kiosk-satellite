@@ -2713,6 +2713,30 @@ class UiStringsNl extends UiStrings {
       'opdracht niet ondersteund of niet verzonden';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'Cd-kwaliteit';
+
+  @override
+  String get mediaAudioLossy => 'Met verlies';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits-bit';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbps';
+  }
+
+  @override
   String get mediaNothingQueued => 'Niets in de wachtrij';
 
   @override
@@ -8522,6 +8546,13 @@ class UiStringsNl extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'Alleen deze luidsprekers verschijnen in de luidsprekerkeuze. Luidsprekers die al in de groep zitten, verschijnen altijd.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Audiokwaliteit tonen';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Toont het formaat, de bitdiepte, de samplefrequentie, de bitrate en de bron van het huidige nummer onderaan Speelt nu. Vereist Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'Alle luidsprekers';

@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "b2e58340af989351bbe8b9b317a90364aed84193",
+  "revision": "26898f4d573212a790b4709c2825622fa0230c5a",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -44,7 +44,7 @@
     "logs_general_en.arb": "aa0d8340c109e04aa6383c98642ff797667899c604719c2dcf94d059a8edab03",
     "logs_logcat_en.arb": "e859068386a59a36c581dfc0c973281f4c76a579590b6ee53656c0e3016f9ff4",
     "offline_notice_en.arb": "b0df7eeb481cd6fc6987f80789915dc3e7e6cec6e648af242df289ab254c013a",
-    "player_controls_en.arb": "61e81ca8c32de2c69557ea016c96174f8b06651c3a6afc6081e3b9b08f3942f1",
+    "player_controls_en.arb": "c1277d16a6a353e72fad08920384f281426f30364d11aac47c6af024f5b94a5b",
     "player_queue_en.arb": "2b9d165ec8649eab92534fc486a92172ba186e89d4f1632b6b2845d825796cda",
     "player_speaker_groups_en.arb": "4ee28b50a4e886608c7ea76afe271ae9c677460ec9c72e8b14fccd7706cda2c0",
     "plugin_windows_en.arb": "6b369caa6e2aed463334e86ed925b16f2b4e70ac047a96a94a576b0682927ae8",
@@ -131,7 +131,7 @@
     "settings_media_player_general_en.arb": "016ad61fbd3ef78ecd2e162a4a28ac5308408609a71108fffc616fddddd9cad7",
     "settings_media_player_lyrics_en.arb": "a3e9a76488b78b46f4f7eef3307d4547250ec5b8c549731b78148eaaade4556e",
     "settings_media_player_music_assistant_en.arb": "71d294c11ed758ddaa93f96a9419c531448f6f285e86382227bc08d799b562c4",
-    "settings_media_player_now_playing_interface_en.arb": "35f8fc1bd4b183627eeb93f752906116171f65366201c47ee4f003dc059c0a47",
+    "settings_media_player_now_playing_interface_en.arb": "4a79e95226fb32b4ca08d2f16ef6bcaee11a5d6f504feff6a76e4ae0fc4679bf",
     "settings_media_player_now_playing_screensaver_en.arb": "1139d0652691c3d4c63ca59b9ac454b60912bcc65037fea1d41837c0540a45b4",
     "settings_media_player_picker_en.arb": "42ec3e6f91bee4bd316a6e6ac1d56040a309c5edbf1ccac3c90e59af1d87dab3",
     "settings_media_player_sendspin_en.arb": "a133c99627d4a702f56fa379b1026314584a0f7536ad20aa726ee2821d3b6541",

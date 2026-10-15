@@ -2704,6 +2704,30 @@ class UiStringsRu extends UiStrings {
       'команда не поддерживается или не отправлена';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD-качество';
+
+  @override
+  String get mediaAudioLossy => 'С потерями';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits бит';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate кГц';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate кбит/с';
+  }
+
+  @override
   String get mediaNothingQueued => 'Очередь пуста';
 
   @override
@@ -8481,6 +8505,13 @@ class UiStringsRu extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'В бейдже показываются только эти динамики. Динамики, которые уже в группе, показываются всегда.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Показывать качество звука';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Показывает формат, разрядность, частоту дискретизации, битрейт и источник текущего трека внизу вида «Сейчас играет». Требуется Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'Все динамики';

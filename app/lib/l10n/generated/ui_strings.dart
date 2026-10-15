@@ -4821,6 +4821,42 @@ abstract class UiStrings {
   /// **'command not supported or not sent'**
   String get mediaCannotControl;
 
+  /// Badge for lossless audio above CD quality (more than 16 bits or 48 kHz).
+  ///
+  /// In en, this message translates to:
+  /// **'Hi-Res'**
+  String get mediaAudioHiRes;
+
+  /// Badge for lossless audio at 16 bits and 44.1 or 48 kHz.
+  ///
+  /// In en, this message translates to:
+  /// **'CD quality'**
+  String get mediaAudioCdQuality;
+
+  /// Badge for compressed audio such as AAC, Vorbis or MP3.
+  ///
+  /// In en, this message translates to:
+  /// **'Lossy'**
+  String get mediaAudioLossy;
+
+  /// Bit depth of the playing audio, for example 24-bit.
+  ///
+  /// In en, this message translates to:
+  /// **'{bits}-bit'**
+  String mediaAudioBitDepth(String bits);
+
+  /// Sample rate of the playing audio, for example 96 kHz.
+  ///
+  /// In en, this message translates to:
+  /// **'{rate} kHz'**
+  String mediaAudioSampleRate(String rate);
+
+  /// Bitrate of the playing audio, for example 320 kbps.
+  ///
+  /// In en, this message translates to:
+  /// **'{rate} kbps'**
+  String mediaAudioBitRate(String rate);
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -14656,6 +14692,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Only these speakers show in the pill. Speakers already in the group always show.'**
   String get settingSendspinSpeakerPillPlayersDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show audio quality'**
+  String get settingSendspinAudioQualityTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the format, bit depth, sample rate, bitrate and source of the current track at the bottom of Now Playing. Requires Music Assistant.'**
+  String get settingSendspinAudioQualityDescription;
 
   /// Shown in the speaker filter when no speakers are picked: the pill offers every speaker.
   ///

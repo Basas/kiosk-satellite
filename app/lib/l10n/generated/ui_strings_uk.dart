@@ -2707,6 +2707,30 @@ class UiStringsUk extends UiStrings {
   String get mediaCannotControl => 'команда не підтримується або не надіслана';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD-якість';
+
+  @override
+  String get mediaAudioLossy => 'Із втратами';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits біт';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate кГц';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate кбіт/с';
+  }
+
+  @override
   String get mediaNothingQueued => 'У черзі нічого немає';
 
   @override
@@ -8510,6 +8534,13 @@ class UiStringsUk extends UiStrings {
   @override
   String get settingSendspinSpeakerPillPlayersDescription =>
       'На панелі показуються лише ці гучномовці. Гучномовці, які вже в групі, показуються завжди.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Показувати якість звуку';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Показує формат, бітову глибину, частоту дискретизації, бітрейт і джерело поточного треку внизу режиму «Зараз грає». Потрібен Music Assistant.';
 
   @override
   String get mediaAllSpeakers => 'Усі гучномовці';
