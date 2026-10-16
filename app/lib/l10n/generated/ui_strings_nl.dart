@@ -1497,6 +1497,21 @@ class UiStringsNl extends UiStrings {
   String get fleetErrorOtherLeader => 'Die kiosk volgt al een andere leider.';
 
   @override
+  String fleetPluginsNames(String names) {
+    return 'Plug-ins: $names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return 'Kan $name niet installeren: $reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return 'Installeer $name opnieuw op deze kiosk om het te synchroniseren';
+  }
+
+  @override
   String get fleetSwitchKiosk => 'Kiosk wisselen';
 
   @override
@@ -1591,6 +1606,20 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get fleetMcpServerToken => 'MCP-servertoken';
+
+  @override
+  String get fleetPlugins => 'Plug-ins';
+
+  @override
+  String get fleetPluginSecrets => 'Geheimen van plug-ins';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk =>
+      'Geen plug-ins geïnstalleerd op deze kiosk';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      'Kiosken met dit profiel installeren deze en nemen hun instellingen over van deze kiosk.';
 
   @override
   String get fleetUpdateTheFleet => 'De vloot bijwerken';

@@ -10297,7 +10297,12 @@ const fleetCredentials = <(String, String)>[
   ('voice.realtime_xai_api_key', 'xAI API key'),
   ('voice.realtime_gemini_api_key', 'Gemini API key'),
   ('voice.realtime_mcp_token', 'MCP server token'),
+  (fleetPluginSecrets, 'Plugin secrets'),
 ];
+
+/// Not a setting: the secret fields of the plugins a profile syncs. Off,
+/// a follower keeps its own values for them.
+const fleetPluginSecrets = 'plugins.secrets';
 
 const fleetCredentialKeys = {
   'ha.token',
@@ -10308,6 +10313,7 @@ const fleetCredentialKeys = {
   'voice.realtime_xai_api_key',
   'voice.realtime_gemini_api_key',
   'voice.realtime_mcp_token',
+  fleetPluginSecrets,
 };
 
 /// Credentials that traveled with a category before they had a switch of
@@ -10840,6 +10846,33 @@ const fleetSyncedKeys = SettingDef<String>(
   defaultValue: '',
   title: 'Synced keys',
   description: 'Internal: the settings the leader pushes here.',
+  category: 'Fleet',
+  hidden: true,
+  perDevice: true,
+);
+
+/// The plugins the leader syncs here, by id: what was applied (`fp`),
+/// whether their secrets came along and whether the fleet installed them,
+/// so only those are removed when the leader stops sending them.
+const fleetSyncedPlugins = SettingDef<String>(
+  key: 'fleet.synced_plugins',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Synced plugins',
+  description: 'Internal: the plugins the leader syncs here.',
+  category: 'Fleet',
+  hidden: true,
+  perDevice: true,
+);
+
+/// The plugins the leader sent that did not install or apply here, by id,
+/// with the package hash and why. The leader reads them from the status.
+const fleetPluginErrors = SettingDef<String>(
+  key: 'fleet.plugin_errors',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Plugin errors',
+  description: 'Internal: the synced plugins that failed here.',
   category: 'Fleet',
   hidden: true,
   perDevice: true,
@@ -11591,6 +11624,8 @@ const List<SettingDef<Object>> allSettings = [
   fleetRoster,
   fleetAppliedRevision,
   fleetSyncedKeys,
+  fleetSyncedPlugins,
+  fleetPluginErrors,
   fleetLastSyncAt,
   intercomEnabled,
   intercomKey,

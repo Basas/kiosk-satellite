@@ -2688,6 +2688,24 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
+  /// **'Plugins: {names}'**
+  String fleetPluginsNames(String names);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not install {name}: {reason}'**
+  String fleetCouldNotInstallNameReason(String name, String reason);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Reinstall {name} on this kiosk to sync it'**
+  String fleetReinstallNameOnThisKioskToSyncIt(String name);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Switch kiosk'**
   String get fleetSwitchKiosk;
 
@@ -2852,6 +2870,30 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'MCP server token'**
   String get fleetMcpServerToken;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Plugins'**
+  String get fleetPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Plugin secrets'**
+  String get fleetPluginSecrets;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'No plugins installed on this kiosk'**
+  String get fleetNoPluginsInstalledOnThisKiosk;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosks on this profile install these and take their settings from this kiosk.'**
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir;
 
   /// Visible label, help or status in this section.
   ///

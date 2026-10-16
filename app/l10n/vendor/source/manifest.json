@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "e7ba765e4e21374b706b4a221638771e7c2ca523",
+  "revision": "d46bc0caf276aeaadd0a04a5ef2eefb3bef12931",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -25,9 +25,9 @@
     "fleet_general_en.arb": "81eedc53b95a855c10d7874fb4c809d08ae5ef0692d011400fa547f841d3a82b",
     "fleet_invitations_en.arb": "b49f4f9cf064c501db1df1f7962f01b8df7f5f8ea3d15f47117984b2faaa7df1",
     "fleet_profiles_en.arb": "e9487e27a346f21492ab6a0a6224cf251758965dbfb30bb5a5a8faef94bc3605",
-    "fleet_status_en.arb": "a5036bc960e95d661fe0dc330704cc7d335fefa24960810c16e6b7128d9b4e04",
+    "fleet_status_en.arb": "7a13ae298318ef5819ccf2b4ed156cc5e542b6220c9f6e416cf05df2db13bec0",
     "fleet_switcher_en.arb": "5991593bdda40d6869f6e2c3402a626b4b2ed8846c3c74135a0b7608cdd374d0",
-    "fleet_sync_selection_en.arb": "8635dd198f45f4b4172dfdf2110571f758950bde9ffb7f6e5a856ba03d7a6336",
+    "fleet_sync_selection_en.arb": "bfb150594173903db5607071469d14391e5c1e657f84fb25a01a658e904e071b",
     "fleet_updates_en.arb": "3b5463bf3e7e96ff4554b313bcfdf836e38df61b1a0a848dc8d386a55615c954",
     "gesture_actions_en.arb": "0f2d3155bfb0f6ea9103eb9f0259832879933872b6bbde54947b7110a1c48189",
     "gesture_descriptions_en.arb": "62e19ccb44fdbbd1bba1d738de9a5f25716920a896774c11e9fc2177aa253f8c",

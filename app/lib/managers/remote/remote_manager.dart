@@ -804,6 +804,15 @@ class RemoteManager extends Manager {
           'length': request.contentLength,
         });
         return _json(r.ok ? 200 : 400, r.toJson());
+      // A plugin package from the leader, the raw body, held until the
+      // push that installs it.
+      case ('PUT', 'api/fleet/plugins'):
+        final r = await commands.execute('fleetStagePlugin', {
+          'sha256': request.url.queryParameters['sha256'] ?? '',
+          'stream': request.read(),
+          'length': request.contentLength,
+        });
+        return _json(r.ok ? 200 : 400, r.toJson());
       case ('DELETE', 'api/fleet/wake-models'):
         final r = await commands.execute('removeCustomWakeModelFile', {
           'path': request.url.queryParameters['path'] ?? '',
@@ -1036,6 +1045,7 @@ class RemoteManager extends Manager {
     'api/fleet/leave',
     'api/fleet/roster',
     'api/fleet/wake-models',
+    'api/fleet/plugins',
     // The leader's fleet backup reads each follower's full configuration.
     'api/config/export',
     'api/commands/getUpdateStatus',

@@ -20313,5 +20313,40 @@
     "source": "d27c23e23491ed2dbd8f027d935c4edcd47e1db8641de7d98bbb55a4dde78d31",
     "translation": "2616446b2aaf40749b9988ba547bff91d2dc21cf2b5a367b7304a935ae1821a6",
     "author": "Xavier Larrea"
+  },
+  "fleetPluginsNames": {
+    "source": "cbebe56136b3fd260e116295a6d95ff5aaed7dc661a2f872331b79af8cde3834",
+    "translation": "e04c0a13d8591d6c23ec17c531317dccbbdeaee8346a1c7e0b33981ae896e909",
+    "author": "Xavier Larrea"
+  },
+  "fleetReinstallNameOnThisKioskToSyncIt": {
+    "source": "00eebacd9d46c8655c04c6252627ced878f59ae34bc92abb0ccd118ac429e536",
+    "translation": "6bb07f47793b8df19828dac31a22b9749e5692471acfbfab50bc7995d909f952",
+    "author": "Xavier Larrea"
+  },
+  "fleetPluginSecrets": {
+    "source": "bb840403722078f2ab07b6df4116f821baa276b039a656312f0a5286f053a8fd",
+    "translation": "5d777d948a67759cb8eab1c7d50aadf7149dccb08c5ac907b8f214568da3b730",
+    "author": "Xavier Larrea"
+  },
+  "fleetNoPluginsInstalledOnThisKiosk": {
+    "source": "f89a45f5c8cadda6e2a090cafac9ff6049d610c920f6246fd13b17d9d4d3388d",
+    "translation": "c946fe63a019df7706e43fb776db28770e493924ca7554d9ee28bb5957993452",
+    "author": "Xavier Larrea"
+  },
+  "fleetKiosksOnThisProfileInstallTheseAndTakeTheir": {
+    "source": "d1e7ea6cb0607bb705f57abe3661a0b8b236e78f42dae6b38eb533afe71537ac",
+    "translation": "3f31f96b2367f7b30dd5462561996e21a4fd46b188a2c0b69b53dc70e546542e",
+    "author": "Xavier Larrea"
+  },
+  "fleetPlugins": {
+    "source": "0def6906186b0007f7e7f318d50cb40e6529732f580978308714b43ede662209",
+    "translation": "9514b7ff4860ead73491768e45cce0ce20e6e3473a7b272e496c43c875d80ac5",
+    "author": "Xavier Larrea"
+  },
+  "fleetCouldNotInstallNameReason": {
+    "source": "4a85cc9ada69e4704834f80ae7b1d618fc7249d00c77f27ce08afad941e73c3c",
+    "translation": "a5f374fb035f5c24a40b91926317640b66de7b6252c82156a291883134f69f32",
+    "author": "Xavier Larrea"
   }
 }

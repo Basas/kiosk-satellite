@@ -24606,5 +24606,47 @@
     "translation": "cbfee6d2a3ae3f9e8bf5121afeeb0c2e9738d7d8110aa92caba1ad061a24a347",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "fleetKiosksOnThisProfileInstallTheseAndTakeTheir": {
+    "source": "d1e7ea6cb0607bb705f57abe3661a0b8b236e78f42dae6b38eb533afe71537ac",
+    "translation": "aa2c51d24ab97ae67addaea32f80de7d555813bce466a3029787dbc972f7248d",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "fleetCouldNotInstallNameReason": {
+    "source": "4a85cc9ada69e4704834f80ae7b1d618fc7249d00c77f27ce08afad941e73c3c",
+    "translation": "e66607670d5691e697ad1f8ec5b8ff72bdeb54472b6bdc3c45ab2b156fc217ca",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "fleetPlugins": {
+    "source": "0def6906186b0007f7e7f318d50cb40e6529732f580978308714b43ede662209",
+    "translation": "9514b7ff4860ead73491768e45cce0ce20e6e3473a7b272e496c43c875d80ac5",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "fleetNoPluginsInstalledOnThisKiosk": {
+    "source": "f89a45f5c8cadda6e2a090cafac9ff6049d610c920f6246fd13b17d9d4d3388d",
+    "translation": "73e55c44218b74a105f5a5c9e9e342bac102280713695fd9df5a2b596ea8a817",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "fleetReinstallNameOnThisKioskToSyncIt": {
+    "source": "00eebacd9d46c8655c04c6252627ced878f59ae34bc92abb0ccd118ac429e536",
+    "translation": "7262422c4abf6ae1131f7d918c0a95c52ce939e449075ddfa92c060701ce1e40",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "fleetPluginSecrets": {
+    "source": "bb840403722078f2ab07b6df4116f821baa276b039a656312f0a5286f053a8fd",
+    "translation": "89e80815064300d644a3f64ef9b5ab8b381668b578fb3f52957bcd11b51eba2c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "fleetPluginsNames": {
+    "source": "cbebe56136b3fd260e116295a6d95ff5aaed7dc661a2f872331b79af8cde3834",
+    "translation": "e04c0a13d8591d6c23ec17c531317dccbbdeaee8346a1c7e0b33981ae896e909",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

@@ -434,6 +434,12 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'fleetXaiApiKey' => strings.fleetXaiApiKey,
       'fleetGeminiApiKey' => strings.fleetGeminiApiKey,
       'fleetMcpServerToken' => strings.fleetMcpServerToken,
+      'fleetPlugins' => strings.fleetPlugins,
+      'fleetPluginSecrets' => strings.fleetPluginSecrets,
+      'fleetNoPluginsInstalledOnThisKiosk' =>
+        strings.fleetNoPluginsInstalledOnThisKiosk,
+      'fleetKiosksOnThisProfileInstallTheseAndTakeTheir' =>
+        strings.fleetKiosksOnThisProfileInstallTheseAndTakeTheir,
       'fleetUpdateTheFleet' => strings.fleetUpdateTheFleet,
       'fleetUpdateTheWholeFleetToTheKioskSatelliteVersion' =>
         strings.fleetUpdateTheWholeFleetToTheKioskSatelliteVersion,

@@ -1501,6 +1501,21 @@ class UiStringsFr extends UiStrings {
   String get fleetErrorOtherLeader => 'Ce kiosque suit déjà un autre leader.';
 
   @override
+  String fleetPluginsNames(String names) {
+    return 'Plugins : $names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return 'Impossible d\'installer $name : $reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return 'Réinstallez $name sur ce kiosque pour le synchroniser';
+  }
+
+  @override
   String get fleetSwitchKiosk => 'Changer de kiosque';
 
   @override
@@ -1595,6 +1610,20 @@ class UiStringsFr extends UiStrings {
 
   @override
   String get fleetMcpServerToken => 'Jeton du serveur MCP';
+
+  @override
+  String get fleetPlugins => 'Plugins';
+
+  @override
+  String get fleetPluginSecrets => 'Secrets des plugins';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk =>
+      'Aucun plugin installé sur ce kiosque';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      'Les kiosques avec ce profil les installent et reprennent leurs réglages de ce kiosque.';
 
   @override
   String get fleetUpdateTheFleet => 'Mettre à jour la flotte';

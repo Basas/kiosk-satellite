@@ -5,6 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Added
+- **Plugins in Fleet Management.** Each profile has a new **Plugins** row that picks which of the leader's plugins its kiosks get. Followers install the package the leader runs, sent over the local network, then take its settings, whether it is enabled and where its actions show. Updating, reinstalling or removing a plugin on the leader does the same on its followers at the next sync, though a follower only removes plugins the fleet installed. Secret plugin settings travel only with the new **Plugin secrets** credential, and **Enable Plugins** stays on each kiosk. A plugin that fails to install on a follower shows on its row on the leader with the reason. See [Fleet Management](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/fleet.md#plugins).
 - **A volume for each chime (#998).** The **Chimes** page under Voice Satellite has a volume slider under each sound: wake, done, error, timer and announcement. Each one is a share of the **Assistant volume**, so a chime that plays louder than the voice responses can be turned down without turning those down too. They apply to chimes the kiosk plays itself, including previews, and default to 100%.
 
 ### Changed

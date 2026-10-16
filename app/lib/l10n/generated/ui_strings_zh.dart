@@ -1445,6 +1445,21 @@ class UiStringsZh extends UiStrings {
   String get fleetErrorOtherLeader => '该 Kiosk 设备已在从其他主设备同步设置。';
 
   @override
+  String fleetPluginsNames(String names) {
+    return '插件：$names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return '无法安装 $name：$reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return '请在此设备上重新安装 $name 以进行同步';
+  }
+
+  @override
   String get fleetSwitchKiosk => '切换 Kiosk 设备';
 
   @override
@@ -1535,6 +1550,19 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get fleetMcpServerToken => 'MCP 服务器令牌';
+
+  @override
+  String get fleetPlugins => '插件';
+
+  @override
+  String get fleetPluginSecrets => '插件密钥';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk => '此 Kiosk 设备未安装插件';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      '使用此方案的 Kiosk 设备会安装这些插件，并沿用此设备上的插件设置。';
 
   @override
   String get fleetUpdateTheFleet => '更新设备群';
@@ -14455,6 +14483,21 @@ class UiStringsZhCn extends UiStringsZh {
   String get fleetErrorOtherLeader => '该 Kiosk 设备已在从其他主设备同步设置。';
 
   @override
+  String fleetPluginsNames(String names) {
+    return '插件：$names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return '无法安装 $name：$reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return '请在此设备上重新安装 $name 以进行同步';
+  }
+
+  @override
   String get fleetSwitchKiosk => '切换 Kiosk 设备';
 
   @override
@@ -14545,6 +14588,19 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get fleetMcpServerToken => 'MCP 服务器令牌';
+
+  @override
+  String get fleetPlugins => '插件';
+
+  @override
+  String get fleetPluginSecrets => '插件密钥';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk => '此 Kiosk 设备未安装插件';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      '使用此方案的 Kiosk 设备会安装这些插件，并沿用此设备上的插件设置。';
 
   @override
   String get fleetUpdateTheFleet => '更新设备群';

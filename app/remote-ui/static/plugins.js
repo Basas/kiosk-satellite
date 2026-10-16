@@ -225,6 +225,8 @@ function render(root, state) {
   const pluginsEnabled = state.enabled === true;
   const scroll = document.scrollingElement?.scrollTop || 0;
   root.replaceChildren();
+  // A follower's fleet banner goes back on top (fleetsync.js).
+  document.dispatchEvent(new CustomEvent('ks-plugins-rendered'));
   const introduction = element('div', undefined, 'card');
   const masterRow = element('div', undefined, 'row');
   masterRow.dataset.searchId = 'x:plugins:master';
@@ -351,7 +353,8 @@ function render(root, state) {
       modal.foot.append(close);
     };
     const check = iconButton(t("pluginCheckForUpdatesForName", {name: plugin.name}), 'M3 11a9 9 0 1 1 2.6 7.4M3 4v7h7M12 7v5l3 2');
-    check.disabled = !plugin.source?.repository; check.dataset.pluginDisabled = String(check.disabled);
+    // A fleet leader keeps a synced plugin in step.
+    check.disabled = !plugin.source?.repository || plugin.fleetManaged === true; check.dataset.pluginDisabled = String(check.disabled);
     check.onclick = (event) => {
       event.stopPropagation();
       run(async () => {

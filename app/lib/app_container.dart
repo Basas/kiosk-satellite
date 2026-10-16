@@ -156,7 +156,10 @@ class AppContainer {
     settings.pluginScreensavers = () => plugins.screensaverOptions;
     remote = RemoteManager(bus, commands, log, settings);
     fleet = FleetManager(bus, commands, log, settings);
-    fleetSync = FleetSyncManager(bus, commands, log, settings);
+    fleetSync = FleetSyncManager(bus, commands, log, settings)
+      ..plugins = plugins;
+    plugins.fleetManaged = (id) =>
+        fleetSync.following && fleetSync.syncedPlugins.containsKey(id);
     intercom = IntercomManager(bus, commands, log, settings);
     alarms = AlarmManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);

@@ -1492,6 +1492,21 @@ class UiStringsRu extends UiStrings {
       'Этот киоск уже следует за другим ведущим.';
 
   @override
+  String fleetPluginsNames(String names) {
+    return 'Плагины: $names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return 'Не удалось установить $name: $reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return 'Переустановите $name на этом киоске, чтобы синхронизировать его';
+  }
+
+  @override
   String get fleetSwitchKiosk => 'Сменить киоск';
 
   @override
@@ -1586,6 +1601,20 @@ class UiStringsRu extends UiStrings {
 
   @override
   String get fleetMcpServerToken => 'токен сервера MCP';
+
+  @override
+  String get fleetPlugins => 'Плагины';
+
+  @override
+  String get fleetPluginSecrets => 'Секреты плагинов';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk =>
+      'На этом киоске нет плагинов';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      'Киоски с этим профилем устанавливают их и берут их настройки с этого киоска.';
 
   @override
   String get fleetUpdateTheFleet => 'Обновить группу';
