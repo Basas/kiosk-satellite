@@ -302,6 +302,8 @@ The entities and actions appear only while Voice Satellite runs natively and is 
 
 ## Timer events
 
+Voice turns fire their own `esphome.kiosk_satellite_voice` event as they start, change and end. See [Home Assistant Events](events.md#voice-satellite).
+
 Every timer on the kiosk fires an `esphome.kiosk_satellite_timer` event on the Home Assistant bus when it starts, changes, is cancelled, finishes or its alert is dismissed. That covers spoken timers, timers from a realtime conversation and timers from `vs_start_timer`. Use it to flash a light or announce a kitchen timer in another room. Home Assistant only fires device events under `esphome.`, hence the prefix.
 
 ```yaml
