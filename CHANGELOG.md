@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.27 - 2026-10-16
 
 ### Added
 - **Plugins in Fleet Management.** Each profile has a new **Plugins** row that picks which of the leader's plugins its kiosks get. Followers install the package the leader runs, sent over the local network, then take its settings, whether it is enabled and where its actions show. Updating, reinstalling or removing a plugin on the leader does the same on its followers at the next sync, though a follower only removes plugins the fleet installed. Secret plugin settings travel only with the new **Plugin secrets** credential, and **Enable Plugins** stays on each kiosk. A plugin that fails to install on a follower shows on its row on the leader with the reason. See [Fleet Management](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/fleet.md#plugins).
