@@ -4487,6 +4487,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingVoiceWakeArbitrationWindowTitle,
       'settingVoiceWakeArbitrationWindowDescription' =>
         strings.settingVoiceWakeArbitrationWindowDescription,
+      'settingVoiceWakeArbitrationOffsetTitle' =>
+        strings.settingVoiceWakeArbitrationOffsetTitle,
+      'settingVoiceWakeArbitrationOffsetDescription' =>
+        strings.settingVoiceWakeArbitrationOffsetDescription,
       'voiceSectionWakeArbitration' => strings.voiceSectionWakeArbitration,
       'voiceOptionSlightly' => strings.voiceOptionSlightly,
       'voiceOptionModerately' => strings.voiceOptionModerately,

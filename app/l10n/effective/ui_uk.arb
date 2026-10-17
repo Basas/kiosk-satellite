@@ -48371,6 +48371,16 @@
     "context": "Settings > Voice Satellite > Wake Word",
     "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged."
   },
+  "settingVoiceWakeArbitrationOffsetTitle": "Поправка арбітражу",
+  "@settingVoiceWakeArbitrationOffsetTitle": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged."
+  },
+  "settingVoiceWakeArbitrationOffsetDescription": "Додається до того, наскільки гучно цей кіоск почув слово активації. Збільште, якщо цей кіоск програє, хоча він ближче, і зменште, якщо він відповідає здалеку.",
+  "@settingVoiceWakeArbitrationOffsetDescription": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged."
+  },
   "voiceSectionWakeArbitration": "Арбітраж слова активації",
   "@voiceSectionWakeArbitration": {
     "context": "Settings > Voice Satellite > Wake Word",

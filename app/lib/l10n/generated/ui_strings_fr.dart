@@ -13491,6 +13491,14 @@ class UiStringsFr extends UiStrings {
       'Durée d\'attente des autres kiosques. Augmentez-la si un kiosque plus lent perd alors qu\'il est plus proche.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle =>
+      'Correction d\'arbitrage';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'S\'ajoute au niveau auquel ce kiosque a entendu le mot d\'activation. Augmentez-la si ce kiosque perd alors qu\'il est plus proche, baissez-la s\'il répond de trop loin.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Arbitrage du mot de réveil';
 
   @override

@@ -25103,5 +25103,17 @@
     "translation": "39dadeeab3c32c36e4208e67439ff1be495a7445d1e14447d32dfb3cfb2f0374",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingVoiceWakeArbitrationOffsetDescription": {
+    "source": "988b475b55301ed0f5ab034a16819210414fcfb50b3c5876ac80e7b4733eaffd",
+    "translation": "d6b75c0e8554282af66c79be4d6b1c7777cc74a5ab445d2820b539f382edd6a6",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingVoiceWakeArbitrationOffsetTitle": {
+    "source": "84250eaed98d40b4cde50ade036273fc6a15bcccf777755d27ee66be797289a5",
+    "translation": "ce5f3b4baff042eb605a2a64406a862b09af18419d32390199056fc40b49650a",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

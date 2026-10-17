@@ -13372,6 +13372,13 @@ class UiStringsUk extends UiStrings {
       'Як довго чекати на інші кіоски. Збільште, якщо повільніший кіоск програє, хоча він ближче.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Поправка арбітражу';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Додається до того, наскільки гучно цей кіоск почув слово активації. Збільште, якщо цей кіоск програє, хоча він ближче, і зменште, якщо він відповідає здалеку.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Арбітраж слова активації';
 
   @override

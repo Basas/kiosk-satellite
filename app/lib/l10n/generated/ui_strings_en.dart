@@ -13225,6 +13225,13 @@ class UiStringsEn extends UiStrings {
       'How long to wait for the other kiosks. Raise it if a slower kiosk loses when it is closer.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Arbitration offset';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Added to how loud this kiosk heard the wake word. Raise it if this kiosk loses when it is closer, lower it if it answers from too far away.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Wake Word Arbitration';
 
   @override

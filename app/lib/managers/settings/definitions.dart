@@ -6571,6 +6571,31 @@ const voiceWakeArbitrationWindowMs = SettingDef<num>(
   dependsOn: 'voice.wake_arbitration',
 );
 
+/// Added to how loud this kiosk claims it heard a wake word. Hardware
+/// that processes its microphone before the app sees it (a Portal Go's
+/// array) hears a wake word far louder over its floor than a plain
+/// microphone at the same distance, which no measurement here can undo.
+/// It describes this kiosk's hardware, so it stays out of fleet syncs.
+const voiceWakeArbitrationOffsetDb = SettingDef<num>(
+  key: 'voice.wake_arbitration_offset_db',
+  type: SettingType.number,
+  defaultValue: 0,
+  title: 'Arbitration offset',
+  description:
+      'Added to how loud this kiosk heard the wake word. Raise it if this '
+      'kiosk loses when it is closer, lower it if it answers from too far '
+      'away.',
+  category: 'Voice Satellite',
+  subpage: 'Wake Word',
+  section: 'Wake Word Arbitration',
+  min: -30,
+  max: 30,
+  step: 1,
+  unit: 'dB',
+  dependsOn: 'voice.wake_arbitration',
+  perDevice: true,
+);
+
 const voiceSkin = SettingDef<String>(
   key: 'voice.skin',
   type: SettingType.select,
@@ -11827,6 +11852,7 @@ const List<SettingDef<Object>> allSettings = [
   voiceStopWord,
   voiceWakeArbitration,
   voiceWakeArbitrationWindowMs,
+  voiceWakeArbitrationOffsetDb,
   voiceSkin,
   voiceTheme,
   voiceOverlayMode,

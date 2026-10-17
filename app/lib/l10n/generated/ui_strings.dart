@@ -23024,6 +23024,18 @@ abstract class UiStrings {
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:
+  /// **'Arbitration offset'**
+  String get settingVoiceWakeArbitrationOffsetTitle;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to how loud this kiosk heard the wake word. Raise it if this kiosk loses when it is closer, lower it if it answers from too far away.'**
+  String get settingVoiceWakeArbitrationOffsetDescription;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
   /// **'Wake Word Arbitration'**
   String get voiceSectionWakeArbitration;
 

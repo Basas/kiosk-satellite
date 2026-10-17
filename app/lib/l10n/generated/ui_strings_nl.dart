@@ -13390,6 +13390,13 @@ class UiStringsNl extends UiStrings {
       'Hoelang er op de andere kiosken wordt gewacht. Verleng deze periode als een tragere kiosk verliest terwijl die dichterbij staat.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Arbitragecorrectie';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Wordt opgeteld bij hoe luid deze kiosk het activeringswoord hoorde. Verhoog deze als deze kiosk verliest terwijl die dichterbij staat en verlaag deze als die van te ver weg antwoordt.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Wekwoordarbitrage';
 
   @override

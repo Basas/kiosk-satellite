@@ -13529,6 +13529,13 @@ class UiStringsDe extends UiStrings {
       'Wie lange auf die anderen Kiosks gewartet wird. Erhöhe den Wert, wenn ein langsamerer Kiosk verliert, obwohl er näher ist.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Arbitrierungsausgleich';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Wird dazu addiert, wie laut dieser Kiosk das Aktivierungswort gehört hat. Erhöhe den Wert, wenn dieser Kiosk verliert, obwohl er näher ist, und senke ihn, wenn er aus zu großer Entfernung antwortet.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Aktivierungswort-Arbitrierung';
 
   @override

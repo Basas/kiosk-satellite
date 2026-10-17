@@ -13308,6 +13308,13 @@ class UiStringsRu extends UiStrings {
       'Сколько ждать другие киоски. Поднимите, если более медленный киоск проигрывает, находясь ближе.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Поправка арбитража';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Прибавляется к тому, насколько громко этот киоск услышал слово активации. Поднимите, если этот киоск проигрывает, находясь ближе, и опустите, если он отвечает издалека.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Арбитраж слова пробуждения';
 
   @override

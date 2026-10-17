@@ -12521,6 +12521,13 @@ class UiStringsZh extends UiStrings {
       '检测到唤醒词后，等待其他 Kiosk 设备报告的时间。如果较慢但更近的设备经常未获选，可以延长此时间。';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => '仲裁补偿';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      '加到此 Kiosk 听到唤醒词的响度上。如果此设备离得更近却未获选，请调高；如果它在太远的地方也会响应，请调低。';
+
+  @override
   String get voiceSectionWakeArbitration => '唤醒词仲裁';
 
   @override
@@ -25866,6 +25873,13 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingVoiceWakeArbitrationWindowDescription =>
       '检测到唤醒词后，等待其他 Kiosk 设备报告的时间。如果较慢但更近的设备经常未获选，可以延长此时间。';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetTitle => '仲裁补偿';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      '加到此 Kiosk 听到唤醒词的响度上。如果此设备离得更近却未获选，请调高；如果它在太远的地方也会响应，请调低。';
 
   @override
   String get voiceSectionWakeArbitration => '唤醒词仲裁';

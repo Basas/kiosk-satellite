@@ -13506,6 +13506,13 @@ class UiStringsEs extends UiStrings {
       'Cuánto esperar a los otros kioskos. Súbela si un kiosko más lento pierde cuando está más cerca.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Ajuste de arbitraje';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Se suma a lo fuerte que este kiosko oyó la palabra de activación. Súbelo si este kiosko pierde cuando está más cerca y bájalo si responde desde demasiado lejos.';
+
+  @override
   String get voiceSectionWakeArbitration =>
       'Arbitraje de la palabra de activación';
 
