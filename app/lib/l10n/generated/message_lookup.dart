@@ -1488,6 +1488,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'deviceHeadlessAdbBattery' => strings.deviceHeadlessAdbBattery,
       'deviceHeadlessAdbStorage' => strings.deviceHeadlessAdbStorage,
       'deviceHeadlessAdbButtons' => strings.deviceHeadlessAdbButtons,
+      'deviceHeadlessAdbButtonsRestart' =>
+        strings.deviceHeadlessAdbButtonsRestart,
       'deviceHardwarePage' => strings.deviceHardwarePage,
       'deviceWebViewPage' => strings.deviceWebViewPage,
       'deviceModel' => strings.deviceModel,

@@ -5371,6 +5371,10 @@ class UiStringsRu extends UiStrings {
       'У этого устройства нет экрана. Включите через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, затем adb shell settings put secure accessibility_enabled 1';
 
   @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'Служба кнопок включена, но не запущена. Перезагрузите устройство, чтобы запустить её: adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Оборудование';
 
   @override

@@ -20366,6 +20366,16 @@
       ]
     }
   },
+  "deviceHeadlessAdbButtonsRestart": "按键服务已开启但尚未启动。请重启设备以启动它：adb reboot",
+  "@deviceHeadlessAdbButtonsRestart": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
   "deviceHardwarePage": "硬件",
   "@deviceHardwarePage": {
     "context": "Settings:Device:Hardware / Home Assistant / WebView",

@@ -20366,6 +20366,16 @@
       ]
     }
   },
+  "deviceHeadlessAdbButtonsRestart": "Le service des boutons est activé mais n'a pas démarré. Redémarrez l'appareil pour le démarrer : adb reboot",
+  "@deviceHeadlessAdbButtonsRestart": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
   "deviceHardwarePage": "Matériel",
   "@deviceHardwarePage": {
     "context": "Settings:Device:Hardware / Home Assistant / WebView",

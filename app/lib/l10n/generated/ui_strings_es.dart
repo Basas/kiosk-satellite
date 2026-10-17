@@ -5435,6 +5435,10 @@ class UiStringsEs extends UiStrings {
       'Este dispositivo no tiene pantalla. Actívalo por adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, y luego adb shell settings put secure accessibility_enabled 1';
 
   @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'El servicio de botones está activado pero no se ha iniciado. Reinicia el dispositivo para iniciarlo: adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Hardware';
 
   @override

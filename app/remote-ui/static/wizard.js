@@ -3,7 +3,7 @@ import { WIZ_OPTIONAL, wizard } from './app.js';
 import { $, THEME_ICONS, api, cmd, saveToken, showView, state } from './core.js';
 import { readOnlyRow } from './device.js';
 import { applyHeadless, isHeadless } from './headless.js';
-import { permissionSpecs } from './permissions.js';
+import { adbHint, permissionSpecs } from './permissions.js';
 import { askImportOptions } from './pickers.js';
 import { dashboardPicker, loadDashboards } from './dashboard_picker.js';
 import { openVsMigrationWizard } from './vs_native.js';
@@ -538,18 +538,25 @@ function wizardHeadlessGrants(b) {
   b.appendChild(lead);
   const list = wizardCard(b, true);
   const spans = {};
+  const descs = {};
   const specs = permissionSpecs((k) => k !== 'btproxy.enabled' && k !== 'location.enabled', () => 'native', true)
     .filter((spec) => ['microphone', 'batteryUnrestricted', 'hardwareButtons'].includes(spec.key));
   for (const spec of specs) {
-    const row = readOnlyRow(deviceText(spec.name), deviceText(spec.adb), '\u2026');
+    const row = readOnlyRow(deviceText(spec.name), deviceText(adbHint(spec)), '\u2026');
     row.querySelector('.desc').style.userSelect = 'all';
     spans[spec.key] = row.querySelector('span');
+    descs[spec.key] = [spec, row.querySelector('.desc')];
     list.appendChild(row);
   }
   const refresh = async () => {
     const p = {};
     try { Object.assign(p, (await cmd('getSystemPermissions')).data || {}); } catch (_) {}
-    try { p.hardwareButtons = (await cmd('getHardwareButtons')).data?.listening === true; } catch (_) {}
+    try {
+      const b = (await cmd('getHardwareButtons')).data;
+      p.hardwareButtons = b?.listening === true;
+      p.hardwareButtonsOn = b?.switchedOn === true;
+    } catch (_) {}
+    for (const [spec, desc] of Object.values(descs)) desc.textContent = deviceText(adbHint(spec, p));
     for (const [key, span] of Object.entries(spans)) {
       const ok = p[key] === true;
       span.textContent = ok ? setupText('Granted') : setupText('Not granted');

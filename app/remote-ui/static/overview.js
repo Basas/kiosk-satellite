@@ -8,7 +8,7 @@ import { attachUpdateInstall, refreshUpdateBadge } from './device.js';
 import { readFilterStatus } from './filter_status.js';
 import { agoLabel } from './notices.js';
 import { loadScreenshot, quick, renderQuickControls } from './panels.js';
-import { permissionSpecs } from './permissions.js';
+import { adbHint, permissionSpecs } from './permissions.js';
 import { loadPlugins } from './plugins.js';
 import { showTab } from './tabs.js';
 import { attachSlider, showToast } from './widgets.js';
@@ -645,7 +645,10 @@ function paintHealth({ filter = true } = {}) {
     // the Permissions Manager on the Device page carries the rest.
     const all = { ...perms };
     if (guard !== null) all.uiGuard = guard === true;
-    if (health.buttons) all.hardwareButtons = health.buttons.listening === true;
+    if (health.buttons) {
+      all.hardwareButtons = health.buttons.listening === true;
+      all.hardwareButtonsOn = health.buttons.switchedOn === true;
+    }
     const text = (t) => (typeof t === 'function' ? t(all) : t);
     for (const spec of permissionSpecs(settingOn, settingVal)) {
       if (!spec.needed || all[spec.key] !== false) continue;
@@ -655,7 +658,7 @@ function paintHealth({ filter = true } = {}) {
         items.push({
           key: `perm:${spec.key}`,
           name: t('overviewPermissionMissing', {permission: deviceText(spec.name)}),
-          desc: deviceText(spec.adb),
+          desc: deviceText(adbHint(spec, all)),
           actions: [],
         });
         continue;

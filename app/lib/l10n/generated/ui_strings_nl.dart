@@ -5408,6 +5408,10 @@ class UiStringsNl extends UiStrings {
       'Dit apparaat heeft geen scherm. Schakel het in via adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, en daarna adb shell settings put secure accessibility_enabled 1';
 
   @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'De knoppendienst staat aan maar is niet gestart. Start het apparaat opnieuw op om de dienst te starten: adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Hardware';
 
   @override

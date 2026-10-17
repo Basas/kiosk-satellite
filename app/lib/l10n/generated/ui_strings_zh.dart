@@ -5151,6 +5151,10 @@ class UiStringsZh extends UiStrings {
       '此设备没有屏幕。请通过 adb 开启：adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService，然后 adb shell settings put secure accessibility_enabled 1';
 
   @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      '按键服务已开启但尚未启动。请重启设备以启动它：adb reboot';
+
+  @override
   String get deviceHardwarePage => '硬件';
 
   @override
@@ -18517,6 +18521,10 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get deviceHeadlessAdbButtons =>
       '此设备没有屏幕。请通过 adb 开启：adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService，然后 adb shell settings put secure accessibility_enabled 1';
+
+  @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      '按键服务已开启但尚未启动。请重启设备以启动它：adb reboot';
 
   @override
   String get deviceHardwarePage => '硬件';

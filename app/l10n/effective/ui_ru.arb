@@ -20366,6 +20366,16 @@
       ]
     }
   },
+  "deviceHeadlessAdbButtonsRestart": "Служба кнопок включена, но не запущена. Перезагрузите устройство, чтобы запустить её: adb reboot",
+  "@deviceHeadlessAdbButtonsRestart": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
   "deviceHardwarePage": "Оборудование",
   "@deviceHardwarePage": {
     "context": "Settings:Device:Hardware / Home Assistant / WebView",

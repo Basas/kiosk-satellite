@@ -5432,6 +5432,10 @@ class UiStringsFr extends UiStrings {
       'Cet appareil n\'a pas d\'écran. Activez-le par adb : adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, puis adb shell settings put secure accessibility_enabled 1';
 
   @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'Le service des boutons est activé mais n\'a pas démarré. Redémarrez l\'appareil pour le démarrer : adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Matériel';
 
   @override

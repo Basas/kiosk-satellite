@@ -5474,6 +5474,10 @@ class UiStringsDe extends UiStrings {
       'Dieses Gerät hat keinen Bildschirm. Über adb einschalten: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, dann adb shell settings put secure accessibility_enabled 1';
 
   @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'Der Tastendienst ist eingeschaltet, wurde aber nicht gestartet. Starte das Gerät neu, um ihn zu starten: adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Hardware';
 
   @override

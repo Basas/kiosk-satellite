@@ -78,8 +78,7 @@ class HardwareButtons {
             'Whether the hardware button service of a device without a '
             'screen is switched on (adb enables it)',
         quiet: true,
-        handler: (_) async =>
-            CommandResult.ok({'listening': await listening()}),
+        handler: (_) async => CommandResult.ok(await status()),
       ),
     );
     _sub = bus.on<SettingChanged>().listen((e) {
@@ -113,12 +112,17 @@ class HardwareButtons {
   Future<void> dispose() async => _sub?.cancel();
 
   /// Whether the button service is switched on (adb, see HeadlessKeyService).
-  static Future<bool> listening() async {
+  /// Whether the button service runs, and whether it is switched on in
+  /// Android's settings: on but not running needs a reboot on Android 7.
+  static Future<Map<String, bool>> status() async {
     try {
       final status = await _channel.invokeMapMethod<String, Object?>('status');
-      return status?['listening'] == true;
+      return {
+        'listening': status?['listening'] == true,
+        'switchedOn': status?['switchedOn'] == true,
+      };
     } catch (_) {
-      return false;
+      return {'listening': false, 'switchedOn': false};
     }
   }
 

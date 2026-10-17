@@ -52,5 +52,6 @@
   "deviceHeadlessAdbBluetooth": "Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, y lo mismo para BLUETOOTH_CONNECT",
   "deviceHeadlessAdbBattery": "Este dispositivo no tiene pantalla. Concédelo por adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
   "deviceHeadlessAdbStorage": "Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, y lo mismo para WRITE_EXTERNAL_STORAGE",
-  "deviceHeadlessAdbButtons": "Este dispositivo no tiene pantalla. Actívalo por adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, y luego adb shell settings put secure accessibility_enabled 1"
+  "deviceHeadlessAdbButtons": "Este dispositivo no tiene pantalla. Actívalo por adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, y luego adb shell settings put secure accessibility_enabled 1",
+  "deviceHeadlessAdbButtonsRestart": "El servicio de botones está activado pero no se ha iniciado. Reinicia el dispositivo para iniciarlo: adb reboot"
 }

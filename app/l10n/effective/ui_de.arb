@@ -20366,6 +20366,16 @@
       ]
     }
   },
+  "deviceHeadlessAdbButtonsRestart": "Der Tastendienst ist eingeschaltet, wurde aber nicht gestartet. Starte das Gerät neu, um ihn zu starten: adb reboot",
+  "@deviceHeadlessAdbButtonsRestart": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
   "deviceHardwarePage": "Hardware",
   "@deviceHardwarePage": {
     "context": "Settings:Device:Hardware / Home Assistant / WebView",

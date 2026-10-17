@@ -18,7 +18,9 @@ export function permissionSpecs(on, value = () => undefined, headless = isHeadle
       .map((spec) => ({ ...spec, adb: HEADLESS_ADB[spec.key] || spec.adb })),
     { key: 'hardwareButtons', name: 'Hardware buttons',
       needed: true,
-      adb: HEADLESS_ADB.hardwareButtons,
+      // Switched on but not running: Android 7 starts a service enabled at
+      // runtime only after a reboot, so the commands would not help again.
+      adb: (all) => (all.hardwareButtonsOn ? HEADLESS_ADB.hardwareButtonsRestart : HEADLESS_ADB.hardwareButtons),
       held: 'The device buttons reach gestures and Voice Satellite.',
       missing: 'The device buttons do nothing until the button service is switched on.',
       idle: '' },
@@ -35,7 +37,13 @@ export const HEADLESS_ADB = {
     batteryUnrestricted: 'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite',
     allFiles: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, then the same for WRITE_EXTERNAL_STORAGE',
     hardwareButtons: 'This device has no screen. Switch it on over adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, then adb shell settings put secure accessibility_enabled 1',
+    hardwareButtonsRestart: 'The button service is switched on but has not started. Restart the device to start it: adb reboot',
 };
+
+/** A row's adb line, which for some rows depends on what the status says. */
+export function adbHint(spec, all = {}) {
+  return typeof spec.adb === 'function' ? spec.adb(all) : spec.adb;
+}
 
 function allPermissionSpecs(on, value) {
   // Nothing listens for the wake word with the native satellite switched

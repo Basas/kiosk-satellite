@@ -52,5 +52,6 @@
   "deviceHeadlessAdbBluetooth": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, потім те саме для BLUETOOTH_CONNECT",
   "deviceHeadlessAdbBattery": "Цей пристрій не має екрана. Надайте через adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
   "deviceHeadlessAdbStorage": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, потім те саме для WRITE_EXTERNAL_STORAGE",
-  "deviceHeadlessAdbButtons": "Цей пристрій не має екрана. Увімкніть через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, потім adb shell settings put secure accessibility_enabled 1"
+  "deviceHeadlessAdbButtons": "Цей пристрій не має екрана. Увімкніть через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, потім adb shell settings put secure accessibility_enabled 1",
+  "deviceHeadlessAdbButtonsRestart": "Службу кнопок увімкнено, але вона не запустилася. Перезавантажте пристрій, щоб запустити її: adb reboot"
 }

@@ -13,7 +13,7 @@ import {
 import { MIC_GROUP_NOTE, cameraAction, exportFileName } from './cameras.js';
 import { $, api, cacheSettings, cmd, depSatisfied, state } from './core.js';
 import { readOnlyRow, renderAnalyticsIntro, renderUpdateHelper, renderUpdateSourceDocs } from './device.js';
-import { permissionSpecs } from './permissions.js';
+import { adbHint, permissionSpecs } from './permissions.js';
 import { renderServicePage } from './service.js';
 import { renderShizukuPage } from './shizuku.js';
 import { CATEGORY_TABS } from './gestures.js';
@@ -1595,6 +1595,7 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
         try {
           const b = await cmd('getHardwareButtons');
           out.hardwareButtons = b.data?.listening === true;
+          out.hardwareButtonsOn = b.data?.switchedOn === true;
         } catch (_) {}
       }
       return out;
@@ -1647,7 +1648,7 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
           : spec.requestable && all[spec.requestable] === false);
         info.querySelector('.desc').textContent = unknownState
           ? deviceText('Status unavailable.')
-          : noScreen ? deviceText(spec.adb)
+          : noScreen ? deviceText(adbHint(spec, all))
           : text(ok ? spec.held : (spec.needed ? spec.missing : spec.idle));
         state.textContent = unknownState ? ''
           : ok ? deviceText('Granted') : noScreen ? deviceText('Not offered')

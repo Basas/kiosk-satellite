@@ -25029,5 +25029,11 @@
     "translation": "b6445eef02fa54376310dfa920992fefb4151fea3327be6d19b9027366a5109e",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "deviceHeadlessAdbButtonsRestart": {
+    "source": "34717a7ea3fd089d9ed38ea64ebb69b3de63a7a7b907d24ad14068938b16ce4e",
+    "translation": "dc1eb1bbd75cb1f9032cdcbec26aaaba515653f575d899c057261dafdc9e92d7",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

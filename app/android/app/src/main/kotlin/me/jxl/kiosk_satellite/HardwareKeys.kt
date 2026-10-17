@@ -10,6 +10,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import io.flutter.plugin.common.BinaryMessenger
@@ -73,7 +74,10 @@ object HardwareKeys {
                         result.success(null)
                     }
                     "status" -> result.success(
-                        mapOf("listening" to HeadlessKeyService.running),
+                        mapOf(
+                            "listening" to HeadlessKeyService.running,
+                            "switchedOn" to switchedOn(context),
+                        ),
                     )
                     // Set even when the mute reads the same: the Dot's
                     // audio HAL reports it unreliably.
@@ -90,6 +94,25 @@ object HardwareKeys {
                 }
             }
         }
+    }
+
+    /**
+     * Whether the button service is switched on in Android's settings,
+     * running or not. Android 7 only starts a service whose component was
+     * enabled at runtime after a reboot or the next app update, so it can
+     * be switched on and still not run.
+     */
+    private fun switchedOn(context: Context): Boolean {
+        val resolver = context.contentResolver
+        val on = try {
+            Settings.Secure.getInt(resolver, Settings.Secure.ACCESSIBILITY_ENABLED) == 1
+        } catch (e: Settings.SettingNotFoundException) {
+            false
+        }
+        if (!on) return false
+        val ours = ComponentName(context, HeadlessKeyService::class.java)
+        val list = Settings.Secure.getString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES) ?: ""
+        return list.split(':').any { ComponentName.unflattenFromString(it.trim()) == ours }
     }
 
     private fun enableService(context: Context) {
