@@ -16,6 +16,18 @@ Kiosk Satellite turns headless on its own on any device whose display is a stub 
 - **Remote management** stays on, since the remote admin is the only way in.
 - Android is kept awake. Asleep, Android drops the Action button before the app can hear it.
 
+## Before You Start
+
+The Dot needs the [CM14.1 port for Amazon Biscuit](https://github.com/hkfuertes/amazon_device_biscuit), the full `cm_biscuit-userdebug` image. The minimal image has no Android framework and cannot run apps. Follow the port's guide to unlock the Dot with Amonet and flash it, then join Wi-Fi:
+
+```
+adb shell biscuit_service wifi on
+adb shell biscuit_service wifi connect '<ssid>' '<password>'
+adb shell ip -4 addr show wlan0
+```
+
+The last command shows the Dot's IP address, which the remote admin needs later.
+
 ## Install
 
 ```
@@ -76,9 +88,9 @@ The ring shows voice activity, timers, alarms, intercom calls, notifications and
 
 On the current LineageOS build, moving effects strobe: the listening arc, the thinking colors, the pulses and breathing all blink rapidly as they move. Solid colors do not.
 
-The cause is the build's light daemon, `biscuit-ledd`. Kiosk Satellite reaches the ring through the ROM's `BiscuitService`, which hands each frame to the daemon as a `FRAME` command. For every `FRAME`, the daemon first writes an all-black frame to the ring's driver (`/sys/bus/i2c/devices/0-003f/frame`) and only then the frame it was sent, which turns the ring off for about 14 ms. A moving effect sends 20 frames a second, so the ring goes dark 20 times a second. The daemon's own animations do not do this, and neither does writing frames to the driver directly, but an app can do neither: the driver only takes writes from root and the build has no `su`.
+The cause is the build's light daemon, `biscuit-ledd` (`device/amazon/biscuit/biscuit-service/biscuit-ledd.cpp` in the port). Kiosk Satellite reaches the ring through the ROM's `BiscuitService`, which hands each frame to the daemon as a `FRAME` command. For every `FRAME`, the daemon first writes an all-black frame to the ring's driver (`/sys/bus/i2c/devices/0-003f/frame`) and only then the frame it was sent, which turns the ring off for about 14 ms. A moving effect sends 20 frames a second, so the ring goes dark 20 times a second. The daemon's own animations do not do this, and neither does writing frames to the driver directly, but an app can do neither: the driver only takes writes from root and the build has no `su`.
 
-Until the daemon is fixed, turn off **Animate effects** at the top of the LED Control page if the strobbing bothers you. Each effect then holds still and the ring changes only when what it shows changes, so it never strobes. A build whose daemon writes a `FRAME` without the black frame first, clearing the ring only when it stops one of its own animations, animates smoothly with the switch on.
+Until the daemon is fixed, turn off **Animate effects** at the top of the LED Control page if the strobing bothers you. Each effect then holds still and the ring changes only when what it shows changes, so it never strobes. The daemon's `FRAME` handler calls `clear()` before it writes, and `clear()` both stops the daemon's animations and writes the black frame. A build whose `FRAME` handler only stops the animations, without the black frame, animates smoothly with the switch on.
 
 ## What to Know
 
