@@ -2632,7 +2632,10 @@ class FleetSyncManager extends Manager {
     if (sentPlugins is List && plugins != null) {
       await _applyPlugins(sentPlugins);
     }
-    final wanted = acceptable(raw.cast<String, Object?>());
+    // Settings this kiosk pins, such as the screensaver on one without a
+    // screen, stay out of both the import and the synced keys.
+    final wanted = acceptable(raw.cast<String, Object?>())
+      ..removeWhere((key, _) => defs.devicePinnedKeys.contains(key));
     // Only what differs: setting a value already held would still wake
     // every listener (a server restart, a page reload) for nothing.
     final changes = <String, Object?>{};

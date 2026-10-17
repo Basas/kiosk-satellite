@@ -556,6 +556,38 @@ void main() {
     },
   );
 
+  test(
+    'settings this kiosk pins never import and never mark it changed here',
+    () async {
+      await build(
+        prefs: {
+          'ks.fleet.leader_info': jsonEncode({'id': 'lead', 'name': 'Leader'}),
+        },
+      );
+      defs.devicePinnedKeys.add(defs.screensaverEnabled.key);
+      addTearDown(() => defs.devicePinnedKeys.clear());
+      await settings.set(defs.screensaverEnabled, false);
+      final (error, _) = await fleet.apply({
+        'version': '2026.9.19',
+        'revision': 'r1',
+        'settings': {
+          defs.screensaverEnabled.key: true,
+          defs.screensaverMode.key: 'clock',
+        },
+      });
+      expect(error, isNull);
+      expect(settings.get(defs.screensaverEnabled), false);
+      expect(settings.get(defs.screensaverMode), 'clock');
+      expect(
+        settings.get(defs.fleetSyncedKeys),
+        isNot(contains(defs.screensaverEnabled.key)),
+      );
+      await settings.set(defs.screensaverEnabled, true);
+      await Future<void>.delayed(Duration.zero);
+      expect(settings.get(defs.fleetAppliedRevision), 'r1');
+    },
+  );
+
   group('plugins stay local', () {
     test(
       'plugin screensaver choices and schedules never travel or get overwritten',

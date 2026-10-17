@@ -203,6 +203,12 @@ class SettingDef<T> {
 /// the remote's `describe()` alike, so both UIs hide the same rows.
 final Set<String> deviceHiddenKeys = {};
 
+/// Settings this device holds at one value whatever is saved, such as the
+/// screensaver switch on a device without a screen. A fleet follower
+/// leaves the leader's value for them out, or it would put its own back
+/// after every push and look changed here, so the leader would push again.
+final Set<String> devicePinnedKeys = {};
+
 const Map<String, String> subpageHints = {
   'Localization Credits': 'Contributors by language',
   'User Interface': 'Kiosk mode, dashboard carousel, haptics, tap sounds',

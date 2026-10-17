@@ -379,8 +379,10 @@ const WIZ_ENGINES = [
 ];
 
 async function wizardLoadVoice() {
+  // The integration runs in a dashboard, which a device without a screen
+  // never shows, so there is nothing to migrate from.
   const [detected, pipelines] = await Promise.all([
-    cmd('haDetectVoiceSatellite', {}).catch(() => null),
+    isHeadless() ? null : cmd('haDetectVoiceSatellite', {}).catch(() => null),
     cmd('voicePipelines', {}).catch(() => null),
   ]);
   wizard.vsInstalled = detected?.ok === true && detected.data === true;

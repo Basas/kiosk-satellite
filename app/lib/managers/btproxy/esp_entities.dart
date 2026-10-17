@@ -1277,6 +1277,8 @@ class EspEntitySurface {
     'last_interaction',
     'next_screensaver',
     'clock_background',
+    'panel_brightness',
+    'url',
   };
 
   static bool _headlessDrops(String objectId) {

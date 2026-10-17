@@ -108,6 +108,8 @@ class HeadlessSettings {
     defs.wakeWordReturnToBackground: false,
     defs.dlnaAudioBackground: true,
     defs.intercomTalkMode: 'handsfree',
+    // The dashboard runtime runs inside the WebView.
+    defs.voiceRuntime: 'native',
   };
 
   /// Before any manager reads its settings and any page renders.
@@ -120,6 +122,7 @@ class HeadlessSettings {
       }
     }
     for (final entry in _pinned.entries) {
+      defs.devicePinnedKeys.add(entry.key.key);
       await _pin(entry.key, entry.value);
     }
     _sub = _bus.on<SettingChanged>().listen((e) {
