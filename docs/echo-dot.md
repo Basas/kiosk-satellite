@@ -8,7 +8,7 @@ Kiosk Satellite turns headless on its own on any device whose display is a stub 
 
 - No screen is ever drawn. There is no WebView, dashboard, screensaver, camera or camera view, and the app never opens an Activity.
 - The Kiosk Satellite Service starts when the device boots, whatever **Start on boot** says. The [Home Launcher](home-launcher.md) is not needed.
-- Voice Satellite, the intercom, alarms, timers, the [DLNA renderer](dlna.md), the [Sendspin player](sendspin.md), ESPHome, Fleet Management and plugins work as usual.
+- Voice Satellite, the intercom, alarms, timers, the [DLNA renderer](dlna.md), the [Sendspin player](sendspin.md), ESPHome, [Fleet Management](#fleet-management) and plugins work as usual.
 - Plugins that need a screen do not install. See [Plugins](#plugins).
 - The remote admin leaves out every page and control that needs a screen: Web Browsing, Screensaver, Camera, Camera Streams, Kiosk Mode, Lockdown Mode, Home Launcher and App Launcher, the dashboard settings of Home Assistant, the screenshot and the screen tiles of the Overview, and the display settings on the other pages.
 - ESPHome leaves out the screen, screensaver, dashboard and camera entities.
@@ -104,6 +104,15 @@ Until the daemon is fixed, turn off **Animate effects** at the top of the LED Co
 - A plugin can declare that it also runs without a screen. It then installs and leaves out its overlays and screensavers on the Dot.
 
 The **LED Control** page drives the light ring itself, so the ring needs no plugin.
+
+## Fleet Management
+
+The Dot can follow a [fleet](fleet.md) leader like any other kiosk, but give it a profile of its own. A leader with a screen does not offer the **Button** gesture trigger, so a profile that includes the **Gestures** category sends a gesture list without button gestures and replaces the Dot's at every sync.
+
+- Create a profile on the leader without the **Gestures** category and assign the Dot, and any other device without a screen, to it. To keep the rest of the Gestures category in sync, keep the category and exclude only the **Gestures** setting, the gesture list itself.
+- If the Dot only needs updates from the fleet, assign it to the built-in **Updates only** profile.
+
+Then set up the Button gestures on the Dot's own remote admin. The other categories are safe to sync: the Dot ignores the leader's values for the settings it holds fixed, such as the screensaver switch.
 
 ## What to Know
 
