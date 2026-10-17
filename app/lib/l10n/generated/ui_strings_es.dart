@@ -12631,8 +12631,8 @@ class UiStringsEs extends UiStrings {
   String get voiceWordAdded => 'Añadido';
 
   @override
-  String get voiceHaAddHint =>
-      'Añade este kiosko en Ajustes, Dispositivos y servicios de Home Assistant, donde aparece como descubierto.';
+  String get voiceHaAddAgainHint =>
+      'Añade este kiosko en Ajustes, Dispositivos y servicios de Home Assistant, donde aparece como descubierto. Si Home Assistant ya lo tenía, ahí te pide la nueva Clave de cifrado de la página ESPHome.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -14126,8 +14126,8 @@ class UiStringsEs extends UiStrings {
       'Convierte este kiosko en un asistente de voz para Home Assistant. Todo se puede cambiar después.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Después de la configuración, añade este kiosko en Home Assistant en Ajustes, Dispositivos y servicios, donde aparece como descubierto.';
+  String get setupVoiceAddAgainHint =>
+      'Después de la configuración, añade este kiosko en Home Assistant en Ajustes, Dispositivos y servicios, donde aparece como descubierto. Si Home Assistant ya lo tenía, ahí te pide la nueva Clave de cifrado de la página ESPHome.';
 
   @override
   String get setupRecommendedWall =>

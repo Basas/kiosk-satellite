@@ -36,7 +36,7 @@ Each connection attempt temporarily pauses scanning to perform its handshake (si
 
 ## Kiosk Entities
 
-Turn on **Expose kiosk entities** to add all the entities listed below to the device in Home Assistant. This is off by default, meaning if you only enable ESPHome for the Bluetooth proxy, no extra entities are created. Rows marked with a requirement only appear if that hardware is present; for example, a kiosk with no camera simply will not have camera entities, rather than displaying dead ones. Because the ESPHome protocol does not use attributes, any hardware details that would normally ride on a sensor as an attribute are split into their own distinct entities.
+**Expose kiosk entities** adds all the entities listed below to the device in Home Assistant. It is on by default. Turn it off if you only enable ESPHome for the Bluetooth proxy, and no extra entities are created. A kiosk set up before this default keeps the choice it had. Rows marked with a requirement only appear if that hardware is present; for example, a kiosk with no camera simply will not have camera entities, rather than displaying dead ones. Because the ESPHome protocol does not use attributes, any hardware details that would normally ride on a sensor as an attribute are split into their own distinct entities.
 
 Native Voice Satellite adds its own VS entities and actions, listed in [Voice Satellite](voice-satellite.md#home-assistant-entities-and-actions).
 

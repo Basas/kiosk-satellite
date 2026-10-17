@@ -11724,8 +11724,8 @@ class UiStringsZh extends UiStrings {
   String get voiceWordAdded => '已添加';
 
   @override
-  String get voiceHaAddHint =>
-      '请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。';
+  String get voiceHaAddAgainHint =>
+      '请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。如果 Home Assistant 之前已添加过它，会在那里要求输入 ESPHome 页面上的新加密密钥。';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -13096,8 +13096,8 @@ class UiStringsZh extends UiStrings {
   String get setupVoiceLead => '将此 Kiosk 设置为 Home Assistant 语音助手。所有设置之后都可修改。';
 
   @override
-  String get setupVoiceAddHint =>
-      '设置完成后，请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。';
+  String get setupVoiceAddAgainHint =>
+      '设置完成后，请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。如果 Home Assistant 之前已添加过它，会在那里要求输入 ESPHome 页面上的新加密密钥。';
 
   @override
   String get setupRecommendedWall => '适合壁挂 Kiosk 的设置。';
@@ -25071,8 +25071,8 @@ class UiStringsZhCn extends UiStringsZh {
   String get voiceWordAdded => '已添加';
 
   @override
-  String get voiceHaAddHint =>
-      '请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。';
+  String get voiceHaAddAgainHint =>
+      '请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。如果 Home Assistant 之前已添加过它，会在那里要求输入 ESPHome 页面上的新加密密钥。';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -26443,8 +26443,8 @@ class UiStringsZhCn extends UiStringsZh {
   String get setupVoiceLead => '将此 Kiosk 设置为 Home Assistant 语音助手。所有设置之后都可修改。';
 
   @override
-  String get setupVoiceAddHint =>
-      '设置完成后，请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。';
+  String get setupVoiceAddAgainHint =>
+      '设置完成后，请在 Home Assistant 的“设置 > 设备与服务”中添加此 Kiosk，它会显示为已发现设备。如果 Home Assistant 之前已添加过它，会在那里要求输入 ESPHome 页面上的新加密密钥。';
 
   @override
   String get setupRecommendedWall => '适合壁挂 Kiosk 的设置。';

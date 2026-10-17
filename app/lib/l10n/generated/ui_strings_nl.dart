@@ -12525,8 +12525,8 @@ class UiStringsNl extends UiStrings {
   String get voiceWordAdded => 'Toegevoegd';
 
   @override
-  String get voiceHaAddHint =>
-      'Voeg deze kiosk toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat.';
+  String get voiceHaAddAgainHint =>
+      'Voeg deze kiosk toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat. Kende Home Assistant de kiosk al, dan vraagt het daar om de nieuwe Versleutelingssleutel van de ESPHome-pagina.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -14004,8 +14004,8 @@ class UiStringsNl extends UiStrings {
       'Maak van deze kiosk een spraakassistent voor Home Assistant. Alles kan later worden gewijzigd.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Voeg deze kiosk na de installatie toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat.';
+  String get setupVoiceAddAgainHint =>
+      'Voeg deze kiosk na de installatie toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat. Kende Home Assistant de kiosk al, dan vraagt het daar om de nieuwe Versleutelingssleutel van de ESPHome-pagina.';
 
   @override
   String get setupRecommendedWall =>

@@ -52,7 +52,7 @@ adb shell settings put secure accessibility_enabled 1
 adb reboot
 ```
 
-The location grant is only needed for the Bluetooth proxy. The accessibility service is how the Action button reaches Kiosk Satellite. Android 7 only notices it after a reboot (or the next app update), which is why the block ends with one.
+The location grant is only needed for the Bluetooth proxy. The accessibility service is how the Action button reaches Kiosk Satellite. Android 7 only notices it after a reboot (or the next app update), which is why the block ends with one. Force-stopping Kiosk Satellite, with `adb shell am force-stop` or **Force stop** in Android's app settings, switches the service off again. Run the two `settings put secure` commands to turn it back on. **Restart app** does not switch it off.
 
 Then open `http://<dot ip>:2324` in a browser. The setup wizard asks for an admin password, the Home Assistant connection and the Voice Satellite wake word. It skips the dashboard step and lists the adb commands for any grant that is still missing. Finally, add the Dot in Home Assistant under **Settings > Devices & services**, where it shows up as discovered.
 

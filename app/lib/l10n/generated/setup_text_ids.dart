@@ -92,7 +92,7 @@ const setupTextMessageIds = <String, String>{
   "Migrate": "voiceMigrate",
   "Preferred": "voicePreferred",
   "Turn this kiosk into a voice assistant for Home Assistant. Everything can be changed later.": "setupVoiceLead",
-  "After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered.": "setupVoiceAddHint",
+  "After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.": "setupVoiceAddAgainHint",
   "The settings that suit a kiosk on the wall.": "setupRecommendedWall",
   "Voice Satellite integration found": "setupVoiceFound",
   "Voice Satellite now runs inside Kiosk Satellite. Migrate to keep the wake words, assistant and look of one of the integration's satellites instead of starting fresh.": "setupVoiceFoundHelp",

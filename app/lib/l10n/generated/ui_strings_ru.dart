@@ -12448,8 +12448,8 @@ class UiStringsRu extends UiStrings {
   String get voiceWordAdded => 'Добавлен';
 
   @override
-  String get voiceHaAddHint =>
-      'Добавьте этот киоск в Home Assistant в разделе Настройки, Устройства и службы, где он появится как обнаруженный.';
+  String get voiceHaAddAgainHint =>
+      'Добавьте этот киоск в Home Assistant в разделе Настройки, Устройства и службы, где он появится как обнаруженный. Если Home Assistant уже знал его, там он запросит новый Ключ шифрования со страницы ESPHome.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -13916,8 +13916,8 @@ class UiStringsRu extends UiStrings {
       'Превратить этот киоск в голосового ассистента Home Assistant. Всё можно изменить позже.';
 
   @override
-  String get setupVoiceAddHint =>
-      'После настройки добавьте этот киоск в Home Assistant в разделе Настройки, Устройства и службы, где он появится как обнаруженный.';
+  String get setupVoiceAddAgainHint =>
+      'После настройки добавьте этот киоск в Home Assistant в разделе Настройки, Устройства и службы, где он появится как обнаруженный. Если Home Assistant уже знал его, там он запросит новый Ключ шифрования со страницы ESPHome.';
 
   @override
   String get setupRecommendedWall => 'Настройки, подходящие киоску на стене.';

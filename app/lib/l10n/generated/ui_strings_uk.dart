@@ -12507,8 +12507,8 @@ class UiStringsUk extends UiStrings {
   String get voiceWordAdded => 'Додано';
 
   @override
-  String get voiceHaAddHint =>
-      'Додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений.';
+  String get voiceHaAddAgainHint =>
+      'Додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений. Якщо Home Assistant уже мав його, там він попросить новий Ключ шифрування зі сторінки ESPHome.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -13987,8 +13987,8 @@ class UiStringsUk extends UiStrings {
       'Перетворіть цей кіоск на голосового асистента для Home Assistant. Усе можна змінити пізніше.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Після налаштування додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений.';
+  String get setupVoiceAddAgainHint =>
+      'Після налаштування додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений. Якщо Home Assistant уже мав його, там він попросить новий Ключ шифрування зі сторінки ESPHome.';
 
   @override
   String get setupRecommendedWall =>

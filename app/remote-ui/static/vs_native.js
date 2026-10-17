@@ -86,7 +86,7 @@ async function paintStatus(card, byKey) {
       : muted ? 'var(--muted)' : 'var(--primary)');
   const reload = entity && status.selectsMissing === true;
   const haRow = voiceRow('Home Assistant', reload ? VS_RELOAD_HINT : entity ? '' : esphome
-    ? 'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered.'
+    ? 'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.'
     : 'Turn on the ESPHome server so Home Assistant can add this kiosk as a satellite.');
   if (entity && !reload) haRow.querySelector('.desc').textContent = entity;
   if (esphome) {

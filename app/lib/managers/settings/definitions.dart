@@ -8981,14 +8981,14 @@ const esphomeEnabled = SettingDef<bool>(
   category: 'ESPHome',
 );
 
-/// Decoupled from the master switch, and off by default, on purpose: a
-/// household that turns on ESPHome just for the Bluetooth proxy must not
-/// wake up to a full entity set it never asked for; entities are an
-/// explicit step.
+/// Decoupled from the master switch, so ESPHome can run just for the
+/// Bluetooth proxy. On for new installs: a kiosk added to Home Assistant
+/// arrives with its controls. Installs from before keep what they had
+/// (SettingsManager's migration writes off where nothing was chosen).
 const esphomeEntities = SettingDef<bool>(
   key: 'esphome.entities',
   type: SettingType.boolean,
-  defaultValue: false,
+  defaultValue: true,
   title: 'Expose kiosk entities',
   description:
       'Serve the sensors and controls of this device as ESPHome entities.',

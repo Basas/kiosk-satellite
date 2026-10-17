@@ -12661,8 +12661,8 @@ class UiStringsDe extends UiStrings {
   String get voiceWordAdded => 'Hinzugefügt';
 
   @override
-  String get voiceHaAddHint =>
-      'Füge diesen Kiosk in Home Assistant unter Einstellungen, Geräte & Dienste hinzu, wo er als erkannt erscheint.';
+  String get voiceHaAddAgainHint =>
+      'Füge diesen Kiosk in Home Assistant unter Einstellungen, Geräte & Dienste hinzu, wo er als erkannt erscheint. Kannte Home Assistant ihn schon, fragt es dort nach dem neuen Verschlüsselungsschlüssel von der ESPHome-Seite.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -14148,8 +14148,8 @@ class UiStringsDe extends UiStrings {
       'Mach diesen Kiosk zu einem Sprachassistenten für Home Assistant. Alles lässt sich später ändern.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Füge diesen Kiosk nach der Einrichtung in Home Assistant unter Einstellungen, Geräte & Dienste hinzu, wo er als erkannt erscheint.';
+  String get setupVoiceAddAgainHint =>
+      'Füge diesen Kiosk nach der Einrichtung in Home Assistant unter Einstellungen, Geräte & Dienste hinzu, wo er als erkannt erscheint. Kannte Home Assistant ihn schon, fragt es dort nach dem neuen Verschlüsselungsschlüssel von der ESPHome-Seite.';
 
   @override
   String get setupRecommendedWall =>

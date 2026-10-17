@@ -12621,8 +12621,8 @@ class UiStringsFr extends UiStrings {
   String get voiceWordAdded => 'Ajouté';
 
   @override
-  String get voiceHaAddHint =>
-      'Ajoutez ce kiosque dans Paramètres, Appareils et services de Home Assistant, où il apparaît comme découvert.';
+  String get voiceHaAddAgainHint =>
+      'Ajoutez ce kiosque dans Paramètres, Appareils et services de Home Assistant, où il apparaît comme découvert. Si Home Assistant le connaissait déjà, il y demande la nouvelle Clé de chiffrement de la page ESPHome.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -14110,8 +14110,8 @@ class UiStringsFr extends UiStrings {
       'Transformez ce kiosque en assistant vocal pour Home Assistant. Tout peut être modifié plus tard.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Après la configuration, ajoutez ce kiosque dans Home Assistant sous Paramètres, Appareils et services, où il apparaît comme découvert.';
+  String get setupVoiceAddAgainHint =>
+      'Après la configuration, ajoutez ce kiosque dans Home Assistant sous Paramètres, Appareils et services, où il apparaît comme découvert. Si Home Assistant le connaissait déjà, il y demande la nouvelle Clé de chiffrement de la page ESPHome.';
 
   @override
   String get setupRecommendedWall => 'Les réglages adaptés à un kiosque mural.';

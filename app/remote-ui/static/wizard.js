@@ -734,7 +734,7 @@ export function wizardSteps() {
           + 'aria-hidden="true"><circle cx="12" cy="12" r="9"/>'
           + '<path d="M12 8h.01M12 12v4"/></svg>';
         const hintText = document.createElement('span');
-        hintText.textContent = setupText('After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered.');
+        hintText.textContent = setupText('After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.');
         hint.appendChild(hintText);
         b.appendChild(hint);
       }

@@ -12375,8 +12375,8 @@ class UiStringsEn extends UiStrings {
   String get voiceWordAdded => 'Added';
 
   @override
-  String get voiceHaAddHint =>
-      'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered.';
+  String get voiceHaAddAgainHint =>
+      'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -13833,8 +13833,8 @@ class UiStringsEn extends UiStrings {
       'Turn this kiosk into a voice assistant for Home Assistant. Everything can be changed later.';
 
   @override
-  String get setupVoiceAddHint =>
-      'After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered.';
+  String get setupVoiceAddAgainHint =>
+      'After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.';
 
   @override
   String get setupRecommendedWall =>
