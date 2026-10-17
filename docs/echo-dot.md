@@ -43,6 +43,19 @@ The location grant is only needed for the Bluetooth proxy. The accessibility ser
 
 Then open `http://<dot ip>:2324` in a browser. The setup wizard asks for an admin password, the Home Assistant connection and the Voice Satellite wake word. It skips the dashboard step and lists the adb commands for any grant that is still missing. Finally, add the Dot in Home Assistant under **Settings > Devices & services**, where it shows up as discovered.
 
+## Volume
+
+These volume settings, on the **Audio** page, keep the wake word working while music plays:
+
+| Setting | Value |
+|---|---|
+| Master volume | 100% |
+| Media volume | 55% or less |
+| Intercom volume | 80% |
+| Assistant volume | 100% |
+
+The Dot's speaker sits right next to its microphones, and the LineageOS build has no hardware echo canceller: Amazon's audio processor never starts without its configuration files. Kiosk Satellite's own echo cancellation removes what the speaker plays, but above about 55% the speaker distorts and the remainder drowns out the wake word. Without music, the wake word works at any volume, so only the media volume needs the limit. Keeping the master volume at 100% leaves the assistant, alarms and intercom at full strength.
+
 ## The Buttons
 
 | Button | What it does |
