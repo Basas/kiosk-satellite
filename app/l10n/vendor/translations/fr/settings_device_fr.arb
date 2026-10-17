@@ -51,5 +51,6 @@
   "deviceHeadlessAdbLocation": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION",
   "deviceHeadlessAdbBluetooth": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, puis de même pour BLUETOOTH_CONNECT",
   "deviceHeadlessAdbBattery": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
+  "deviceHeadlessAdbStorage": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, puis de même pour WRITE_EXTERNAL_STORAGE",
   "deviceHeadlessAdbButtons": "Cet appareil n'a pas d'écran. Activez-le par adb : adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, puis adb shell settings put secure accessibility_enabled 1"
 }

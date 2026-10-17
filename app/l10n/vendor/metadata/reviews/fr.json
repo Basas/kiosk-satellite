@@ -25080,5 +25080,23 @@
     "translation": "dde3648a640be90a9623e373956a1d0db2611d5609e2e1eb37755196881705de",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "deviceHeadlessAdbStorage": {
+    "source": "07af859a5c79917fb33fe36aa5f85afa1f675c9b2ce6edfa9afc68b3cb340330",
+    "translation": "dfb22b55b9e063441ee12bb66387887c02da92508a155ba8fe8e40558278560a",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "overviewInstallHeadlessHelp": {
+    "source": "771450d7c07be8cf4f3aaf00a25d6e9b53ea8c2b441a711fc193b9c45495a182",
+    "translation": "3acf1ffb109fa2b38d7f0c295a1bc3e074e4cd4ba5cbc1148f1be5bb69bb8343",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "overviewInstallSilentHelp": {
+    "source": "38a2100da16765c4981d004cccbd6d169756c05ff0346413d606239fbcae7367",
+    "translation": "2b9ef51a8340d67f5b23fbedfd982f79cbb6bfe0d35f3b32431e6bc9164665a7",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

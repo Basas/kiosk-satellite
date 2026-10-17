@@ -13874,6 +13874,38 @@
       }
     }
   },
+  "overviewInstallSilentHelp": "Kiosk Satellite {version} готовий до встановлення. Він встановлюється без підтвердження на пристрої.",
+  "@overviewInstallSilentHelp": {
+    "context": "Remote admin > Overview > Needs attention",
+    "description": "Translate the interface text. Keep external names, versions and technical details unchanged.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Needs attention"
+      ]
+    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewInstallHeadlessHelp": "Kiosk Satellite {version} готовий до встановлення. Цей пристрій не має екрана для підтвердження, тож зробіть Kiosk Satellite власником пристрою, скористайтеся Shizuku або встановіть через adb.",
+  "@overviewInstallHeadlessHelp": {
+    "context": "Remote admin > Overview > Needs attention",
+    "description": "Translate the interface text. Keep external names, versions and technical details unchanged.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Needs attention"
+      ]
+    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "overviewHaSetup": "Home Assistant не налаштовано",
   "@overviewHaSetup": {
     "context": "Remote admin > Overview > Needs attention",
@@ -20306,6 +20338,16 @@
   },
   "deviceHeadlessAdbBattery": "Цей пристрій не має екрана. Надайте через adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
   "@deviceHeadlessAdbBattery": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbStorage": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, потім те саме для WRITE_EXTERNAL_STORAGE",
+  "@deviceHeadlessAdbStorage": {
     "context": "Settings:Device",
     "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
     "x-locations": {

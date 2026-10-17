@@ -6367,6 +6367,18 @@ abstract class UiStrings {
   /// Translate the interface text. Keep external names, versions and technical details unchanged.
   ///
   /// In en, this message translates to:
+  /// **'Kiosk Satellite {version} is ready to install. It installs without a confirmation on the device.'**
+  String overviewInstallSilentHelp(String version);
+
+  /// Translate the interface text. Keep external names, versions and technical details unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosk Satellite {version} is ready to install. This device has no screen to confirm it on, so make Kiosk Satellite the device owner, use Shizuku or install it over adb.'**
+  String overviewInstallHeadlessHelp(String version);
+
+  /// Translate the interface text. Keep external names, versions and technical details unchanged.
+  ///
+  /// In en, this message translates to:
   /// **'Home Assistant not set up'**
   String get overviewHaSetup;
 
@@ -9315,6 +9327,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite'**
   String get deviceHeadlessAdbBattery;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, then the same for WRITE_EXTERNAL_STORAGE'**
+  String get deviceHeadlessAdbStorage;
 
   /// Grant instructions on a device without a screen. Keep the adb commands unchanged.
   ///

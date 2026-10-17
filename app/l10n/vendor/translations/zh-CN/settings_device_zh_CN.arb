@@ -51,5 +51,6 @@
   "deviceHeadlessAdbLocation": "此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION",
   "deviceHeadlessAdbBluetooth": "此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN，然后对 BLUETOOTH_CONNECT 执行相同操作",
   "deviceHeadlessAdbBattery": "此设备没有屏幕。请通过 adb 授予：adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
+  "deviceHeadlessAdbStorage": "此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE，然后对 WRITE_EXTERNAL_STORAGE 执行相同操作",
   "deviceHeadlessAdbButtons": "此设备没有屏幕。请通过 adb 开启：adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService，然后 adb shell settings put secure accessibility_enabled 1"
 }

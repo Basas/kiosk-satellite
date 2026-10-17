@@ -13874,6 +13874,38 @@
       }
     }
   },
+  "overviewInstallSilentHelp": "Kiosk Satellite {version} 已可安装。它会在设备上无需确认直接安装。",
+  "@overviewInstallSilentHelp": {
+    "context": "Remote admin > Overview > Needs attention",
+    "description": "Translate the interface text. Keep external names, versions and technical details unchanged.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Needs attention"
+      ]
+    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewInstallHeadlessHelp": "Kiosk Satellite {version} 已可安装。此设备没有可用于确认的屏幕，请将 Kiosk Satellite 设为设备所有者、使用 Shizuku，或通过 adb 安装。",
+  "@overviewInstallHeadlessHelp": {
+    "context": "Remote admin > Overview > Needs attention",
+    "description": "Translate the interface text. Keep external names, versions and technical details unchanged.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Needs attention"
+      ]
+    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "overviewHaSetup": "尚未设置 Home Assistant",
   "@overviewHaSetup": {
     "context": "Remote admin > Overview > Needs attention",
@@ -20306,6 +20338,16 @@
   },
   "deviceHeadlessAdbBattery": "此设备没有屏幕。请通过 adb 授予：adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
   "@deviceHeadlessAdbBattery": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbStorage": "此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE，然后对 WRITE_EXTERNAL_STORAGE 执行相同操作",
+  "@deviceHeadlessAdbStorage": {
     "context": "Settings:Device",
     "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
     "x-locations": {

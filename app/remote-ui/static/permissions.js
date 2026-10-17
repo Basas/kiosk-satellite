@@ -14,7 +14,7 @@ export function permissionSpecs(on, value = () => undefined, headless = isHeadle
   // display features are left out. The buttons are the device's own row.
   return [
     ...specs
-      .filter((spec) => ['microphone', 'batteryUnrestricted', 'bluetooth', 'notification', 'location'].includes(spec.key))
+      .filter((spec) => ['microphone', 'batteryUnrestricted', 'bluetooth', 'notification', 'location', 'allFiles'].includes(spec.key))
       .map((spec) => ({ ...spec, adb: HEADLESS_ADB[spec.key] || spec.adb })),
     { key: 'hardwareButtons', name: 'Hardware buttons',
       needed: true,
@@ -33,6 +33,7 @@ export const HEADLESS_ADB = {
     location: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION',
     bluetooth: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, then the same for BLUETOOTH_CONNECT',
     batteryUnrestricted: 'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite',
+    allFiles: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, then the same for WRITE_EXTERNAL_STORAGE',
     hardwareButtons: 'This device has no screen. Switch it on over adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, then adb shell settings put secure accessibility_enabled 1',
 };
 

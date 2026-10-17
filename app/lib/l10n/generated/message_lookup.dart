@@ -1486,6 +1486,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'deviceHeadlessAdbLocation' => strings.deviceHeadlessAdbLocation,
       'deviceHeadlessAdbBluetooth' => strings.deviceHeadlessAdbBluetooth,
       'deviceHeadlessAdbBattery' => strings.deviceHeadlessAdbBattery,
+      'deviceHeadlessAdbStorage' => strings.deviceHeadlessAdbStorage,
       'deviceHeadlessAdbButtons' => strings.deviceHeadlessAdbButtons,
       'deviceHardwarePage' => strings.deviceHardwarePage,
       'deviceWebViewPage' => strings.deviceWebViewPage,

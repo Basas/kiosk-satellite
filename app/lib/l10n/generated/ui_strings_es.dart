@@ -3673,6 +3673,16 @@ class UiStringsEs extends UiStrings {
   }
 
   @override
+  String overviewInstallSilentHelp(String version) {
+    return 'Kiosk Satellite $version está listo para instalarse. Se instala sin confirmación en el dispositivo.';
+  }
+
+  @override
+  String overviewInstallHeadlessHelp(String version) {
+    return 'Kiosk Satellite $version está listo para instalarse. Este dispositivo no tiene pantalla para confirmarlo, así que haz que Kiosk Satellite sea el propietario del dispositivo, usa Shizuku o instálalo por adb.';
+  }
+
+  @override
   String get overviewHaSetup => 'Home Assistant sin configurar';
 
   @override
@@ -5415,6 +5425,10 @@ class UiStringsEs extends UiStrings {
   @override
   String get deviceHeadlessAdbBattery =>
       'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbStorage =>
+      'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, y lo mismo para WRITE_EXTERNAL_STORAGE';
 
   @override
   String get deviceHeadlessAdbButtons =>

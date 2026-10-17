@@ -51,5 +51,6 @@
   "deviceHeadlessAdbLocation": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION",
   "deviceHeadlessAdbBluetooth": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, en daarna hetzelfde voor BLUETOOTH_CONNECT",
   "deviceHeadlessAdbBattery": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
+  "deviceHeadlessAdbStorage": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, en daarna hetzelfde voor WRITE_EXTERNAL_STORAGE",
   "deviceHeadlessAdbButtons": "Dit apparaat heeft geen scherm. Schakel het in via adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, en daarna adb shell settings put secure accessibility_enabled 1"
 }

@@ -2,6 +2,12 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Fixed
+- **File Manager on a device without a screen.** The Permissions page now lists **All files access** on a headless device with its adb command, and the File Manager shows that command instead of a grant button for a screen the device does not have. The Echo Dot guide includes the storage grants, which give Android 7 the same access. See [Echo Dot](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/echo-dot.md#setup-in-one-sitting).
+- **Update notice on a kiosk that installs silently.** The Overview said an available update is confirmed on the tablet screen even on a kiosk that installs without a confirmation, such as a device owner or one using Shizuku, and on a device without a screen. It now says the update installs without a confirmation, or how to install it on a device with no screen to confirm it on.
+
 ## v2026.10.28 - 2026-10-17
 
 ### Added

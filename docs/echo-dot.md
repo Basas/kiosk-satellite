@@ -46,13 +46,15 @@ Android cannot ask for permissions on a device without a screen, so they are gra
 adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO
 adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_COARSE_LOCATION
 adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION
+adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE
+adb shell pm grant me.jxl.kiosk_satellite android.permission.WRITE_EXTERNAL_STORAGE
 adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite
 adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService
 adb shell settings put secure accessibility_enabled 1
 adb reboot
 ```
 
-The location grant is only needed for the Bluetooth proxy. The accessibility service is how the Action button reaches Kiosk Satellite. Android 7 only notices it after a reboot (or the next app update), which is why the block ends with one. Force-stopping Kiosk Satellite, with `adb shell am force-stop` or **Force stop** in Android's app settings, switches the service off again. Run the two `settings put secure` commands to turn it back on. **Restart app** does not switch it off.
+The location grant is only needed for the Bluetooth proxy. The storage grants let the remote admin's File Manager browse the shared storage, Android 7's form of **All files access**. Without them it only reaches the app's own folder. The accessibility service is how the Action button reaches Kiosk Satellite. Android 7 only notices it after a reboot (or the next app update), which is why the block ends with one. Force-stopping Kiosk Satellite, with `adb shell am force-stop` or **Force stop** in Android's app settings, switches the service off again. Run the two `settings put secure` commands to turn it back on. **Restart app** does not switch it off.
 
 Then open `http://<dot ip>:2324` in a browser. The setup wizard asks for an admin password, the Home Assistant connection and the Voice Satellite wake word. It skips the dashboard step and lists the adb commands for any grant that is still missing. Finally, add the Dot in Home Assistant under **Settings > Devices & services**, where it shows up as discovered.
 

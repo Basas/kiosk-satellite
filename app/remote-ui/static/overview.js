@@ -580,7 +580,11 @@ function paintHealth({ filter = true } = {}) {
     items.push({
       key: 'update',
       name: overviewText('Update available'),
-      desc: t('overviewInstallHelp', {version: upd.availableVersion}),
+      // Where the install is confirmed, if anywhere: a device owner or
+      // Shizuku installs without asking, and a device without a screen has
+      // nowhere to ask.
+      desc: t(upd.silent ? 'overviewInstallSilentHelp'
+        : isHeadless() ? 'overviewInstallHeadlessHelp' : 'overviewInstallHelp', {version: upd.availableVersion}),
       action: (btn) => { overviewLabel(btn, 'Install'); attachUpdateInstall(btn, () => health.upd); },
     });
   }

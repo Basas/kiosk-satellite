@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "7eefb5645356bbe25c5afc68ef62c5fbe72884f3",
+  "revision": "6f2ff54ce5ecc979ed1170e77932f5a978c1cccb",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -61,7 +61,7 @@
     "remote_connection_en.arb": "d438faa4ded295302c4ef4ffc76ef2725bd24cdf12aec5b1ed322ba9474c4c15",
     "remote_login_en.arb": "41f863e4bcc35fd32888b1098539a67b31c40f06f0bf9dbd27c754caf74f8fbf",
     "remote_overview_action_errors_en.arb": "0ebf16c341b25d428f293a81781741b12acc7ec85ab8d9faec03ded19f4dad7c",
-    "remote_overview_attention_en.arb": "216e92747e8135dbfd5599bd754a3c2d96755a606a83f9105b27c6fe2598476e",
+    "remote_overview_attention_en.arb": "29ae1e7fe0f4c697f55ff77fb97a0be6c5af8ca4e455d462cd8c34de26cd7c13",
     "remote_overview_controls_en.arb": "3d7577c8816f1e5279142f158432401f6374eee5079a4595ef0a4fde4109dc29",
     "remote_overview_health_en.arb": "e517cae5ee8b8cee3ca41dcdac4e558a44d7f3e550bcd19cb8b843343c0c9791",
     "remote_overview_screen_en.arb": "8a3fd605d0d74a4cedf1ad25e63d7e9edbf7aef47e0fd1603aee7ec50356d8a6",
@@ -85,7 +85,7 @@
     "settings_camera_streams_views_en.arb": "8d9a3fdccbc96d765aee7f253b1c8a00b444c0872704f258de0b1539e516686a",
     "settings_device_analytics_en.arb": "5292b4b76300c1778474159f823c126c5a2c432be9aa4b7b31510e964c47e745",
     "settings_device_configuration_en.arb": "794a1a47defafd2faf983ffca852f6a368936cd48a8c83291af54d5fab593e8f",
-    "settings_device_en.arb": "cdecc73dd0484215c07d0ece335cdcc21cc604d0724c970df7ee297cf715a7b3",
+    "settings_device_en.arb": "2437610440224479c9443b44a718e156cadcc5c34e496c06ff9089484dca06f6",
     "settings_device_information_en.arb": "9adae672881850471d412a264ccb61a1402581147b04afcc42aa91ad095a6514",
     "settings_device_permissions_en.arb": "808b5bc4c66bd941a1cdea0e101df97b3ab2210ca746986fae13d35acfef796c",
     "settings_device_remote_administration_en.arb": "c3881e729e892cf7e352ee2521ae015b335f9e1f3e79b2ce39d08542d359ab81",

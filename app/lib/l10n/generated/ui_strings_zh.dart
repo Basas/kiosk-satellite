@@ -3502,6 +3502,16 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String overviewInstallSilentHelp(String version) {
+    return 'Kiosk Satellite $version 已可安装。它会在设备上无需确认直接安装。';
+  }
+
+  @override
+  String overviewInstallHeadlessHelp(String version) {
+    return 'Kiosk Satellite $version 已可安装。此设备没有可用于确认的屏幕，请将 Kiosk Satellite 设为设备所有者、使用 Shizuku，或通过 adb 安装。';
+  }
+
+  @override
   String get overviewHaSetup => '尚未设置 Home Assistant';
 
   @override
@@ -5131,6 +5141,10 @@ class UiStringsZh extends UiStrings {
   @override
   String get deviceHeadlessAdbBattery =>
       '此设备没有屏幕。请通过 adb 授予：adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbStorage =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE，然后对 WRITE_EXTERNAL_STORAGE 执行相同操作';
 
   @override
   String get deviceHeadlessAdbButtons =>
@@ -16856,6 +16870,16 @@ class UiStringsZhCn extends UiStringsZh {
   }
 
   @override
+  String overviewInstallSilentHelp(String version) {
+    return 'Kiosk Satellite $version 已可安装。它会在设备上无需确认直接安装。';
+  }
+
+  @override
+  String overviewInstallHeadlessHelp(String version) {
+    return 'Kiosk Satellite $version 已可安装。此设备没有可用于确认的屏幕，请将 Kiosk Satellite 设为设备所有者、使用 Shizuku，或通过 adb 安装。';
+  }
+
+  @override
   String get overviewHaSetup => '尚未设置 Home Assistant';
 
   @override
@@ -18485,6 +18509,10 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get deviceHeadlessAdbBattery =>
       '此设备没有屏幕。请通过 adb 授予：adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbStorage =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE，然后对 WRITE_EXTERNAL_STORAGE 执行相同操作';
 
   @override
   String get deviceHeadlessAdbButtons =>
