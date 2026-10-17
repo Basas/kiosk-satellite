@@ -8,6 +8,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **More Home Assistant events.** Voice Satellite interactions, intercom calls, the screensaver and the screen now fire events on the Home Assistant bus, next to the existing timer and alarm events: `esphome.kiosk_satellite_voice`, `esphome.kiosk_satellite_intercom`, `esphome.kiosk_satellite_screensaver` and `esphome.kiosk_satellite_screen`. They follow the same changes as the Android broadcasts, with the same names in lowercase as `event_type`, such as `started`, `thinking` and `ended` for a voice turn. See [Home Assistant Events](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/events.md).
 - **Who turned the screen off (#1007).** The new `esphome.kiosk_satellite_screen` event and the new `SCREEN_ON` and `SCREEN_OFF` Android broadcasts carry a `source`. It reads `app` when Kiosk Satellite moved the screen, such as the screensaver turning it off or a wake on motion. It reads `system` when Android did, such as the power button. An automation can keep motion and face detection from waking a screen someone turned off with the power button. See [Screen](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/events.md#screen).
 
+### Fixed
+- **Secure context proxy after a Home Assistant URL change.** When the **Home Assistant base URL** moved to another address while the secure context proxy was on, the proxy forwarded to the new address but kept parts of the old one. A reload of the dashboard view could then open the old address directly, past the proxy, and keep retrying it when that address was unreachable, such as after moving the kiosk to another network. Everything now follows the new address at once, and the log names it.
+
 ## v2026.10.27 - 2026-10-16
 
 ### Added

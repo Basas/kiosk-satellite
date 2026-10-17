@@ -386,6 +386,11 @@ class _KioskScreenState extends State<KioskScreen>
   /// where the current page was (a token change, see _onSettingChanged).
   bool _rebuildFromStart = false;
 
+  /// The proxied origin the current WebView was created with (its media
+  /// rewrite script names it), and the epoch that WebView belongs to.
+  String? _webViewProxyOrigin;
+  int _webViewProxyEpoch = -1;
+
   /// Set when auto-login turns on: the seed replaces a login done by hand
   /// once, on the first page that sees this marker.
   String? _autoLoginReplace;
@@ -640,6 +645,17 @@ class _KioskScreenState extends State<KioskScreen>
     if (e.key == defs.secureProxy.key) {
       await c.proxy.sync();
       setState(() => _webViewEpoch++);
+      return;
+    }
+    // A start URL on a new Home Assistant origin moves the proxy's upstream
+    // (or starts or stops it), and the media rewrite script of the WebView
+    // on screen still names the old one. Rebuild when the origin it was
+    // created with is no longer the proxied one.
+    if (e.key == defs.startUrl.key) {
+      await c.proxy.sync();
+      if (mounted && c.proxy.targetOrigin != _webViewProxyOrigin) {
+        setState(() => _webViewEpoch++);
+      }
       return;
     }
     // Pull-to-refresh toggles live on the existing WebView; the clear-cache
@@ -1784,6 +1800,12 @@ class _KioskScreenState extends State<KioskScreen>
     // moves a proxied currentUrl back to the real origin (or vice
     // versa), and both calls pass everything else through untouched.
     final initialUrl = c.proxy.mapUrl(c.proxy.unmapUrl(_rebuildUrl()));
+    // Recorded once per WebView, not per build: a build that keeps the
+    // same WebView keeps its user scripts too.
+    if (_webViewProxyEpoch != _webViewEpoch) {
+      _webViewProxyEpoch = _webViewEpoch;
+      _webViewProxyOrigin = c.proxy.targetOrigin;
+    }
     // A custom page skips the HTTP cache from its very first load (see
     // BrowserManager.prepareLoad), as everything does with Disable cache.
     final freshLoads =
