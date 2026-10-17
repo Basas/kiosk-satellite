@@ -60,6 +60,10 @@ class SendspinManager extends Manager {
   bool _playing = false;
   Map<String, Object?> _status = const {};
 
+  /// Whether this device's own Sendspin player is playing, whichever player
+  /// the Now Playing surfaces follow. The status lights read it.
+  final localPlaying = ValueNotifier<bool>(false);
+
   /// Live now-playing snapshot for the floating player overlay: the merged
   /// status plus 'playing' and 'receivedAt' (epoch ms of the last metadata
   /// update, for on-screen position extrapolation). Null when idle.
@@ -1000,6 +1004,7 @@ class SendspinManager extends Manager {
           final playing = map['playing'] == true;
           if (playing != _playing) {
             _playing = playing;
+            localPlaying.value = playing;
             // The position stood still while nothing played, and the
             // native side reports playing once the music starts, so it
             // runs on from here rather than from when it was stamped.
@@ -2832,6 +2837,7 @@ class SendspinManager extends Manager {
     }
     if (_playing) {
       _playing = false;
+      localPlaying.value = false;
       bus.publish(
         const VoiceInteractionChanged(
           active: false,

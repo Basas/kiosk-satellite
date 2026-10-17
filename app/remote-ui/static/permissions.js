@@ -1,3 +1,5 @@
+import { isHeadless } from './headless.js';
+
 /* ---- System permissions ----
    What the app can ask Android for, what each grant is for, and whether a
    switched-on feature needs it right now. One list, read by the Device
@@ -5,7 +7,36 @@
    Overview's Needs attention card (only what is needed and missing).
    `on(key)` answers whether a boolean setting is on, `value(key)` reads
    any setting. */
-export function permissionSpecs(on, value = () => undefined) {
+export function permissionSpecs(on, value = () => undefined, headless = isHeadless()) {
+  const specs = allPermissionSpecs(on, value);
+  if (!headless) return specs;
+  // No screen to accept a grant on: adb gives each one, and the grants for
+  // display features are left out. The buttons are the device's own row.
+  return [
+    ...specs
+      .filter((spec) => ['microphone', 'batteryUnrestricted', 'bluetooth', 'notification', 'location'].includes(spec.key))
+      .map((spec) => ({ ...spec, adb: HEADLESS_ADB[spec.key] || spec.adb })),
+    { key: 'hardwareButtons', name: 'Hardware buttons',
+      needed: true,
+      adb: HEADLESS_ADB.hardwareButtons,
+      held: 'The device buttons reach gestures and Voice Satellite.',
+      missing: 'The device buttons do nothing until the button service is switched on.',
+      idle: '' },
+  ];
+}
+
+// The adb command for each grant a device without a screen needs, since
+// Android cannot ask for it there.
+export const HEADLESS_ADB = {
+    microphone: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO',
+    notification: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS',
+    location: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION',
+    bluetooth: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, then the same for BLUETOOTH_CONNECT',
+    batteryUnrestricted: 'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite',
+    hardwareButtons: 'This device has no screen. Switch it on over adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, then adb shell settings put secure accessibility_enabled 1',
+};
+
+function allPermissionSpecs(on, value) {
   // Nothing listens for the wake word with the native satellite switched
   // off. A dashboard runtime starts the engine from the page instead.
   const listening = on('wake_word.enabled')

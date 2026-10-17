@@ -1712,6 +1712,15 @@ class UiStringsZh extends UiStrings {
   String get gestureIntercomEmpty => '尚未在网络中发现 Kiosk 设备。';
 
   @override
+  String get gestureVoiceWake => '开始语音指令';
+
+  @override
+  String get gestureVoiceStop => '停止语音助手';
+
+  @override
+  String get gestureVoiceMute => '将 Voice Satellite 静音或取消静音';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '点击$corner角 $count 次';
   }
@@ -1812,6 +1821,21 @@ class UiStringsZh extends UiStrings {
   @override
   String gestureFireEvent(String value) {
     return '触发事件 $value';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return '按下 $button 按钮';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return '双击 $button 按钮';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return '长按 $button 按钮';
   }
 
   @override
@@ -2133,6 +2157,22 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get gesturePluginTriggerHelp => '请先在“插件管理器”中启用提供触发器的插件。';
+
+  @override
+  String get gestureButton => '按钮';
+
+  @override
+  String get gesturePress => '按下';
+
+  @override
+  String get gestureDoublePress => '双击';
+
+  @override
+  String get gestureHoldPress => '长按';
+
+  @override
+  String get gestureButtonDefaults =>
+      '没有手势使用的按键会保留原本的作用：操作键接听、停止或关闭正在响铃的内容，否则开始语音指令；麦克风键将 Voice Satellite 静音；音量键调整音量。';
 
   @override
   String get intercomCall => '呼叫';
@@ -3749,6 +3789,9 @@ class UiStringsZh extends UiStrings {
   String get overviewShowingCustomPages => '正在显示自定义网页';
 
   @override
+  String get overviewHeadlessMode => '无屏幕模式';
+
+  @override
   String get overviewNoScreenshot => '暂无截图';
 
   @override
@@ -5056,6 +5099,39 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get deviceOpenSettingsDevice => '在设备上打开设置';
+
+  @override
+  String get deviceHardwareButtons => '硬件按钮';
+
+  @override
+  String get deviceHardwareButtonsHeld => '设备按钮可以触发手势和 Voice Satellite。';
+
+  @override
+  String get deviceHardwareButtonsMissing => '在开启按钮服务之前，设备按钮不起作用。';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN，然后对 BLUETOOTH_CONNECT 执行相同操作';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      '此设备没有屏幕。请通过 adb 开启：adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService，然后 adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => '硬件';
@@ -7683,6 +7759,193 @@ class UiStringsZh extends UiStrings {
   String get kioskOpenSettingsDevice => '在设备上打开设置';
 
   @override
+  String get settingLedEnabledTitle => '启用 LED 控制';
+
+  @override
+  String get settingLedEnabledDescription => '让 Kiosk Satellite 控制灯光。';
+
+  @override
+  String get settingLedAnimationsTitle => '动画效果';
+
+  @override
+  String get settingLedAnimationsDescription => '让光弧转动、脉冲渐变。关闭后所有效果均为静态。';
+
+  @override
+  String get settingLedIdleEnabledTitle => '空闲时亮灯';
+
+  @override
+  String get settingLedIdleEnabledDescription => '没有其他内容显示时保持亮灯。';
+
+  @override
+  String get settingLedIdleBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedIdleBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedIdleLightColorTitle => '颜色';
+
+  @override
+  String get settingLedIdleLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedIdleStyleTitle => '效果';
+
+  @override
+  String get settingLedIdleStyleDescription => '空闲时灯光的显示方式。';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => '常亮';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => '呼吸';
+
+  @override
+  String get settingLedVoiceEnabledTitle => '显示语音活动';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Voice Satellite 聆听、思考和回答时亮灯。';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedVoiceBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedVoiceLightColorTitle => '颜色';
+
+  @override
+  String get settingLedVoiceLightColorDescription => '聆听时有光弧转动，思考时交替闪烁，回答时渐变。';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => '强调色';
+
+  @override
+  String get settingLedVoiceAccentColorDescription => '绕灯光移动的光弧。';
+
+  @override
+  String get settingLedVoiceMutedTitle => '静音时显示';
+
+  @override
+  String get settingLedVoiceMutedDescription => 'Voice Satellite 静音时保持亮灯。';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => '静音颜色';
+
+  @override
+  String get settingLedVoiceMutedColorDescription => '静音时灯光的颜色。';
+
+  @override
+  String get settingLedTimersEnabledTitle => '显示计时器';
+
+  @override
+  String get settingLedTimersEnabledDescription => '计时器响铃时脉冲闪烁。';
+
+  @override
+  String get settingLedTimersBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedTimersBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedTimersLightColorTitle => '颜色';
+
+  @override
+  String get settingLedTimersLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedTimersCountdownTitle => '显示倒计时';
+
+  @override
+  String get settingLedTimersCountdownDescription => '下一个计时器倒数时，灯光逐个熄灭。';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => '显示闹钟';
+
+  @override
+  String get settingLedAlarmsEnabledDescription => '闹钟响铃时脉冲闪烁。';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => '颜色';
+
+  @override
+  String get settingLedAlarmsLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedIntercomEnabledTitle => '显示对讲通话';
+
+  @override
+  String get settingLedIntercomEnabledDescription => '来电响铃时脉冲闪烁，通话进行时转动。';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedIntercomBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedIntercomLightColorTitle => '颜色';
+
+  @override
+  String get settingLedIntercomLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => '显示通知';
+
+  @override
+  String get settingLedNotificationsEnabledDescription => '有通知等待时缓慢脉冲闪烁。';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => '颜色';
+
+  @override
+  String get settingLedNotificationsLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedMediaEnabledTitle => '显示音乐';
+
+  @override
+  String get settingLedMediaEnabledDescription => '此设备播放音乐时亮灯。';
+
+  @override
+  String get settingLedMediaBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedMediaBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedMediaLightColorTitle => '颜色';
+
+  @override
+  String get settingLedMediaLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedMediaStyleTitle => '效果';
+
+  @override
+  String get settingLedMediaStyleDescription => '灯光显示音乐的方式。';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => '常亮';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => '呼吸';
+
+  @override
   String get settingLockdownEnabledTitle => '启用锁定模式';
 
   @override
@@ -8505,6 +8768,45 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get settingsMenuThemeAuto => '自动';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary => '状态和快捷控制';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => '连接';
+
+  @override
+  String get settingsMenuAudio => '音频';
+
+  @override
+  String get settingsMenuAudioSummary => '音量、麦克风';
+
+  @override
+  String get settingsGroupMedia => '媒体';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => '远程播放音频';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary => '按钮和拍手手势';
+
+  @override
+  String get settingsMenuLeds => 'LED 控制';
+
+  @override
+  String get settingsMenuLedsSummary => '状态灯颜色和效果';
+
+  @override
+  String get settingsLedTimers => '计时器';
+
+  @override
+  String get settingsLedNotifications => '通知';
+
+  @override
+  String get settingsLedIdle => '空闲';
+
+  @override
+  String get settingsLedEffects => '效果';
 
   @override
   String get settingAdaptiveBrightnessTitle => '自适应亮度';
@@ -12590,6 +12892,10 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get setupSelectDashboardHelp => '选择 Kiosk 显示的仪表盘，之后可在设置中更改。';
+
+  @override
+  String get setupHeadlessGrants =>
+      '此设备没有屏幕，因此 Android 无法在设备上请求这些权限。请通过 adb 逐一授予，然后在此完成。';
 
   @override
   String get setupWelcome => '欢迎';
@@ -14750,6 +15056,15 @@ class UiStringsZhCn extends UiStringsZh {
   String get gestureIntercomEmpty => '尚未在网络中发现 Kiosk 设备。';
 
   @override
+  String get gestureVoiceWake => '开始语音指令';
+
+  @override
+  String get gestureVoiceStop => '停止语音助手';
+
+  @override
+  String get gestureVoiceMute => '将 Voice Satellite 静音或取消静音';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '点击$corner角 $count 次';
   }
@@ -14850,6 +15165,21 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String gestureFireEvent(String value) {
     return '触发事件 $value';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return '按下 $button 按钮';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return '双击 $button 按钮';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return '长按 $button 按钮';
   }
 
   @override
@@ -15171,6 +15501,22 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get gesturePluginTriggerHelp => '请先在“插件管理器”中启用提供触发器的插件。';
+
+  @override
+  String get gestureButton => '按钮';
+
+  @override
+  String get gesturePress => '按下';
+
+  @override
+  String get gestureDoublePress => '双击';
+
+  @override
+  String get gestureHoldPress => '长按';
+
+  @override
+  String get gestureButtonDefaults =>
+      '没有手势使用的按键会保留原本的作用：操作键接听、停止或关闭正在响铃的内容，否则开始语音指令；麦克风键将 Voice Satellite 静音；音量键调整音量。';
 
   @override
   String get intercomCall => '呼叫';
@@ -16787,6 +17133,9 @@ class UiStringsZhCn extends UiStringsZh {
   String get overviewShowingCustomPages => '正在显示自定义网页';
 
   @override
+  String get overviewHeadlessMode => '无屏幕模式';
+
+  @override
   String get overviewNoScreenshot => '暂无截图';
 
   @override
@@ -18094,6 +18443,39 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get deviceOpenSettingsDevice => '在设备上打开设置';
+
+  @override
+  String get deviceHardwareButtons => '硬件按钮';
+
+  @override
+  String get deviceHardwareButtonsHeld => '设备按钮可以触发手势和 Voice Satellite。';
+
+  @override
+  String get deviceHardwareButtonsMissing => '在开启按钮服务之前，设备按钮不起作用。';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN，然后对 BLUETOOTH_CONNECT 执行相同操作';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      '此设备没有屏幕。请通过 adb 授予：adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      '此设备没有屏幕。请通过 adb 开启：adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService，然后 adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => '硬件';
@@ -20721,6 +21103,193 @@ class UiStringsZhCn extends UiStringsZh {
   String get kioskOpenSettingsDevice => '在设备上打开设置';
 
   @override
+  String get settingLedEnabledTitle => '启用 LED 控制';
+
+  @override
+  String get settingLedEnabledDescription => '让 Kiosk Satellite 控制灯光。';
+
+  @override
+  String get settingLedAnimationsTitle => '动画效果';
+
+  @override
+  String get settingLedAnimationsDescription => '让光弧转动、脉冲渐变。关闭后所有效果均为静态。';
+
+  @override
+  String get settingLedIdleEnabledTitle => '空闲时亮灯';
+
+  @override
+  String get settingLedIdleEnabledDescription => '没有其他内容显示时保持亮灯。';
+
+  @override
+  String get settingLedIdleBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedIdleBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedIdleLightColorTitle => '颜色';
+
+  @override
+  String get settingLedIdleLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedIdleStyleTitle => '效果';
+
+  @override
+  String get settingLedIdleStyleDescription => '空闲时灯光的显示方式。';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => '常亮';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => '呼吸';
+
+  @override
+  String get settingLedVoiceEnabledTitle => '显示语音活动';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Voice Satellite 聆听、思考和回答时亮灯。';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedVoiceBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedVoiceLightColorTitle => '颜色';
+
+  @override
+  String get settingLedVoiceLightColorDescription => '聆听时有光弧转动，思考时交替闪烁，回答时渐变。';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => '强调色';
+
+  @override
+  String get settingLedVoiceAccentColorDescription => '绕灯光移动的光弧。';
+
+  @override
+  String get settingLedVoiceMutedTitle => '静音时显示';
+
+  @override
+  String get settingLedVoiceMutedDescription => 'Voice Satellite 静音时保持亮灯。';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => '静音颜色';
+
+  @override
+  String get settingLedVoiceMutedColorDescription => '静音时灯光的颜色。';
+
+  @override
+  String get settingLedTimersEnabledTitle => '显示计时器';
+
+  @override
+  String get settingLedTimersEnabledDescription => '计时器响铃时脉冲闪烁。';
+
+  @override
+  String get settingLedTimersBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedTimersBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedTimersLightColorTitle => '颜色';
+
+  @override
+  String get settingLedTimersLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedTimersCountdownTitle => '显示倒计时';
+
+  @override
+  String get settingLedTimersCountdownDescription => '下一个计时器倒数时，灯光逐个熄灭。';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => '显示闹钟';
+
+  @override
+  String get settingLedAlarmsEnabledDescription => '闹钟响铃时脉冲闪烁。';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => '颜色';
+
+  @override
+  String get settingLedAlarmsLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedIntercomEnabledTitle => '显示对讲通话';
+
+  @override
+  String get settingLedIntercomEnabledDescription => '来电响铃时脉冲闪烁，通话进行时转动。';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedIntercomBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedIntercomLightColorTitle => '颜色';
+
+  @override
+  String get settingLedIntercomLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => '显示通知';
+
+  @override
+  String get settingLedNotificationsEnabledDescription => '有通知等待时缓慢脉冲闪烁。';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => '颜色';
+
+  @override
+  String get settingLedNotificationsLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedMediaEnabledTitle => '显示音乐';
+
+  @override
+  String get settingLedMediaEnabledDescription => '此设备播放音乐时亮灯。';
+
+  @override
+  String get settingLedMediaBrightnessTitle => '亮度';
+
+  @override
+  String get settingLedMediaBrightnessDescription => '此项灯光的亮度。';
+
+  @override
+  String get settingLedMediaLightColorTitle => '颜色';
+
+  @override
+  String get settingLedMediaLightColorDescription => '此项灯光的颜色。';
+
+  @override
+  String get settingLedMediaStyleTitle => '效果';
+
+  @override
+  String get settingLedMediaStyleDescription => '灯光显示音乐的方式。';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => '常亮';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => '呼吸';
+
+  @override
   String get settingLockdownEnabledTitle => '启用锁定模式';
 
   @override
@@ -21543,6 +22112,45 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get settingsMenuThemeAuto => '自动';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary => '状态和快捷控制';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => '连接';
+
+  @override
+  String get settingsMenuAudio => '音频';
+
+  @override
+  String get settingsMenuAudioSummary => '音量、麦克风';
+
+  @override
+  String get settingsGroupMedia => '媒体';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => '远程播放音频';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary => '按钮和拍手手势';
+
+  @override
+  String get settingsMenuLeds => 'LED 控制';
+
+  @override
+  String get settingsMenuLedsSummary => '状态灯颜色和效果';
+
+  @override
+  String get settingsLedTimers => '计时器';
+
+  @override
+  String get settingsLedNotifications => '通知';
+
+  @override
+  String get settingsLedIdle => '空闲';
+
+  @override
+  String get settingsLedEffects => '效果';
 
   @override
   String get settingAdaptiveBrightnessTitle => '自适应亮度';
@@ -25628,6 +26236,10 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get setupSelectDashboardHelp => '选择 Kiosk 显示的仪表盘，之后可在设置中更改。';
+
+  @override
+  String get setupHeadlessGrants =>
+      '此设备没有屏幕，因此 Android 无法在设备上请求这些权限。请通过 adb 逐一授予，然后在此完成。';
 
   @override
   String get setupWelcome => '欢迎';

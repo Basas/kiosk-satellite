@@ -3,6 +3,7 @@ import 'dart:async';
 import 'core/command_registry.dart';
 import 'core/event_bus.dart';
 import 'core/events.dart';
+import 'core/headless.dart';
 import 'core/logging.dart';
 import 'core/manager.dart';
 import 'managers/plugins/plugin_manager.dart';
@@ -16,8 +17,10 @@ import 'managers/device/device_manager.dart';
 import 'managers/device_camera/device_camera_manager.dart';
 import 'managers/btproxy/bt_proxy_manager.dart';
 import 'managers/dlna/dlna_manager.dart';
+import 'managers/dlna/headless_dlna_player.dart';
 import 'managers/files/files_manager.dart';
 import 'managers/gestures/gestures_manager.dart';
+import 'managers/gestures/hardware_buttons.dart';
 import 'managers/glance/glance_manager.dart';
 import 'managers/home_assistant/home_assistant_manager.dart';
 import 'managers/home_assistant/plugin_ha_socket.dart';
@@ -27,6 +30,7 @@ import 'managers/js_api/page_state_manager.dart';
 import 'managers/kiosk/kiosk_manager.dart';
 import 'managers/launcher/app_launcher_manager.dart';
 import 'managers/launcher/home_launcher_manager.dart';
+import 'managers/led/led_manager.dart';
 import 'managers/motion/motion_entity_manager.dart';
 import 'managers/motion/motion_manager.dart';
 import 'managers/notifications/notification_manager.dart';
@@ -49,6 +53,7 @@ import 'managers/screensaver/screensaver_manager.dart';
 import 'managers/sendspin/sendspin_manager.dart';
 import 'managers/service/service_manager.dart';
 import 'managers/sound/sound_manager.dart';
+import 'managers/settings/headless_settings.dart';
 import 'managers/settings/provisioning.dart';
 import 'managers/settings/settings_manager.dart';
 import 'managers/update/update_manager.dart';
@@ -163,6 +168,16 @@ class AppContainer {
     intercom = IntercomManager(bus, commands, log, settings);
     alarms = AlarmManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);
+    // It follows what the managers above are doing, through the bus and
+    // the media players' own states.
+    leds = LedManager(
+      bus,
+      commands,
+      log,
+      settings,
+      sendspin.localPlaying,
+      dlna.transportState,
+    );
     broadcasts = EventBroadcastManager(bus, commands, log);
     // Composition-root wiring: it reads the state other managers own and
     // reports it to pages (kioskSatellite.getTheme / getKioskState).
@@ -232,6 +247,7 @@ class AppContainer {
   late final IntercomManager intercom;
   late final AlarmManager alarms;
   late final VoiceRequestsManager voiceRequests;
+  late final LedManager leds;
   late final PageStateManager pageState;
 
   /// Built after [device.init] so it can carry the app version.
@@ -310,6 +326,9 @@ class AppContainer {
     alarms,
     // After intercom and alarms: it runs their commands.
     voiceRequests,
+    // Before the remote admin's first request reads its hidden settings,
+    // which is not until every manager is up.
+    leds,
     // Last: it reads the state every manager above keeps.
     pageState,
   ];
@@ -319,6 +338,9 @@ class AppContainer {
     // Apply any adb/MDM intent provisioning before other managers read
     // their settings; the channel also handles pushes while running.
     await ProvisioningChannel(settings, log).init();
+    // A device without a screen hides and pins the display settings before
+    // any manager reads them.
+    if (Headless.active) await HeadlessSettings(settings, bus, log).init();
     await device.init();
     jsApi = JsApiManager(bus, commands, log, device.appVersion)
       ..haSockets = PageHaSockets(
@@ -348,6 +370,21 @@ class AppContainer {
     });
     for (final manager in _ordered.skip(2)) {
       await manager.init();
+    }
+    if (Headless.active) {
+      // Without a screen there is no DLNA overlay to own the player, and
+      // the buttons reach the app through their own service.
+      HeadlessDlnaPlayer(dlna, device.mediaGain, log).start();
+      await HardwareButtons(
+        bus: bus,
+        commands: commands,
+        log: log,
+        settings: settings,
+        alarms: alarms,
+        intercom: intercom,
+        voice: voice,
+        voiceTimers: voiceTimers,
+      ).start();
     }
     log.info('app', 'all managers initialized');
   }

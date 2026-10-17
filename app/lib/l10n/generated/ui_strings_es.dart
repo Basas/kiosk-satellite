@@ -1780,6 +1780,15 @@ class UiStringsEs extends UiStrings {
       'Aún no se ha encontrado ningún kiosko en la red.';
 
   @override
+  String get gestureVoiceWake => 'Iniciar un comando de voz';
+
+  @override
+  String get gestureVoiceStop => 'Detener el asistente de voz';
+
+  @override
+  String get gestureVoiceMute => 'Silenciar o reactivar Voice Satellite';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '$count toques en la esquina $corner';
   }
@@ -1880,6 +1889,21 @@ class UiStringsEs extends UiStrings {
   @override
   String gestureFireEvent(String value) {
     return 'Emitir evento $value';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Pulsar el botón $button';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Pulsar dos veces el botón $button';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'Mantener pulsado el botón $button';
   }
 
   @override
@@ -2211,6 +2235,22 @@ class UiStringsEs extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Primero activa un plugin con disparadores en el administrador de plugins.';
+
+  @override
+  String get gestureButton => 'Botón';
+
+  @override
+  String get gesturePress => 'Pulsar';
+
+  @override
+  String get gestureDoublePress => 'Doble pulsación';
+
+  @override
+  String get gestureHoldPress => 'Mantener pulsado';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Una pulsación que ningún gesto usa conserva su función: Acción contesta, detiene o descarta lo que suena y, si no, inicia un comando de voz, Micrófono silencia Voice Satellite y los botones de volumen cambian el volumen.';
 
   @override
   String get intercomCall => 'Llamar';
@@ -3933,6 +3973,9 @@ class UiStringsEs extends UiStrings {
   String get overviewShowingCustomPages => 'Mostrando páginas personalizadas';
 
   @override
+  String get overviewHeadlessMode => 'Modo sin pantalla';
+
+  @override
   String get overviewNoScreenshot => 'Sin captura de pantalla';
 
   @override
@@ -5338,6 +5381,41 @@ class UiStringsEs extends UiStrings {
   @override
   String get deviceOpenSettingsDevice =>
       'Abrir configuración en el dispositivo';
+
+  @override
+  String get deviceHardwareButtons => 'Botones físicos';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'Los botones del dispositivo llegan a los gestos y a Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'Los botones del dispositivo no hacen nada hasta que se activa el servicio de botones.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, y lo mismo para BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'Este dispositivo no tiene pantalla. Concédelo por adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'Este dispositivo no tiene pantalla. Actívalo por adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, y luego adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => 'Hardware';
@@ -8201,6 +8279,223 @@ class UiStringsEs extends UiStrings {
   String get kioskOpenSettingsDevice => 'Abrir configuración en el dispositivo';
 
   @override
+  String get settingLedEnabledTitle => 'Activar el control de LED';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Permite que Kiosk Satellite controle las luces.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Animar los efectos';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Mueve los arcos y desvanece los pulsos. Desactívalo para que todos los efectos sean estáticos.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'Encender en reposo';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Permanece encendido mientras no se muestra nada más.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Color';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'El color de las luces para esto.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Efecto';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Cómo se muestran las luces en reposo.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Fijo';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Respiración';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Mostrar la actividad de voz';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Se enciende mientras Voice Satellite escucha, piensa y responde.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Color';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Bajo un arco que gira mientras escucha, alternando mientras piensa y desvaneciéndose mientras responde.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Color de acento';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'El arco que se mueve alrededor de las luces.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Mostrar cuando está silenciado';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Permanece encendido mientras Voice Satellite está silenciado.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Color en silencio';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'El color de las luces mientras está silenciado.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Mostrar los temporizadores';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Palpita mientras suena un temporizador.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Color';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'El color de las luces para esto.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Mostrar la cuenta atrás';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'Las luces se apagan una a una mientras se agota el siguiente temporizador.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Mostrar las alarmas';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Palpita mientras suena una alarma.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Color';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'El color de las luces para esto.';
+
+  @override
+  String get settingLedIntercomEnabledTitle =>
+      'Mostrar las llamadas del intercomunicador';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Palpita mientras suena una llamada y gira mientras está activa.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Color';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'El color de las luces para esto.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle =>
+      'Mostrar las notificaciones';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Palpita despacio mientras espera una notificación.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Color';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'El color de las luces para esto.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Mostrar la música';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'Se enciende mientras suena música en este dispositivo.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Brillo';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'Cuánto brillan las luces para esto.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Color';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'El color de las luces para esto.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Efecto';
+
+  @override
+  String get settingLedMediaStyleDescription =>
+      'Cómo muestran la música las luces.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Fijo';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Respiración';
+
+  @override
   String get settingLockdownEnabledTitle => 'Activar modo de bloqueo';
 
   @override
@@ -9082,6 +9377,48 @@ class UiStringsEs extends UiStrings {
 
   @override
   String get settingsMenuThemeAuto => 'Automático';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary =>
+      'Estado y controles rápidos';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'Conexión';
+
+  @override
+  String get settingsMenuAudio => 'Audio';
+
+  @override
+  String get settingsMenuAudioSummary => 'Volumen, micrófono';
+
+  @override
+  String get settingsGroupMedia => 'Multimedia';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => 'Reproducir audio a distancia';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary =>
+      'Gestos con botones y palmadas';
+
+  @override
+  String get settingsMenuLeds => 'Control de LED';
+
+  @override
+  String get settingsMenuLedsSummary =>
+      'Colores y efectos de las luces de estado';
+
+  @override
+  String get settingsLedTimers => 'Temporizadores';
+
+  @override
+  String get settingsLedNotifications => 'Notificaciones';
+
+  @override
+  String get settingsLedIdle => 'En reposo';
+
+  @override
+  String get settingsLedEffects => 'Efectos';
 
   @override
   String get settingAdaptiveBrightnessTitle => 'Brillo adaptativo';
@@ -13561,6 +13898,10 @@ class UiStringsEs extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Elige el panel de control que mostrará el kiosko. Puedes cambiarlo después en Configuración.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'Este dispositivo no tiene pantalla, así que Android no puede pedirlos en él. Concede cada uno por adb y luego termina aquí.';
 
   @override
   String get setupWelcome => 'Bienvenido';

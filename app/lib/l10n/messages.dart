@@ -441,6 +441,8 @@ String settingsPageText(
   'Sendspin' => mediaText(context, english),
   'Launcher' => launcherText(context, english),
   'Gestures' => gestureText(context, english),
+  // Its groups are named after the pages of the features they light up.
+  'LED Control' => navigationText(context, english),
   'Kiosk' || 'Home' || 'Lockdown' => kioskText(context, english),
   'Alarms' => switch (english) {
     'Defaults' => l10n(context).alarmsDefaultsSection,

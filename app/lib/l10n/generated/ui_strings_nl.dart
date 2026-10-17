@@ -1772,6 +1772,16 @@ class UiStringsNl extends UiStrings {
       'Er is nog geen kiosk op het netwerk gevonden.';
 
   @override
+  String get gestureVoiceWake => 'Een spraakopdracht starten';
+
+  @override
+  String get gestureVoiceStop => 'De spraakassistent stoppen';
+
+  @override
+  String get gestureVoiceMute =>
+      'Voice Satellite dempen of het dempen opheffen';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '$count tikken in de hoek $corner';
   }
@@ -1872,6 +1882,21 @@ class UiStringsNl extends UiStrings {
   @override
   String gestureFireEvent(String value) {
     return 'Gebeurtenis $value activeren';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Op de knop $button drukken';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Twee keer op de knop $button drukken';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'De knop $button ingedrukt houden';
   }
 
   @override
@@ -2203,6 +2228,22 @@ class UiStringsNl extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Schakel eerst een plug-in met triggers in via Plug-inbeheer.';
+
+  @override
+  String get gestureButton => 'Knop';
+
+  @override
+  String get gesturePress => 'Drukken';
+
+  @override
+  String get gestureDoublePress => 'Dubbel drukken';
+
+  @override
+  String get gestureHoldPress => 'Ingedrukt houden';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Een druk die geen gebaar gebruikt, houdt zijn eigen taak: Actie neemt op, stopt of negeert wat er overgaat en start anders een spraakopdracht, Microfoon dempt Voice Satellite en de volumeknoppen wijzigen het volume.';
 
   @override
   String get intercomCall => 'Oproep';
@@ -3917,6 +3958,9 @@ class UiStringsNl extends UiStrings {
   String get overviewShowingCustomPages => 'Toont eigen pagina\'s';
 
   @override
+  String get overviewHeadlessMode => 'Modus zonder scherm';
+
+  @override
   String get overviewNoScreenshot => 'Geen schermafdruk';
 
   @override
@@ -5310,6 +5354,41 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get deviceOpenSettingsDevice => 'Instellingen openen op apparaat';
+
+  @override
+  String get deviceHardwareButtons => 'Hardwareknoppen';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'De knoppen van het apparaat bereiken gebaren en Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'De knoppen van het apparaat doen niets tot de knoppendienst is ingeschakeld.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, en daarna hetzelfde voor BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'Dit apparaat heeft geen scherm. Schakel het in via adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, en daarna adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => 'Hardware';
@@ -8144,6 +8223,220 @@ class UiStringsNl extends UiStrings {
   String get kioskOpenSettingsDevice => 'Instellingen openen op apparaat';
 
   @override
+  String get settingLedEnabledTitle => 'LED-bediening inschakelen';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Laat Kiosk Satellite de lampjes bedienen.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Effecten animeren';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Laat de bogen draaien en de pulsen vervagen. Zet dit uit om alle effecten stil te zetten.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'Branden bij inactiviteit';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Blijft branden zolang er niets anders wordt getoond.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Effect';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Hoe de lampjes er bij inactiviteit uitzien.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Vast';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Ademend';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Spraakactiviteit tonen';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Licht op terwijl Voice Satellite luistert, nadenkt en antwoordt.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Onder een boog die draait tijdens het luisteren, wisselt tijdens het nadenken en vervaagt tijdens het antwoorden.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Accentkleur';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'De boog die rond de lampjes beweegt.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Tonen als gedempt';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Blijft branden zolang Voice Satellite gedempt is.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Kleur bij dempen';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'De kleur van de lampjes als gedempt.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Timers tonen';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Pulseert terwijl een timer afgaat.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Aftellen tonen';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'De lampjes gaan een voor een uit terwijl de volgende timer afloopt.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Alarmen tonen';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Pulseert terwijl een alarm afgaat.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedIntercomEnabledTitle => 'Intercomgesprekken tonen';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Pulseert terwijl een gesprek overgaat en draait zolang het loopt.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => 'Meldingen tonen';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Pulseert langzaam zolang er een melding wacht.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Muziek tonen';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'Licht op terwijl er muziek speelt op dit apparaat.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Effect';
+
+  @override
+  String get settingLedMediaStyleDescription => 'Hoe de lampjes muziek tonen.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Vast';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Ademend';
+
+  @override
   String get settingLockdownEnabledTitle => 'Vergrendelingsmodus inschakelen';
 
   @override
@@ -9013,6 +9306,47 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get settingsMenuThemeAuto => 'Automatisch';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary =>
+      'Status en snelle bediening';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'Verbinding';
+
+  @override
+  String get settingsMenuAudio => 'Audio';
+
+  @override
+  String get settingsMenuAudioSummary => 'Volume, microfoon';
+
+  @override
+  String get settingsGroupMedia => 'Media';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => 'Audio op afstand afspelen';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary => 'Knop- en klapgebaren';
+
+  @override
+  String get settingsMenuLeds => 'LED-bediening';
+
+  @override
+  String get settingsMenuLedsSummary =>
+      'Kleuren en effecten van de statuslampjes';
+
+  @override
+  String get settingsLedTimers => 'Timers';
+
+  @override
+  String get settingsLedNotifications => 'Meldingen';
+
+  @override
+  String get settingsLedIdle => 'Inactief';
+
+  @override
+  String get settingsLedEffects => 'Effecten';
 
   @override
   String get settingAdaptiveBrightnessTitle => 'Adaptieve helderheid';
@@ -13446,6 +13780,10 @@ class UiStringsNl extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Kies het dashboard dat de kiosk moet weergeven. Je kunt dit later wijzigen via Instellingen.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'Dit apparaat heeft geen scherm, dus Android kan er niet om vragen. Verleen ze elk via adb en rond dan hier af.';
 
   @override
   String get setupWelcome => 'Welkom';

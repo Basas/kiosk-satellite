@@ -151,6 +151,8 @@
   input[type=range]:focus-visible::-webkit-slider-thumb {
     outline: 2px solid var(--primary); outline-offset: 3px; }
   .hidden { display: none !important; }
+  /* A device without a screen (headless.js). */
+  html[data-headless] .no-headless { display: none !important; }
 
   /* Boot splash: the banner wordmark centered and still with a spinner
      right below it, until the boot decides which section owns the page.

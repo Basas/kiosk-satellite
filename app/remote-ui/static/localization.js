@@ -1,3 +1,4 @@
+import { isHeadless } from './headless.js';
 import { setupTextMessageIds } from './setup_text_ids.js';
 import { overviewTextMessageIds } from './overview_text_ids.js';
 import { voiceTextMessageIds } from './voice_text_ids.js';
@@ -108,6 +109,7 @@ export function settingsPageText(category, english) {
     : ['Cameras', 'cameras'].includes(category) ? cameraStreamsText(english)
     : ['Launcher', 'launcher'].includes(category) ? launcherText(english)
     : ['Gestures', 'gestures'].includes(category) ? gestureText(english)
+    : ['LED Control', 'leds'].includes(category) ? navigationText(english)
     : ['Fleet', 'fleet'].includes(category) ? fleetText(english)
     : ['Plugins', 'plugins'].includes(category) ? pluginText(english)
     : ['Kiosk', 'kiosk', 'Home', 'home', 'Lockdown', 'lockdown'].includes(category) ? kioskText(english)
@@ -229,7 +231,9 @@ export function navigationText(english) {
 export function localizeNavigation() {
   document.querySelectorAll('#tabs .nav-title, #tabs .nav-sub, #tabs .nav-head').forEach(element => {
     element.dataset.englishText ??= element.textContent;
-    element.textContent = navigationText(element.dataset.englishText);
+    // A device without a screen names some pages for what is left on them.
+    const english = (isHeadless() && element.dataset.headlessText) || element.dataset.englishText;
+    element.textContent = navigationText(english);
   });
   const search = document.getElementById('settingsSearch');
   if (search) {

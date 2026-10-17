@@ -1779,6 +1779,15 @@ class UiStringsFr extends UiStrings {
       'Aucun kiosque trouvé sur le réseau pour l\'instant.';
 
   @override
+  String get gestureVoiceWake => 'Lancer une commande vocale';
+
+  @override
+  String get gestureVoiceStop => 'Arrêter l\'assistant vocal';
+
+  @override
+  String get gestureVoiceMute => 'Couper ou rétablir le son de Voice Satellite';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '$count appuis dans le coin $corner';
   }
@@ -1879,6 +1888,21 @@ class UiStringsFr extends UiStrings {
   @override
   String gestureFireEvent(String value) {
     return 'Déclencher l\'événement $value';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Appuyer sur le bouton $button';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Appuyer deux fois sur le bouton $button';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'Maintenir le bouton $button';
   }
 
   @override
@@ -2210,6 +2234,22 @@ class UiStringsFr extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Activez d\'abord un plugin proposant des déclencheurs dans le Gestionnaire de plugins.';
+
+  @override
+  String get gestureButton => 'Bouton';
+
+  @override
+  String get gesturePress => 'Appui';
+
+  @override
+  String get gestureDoublePress => 'Double appui';
+
+  @override
+  String get gestureHoldPress => 'Maintien';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Un appui qu\'aucun geste n\'utilise garde sa fonction : Action répond, arrête ou ignore ce qui sonne et sinon lance une commande vocale, Micro coupe Voice Satellite et les boutons de volume changent le volume.';
 
   @override
   String get intercomCall => 'Appeler';
@@ -3930,6 +3970,9 @@ class UiStringsFr extends UiStrings {
   String get overviewShowingCustomPages => 'Affiche des pages personnalisées';
 
   @override
+  String get overviewHeadlessMode => 'Mode sans écran';
+
+  @override
   String get overviewNoScreenshot => 'Aucune capture d\'écran';
 
   @override
@@ -5335,6 +5378,41 @@ class UiStringsFr extends UiStrings {
   @override
   String get deviceOpenSettingsDevice =>
       'Ouvrir les paramètres sur l\'appareil';
+
+  @override
+  String get deviceHardwareButtons => 'Boutons physiques';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'Les boutons de l\'appareil atteignent les gestes et Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'Les boutons de l\'appareil ne font rien tant que le service des boutons n\'est pas activé.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'Cet appareil n\'a pas d\'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'Cet appareil n\'a pas d\'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'Cet appareil n\'a pas d\'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'Cet appareil n\'a pas d\'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, puis de même pour BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'Cet appareil n\'a pas d\'écran. Accordez-la par adb : adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'Cet appareil n\'a pas d\'écran. Activez-le par adb : adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, puis adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => 'Matériel';
@@ -8193,6 +8271,223 @@ class UiStringsFr extends UiStrings {
   String get kioskOpenSettingsDevice => 'Ouvrir les paramètres sur l\'appareil';
 
   @override
+  String get settingLedEnabledTitle => 'Activer le contrôle des LED';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Laisse Kiosk Satellite contrôler les voyants.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Animer les effets';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Fait tourner les arcs et fondre les pulsations. Désactivez-le pour que tous les effets soient fixes.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'S\'allumer au repos';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Reste allumé tant que rien d\'autre ne s\'affiche.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'La couleur des voyants pour ceci.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Effet';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Comment les voyants s’affichent au repos.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Fixe';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Respiration';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Afficher l\'activité vocale';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'S\'allume pendant que Voice Satellite écoute, réfléchit et répond.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Sous un arc qui tourne pendant l\'écoute, alterne pendant la réflexion et fond pendant la réponse.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Couleur d\'accent';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'L\'arc qui tourne autour des voyants.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Afficher en sourdine';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Reste allumé tant que Voice Satellite est en sourdine.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Couleur en sourdine';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'La couleur des voyants en sourdine.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Afficher les minuteurs';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Pulse pendant qu\'un minuteur sonne.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'La couleur des voyants pour ceci.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Afficher le compte à rebours';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'Les voyants s\'éteignent un par un à mesure que le prochain minuteur s\'écoule.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Afficher les alarmes';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Pulse pendant qu\'une alarme sonne.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'La couleur des voyants pour ceci.';
+
+  @override
+  String get settingLedIntercomEnabledTitle =>
+      'Afficher les appels de l\'interphone';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Pulse pendant qu\'un appel sonne et tourne pendant qu\'il est en cours.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'La couleur des voyants pour ceci.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle =>
+      'Afficher les notifications';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Pulse lentement tant qu\'une notification attend.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'La couleur des voyants pour ceci.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Afficher la musique';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'S\'allume pendant que de la musique joue sur cet appareil.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Luminosité';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'La luminosité des voyants pour ceci.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Couleur';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'La couleur des voyants pour ceci.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Effet';
+
+  @override
+  String get settingLedMediaStyleDescription =>
+      'Comment les voyants montrent la musique.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Fixe';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Respiration';
+
+  @override
   String get settingLockdownEnabledTitle => 'Activer le mode verrouillage';
 
   @override
@@ -9075,6 +9370,47 @@ class UiStringsFr extends UiStrings {
 
   @override
   String get settingsMenuThemeAuto => 'Automatique';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary => 'État et commandes rapides';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'Connexion';
+
+  @override
+  String get settingsMenuAudio => 'Audio';
+
+  @override
+  String get settingsMenuAudioSummary => 'Volume, micro';
+
+  @override
+  String get settingsGroupMedia => 'Médias';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => 'Lire de l\'audio à distance';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary =>
+      'Gestes par bouton et claquements';
+
+  @override
+  String get settingsMenuLeds => 'Contrôle des LED';
+
+  @override
+  String get settingsMenuLedsSummary =>
+      'Couleurs et effets des voyants d\'état';
+
+  @override
+  String get settingsLedTimers => 'Minuteurs';
+
+  @override
+  String get settingsLedNotifications => 'Notifications';
+
+  @override
+  String get settingsLedIdle => 'Au repos';
+
+  @override
+  String get settingsLedEffects => 'Effets';
 
   @override
   String get settingAdaptiveBrightnessTitle => 'Luminosité adaptative';
@@ -13547,6 +13883,10 @@ class UiStringsFr extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Choisissez le tableau de bord que le kiosque affichera. Vous pourrez le modifier plus tard dans Paramètres.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'Cet appareil n\'a pas d\'écran, Android ne peut donc pas les demander dessus. Accordez chacune par adb, puis terminez ici.';
 
   @override
   String get setupWelcome => 'Bienvenue';

@@ -1767,6 +1767,15 @@ class UiStringsUk extends UiStrings {
   String get gestureIntercomEmpty => 'У мережі ще не знайдено жодного кіоска.';
 
   @override
+  String get gestureVoiceWake => 'Почати голосову команду';
+
+  @override
+  String get gestureVoiceStop => 'Зупинити голосового асистента';
+
+  @override
+  String get gestureVoiceMute => 'Вимкнути або ввімкнути звук Voice Satellite';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '$count дотиків у кут $corner';
   }
@@ -1867,6 +1876,21 @@ class UiStringsUk extends UiStrings {
   @override
   String gestureFireEvent(String value) {
     return 'Надіслати подію $value';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Натиснути кнопку $button';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Двічі натиснути кнопку $button';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'Утримувати кнопку $button';
   }
 
   @override
@@ -2196,6 +2220,22 @@ class UiStringsUk extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Спочатку ввімкніть плагін із тригерами у менеджері плагінів.';
+
+  @override
+  String get gestureButton => 'Кнопка';
+
+  @override
+  String get gesturePress => 'Натискання';
+
+  @override
+  String get gestureDoublePress => 'Подвійне натискання';
+
+  @override
+  String get gestureHoldPress => 'Утримання';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Натискання, яке не використовує жоден жест, зберігає свою роль: Дія відповідає, зупиняє або відхиляє те, що дзвонить, а інакше починає голосову команду, Мікрофон вимикає Voice Satellite, а кнопки гучності змінюють гучність.';
 
   @override
   String get intercomCall => 'Виклик';
@@ -3903,6 +3943,9 @@ class UiStringsUk extends UiStrings {
   String get overviewShowingCustomPages => 'Показ власних сторінок';
 
   @override
+  String get overviewHeadlessMode => 'Режим без екрана';
+
+  @override
   String get overviewNoScreenshot => 'Немає знімка екрана';
 
   @override
@@ -5289,6 +5332,41 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get deviceOpenSettingsDevice => 'Відкрити налаштування на пристрої';
+
+  @override
+  String get deviceHardwareButtons => 'Апаратні кнопки';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'Кнопки пристрою доходять до жестів і Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'Кнопки пристрою нічого не роблять, доки не ввімкнено службу кнопок.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, потім те саме для BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'Цей пристрій не має екрана. Увімкніть через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, потім adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => 'Апаратне забезпечення';
@@ -8129,6 +8207,221 @@ class UiStringsUk extends UiStrings {
   String get kioskOpenSettingsDevice => 'Відкрити налаштування на пристрої';
 
   @override
+  String get settingLedEnabledTitle => 'Увімкнути керування LED';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Дозволяє Kiosk Satellite керувати індикаторами.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Анімувати ефекти';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Рухає дуги й плавно змінює пульсації. Вимкніть, щоб усі ефекти були статичними.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'Світитися у спокої';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Світиться, поки нічого іншого не показано.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Ефект';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Як індикатори виглядають у спокої.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Постійно';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Дихання';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Показувати голосову активність';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Світиться, поки Voice Satellite слухає, думає й відповідає.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Під дугою, що обертається під час слухання, чергується під час обмірковування й переливається під час відповіді.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Акцентний колір';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'Дуга, що рухається навколо індикаторів.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Показувати, коли вимкнено звук';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Світиться, поки звук Voice Satellite вимкнено.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Колір із вимкненим звуком';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'Колір індикаторів, коли звук вимкнено.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Показувати таймери';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Пульсує, поки дзвонить таймер.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Показувати зворотний відлік';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'Індикатори гаснуть один за одним, поки спливає найближчий таймер.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Показувати будильники';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Пульсує, поки дзвонить будильник.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedIntercomEnabledTitle => 'Показувати дзвінки інтеркому';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Пульсує, поки дзвонить виклик, і обертається, поки він триває.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => 'Показувати сповіщення';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Повільно пульсує, поки чекає сповіщення.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Показувати музику';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'Світиться, поки на цьому пристрої грає музика.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Ефект';
+
+  @override
+  String get settingLedMediaStyleDescription =>
+      'Як індикатори показують музику.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Постійно';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Дихання';
+
+  @override
   String get settingLockdownEnabledTitle => 'Увімкнути режим блокування';
 
   @override
@@ -9004,6 +9297,46 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get settingsMenuThemeAuto => 'Авто';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary => 'Стан і швидке керування';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'З\'єднання';
+
+  @override
+  String get settingsMenuAudio => 'Аудіо';
+
+  @override
+  String get settingsMenuAudioSummary => 'Гучність, мікрофон';
+
+  @override
+  String get settingsGroupMedia => 'Медіа';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => 'Відтворення аудіо віддалено';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary =>
+      'Жести кнопками й оплесками';
+
+  @override
+  String get settingsMenuLeds => 'Керування LED';
+
+  @override
+  String get settingsMenuLedsSummary => 'Кольори й ефекти індикаторів стану';
+
+  @override
+  String get settingsLedTimers => 'Таймери';
+
+  @override
+  String get settingsLedNotifications => 'Сповіщення';
+
+  @override
+  String get settingsLedIdle => 'У спокої';
+
+  @override
+  String get settingsLedEffects => 'Ефекти';
 
   @override
   String get settingAdaptiveBrightnessTitle => 'Адаптивна яскравість';
@@ -13431,6 +13764,10 @@ class UiStringsUk extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Виберіть панель керування, яку відображатиме кіоск. Ви зможете змінити її пізніше в Налаштуваннях.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'Цей пристрій не має екрана, тому Android не може запитати їх на ньому. Надайте кожен через adb, а потім завершіть тут.';
 
   @override
   String get setupWelcome => 'Вітаємо';

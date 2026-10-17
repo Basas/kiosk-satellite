@@ -1,3 +1,4 @@
+import { tabHidden } from './headless.js';
 import { navigationText, t, settingsPageText, pluginText } from './localization.js';
 import { readRoute } from './routes.js';
 import { $, depSatisfied, state } from './core.js';
@@ -19,7 +20,7 @@ export const SEARCH_CATEGORY_TABS = {
   'Sendspin': 'sendspin', 'DLNA': 'dlna', 'Intercom': 'intercom', 'Alarms': 'alarms',
   'ESPHome': 'esphome',
   'Device': 'device', 'Cameras': 'cameras', 'Gestures': 'gestures',
-  'Fleet': 'fleet', 'Plugins': 'plugins',
+  'Fleet': 'fleet', 'Plugins': 'plugins', 'LED Control': 'leds',
 };
 // Second-level pages no setting declares: their rows come from the Voice
 // Satellite integration, not from the definitions, so the page that draws
@@ -256,6 +257,8 @@ export function searchSettingsIndex(query) {
     ? 'native' : 'dashboard';
   [...SEARCH_PAGES.map(page => ({...page, title: navigationText(page.title), desc: navigationText(page.desc), englishAlias: `${page.title} ${page.desc}`})), ...subs, ...defs, ...SEARCH_EXTRAS, ...pluginSearchEntries()].forEach((raw, order) => {
     if (typeof raw.title !== 'string' || !raw.title.trim()) return;
+    if (tabHidden(raw.tab)
+      || document.querySelector(`#tabs button[data-tab="${raw.tab}"]`)?.classList.contains('hidden')) return;
     const e = {...raw, desc: typeof raw.desc === 'string' ? raw.desc : ''};
     if (SEARCH_EXTRAS.includes(raw) || subs.includes(raw)) {
       e.englishAlias = `${e.englishAlias || ''} ${e.title} ${e.desc}`;

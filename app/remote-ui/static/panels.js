@@ -1,3 +1,4 @@
+import { isHeadless } from './headless.js';
 import { cameraStreamsError } from './localization.js';
 import { overviewLabel, overviewMessageBox, overviewModalShell } from './overview_labels.js';
 import { mediaText, mediaError, deviceText, t, screenAudioText, screensaverText, immichError, overviewText } from './localization.js';
@@ -129,7 +130,8 @@ export async function updatePlayerRow() {
   const tab = document.getElementById('tab-sendspin');
   if (!tab) return;
   // What every source has in common, said once at the top of the page.
-  if (!tab.querySelector('.media-player-intro')) {
+  // Both surfaces it names need a screen.
+  if (!isHeadless() && !tab.querySelector('.media-player-intro')) {
     const intro = document.createElement('div');
     intro.className = 'card media-player-intro';
     intro.appendChild(introRow(INTRO_INFO_ICON, '', mediaText('The floating player and Now Playing show only while '
@@ -453,6 +455,8 @@ export async function updateBrightnessGrantNotices() {
     granted = !!(res.data || {}).writeSettings;
   } catch (_) { return; }
   $('#brightnessGrantRow').style.display = granted ? 'none' : '';
+  // No panel to light on a device without a screen.
+  if (isHeadless()) return;
   const root = document.getElementById('tab-screenaudio');
   const existing = root.querySelector('.brightness-grant-card');
   if (granted) { root.querySelectorAll('.brightness-grant-card').forEach((el) => el.remove()); return; }
@@ -659,6 +663,8 @@ document.getElementById('tileCameraView')?.addEventListener('click', () => {
 });
 
 export async function loadScreenshot() {
+  // Nothing to capture on a device without a screen.
+  if (isHeadless()) return;
   try {
     const res = await api('/api/screenshot');
     if (!res.ok) return false;

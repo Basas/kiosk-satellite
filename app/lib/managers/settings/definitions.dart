@@ -11037,6 +11037,407 @@ const uiScale = SettingDef<num>(
 );
 
 /// All settings, in display order.
+
+// ── LED Control ────────────────────────────────────────────────────────
+// The device's status lights (LedManager), such as an Echo Dot's light ring.
+// One group per feature, each with its own switch and brightness. The
+// colors default to the ones an Echo device uses. Hidden on devices without
+// lights the app can drive.
+
+const ledEnabled = SettingDef<bool>(
+  key: 'led.enabled',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Enable LED Control',
+  description: 'Let Kiosk Satellite control the lights.',
+  category: 'LED Control',
+);
+
+const ledAnimations = SettingDef<bool>(
+  key: 'led.animations',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Animate effects',
+  description:
+      'Move the arcs and fade the pulses. Turn off to make every effect '
+      'static instead.',
+  category: 'LED Control',
+  section: 'Effects',
+  dependsOn: 'led.enabled',
+);
+
+const ledIdleEnabled = SettingDef<bool>(
+  key: 'led.idle.enabled',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Light up when idle',
+  description: 'Stay lit while nothing else is showing.',
+  category: 'LED Control',
+  section: 'Idle',
+  dependsOn: 'led.enabled',
+);
+
+const ledIdleBrightness = SettingDef<num>(
+  key: 'led.idle.brightness',
+  type: SettingType.number,
+  defaultValue: 10,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Idle',
+  dependsOn: 'led.idle.enabled',
+);
+
+const ledIdleLightColor = SettingDef<String>(
+  key: 'led.idle.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '255,255,255',
+  title: 'Color',
+  description: 'The color of the lights for this.',
+  category: 'LED Control',
+  section: 'Idle',
+  dependsOn: 'led.idle.enabled',
+);
+
+const ledIdleStyle = SettingDef<String>(
+  key: 'led.idle.style',
+  type: SettingType.select,
+  defaultValue: 'solid',
+  title: 'Effect',
+  description: 'How the lights show while idle.',
+  category: 'LED Control',
+  section: 'Idle',
+  options: ['solid', 'breathe'],
+  optionLabels: {'solid': 'Solid', 'breathe': 'Breathing'},
+  dependsOn: 'led.idle.enabled',
+);
+
+const ledVoiceEnabled = SettingDef<bool>(
+  key: 'led.voice.enabled',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show voice activity',
+  description: 'Light up while Voice Satellite listens, thinks and answers.',
+  category: 'LED Control',
+  section: 'Voice Satellite',
+  dependsOn: 'led.enabled',
+);
+
+const ledVoiceBrightness = SettingDef<num>(
+  key: 'led.voice.brightness',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Voice Satellite',
+  dependsOn: 'led.voice.enabled',
+);
+
+const ledVoiceLightColor = SettingDef<String>(
+  key: 'led.voice.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '0,0,255',
+  title: 'Color',
+  description:
+      'Under an arc that turns while listening, alternating while thinking and fading while answering.',
+  category: 'LED Control',
+  section: 'Voice Satellite',
+  dependsOn: 'led.voice.enabled',
+);
+
+const ledVoiceAccentColor = SettingDef<String>(
+  key: 'led.voice.accent_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '0,200,255',
+  title: 'Accent color',
+  description: 'The arc that moves around the lights.',
+  category: 'LED Control',
+  section: 'Voice Satellite',
+  dependsOn: 'led.voice.enabled',
+);
+
+const ledVoiceMuted = SettingDef<bool>(
+  key: 'led.voice.muted',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show when muted',
+  description: 'Stay lit while Voice Satellite is muted.',
+  category: 'LED Control',
+  section: 'Voice Satellite',
+  dependsOn: 'led.voice.enabled',
+);
+
+const ledVoiceMutedColor = SettingDef<String>(
+  key: 'led.voice.muted_color',
+  type: SettingType.string,
+  defaultValue: '255,0,0',
+  title: 'Muted color',
+  description: 'The color of the lights while muted.',
+  category: 'LED Control',
+  section: 'Voice Satellite',
+  dependsOn: 'led.voice.muted',
+  alsoDependsOn: 'led.voice.enabled',
+);
+
+const ledTimersEnabled = SettingDef<bool>(
+  key: 'led.timers.enabled',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show timers',
+  description: 'Pulse while a timer rings.',
+  category: 'LED Control',
+  section: 'Timers',
+  dependsOn: 'led.enabled',
+);
+
+const ledTimersBrightness = SettingDef<num>(
+  key: 'led.timers.brightness',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Timers',
+  dependsOn: 'led.timers.enabled',
+);
+
+const ledTimersLightColor = SettingDef<String>(
+  key: 'led.timers.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '0,200,255',
+  title: 'Color',
+  description: 'The color of the lights for this.',
+  category: 'LED Control',
+  section: 'Timers',
+  dependsOn: 'led.timers.enabled',
+);
+
+const ledTimersCountdown = SettingDef<bool>(
+  key: 'led.timers.countdown',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show the countdown',
+  description: 'The lights go out one by one as the next timer runs down.',
+  category: 'LED Control',
+  section: 'Timers',
+  dependsOn: 'led.timers.enabled',
+);
+
+const ledAlarmsEnabled = SettingDef<bool>(
+  key: 'led.alarms.enabled',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show alarms',
+  description: 'Pulse while an alarm rings.',
+  category: 'LED Control',
+  section: 'Alarms',
+  dependsOn: 'led.enabled',
+);
+
+const ledAlarmsBrightness = SettingDef<num>(
+  key: 'led.alarms.brightness',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Alarms',
+  dependsOn: 'led.alarms.enabled',
+);
+
+const ledAlarmsLightColor = SettingDef<String>(
+  key: 'led.alarms.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '0,200,255',
+  title: 'Color',
+  description: 'The color of the lights for this.',
+  category: 'LED Control',
+  section: 'Alarms',
+  dependsOn: 'led.alarms.enabled',
+);
+
+const ledIntercomEnabled = SettingDef<bool>(
+  key: 'led.intercom.enabled',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show intercom calls',
+  description: 'Pulse while a call rings and turn while it is live.',
+  category: 'LED Control',
+  section: 'Intercom',
+  dependsOn: 'led.enabled',
+);
+
+const ledIntercomBrightness = SettingDef<num>(
+  key: 'led.intercom.brightness',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Intercom',
+  dependsOn: 'led.intercom.enabled',
+);
+
+const ledIntercomLightColor = SettingDef<String>(
+  key: 'led.intercom.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '0,255,0',
+  title: 'Color',
+  description: 'The color of the lights for this.',
+  category: 'LED Control',
+  section: 'Intercom',
+  dependsOn: 'led.intercom.enabled',
+);
+
+const ledNotificationsEnabled = SettingDef<bool>(
+  key: 'led.notifications.enabled',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show notifications',
+  description: 'Pulse slowly while a notification is waiting.',
+  category: 'LED Control',
+  section: 'Notifications',
+  dependsOn: 'led.enabled',
+);
+
+const ledNotificationsBrightness = SettingDef<num>(
+  key: 'led.notifications.brightness',
+  type: SettingType.number,
+  defaultValue: 100,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Notifications',
+  dependsOn: 'led.notifications.enabled',
+);
+
+const ledNotificationsLightColor = SettingDef<String>(
+  key: 'led.notifications.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '255,170,0',
+  title: 'Color',
+  description: 'The color of the lights for this.',
+  category: 'LED Control',
+  section: 'Notifications',
+  dependsOn: 'led.notifications.enabled',
+);
+
+const ledMediaEnabled = SettingDef<bool>(
+  key: 'led.media.enabled',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show music',
+  description: 'Light up while music plays on this device.',
+  category: 'LED Control',
+  section: 'Media Player',
+  dependsOn: 'led.enabled',
+);
+
+const ledMediaBrightness = SettingDef<num>(
+  key: 'led.media.brightness',
+  type: SettingType.number,
+  defaultValue: 30,
+  min: 5,
+  max: 100,
+  step: 5,
+  unit: '%',
+  title: 'Brightness',
+  description: 'How bright the lights shine for this.',
+  category: 'LED Control',
+  section: 'Media Player',
+  dependsOn: 'led.media.enabled',
+);
+
+const ledMediaLightColor = SettingDef<String>(
+  key: 'led.media.light_color',
+  type: SettingType.string,
+  // Stored as "r,g,b"; both UIs render a color picker for it.
+  defaultValue: '255,255,255',
+  title: 'Color',
+  description: 'The color of the lights for this.',
+  category: 'LED Control',
+  section: 'Media Player',
+  dependsOn: 'led.media.enabled',
+);
+
+const ledMediaStyle = SettingDef<String>(
+  key: 'led.media.style',
+  type: SettingType.select,
+  defaultValue: 'breathe',
+  title: 'Effect',
+  description: 'How the lights show music.',
+  category: 'LED Control',
+  section: 'Media Player',
+  options: ['solid', 'breathe'],
+  optionLabels: {'solid': 'Solid', 'breathe': 'Breathing'},
+  dependsOn: 'led.media.enabled',
+);
+
+/// Every LED Control setting, hidden together where there are no lights.
+const ledSettings = <SettingDef<Object>>[
+  ledEnabled,
+  ledAnimations,
+  ledIdleEnabled,
+  ledIdleBrightness,
+  ledIdleLightColor,
+  ledIdleStyle,
+  ledVoiceEnabled,
+  ledVoiceBrightness,
+  ledVoiceLightColor,
+  ledVoiceAccentColor,
+  ledVoiceMuted,
+  ledVoiceMutedColor,
+  ledTimersEnabled,
+  ledTimersBrightness,
+  ledTimersLightColor,
+  ledTimersCountdown,
+  ledAlarmsEnabled,
+  ledAlarmsBrightness,
+  ledAlarmsLightColor,
+  ledIntercomEnabled,
+  ledIntercomBrightness,
+  ledIntercomLightColor,
+  ledNotificationsEnabled,
+  ledNotificationsBrightness,
+  ledNotificationsLightColor,
+  ledMediaEnabled,
+  ledMediaBrightness,
+  ledMediaLightColor,
+  ledMediaStyle,
+];
+
 const List<SettingDef<Object>> allSettings = [
   startUrl,
   secureProxy,
@@ -11072,6 +11473,7 @@ const List<SettingDef<Object>> allSettings = [
   gestureMappings,
   clapStrictness,
   handGestureHoldSeconds,
+  ...ledSettings,
   kioskAllowDrawer,
   kioskAllowDashboard,
   kioskAllowHaKiosk,

@@ -3180,6 +3180,24 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'Start a voice command'**
+  String get gestureVoiceWake;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop the voice assistant'**
+  String get gestureVoiceStop;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute or unmute Voice Satellite'**
+  String get gestureVoiceMute;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'{count} taps in the {corner} corner'**
   String gestureDescribeCornerTaps(String count, String corner);
 
@@ -3314,6 +3332,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Fire event {value}'**
   String gestureFireEvent(String value);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Press the {button} button'**
+  String gestureDescribeButtonPress(String button);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Double-press the {button} button'**
+  String gestureDescribeButtonDouble(String button);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the {button} button'**
+  String gestureDescribeButtonHold(String button);
 
   /// Label or guidance in this section.
   ///
@@ -3884,6 +3920,36 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Enable a plugin with triggers in Plugin Manager first.'**
   String get gesturePluginTriggerHelp;
+
+  /// Gesture type and field label: a hardware button of a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Button'**
+  String get gestureButton;
+
+  /// Field label and option: how the button is pressed (a single press).
+  ///
+  /// In en, this message translates to:
+  /// **'Press'**
+  String get gesturePress;
+
+  /// Option: two presses of the button in quick succession.
+  ///
+  /// In en, this message translates to:
+  /// **'Double press'**
+  String get gestureDoublePress;
+
+  /// Option: the button held down.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get gestureHoldPress;
+
+  /// Note under the gesture list on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'A button press no gesture claims keeps its own job: Action answers, stops or dismisses what is ringing and otherwise starts a voice command, Microphone mutes Voice Satellite and the volume buttons change the volume.'**
+  String get gestureButtonDefaults;
 
   /// Label or guidance in this section.
   ///
@@ -6808,6 +6874,12 @@ abstract class UiStrings {
   /// **'Showing custom pages'**
   String get overviewShowingCustomPages;
 
+  /// Home Assistant status tile on a device without a screen, which has no dashboard to report on.
+  ///
+  /// In en, this message translates to:
+  /// **'Headless mode'**
+  String get overviewHeadlessMode;
+
   /// Translate the interface text. Keep external names, versions and technical details unchanged.
   ///
   /// In en, this message translates to:
@@ -9189,6 +9261,60 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Open settings on device'**
   String get deviceOpenSettingsDevice;
+
+  /// Permissions Manager row on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardware buttons'**
+  String get deviceHardwareButtons;
+
+  /// Permissions Manager row on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'The device buttons reach gestures and Voice Satellite.'**
+  String get deviceHardwareButtonsHeld;
+
+  /// Permissions Manager row on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'The device buttons do nothing until the button service is switched on.'**
+  String get deviceHardwareButtonsMissing;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO'**
+  String get deviceHeadlessAdbMicrophone;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS'**
+  String get deviceHeadlessAdbNotifications;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION'**
+  String get deviceHeadlessAdbLocation;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, then the same for BLUETOOTH_CONNECT'**
+  String get deviceHeadlessAdbBluetooth;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite'**
+  String get deviceHeadlessAdbBattery;
+
+  /// Grant instructions on a device without a screen. Keep the adb commands unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Switch it on over adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, then adb shell settings put secure accessibility_enabled 1'**
+  String get deviceHeadlessAdbButtons;
 
   /// Label or explanation on this Device settings page.
   ///
@@ -14003,6 +14129,378 @@ abstract class UiStrings {
   /// **'Open settings on device'**
   String get kioskOpenSettingsDevice;
 
+  /// Setting label: the master switch of the LED Control page.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable LED Control'**
+  String get settingLedEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Kiosk Satellite control the lights.'**
+  String get settingLedEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Animate effects'**
+  String get settingLedAnimationsTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the arcs and fade the pulses. Turn off to make every effect static instead.'**
+  String get settingLedAnimationsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Light up when idle'**
+  String get settingLedIdleEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay lit while nothing else is showing.'**
+  String get settingLedIdleEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedIdleBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedIdleBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedIdleLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedIdleLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Effect'**
+  String get settingLedIdleStyleTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How the lights show while idle.'**
+  String get settingLedIdleStyleDescription;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid'**
+  String get settingLedIdleStyleOptionSolid;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing'**
+  String get settingLedIdleStyleOptionBreathe;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show voice activity'**
+  String get settingLedVoiceEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Light up while Voice Satellite listens, thinks and answers.'**
+  String get settingLedVoiceEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedVoiceBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedVoiceBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedVoiceLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Under an arc that turns while listening, alternating while thinking and fading while answering.'**
+  String get settingLedVoiceLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent color'**
+  String get settingLedVoiceAccentColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The arc that moves around the lights.'**
+  String get settingLedVoiceAccentColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show when muted'**
+  String get settingLedVoiceMutedTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay lit while Voice Satellite is muted.'**
+  String get settingLedVoiceMutedDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted color'**
+  String get settingLedVoiceMutedColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights while muted.'**
+  String get settingLedVoiceMutedColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show timers'**
+  String get settingLedTimersEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse while a timer rings.'**
+  String get settingLedTimersEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedTimersBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedTimersBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedTimersLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedTimersLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the countdown'**
+  String get settingLedTimersCountdownTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The lights go out one by one as the next timer runs down.'**
+  String get settingLedTimersCountdownDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show alarms'**
+  String get settingLedAlarmsEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse while an alarm rings.'**
+  String get settingLedAlarmsEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedAlarmsBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedAlarmsBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedAlarmsLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedAlarmsLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show intercom calls'**
+  String get settingLedIntercomEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse while a call rings and turn while it is live.'**
+  String get settingLedIntercomEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedIntercomBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedIntercomBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedIntercomLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedIntercomLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show notifications'**
+  String get settingLedNotificationsEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse slowly while a notification is waiting.'**
+  String get settingLedNotificationsEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedNotificationsBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedNotificationsBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedNotificationsLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedNotificationsLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show music'**
+  String get settingLedMediaEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Light up while music plays on this device.'**
+  String get settingLedMediaEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedMediaBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedMediaBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedMediaLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedMediaLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Effect'**
+  String get settingLedMediaStyleTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How the lights show music.'**
+  String get settingLedMediaStyleDescription;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid'**
+  String get settingLedMediaStyleOptionSolid;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing'**
+  String get settingLedMediaStyleOptionBreathe;
+
   /// Setting label.
   ///
   /// In en, this message translates to:
@@ -15514,6 +16012,84 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Automatic'**
   String get settingsMenuThemeAuto;
+
+  /// Summary below Overview on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Status and quick controls'**
+  String get settingsMenuOverviewHeadlessSummary;
+
+  /// Summary below Home Assistant on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection'**
+  String get settingsMenuHomeAssistantHeadlessSummary;
+
+  /// The Screen & Audio page on a device without a screen, and its menu group.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get settingsMenuAudio;
+
+  /// Summary below Audio on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume, microphone'**
+  String get settingsMenuAudioSummary;
+
+  /// Menu group on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Media'**
+  String get settingsGroupMedia;
+
+  /// Summary below DLNA Renderer on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Play audio remotely'**
+  String get settingsMenuDlnaHeadlessSummary;
+
+  /// Summary below Gestures on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Button and clap gestures'**
+  String get settingsMenuGesturesHeadlessSummary;
+
+  /// The LED Control page, on devices with status lights.
+  ///
+  /// In en, this message translates to:
+  /// **'LED Control'**
+  String get settingsMenuLeds;
+
+  /// Summary below LED Control in the Settings menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Status light colors and effects'**
+  String get settingsMenuLedsSummary;
+
+  /// Group on the LED Control page.
+  ///
+  /// In en, this message translates to:
+  /// **'Timers'**
+  String get settingsLedTimers;
+
+  /// Group on the LED Control page.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsLedNotifications;
+
+  /// Group on the LED Control page: what the lights do when nothing else is showing.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle'**
+  String get settingsLedIdle;
+
+  /// Group on the LED Control page: how the lights move.
+  ///
+  /// In en, this message translates to:
+  /// **'Effects'**
+  String get settingsLedEffects;
 
   /// Setting label.
   ///
@@ -23086,6 +23662,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Choose the dashboard the kiosk will display. You can change it later in Settings.'**
   String get setupSelectDashboardHelp;
+
+  /// Permissions step of the remote setup wizard on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen, so Android cannot ask for these on it. Give each one over adb, then finish here.'**
+  String get setupHeadlessGrants;
 
   /// Welcome step label.
   ///

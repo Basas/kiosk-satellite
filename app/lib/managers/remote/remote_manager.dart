@@ -14,6 +14,7 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../core/headless.dart';
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
@@ -532,6 +533,8 @@ class RemoteManager extends Manager {
       final deviceName = data?['name'];
       return _json(200, {
         'setupNeeded': _setupMode,
+        // The wizard skips the dashboard on a device without a screen.
+        'headless': Headless.active,
         'passwordNeeded': _settings.get(defs.remotePassword).isEmpty,
         'deviceName': deviceName is String ? deviceName : '',
         'language': _settings.get(defs.uiLanguage),

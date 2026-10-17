@@ -6850,6 +6850,45 @@
       ]
     }
   },
+  "gestureVoiceWake": "Lancer une commande vocale",
+  "@gestureVoiceWake": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureVoiceStop": "Arrêter l'assistant vocal",
+  "@gestureVoiceStop": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureVoiceMute": "Couper ou rétablir le son de Voice Satellite",
+  "@gestureVoiceMute": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
   "gestureDescribeCornerTaps": "{count} appuis dans le coin {corner}",
   "@gestureDescribeCornerTaps": {
     "context": "Settings > Gestures > Configured gestures",
@@ -7255,6 +7294,63 @@
     },
     "placeholders": {
       "value": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonPress": "Appuyer sur le bouton {button}",
+  "@gestureDescribeButtonPress": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonDouble": "Appuyer deux fois sur le bouton {button}",
+  "@gestureDescribeButtonDouble": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonHold": "Maintenir le bouton {button}",
+  "@gestureDescribeButtonHold": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
         "type": "String"
       }
     },
@@ -8499,6 +8595,56 @@
       ],
       "remoteAdmin": [
         "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureButton": "Bouton",
+  "@gestureButton": {
+    "context": "Gestures > Add gesture",
+    "description": "Gesture type and field label: a hardware button of a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gesturePress": "Appui",
+  "@gesturePress": {
+    "context": "Gestures > Add gesture",
+    "description": "Field label and option: how the button is pressed (a single press).",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureDoublePress": "Double appui",
+  "@gestureDoublePress": {
+    "context": "Gestures > Add gesture",
+    "description": "Option: two presses of the button in quick succession.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureHoldPress": "Maintien",
+  "@gestureHoldPress": {
+    "context": "Gestures > Add gesture",
+    "description": "Option: the button held down.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureButtonDefaults": "Un appui qu'aucun geste n'utilise garde sa fonction : Action répond, arrête ou ignore ce qui sonne et sinon lance une commande vocale, Micro coupe Voice Satellite et les boutons de volume changent le volume.",
+  "@gestureButtonDefaults": {
+    "context": "Gestures",
+    "description": "Note under the gesture list on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures"
       ]
     }
   },
@@ -14731,6 +14877,17 @@
       ]
     }
   },
+  "overviewHeadlessMode": "Mode sans écran",
+  "@overviewHeadlessMode": {
+    "context": "Remote admin > Overview > Status",
+    "description": "Home Assistant status tile on a device without a screen, which has no dashboard to report on.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Status"
+      ]
+    }
+  },
   "overviewNoScreenshot": "Aucune capture d'écran",
   "@overviewNoScreenshot": {
     "context": "Remote admin > Overview > Screenshot",
@@ -20059,6 +20216,96 @@
       "device": [
         "Settings > Device"
       ],
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtons": "Boutons physiques",
+  "@deviceHardwareButtons": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtonsHeld": "Les boutons de l'appareil atteignent les gestes et Voice Satellite.",
+  "@deviceHardwareButtonsHeld": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtonsMissing": "Les boutons de l'appareil ne font rien tant que le service des boutons n'est pas activé.",
+  "@deviceHardwareButtonsMissing": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbMicrophone": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO",
+  "@deviceHeadlessAdbMicrophone": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbNotifications": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS",
+  "@deviceHeadlessAdbNotifications": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbLocation": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION",
+  "@deviceHeadlessAdbLocation": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbBluetooth": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, puis de même pour BLUETOOTH_CONNECT",
+  "@deviceHeadlessAdbBluetooth": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbBattery": "Cet appareil n'a pas d'écran. Accordez-la par adb : adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
+  "@deviceHeadlessAdbBattery": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbButtons": "Cet appareil n'a pas d'écran. Activez-le par adb : adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, puis adb shell settings put secure accessibility_enabled 1",
+  "@deviceHeadlessAdbButtons": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
       "remoteAdmin": [
         "Device"
       ]
@@ -30582,6 +30829,812 @@
       ]
     }
   },
+  "settingLedEnabledTitle": "Activer le contrôle des LED",
+  "@settingLedEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label: the master switch of the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Enable LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control > Enable LED Control"
+      ]
+    }
+  },
+  "settingLedEnabledDescription": "Laisse Kiosk Satellite contrôler les voyants.",
+  "@settingLedEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Enable LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control > Enable LED Control"
+      ]
+    }
+  },
+  "settingLedAnimationsTitle": "Animer les effets",
+  "@settingLedAnimationsTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Effects > Animate effects"
+      ],
+      "remoteAdmin": [
+        "LED Control > Effects > Animate effects"
+      ]
+    }
+  },
+  "settingLedAnimationsDescription": "Fait tourner les arcs et fondre les pulsations. Désactivez-le pour que tous les effets soient fixes.",
+  "@settingLedAnimationsDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Effects > Animate effects"
+      ],
+      "remoteAdmin": [
+        "LED Control > Effects > Animate effects"
+      ]
+    }
+  },
+  "settingLedIdleEnabledTitle": "S'allumer au repos",
+  "@settingLedIdleEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Light up when idle"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Light up when idle"
+      ]
+    }
+  },
+  "settingLedIdleEnabledDescription": "Reste allumé tant que rien d'autre ne s'affiche.",
+  "@settingLedIdleEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Light up when idle"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Light up when idle"
+      ]
+    }
+  },
+  "settingLedIdleBrightnessTitle": "Luminosité",
+  "@settingLedIdleBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Brightness"
+      ]
+    }
+  },
+  "settingLedIdleBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedIdleBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Brightness"
+      ]
+    }
+  },
+  "settingLedIdleLightColorTitle": "Couleur",
+  "@settingLedIdleLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Color"
+      ]
+    }
+  },
+  "settingLedIdleLightColorDescription": "La couleur des voyants pour ceci.",
+  "@settingLedIdleLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Color"
+      ]
+    }
+  },
+  "settingLedIdleStyleTitle": "Effet",
+  "@settingLedIdleStyleTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleDescription": "Comment les voyants s’affichent au repos.",
+  "@settingLedIdleStyleDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleOptionSolid": "Fixe",
+  "@settingLedIdleStyleOptionSolid": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleOptionBreathe": "Respiration",
+  "@settingLedIdleStyleOptionBreathe": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedVoiceEnabledTitle": "Afficher l'activité vocale",
+  "@settingLedVoiceEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show voice activity"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show voice activity"
+      ]
+    }
+  },
+  "settingLedVoiceEnabledDescription": "S'allume pendant que Voice Satellite écoute, réfléchit et répond.",
+  "@settingLedVoiceEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show voice activity"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show voice activity"
+      ]
+    }
+  },
+  "settingLedVoiceBrightnessTitle": "Luminosité",
+  "@settingLedVoiceBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Brightness"
+      ]
+    }
+  },
+  "settingLedVoiceBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedVoiceBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Brightness"
+      ]
+    }
+  },
+  "settingLedVoiceLightColorTitle": "Couleur",
+  "@settingLedVoiceLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Color"
+      ]
+    }
+  },
+  "settingLedVoiceLightColorDescription": "Sous un arc qui tourne pendant l'écoute, alterne pendant la réflexion et fond pendant la réponse.",
+  "@settingLedVoiceLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Color"
+      ]
+    }
+  },
+  "settingLedVoiceAccentColorTitle": "Couleur d'accent",
+  "@settingLedVoiceAccentColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Accent color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Accent color"
+      ]
+    }
+  },
+  "settingLedVoiceAccentColorDescription": "L'arc qui tourne autour des voyants.",
+  "@settingLedVoiceAccentColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Accent color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Accent color"
+      ]
+    }
+  },
+  "settingLedVoiceMutedTitle": "Afficher en sourdine",
+  "@settingLedVoiceMutedTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show when muted"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show when muted"
+      ]
+    }
+  },
+  "settingLedVoiceMutedDescription": "Reste allumé tant que Voice Satellite est en sourdine.",
+  "@settingLedVoiceMutedDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show when muted"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show when muted"
+      ]
+    }
+  },
+  "settingLedVoiceMutedColorTitle": "Couleur en sourdine",
+  "@settingLedVoiceMutedColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Muted color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Muted color"
+      ]
+    }
+  },
+  "settingLedVoiceMutedColorDescription": "La couleur des voyants en sourdine.",
+  "@settingLedVoiceMutedColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Muted color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Muted color"
+      ]
+    }
+  },
+  "settingLedTimersEnabledTitle": "Afficher les minuteurs",
+  "@settingLedTimersEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show timers"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show timers"
+      ]
+    }
+  },
+  "settingLedTimersEnabledDescription": "Pulse pendant qu'un minuteur sonne.",
+  "@settingLedTimersEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show timers"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show timers"
+      ]
+    }
+  },
+  "settingLedTimersBrightnessTitle": "Luminosité",
+  "@settingLedTimersBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Brightness"
+      ]
+    }
+  },
+  "settingLedTimersBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedTimersBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Brightness"
+      ]
+    }
+  },
+  "settingLedTimersLightColorTitle": "Couleur",
+  "@settingLedTimersLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Color"
+      ]
+    }
+  },
+  "settingLedTimersLightColorDescription": "La couleur des voyants pour ceci.",
+  "@settingLedTimersLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Color"
+      ]
+    }
+  },
+  "settingLedTimersCountdownTitle": "Afficher le compte à rebours",
+  "@settingLedTimersCountdownTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show the countdown"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show the countdown"
+      ]
+    }
+  },
+  "settingLedTimersCountdownDescription": "Les voyants s'éteignent un par un à mesure que le prochain minuteur s'écoule.",
+  "@settingLedTimersCountdownDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show the countdown"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show the countdown"
+      ]
+    }
+  },
+  "settingLedAlarmsEnabledTitle": "Afficher les alarmes",
+  "@settingLedAlarmsEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Show alarms"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Show alarms"
+      ]
+    }
+  },
+  "settingLedAlarmsEnabledDescription": "Pulse pendant qu'une alarme sonne.",
+  "@settingLedAlarmsEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Show alarms"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Show alarms"
+      ]
+    }
+  },
+  "settingLedAlarmsBrightnessTitle": "Luminosité",
+  "@settingLedAlarmsBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Brightness"
+      ]
+    }
+  },
+  "settingLedAlarmsBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedAlarmsBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Brightness"
+      ]
+    }
+  },
+  "settingLedAlarmsLightColorTitle": "Couleur",
+  "@settingLedAlarmsLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Color"
+      ]
+    }
+  },
+  "settingLedAlarmsLightColorDescription": "La couleur des voyants pour ceci.",
+  "@settingLedAlarmsLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Color"
+      ]
+    }
+  },
+  "settingLedIntercomEnabledTitle": "Afficher les appels de l'interphone",
+  "@settingLedIntercomEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Show intercom calls"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Show intercom calls"
+      ]
+    }
+  },
+  "settingLedIntercomEnabledDescription": "Pulse pendant qu'un appel sonne et tourne pendant qu'il est en cours.",
+  "@settingLedIntercomEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Show intercom calls"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Show intercom calls"
+      ]
+    }
+  },
+  "settingLedIntercomBrightnessTitle": "Luminosité",
+  "@settingLedIntercomBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Brightness"
+      ]
+    }
+  },
+  "settingLedIntercomBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedIntercomBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Brightness"
+      ]
+    }
+  },
+  "settingLedIntercomLightColorTitle": "Couleur",
+  "@settingLedIntercomLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Color"
+      ]
+    }
+  },
+  "settingLedIntercomLightColorDescription": "La couleur des voyants pour ceci.",
+  "@settingLedIntercomLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Color"
+      ]
+    }
+  },
+  "settingLedNotificationsEnabledTitle": "Afficher les notifications",
+  "@settingLedNotificationsEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Show notifications"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Show notifications"
+      ]
+    }
+  },
+  "settingLedNotificationsEnabledDescription": "Pulse lentement tant qu'une notification attend.",
+  "@settingLedNotificationsEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Show notifications"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Show notifications"
+      ]
+    }
+  },
+  "settingLedNotificationsBrightnessTitle": "Luminosité",
+  "@settingLedNotificationsBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Brightness"
+      ]
+    }
+  },
+  "settingLedNotificationsBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedNotificationsBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Brightness"
+      ]
+    }
+  },
+  "settingLedNotificationsLightColorTitle": "Couleur",
+  "@settingLedNotificationsLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Color"
+      ]
+    }
+  },
+  "settingLedNotificationsLightColorDescription": "La couleur des voyants pour ceci.",
+  "@settingLedNotificationsLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Color"
+      ]
+    }
+  },
+  "settingLedMediaEnabledTitle": "Afficher la musique",
+  "@settingLedMediaEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Show music"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Show music"
+      ]
+    }
+  },
+  "settingLedMediaEnabledDescription": "S'allume pendant que de la musique joue sur cet appareil.",
+  "@settingLedMediaEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Show music"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Show music"
+      ]
+    }
+  },
+  "settingLedMediaBrightnessTitle": "Luminosité",
+  "@settingLedMediaBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Brightness"
+      ]
+    }
+  },
+  "settingLedMediaBrightnessDescription": "La luminosité des voyants pour ceci.",
+  "@settingLedMediaBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Brightness"
+      ]
+    }
+  },
+  "settingLedMediaLightColorTitle": "Couleur",
+  "@settingLedMediaLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Color"
+      ]
+    }
+  },
+  "settingLedMediaLightColorDescription": "La couleur des voyants pour ceci.",
+  "@settingLedMediaLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Color"
+      ]
+    }
+  },
+  "settingLedMediaStyleTitle": "Effet",
+  "@settingLedMediaStyleTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleDescription": "Comment les voyants montrent la musique.",
+  "@settingLedMediaStyleDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleOptionSolid": "Fixe",
+  "@settingLedMediaStyleOptionSolid": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleOptionBreathe": "Respiration",
+  "@settingLedMediaStyleOptionBreathe": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
   "settingLockdownEnabledTitle": "Activer le mode verrouillage",
   "@settingLockdownEnabledTitle": {
     "context": "Lockdown Mode > Enable Lockdown Mode",
@@ -33833,6 +34886,154 @@
     "x-locations": {
       "remoteAdmin": [
         "Sidebar > theme button"
+      ]
+    }
+  },
+  "settingsMenuOverviewHeadlessSummary": "État et commandes rapides",
+  "@settingsMenuOverviewHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Overview on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuHomeAssistantHeadlessSummary": "Connexion",
+  "@settingsMenuHomeAssistantHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Home Assistant on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuAudio": "Audio",
+  "@settingsMenuAudio": {
+    "context": "Settings:Menu",
+    "description": "The Screen & Audio page on a device without a screen, and its menu group.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuAudioSummary": "Volume, micro",
+  "@settingsMenuAudioSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Audio on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsGroupMedia": "Médias",
+  "@settingsGroupMedia": {
+    "context": "Settings:Menu",
+    "description": "Menu group on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuDlnaHeadlessSummary": "Lire de l'audio à distance",
+  "@settingsMenuDlnaHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below DLNA Renderer on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuGesturesHeadlessSummary": "Gestes par bouton et claquements",
+  "@settingsMenuGesturesHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Gestures on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuLeds": "Contrôle des LED",
+  "@settingsMenuLeds": {
+    "context": "Settings:Menu",
+    "description": "The LED Control page, on devices with status lights.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuLedsSummary": "Couleurs et effets des voyants d'état",
+  "@settingsMenuLedsSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below LED Control in the Settings menu.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedTimers": "Minuteurs",
+  "@settingsLedTimers": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedNotifications": "Notifications",
+  "@settingsLedNotifications": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedIdle": "Au repos",
+  "@settingsLedIdle": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page: what the lights do when nothing else is showing.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control"
+      ]
+    }
+  },
+  "settingsLedEffects": "Effets",
+  "@settingsLedEffects": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page: how the lights move.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control"
       ]
     }
   },
@@ -48256,6 +49457,16 @@
       ],
       "remoteAdmin": [
         "First-time setup > Dashboard"
+      ]
+    }
+  },
+  "setupHeadlessGrants": "Cet appareil n'a pas d'écran, Android ne peut donc pas les demander dessus. Accordez chacune par adb, puis terminez ici.",
+  "@setupHeadlessGrants": {
+    "context": "Setup",
+    "description": "Permissions step of the remote setup wizard on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Setup wizard > Permissions"
       ]
     }
   },

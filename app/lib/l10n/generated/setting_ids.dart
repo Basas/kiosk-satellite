@@ -2060,4 +2060,120 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingBrowserUrlFilterNoticeTitle",
     "description": "settingBrowserUrlFilterNoticeDescription",
   },
+  "led.voice.enabled": {
+    "title": "settingLedVoiceEnabledTitle",
+    "description": "settingLedVoiceEnabledDescription",
+  },
+  "led.voice.brightness": {
+    "title": "settingLedVoiceBrightnessTitle",
+    "description": "settingLedVoiceBrightnessDescription",
+  },
+  "led.voice.light_color": {
+    "title": "settingLedVoiceLightColorTitle",
+    "description": "settingLedVoiceLightColorDescription",
+  },
+  "led.voice.accent_color": {
+    "title": "settingLedVoiceAccentColorTitle",
+    "description": "settingLedVoiceAccentColorDescription",
+  },
+  "led.voice.muted": {
+    "title": "settingLedVoiceMutedTitle",
+    "description": "settingLedVoiceMutedDescription",
+  },
+  "led.voice.muted_color": {
+    "title": "settingLedVoiceMutedColorTitle",
+    "description": "settingLedVoiceMutedColorDescription",
+  },
+  "led.timers.enabled": {
+    "title": "settingLedTimersEnabledTitle",
+    "description": "settingLedTimersEnabledDescription",
+  },
+  "led.timers.brightness": {
+    "title": "settingLedTimersBrightnessTitle",
+    "description": "settingLedTimersBrightnessDescription",
+  },
+  "led.timers.light_color": {
+    "title": "settingLedTimersLightColorTitle",
+    "description": "settingLedTimersLightColorDescription",
+  },
+  "led.timers.countdown": {
+    "title": "settingLedTimersCountdownTitle",
+    "description": "settingLedTimersCountdownDescription",
+  },
+  "led.alarms.enabled": {
+    "title": "settingLedAlarmsEnabledTitle",
+    "description": "settingLedAlarmsEnabledDescription",
+  },
+  "led.alarms.brightness": {
+    "title": "settingLedAlarmsBrightnessTitle",
+    "description": "settingLedAlarmsBrightnessDescription",
+  },
+  "led.alarms.light_color": {
+    "title": "settingLedAlarmsLightColorTitle",
+    "description": "settingLedAlarmsLightColorDescription",
+  },
+  "led.intercom.enabled": {
+    "title": "settingLedIntercomEnabledTitle",
+    "description": "settingLedIntercomEnabledDescription",
+  },
+  "led.intercom.brightness": {
+    "title": "settingLedIntercomBrightnessTitle",
+    "description": "settingLedIntercomBrightnessDescription",
+  },
+  "led.intercom.light_color": {
+    "title": "settingLedIntercomLightColorTitle",
+    "description": "settingLedIntercomLightColorDescription",
+  },
+  "led.notifications.enabled": {
+    "title": "settingLedNotificationsEnabledTitle",
+    "description": "settingLedNotificationsEnabledDescription",
+  },
+  "led.notifications.brightness": {
+    "title": "settingLedNotificationsBrightnessTitle",
+    "description": "settingLedNotificationsBrightnessDescription",
+  },
+  "led.notifications.light_color": {
+    "title": "settingLedNotificationsLightColorTitle",
+    "description": "settingLedNotificationsLightColorDescription",
+  },
+  "led.media.enabled": {
+    "title": "settingLedMediaEnabledTitle",
+    "description": "settingLedMediaEnabledDescription",
+  },
+  "led.media.brightness": {
+    "title": "settingLedMediaBrightnessTitle",
+    "description": "settingLedMediaBrightnessDescription",
+  },
+  "led.media.light_color": {
+    "title": "settingLedMediaLightColorTitle",
+    "description": "settingLedMediaLightColorDescription",
+  },
+  "led.media.style": {
+    "title": "settingLedMediaStyleTitle",
+    "description": "settingLedMediaStyleDescription",
+  },
+  "led.idle.enabled": {
+    "title": "settingLedIdleEnabledTitle",
+    "description": "settingLedIdleEnabledDescription",
+  },
+  "led.idle.brightness": {
+    "title": "settingLedIdleBrightnessTitle",
+    "description": "settingLedIdleBrightnessDescription",
+  },
+  "led.idle.light_color": {
+    "title": "settingLedIdleLightColorTitle",
+    "description": "settingLedIdleLightColorDescription",
+  },
+  "led.idle.style": {
+    "title": "settingLedIdleStyleTitle",
+    "description": "settingLedIdleStyleDescription",
+  },
+  "led.animations": {
+    "title": "settingLedAnimationsTitle",
+    "description": "settingLedAnimationsDescription",
+  },
+  "led.enabled": {
+    "title": "settingLedEnabledTitle",
+    "description": "settingLedEnabledDescription",
+  },
 };

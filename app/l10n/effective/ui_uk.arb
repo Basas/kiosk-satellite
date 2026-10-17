@@ -6850,6 +6850,45 @@
       ]
     }
   },
+  "gestureVoiceWake": "Почати голосову команду",
+  "@gestureVoiceWake": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureVoiceStop": "Зупинити голосового асистента",
+  "@gestureVoiceStop": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureVoiceMute": "Вимкнути або ввімкнути звук Voice Satellite",
+  "@gestureVoiceMute": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
   "gestureDescribeCornerTaps": "{count} дотиків у кут {corner}",
   "@gestureDescribeCornerTaps": {
     "context": "Settings > Gestures > Configured gestures",
@@ -7255,6 +7294,63 @@
     },
     "placeholders": {
       "value": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonPress": "Натиснути кнопку {button}",
+  "@gestureDescribeButtonPress": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonDouble": "Двічі натиснути кнопку {button}",
+  "@gestureDescribeButtonDouble": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonHold": "Утримувати кнопку {button}",
+  "@gestureDescribeButtonHold": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
         "type": "String"
       }
     },
@@ -8499,6 +8595,56 @@
       ],
       "remoteAdmin": [
         "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureButton": "Кнопка",
+  "@gestureButton": {
+    "context": "Gestures > Add gesture",
+    "description": "Gesture type and field label: a hardware button of a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gesturePress": "Натискання",
+  "@gesturePress": {
+    "context": "Gestures > Add gesture",
+    "description": "Field label and option: how the button is pressed (a single press).",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureDoublePress": "Подвійне натискання",
+  "@gestureDoublePress": {
+    "context": "Gestures > Add gesture",
+    "description": "Option: two presses of the button in quick succession.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureHoldPress": "Утримання",
+  "@gestureHoldPress": {
+    "context": "Gestures > Add gesture",
+    "description": "Option: the button held down.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureButtonDefaults": "Натискання, яке не використовує жоден жест, зберігає свою роль: Дія відповідає, зупиняє або відхиляє те, що дзвонить, а інакше починає голосову команду, Мікрофон вимикає Voice Satellite, а кнопки гучності змінюють гучність.",
+  "@gestureButtonDefaults": {
+    "context": "Gestures",
+    "description": "Note under the gesture list on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures"
       ]
     }
   },
@@ -14731,6 +14877,17 @@
       ]
     }
   },
+  "overviewHeadlessMode": "Режим без екрана",
+  "@overviewHeadlessMode": {
+    "context": "Remote admin > Overview > Status",
+    "description": "Home Assistant status tile on a device without a screen, which has no dashboard to report on.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Status"
+      ]
+    }
+  },
   "overviewNoScreenshot": "Немає знімка екрана",
   "@overviewNoScreenshot": {
     "context": "Remote admin > Overview > Screenshot",
@@ -20059,6 +20216,96 @@
       "device": [
         "Settings > Device"
       ],
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtons": "Апаратні кнопки",
+  "@deviceHardwareButtons": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtonsHeld": "Кнопки пристрою доходять до жестів і Voice Satellite.",
+  "@deviceHardwareButtonsHeld": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtonsMissing": "Кнопки пристрою нічого не роблять, доки не ввімкнено службу кнопок.",
+  "@deviceHardwareButtonsMissing": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbMicrophone": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO",
+  "@deviceHeadlessAdbMicrophone": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbNotifications": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS",
+  "@deviceHeadlessAdbNotifications": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbLocation": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION",
+  "@deviceHeadlessAdbLocation": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbBluetooth": "Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, потім те саме для BLUETOOTH_CONNECT",
+  "@deviceHeadlessAdbBluetooth": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbBattery": "Цей пристрій не має екрана. Надайте через adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
+  "@deviceHeadlessAdbBattery": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbButtons": "Цей пристрій не має екрана. Увімкніть через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, потім adb shell settings put secure accessibility_enabled 1",
+  "@deviceHeadlessAdbButtons": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
       "remoteAdmin": [
         "Device"
       ]
@@ -30582,6 +30829,812 @@
       ]
     }
   },
+  "settingLedEnabledTitle": "Увімкнути керування LED",
+  "@settingLedEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label: the master switch of the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Enable LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control > Enable LED Control"
+      ]
+    }
+  },
+  "settingLedEnabledDescription": "Дозволяє Kiosk Satellite керувати індикаторами.",
+  "@settingLedEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Enable LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control > Enable LED Control"
+      ]
+    }
+  },
+  "settingLedAnimationsTitle": "Анімувати ефекти",
+  "@settingLedAnimationsTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Effects > Animate effects"
+      ],
+      "remoteAdmin": [
+        "LED Control > Effects > Animate effects"
+      ]
+    }
+  },
+  "settingLedAnimationsDescription": "Рухає дуги й плавно змінює пульсації. Вимкніть, щоб усі ефекти були статичними.",
+  "@settingLedAnimationsDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Effects > Animate effects"
+      ],
+      "remoteAdmin": [
+        "LED Control > Effects > Animate effects"
+      ]
+    }
+  },
+  "settingLedIdleEnabledTitle": "Світитися у спокої",
+  "@settingLedIdleEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Light up when idle"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Light up when idle"
+      ]
+    }
+  },
+  "settingLedIdleEnabledDescription": "Світиться, поки нічого іншого не показано.",
+  "@settingLedIdleEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Light up when idle"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Light up when idle"
+      ]
+    }
+  },
+  "settingLedIdleBrightnessTitle": "Яскравість",
+  "@settingLedIdleBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Brightness"
+      ]
+    }
+  },
+  "settingLedIdleBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedIdleBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Brightness"
+      ]
+    }
+  },
+  "settingLedIdleLightColorTitle": "Колір",
+  "@settingLedIdleLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Color"
+      ]
+    }
+  },
+  "settingLedIdleLightColorDescription": "Колір індикаторів для цього.",
+  "@settingLedIdleLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Color"
+      ]
+    }
+  },
+  "settingLedIdleStyleTitle": "Ефект",
+  "@settingLedIdleStyleTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleDescription": "Як індикатори виглядають у спокої.",
+  "@settingLedIdleStyleDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleOptionSolid": "Постійно",
+  "@settingLedIdleStyleOptionSolid": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleOptionBreathe": "Дихання",
+  "@settingLedIdleStyleOptionBreathe": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedVoiceEnabledTitle": "Показувати голосову активність",
+  "@settingLedVoiceEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show voice activity"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show voice activity"
+      ]
+    }
+  },
+  "settingLedVoiceEnabledDescription": "Світиться, поки Voice Satellite слухає, думає й відповідає.",
+  "@settingLedVoiceEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show voice activity"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show voice activity"
+      ]
+    }
+  },
+  "settingLedVoiceBrightnessTitle": "Яскравість",
+  "@settingLedVoiceBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Brightness"
+      ]
+    }
+  },
+  "settingLedVoiceBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedVoiceBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Brightness"
+      ]
+    }
+  },
+  "settingLedVoiceLightColorTitle": "Колір",
+  "@settingLedVoiceLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Color"
+      ]
+    }
+  },
+  "settingLedVoiceLightColorDescription": "Під дугою, що обертається під час слухання, чергується під час обмірковування й переливається під час відповіді.",
+  "@settingLedVoiceLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Color"
+      ]
+    }
+  },
+  "settingLedVoiceAccentColorTitle": "Акцентний колір",
+  "@settingLedVoiceAccentColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Accent color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Accent color"
+      ]
+    }
+  },
+  "settingLedVoiceAccentColorDescription": "Дуга, що рухається навколо індикаторів.",
+  "@settingLedVoiceAccentColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Accent color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Accent color"
+      ]
+    }
+  },
+  "settingLedVoiceMutedTitle": "Показувати, коли вимкнено звук",
+  "@settingLedVoiceMutedTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show when muted"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show when muted"
+      ]
+    }
+  },
+  "settingLedVoiceMutedDescription": "Світиться, поки звук Voice Satellite вимкнено.",
+  "@settingLedVoiceMutedDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show when muted"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show when muted"
+      ]
+    }
+  },
+  "settingLedVoiceMutedColorTitle": "Колір із вимкненим звуком",
+  "@settingLedVoiceMutedColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Muted color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Muted color"
+      ]
+    }
+  },
+  "settingLedVoiceMutedColorDescription": "Колір індикаторів, коли звук вимкнено.",
+  "@settingLedVoiceMutedColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Muted color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Muted color"
+      ]
+    }
+  },
+  "settingLedTimersEnabledTitle": "Показувати таймери",
+  "@settingLedTimersEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show timers"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show timers"
+      ]
+    }
+  },
+  "settingLedTimersEnabledDescription": "Пульсує, поки дзвонить таймер.",
+  "@settingLedTimersEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show timers"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show timers"
+      ]
+    }
+  },
+  "settingLedTimersBrightnessTitle": "Яскравість",
+  "@settingLedTimersBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Brightness"
+      ]
+    }
+  },
+  "settingLedTimersBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedTimersBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Brightness"
+      ]
+    }
+  },
+  "settingLedTimersLightColorTitle": "Колір",
+  "@settingLedTimersLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Color"
+      ]
+    }
+  },
+  "settingLedTimersLightColorDescription": "Колір індикаторів для цього.",
+  "@settingLedTimersLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Color"
+      ]
+    }
+  },
+  "settingLedTimersCountdownTitle": "Показувати зворотний відлік",
+  "@settingLedTimersCountdownTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show the countdown"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show the countdown"
+      ]
+    }
+  },
+  "settingLedTimersCountdownDescription": "Індикатори гаснуть один за одним, поки спливає найближчий таймер.",
+  "@settingLedTimersCountdownDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show the countdown"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show the countdown"
+      ]
+    }
+  },
+  "settingLedAlarmsEnabledTitle": "Показувати будильники",
+  "@settingLedAlarmsEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Show alarms"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Show alarms"
+      ]
+    }
+  },
+  "settingLedAlarmsEnabledDescription": "Пульсує, поки дзвонить будильник.",
+  "@settingLedAlarmsEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Show alarms"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Show alarms"
+      ]
+    }
+  },
+  "settingLedAlarmsBrightnessTitle": "Яскравість",
+  "@settingLedAlarmsBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Brightness"
+      ]
+    }
+  },
+  "settingLedAlarmsBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedAlarmsBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Brightness"
+      ]
+    }
+  },
+  "settingLedAlarmsLightColorTitle": "Колір",
+  "@settingLedAlarmsLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Color"
+      ]
+    }
+  },
+  "settingLedAlarmsLightColorDescription": "Колір індикаторів для цього.",
+  "@settingLedAlarmsLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Color"
+      ]
+    }
+  },
+  "settingLedIntercomEnabledTitle": "Показувати дзвінки інтеркому",
+  "@settingLedIntercomEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Show intercom calls"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Show intercom calls"
+      ]
+    }
+  },
+  "settingLedIntercomEnabledDescription": "Пульсує, поки дзвонить виклик, і обертається, поки він триває.",
+  "@settingLedIntercomEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Show intercom calls"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Show intercom calls"
+      ]
+    }
+  },
+  "settingLedIntercomBrightnessTitle": "Яскравість",
+  "@settingLedIntercomBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Brightness"
+      ]
+    }
+  },
+  "settingLedIntercomBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedIntercomBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Brightness"
+      ]
+    }
+  },
+  "settingLedIntercomLightColorTitle": "Колір",
+  "@settingLedIntercomLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Color"
+      ]
+    }
+  },
+  "settingLedIntercomLightColorDescription": "Колір індикаторів для цього.",
+  "@settingLedIntercomLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Color"
+      ]
+    }
+  },
+  "settingLedNotificationsEnabledTitle": "Показувати сповіщення",
+  "@settingLedNotificationsEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Show notifications"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Show notifications"
+      ]
+    }
+  },
+  "settingLedNotificationsEnabledDescription": "Повільно пульсує, поки чекає сповіщення.",
+  "@settingLedNotificationsEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Show notifications"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Show notifications"
+      ]
+    }
+  },
+  "settingLedNotificationsBrightnessTitle": "Яскравість",
+  "@settingLedNotificationsBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Brightness"
+      ]
+    }
+  },
+  "settingLedNotificationsBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedNotificationsBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Brightness"
+      ]
+    }
+  },
+  "settingLedNotificationsLightColorTitle": "Колір",
+  "@settingLedNotificationsLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Color"
+      ]
+    }
+  },
+  "settingLedNotificationsLightColorDescription": "Колір індикаторів для цього.",
+  "@settingLedNotificationsLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Color"
+      ]
+    }
+  },
+  "settingLedMediaEnabledTitle": "Показувати музику",
+  "@settingLedMediaEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Show music"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Show music"
+      ]
+    }
+  },
+  "settingLedMediaEnabledDescription": "Світиться, поки на цьому пристрої грає музика.",
+  "@settingLedMediaEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Show music"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Show music"
+      ]
+    }
+  },
+  "settingLedMediaBrightnessTitle": "Яскравість",
+  "@settingLedMediaBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Brightness"
+      ]
+    }
+  },
+  "settingLedMediaBrightnessDescription": "Наскільки яскраво світяться індикатори для цього.",
+  "@settingLedMediaBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Brightness"
+      ]
+    }
+  },
+  "settingLedMediaLightColorTitle": "Колір",
+  "@settingLedMediaLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Color"
+      ]
+    }
+  },
+  "settingLedMediaLightColorDescription": "Колір індикаторів для цього.",
+  "@settingLedMediaLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Color"
+      ]
+    }
+  },
+  "settingLedMediaStyleTitle": "Ефект",
+  "@settingLedMediaStyleTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleDescription": "Як індикатори показують музику.",
+  "@settingLedMediaStyleDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleOptionSolid": "Постійно",
+  "@settingLedMediaStyleOptionSolid": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleOptionBreathe": "Дихання",
+  "@settingLedMediaStyleOptionBreathe": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
   "settingLockdownEnabledTitle": "Увімкнути режим блокування",
   "@settingLockdownEnabledTitle": {
     "context": "Lockdown Mode > Enable Lockdown Mode",
@@ -33833,6 +34886,154 @@
     "x-locations": {
       "remoteAdmin": [
         "Sidebar > theme button"
+      ]
+    }
+  },
+  "settingsMenuOverviewHeadlessSummary": "Стан і швидке керування",
+  "@settingsMenuOverviewHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Overview on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuHomeAssistantHeadlessSummary": "З'єднання",
+  "@settingsMenuHomeAssistantHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Home Assistant on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuAudio": "Аудіо",
+  "@settingsMenuAudio": {
+    "context": "Settings:Menu",
+    "description": "The Screen & Audio page on a device without a screen, and its menu group.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuAudioSummary": "Гучність, мікрофон",
+  "@settingsMenuAudioSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Audio on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsGroupMedia": "Медіа",
+  "@settingsGroupMedia": {
+    "context": "Settings:Menu",
+    "description": "Menu group on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuDlnaHeadlessSummary": "Відтворення аудіо віддалено",
+  "@settingsMenuDlnaHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below DLNA Renderer on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuGesturesHeadlessSummary": "Жести кнопками й оплесками",
+  "@settingsMenuGesturesHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Gestures on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuLeds": "Керування LED",
+  "@settingsMenuLeds": {
+    "context": "Settings:Menu",
+    "description": "The LED Control page, on devices with status lights.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuLedsSummary": "Кольори й ефекти індикаторів стану",
+  "@settingsMenuLedsSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below LED Control in the Settings menu.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedTimers": "Таймери",
+  "@settingsLedTimers": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedNotifications": "Сповіщення",
+  "@settingsLedNotifications": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedIdle": "У спокої",
+  "@settingsLedIdle": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page: what the lights do when nothing else is showing.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control"
+      ]
+    }
+  },
+  "settingsLedEffects": "Ефекти",
+  "@settingsLedEffects": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page: how the lights move.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control"
       ]
     }
   },
@@ -48256,6 +49457,16 @@
       ],
       "remoteAdmin": [
         "First-time setup > Dashboard"
+      ]
+    }
+  },
+  "setupHeadlessGrants": "Цей пристрій не має екрана, тому Android не може запитати їх на ньому. Надайте кожен через adb, а потім завершіть тут.",
+  "@setupHeadlessGrants": {
+    "context": "Setup",
+    "description": "Permissions step of the remote setup wizard on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Setup wizard > Permissions"
       ]
     }
   },

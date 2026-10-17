@@ -6850,6 +6850,45 @@
       ]
     }
   },
+  "gestureVoiceWake": "Een spraakopdracht starten",
+  "@gestureVoiceWake": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureVoiceStop": "De spraakassistent stoppen",
+  "@gestureVoiceStop": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureVoiceMute": "Voice Satellite dempen of het dempen opheffen",
+  "@gestureVoiceMute": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
   "gestureDescribeCornerTaps": "{count} tikken in de hoek {corner}",
   "@gestureDescribeCornerTaps": {
     "context": "Settings > Gestures > Configured gestures",
@@ -7255,6 +7294,63 @@
     },
     "placeholders": {
       "value": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonPress": "Op de knop {button} drukken",
+  "@gestureDescribeButtonPress": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonDouble": "Twee keer op de knop {button} drukken",
+  "@gestureDescribeButtonDouble": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Supplied names, IDs and values are inserted by the app."
+  },
+  "gestureDescribeButtonHold": "De knop {button} ingedrukt houden",
+  "@gestureDescribeButtonHold": {
+    "context": "Settings > Gestures > Configured gestures",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Configured gestures"
+      ],
+      "remoteAdmin": [
+        "Gestures > Configured gestures"
+      ]
+    },
+    "placeholders": {
+      "button": {
         "type": "String"
       }
     },
@@ -8499,6 +8595,56 @@
       ],
       "remoteAdmin": [
         "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureButton": "Knop",
+  "@gestureButton": {
+    "context": "Gestures > Add gesture",
+    "description": "Gesture type and field label: a hardware button of a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gesturePress": "Drukken",
+  "@gesturePress": {
+    "context": "Gestures > Add gesture",
+    "description": "Field label and option: how the button is pressed (a single press).",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureDoublePress": "Dubbel drukken",
+  "@gestureDoublePress": {
+    "context": "Gestures > Add gesture",
+    "description": "Option: two presses of the button in quick succession.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureHoldPress": "Ingedrukt houden",
+  "@gestureHoldPress": {
+    "context": "Gestures > Add gesture",
+    "description": "Option: the button held down.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures > Add gesture"
+      ]
+    }
+  },
+  "gestureButtonDefaults": "Een druk die geen gebaar gebruikt, houdt zijn eigen taak: Actie neemt op, stopt of negeert wat er overgaat en start anders een spraakopdracht, Microfoon dempt Voice Satellite en de volumeknoppen wijzigen het volume.",
+  "@gestureButtonDefaults": {
+    "context": "Gestures",
+    "description": "Note under the gesture list on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Gestures"
       ]
     }
   },
@@ -14731,6 +14877,17 @@
       ]
     }
   },
+  "overviewHeadlessMode": "Modus zonder scherm",
+  "@overviewHeadlessMode": {
+    "context": "Remote admin > Overview > Status",
+    "description": "Home Assistant status tile on a device without a screen, which has no dashboard to report on.",
+    "x-locations": {
+      "device": [],
+      "remoteAdmin": [
+        "Overview > Status"
+      ]
+    }
+  },
   "overviewNoScreenshot": "Geen schermafdruk",
   "@overviewNoScreenshot": {
     "context": "Remote admin > Overview > Screenshot",
@@ -20059,6 +20216,96 @@
       "device": [
         "Settings > Device"
       ],
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtons": "Hardwareknoppen",
+  "@deviceHardwareButtons": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtonsHeld": "De knoppen van het apparaat bereiken gebaren en Voice Satellite.",
+  "@deviceHardwareButtonsHeld": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHardwareButtonsMissing": "De knoppen van het apparaat doen niets tot de knoppendienst is ingeschakeld.",
+  "@deviceHardwareButtonsMissing": {
+    "context": "Settings:Device",
+    "description": "Permissions Manager row on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbMicrophone": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO",
+  "@deviceHeadlessAdbMicrophone": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbNotifications": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS",
+  "@deviceHeadlessAdbNotifications": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbLocation": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION",
+  "@deviceHeadlessAdbLocation": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbBluetooth": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, en daarna hetzelfde voor BLUETOOTH_CONNECT",
+  "@deviceHeadlessAdbBluetooth": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbBattery": "Dit apparaat heeft geen scherm. Verleen het via adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite",
+  "@deviceHeadlessAdbBattery": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb command unchanged.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device"
+      ]
+    }
+  },
+  "deviceHeadlessAdbButtons": "Dit apparaat heeft geen scherm. Schakel het in via adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, en daarna adb shell settings put secure accessibility_enabled 1",
+  "@deviceHeadlessAdbButtons": {
+    "context": "Settings:Device",
+    "description": "Grant instructions on a device without a screen. Keep the adb commands unchanged.",
+    "x-locations": {
       "remoteAdmin": [
         "Device"
       ]
@@ -30582,6 +30829,812 @@
       ]
     }
   },
+  "settingLedEnabledTitle": "LED-bediening inschakelen",
+  "@settingLedEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label: the master switch of the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Enable LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control > Enable LED Control"
+      ]
+    }
+  },
+  "settingLedEnabledDescription": "Laat Kiosk Satellite de lampjes bedienen.",
+  "@settingLedEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Enable LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control > Enable LED Control"
+      ]
+    }
+  },
+  "settingLedAnimationsTitle": "Effecten animeren",
+  "@settingLedAnimationsTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Effects > Animate effects"
+      ],
+      "remoteAdmin": [
+        "LED Control > Effects > Animate effects"
+      ]
+    }
+  },
+  "settingLedAnimationsDescription": "Laat de bogen draaien en de pulsen vervagen. Zet dit uit om alle effecten stil te zetten.",
+  "@settingLedAnimationsDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Effects > Animate effects"
+      ],
+      "remoteAdmin": [
+        "LED Control > Effects > Animate effects"
+      ]
+    }
+  },
+  "settingLedIdleEnabledTitle": "Branden bij inactiviteit",
+  "@settingLedIdleEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Light up when idle"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Light up when idle"
+      ]
+    }
+  },
+  "settingLedIdleEnabledDescription": "Blijft branden zolang er niets anders wordt getoond.",
+  "@settingLedIdleEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Light up when idle"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Light up when idle"
+      ]
+    }
+  },
+  "settingLedIdleBrightnessTitle": "Helderheid",
+  "@settingLedIdleBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Brightness"
+      ]
+    }
+  },
+  "settingLedIdleBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedIdleBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Brightness"
+      ]
+    }
+  },
+  "settingLedIdleLightColorTitle": "Kleur",
+  "@settingLedIdleLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Color"
+      ]
+    }
+  },
+  "settingLedIdleLightColorDescription": "De kleur van de lampjes hiervoor.",
+  "@settingLedIdleLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Color"
+      ]
+    }
+  },
+  "settingLedIdleStyleTitle": "Effect",
+  "@settingLedIdleStyleTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleDescription": "Hoe de lampjes er bij inactiviteit uitzien.",
+  "@settingLedIdleStyleDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleOptionSolid": "Vast",
+  "@settingLedIdleStyleOptionSolid": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedIdleStyleOptionBreathe": "Ademend",
+  "@settingLedIdleStyleOptionBreathe": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Idle > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Idle > Effect"
+      ]
+    }
+  },
+  "settingLedVoiceEnabledTitle": "Spraakactiviteit tonen",
+  "@settingLedVoiceEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show voice activity"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show voice activity"
+      ]
+    }
+  },
+  "settingLedVoiceEnabledDescription": "Licht op terwijl Voice Satellite luistert, nadenkt en antwoordt.",
+  "@settingLedVoiceEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show voice activity"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show voice activity"
+      ]
+    }
+  },
+  "settingLedVoiceBrightnessTitle": "Helderheid",
+  "@settingLedVoiceBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Brightness"
+      ]
+    }
+  },
+  "settingLedVoiceBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedVoiceBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Brightness"
+      ]
+    }
+  },
+  "settingLedVoiceLightColorTitle": "Kleur",
+  "@settingLedVoiceLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Color"
+      ]
+    }
+  },
+  "settingLedVoiceLightColorDescription": "Onder een boog die draait tijdens het luisteren, wisselt tijdens het nadenken en vervaagt tijdens het antwoorden.",
+  "@settingLedVoiceLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Color"
+      ]
+    }
+  },
+  "settingLedVoiceAccentColorTitle": "Accentkleur",
+  "@settingLedVoiceAccentColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Accent color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Accent color"
+      ]
+    }
+  },
+  "settingLedVoiceAccentColorDescription": "De boog die rond de lampjes beweegt.",
+  "@settingLedVoiceAccentColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Accent color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Accent color"
+      ]
+    }
+  },
+  "settingLedVoiceMutedTitle": "Tonen als gedempt",
+  "@settingLedVoiceMutedTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show when muted"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show when muted"
+      ]
+    }
+  },
+  "settingLedVoiceMutedDescription": "Blijft branden zolang Voice Satellite gedempt is.",
+  "@settingLedVoiceMutedDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Show when muted"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Show when muted"
+      ]
+    }
+  },
+  "settingLedVoiceMutedColorTitle": "Kleur bij dempen",
+  "@settingLedVoiceMutedColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Muted color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Muted color"
+      ]
+    }
+  },
+  "settingLedVoiceMutedColorDescription": "De kleur van de lampjes als gedempt.",
+  "@settingLedVoiceMutedColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Voice Satellite > Muted color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Voice Satellite > Muted color"
+      ]
+    }
+  },
+  "settingLedTimersEnabledTitle": "Timers tonen",
+  "@settingLedTimersEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show timers"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show timers"
+      ]
+    }
+  },
+  "settingLedTimersEnabledDescription": "Pulseert terwijl een timer afgaat.",
+  "@settingLedTimersEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show timers"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show timers"
+      ]
+    }
+  },
+  "settingLedTimersBrightnessTitle": "Helderheid",
+  "@settingLedTimersBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Brightness"
+      ]
+    }
+  },
+  "settingLedTimersBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedTimersBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Brightness"
+      ]
+    }
+  },
+  "settingLedTimersLightColorTitle": "Kleur",
+  "@settingLedTimersLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Color"
+      ]
+    }
+  },
+  "settingLedTimersLightColorDescription": "De kleur van de lampjes hiervoor.",
+  "@settingLedTimersLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Color"
+      ]
+    }
+  },
+  "settingLedTimersCountdownTitle": "Aftellen tonen",
+  "@settingLedTimersCountdownTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show the countdown"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show the countdown"
+      ]
+    }
+  },
+  "settingLedTimersCountdownDescription": "De lampjes gaan een voor een uit terwijl de volgende timer afloopt.",
+  "@settingLedTimersCountdownDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Timers > Show the countdown"
+      ],
+      "remoteAdmin": [
+        "LED Control > Timers > Show the countdown"
+      ]
+    }
+  },
+  "settingLedAlarmsEnabledTitle": "Alarmen tonen",
+  "@settingLedAlarmsEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Show alarms"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Show alarms"
+      ]
+    }
+  },
+  "settingLedAlarmsEnabledDescription": "Pulseert terwijl een alarm afgaat.",
+  "@settingLedAlarmsEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Show alarms"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Show alarms"
+      ]
+    }
+  },
+  "settingLedAlarmsBrightnessTitle": "Helderheid",
+  "@settingLedAlarmsBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Brightness"
+      ]
+    }
+  },
+  "settingLedAlarmsBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedAlarmsBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Brightness"
+      ]
+    }
+  },
+  "settingLedAlarmsLightColorTitle": "Kleur",
+  "@settingLedAlarmsLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Color"
+      ]
+    }
+  },
+  "settingLedAlarmsLightColorDescription": "De kleur van de lampjes hiervoor.",
+  "@settingLedAlarmsLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Alarms > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Alarms > Color"
+      ]
+    }
+  },
+  "settingLedIntercomEnabledTitle": "Intercomgesprekken tonen",
+  "@settingLedIntercomEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Show intercom calls"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Show intercom calls"
+      ]
+    }
+  },
+  "settingLedIntercomEnabledDescription": "Pulseert terwijl een gesprek overgaat en draait zolang het loopt.",
+  "@settingLedIntercomEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Show intercom calls"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Show intercom calls"
+      ]
+    }
+  },
+  "settingLedIntercomBrightnessTitle": "Helderheid",
+  "@settingLedIntercomBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Brightness"
+      ]
+    }
+  },
+  "settingLedIntercomBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedIntercomBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Brightness"
+      ]
+    }
+  },
+  "settingLedIntercomLightColorTitle": "Kleur",
+  "@settingLedIntercomLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Color"
+      ]
+    }
+  },
+  "settingLedIntercomLightColorDescription": "De kleur van de lampjes hiervoor.",
+  "@settingLedIntercomLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Intercom > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Intercom > Color"
+      ]
+    }
+  },
+  "settingLedNotificationsEnabledTitle": "Meldingen tonen",
+  "@settingLedNotificationsEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Show notifications"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Show notifications"
+      ]
+    }
+  },
+  "settingLedNotificationsEnabledDescription": "Pulseert langzaam zolang er een melding wacht.",
+  "@settingLedNotificationsEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Show notifications"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Show notifications"
+      ]
+    }
+  },
+  "settingLedNotificationsBrightnessTitle": "Helderheid",
+  "@settingLedNotificationsBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Brightness"
+      ]
+    }
+  },
+  "settingLedNotificationsBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedNotificationsBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Brightness"
+      ]
+    }
+  },
+  "settingLedNotificationsLightColorTitle": "Kleur",
+  "@settingLedNotificationsLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Color"
+      ]
+    }
+  },
+  "settingLedNotificationsLightColorDescription": "De kleur van de lampjes hiervoor.",
+  "@settingLedNotificationsLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Notifications > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Notifications > Color"
+      ]
+    }
+  },
+  "settingLedMediaEnabledTitle": "Muziek tonen",
+  "@settingLedMediaEnabledTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Show music"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Show music"
+      ]
+    }
+  },
+  "settingLedMediaEnabledDescription": "Licht op terwijl er muziek speelt op dit apparaat.",
+  "@settingLedMediaEnabledDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Show music"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Show music"
+      ]
+    }
+  },
+  "settingLedMediaBrightnessTitle": "Helderheid",
+  "@settingLedMediaBrightnessTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Brightness"
+      ]
+    }
+  },
+  "settingLedMediaBrightnessDescription": "Hoe fel de lampjes hiervoor branden.",
+  "@settingLedMediaBrightnessDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Brightness"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Brightness"
+      ]
+    }
+  },
+  "settingLedMediaLightColorTitle": "Kleur",
+  "@settingLedMediaLightColorTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Color"
+      ]
+    }
+  },
+  "settingLedMediaLightColorDescription": "De kleur van de lampjes hiervoor.",
+  "@settingLedMediaLightColorDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Color"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Color"
+      ]
+    }
+  },
+  "settingLedMediaStyleTitle": "Effect",
+  "@settingLedMediaStyleTitle": {
+    "context": "Settings > LED Control",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleDescription": "Hoe de lampjes muziek tonen.",
+  "@settingLedMediaStyleDescription": {
+    "context": "Settings > LED Control",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleOptionSolid": "Vast",
+  "@settingLedMediaStyleOptionSolid": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
+  "settingLedMediaStyleOptionBreathe": "Ademend",
+  "@settingLedMediaStyleOptionBreathe": {
+    "context": "Settings > LED Control",
+    "description": "Option of the Effect setting.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control > Media Player > Effect"
+      ],
+      "remoteAdmin": [
+        "LED Control > Media Player > Effect"
+      ]
+    }
+  },
   "settingLockdownEnabledTitle": "Vergrendelingsmodus inschakelen",
   "@settingLockdownEnabledTitle": {
     "context": "Lockdown Mode > Enable Lockdown Mode",
@@ -33833,6 +34886,154 @@
     "x-locations": {
       "remoteAdmin": [
         "Sidebar > theme button"
+      ]
+    }
+  },
+  "settingsMenuOverviewHeadlessSummary": "Status en snelle bediening",
+  "@settingsMenuOverviewHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Overview on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuHomeAssistantHeadlessSummary": "Verbinding",
+  "@settingsMenuHomeAssistantHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Home Assistant on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuAudio": "Audio",
+  "@settingsMenuAudio": {
+    "context": "Settings:Menu",
+    "description": "The Screen & Audio page on a device without a screen, and its menu group.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuAudioSummary": "Volume, microfoon",
+  "@settingsMenuAudioSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Audio on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsGroupMedia": "Media",
+  "@settingsGroupMedia": {
+    "context": "Settings:Menu",
+    "description": "Menu group on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuDlnaHeadlessSummary": "Audio op afstand afspelen",
+  "@settingsMenuDlnaHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below DLNA Renderer on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuGesturesHeadlessSummary": "Knop- en klapgebaren",
+  "@settingsMenuGesturesHeadlessSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below Gestures on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuLeds": "LED-bediening",
+  "@settingsMenuLeds": {
+    "context": "Settings:Menu",
+    "description": "The LED Control page, on devices with status lights.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsMenuLedsSummary": "Kleuren en effecten van de statuslampjes",
+  "@settingsMenuLedsSummary": {
+    "context": "Settings:Menu",
+    "description": "Summary below LED Control in the Settings menu.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedTimers": "Timers",
+  "@settingsLedTimers": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedNotifications": "Meldingen",
+  "@settingsLedNotifications": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsLedIdle": "Inactief",
+  "@settingsLedIdle": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page: what the lights do when nothing else is showing.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control"
+      ]
+    }
+  },
+  "settingsLedEffects": "Effecten",
+  "@settingsLedEffects": {
+    "context": "Settings:Menu",
+    "description": "Group on the LED Control page: how the lights move.",
+    "x-locations": {
+      "device": [
+        "Settings > LED Control"
+      ],
+      "remoteAdmin": [
+        "LED Control"
       ]
     }
   },
@@ -48256,6 +49457,16 @@
       ],
       "remoteAdmin": [
         "First-time setup > Dashboard"
+      ]
+    }
+  },
+  "setupHeadlessGrants": "Dit apparaat heeft geen scherm, dus Android kan er niet om vragen. Verleen ze elk via adb en rond dan hier af.",
+  "@setupHeadlessGrants": {
+    "context": "Setup",
+    "description": "Permissions step of the remote setup wizard on a device without a screen.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Setup wizard > Permissions"
       ]
     }
   },

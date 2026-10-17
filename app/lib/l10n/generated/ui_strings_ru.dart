@@ -1767,6 +1767,15 @@ class UiStringsRu extends UiStrings {
   String get gestureIntercomEmpty => 'Киоски в сети пока не найдены.';
 
   @override
+  String get gestureVoiceWake => 'Начать голосовую команду';
+
+  @override
+  String get gestureVoiceStop => 'Остановить голосового ассистента';
+
+  @override
+  String get gestureVoiceMute => 'Выключить или включить звук Voice Satellite';
+
+  @override
   String gestureDescribeCornerTaps(String count, String corner) {
     return '$count нажатий в $corner углу';
   }
@@ -1867,6 +1876,21 @@ class UiStringsRu extends UiStrings {
   @override
   String gestureFireEvent(String value) {
     return 'Вызвать событие $value';
+  }
+
+  @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Нажать кнопку $button';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Дважды нажать кнопку $button';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'Удерживать кнопку $button';
   }
 
   @override
@@ -2195,6 +2219,22 @@ class UiStringsRu extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Сначала включите плагин с триггерами в менеджере плагинов.';
+
+  @override
+  String get gestureButton => 'Кнопка';
+
+  @override
+  String get gesturePress => 'Нажатие';
+
+  @override
+  String get gestureDoublePress => 'Двойное нажатие';
+
+  @override
+  String get gestureHoldPress => 'Удержание';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Нажатие, которое не использует ни один жест, сохраняет свою роль: Действие отвечает, останавливает или отклоняет то, что звонит, а иначе начинает голосовую команду, Микрофон выключает Voice Satellite, а кнопки громкости меняют громкость.';
 
   @override
   String get intercomCall => 'Позвонить';
@@ -3894,6 +3934,9 @@ class UiStringsRu extends UiStrings {
   String get overviewShowingCustomPages => 'Показ своих страниц';
 
   @override
+  String get overviewHeadlessMode => 'Режим без экрана';
+
+  @override
   String get overviewNoScreenshot => 'Нет скриншота';
 
   @override
@@ -5274,6 +5317,41 @@ class UiStringsRu extends UiStrings {
 
   @override
   String get deviceOpenSettingsDevice => 'Открыть настройки на устройстве';
+
+  @override
+  String get deviceHardwareButtons => 'Аппаратные кнопки';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'Кнопки устройства доходят до жестов и Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'Кнопки устройства ничего не делают, пока не включена служба кнопок.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'У этого устройства нет экрана. Выдайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'У этого устройства нет экрана. Выдайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'У этого устройства нет экрана. Выдайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'У этого устройства нет экрана. Выдайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, затем то же для BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'У этого устройства нет экрана. Выдайте через adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'У этого устройства нет экрана. Включите через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, затем adb shell settings put secure accessibility_enabled 1';
 
   @override
   String get deviceHardwarePage => 'Оборудование';
@@ -8102,6 +8180,221 @@ class UiStringsRu extends UiStrings {
   String get kioskOpenSettingsDevice => 'Открыть настройки на устройстве';
 
   @override
+  String get settingLedEnabledTitle => 'Включить управление LED';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Позволяет Kiosk Satellite управлять индикаторами.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Анимировать эффекты';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Вращает дуги и плавно меняет пульсации. Выключите, чтобы все эффекты стали статичными.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'Светиться в покое';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Светится, пока ничего другого не показано.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'Цвет индикаторов для этого.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Эффект';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Как выглядят индикаторы в покое.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Постоянно';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Дыхание';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Показывать голосовую активность';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Светится, пока Voice Satellite слушает, думает и отвечает.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Под дугой, которая вращается при прослушивании, чередуется при обдумывании и переливается при ответе.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Акцентный цвет';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'Дуга, которая движется вокруг индикаторов.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Показывать при выключенном звуке';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Светится, пока звук Voice Satellite выключен.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Цвет при выключенном звуке';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'Цвет индикаторов при выключенном звуке.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Показывать таймеры';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Пульсирует, пока звонит таймер.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'Цвет индикаторов для этого.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Показывать обратный отсчёт';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'Индикаторы гаснут один за другим, пока истекает ближайший таймер.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Показывать будильники';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Пульсирует, пока звонит будильник.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'Цвет индикаторов для этого.';
+
+  @override
+  String get settingLedIntercomEnabledTitle => 'Показывать звонки интеркома';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Пульсирует, пока звонит вызов, и вращается, пока он идёт.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'Цвет индикаторов для этого.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => 'Показывать уведомления';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Медленно пульсирует, пока ждёт уведомление.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'Цвет индикаторов для этого.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Показывать музыку';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'Светится, пока на этом устройстве играет музыка.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Яркость';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'Насколько ярко светятся индикаторы для этого.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Цвет';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'Цвет индикаторов для этого.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Эффект';
+
+  @override
+  String get settingLedMediaStyleDescription =>
+      'Как индикаторы показывают музыку.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Постоянно';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Дыхание';
+
+  @override
   String get settingLockdownEnabledTitle => 'Включить режим блокировки';
 
   @override
@@ -8974,6 +9267,47 @@ class UiStringsRu extends UiStrings {
 
   @override
   String get settingsMenuThemeAuto => 'Автоматическая';
+
+  @override
+  String get settingsMenuOverviewHeadlessSummary =>
+      'Состояние и быстрое управление';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'Подключение';
+
+  @override
+  String get settingsMenuAudio => 'Аудио';
+
+  @override
+  String get settingsMenuAudioSummary => 'Громкость, микрофон';
+
+  @override
+  String get settingsGroupMedia => 'Медиа';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary =>
+      'Удалённое воспроизведение аудио';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary => 'Жесты кнопками и хлопками';
+
+  @override
+  String get settingsMenuLeds => 'Управление LED';
+
+  @override
+  String get settingsMenuLedsSummary => 'Цвета и эффекты индикаторов состояния';
+
+  @override
+  String get settingsLedTimers => 'Таймеры';
+
+  @override
+  String get settingsLedNotifications => 'Уведомления';
+
+  @override
+  String get settingsLedIdle => 'В покое';
+
+  @override
+  String get settingsLedEffects => 'Эффекты';
 
   @override
   String get settingAdaptiveBrightnessTitle => 'Адаптивная яркость';
@@ -13361,6 +13695,10 @@ class UiStringsRu extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Выберите панель, которую покажет киоск. Позже её можно сменить в настройках.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'У этого устройства нет экрана, поэтому Android не может запросить их на нём. Выдайте каждое через adb, а затем завершите здесь.';
 
   @override
   String get setupWelcome => 'Добро пожаловать';

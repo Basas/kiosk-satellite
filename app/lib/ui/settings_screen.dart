@@ -172,7 +172,8 @@ List<Widget> _sectionedCards(
                   def.category == 'Home Assistant' ||
                   def.category == 'Screen & Audio' ||
                   def.category == 'Screensaver' ||
-                  def.category == 'Voice Satellite')
+                  def.category == 'Voice Satellite' ||
+                  def.category == 'LED Control')
               ? Builder(
                   builder: (context) => SectionHeading(
                     settingsPageText(context, def.category, heading),
@@ -302,6 +303,12 @@ const _categories = <(String, String, Object, String)>[
   ),
   ('Gestures', 'Gestures', Icons.gesture, 'Touch, palm and clap gestures'),
   (
+    'LED Control',
+    'LED Control',
+    Icons.blur_circular,
+    'Status light colors and effects',
+  ),
+  (
     'Device',
     'Device',
     Icons.tablet_android_outlined,
@@ -342,6 +349,19 @@ final List<SettingDef<Object>> _chimeRows = [
     voiceChimeVolumes[kind]!,
   ],
 ];
+
+/// Whether a category's page is listed. LED Control only exists on a
+/// device with lights the app can drive (LedManager hides its settings
+/// everywhere else).
+bool _categoryShown(String category) =>
+    category != 'LED Control' || _defsFor(category).isNotEmpty;
+
+/// Where the category at [index] sits among the ones listed: what its icon
+/// color cycles by, so a hidden page never leaves two neighbors alike.
+int _shownPosition(int index) => [
+  for (final c in _categories.take(index))
+    if (_categoryShown(c.$1)) c,
+].length;
 
 List<SettingDef<Object>> _defsFor(String category) => [
   for (final def in allSettings)
@@ -488,7 +508,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _cachedSearchIndex = buildSettingsSearchIndex(
         [
           for (final (category, title, _, subtitle) in _categories)
-            (category, title, subtitle),
+            if (_categoryShown(category)) (category, title, subtitle),
         ],
         pageText: (text) => navigationText(context, text),
         deviceTextFor: (text) => deviceText(context, text),
@@ -873,11 +893,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   index,
                                   (category, title, icon, subtitle),
                                 )
-                                in _categories.indexed) ...[
-                              if (_railGroups[category] case final heading?)
-                                _RailHeading(heading, first: index == 0),
-                              _railTile(context, index, title, icon, subtitle),
-                            ],
+                                in _categories.indexed)
+                              if (_categoryShown(category)) ...[
+                                if (_railGroups[category] case final heading?)
+                                  _RailHeading(heading, first: index == 0),
+                                _railTile(
+                                  context,
+                                  index,
+                                  title,
+                                  icon,
+                                  subtitle,
+                                ),
+                              ],
                           ],
                         ),
                       ),
@@ -1077,7 +1104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                _CategoryIcon(index: index, icon: icon),
+                _CategoryIcon(index: _shownPosition(index), icon: icon),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -1118,6 +1145,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   get _hubGroups {
     final groups = <(String, List<(int, (String, String, Object, String))>)>[];
     for (final entry in _categories.indexed) {
+      if (!_categoryShown(entry.$2.$1)) continue;
       final heading = _railGroups[entry.$2.$1];
       if (heading != null) groups.add((heading, []));
       groups.last.$2.add(entry);

@@ -1,3 +1,4 @@
+import { isHeadless } from './headless.js';
 import { t, voiceText, voiceVadOption } from './localization.js';
 import { api, cmd, state } from './core.js';
 import { pickRow, playerSpec } from './entity_picker.js';
@@ -549,7 +550,9 @@ export async function renderNativeVs(root, byKey) {
     const r = await cmd('haDetectVoiceSatellite', {});
     installed = r.ok && r.data === true;
   } catch (_) {}
-  if (!installed || !root.isConnected || root.querySelector('#vsRollbackCard')) return;
+  // The dashboard runtime runs in the WebView, which a device without a
+  // screen does not have.
+  if (!installed || isHeadless() || !root.isConnected || root.querySelector('#vsRollbackCard')) return;
   const back = document.createElement('div');
   back.className = 'card';
   back.id = 'vsRollbackCard';

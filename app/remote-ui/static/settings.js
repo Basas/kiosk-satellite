@@ -1,3 +1,4 @@
+import { isHeadless } from './headless.js';
 import { renderTlsSettings } from './tls.js';
 import { localizeSetting, voiceText, esphomeError, esphomeDeviceIdentity, esphomeText, launcherText, kioskText, intercomText, intercomError, cameraText, cameraError, cameraResolutionNotice, screensaverText, deviceText, haText, screenAudioText, haConnectionError, settingsPageText, setupImportError, t } from './localization.js';
 import { preserveDraft } from './drafts.js';
@@ -566,12 +567,17 @@ async function renderSettings({ cached = false } = {}) {
     return panels;
   };
 
+  // LED Control exists only where the device has lights to drive: its
+  // settings come back hidden everywhere else.
+  document.querySelector('#tabs button[data-tab="leds"]')?.classList.toggle('hidden',
+    !settings.some((s) => s.category === 'LED Control' && !s.hidden));
+
   for (const [tabId, cats, opts] of CATEGORY_TABS) {
     if (tabId === 'tab-homeassistant') continue; // custom render below
     if (tabId === 'tab-voicesatellite') continue; // custom render below
     const helperPage = tabId === 'device-settings' && helperStatus?.nativeSilent === false;
     const panels = render(document.getElementById(tabId), cats.filter((c) => byCat[c]),
-      tabId === 'device-settings' ? { ...opts, handBuilt: ['Shizuku'], extra: ['TLS', ...(helperPage ? ['Optional update helper'] : []), ...(opts?.extra || [])] } : opts);
+      tabId === 'device-settings' ? { ...opts, handBuilt: ['Shizuku'], extra: ['TLS', ...(helperPage ? ['Optional update helper'] : []), ...(opts?.extra || []).filter((page) => page !== 'WebView' || !isHeadless())] } : opts);
     if (tabId === 'device-settings') {
       renderShizukuPage(panels.get('Shizuku'));
       const adminEntry = document.querySelector('#device-pages [data-subpage-entry="Remote Administration"]');
@@ -1585,6 +1591,12 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
         const g = await cmd('hasUiGuard');
         out.uiGuard = g.data === true;
       } catch (_) {}
+      if (isHeadless()) {
+        try {
+          const b = await cmd('getHardwareButtons');
+          out.hardwareButtons = b.data?.listening === true;
+        } catch (_) {}
+      }
       return out;
     };
 
@@ -1630,7 +1642,9 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
         const text = (t) => deviceText(typeof t === 'function' ? t(all) : t);
         // The device has no screen for the grant: the adb command stands
         // in for the button, and the row is not an error nobody can fix.
-        const noScreen = !ok && spec.requestable && all[spec.requestable] === false;
+        const noScreen = !ok && (isHeadless()
+          ? !!spec.adb
+          : spec.requestable && all[spec.requestable] === false);
         info.querySelector('.desc').textContent = unknownState
           ? deviceText('Status unavailable.')
           : noScreen ? deviceText(spec.adb)
@@ -1822,7 +1836,8 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
     // from the URL scheme (https needs no proxy, so it sits disabled and
     // off; plain http enables it, validation turns it on with a modal).
     const spSetting = settings.find((s) => s.key === 'browser.secure_proxy');
-    {
+    // A device without a screen has no page that needs a secure context.
+    if (!isHeadless()) {
       const urlVal = (ha.find((s) => s.key === 'ha.url')?.value || '').trim();
       const spu = (() => { try { return new URL(urlVal); } catch (_) { return null; } })();
       const spHttp = spu && spu.protocol === 'http:'
@@ -1900,6 +1915,10 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
 
     if (!state.haConnected) {
       vdesc.textContent = haText('Not validated yet. The settings below unlock once the connection checks out.');
+    } else if (isHeadless()) {
+      // Everything past the connection is the dashboard, which a device
+      // without a screen does not have.
+      vdesc.textContent = haText('Connected.');
     } else {
       vdesc.textContent = haText('Connected.');
       // Dashboard picker: what the kiosk shows. Radio rows; picking one sets
