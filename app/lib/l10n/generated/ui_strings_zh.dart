@@ -3216,6 +3216,9 @@ class UiStringsZh extends UiStrings {
   String get pluginErrorAndroidOld => 'Android 版本过旧';
 
   @override
+  String get pluginErrorNeedsScreen => '此插件需要屏幕';
+
+  @override
   String get pluginErrorNativeIntegrity => '已安装原生库的完整性校验失败';
 
   @override
@@ -16558,6 +16561,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginErrorAndroidOld => 'Android 版本过旧';
+
+  @override
+  String get pluginErrorNeedsScreen => '此插件需要屏幕';
 
   @override
   String get pluginErrorNativeIntegrity => '已安装原生库的完整性校验失败';

@@ -1,5 +1,5 @@
 import { fleetStatusText, profileName } from './fleet-messages.js';
-import { fleetText, t, navigationText, localizeSetting } from './localization.js';
+import { fleetText, t, navigationText, localizeSetting, pluginError } from './localization.js';
 import { watchUpdates } from './live.js';
 import { cmd, state } from './core.js';
 import { settingRow } from './rows.js';
@@ -809,7 +809,7 @@ export async function renderFleetPage({ fetch = true } = {}) {
       [cats.length ? cats.map(navigationText).join(', ') : fleetText('Nothing yet'), creds.length ? t("fleetWithTheNames", {names: creds.map(fleetText).join(', ')}) : fleetText('No credentials'), fleetText(following.dashboard ? fleetText('The dashboard') : fleetText('No dashboard')),
         ...((following.syncedPlugins || []).length ? [t('fleetPluginsNames', {names: following.syncedPlugins.join(', ')})] : [])].join('. ') + '.'));
     for (const e of following.pluginErrors || []) {
-      card.appendChild(hintRow(t('fleetCouldNotInstallNameReason', {name: e.name, reason: e.message}), { warn: true }));
+      card.appendChild(hintRow(t('fleetCouldNotInstallNameReason', {name: e.name, reason: pluginError(e.message)}), { warn: true }));
     }
     const leave = infoRow(fleetText('Leave the fleet'), fleetText('Stops the sync. Settings stay as they are.'));
     leave.appendChild(button(fleetText('Leave'), 'btn-ghost', async () => {

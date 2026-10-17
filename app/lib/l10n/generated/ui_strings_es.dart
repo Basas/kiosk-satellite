@@ -3360,6 +3360,9 @@ class UiStringsEs extends UiStrings {
       'La versión de Android es demasiado antigua';
 
   @override
+  String get pluginErrorNeedsScreen => 'Este plugin necesita una pantalla';
+
+  @override
   String get pluginErrorNativeIntegrity =>
       'Las bibliotecas nativas instaladas no pasaron la verificación de integridad';
 

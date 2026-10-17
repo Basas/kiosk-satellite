@@ -5860,6 +5860,12 @@ abstract class UiStrings {
   /// **'Android version is too old'**
   String get pluginErrorAndroidOld;
 
+  /// Shown on a device without a screen for a plugin that only shows overlays or screensavers. Keep plugin identifiers and diagnostic details unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This plugin needs a screen'**
+  String get pluginErrorNeedsScreen;
+
   /// Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.
   ///
   /// In en, this message translates to:

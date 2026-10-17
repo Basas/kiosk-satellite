@@ -3353,6 +3353,9 @@ class UiStringsNl extends UiStrings {
   String get pluginErrorAndroidOld => 'De Android-versie is te oud';
 
   @override
+  String get pluginErrorNeedsScreen => 'Deze plugin heeft een scherm nodig';
+
+  @override
   String get pluginErrorNativeIntegrity =>
       'De integriteitscontrole van de geïnstalleerde systeemeigen bibliotheken is mislukt';
 

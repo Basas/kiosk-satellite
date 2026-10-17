@@ -12757,6 +12757,19 @@
       ]
     }
   },
+  "pluginErrorNeedsScreen": "Este plugin necesita una pantalla",
+  "@pluginErrorNeedsScreen": {
+    "context": "Settings > Plugin Manager > Install, update or enable a plugin",
+    "description": "Shown on a device without a screen for a plugin that only shows overlays or screensavers. Keep plugin identifiers and diagnostic details unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager"
+      ],
+      "remoteAdmin": [
+        "Settings > Plugin Manager"
+      ]
+    }
+  },
   "pluginErrorNativeIntegrity": "Las bibliotecas nativas instaladas no pasaron la verificación de integridad",
   "@pluginErrorNativeIntegrity": {
     "context": "Settings > Plugin Manager > Install, update or enable a plugin",

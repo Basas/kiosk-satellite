@@ -887,6 +887,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'pluginErrorRestartEnable' => strings.pluginErrorRestartEnable,
       'pluginErrorInstalledIntegrity' => strings.pluginErrorInstalledIntegrity,
       'pluginErrorAndroidOld' => strings.pluginErrorAndroidOld,
+      'pluginErrorNeedsScreen' => strings.pluginErrorNeedsScreen,
       'pluginErrorNativeIntegrity' => strings.pluginErrorNativeIntegrity,
       'pluginErrorNativeFileIntegrity' =>
         strings.pluginErrorNativeFileIntegrity,

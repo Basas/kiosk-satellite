@@ -25,6 +25,7 @@ import me.jxl.kiosk.plugins.KioskPlugin
 import me.jxl.kiosk.plugins.OverlayFactory
 import me.jxl.kiosk.plugins.OverlaySpec
 import me.jxl.kiosk.plugins.PluginHost
+import me.jxl.kiosk_satellite.Headless
 import org.json.JSONObject
 
 /** Process-owned runtime for explicitly installed, trusted SDK 1 plugins. */
@@ -80,6 +81,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     private val main = Handler(Looper.getMainLooper())
     private val worker = Executors.newSingleThreadExecutor { task -> Thread(task, "plugin-manager").apply { isDaemon = true } }
     private val prefs = context.getSharedPreferences("kiosk_plugins", Context.MODE_PRIVATE)
+    private val headless = Headless.active(context)
     private val root = File(context.filesDir, "plugins-v1").apply { mkdirs() }
     // Each installed package as it arrived, by its hash, so a fleet leader
     // can hand its followers the exact bytes it runs.
@@ -365,6 +367,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 require(insets.all { it in 0..PluginOverlays.MAX_INSET }) { "Content insets must be 0 to 4096 dp" }
                 emit("contentInsets", mapOf("id" to id, "session" to token, "insets" to insets), alive)
             }
+            override fun isHeadless() = headless
             override fun log(message: String) = emit("log", mapOf("id" to id, "message" to message.take(1000)), alive)
             override fun nativeLibraryPath(name: String): String {
                 check(alive.get() && "native" in manifest.capabilities)
@@ -489,6 +492,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                             try {
                                 val manifest = PluginManifest(JSONObject(args["manifest"] as String))
                                 require(manifest.minAndroidSdk <= Build.VERSION.SDK_INT) { "Plugin needs Android API ${manifest.minAndroidSdk}" }
+                                requireScreen(manifest)
                                 mapOf("compatible" to true, "compatibilityError" to "")
                             } catch (error: Exception) {
                                 mapOf("compatible" to false, "compatibilityError" to (error.message ?: "Invalid plugin manifest"))
@@ -710,6 +714,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 "This plugin ID belongs to another repository. Uninstall it before changing sources."
             }
             require(manifest.minAndroidSdk <= Build.VERSION.SDK_INT) { "Plugin needs Android API ${manifest.minAndroidSdk}" }
+            requireScreen(manifest)
             require(manifest.id !in restartRequired) { "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it." }
             require(records.has(manifest.id) || records.length() < 8) { "At most 8 plugins can be installed" }
             val previous = records.optJSONObject(manifest.id)
@@ -814,6 +819,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 PluginPackage.sha256(PluginPackage.installedManifest(dir).readBytes()) == record.getString("manifestSha256")) { "Installed plugin failed its integrity check. Reinstall it." }
             val manifest = manifest(id)
             require(manifest.minAndroidSdk <= Build.VERSION.SDK_INT) { "Android version is too old" }
+            requireScreen(manifest)
             val config = manifest.config(record.optJSONObject("config") ?: JSONObject())
             check(jar.setReadOnly())
             val digests = record.optJSONObject("nativeSha256") ?: JSONObject()
@@ -844,6 +850,14 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             throw error
         }
     }
+
+    /**
+     * On a device without a screen, a plugin that only shows overlays or
+     * screensavers would run for nothing, so it neither installs nor starts.
+     * This also turns away a fleet leader's push.
+     */
+    private fun requireScreen(manifest: PluginManifest) =
+        require(!headless || !manifest.needsScreen) { "This plugin needs a screen" }
 
     private fun stopSession(id: String) {
         val session = sessions.remove(id) ?: return

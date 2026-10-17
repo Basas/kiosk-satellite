@@ -117,7 +117,7 @@ Secret plugin settings, such as a token, travel only when the profile includes *
 | Enable Plugins | Stays per kiosk. A follower with it off installs and configures the plugins but runs them only once it is switched on. |
 | Removal | When a plugin leaves the profile or the leader, a follower removes it only if the fleet installed it. A plugin the kiosk had before stays with its last settings. |
 | Local changes | A change to a synced plugin on a follower is replaced at the next sync, and a banner on its Plugin Manager page says so. Its update check is off there, since the leader keeps it up to date. |
-| Failures | A package a follower cannot install, for example one that needs a newer Android version, shows on its row on the leader with the reason. The leader tries again when the plugin changes or with **Sync now**. |
+| Failures | A package a follower cannot install, for example one that needs a newer Android version or a screen the follower does not have, shows on its row on the leader with the reason. The leader tries again when the plugin changes or with **Sync now**. |
 | Earlier installs | The leader keeps a copy of each package it installs. A repository plugin installed on an earlier version is fetched again from its GitHub release and checked against the SHA-256 it was installed with. A plugin installed from a ZIP on an earlier version has to be installed again on the leader before it can sync. |
 
 A plugin that uses Shizuku asks for its permission on each kiosk. Runtime chart data, history and plugin entity declarations and readings are never synchronized. Plugin entity exclusions, a plugin screensaver picked as the screensaver mode and gestures assigned to plugin actions stay local. A fleet token cannot call plugin management commands.

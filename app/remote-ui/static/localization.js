@@ -484,7 +484,7 @@ export function pluginError(error) {
     if (match) return t('pluginErrorAssetUrl', {name: match[1]});
     match = /^Plugin needs Android API ([0-9]+)$/.exec(text);
     if (match) return t('pluginErrorAndroidApi', {version: match[1]});
-    match = /^Invalid (id|name|version|entryClass|description|author|license|key|title|group|readingsTitle)$/.exec(text);
+    match = /^Invalid (id|name|version|entryClass|description|author|license|key|title|group|readingsTitle|headless)$/.exec(text);
     if (match) return t('pluginErrorInvalidField', {field: match[1]});
     match = /^Unexpected or duplicate ZIP entry: ([\s\S]*)$/.exec(text);
     if (match) return t('pluginErrorZipEntry', {name: match[1]});

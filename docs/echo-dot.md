@@ -9,6 +9,7 @@ Kiosk Satellite turns headless on its own on any device whose display is a stub 
 - No screen is ever drawn. There is no WebView, dashboard, screensaver, camera or camera view, and the app never opens an Activity.
 - The Kiosk Satellite Service starts when the device boots, whatever **Start on boot** says. The [Home Launcher](home-launcher.md) is not needed.
 - Voice Satellite, the intercom, alarms, timers, the [DLNA renderer](dlna.md), the [Sendspin player](sendspin.md), ESPHome, Fleet Management and plugins work as usual.
+- Plugins that need a screen do not install. See [Plugins](#plugins).
 - The remote admin leaves out every page and control that needs a screen: Web Browsing, Screensaver, Camera, Camera Streams, Kiosk Mode, Lockdown Mode, Home Launcher and App Launcher, the dashboard settings of Home Assistant, the screenshot and the screen tiles of the Overview, and the display settings on the other pages.
 - ESPHome leaves out the screen, screensaver, dashboard and camera entities.
 - The DLNA renderer offers audio only, so Home Assistant's media browser lists only what the Dot can play.
@@ -92,6 +93,16 @@ The cause is the build's light daemon, `biscuit-ledd` (`device/amazon/biscuit/bi
 
 Until the daemon is fixed, turn off **Animate effects** at the top of the LED Control page if the strobing bothers you. Each effect then holds still and the ring changes only when what it shows changes, so it never strobes. The daemon's `FRAME` handler calls `clear()` before it writes, and `clear()` both stops the daemon's animations and writes the black frame. A build whose `FRAME` handler only stops the animations, without the black frame, animates smoothly with the switch on.
 
+## Plugins
+
+[Plugins](plugins.md) work on the Dot, except for the parts that need a screen:
+
+- A plugin that publishes entities, reacts to Voice Satellite or talks to Home Assistant runs as it would anywhere else.
+- A plugin built around overlays or screensavers does not install. The Plugin Manager shows **This plugin needs a screen** and keeps its Install button disabled, and a fleet leader that tries to push one shows the same reason on the Dot's row.
+- A plugin can declare that it also runs without a screen. It then installs and leaves out its overlays and screensavers on the Dot.
+
+The **LED Control** page drives the light ring itself, so the ring needs no plugin.
+
 ## What to Know
 
 - **Updates.** The update screen needs someone to tap Install, which a device without a screen cannot do. Make Kiosk Satellite the device owner (`adb shell dpm set-device-owner me.jxl.kiosk_satellite/.KioskAdminReceiver`, on a Dot with no accounts) or use [Shizuku](shizuku.md) so updates install silently. Otherwise update with `adb install -r`.
@@ -99,7 +110,7 @@ Until the daemon is fixed, turn off **Animate effects** at the top of the LED Co
 
 ## Memory
 
-The Overview's RAM tile counts only memory nobody holds, usually about 0.2 GB on the Dot. Android keeps the rest filled with cached apps and files it gives back on demand, and the Dot runs normally with that much free. These recover real memory:
+The Overview's RAM tile counts only memory nobody holds, usually about 0.3 GB on the Dot. Android keeps the rest filled with cached apps and files it gives back on demand, and the Dot runs normally with that much free. These recover real memory:
 
 | Change | Gain | How |
 |---|---|---|

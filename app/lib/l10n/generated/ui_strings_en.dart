@@ -3318,6 +3318,9 @@ class UiStringsEn extends UiStrings {
   String get pluginErrorAndroidOld => 'Android version is too old';
 
   @override
+  String get pluginErrorNeedsScreen => 'This plugin needs a screen';
+
+  @override
   String get pluginErrorNativeIntegrity =>
       'Installed native libraries failed their integrity check';
 

@@ -3332,6 +3332,9 @@ class UiStringsRu extends UiStrings {
   String get pluginErrorAndroidOld => 'Версия Android слишком старая';
 
   @override
+  String get pluginErrorNeedsScreen => 'Этому плагину нужен экран';
+
+  @override
   String get pluginErrorNativeIntegrity =>
       'Установленные нативные библиотеки не прошли проверку целостности';
 
