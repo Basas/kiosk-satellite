@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.28 - 2026-10-17
 
 ### Added
 - **Echo Dot and other devices without a screen.** Kiosk Satellite now runs headless on a device whose display is a stub, such as a 2nd generation Echo Dot on LineageOS. It draws nothing and starts with the device, while Voice Satellite, the intercom, alarms, timers, the DLNA renderer and the Sendspin player work as usual. The remote admin and the setup wizard leave out every page and control that needs a screen, ESPHome leaves out the screen and camera entities, the DLNA renderer offers audio only and intercom calls are hands-free. Grants are given over adb, and the wizard lists the commands. Plugins that only show overlays or screensavers do not install there, from the Plugin Manager or a fleet leader alike. As a fleet follower, such a device leaves out the leader's values for the settings it holds fixed, such as the screensaver switch. Importing a backup in its setup wizard finishes setup at once. The guide also points to the LineageOS port to flash, covers joining Wi-Fi over adb and recommends volume settings that keep the wake word working while music plays. See [Echo Dot](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/echo-dot.md).
