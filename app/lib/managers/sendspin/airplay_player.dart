@@ -39,10 +39,12 @@ class AirPlayPlayer implements RemotePlayer {
   @override
   bool queueEmpty = false;
 
-  /// The sender's Up Next, read through its remote control, so only once
-  /// the receiver has found that.
+  /// The sender's Up Next, read through its remote control: only from a
+  /// sender that answers the control's status (a Mac does, iOS refuses
+  /// everything but play, pause, skip and volume).
   @override
-  bool get hasQueue => _snapshot?['remote'] == true;
+  bool get hasQueue =>
+      _snapshot?['remote'] == true && _snapshot?['remoteStatus'] == true;
 
   /// The playing song, then the sender's Up Next. A Mac lists the songs
   /// after the current one, which is all the panel shows of a queue.
@@ -189,6 +191,9 @@ class AirPlayPlayer implements RemotePlayer {
     }
     final artworkId = (raw['artworkId'] as num?)?.toInt() ?? 0;
     final remote = raw['remote'] == true;
+    // The controls beyond play, pause and skip, for a sender that answers
+    // its remote control's status: iOS refuses them all.
+    final rich = remote && raw['remoteStatus'] == true;
     final duration = (raw['durationMs'] as num?)?.toInt();
     return {
       'title': title,
@@ -218,10 +223,10 @@ class AirPlayPlayer implements RemotePlayer {
               'previous',
               'volume',
               // A bar to drag needs a track with a length.
-              if (duration != null) 'seek',
+              if (rich && duration != null) 'seek',
               // Only what the sender allows for what plays.
-              if (raw['shuffleOffered'] == true) 'shuffle',
-              if (raw['repeatOffered'] == true) 'repeat',
+              if (rich && raw['shuffleOffered'] == true) 'shuffle',
+              if (rich && raw['repeatOffered'] == true) 'repeat',
             ]
           : const ['volume'],
       if (duration == null) 'stream': true,

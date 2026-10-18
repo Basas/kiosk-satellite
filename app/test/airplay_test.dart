@@ -38,6 +38,7 @@ void main() {
         'receivedAt': 1000,
         'artworkId': 3,
         'remote': true,
+        'remoteStatus': true,
       })!;
       expect(snap['title'], 'Song');
       expect(snap['artist'], 'Band');
@@ -64,6 +65,7 @@ void main() {
         'title': 'Song',
         'durationMs': 1000,
         'remote': true,
+        'remoteStatus': true,
         'shuffle': true,
         'repeat': 'all',
         'shuffleOffered': true,
@@ -80,6 +82,26 @@ void main() {
         'repeatOffered': true,
       })!;
       expect(bare['supportedCommands'], ['volume']);
+    });
+
+    test('offers only play, pause and skip when the sender refuses the '
+        'rest (iOS)', () {
+      final snap = AirPlayPlayer.snapshotFrom({
+        'client': 'iPad',
+        'title': 'Song',
+        'durationMs': 1000,
+        'remote': true,
+        'remoteStatus': false,
+        'shuffleOffered': true,
+        'repeatOffered': true,
+      })!;
+      expect(snap['supportedCommands'], [
+        'play',
+        'pause',
+        'next',
+        'previous',
+        'volume',
+      ]);
     });
 
     test('offers no seek for a stream with no length', () {
@@ -335,6 +357,7 @@ void main() {
           'title': 'Song',
           'artist': 'Band',
           'remote': true,
+          'remoteStatus': true,
         }),
       );
       await pumpEventQueue();

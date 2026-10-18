@@ -132,11 +132,21 @@ class AirPlayManager extends Manager {
             "sender's remote control (DACP), such as "
             'ctrl-int/1/nextitem, and answer with its HTTP status and body '
             'as hex.',
-        params: const {'path': 'the request path after the port'},
+        params: const {
+          'path': 'the request path after the port',
+          'headers': 'extra request headers, an object of names to values',
+        },
         handler: (p) async {
           final path = '${p['path'] ?? ''}'.trim();
           if (path.isEmpty) return const CommandResult.fail('no path');
-          final answer = await channel.invokeMethod('remote', {'path': path});
+          final headers = p['headers'];
+          final answer = await channel.invokeMethod('remote', {
+            'path': path,
+            if (headers is Map)
+              'headers': {
+                for (final e in headers.entries) '${e.key}': '${e.value}',
+              },
+          });
           return answer == null
               ? const CommandResult.fail('no sender remote control')
               : CommandResult.ok(answer);

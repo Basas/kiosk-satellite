@@ -38,8 +38,9 @@ import me.jxl.kiosk_satellite.airplay.RaopServer
  *  - stats: the live session's playout diagnostics, null with none.
  *  - artwork: the current cover's bytes, null for none.
  *  - nudge: re-announce after a network change.
- *  - remote {path}: a raw request to the sender's remote control, for
- *    diagnostics: its status and body as hex, null with none.
+ *  - remote {path, headers}: a raw request to the sender's remote
+ *    control, with any extra headers, for diagnostics: its status and
+ *    body as hex, null with none.
  *
  * Pushes `snapshot` on every change: null with no session, else the
  * sender's name, whether it plays, the track, its progress and an
@@ -124,8 +125,10 @@ class AirPlayBridge(private val context: Context, messenger: BinaryMessenger) {
                 "artwork" -> result.success(state.artwork.takeIf { it.isNotEmpty() })
                 "remote" -> {
                     val path = call.argument<String>("path") ?: ""
+                    val headers = (call.argument<Map<String, Any?>>("headers") ?: emptyMap())
+                        .mapValues { "${it.value}" }
                     worker.execute {
-                        val answer = runCatching { server.remoteRequest(path) }.getOrNull()
+                        val answer = runCatching { server.remoteRequest(path, headers) }.getOrNull()
                         main.post {
                             result.success(answer?.let {
                                 mapOf(
@@ -197,6 +200,12 @@ class AirPlayBridge(private val context: Context, messenger: BinaryMessenger) {
          */
         var metadataRtp: Long? = null
         var artworkRtp: Long? = null
+        /**
+         * Whether the sender answers its remote control's status, which is
+         * what the richer controls (seek, shuffle, repeat, the queue) also
+         * need. A Mac does, iOS refuses all of them.
+         */
+        var remoteStatus = false
         var shuffle = false
         var repeat = "off"
         var shuffleOffered = false
@@ -238,6 +247,7 @@ class AirPlayBridge(private val context: Context, messenger: BinaryMessenger) {
             // The cover belongs to the track shown: the album's cover for
             // the queue panel.
             "artworkMatchesTrack" to (artwork.isNotEmpty() && artworkRtp != null && artworkRtp == metadataRtp),
+            "remoteStatus" to remoteStatus,
             "shuffle" to shuffle,
             "repeat" to repeat,
             "shuffleOffered" to shuffleOffered,
@@ -268,6 +278,7 @@ class AirPlayBridge(private val context: Context, messenger: BinaryMessenger) {
             metadataRtp = null
             artworkRtp = null
             remote = false
+            remoteStatus = false
             shuffle = false
             repeat = "off"
             shuffleOffered = false
@@ -325,6 +336,7 @@ class AirPlayBridge(private val context: Context, messenger: BinaryMessenger) {
             shuffleOffered: Boolean,
             repeatOffered: Boolean,
         ) = onMain {
+            remoteStatus = true
             this.shuffle = shuffle
             this.repeat = when (repeat) {
                 1 -> "one"

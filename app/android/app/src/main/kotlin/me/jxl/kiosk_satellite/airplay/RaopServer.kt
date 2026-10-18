@@ -185,8 +185,8 @@ internal class RaopServer(
     }
 
     /** A raw remote control request on the live session, for diagnostics. */
-    fun remoteRequest(path: String): Pair<Int, ByteArray>? =
-        synchronized(lock) { current }?.dacpRequest(path)
+    fun remoteRequest(path: String, headers: Map<String, String> = emptyMap()): Pair<Int, ByteArray>? =
+        synchronized(lock) { current }?.dacpRequest(path, headers = headers)
 
     /** The live session's playout diagnostics, null with no session. */
     fun stats(): Map<String, Any?>? = synchronized(lock) { current }?.stats()
@@ -432,7 +432,11 @@ internal class RaopServer(
          * port: the status and body, or null when it could not be asked.
          * Blocks, so off the main thread.
          */
-        fun dacpRequest(path: String, readTimeoutMs: Int = 4000): Pair<Int, ByteArray>? {
+        fun dacpRequest(
+            path: String,
+            readTimeoutMs: Int = 4000,
+            headers: Map<String, String> = emptyMap(),
+        ): Pair<Int, ByteArray>? {
             val remote = activeRemote ?: return null
             val p = dacpPort
             if (p <= 0) return null
@@ -444,6 +448,7 @@ internal class RaopServer(
                 conn.readTimeout = readTimeoutMs
                 conn.useCaches = false
                 conn.setRequestProperty("Active-Remote", remote)
+                for ((name, value) in headers) conn.setRequestProperty(name, value)
                 try {
                     val code = conn.responseCode
                     val body = runCatching {
@@ -506,8 +511,10 @@ internal class RaopServer(
                     ) {
                         continue
                     }
-                    // A sender without the status says so for good.
-                    if (status == 501) break
+                    // A sender without the status says so for good: 501,
+                    // or 400 from iOS, whose remote control takes play,
+                    // pause, skip and volume and refuses everything else.
+                    if (status == 501 || status == 400) break
                     // Nothing new since the revision named.
                     if (status == 403) {
                         backoff = 1000L
