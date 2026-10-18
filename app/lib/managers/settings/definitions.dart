@@ -6621,6 +6621,7 @@ const voiceSkin = SettingDef<String>(
     'ink-blobs',
     'jarvis',
     'kitt',
+    'hal-9000',
     'voice-only',
   ],
   optionLabels: {
@@ -6636,6 +6637,7 @@ const voiceSkin = SettingDef<String>(
     'ink-blobs': 'Ink Blobs',
     'jarvis': 'Jarvis',
     'kitt': 'KITT',
+    'hal-9000': 'HAL 9000',
     'voice-only': 'Voice Only',
   },
   dependsOn: 'voice.enabled',
