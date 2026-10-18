@@ -5,6 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Changed
+- **Echo Dot guide for the Kiosk Satellite Edition image.** The Echo Dot guide now points to the [Kiosk Satellite Edition of LineageOS for the Echo Dot](https://github.com/jxlarrea/lineageos-biscuit-kiosk-satellite), which installs Kiosk Satellite on first boot with every permission and as the device owner, so the adb install and grant steps are gone. It also drops the media volume limit, since the wake word works over music at full volume on that image, and the light ring strobing and memory workarounds it no longer needs. See [Echo Dot](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/echo-dot.md).
 - **Echo Dot Action button without the accessibility service.** On a system that sends the Echo Dot's Action button as a broadcast, such as the Kiosk Satellite Edition build of its LineageOS port, Kiosk Satellite takes the button from that broadcast. The button service no longer has to be switched on over adb, and the Dot no longer needs a reboot after setup before the button works. On other systems the button service works as before.
 
 ### Fixed
