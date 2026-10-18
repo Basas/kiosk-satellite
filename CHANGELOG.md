@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.29 - 2026-10-17
 
 ### Added
 - **HAL 9000 skin for Voice Satellite.** The new **HAL 9000** skin draws HAL's eye from 2001: A Space Odyssey: a fisheye lens in a polished chrome ring, its dark glass lit from within by a red light with a hot yellow center. The light flares with your voice and the answer, its yellow center swelling from a point to a blaze and its red filling the glass and spilling onto the chrome. It pulses while the assistant thinks and dims at rest without ever going out. It sits at the top of the screen with the conversation under it, as Jarvis and KITT do. Docked during a realtime conversation it floats on a dark disc above the bubble, with a red ring around the chrome that unwinds as the conversation ends. With Reactive activity bar off, it runs its own animation instead of following your voice.
