@@ -9,8 +9,9 @@ import 'assist_art.dart';
 /// The HAL 9000 skin's indicator: HAL's eye from 2001: A Space Odyssey. A
 /// fisheye lens in a polished chrome ring and a black barrel, its glass
 /// lit from within by a red light with a hot yellow center. The light
-/// swells with the voice and the answer, pulses while the assistant
-/// thinks and dims at rest. The lens, its metal and the reflections on its
+/// flares with the voice and the answer, its center swelling and its red
+/// filling the glass and spilling onto the chrome, pulses while the
+/// assistant thinks and dims at rest. The lens, its metal and the reflections on its
 /// glass are an image drawn once, and the light is a few gradients added
 /// over it each frame, so a frame costs one image draw and no blur.
 class HalArt extends StatefulWidget {
@@ -52,7 +53,11 @@ class HalArt extends StatefulWidget {
 class _HalArtState extends State<HalArt> {
   /// The light's strength as drawn, eased toward its target every frame so
   /// a change of mode glides.
-  double _glow = 0.5;
+  double _glow = 0.6;
+
+  /// How hard the voice drives the light (0 to 1) as drawn: quick to rise,
+  /// slower to fall, so each syllable flares and fades.
+  double _pulse = 0;
   double _last = -1;
 
   /// The loudest recent level while listening and while speaking, each
@@ -509,23 +514,31 @@ class _HalPainter extends CustomPainter {
     return (l * math.min(4.0, 0.9 / math.max(peak, 0.1))).clamp(0.0, 1.0);
   }
 
-  /// The light's strength: about 0.6 at rest, 1 fully lit, past it when
-  /// a voice is loud.
-  double _target(double t, double l) {
+  /// The light's steady strength for the mode: about 0.6 at rest and
+  /// near 1 through a conversation.
+  double _glowTarget(double t) => switch (w.mode) {
+    ArtMode.idle => 0.6 + 0.04 * math.sin(2 * math.pi * t / 4),
+    ArtMode.thinking => 0.85,
+    ArtMode.listening || ArtMode.speaking => 0.9,
+  };
+
+  /// How hard the voice drives the light, 0 to 1. Without a level to
+  /// follow the answer still flares, and thinking pulses slowly.
+  double _pulseTarget(double t, double l) {
     switch (w.mode) {
       case ArtMode.idle:
-        return 0.62 + 0.04 * math.sin(2 * math.pi * t / 4);
+        return 0;
       case ArtMode.thinking:
-        return 0.68 + 0.3 * (0.5 + 0.5 * math.sin(2 * math.pi * t / 1.2));
-      case ArtMode.speaking when w.reactive:
-        return 0.72 + 0.6 * l;
-      case ArtMode.listening when w.reactive:
-        return 0.8 + 0.45 * l;
+        return 0.3 * (0.5 + 0.5 * math.sin(2 * math.pi * t / 1.2));
+      case ArtMode.listening || ArtMode.speaking when w.reactive:
+        // Lifted so a quiet voice still shows.
+        return math.pow(l, 0.6).toDouble();
       case ArtMode.speaking:
-        return 0.85 +
-            0.15 * math.sin(2 * math.pi * 1.7 * t) * math.sin(2 * math.pi * t);
+        final beat =
+            0.5 + 0.5 * math.sin(2 * math.pi * 2.3 * t) * math.sin(2.9 * t);
+        return 0.25 + 0.55 * beat;
       case ArtMode.listening:
-        return 0.82 + 0.04 * math.sin(2 * math.pi * t / 2.4);
+        return 0.08 + 0.05 * math.sin(2 * math.pi * t / 2.4);
     }
   }
 
@@ -536,11 +549,13 @@ class _HalPainter extends CustomPainter {
     final dt = state._last < 0 ? 1.0 : (t - state._last).clamp(0.0, 0.1);
     state._last = t;
     final l = w.reactive ? _scaled(dt) : 0.0;
-    // A voice moves it within a few frames, a change of mode over a few
-    // tenths of a second.
-    final rate = w.reactive && w.mode != ArtMode.thinking ? 22.0 : 6.0;
-    state._glow += (_target(t, l) - state._glow) * (1 - math.exp(-rate * dt));
-    final g = state._glow.clamp(0.0, 1.4);
+    state._glow += (_glowTarget(t) - state._glow) * (1 - math.exp(-5 * dt));
+    final target = _pulseTarget(t, l).clamp(0.0, 1.0);
+    // About 30 ms to rise and 110 to fall most of the way.
+    final rate = target > state._pulse ? 35.0 : 9.0;
+    state._pulse += (target - state._pulse) * (1 - math.exp(-rate * dt));
+    final g = state._glow.clamp(0.0, 1.0);
+    final p = state._pulse.clamp(0.0, 1.0);
 
     final area = w.box ?? Offset.zero & size;
     final radius = math.min(area.width, area.height) / 2 / _reach;
@@ -572,18 +587,20 @@ class _HalPainter extends CustomPainter {
       Paint()..filterQuality = FilterQuality.medium,
     );
 
-    // The light, added over the glass: a red that fills the lens and
-    // fades before its edge, the faint rings of the inner elements it
-    // catches, a hot yellow center that grows with it, and a little of it
-    // spilling onto the ring that holds the glass.
+    // The light, added over the glass: a red that fills more of the lens
+    // as the voice drives it and fades before its edge, the faint rings of
+    // the inner elements it catches, a hot yellow center that swells from
+    // a point to a blaze, and its spill onto the ring that holds the glass
+    // and, when loud, the chrome.
     final add = Paint()..blendMode = BlendMode.plus;
-    final a = math.min(1.0, g);
+    final a = math.min(1.0, g + 0.4 * p);
+    double grow(double rest, double loud) => rest + (loud - rest) * p;
     canvas.drawCircle(
       Offset.zero,
-      620,
+      _glass,
       add
         ..shader = _radial(
-          620,
+          _glass,
           [
             const Color(0xFFFF3A12).withValues(alpha: a),
             const Color(0xFFF01405).withValues(alpha: 0.95 * a),
@@ -592,7 +609,14 @@ class _HalPainter extends CustomPainter {
             const Color(0xFF320000).withValues(alpha: 0.45 * a),
             const Color(0x00000000),
           ],
-          [0, 70 + 40 * g, 200 + 45 * g, 350 + 55 * g, 510, 620],
+          [
+            0,
+            grow(80, 200),
+            grow(200, 380),
+            grow(340, 520),
+            grow(500, 610),
+            grow(620, _glass),
+          ],
         ),
     );
     for (final (r, alpha) in const [
@@ -601,20 +625,21 @@ class _HalPainter extends CustomPainter {
       (455.0, 0.1),
       (560.0, 0.08),
     ]) {
+      final lit = alpha * a * (1 + 1.5 * p);
       canvas.drawCircle(
         Offset.zero,
         r,
-        _stroke(_red.withValues(alpha: alpha * 0.25 * a), 40)
+        _stroke(_red.withValues(alpha: math.min(1, 0.25 * lit)), 40)
           ..blendMode = BlendMode.plus,
       );
       canvas.drawCircle(
         Offset.zero,
         r,
-        _stroke(_red.withValues(alpha: alpha * 0.5 * a), 3)
+        _stroke(_red.withValues(alpha: math.min(1, 0.5 * lit)), 3)
           ..blendMode = BlendMode.plus,
       );
     }
-    final core = 95 + 55 * g;
+    final core = grow(90, 400);
     canvas.drawCircle(
       Offset.zero,
       core,
@@ -624,13 +649,59 @@ class _HalPainter extends CustomPainter {
           [
             const Color(0xFFFFFBE0).withValues(alpha: a),
             const Color(0xFFFFE070).withValues(alpha: 0.95 * a),
-            const Color(0xFFFF8A1A).withValues(alpha: 0.7 * a),
-            const Color(0xFFFF3008).withValues(alpha: 0.3 * a),
+            const Color(0xFFFF8A1A).withValues(alpha: 0.75 * a),
+            const Color(0xFFFF3008).withValues(alpha: 0.35 * a),
             const Color(0x00000000),
           ],
-          [0, core * 0.16, core * 0.38, core * 0.68, core],
+          [
+            0,
+            core * grow(0.16, 0.3),
+            core * grow(0.38, 0.55),
+            core * grow(0.7, 0.78),
+            core,
+          ],
         ),
     );
+    // A loud voice blooms the whole glass and throws red onto the metal.
+    if (p > 0.01) {
+      canvas.drawCircle(
+        Offset.zero,
+        _glass,
+        add
+          ..shader = _radial(
+            _glass,
+            [
+              const Color(0xFFFF5A20).withValues(alpha: 0.55 * p),
+              const Color(0xFFFF1E0A).withValues(alpha: 0.35 * p),
+              const Color(0xFFC00800).withValues(alpha: 0.18 * p),
+              const Color(0x00000000),
+            ],
+            const [0, 220, 480, _glass],
+          ),
+      );
+      canvas.drawCircle(
+        Offset.zero,
+        _rim,
+        add
+          ..shader = _radial(
+            _rim,
+            [
+              const Color(0x00000000),
+              const Color(0xFFFF1E0A).withValues(alpha: 0.3 * p),
+              const Color(0xFFFF1E0A).withValues(alpha: 0.1 * p),
+              const Color(0xFFFF1E0A).withValues(alpha: 0.12 * p),
+              const Color(0x00000000),
+            ],
+            const [
+              _glass - 10,
+              _glass + 8,
+              _barrelStep,
+              _chromeInner + 20,
+              _rim,
+            ],
+          ),
+      );
+    }
     canvas.drawCircle(
       Offset.zero,
       _barrelStep,
@@ -646,24 +717,6 @@ class _HalPainter extends CustomPainter {
           const [_glass, _glass + 6, _retainer + 10, _barrelStep],
         ),
     );
-    // Past full, a loud voice blooms the center over the glass.
-    if (g > 1) {
-      final over = (g - 1) / 0.4;
-      canvas.drawCircle(
-        Offset.zero,
-        420,
-        add
-          ..shader = _radial(
-            420,
-            [
-              const Color(0xFFFF6A30).withValues(alpha: 0.5 * over),
-              const Color(0xFFFF1E0A).withValues(alpha: 0.18 * over),
-              const Color(0x00000000),
-            ],
-            const [0, 160, 420],
-          ),
-      );
-    }
 
     // Docked, a red ring around the chrome unwinds as the conversation
     // ends.
