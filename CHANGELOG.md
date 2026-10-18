@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Fixed
+- **Wake word arbitration after a slow Wi-Fi start.** When Wi-Fi was not up yet as Kiosk Satellite started, such as on an Echo Dot right after a reboot, its first hello to the other kiosks failed and the regular hellos never started. The other kiosks then reached it only with broadcast claims, which Wi-Fi can drop. A failed send now counts as a lost packet, and the hellos carry on.
+
 ## v2026.10.29 - 2026-10-17
 
 ### Added
