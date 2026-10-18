@@ -1016,6 +1016,26 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinSonosGroupVolumeTitle",
     "description": "settingSendspinGroupVolumeDescription",
   },
+  "airplay.enabled": {
+    "title": "settingAirplayEnabledTitle",
+    "description": "settingAirplayEnabledDescription",
+  },
+  "airplay.name": {
+    "title": "settingAirplayNameTitle",
+    "description": "settingAirplayNameDescription",
+  },
+  "airplay.sender_volume": {
+    "title": "settingAirplaySenderVolumeTitle",
+    "description": "settingAirplaySenderVolumeDescription",
+  },
+  "airplay.sync_offset_ms": {
+    "title": "settingSendspinSyncOffsetTitle",
+    "description": "settingAirplaySyncOffsetDescription",
+  },
+  "airplay.takeover": {
+    "title": "settingAirplayTakeoverTitle",
+    "description": "settingAirplayTakeoverDescription",
+  },
   "sendspin.ma_url": {
     "title": "settingSendspinMaUrlTitle",
     "description": "settingSendspinMaUrlDescription",

@@ -8501,6 +8501,43 @@ class UiStringsUk extends UiStrings {
       'Дозволи, на які спирається захист блокування.';
 
   @override
+  String get settingAirplayEnabledTitle => 'Увімкнути приймач AirPlay';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'Пристрій з\'явиться як гучномовець AirPlay у меню AirPlay на iPhone, iPad або Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Назва гучномовця';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'Назва в меню AirPlay. Якщо порожньо, використовується назва пристрою.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle =>
+      'Враховувати гучність відправника';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'Регулятор гучності на iPhone, iPad або Mac змінює гучність цього пристрою. Якщо вимкнено, діє лише гучність цього пристрою.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Від\'ємне значення змушує цей пристрій грати раніше, щоб звук збігався з відео на відправнику. Застосовується одразу.';
+
+  @override
+  String get settingAirplayTakeoverTitle =>
+      'Дозволити іншому відправнику перехопити';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'Інший iPhone, iPad або Mac може перехопити відтворення, поки грає перший. Якщо вимкнено, він чекатиме, доки перший не від\'єднається.';
+
+  @override
+  String get mediaAirplayHint => 'Відтворення аудіо з iPhone, iPad або Mac';
+
+  @override
   String get mediaCacheTitle => 'Кеш обкладинок альбомів';
 
   @override
@@ -8634,8 +8671,18 @@ class UiStringsUk extends UiStrings {
   String get mediaAnotherPlayer => 'інший плеєр';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'Власний плеєр Sendspin цього пристрою залишається офлайн, доки керується $player.';
+  String mediaOfflineSendspin(String player) {
+    return 'Плеєр Sendspin залишається офлайн, доки вибрано $player.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'Приймач AirPlay залишається вимкненим, доки вибрано $player.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'Плеєр Sendspin і приймач AirPlay залишаються офлайн, доки вибрано $player.';
   }
 
   @override

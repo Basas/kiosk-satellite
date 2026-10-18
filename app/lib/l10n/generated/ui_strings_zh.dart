@@ -8020,6 +8020,40 @@ class UiStringsZh extends UiStrings {
   String get lockdownPermissionsSearch => '锁定保护功能所依赖的权限。';
 
   @override
+  String get settingAirplayEnabledTitle => '启用 AirPlay 接收器';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      '此设备会作为 AirPlay 扬声器出现在 iPhone、iPad 或 Mac 的 AirPlay 菜单中。';
+
+  @override
+  String get settingAirplayNameTitle => '扬声器名称';
+
+  @override
+  String get settingAirplayNameDescription => 'AirPlay 菜单中显示的名称。留空则使用设备名称。';
+
+  @override
+  String get settingAirplaySenderVolumeTitle => '跟随发送端音量';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'iPhone、iPad 或 Mac 上的音量控制会改变此设备的播放音量。关闭后，只有此设备的音量生效。';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      '负值让此设备提前播放，使声音与发送端的视频对齐。立即生效。';
+
+  @override
+  String get settingAirplayTakeoverTitle => '允许其他发送端接管';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      '一台设备播放时，另一台 iPhone、iPad 或 Mac 可以接管。关闭后，它必须等第一台断开连接。';
+
+  @override
+  String get mediaAirplayHint => '播放来自 iPhone、iPad 或 Mac 的音频';
+
+  @override
   String get mediaCacheTitle => '专辑封面缓存';
 
   @override
@@ -8146,8 +8180,18 @@ class UiStringsZh extends UiStrings {
   String get mediaAnotherPlayer => '其他播放器';
 
   @override
-  String mediaLocalOffline(String player) {
-    return '控制 $player 时，此设备自身的 Sendspin 播放器保持离线。';
+  String mediaOfflineSendspin(String player) {
+    return '选择 $player 时，Sendspin 播放器保持离线。';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return '选择 $player 时，AirPlay 接收器保持关闭。';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return '选择 $player 时，Sendspin 播放器和 AirPlay 接收器保持离线。';
   }
 
   @override
@@ -21392,6 +21436,40 @@ class UiStringsZhCn extends UiStringsZh {
   String get lockdownPermissionsSearch => '锁定保护功能所依赖的权限。';
 
   @override
+  String get settingAirplayEnabledTitle => '启用 AirPlay 接收器';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      '此设备会作为 AirPlay 扬声器出现在 iPhone、iPad 或 Mac 的 AirPlay 菜单中。';
+
+  @override
+  String get settingAirplayNameTitle => '扬声器名称';
+
+  @override
+  String get settingAirplayNameDescription => 'AirPlay 菜单中显示的名称。留空则使用设备名称。';
+
+  @override
+  String get settingAirplaySenderVolumeTitle => '跟随发送端音量';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'iPhone、iPad 或 Mac 上的音量控制会改变此设备的播放音量。关闭后，只有此设备的音量生效。';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      '负值让此设备提前播放，使声音与发送端的视频对齐。立即生效。';
+
+  @override
+  String get settingAirplayTakeoverTitle => '允许其他发送端接管';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      '一台设备播放时，另一台 iPhone、iPad 或 Mac 可以接管。关闭后，它必须等第一台断开连接。';
+
+  @override
+  String get mediaAirplayHint => '播放来自 iPhone、iPad 或 Mac 的音频';
+
+  @override
   String get mediaCacheTitle => '专辑封面缓存';
 
   @override
@@ -21518,8 +21596,18 @@ class UiStringsZhCn extends UiStringsZh {
   String get mediaAnotherPlayer => '其他播放器';
 
   @override
-  String mediaLocalOffline(String player) {
-    return '控制 $player 时，此设备自身的 Sendspin 播放器保持离线。';
+  String mediaOfflineSendspin(String player) {
+    return '选择 $player 时，Sendspin 播放器保持离线。';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return '选择 $player 时，AirPlay 接收器保持关闭。';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return '选择 $player 时，Sendspin 播放器和 AirPlay 接收器保持离线。';
   }
 
   @override

@@ -65,6 +65,8 @@ const Map<String, Object> subpageIcons = {
   'Sendspin Player': 'assets/svg/sendspin.svg',
   'Music Assistant': 'assets/svg/music-assistant.svg',
   'Sonos': Icons.speaker_outlined,
+  // The audio mark, which Material does not draw.
+  'AirPlay': 'assets/svg/airplay.svg',
   'Floating Player': Icons.picture_in_picture_alt_outlined,
   'Now Playing': Icons.fullscreen,
   'Lyrics': Icons.lyrics_outlined,

@@ -31860,6 +31860,136 @@
       ]
     }
   },
+  "settingAirplayEnabledTitle": "Включить приёмник AirPlay",
+  "@settingAirplayEnabledTitle": {
+    "context": "Settings > Media Player > AirPlay > Enable AirPlay receiver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Enable AirPlay receiver"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Enable AirPlay receiver"
+      ]
+    }
+  },
+  "settingAirplayEnabledDescription": "Устройство появляется как колонка AirPlay в меню AirPlay на iPhone, iPad или Mac.",
+  "@settingAirplayEnabledDescription": {
+    "context": "Settings > Media Player > AirPlay > Enable AirPlay receiver",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Enable AirPlay receiver"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Enable AirPlay receiver"
+      ]
+    }
+  },
+  "settingAirplayNameTitle": "Имя колонки",
+  "@settingAirplayNameTitle": {
+    "context": "Settings > Media Player > AirPlay > Speaker name",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Speaker name"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Speaker name"
+      ]
+    }
+  },
+  "settingAirplayNameDescription": "Имя в меню AirPlay. Если пусто, используется имя устройства.",
+  "@settingAirplayNameDescription": {
+    "context": "Settings > Media Player > AirPlay > Speaker name",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Speaker name"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Speaker name"
+      ]
+    }
+  },
+  "settingAirplaySenderVolumeTitle": "Следовать громкости отправителя",
+  "@settingAirplaySenderVolumeTitle": {
+    "context": "Settings > Media Player > AirPlay > Follow the sender's volume",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Follow the sender's volume"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Follow the sender's volume"
+      ]
+    }
+  },
+  "settingAirplaySenderVolumeDescription": "Регулятор громкости на iPhone, iPad или Mac меняет громкость этого устройства. Если выключено, действует только громкость этого устройства.",
+  "@settingAirplaySenderVolumeDescription": {
+    "context": "Settings > Media Player > AirPlay > Follow the sender's volume",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Follow the sender's volume"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Follow the sender's volume"
+      ]
+    }
+  },
+  "settingAirplaySyncOffsetDescription": "Отрицательное значение заставляет это устройство играть раньше, чтобы звук совпадал с видео на отправителе. Применяется сразу.",
+  "@settingAirplaySyncOffsetDescription": {
+    "context": "Settings > Media Player > AirPlay > Audio sync offset (ms)",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Audio sync offset (ms)"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Audio sync offset (ms)"
+      ]
+    }
+  },
+  "settingAirplayTakeoverTitle": "Разрешить другому отправителю перехват",
+  "@settingAirplayTakeoverTitle": {
+    "context": "Settings > Media Player > AirPlay > Let another sender take over",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Let another sender take over"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Let another sender take over"
+      ]
+    }
+  },
+  "settingAirplayTakeoverDescription": "Другой iPhone, iPad или Mac может перехватить воспроизведение, пока играет первый. Если выключено, ему придётся ждать, пока первый не отключится.",
+  "@settingAirplayTakeoverDescription": {
+    "context": "Settings > Media Player > AirPlay > Let another sender take over",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Let another sender take over"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Let another sender take over"
+      ]
+    }
+  },
+  "mediaAirplayHint": "Воспроизведение звука с iPhone, iPad или Mac",
+  "@mediaAirplayHint": {
+    "context": "Settings > Media Player > AirPlay",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay"
+      ]
+    }
+  },
   "mediaCacheTitle": "Кэш обложек",
   "@mediaCacheTitle": {
     "context": "Settings > Media Player > Album art cache",
@@ -32364,8 +32494,8 @@
       ]
     }
   },
-  "mediaLocalOffline": "Собственный плеер Sendspin этого устройства остаётся не в сети, пока управляется {player}.",
-  "@mediaLocalOffline": {
+  "mediaOfflineSendspin": "Плеер Sendspin остаётся не в сети, пока выбран {player}.",
+  "@mediaOfflineSendspin": {
     "context": "Settings > Media Player",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -32379,7 +32509,45 @@
     "placeholders": {
       "player": {
         "type": "String",
-        "description": "Value supplied by the app. Preserve names, addresses and technical details."
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
+      }
+    }
+  },
+  "mediaOfflineAirplay": "Приёмник AirPlay остаётся выключенным, пока выбран {player}.",
+  "@mediaOfflineAirplay": {
+    "context": "Settings > Media Player",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player"
+      ],
+      "remoteAdmin": [
+        "Media Player"
+      ]
+    },
+    "placeholders": {
+      "player": {
+        "type": "String",
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
+      }
+    }
+  },
+  "mediaOfflineBoth": "Плеер Sendspin и приёмник AirPlay остаются не в сети, пока выбран {player}.",
+  "@mediaOfflineBoth": {
+    "context": "Settings > Media Player",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player"
+      ],
+      "remoteAdmin": [
+        "Media Player"
+      ]
+    },
+    "placeholders": {
+      "player": {
+        "type": "String",
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
       }
     }
   },

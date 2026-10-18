@@ -13,8 +13,10 @@ import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/logging.dart';
 import '../../core/manager.dart';
+import '../airplay/airplay_manager.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
+import 'airplay_player.dart';
 import 'ha_remote_player.dart';
 import 'artwork_cache.dart';
 import 'queue_artwork_cache.dart';
@@ -250,6 +252,10 @@ class SendspinManager extends Manager {
     if (url.isEmpty) return null;
     // Another app's cover, kept by the media session bridge.
     if (url.startsWith('mediasession:')) return SessionPlayer.artwork(url);
+    // An AirPlay sender's, kept by the receiver.
+    if (url.startsWith(AirPlayPlayer.artworkScheme)) {
+      return AirPlayManager.artworkFor(url);
+    }
     HttpClient? client;
     try {
       final serverHost = Uri.parse(
@@ -358,9 +364,13 @@ class SendspinManager extends Manager {
   String get followedPlayerName => _remotePicked ? _pickedName : '';
 
   /// The pick's stored name, or for a media session followed as "any
-  /// app" the app that plays right now.
+  /// app" the app that plays right now, and for the AirPlay receiver the
+  /// sender playing to it.
   String get _pickedName {
     final remote = _remote;
+    if (remote is AirPlayPlayer && remote.clientName.isNotEmpty) {
+      return remote.clientName;
+    }
     if (remote is SessionPlayer &&
         remote.package == SessionPlayer.anyApp &&
         remote.appName.isNotEmpty) {
@@ -549,9 +559,10 @@ class SendspinManager extends Manager {
           false);
 
   /// Whether the shown player plays out of this device, so its volume is
-  /// the device's media volume: the local player, or another app's media
-  /// session.
-  bool get _deviceVolume => _remote == null || _remote is SessionPlayer;
+  /// the device's media volume: the local player, another app's media
+  /// session or an AirPlay sender.
+  bool get _deviceVolume =>
+      _remote == null || _remote is SessionPlayer || _remote is AirPlayPlayer;
 
   /// Whether the view's volume slider and mute act on the whole group
   /// this device plays in (issue #867): the local player, grouped in
@@ -1078,6 +1089,14 @@ class SendspinManager extends Manager {
       _syncDucking();
     });
 
+    // The AirPlay receiver's sessions, for its follower while it is the
+    // pick.
+    bus.on<AirPlaySessionChanged>().listen((e) {
+      final remote = _remote;
+      if (remote is AirPlayPlayer) remote.handle(e.session);
+    });
+    AirPlayManager.albumCoverAdded.addListener(_onAirPlayCover);
+
     // The "Show the Sendspin player" gesture with nothing on screen to
     // show: the queue may still exist server-side, invisible to this app
     // since it restarted (issue #178) — go look for it.
@@ -1525,8 +1544,9 @@ class SendspinManager extends Manager {
             'Follow a player: the source (device, home_assistant, '
             'music_assistant or sonos) and the player by name or id, the '
             'way the Media Player page picks one. The device source puts '
-            'this device back on its own Sendspin player, or with player '
-            'media_session on whichever app plays on the device.',
+            'this device back on its own Sendspin player, with player '
+            'media_session on whichever app plays on the device, or with '
+            'player airplay on its AirPlay receiver.',
         params: const {
           'source': 'device | home_assistant | music_assistant | sonos',
           'player': 'the player name, or its id',
@@ -1535,21 +1555,22 @@ class SendspinManager extends Manager {
           final source = sourceKey('${p['source'] ?? ''}');
           if (source == null) return const CommandResult.fail('unknown source');
           if (source.isEmpty) {
-            final session = isLocalSessionName('${p['player'] ?? ''}');
+            final player = '${p['player'] ?? ''}';
+            final session = isLocalSessionName(player);
+            final airplay = player.trim().toLowerCase() == airplayPick;
+            final (pick, id, name) = session
+                ? (localSessionPick, 'media_session', localSessionName)
+                : airplay
+                ? (airplayPick, airplayPick, airplayName)
+                : ('', '', '');
             await _settings.set(defs.sendspinPlayerSource, '');
             await Future<void>.delayed(Duration.zero);
-            await _settings.set(
-              defs.sendspinPlayer,
-              session ? localSessionPick : '',
-            );
-            await _settings.set(
-              defs.sendspinPlayerName,
-              session ? localSessionName : '',
-            );
+            await _settings.set(defs.sendspinPlayer, pick);
+            await _settings.set(defs.sendspinPlayerName, name);
             return CommandResult.ok({
               'source': 'device',
-              'id': session ? 'media_session' : '',
-              'name': session ? localSessionName : '',
+              'id': id,
+              'name': name,
             });
           }
           final wanted = '${p['player'] ?? ''}'.trim();
@@ -1811,9 +1832,11 @@ class SendspinManager extends Manager {
       _ => PlayerSourceKind.local,
     };
     if (picked.isLocal || picked.kind == kind) return;
-    // This device's other player: the apps playing on it.
+    // This device's other players: the apps playing on it and the
+    // AirPlay receiver.
     if (kind == PlayerSourceKind.local &&
-        picked.kind == PlayerSourceKind.mediaSession) {
+        (picked.kind == PlayerSourceKind.mediaSession ||
+            picked.kind == PlayerSourceKind.airplay)) {
       return;
     }
     await _settings.set(defs.sendspinPlayer, '');
@@ -1870,6 +1893,13 @@ class SendspinManager extends Manager {
 
   /// What the pick is called where it is stored and shown.
   static const localSessionName = 'Local Media Session';
+
+  /// The pick that plays what an iPhone, iPad or Mac sends to this
+  /// device's AirPlay receiver: the device source's third player.
+  static const airplayPick = 'airplay';
+
+  /// What that pick is called, a name no language translates.
+  static const airplayName = 'AirPlay';
 
   /// Whether an action's player names the local media session rather
   /// than the Sendspin player.
@@ -1983,6 +2013,9 @@ class SendspinManager extends Manager {
           .catchError((_) {}),
     );
     unawaited(_remoteDucker?.update(active: voiceActive.value, factor: factor));
+    // The AirPlay receiver plays out of this device like the local player
+    // and ducks on the same factor, whether or not a sender plays.
+    unawaited(AirPlayManager.duck(voiceActive.value ? factor : 1.0));
   }
 
   Future<void> _retireRemote(RemotePlayer remote, VolumeDucker? ducker) async {
@@ -2016,6 +2049,7 @@ class SendspinManager extends Manager {
         source.id.isNotEmpty && haUrl.isNotEmpty && haToken.isNotEmpty,
       PlayerSourceKind.sonos => source.id.isNotEmpty && sonosHost.isNotEmpty,
       PlayerSourceKind.mediaSession => source.id.isNotEmpty,
+      PlayerSourceKind.airplay => true,
     };
     final key = want
         ? switch (source.kind) {
@@ -2027,6 +2061,7 @@ class SendspinManager extends Manager {
               'sonos|${source.id}|$sonosHost|'
                   '${_settings.get(defs.sendspinSonosGroupVolume)}|${_settings.get(defs.sendspinSonosInputs)}',
             PlayerSourceKind.mediaSession => 'session|${source.id}',
+            PlayerSourceKind.airplay => 'airplay',
             _ => '',
           }
         : '';
@@ -2077,6 +2112,7 @@ class SendspinManager extends Manager {
         onSnapshot: snapshot,
         log: log,
       ),
+      PlayerSourceKind.airplay => AirPlayPlayer(onSnapshot: snapshot),
       _ => remoteFactory(
         baseUrl: maUrl,
         token: maToken,
@@ -2144,8 +2180,15 @@ class SendspinManager extends Manager {
     unawaited(_refreshLyrics());
   }
 
+  /// An album cover came in after the panel listed the queue: list it
+  /// again, now with that album's rows drawn.
+  void _onAirPlayCover() {
+    if (_remote is AirPlayPlayer && queueOpen) unawaited(refreshQueue());
+  }
+
   @override
   Future<void> dispose() async {
+    AirPlayManager.albumCoverAdded.removeListener(_onAirPlayCover);
     nowPlaying.removeListener(_remoteMediaChanged);
     nowPlaying.removeListener(_publishMediaSummary);
     _restartDebounce?.cancel();

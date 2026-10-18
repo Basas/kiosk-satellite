@@ -31860,6 +31860,136 @@
       ]
     }
   },
+  "settingAirplayEnabledTitle": "启用 AirPlay 接收器",
+  "@settingAirplayEnabledTitle": {
+    "context": "Settings > Media Player > AirPlay > Enable AirPlay receiver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Enable AirPlay receiver"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Enable AirPlay receiver"
+      ]
+    }
+  },
+  "settingAirplayEnabledDescription": "此设备会作为 AirPlay 扬声器出现在 iPhone、iPad 或 Mac 的 AirPlay 菜单中。",
+  "@settingAirplayEnabledDescription": {
+    "context": "Settings > Media Player > AirPlay > Enable AirPlay receiver",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Enable AirPlay receiver"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Enable AirPlay receiver"
+      ]
+    }
+  },
+  "settingAirplayNameTitle": "扬声器名称",
+  "@settingAirplayNameTitle": {
+    "context": "Settings > Media Player > AirPlay > Speaker name",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Speaker name"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Speaker name"
+      ]
+    }
+  },
+  "settingAirplayNameDescription": "AirPlay 菜单中显示的名称。留空则使用设备名称。",
+  "@settingAirplayNameDescription": {
+    "context": "Settings > Media Player > AirPlay > Speaker name",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Speaker name"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Speaker name"
+      ]
+    }
+  },
+  "settingAirplaySenderVolumeTitle": "跟随发送端音量",
+  "@settingAirplaySenderVolumeTitle": {
+    "context": "Settings > Media Player > AirPlay > Follow the sender's volume",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Follow the sender's volume"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Follow the sender's volume"
+      ]
+    }
+  },
+  "settingAirplaySenderVolumeDescription": "iPhone、iPad 或 Mac 上的音量控制会改变此设备的播放音量。关闭后，只有此设备的音量生效。",
+  "@settingAirplaySenderVolumeDescription": {
+    "context": "Settings > Media Player > AirPlay > Follow the sender's volume",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Follow the sender's volume"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Follow the sender's volume"
+      ]
+    }
+  },
+  "settingAirplaySyncOffsetDescription": "负值让此设备提前播放，使声音与发送端的视频对齐。立即生效。",
+  "@settingAirplaySyncOffsetDescription": {
+    "context": "Settings > Media Player > AirPlay > Audio sync offset (ms)",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Audio sync offset (ms)"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Audio sync offset (ms)"
+      ]
+    }
+  },
+  "settingAirplayTakeoverTitle": "允许其他发送端接管",
+  "@settingAirplayTakeoverTitle": {
+    "context": "Settings > Media Player > AirPlay > Let another sender take over",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Let another sender take over"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Let another sender take over"
+      ]
+    }
+  },
+  "settingAirplayTakeoverDescription": "一台设备播放时，另一台 iPhone、iPad 或 Mac 可以接管。关闭后，它必须等第一台断开连接。",
+  "@settingAirplayTakeoverDescription": {
+    "context": "Settings > Media Player > AirPlay > Let another sender take over",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Let another sender take over"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Let another sender take over"
+      ]
+    }
+  },
+  "mediaAirplayHint": "播放来自 iPhone、iPad 或 Mac 的音频",
+  "@mediaAirplayHint": {
+    "context": "Settings > Media Player > AirPlay",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay"
+      ]
+    }
+  },
   "mediaCacheTitle": "专辑封面缓存",
   "@mediaCacheTitle": {
     "context": "Settings > Media Player > Album art cache",
@@ -32364,8 +32494,8 @@
       ]
     }
   },
-  "mediaLocalOffline": "控制 {player} 时，此设备自身的 Sendspin 播放器保持离线。",
-  "@mediaLocalOffline": {
+  "mediaOfflineSendspin": "选择 {player} 时，Sendspin 播放器保持离线。",
+  "@mediaOfflineSendspin": {
     "context": "Settings > Media Player",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -32379,7 +32509,45 @@
     "placeholders": {
       "player": {
         "type": "String",
-        "description": "Value supplied by the app. Preserve names, addresses and technical details."
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
+      }
+    }
+  },
+  "mediaOfflineAirplay": "选择 {player} 时，AirPlay 接收器保持关闭。",
+  "@mediaOfflineAirplay": {
+    "context": "Settings > Media Player",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player"
+      ],
+      "remoteAdmin": [
+        "Media Player"
+      ]
+    },
+    "placeholders": {
+      "player": {
+        "type": "String",
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
+      }
+    }
+  },
+  "mediaOfflineBoth": "选择 {player} 时，Sendspin 播放器和 AirPlay 接收器保持离线。",
+  "@mediaOfflineBoth": {
+    "context": "Settings > Media Player",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player"
+      ],
+      "remoteAdmin": [
+        "Media Player"
+      ]
+    },
+    "placeholders": {
+      "player": {
+        "type": "String",
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
       }
     }
   },

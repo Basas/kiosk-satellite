@@ -16,6 +16,7 @@ import 'managers/camera/camera_manager.dart';
 import 'managers/device/device_manager.dart';
 import 'managers/device_camera/device_camera_manager.dart';
 import 'managers/btproxy/bt_proxy_manager.dart';
+import 'managers/airplay/airplay_manager.dart';
 import 'managers/dlna/dlna_manager.dart';
 import 'managers/dlna/headless_dlna_player.dart';
 import 'managers/files/files_manager.dart';
@@ -124,6 +125,7 @@ class AppContainer {
     pipeline = AssistPipelineManager(bus, commands, log, settings, wakeWord);
     sendspin = SendspinManager(bus, commands, log, settings);
     dlna = DlnaManager(bus, commands, log, settings);
+    airplay = AirPlayManager(bus, commands, log, settings);
     btProxy = BtProxyManager(bus, commands, log, settings);
     // Composition-root wiring: the opaque full-screen overlays report their
     // visibility so the dashboard WebView stops compositing underneath
@@ -231,6 +233,7 @@ class AppContainer {
   late final AssistPipelineManager pipeline;
   late final SendspinManager sendspin;
   late final DlnaManager dlna;
+  late final AirPlayManager airplay;
   late final BtProxyManager btProxy;
   late final FilesManager files;
   late final GlanceManager glance;
@@ -300,6 +303,8 @@ class AppContainer {
     pipeline,
     sendspin,
     dlna,
+    // After sendspin: the surfaces it drives follow an AirPlay session.
+    airplay,
     btProxy,
     files,
     glance,

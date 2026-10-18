@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "1925e66b8701441c17279513fe73e12db5a77a99",
+  "revision": "28113b6cb90169608e842cdbd4420e3313066855",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -127,9 +127,10 @@
     "settings_leds_en.arb": "ba45feb28eb45ea9ef9b299e6c53da2ad9458231218351e87a98c4a9d368f512",
     "settings_lockdown_general_en.arb": "35f9a497d506c0925ca06d3f39f5ff8e3d99ccdc6c8552005ef56754c7c2a2ba",
     "settings_lockdown_permissions_en.arb": "5e1c4165f637ce0c7d46c2f52587044bf47da538e3c17ca74a6e512a771547f1",
+    "settings_media_player_airplay_en.arb": "a42e3091effd1fbbe7f2d278cfc36154523106b0624512780e371e07a2b6838c",
     "settings_media_player_cache_en.arb": "ce251f8e7c3307fc7863779680cc610a8d2bf50b41e9d904b3f84ad153564a8a",
     "settings_media_player_floating_en.arb": "cb84a2d33a3e48ef9096946f22b57eff8016336e2ebb2a8667c2a8849f90ed65",
-    "settings_media_player_general_en.arb": "016ad61fbd3ef78ecd2e162a4a28ac5308408609a71108fffc616fddddd9cad7",
+    "settings_media_player_general_en.arb": "a813720d4e91645fc00702e2097a0a65b8a56b3c2b24b5b62c5e725d417e6a6e",
     "settings_media_player_lyrics_en.arb": "a3e9a76488b78b46f4f7eef3307d4547250ec5b8c549731b78148eaaade4556e",
     "settings_media_player_music_assistant_en.arb": "71d294c11ed758ddaa93f96a9419c531448f6f285e86382227bc08d799b562c4",
     "settings_media_player_now_playing_interface_en.arb": "4a79e95226fb32b4ca08d2f16ef6bcaee11a5d6f504feff6a76e4ae0fc4679bf",

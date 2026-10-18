@@ -490,11 +490,13 @@ class SettingsManager extends Manager {
       await _prefs.remove('${_prefix}sendspin.ma_player_name');
     }
     // The pick is filtered by a source now: a pick stored before the
-    // source existed names its own. The Local Media Session is this
-    // device's own pick and belongs under the empty source.
+    // source existed names its own. The Local Media Session and the
+    // AirPlay receiver are this device's own picks and belong under the
+    // empty source.
     final picked = _prefs.getString('${_prefix}sendspin.player') ?? '';
     if (picked.trim().isNotEmpty &&
         !picked.startsWith('session:') &&
+        picked != 'airplay' &&
         (_prefs.getString('${_prefix}sendspin.player_source') ?? '').isEmpty) {
       final source = picked.startsWith('ha:')
           ? 'ha'

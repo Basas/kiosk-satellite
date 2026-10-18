@@ -31860,6 +31860,136 @@
       ]
     }
   },
+  "settingAirplayEnabledTitle": "Activer le récepteur AirPlay",
+  "@settingAirplayEnabledTitle": {
+    "context": "Settings > Media Player > AirPlay > Enable AirPlay receiver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Enable AirPlay receiver"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Enable AirPlay receiver"
+      ]
+    }
+  },
+  "settingAirplayEnabledDescription": "L'appareil apparaît comme une enceinte AirPlay dans le menu AirPlay d'un iPhone, d'un iPad ou d'un Mac.",
+  "@settingAirplayEnabledDescription": {
+    "context": "Settings > Media Player > AirPlay > Enable AirPlay receiver",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Enable AirPlay receiver"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Enable AirPlay receiver"
+      ]
+    }
+  },
+  "settingAirplayNameTitle": "Nom de l'enceinte",
+  "@settingAirplayNameTitle": {
+    "context": "Settings > Media Player > AirPlay > Speaker name",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Speaker name"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Speaker name"
+      ]
+    }
+  },
+  "settingAirplayNameDescription": "Le nom dans le menu AirPlay. Vide, le nom de l'appareil est utilisé.",
+  "@settingAirplayNameDescription": {
+    "context": "Settings > Media Player > AirPlay > Speaker name",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Speaker name"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Speaker name"
+      ]
+    }
+  },
+  "settingAirplaySenderVolumeTitle": "Suivre le volume de l'émetteur",
+  "@settingAirplaySenderVolumeTitle": {
+    "context": "Settings > Media Player > AirPlay > Follow the sender's volume",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Follow the sender's volume"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Follow the sender's volume"
+      ]
+    }
+  },
+  "settingAirplaySenderVolumeDescription": "Le réglage du volume de l'iPhone, de l'iPad ou du Mac change le volume de cet appareil. Si l'option est désactivée, seul le volume de cet appareil compte.",
+  "@settingAirplaySenderVolumeDescription": {
+    "context": "Settings > Media Player > AirPlay > Follow the sender's volume",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Follow the sender's volume"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Follow the sender's volume"
+      ]
+    }
+  },
+  "settingAirplaySyncOffsetDescription": "Une valeur négative fait jouer cet appareil plus tôt, pour caler le son sur la vidéo de l'émetteur. S'applique en direct.",
+  "@settingAirplaySyncOffsetDescription": {
+    "context": "Settings > Media Player > AirPlay > Audio sync offset (ms)",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Audio sync offset (ms)"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Audio sync offset (ms)"
+      ]
+    }
+  },
+  "settingAirplayTakeoverTitle": "Laisser un autre émetteur prendre la main",
+  "@settingAirplayTakeoverTitle": {
+    "context": "Settings > Media Player > AirPlay > Let another sender take over",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Let another sender take over"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Let another sender take over"
+      ]
+    }
+  },
+  "settingAirplayTakeoverDescription": "Un deuxième iPhone, iPad ou Mac peut prendre la main pendant qu'un autre joue. Si l'option est désactivée, il doit attendre que le premier se déconnecte.",
+  "@settingAirplayTakeoverDescription": {
+    "context": "Settings > Media Player > AirPlay > Let another sender take over",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay > Let another sender take over"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay > Let another sender take over"
+      ]
+    }
+  },
+  "mediaAirplayHint": "Lire l'audio d'un iPhone, d'un iPad ou d'un Mac",
+  "@mediaAirplayHint": {
+    "context": "Settings > Media Player > AirPlay",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player > AirPlay"
+      ],
+      "remoteAdmin": [
+        "Media Player > AirPlay"
+      ]
+    }
+  },
   "mediaCacheTitle": "Cache des pochettes d'album",
   "@mediaCacheTitle": {
     "context": "Settings > Media Player > Album art cache",
@@ -32364,8 +32494,8 @@
       ]
     }
   },
-  "mediaLocalOffline": "Le propre lecteur Sendspin de cet appareil reste hors ligne tant que {player} est contrôlé.",
-  "@mediaLocalOffline": {
+  "mediaOfflineSendspin": "Le lecteur Sendspin reste hors ligne tant que {player} est sélectionné.",
+  "@mediaOfflineSendspin": {
     "context": "Settings > Media Player",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -32379,7 +32509,45 @@
     "placeholders": {
       "player": {
         "type": "String",
-        "description": "Value supplied by the app. Preserve names, addresses and technical details."
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
+      }
+    }
+  },
+  "mediaOfflineAirplay": "Le récepteur AirPlay reste désactivé tant que {player} est sélectionné.",
+  "@mediaOfflineAirplay": {
+    "context": "Settings > Media Player",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player"
+      ],
+      "remoteAdmin": [
+        "Media Player"
+      ]
+    },
+    "placeholders": {
+      "player": {
+        "type": "String",
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
+      }
+    }
+  },
+  "mediaOfflineBoth": "Le lecteur Sendspin et le récepteur AirPlay restent hors ligne tant que {player} est sélectionné.",
+  "@mediaOfflineBoth": {
+    "context": "Settings > Media Player",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Media Player"
+      ],
+      "remoteAdmin": [
+        "Media Player"
+      ]
+    },
+    "placeholders": {
+      "player": {
+        "type": "String",
+        "description": "The picked player's name, as the Player row shows it. Keep unchanged."
       }
     }
   },

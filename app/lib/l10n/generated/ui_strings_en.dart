@@ -8415,6 +8415,41 @@ class UiStringsEn extends UiStrings {
       'The grants the lockdown protections lean on.';
 
   @override
+  String get settingAirplayEnabledTitle => 'Enable AirPlay receiver';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'The device shows up as an AirPlay speaker in the AirPlay menu of an iPhone, iPad or Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Speaker name';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'The name in the AirPlay menu. Empty uses the device name.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle => 'Follow the sender\'s volume';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'The volume control on the iPhone, iPad or Mac changes how loud this device plays. Off, only this device\'s volume does.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Negative plays this device earlier, to line the sound up with video on the sender. Applies live.';
+
+  @override
+  String get settingAirplayTakeoverTitle => 'Let another sender take over';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'A second iPhone, iPad or Mac can take over while one plays. Off, it has to wait until the first one disconnects.';
+
+  @override
+  String get mediaAirplayHint => 'Play audio from an iPhone, iPad or Mac';
+
+  @override
   String get mediaCacheTitle => 'Album art cache';
 
   @override
@@ -8547,8 +8582,18 @@ class UiStringsEn extends UiStrings {
   String get mediaAnotherPlayer => 'another player';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'This device\'s own Sendspin player stays offline while $player is controlled.';
+  String mediaOfflineSendspin(String player) {
+    return 'The Sendspin player stays offline while $player is picked.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'The AirPlay receiver stays off while $player is picked.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'The Sendspin player and the AirPlay receiver stay offline while $player is picked.';
   }
 
   @override

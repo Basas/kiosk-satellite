@@ -8473,6 +8473,43 @@ class UiStringsRu extends UiStrings {
       'Разрешения, на которые опираются защиты блокировки.';
 
   @override
+  String get settingAirplayEnabledTitle => 'Включить приёмник AirPlay';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'Устройство появляется как колонка AirPlay в меню AirPlay на iPhone, iPad или Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Имя колонки';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'Имя в меню AirPlay. Если пусто, используется имя устройства.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle =>
+      'Следовать громкости отправителя';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'Регулятор громкости на iPhone, iPad или Mac меняет громкость этого устройства. Если выключено, действует только громкость этого устройства.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Отрицательное значение заставляет это устройство играть раньше, чтобы звук совпадал с видео на отправителе. Применяется сразу.';
+
+  @override
+  String get settingAirplayTakeoverTitle =>
+      'Разрешить другому отправителю перехват';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'Другой iPhone, iPad или Mac может перехватить воспроизведение, пока играет первый. Если выключено, ему придётся ждать, пока первый не отключится.';
+
+  @override
+  String get mediaAirplayHint => 'Воспроизведение звука с iPhone, iPad или Mac';
+
+  @override
   String get mediaCacheTitle => 'Кэш обложек';
 
   @override
@@ -8606,8 +8643,18 @@ class UiStringsRu extends UiStrings {
   String get mediaAnotherPlayer => 'другой плеер';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'Собственный плеер Sendspin этого устройства остаётся не в сети, пока управляется $player.';
+  String mediaOfflineSendspin(String player) {
+    return 'Плеер Sendspin остаётся не в сети, пока выбран $player.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'Приёмник AirPlay остаётся выключенным, пока выбран $player.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'Плеер Sendspin и приёмник AirPlay остаются не в сети, пока выбран $player.';
   }
 
   @override

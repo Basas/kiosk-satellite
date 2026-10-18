@@ -2533,6 +2533,21 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'lockdownOverlayHeld' => strings.lockdownOverlayHeld,
       'lockdownOverlayMissing' => strings.lockdownOverlayMissing,
       'lockdownPermissionsSearch' => strings.lockdownPermissionsSearch,
+      'settingAirplayEnabledTitle' => strings.settingAirplayEnabledTitle,
+      'settingAirplayEnabledDescription' =>
+        strings.settingAirplayEnabledDescription,
+      'settingAirplayNameTitle' => strings.settingAirplayNameTitle,
+      'settingAirplayNameDescription' => strings.settingAirplayNameDescription,
+      'settingAirplaySenderVolumeTitle' =>
+        strings.settingAirplaySenderVolumeTitle,
+      'settingAirplaySenderVolumeDescription' =>
+        strings.settingAirplaySenderVolumeDescription,
+      'settingAirplaySyncOffsetDescription' =>
+        strings.settingAirplaySyncOffsetDescription,
+      'settingAirplayTakeoverTitle' => strings.settingAirplayTakeoverTitle,
+      'settingAirplayTakeoverDescription' =>
+        strings.settingAirplayTakeoverDescription,
+      'mediaAirplayHint' => strings.mediaAirplayHint,
       'mediaCacheTitle' => strings.mediaCacheTitle,
       'mediaCacheReadFailed' => strings.mediaCacheReadFailed,
       'mediaCacheClearFailed' => strings.mediaCacheClearFailed,

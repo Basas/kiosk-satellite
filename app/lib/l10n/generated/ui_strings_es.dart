@@ -8575,6 +8575,42 @@ class UiStringsEs extends UiStrings {
       'Los permisos que necesitan las protecciones del modo de bloqueo.';
 
   @override
+  String get settingAirplayEnabledTitle => 'Activar receptor AirPlay';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'El dispositivo aparece como un altavoz AirPlay en el menú AirPlay de un iPhone, iPad o Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Nombre del altavoz';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'El nombre en el menú AirPlay. Si está vacío, se usa el nombre del dispositivo.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle => 'Seguir el volumen del emisor';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'El control de volumen del iPhone, iPad o Mac cambia el volumen de este dispositivo. Si está desactivado, solo cuenta el volumen de este dispositivo.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Un valor negativo hace que este dispositivo suene antes, para alinear el sonido con el video del emisor. Se aplica al instante.';
+
+  @override
+  String get settingAirplayTakeoverTitle =>
+      'Permitir que otro emisor tome el control';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'Otro iPhone, iPad o Mac puede tomar el control mientras uno reproduce. Si está desactivado, debe esperar a que el primero se desconecte.';
+
+  @override
+  String get mediaAirplayHint => 'Reproduce audio desde un iPhone, iPad o Mac';
+
+  @override
   String get mediaCacheTitle => 'Caché de portadas';
 
   @override
@@ -8711,8 +8747,18 @@ class UiStringsEs extends UiStrings {
   String get mediaAnotherPlayer => 'otro reproductor';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'El reproductor Sendspin de este dispositivo permanece desconectado mientras se controla $player.';
+  String mediaOfflineSendspin(String player) {
+    return 'El reproductor Sendspin permanece desconectado mientras $player está seleccionado.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'El receptor AirPlay permanece desactivado mientras $player está seleccionado.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'El reproductor Sendspin y el receptor AirPlay permanecen desconectados mientras $player está seleccionado.';
   }
 
   @override

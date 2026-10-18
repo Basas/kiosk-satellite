@@ -25284,5 +25284,83 @@
     "translation": "16a2d1bea498aab296a476a7b6ead5b7d8101f16b43f947d127b9940c81744db",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingAirplayEnabledTitle": {
+    "source": "331729003d15cb5893113b29afd6f3df93805adc48baebe9d634d7686df11303",
+    "translation": "ebfa1726d525bc4953d8c69aaac758552bc619e20b77aa9f314c31aebde56c5b",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaOfflineAirplay": {
+    "source": "8f80a5b512e4c4ee1f6849dd3acb66d0c9c4e9088fa219181f61d7f8530176c5",
+    "translation": "d4568e2c7da0ffe20ce2b3af24848aae0939234c3505af839dde50b8c954b201",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplaySenderVolumeDescription": {
+    "source": "7b3ce672d0386e7b1f12dfed2ed97db73279d73e9cbf928f0cfb9463978e8989",
+    "translation": "9af50031d989ac935e3017a89f2ffb7f56c672f72206bb4e3df501906ab63c34",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaAirplayHint": {
+    "source": "cbebdd4eb9daf7449c7f281286b48f1302d08e10fa98f6da3872b3ed083053f3",
+    "translation": "4562d2d91906b91f9040d102f8d6094f66f199f79fa066e6321a653639100f0c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaOfflineSendspin": {
+    "source": "d61bfeb81c59110aad8f6b1958da421866fa7d44800826d9e9e3e7215a0fd567",
+    "translation": "3015442e24e8f9e7ad648e8e86b51d5827cefae03328b186f0d003177ec72359",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplayEnabledDescription": {
+    "source": "a0762fb1af6f7bdb86f47b687eb795417438c2fc15bc1b007ca3e9c67b88315e",
+    "translation": "29ed71d4c1c36c4e95770c62da79ea2a7ae9777d97241fc1ba39f74ee37d33e5",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplayNameTitle": {
+    "source": "770d3c70eb51d19fed034778d9c2b18e809e4c89f603d4a3ba91533bf29688a5",
+    "translation": "495652b709f6a8e51347cde31bc18e3b81fb5978d4854e73eb17c0fa3e4bdcbc",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "mediaOfflineBoth": {
+    "source": "7e5f99f7760c7bb9b3764869994f3e879f0e89b8510e3cef083ca0068d6734a8",
+    "translation": "d2f417dc65f292247d452cd335dc20d59ea7c5a18d23726929af5f35107fe2f4",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplayTakeoverTitle": {
+    "source": "a11ca88a74ca310935f42f3a5d9d2368028c661404f0a0e803656e469fcfa009",
+    "translation": "6b46d9b7ea192cfabbfad0a667adbe3e137d233012806f78cd616a5374f8bf45",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplaySyncOffsetDescription": {
+    "source": "3bd3956c2fe0edfc27c21ff49821cf9df383120f74c19d09ff3cf10072d380dc",
+    "translation": "5c593e5359fe4310067e3244bae4ecb1ac867c04e124a17e45a76340482d4062",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplayNameDescription": {
+    "source": "3b8451016609f8e9cfd28e2c8480ca36b991f0b0411a506e2627dd61eae70b43",
+    "translation": "d9ea7e0a28b8be9869f2ebdd0b8417e843ce8ab351eefa179bf7535d1670c071",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplaySenderVolumeTitle": {
+    "source": "12e7cf6b6aa7c761769bcd278a84ce0efd68c3bb78bf212b4cb5d508e603e52b",
+    "translation": "2d8081618dba10aac3e1b4279c78b759ae9d42e87d3c44d0a1de9a9404b03f2c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingAirplayTakeoverDescription": {
+    "source": "c7caec102534aac908da89dfeb820728c9f3aa9b73e3c62c0c72295c715574d1",
+    "translation": "03c573412ba930c05f953b0403cd163059de472ef003ace2e0471e40256fddc0",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

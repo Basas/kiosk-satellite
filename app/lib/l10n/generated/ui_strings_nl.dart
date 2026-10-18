@@ -8518,6 +8518,42 @@ class UiStringsNl extends UiStrings {
       'De toestemmingen waarop de beveiliging van de vergrendelingsmodus steunt.';
 
   @override
+  String get settingAirplayEnabledTitle => 'AirPlay-ontvanger inschakelen';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'Het apparaat verschijnt als AirPlay-luidspreker in het AirPlay-menu van een iPhone, iPad of Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Naam van de luidspreker';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'De naam in het AirPlay-menu. Leeg gebruikt de apparaatnaam.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle => 'Volume van de afzender volgen';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'De volumeregeling van de iPhone, iPad of Mac verandert hoe luid dit apparaat speelt. Als dit uitstaat, telt alleen het volume van dit apparaat.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Een negatieve waarde laat dit apparaat eerder spelen, zodat het geluid gelijkloopt met video op de afzender. Wordt direct toegepast.';
+
+  @override
+  String get settingAirplayTakeoverTitle =>
+      'Een andere afzender laten overnemen';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'Een tweede iPhone, iPad of Mac kan overnemen terwijl er een speelt. Als dit uitstaat, moet die wachten tot de eerste de verbinding verbreekt.';
+
+  @override
+  String get mediaAirplayHint => 'Audio afspelen vanaf een iPhone, iPad of Mac';
+
+  @override
   String get mediaCacheTitle => 'Cache voor albumhoezen';
 
   @override
@@ -8651,8 +8687,18 @@ class UiStringsNl extends UiStrings {
   String get mediaAnotherPlayer => 'een andere speler';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'De eigen Sendspin-speler van dit apparaat blijft offline terwijl $player wordt bediend.';
+  String mediaOfflineSendspin(String player) {
+    return 'De Sendspin-speler blijft offline zolang $player is gekozen.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'De AirPlay-ontvanger blijft uit zolang $player is gekozen.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'De Sendspin-speler en de AirPlay-ontvanger blijven offline zolang $player is gekozen.';
   }
 
   @override

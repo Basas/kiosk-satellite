@@ -114,7 +114,10 @@ class SettingDef<T> {
     if (wanted is Map && wanted['gt'] is num) {
       return value is num && value > (wanted['gt'] as num);
     }
-    if (wanted is Map && wanted.containsKey('ne')) return value != wanted['ne'];
+    if (wanted is Map && wanted.containsKey('ne')) {
+      final ne = wanted['ne'];
+      return ne is List ? !ne.contains(value) : value != ne;
+    }
     return value == wanted;
   }
 
@@ -267,6 +270,7 @@ const Map<String, String> subpageHints = {
   'Sendspin Player': 'Make this device a synchronized Music Assistant player',
   'Music Assistant': 'Server, token, kiosk menu shortcut',
   'Sonos': 'Speakers on the network, add one by address',
+  'AirPlay': 'Play audio from an iPhone, iPad or Mac',
   'Floating Player': 'The small card over the dashboard',
   'Now Playing': 'Full-screen view while music plays',
   'Lyrics': 'Synchronized lyrics, their source and timing',
@@ -7868,9 +7872,9 @@ const sendspinPlayerSource = SettingDef<String>(
 /// `ma:<player id>` for a Music Assistant player, `ha:<entity id>` for a
 /// Home Assistant media player or `sonos:<player id>` for a Sonos speaker
 /// followed directly, always of the source picked above. With this device
-/// as the source, empty is its own Sendspin player and `session:*` the
-/// Local Media Session: whichever other app plays on the device, through
-/// its Android media session. Visible so both
+/// as the source, empty is its own Sendspin player, `session:*` the
+/// Local Media Session (whichever other app plays on the device, through
+/// its Android media session) and `airplay` the AirPlay receiver. Visible so both
 /// settings surfaces place it under the source, but its row is
 /// hand-built on each: a picker fed by that source's live player list,
 /// never a text field. Always on the page, so a source change never
@@ -8036,6 +8040,99 @@ const sendspinSonosHosts = SettingDef<String>(
   perDevice: true,
 );
 
+/// The AirPlay 1 receiver (airplay/ in Kotlin): an iPhone, iPad or Mac
+/// plays to the device as it would to any AirPlay speaker. It is one of
+/// this device's players, picked under Player like the Sendspin player
+/// and the Local Media Session, and runs only while it is the pick and
+/// this switch is on, so the two never play over each other. Its page
+/// shows only while it is the pick, the way the Sendspin player's does.
+const airplayEnabled = SettingDef<bool>(
+  key: 'airplay.enabled',
+  dependsOn: 'sendspin.player_source',
+  dependsOnValue: '',
+  alsoDependsOn: 'sendspin.player',
+  alsoDependsOnValue: 'airplay',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Enable AirPlay receiver',
+  description:
+      'The device shows up as an AirPlay speaker in the AirPlay menu of an '
+      'iPhone, iPad or Mac.',
+  category: 'Sendspin',
+  subpage: 'AirPlay',
+  section: 'AirPlay',
+);
+
+/// The name senders list the receiver under. Empty is the device name,
+/// the way the Sendspin player is named in Music Assistant.
+const airplayName = SettingDef<String>(
+  key: 'airplay.name',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Speaker name',
+  description: 'The name in the AirPlay menu. Empty uses the device name.',
+  category: 'Sendspin',
+  subpage: 'AirPlay',
+  section: 'AirPlay',
+  dependsOn: 'airplay.enabled',
+  perDevice: true,
+);
+
+/// Whether the sender's volume control scales what this device plays.
+/// Off, the sender's slider does nothing here and only the device's own
+/// media volume counts, for a kiosk whose level is set once for the room.
+const airplaySenderVolume = SettingDef<bool>(
+  key: 'airplay.sender_volume',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: "Follow the sender's volume",
+  description:
+      'The volume control on the iPhone, iPad or Mac changes how loud this '
+      "device plays. Off, only this device's volume does.",
+  category: 'Sendspin',
+  subpage: 'AirPlay',
+  section: 'AirPlay',
+  dependsOn: 'airplay.enabled',
+);
+
+/// Moves the receiver's playout against the sender's clock, for a speaker
+/// path that adds its own delay (Bluetooth) and lip sync with video on
+/// the sender. Negative plays earlier, as the Sendspin offset does.
+const airplaySyncOffset = SettingDef<num>(
+  key: 'airplay.sync_offset_ms',
+  type: SettingType.number,
+  defaultValue: 0,
+  min: -1000,
+  max: 1000,
+  step: 10,
+  unit: 'ms',
+  title: 'Audio sync offset (ms)',
+  description:
+      'Negative plays this device earlier, to line the sound up with video '
+      'on the sender. Applies live.',
+  category: 'Sendspin',
+  subpage: 'AirPlay',
+  section: 'AirPlay',
+  dependsOn: 'airplay.enabled',
+);
+
+/// Whether a second sender can take the speaker from one that plays, the
+/// way picking a speaker on a second phone does on most AirPlay
+/// speakers. Off, the second one is turned away until the first stops.
+const airplayTakeover = SettingDef<bool>(
+  key: 'airplay.takeover',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Let another sender take over',
+  description:
+      'A second iPhone, iPad or Mac can take over while one plays. Off, it '
+      'has to wait until the first one disconnects.',
+  category: 'Sendspin',
+  subpage: 'AirPlay',
+  section: 'AirPlay',
+  dependsOn: 'airplay.enabled',
+);
+
 const sendspinEnabled = SettingDef<bool>(
   key: 'sendspin.enabled',
   // Gone while another source is picked (issue #265): the local player
@@ -8044,10 +8141,13 @@ const sendspinEnabled = SettingDef<bool>(
   // page entry goes with them.
   dependsOn: 'sendspin.player_source',
   dependsOnValue: '',
-  // Gone the same way while this device's Local Media Session is the
-  // pick: the surfaces follow another app then, not the Sendspin player.
+  // Gone the same way while this device's Local Media Session or AirPlay
+  // receiver is the pick: the surfaces follow that, not the Sendspin
+  // player.
   alsoDependsOn: 'sendspin.player',
-  alsoDependsOnValue: {'ne': 'session:*'},
+  alsoDependsOnValue: {
+    'ne': ['session:*', 'airplay'],
+  },
   type: SettingType.boolean,
   defaultValue: false,
   title: 'Enable Sendspin player',
@@ -11936,6 +12036,12 @@ const List<SettingDef<Object>> allSettings = [
   sendspinCodec,
   sendspinSyncOffset,
   sendspinGroupVolume,
+  // The AirPlay page takes the Sendspin Player page's place when picked.
+  airplayEnabled,
+  airplayName,
+  airplaySenderVolume,
+  airplaySyncOffset,
+  airplayTakeover,
   sendspinMaUrl,
   sendspinMaToken,
   sendspinMaInputs,

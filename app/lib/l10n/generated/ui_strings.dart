@@ -14627,6 +14627,66 @@ abstract class UiStrings {
   /// **'The grants the lockdown protections lean on.'**
   String get lockdownPermissionsSearch;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable AirPlay receiver'**
+  String get settingAirplayEnabledTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The device shows up as an AirPlay speaker in the AirPlay menu of an iPhone, iPad or Mac.'**
+  String get settingAirplayEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker name'**
+  String get settingAirplayNameTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The name in the AirPlay menu. Empty uses the device name.'**
+  String get settingAirplayNameDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the sender\'s volume'**
+  String get settingAirplaySenderVolumeTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The volume control on the iPhone, iPad or Mac changes how loud this device plays. Off, only this device\'s volume does.'**
+  String get settingAirplaySenderVolumeDescription;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Negative plays this device earlier, to line the sound up with video on the sender. Applies live.'**
+  String get settingAirplaySyncOffsetDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Let another sender take over'**
+  String get settingAirplayTakeoverTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'A second iPhone, iPad or Mac can take over while one plays. Off, it has to wait until the first one disconnects.'**
+  String get settingAirplayTakeoverDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Play audio from an iPhone, iPad or Mac'**
+  String get mediaAirplayHint;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -14858,8 +14918,20 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'This device\'s own Sendspin player stays offline while {player} is controlled.'**
-  String mediaLocalOffline(String player);
+  /// **'The Sendspin player stays offline while {player} is picked.'**
+  String mediaOfflineSendspin(String player);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The AirPlay receiver stays off while {player} is picked.'**
+  String mediaOfflineAirplay(String player);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The Sendspin player and the AirPlay receiver stay offline while {player} is picked.'**
+  String mediaOfflineBoth(String player);
 
   /// Setting label.
   ///
