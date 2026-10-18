@@ -4,6 +4,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ## Unreleased
 
+### Changed
+- **Echo Dot Action button without the accessibility service.** On a system that sends the Echo Dot's Action button as a broadcast, such as the Kiosk Satellite Edition build of its LineageOS port, Kiosk Satellite takes the button from that broadcast. The button service no longer has to be switched on over adb, and the Dot no longer needs a reboot after setup before the button works. On other systems the button service works as before.
+
 ### Fixed
 - **Wake word arbitration after a slow Wi-Fi start.** When Wi-Fi was not up yet as Kiosk Satellite started, such as on an Echo Dot right after a reboot, its first hello to the other kiosks failed and the regular hellos never started. The other kiosks then reached it only with broadcast claims, which Wi-Fi can drop. A failed send now counts as a lost packet, and the hellos carry on.
 

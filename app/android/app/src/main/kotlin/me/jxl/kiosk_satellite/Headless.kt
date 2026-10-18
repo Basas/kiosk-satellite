@@ -88,6 +88,20 @@ object Headless {
         awake = null
     }
 
+    /**
+     * The Kiosk Satellite Edition ROM for the Echo Dot broadcasts every press
+     * and release of the Action button, also while the device sleeps
+     * (`ro.biscuit.action_broadcast`). The button then needs no
+     * accessibility service.
+     */
+    val actionBroadcast: Boolean by lazy {
+        runCatching {
+            Class.forName("android.os.SystemProperties")
+                .getMethod("get", String::class.java, String::class.java)
+                .invoke(null, "ro.biscuit.action_broadcast", "") as String
+        }.getOrDefault("") == "1"
+    }
+
     /** The engine's shell arguments. Impeller has no software backend, so
      *  it stays off for the Skia software renderer [useSoftwareRenderer]
      *  turns on. */
