@@ -10,6 +10,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ### Fixed
 - **Wake word arbitration after a slow Wi-Fi start.** When Wi-Fi was not up yet as Kiosk Satellite started, such as on an Echo Dot right after a reboot, its first hello to the other kiosks failed and the regular hellos never started. The other kiosks then reached it only with broadcast claims, which Wi-Fi can drop. A failed send now counts as a lost packet, and the hellos carry on.
+- **Green line under videos on a Google Pixel (#1024).** Videos on a Pixel Tablet, such as a stream sent to the DLNA renderer, showed a green line along the bottom. The decoder pads a 1080p frame to 1088 rows, and Flutter drew the padding too. Videos on a Pixel now play on a platform view, which leaves the padding out.
+- **DLNA renderer slow to come back after a restart (#1024).** After Kiosk Satellite or the device restarted, Home Assistant could take up to 10 minutes to see the DLNA renderer again. The renderer announced itself with the same boot ID every time, so Home Assistant ignored the announcements and waited for its next network scan. The boot ID now changes on every start, and Home Assistant reconnects right away.
+- **Screensaver over a DLNA video.** With a screensaver timeout under 15 seconds, the screensaver started over a video sent to the DLNA renderer and was dismissed again over and over, since the renderer only reported activity every 15 seconds. The screensaver now waits while DLNA media plays on screen and starts its countdown again when it pauses or stops.
 
 ## v2026.10.29 - 2026-10-17
 
