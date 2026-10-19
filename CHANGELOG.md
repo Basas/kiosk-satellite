@@ -5,6 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Fixed
+- **Bubble Card sliders no longer swipe the dashboard carousel (#1049).** With **Enable dashboard carousel** on, dragging a Bubble Card slider also moved to the next view. The carousel already left sliders alone, but only recognized them by element name, and Bubble Card builds its sliders from plain elements named only in their class. Elements with "slider" in their class or the `slider` role now keep their drag too.
 - **Kiosk links in an iframe no longer show ERR_UNKNOWN_URL_SCHEME (#1044).** A `ks://` or `app://` link loaded inside an iframe, such as a Webpage dashboard or an iframe card, ran its action but left the frame on Chromium's "Webpage not available" error page. The error showed once whatever the link opened was closed, such as Music Assistant after Now Playing was dismissed. The frame now stays empty instead.
 - **The remote admin's entity picker keeps up with large Home Assistant setups (#1047).** With thousands of entities, each keystroke in the picker's search stalled while every matching row was rebuilt, and clearing the search rebuilt the whole list. The list now draws 100 rows at a time and adds more as you scroll, and the search works its filter out once per change. With 8,000 entities a keystroke now takes about 15 ms instead of up to 400 ms.
 
