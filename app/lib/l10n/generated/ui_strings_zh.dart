@@ -2757,6 +2757,17 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => '扫码';
+
+  @override
+  String get pluginScanHelp => '请将条码或二维码置于框内。';
+
+  @override
+  String pluginScanSource(String name) {
+    return '由 $name 请求';
+  }
+
+  @override
   String get pluginActions => '操作';
 
   @override
@@ -16306,6 +16317,17 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String pluginCloseWindow(String name) {
     return '关闭 $name';
+  }
+
+  @override
+  String get pluginScanTitle => '扫码';
+
+  @override
+  String get pluginScanHelp => '请将条码或二维码置于框内。';
+
+  @override
+  String pluginScanSource(String name) {
+    return '由 $name 请求';
   }
 
   @override

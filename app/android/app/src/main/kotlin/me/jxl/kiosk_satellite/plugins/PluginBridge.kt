@@ -251,6 +251,15 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 })
             }
         }
+        /** The camera claim and the barcode scan this session holds. Guarded by [cameraLock]. */
+        @Volatile var camera: CameraClaim? = null
+        @Volatile var scan: BarcodeScan? = null
+        private var cameraThread: java.util.concurrent.ExecutorService? = null
+        /** Frames and camera closes reach the plugin here, apart from its other callbacks. */
+        @Synchronized fun cameraExecutor(): java.util.concurrent.ExecutorService =
+            cameraThread ?: Executors.newSingleThreadExecutor { task -> Thread(task, "plugin-$id-camera").apply { isDaemon = true } }
+                .also { cameraThread = it }
+        @Synchronized fun closeCameraThread() { cameraThread?.shutdownNow(); cameraThread = null }
         private var shizukuClient: PluginShizuku.Client? = null
         @Synchronized fun closeShizuku() { shizukuClient?.close(); shizukuClient = null }
         @Synchronized fun shizukuClient(): PluginShizuku.Client {
@@ -326,6 +335,78 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             override fun haUnsubscribe(key: String) {
                 check(alive.get() && "ha" in manifest.capabilities) { "SDK 1 ha access is required" }
                 if (haSubscriptions.remove(key)) emit("haUnsubscribe", mapOf("id" to id, "session" to token, "key" to key), alive)
+            }
+            override fun openCamera(options: Map<String, Any>, listener: PluginHost.CameraListener) {
+                check(alive.get() && "camera" in manifest.capabilities) { "SDK 1 camera access is required" }
+                val claim = CameraClaim(this@Session, PluginCameraRequest.parse(options), listener, cameraClaims.incrementAndGet())
+                // Opening again replaces this plugin's own claim. Another plugin's stands.
+                var replaced: CameraClaim? = null
+                val accepted = synchronized(cameraLock) {
+                    val owner = cameraOwner
+                    if (owner != null && owner !== this@Session) false else {
+                        replaced = camera
+                        camera = claim
+                        cameraOwner = this@Session
+                        PluginCameraFrames.sink = ::offerFrame
+                        true
+                    }
+                }
+                if (!accepted) { cameraClosed(this@Session, listener, "busy"); return }
+                main.post {
+                    replaced?.let { main.removeCallbacks(it.timeout) }
+                    if (!alive.get() || camera !== claim) return@post
+                    main.postDelayed(claim.timeout, claim.request.timeoutMs)
+                    // The app decides whether the camera may run and binds it.
+                    channel.invokeMethod("cameraOpen", mapOf(
+                        "id" to id, "session" to token, "claim" to claim.number,
+                        "width" to claim.request.width, "height" to claim.request.height, "facing" to claim.request.facing,
+                    ), object : MethodChannel.Result {
+                        override fun success(result: Any?) {
+                            val reason = result as? String ?: return
+                            worker.execute { endCamera(this@Session, claim, reason.takeIf { it in PLUGIN_CAMERA_REASONS } ?: "camera_failed", notifyApp = false) }
+                        }
+                        override fun error(code: String, message: String?, details: Any?) =
+                            worker.execute { endCamera(this@Session, claim, "camera_failed", notifyApp = true) }
+                        override fun notImplemented() =
+                            worker.execute { endCamera(this@Session, claim, "camera_failed", notifyApp = false) }
+                    })
+                }
+            }
+            override fun closeCamera() {
+                check(alive.get() && "camera" in manifest.capabilities) { "SDK 1 camera access is required" }
+                worker.execute { endCamera(this@Session, null, "closed", notifyApp = true) }
+            }
+            override fun scanBarcode(options: Map<String, Any>, callback: PluginHost.CommandCallback) {
+                check(alive.get() && "barcode" in manifest.capabilities) { "SDK 1 barcode access is required" }
+                val request = PluginBarcodeRequest.parse(options)
+                val current = BarcodeScan(this@Session, UUID.randomUUID().toString(), callback)
+                val started = synchronized(cameraLock) {
+                    if (scanOwner != null) false else { scanOwner = this@Session; scan = current; true }
+                }
+                if (!started) { answerScan(this@Session, callback, false, null, "busy"); return }
+                main.post {
+                    if (!alive.get() || scan !== current) return@post
+                    // A backstop: the app times the scan out itself.
+                    main.postDelayed(current.timeout, request.timeoutMs + 30_000)
+                    channel.invokeMethod("barcodeScan", mapOf("id" to id, "session" to token, "scan" to current.id) + request.toMap(),
+                        object : MethodChannel.Result {
+                            override fun success(result: Any?) {
+                                val value = result as? Map<*, *>
+                                if (value?.get("ok") == true && value["value"] is String) {
+                                    finishScan(current, true, mapOf("value" to value["value"], "format" to (value["format"] as? String ?: "unknown")), null)
+                                } else {
+                                    finishScan(current, false, null, (value?.get("error") as? String)?.takeIf { it in PLUGIN_SCAN_ERRORS } ?: "unavailable")
+                                }
+                            }
+                            override fun error(code: String, message: String?, details: Any?) = finishScan(current, false, null, "unavailable")
+                            override fun notImplemented() = finishScan(current, false, null, "unavailable")
+                        })
+                }
+            }
+            override fun cancelBarcodeScan() {
+                check(alive.get() && "barcode" in manifest.capabilities) { "SDK 1 barcode access is required" }
+                val current = synchronized(cameraLock) { scan } ?: return
+                emit("barcodeCancel", mapOf("id" to id, "session" to token, "scan" to current.id), alive)
             }
             override fun subscribe(event: String) {
                 check(alive.get() && "host.read" in manifest.capabilities) { "SDK 1 host.read access is required" }
@@ -511,6 +592,122 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         }
     }
 
+    /** One plugin holds the camera and one scans at a time, across every session. */
+    private val cameraLock = Any()
+    private var cameraOwner: Session? = null
+    private var scanOwner: Session? = null
+    private val cameraClaims = AtomicInteger()
+
+    /** A plugin's openCamera, numbered so a late close from the app cannot end a newer one. */
+    private inner class CameraClaim(val session: Session, val request: PluginCameraRequest, val listener: PluginHost.CameraListener, val number: Int) {
+        /** A frame is with the plugin. Frames that arrive meanwhile are skipped. */
+        val busy = AtomicBoolean(false)
+        @Volatile var lastFrameNs = 0L
+        val timeout = Runnable { worker.execute { endCamera(session, this, "timeout", notifyApp = true) } }
+    }
+
+    private inner class BarcodeScan(val session: Session, val id: String, val callback: PluginHost.CommandCallback) {
+        val timeout = Runnable { finishScan(this, false, null, "timeout") }
+    }
+
+    /**
+     * A motion session frame for the plugin holding the camera, on the
+     * analyzer thread. Paced to the claim's rate and copied, since the image
+     * goes back to the camera when this returns.
+     */
+    private fun offerFrame(image: androidx.camera.core.ImageProxy, front: Boolean) {
+        val claim = synchronized(cameraLock) { cameraOwner?.camera } ?: return
+        val session = claim.session
+        if (!session.alive.get()) return
+        val now = System.nanoTime()
+        if (now - claim.lastFrameNs < 1_000_000_000L / claim.request.fps) return
+        if (!claim.busy.compareAndSet(false, true)) return
+        claim.lastFrameNs = now
+        val frame = try {
+            me.jxl.kiosk.plugins.CameraFrame(image.width, image.height, image.imageInfo.rotationDegrees, front,
+                image.imageInfo.timestamp, claim.request.format, PluginCameraFrames.copy(image, claim.request.format == "nv21"))
+        } catch (error: Exception) {
+            claim.busy.set(false)
+            throw error
+        }
+        try {
+            session.cameraExecutor().execute {
+                try {
+                    if (session.alive.get() && session.camera === claim) claim.listener.onFrame(frame)
+                } catch (error: Throwable) {
+                    cameraFailed(session, error)
+                } finally {
+                    claim.busy.set(false)
+                }
+            }
+        } catch (_: java.util.concurrent.RejectedExecutionException) {
+            claim.busy.set(false)
+        }
+    }
+
+    /**
+     * Ends a session's camera claim, or only [claim] when it is still the
+     * current one. [notifyApp] tells the app to let the camera go, unless
+     * the app ended it.
+     */
+    private fun endCamera(session: Session, claim: CameraClaim?, reason: String, notifyApp: Boolean) {
+        val ended = synchronized(cameraLock) {
+            val current = session.camera
+            if (current == null || (claim != null && current !== claim)) null else {
+                session.camera = null
+                if (cameraOwner === session) {
+                    cameraOwner = null
+                    PluginCameraFrames.sink = null
+                }
+                current
+            }
+        } ?: return
+        main.removeCallbacks(ended.timeout)
+        if (notifyApp) emit("cameraClose", mapOf("id" to session.id, "session" to session.token, "claim" to ended.number))
+        if (session.alive.get()) cameraClosed(session, ended.listener, reason)
+    }
+
+    private fun cameraClosed(session: Session, listener: PluginHost.CameraListener, reason: String) {
+        try {
+            session.cameraExecutor().execute {
+                try { if (session.alive.get()) listener.onClosed(reason) } catch (error: Throwable) { cameraFailed(session, error) }
+            }
+        } catch (_: java.util.concurrent.RejectedExecutionException) { /* The session ended. */ }
+    }
+
+    /** A camera callback threw. The plugin is stopped like any failed callback. */
+    private fun cameraFailed(session: Session, error: Throwable) {
+        worker.execute {
+            if (session.alive.get() && sessions[session.id] === session) {
+                fail(session.id, error)
+                emit("changed", snapshot())
+            }
+        }
+    }
+
+    /** The scan is over. A session that ended hears nothing. */
+    private fun finishScan(scan: BarcodeScan, ok: Boolean, data: Any?, error: String?) {
+        val session = scan.session
+        val current = synchronized(cameraLock) {
+            if (session.scan !== scan) false else {
+                session.scan = null
+                if (scanOwner === session) scanOwner = null
+                true
+            }
+        }
+        if (!current) return
+        main.removeCallbacks(scan.timeout)
+        answerScan(session, scan.callback, ok, data, error)
+    }
+
+    private fun answerScan(session: Session, callback: PluginHost.CommandCallback, ok: Boolean, data: Any?, error: String?) {
+        worker.execute {
+            if (!session.alive.get() || sessions[session.id] !== session) return@execute
+            try { session.call { callback.onResult(ok, data ?: if (ok) null else mapOf("code" to error), error) } }
+            catch (failure: Throwable) { fail(session.id, failure); emit("changed", snapshot()) }
+        }
+    }
+
     /** Registered on the engine by KioskApplication. */
     internal val overlayViews = PluginOverlayViews(
         context.assets,
@@ -609,6 +806,16 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                                 val payload = args["payload"] as? Map<String, Any?> ?: emptyMap()
                                 try { session.call { session.plugin!!.onEvent("ks.$event", payload) } }
                                 catch (error: Throwable) { fail(session.id, error); emit("changed", snapshot()); throw error }
+                            }
+                            null
+                        }
+                        "cameraClosed" -> {
+                            // The app could not run the camera or had to stop it.
+                            val session = sessions[args["id"]]
+                            val number = (args["claim"] as? Number)?.toInt()
+                            val claim = session?.camera
+                            if (session != null && session.token == args["session"] && claim != null && claim.number == number) {
+                                endCamera(session, claim, (args["reason"] as? String)?.takeIf { it in PLUGIN_CAMERA_REASONS } ?: "camera_failed", notifyApp = false)
                             }
                             null
                         }
@@ -950,6 +1157,11 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         session.alive.set(false)
         session.closeShizuku(); session.closeCharts(); session.closeStatusTiles(); session.triggers.close(); session.closeEntities(); session.closeScreensavers(); session.overlays.close(); session.closeSetup()
         session.subscriptions.clear()
+        endCamera(session, null, "closed", notifyApp = true)
+        session.scan?.let { scan ->
+            emit("barcodeCancel", mapOf("id" to id, "session" to session.token, "scan" to scan.id))
+            finishScan(scan, false, null, "canceled")
+        }
         emit("hostSessionClosed", mapOf("id" to id, "session" to session.token))
         emit("hideWindow", mapOf("id" to id))
         try { session.call { session.plugin?.stop() } }
@@ -957,7 +1169,10 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             restartRequired.add(id)
             throw error
         }
-        finally { session.executor.shutdownNow() }
+        finally {
+            session.executor.shutdownNow()
+            session.closeCameraThread()
+        }
     }
 
     private fun fail(id: String, error: Throwable) {

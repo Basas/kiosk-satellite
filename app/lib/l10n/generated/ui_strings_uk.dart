@@ -2834,6 +2834,17 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => 'Скануйте код';
+
+  @override
+  String get pluginScanHelp => 'Тримайте код у рамці.';
+
+  @override
+  String pluginScanSource(String name) {
+    return 'Запит від $name';
+  }
+
+  @override
   String get pluginActions => 'Дії';
 
   @override

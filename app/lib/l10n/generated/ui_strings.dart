@@ -5025,6 +5025,24 @@ abstract class UiStrings {
   /// **'Close {name}'**
   String pluginCloseWindow(String name);
 
+  /// Scanner heading when the plugin that opened the scanner gives none. A code is a barcode or a QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a code'**
+  String get pluginScanTitle;
+
+  /// Help under the scanner heading when the plugin gives none.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the code inside the frame.'**
+  String get pluginScanHelp;
+
+  /// Says which plugin opened the scanner. The placeholder is the plugin's name.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested by {name}'**
+  String pluginScanSource(String name);
+
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:

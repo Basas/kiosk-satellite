@@ -6,6 +6,7 @@ import 'core/events.dart';
 import 'core/headless.dart';
 import 'core/logging.dart';
 import 'core/manager.dart';
+import 'managers/plugins/plugin_camera.dart';
 import 'managers/plugins/plugin_manager.dart';
 import 'managers/plugins/plugin_host_api.dart';
 import 'managers/shizuku/shizuku_manager.dart';
@@ -165,7 +166,15 @@ class AppContainer {
         view: voice.view,
         level: voice.level,
         settings: settings,
+      )
+      ..camera = PluginCamera(
+        motion: motion,
+        commands: commands,
+        settings: settings,
+        log: log,
       );
+    // A snapshot binding the camera mid-scan would take it from the scanner.
+    deviceCamera.scannerActive = () => motion.scannerHeld;
     settings.pluginScreensavers = () => plugins.screensaverOptions;
     settings.pluginVoiceSkins = () => plugins.voiceSkinOptions;
     remote = RemoteManager(bus, commands, log, settings);

@@ -186,6 +186,12 @@ class PluginPackageTest {
         rejects { PluginManifest(caps("host.control", "voice.text")) }
         for (event in listOf("voice.text", "voice.level", "voice.overlay", "voice.skin", "voice.appearance")) assertTrue(PluginHostPolicy.validEvent(event))
     }
+    @Test fun cameraAndBarcodeStandOnTheirOwn() {
+        fun caps(vararg names: String) = manifest().put("capabilities", org.json.JSONArray(names.toList()))
+        assertEquals(setOf("camera"), PluginManifest(caps("camera")).capabilities)
+        assertEquals(setOf("barcode"), PluginManifest(caps("barcode")).capabilities)
+        assertFalse(PluginManifest(caps("camera", "barcode")).needsScreen)
+    }
     @Test fun aVoiceSkinNamesItsPictureUnderAssets() {
         fun skin(thumbnail: Any?) = manifest()
             .put("capabilities", org.json.JSONArray(listOf("overlay", "host.read", "voice.skin")))

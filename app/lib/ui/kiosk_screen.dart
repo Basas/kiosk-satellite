@@ -45,6 +45,8 @@ import '../managers/sendspin/music_assistant_api.dart';
 import '../managers/home_assistant/kiosk_mode.dart';
 import '../managers/gestures/gesture_mappings.dart';
 import '../managers/browser/browser_manager.dart';
+import '../managers/plugins/plugin_camera.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' show CameraFacing;
 import '../managers/settings/definitions.dart' as defs;
 import 'app_launcher_overlay.dart';
 import 'ui_scale.dart' show UiScaleExempt, uiScaleFactor;
@@ -54,6 +56,7 @@ import 'plugin_overlay.dart';
 import 'offline_notice.dart';
 import 'dlna_media_overlay.dart';
 import 'camera_view_overlay.dart';
+import 'code_scanner.dart';
 import 'face_preview_overlay.dart';
 import 'fleet_settings.dart';
 import 'intercom_settings.dart';
@@ -707,6 +710,34 @@ class _KioskScreenState extends State<KioskScreen>
     }
   }
 
+  /// The scanner for a plugin's scanBarcode, above every route.
+  Future<Map<String, Object?>> _presentScan(
+    PluginScanRequest request,
+    Future<String> cancel,
+  ) async {
+    final plugin = c.plugins.installed.value
+        .where((p) => p['id'] == request.pluginId)
+        .firstOrNull;
+    final name = plugin?['name'] as String? ?? request.pluginId;
+    final facing = request.facing ?? c.settings.get(defs.cameraDevice);
+    final outcome = await Navigator.of(context, rootNavigator: true)
+        .push<CodeScanOutcome>(
+          MaterialPageRoute(
+            builder: (context) => CodeScanner(
+              title: request.title ?? l10n(context).pluginScanTitle,
+              help: request.message ?? l10n(context).pluginScanHelp,
+              source: l10n(context).pluginScanSource(name),
+              formats: codeScanFormats(request.formats),
+              facing: facing == 'back' ? CameraFacing.back : CameraFacing.front,
+              timeout: request.timeout,
+              cancel: cancel,
+              closeOnError: true,
+            ),
+          ),
+        );
+    return (outcome ?? const CodeScanOutcome.failed('canceled')).toJson();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -731,6 +762,8 @@ class _KioskScreenState extends State<KioskScreen>
     });
     _settingsSub = c.bus.on<SettingChanged>().listen(_onSettingChanged);
     _gestureSub = c.bus.on<KioskExitGesture>().listen(_onExitGesture);
+    // A plugin's barcode scan opens over whatever is showing.
+    c.plugins.camera?.presenter = _presentScan;
     // Dpad and keyboard navigation (issue #377), registered on both stages
     // of the key pipeline; see _onKey for why it takes two.
     HardwareKeyboard.instance.addHandler(_onKey);
@@ -1467,6 +1500,9 @@ class _KioskScreenState extends State<KioskScreen>
   @override
   void dispose() {
     BackgroundListening.onDownloadComplete = null;
+    if (c.plugins.camera?.presenter == _presentScan) {
+      c.plugins.camera?.presenter = null;
+    }
     c.jsApi.detach();
     _refreshingFailsafe?.cancel();
     HardwareKeyboard.instance.removeHandler(_onKey);

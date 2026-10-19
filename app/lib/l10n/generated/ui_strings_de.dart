@@ -2867,6 +2867,17 @@ class UiStringsDe extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => 'Code scannen';
+
+  @override
+  String get pluginScanHelp => 'Halte den Code in den Rahmen.';
+
+  @override
+  String pluginScanSource(String name) {
+    return 'Angefordert von $name';
+  }
+
+  @override
   String get pluginActions => 'Aktionen';
 
   @override

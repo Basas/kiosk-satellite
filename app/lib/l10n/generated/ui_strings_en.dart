@@ -2820,6 +2820,17 @@ class UiStringsEn extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => 'Scan a code';
+
+  @override
+  String get pluginScanHelp => 'Hold the code inside the frame.';
+
+  @override
+  String pluginScanSource(String name) {
+    return 'Requested by $name';
+  }
+
+  @override
   String get pluginActions => 'Actions';
 
   @override

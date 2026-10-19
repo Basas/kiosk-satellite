@@ -15,6 +15,7 @@ import 'fleet_plugin_host.dart';
 import 'plugin_directory.dart';
 import 'plugin_repository.dart';
 import '../home_assistant/plugin_ha_socket.dart';
+import 'plugin_camera.dart';
 import 'plugin_host_api.dart';
 
 class PluginWindow {
@@ -261,6 +262,10 @@ class PluginManager extends Manager implements FleetPluginHost {
   /// The voice turn plugins follow. Set by the app container before [init].
   PluginVoiceFeed? voice;
 
+  /// The device camera for the camera and barcode capabilities. Set by the
+  /// app container before [init].
+  PluginCamera? camera;
+
   List<Map<String, Object?>> get actions => [
     for (final plugin in installed.value)
       for (final command
@@ -342,6 +347,9 @@ class PluginManager extends Manager implements FleetPluginHost {
     _attachSub = bus.on<ActivityAttached>().listen((_) {
       if (!_disposed && overlays.value.isNotEmpty) overlayEpoch.value++;
     });
+    camera?.notifyClosed = (args) => unawaited(
+      channel.invokeMethod<void>('cameraClosed', args).catchError((_) {}),
+    );
     _hostReads = PluginHostApi(
       commands,
       bus,
@@ -376,6 +384,17 @@ class PluginManager extends Manager implements FleetPluginHost {
             _setSetup(data['id'] as String, null);
           }
           _hostReads.close(call.arguments as Map);
+        case 'cameraOpen':
+          return camera == null
+              ? 'camera_failed'
+              : await camera!.open(call.arguments as Map);
+        case 'cameraClose':
+          camera?.close(call.arguments as Map);
+        case 'barcodeScan':
+          return camera?.scan(call.arguments as Map) ??
+              {'ok': false, 'error': 'unavailable'};
+        case 'barcodeCancel':
+          camera?.cancelScan(call.arguments as Map);
         case 'hostSubscription':
           _hostReads.subscription(call.arguments as Map);
         case 'hostCommand':

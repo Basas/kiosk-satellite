@@ -2842,6 +2842,17 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => 'Scan een code';
+
+  @override
+  String get pluginScanHelp => 'Houd de code binnen het kader.';
+
+  @override
+  String pluginScanSource(String name) {
+    return 'Aangevraagd door $name';
+  }
+
+  @override
   String get pluginActions => 'Acties';
 
   @override
