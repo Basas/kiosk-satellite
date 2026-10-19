@@ -1887,6 +1887,12 @@ class _KioskScreenState extends State<KioskScreen>
       // it the callback is simply never invoked, and app:// navigations
       // would fall through to Chromium as an unknown scheme.
       useShouldOverrideUrlLoading: true,
+      // The plugin honors CANCEL only for the main frame. An iframe pointed
+      // at ks:// or app:// (a Webpage dashboard, an iframe card) still runs
+      // the action in shouldOverrideUrlLoading, but without this Chromium
+      // goes on to load the link in the frame and shows
+      // ERR_UNKNOWN_URL_SCHEME there (issue #1044).
+      regexToCancelSubFramesLoading: r'(?i)^(ks|app):.*',
       // Long-press menus and text selection, when kiosk mode says so.
       disableContextMenu:
           c.kiosk.locked && c.settings.get(defs.kioskDisableContextMenus),

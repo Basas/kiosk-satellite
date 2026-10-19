@@ -4,6 +4,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ## Unreleased
 
+### Fixed
+- **Kiosk links in an iframe no longer show ERR_UNKNOWN_URL_SCHEME (#1044).** A `ks://` or `app://` link loaded inside an iframe, such as a Webpage dashboard or an iframe card, ran its action but left the frame on Chromium's "Webpage not available" error page. The error showed once whatever the link opened was closed, such as Music Assistant after Now Playing was dismissed. The frame now stays empty instead.
+
 ### Changed
 - **Fewer GitHub requests per plugin review.** Opening a plugin's review, from **Add plugin**, **Browse plugins**, an install link or **Check for updates**, now makes one GitHub API request instead of two. The README is read by the release tag instead of looking up the tag's commit first. GitHub allows 60 of these requests an hour per network without a login, so a home with several kiosks now runs into "GitHub denied the request" half as often. The package is still checked against its SHA-256 before it installs.
 
