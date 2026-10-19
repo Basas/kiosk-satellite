@@ -18,8 +18,6 @@
   "pluginCouldNotReadTheSelectedZip": "Не удалось прочитать выбранный ZIP",
   "pluginBrowsePlugins": "Обзор плагинов",
   "pluginFindPluginsMadeByTheCommunity": "Найдите плагины, созданные сообществом",
-  "pluginListedInCommunityPlugins": "Есть в Плагинах сообщества.",
-  "pluginNotListedInCommunityPlugins": "Нет в Плагинах сообщества.",
   "pluginSearchPlugins": "Поиск плагинов",
   "pluginUpdate": "Обновить",
   "pluginInstalled": "Установлен",
@@ -44,5 +42,8 @@
   "pluginSortName": "Название",
   "pluginSortMostDownloads": "Больше всего загрузок",
   "pluginPluginsPerPage": "Плагинов на странице",
-  "pluginCountPerPage": "{count} на странице"
+  "pluginCountPerPage": "{count} на странице",
+  "pluginByAuthor": "от {author}",
+  "pluginListedChip": "Есть в Плагинах сообщества",
+  "pluginNotListedChip": "Нет в Плагинах сообщества"
 }

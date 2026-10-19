@@ -135,29 +135,86 @@ function repositoryDialog() {
   });
 }
 
+const SVG = (path) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
+const REVIEW_ICONS = {
+  version: 'M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01',
+  license: 'M12 3v18M5 21h14M6 7l-3 7a3 3 0 0 0 6 0zM18 7l-3 7a3 3 0 0 0 6 0zM6 7h12',
+  listed: 'M9 12l2 2 4-4M12 3l2.4 1.8 3 .2.9 2.9 2.2 2-1 2.9 1 2.9-2.2 2-.9 2.9-3 .2L12 21l-2.4-1.8-3-.2-.9-2.9-2.2-2 1-2.9-1-2.9 2.2-2 .9-2.9 3-.2z',
+  warn: 'M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z',
+  error: 'M12 8v4M12 16h.01M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z',
+};
+
+function reviewChip(icon, text, { tone, title } = {}) {
+  const chip = element('span', undefined, `plugin-review-chip${tone ? ` ${tone}` : ''}`);
+  chip.innerHTML = SVG(REVIEW_ICONS[icon]);
+  chip.append(text);
+  if (title) chip.title = title;
+  return chip;
+}
+
+function reviewNotice(icon, text, detail, tone) {
+  const notice = element('div', undefined, `plugin-review-notice ${tone}`);
+  notice.innerHTML = SVG(REVIEW_ICONS[icon]);
+  const words = element('div');
+  words.append(element('div', text));
+  if (detail) words.append(element('div', detail, 'plugin-review-detail'));
+  notice.append(words);
+  return notice;
+}
+
+// The review before an install or update: who made the plugin and what it is
+// on a header band, the README under it and the trust notice on a footer
+// band above the buttons. Mirrors the device (plugin_settings.dart,
+// showPluginPreview).
 function confirmPreview(preview) {
   return new Promise((resolve) => {
     const plugin = preview.manifest;
     const close = value => { document.removeEventListener('ks-settings-cached', renderError); modal.close(); resolve(value); };
-    const modal = modalShell({ title: plugin.name, width: 760, onDismiss: () => close(false) });
-    let compatibilityRow;
+    const modal = modalShell({ title: '', width: 720, onDismiss: () => close(false) });
+    // The error is drawn again once the language catalogs arrive.
+    let compatibilityNotice;
     function renderError() {
-      if (compatibilityRow) compatibilityRow.replaceWith(compatibilityRow = hintRow(pluginError(preview.compatibilityError), { warn: true }));
+      if (compatibilityNotice) compatibilityNotice.replaceWith(compatibilityNotice = reviewNotice('error', pluginError(preview.compatibilityError), '', 'error'));
     }
-    modal.body.append(hintRow(plugin.description));
-    for (const [title, value] of Object.entries({ ...(preview.installedVersion ? { 'Installed version': preview.installedVersion } : {}), Version: plugin.version, Author: plugin.author, License: plugin.license })) {
-      const row = element('div', undefined, 'row');
-      row.append(element('span', pluginText(title), 'info'), element('span', value, 'desc')); modal.body.append(row);
-    }
-    if (preview.listed === true) modal.body.append(hintRow(pluginText('Listed in Community Plugins.')));
-    else if (preview.listed === false) modal.body.append(hintRow(pluginText('Not listed in Community Plugins.'), { warn: true }));
-    modal.body.append(pluginReadme(preview), hintRow(pluginText(trustNotice), { warn: true }),
-      hintRow(pluginText('New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.')));
+    modal.card.classList.add('plugin-review');
+    modal.head.remove();
+
+    const header = element('div', undefined, 'plugin-review-head');
+    const top = element('div', undefined, 'plugin-review-top');
+    const icon = element('span', undefined, 'plugin-icon plugin-review-icon');
+    if (preview.icon) {
+      const img = element('img'); img.alt = ''; img.referrerPolicy = 'no-referrer';
+      img.onerror = () => img.replaceWith(subpageIcon('Plugins'));
+      img.src = preview.icon; icon.append(img);
+    } else icon.append(subpageIcon('Plugins'));
+    const names = element('div', undefined, 'plugin-review-names');
+    names.append(element('h3', plugin.name, 'plugin-review-name'),
+      element('div', t('pluginByAuthor', { author: plugin.author }), 'plugin-review-author'));
+    const chips = element('div', undefined, 'plugin-review-chips');
+    chips.append(reviewChip('version', preview.installedVersion ? `${preview.installedVersion} → ${plugin.version}` : plugin.version, { title: pluginText('Version') }),
+      reviewChip('license', plugin.license, { title: pluginText('License') }));
+    if (preview.listed === true) chips.append(reviewChip('listed', pluginText('Listed in Community Plugins'), { tone: 'listed' }));
+    else if (preview.listed === false) chips.append(reviewChip('warn', pluginText('Not listed in Community Plugins'), { tone: 'unlisted' }));
+    names.append(chips);
+    top.append(icon, names);
+    header.append(top);
+    if (plugin.description) header.append(element('p', plugin.description, 'plugin-review-description'));
+    modal.card.insertBefore(header, modal.body);
+
+    modal.body.classList.add('plugin-review-body');
+    modal.body.append(element('div', 'README', 'plugin-review-eyebrow'), pluginReadme(preview));
+
+    const footer = element('div', undefined, 'plugin-review-foot');
     if (!preview.compatible) {
-      compatibilityRow = hintRow(pluginError(preview.compatibilityError), { warn: true });
-      modal.body.append(compatibilityRow);
+      compatibilityNotice = reviewNotice('error', pluginError(preview.compatibilityError), '', 'error');
+      footer.append(compatibilityNotice);
       document.addEventListener('ks-settings-cached', renderError);
     }
+    footer.append(reviewNotice('warn', pluginText(trustNotice),
+      pluginText('New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.'), 'warn'));
+    modal.card.insertBefore(footer, modal.foot);
+    footer.append(modal.foot);
+
     const cancel = element('button', pluginText('Cancel'), 'btn-text');
     cancel.onclick = () => close(false);
     const install = element('button', preview.installedVersion ? pluginText('Trust and update') : pluginText('Trust and install'), 'btn-primary');

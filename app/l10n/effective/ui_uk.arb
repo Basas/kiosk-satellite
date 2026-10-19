@@ -11762,32 +11762,6 @@
       ]
     }
   },
-  "pluginListedInCommunityPlugins": "Є в Плагінах спільноти.",
-  "@pluginListedInCommunityPlugins": {
-    "context": "Settings > Plugin Manager > Add plugin",
-    "description": "Visible label, help or status in this section.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager > Add plugin"
-      ],
-      "remoteAdmin": [
-        "Plugin Manager > Add plugin"
-      ]
-    }
-  },
-  "pluginNotListedInCommunityPlugins": "Немає в Плагінах спільноти.",
-  "@pluginNotListedInCommunityPlugins": {
-    "context": "Settings > Plugin Manager > Add plugin",
-    "description": "Visible label, help or status in this section.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager > Add plugin"
-      ],
-      "remoteAdmin": [
-        "Plugin Manager > Add plugin"
-      ]
-    }
-  },
   "pluginSearchPlugins": "Пошук плагінів",
   "@pluginSearchPlugins": {
     "context": "Settings > Plugin Manager > Browse plugins",
@@ -12121,6 +12095,51 @@
       }
     },
     "x-notes": "Keep placeholders unchanged. Names and technical values are supplied by the app."
+  },
+  "pluginByAuthor": "від {author}",
+  "@pluginByAuthor": {
+    "context": "Settings > Plugin Manager > Add plugin",
+    "description": "Who made the plugin, under its name in the install review.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > Add plugin"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > Add plugin"
+      ]
+    },
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Names and technical values are supplied by the app."
+  },
+  "pluginListedChip": "Є в Плагінах спільноти",
+  "@pluginListedChip": {
+    "context": "Settings > Plugin Manager > Add plugin",
+    "description": "A label in the install review that says whether the plugin is in the Community Plugins directory.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > Add plugin"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > Add plugin"
+      ]
+    }
+  },
+  "pluginNotListedChip": "Немає в Плагінах спільноти",
+  "@pluginNotListedChip": {
+    "context": "Settings > Plugin Manager > Add plugin",
+    "description": "A label in the install review that says whether the plugin is in the Community Plugins directory.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > Add plugin"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > Add plugin"
+      ]
+    }
   },
   "pluginCharts": "Графіки",
   "@pluginCharts": {

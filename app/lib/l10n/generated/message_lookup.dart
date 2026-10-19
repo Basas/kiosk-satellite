@@ -819,10 +819,6 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'pluginBrowsePlugins' => strings.pluginBrowsePlugins,
       'pluginFindPluginsMadeByTheCommunity' =>
         strings.pluginFindPluginsMadeByTheCommunity,
-      'pluginListedInCommunityPlugins' =>
-        strings.pluginListedInCommunityPlugins,
-      'pluginNotListedInCommunityPlugins' =>
-        strings.pluginNotListedInCommunityPlugins,
       'pluginSearchPlugins' => strings.pluginSearchPlugins,
       'pluginUpdate' => strings.pluginUpdate,
       'pluginInstalled' => strings.pluginInstalled,
@@ -852,6 +848,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'pluginSortName' => strings.pluginSortName,
       'pluginSortMostDownloads' => strings.pluginSortMostDownloads,
       'pluginPluginsPerPage' => strings.pluginPluginsPerPage,
+      'pluginListedChip' => strings.pluginListedChip,
+      'pluginNotListedChip' => strings.pluginNotListedChip,
       'pluginCharts' => strings.pluginCharts,
       'pluginReadings' => strings.pluginReadings,
       'pluginWaitingForSamples' => strings.pluginWaitingForSamples,

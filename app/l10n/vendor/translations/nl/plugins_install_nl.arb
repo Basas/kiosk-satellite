@@ -18,8 +18,6 @@
   "pluginCouldNotReadTheSelectedZip": "Kon de geselecteerde ZIP niet lezen",
   "pluginBrowsePlugins": "Plug-ins bekijken",
   "pluginFindPluginsMadeByTheCommunity": "Vind plug-ins die de community heeft gemaakt",
-  "pluginListedInCommunityPlugins": "Staat in Communityplug-ins.",
-  "pluginNotListedInCommunityPlugins": "Staat niet in Communityplug-ins.",
   "pluginSearchPlugins": "Plug-ins zoeken",
   "pluginUpdate": "Bijwerken",
   "pluginInstalled": "Geïnstalleerd",
@@ -44,5 +42,8 @@
   "pluginSortName": "Naam",
   "pluginSortMostDownloads": "Meeste downloads",
   "pluginPluginsPerPage": "Plug-ins per pagina",
-  "pluginCountPerPage": "{count} per pagina"
+  "pluginCountPerPage": "{count} per pagina",
+  "pluginByAuthor": "door {author}",
+  "pluginListedChip": "Staat in Communityplug-ins",
+  "pluginNotListedChip": "Staat niet in Communityplug-ins"
 }

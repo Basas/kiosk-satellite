@@ -3066,12 +3066,6 @@ class UiStringsUk extends UiStrings {
       'Знайдіть плагіни, створені спільнотою';
 
   @override
-  String get pluginListedInCommunityPlugins => 'Є в Плагінах спільноти.';
-
-  @override
-  String get pluginNotListedInCommunityPlugins => 'Немає в Плагінах спільноти.';
-
-  @override
   String get pluginSearchPlugins => 'Пошук плагінів';
 
   @override
@@ -3155,6 +3149,17 @@ class UiStringsUk extends UiStrings {
   String pluginCountPerPage(String count) {
     return '$count на сторінці';
   }
+
+  @override
+  String pluginByAuthor(String author) {
+    return 'від $author';
+  }
+
+  @override
+  String get pluginListedChip => 'Є в Плагінах спільноти';
+
+  @override
+  String get pluginNotListedChip => 'Немає в Плагінах спільноти';
 
   @override
   String get pluginCharts => 'Графіки';

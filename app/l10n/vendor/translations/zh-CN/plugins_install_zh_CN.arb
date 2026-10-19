@@ -18,8 +18,6 @@
   "pluginCouldNotReadTheSelectedZip": "无法读取所选 ZIP",
   "pluginBrowsePlugins": "浏览插件",
   "pluginFindPluginsMadeByTheCommunity": "查找社区制作的插件",
-  "pluginListedInCommunityPlugins": "已收录于社区插件。",
-  "pluginNotListedInCommunityPlugins": "未收录于社区插件。",
   "pluginSearchPlugins": "搜索插件",
   "pluginUpdate": "更新",
   "pluginInstalled": "已安装",
@@ -44,5 +42,8 @@
   "pluginSortName": "名称",
   "pluginSortMostDownloads": "下载最多",
   "pluginPluginsPerPage": "每页插件数",
-  "pluginCountPerPage": "每页 {count} 个"
+  "pluginCountPerPage": "每页 {count} 个",
+  "pluginByAuthor": "作者：{author}",
+  "pluginListedChip": "已收录于社区插件",
+  "pluginNotListedChip": "未收录于社区插件"
 }

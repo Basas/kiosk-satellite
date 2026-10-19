@@ -5419,18 +5419,6 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
-  /// **'Listed in Community Plugins.'**
-  String get pluginListedInCommunityPlugins;
-
-  /// Visible label, help or status in this section.
-  ///
-  /// In en, this message translates to:
-  /// **'Not listed in Community Plugins.'**
-  String get pluginNotListedInCommunityPlugins;
-
-  /// Visible label, help or status in this section.
-  ///
-  /// In en, this message translates to:
   /// **'Search plugins'**
   String get pluginSearchPlugins;
 
@@ -5577,6 +5565,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'{count} per page'**
   String pluginCountPerPage(String count);
+
+  /// Who made the plugin, under its name in the install review.
+  ///
+  /// In en, this message translates to:
+  /// **'by {author}'**
+  String pluginByAuthor(String author);
+
+  /// A label in the install review that says whether the plugin is in the Community Plugins directory.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed in Community Plugins'**
+  String get pluginListedChip;
+
+  /// A label in the install review that says whether the plugin is in the Community Plugins directory.
+  ///
+  /// In en, this message translates to:
+  /// **'Not listed in Community Plugins'**
+  String get pluginNotListedChip;
 
   /// Visible label, help or status in this section.
   ///

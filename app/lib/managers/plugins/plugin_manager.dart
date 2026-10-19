@@ -823,10 +823,12 @@ class PluginManager extends Manager implements FleetPluginHost {
           'manifest': jsonEncode(preview['manifest']),
         })
         .timeout(const Duration(seconds: 10));
+    final listing = await directory.lookup(preview['repository'] as String);
     return {
       ...preview,
       ...?compatibility,
-      'listed': await directory.lists(preview['repository'] as String),
+      'listed': listing?.listed,
+      'icon': ?listing?.icon,
     };
   }
 

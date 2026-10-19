@@ -2977,12 +2977,6 @@ class UiStringsZh extends UiStrings {
   String get pluginFindPluginsMadeByTheCommunity => '查找社区制作的插件';
 
   @override
-  String get pluginListedInCommunityPlugins => '已收录于社区插件。';
-
-  @override
-  String get pluginNotListedInCommunityPlugins => '未收录于社区插件。';
-
-  @override
   String get pluginSearchPlugins => '搜索插件';
 
   @override
@@ -3060,6 +3054,17 @@ class UiStringsZh extends UiStrings {
   String pluginCountPerPage(String count) {
     return '每页 $count 个';
   }
+
+  @override
+  String pluginByAuthor(String author) {
+    return '作者：$author';
+  }
+
+  @override
+  String get pluginListedChip => '已收录于社区插件';
+
+  @override
+  String get pluginNotListedChip => '未收录于社区插件';
 
   @override
   String get pluginCharts => '图表';
@@ -16537,12 +16542,6 @@ class UiStringsZhCn extends UiStringsZh {
   String get pluginFindPluginsMadeByTheCommunity => '查找社区制作的插件';
 
   @override
-  String get pluginListedInCommunityPlugins => '已收录于社区插件。';
-
-  @override
-  String get pluginNotListedInCommunityPlugins => '未收录于社区插件。';
-
-  @override
   String get pluginSearchPlugins => '搜索插件';
 
   @override
@@ -16620,6 +16619,17 @@ class UiStringsZhCn extends UiStringsZh {
   String pluginCountPerPage(String count) {
     return '每页 $count 个';
   }
+
+  @override
+  String pluginByAuthor(String author) {
+    return '作者：$author';
+  }
+
+  @override
+  String get pluginListedChip => '已收录于社区插件';
+
+  @override
+  String get pluginNotListedChip => '未收录于社区插件';
 
   @override
   String get pluginCharts => '图表';

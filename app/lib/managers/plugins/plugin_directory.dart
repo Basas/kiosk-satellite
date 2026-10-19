@@ -77,13 +77,20 @@ class PluginDirectory {
   }
 
   /// Whether the list has [repository]: null when it cannot be read.
-  Future<bool?> lists(String repository) async {
+  Future<bool?> lists(String repository) async =>
+      (await lookup(repository))?.listed;
+
+  /// Whether the list has [repository], and the icon it shows for it.
+  /// Null when the list cannot be read.
+  Future<({bool listed, String? icon})?> lookup(String repository) async {
     try {
       final key = PluginRepository.repositoryUrl(repository).toString();
       final data = await read().timeout(const Duration(seconds: 8));
-      return (data['plugins'] as List).any(
-        (p) => (p as Map)['repositoryKey'] == key,
-      );
+      final entry = (data['plugins'] as List)
+          .cast<Map>()
+          .where((p) => p['repositoryKey'] == key)
+          .firstOrNull;
+      return (listed: entry != null, icon: entry?['icon'] as String?);
     } catch (_) {
       return null;
     }

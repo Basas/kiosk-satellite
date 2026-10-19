@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "770e355dc1885b9421038aa5fb02f33236d28000",
+  "revision": "975329870b67fb2355ee39d1cc2b37571e19015a",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -50,7 +50,7 @@
     "plugin_windows_en.arb": "eb2b36bf76190943bd227c2de0348e0a69329951183130ee94ce88c443d9fa22",
     "plugins_actions_en.arb": "8118af0e8db9b01d113da967e74b011ad325201616692ad700d16e8709944bf1",
     "plugins_general_en.arb": "7e376a1a8e8612cac40c25486feb2869802457b5d317a6aa4921423a9b06d34c",
-    "plugins_install_en.arb": "545ee805d0200de517bfff660288ec4dc1536afe17751f50d95be1932f7adcd6",
+    "plugins_install_en.arb": "984de6b86ae515fd5f2d40b72f7737b5581adec6da48c6202eb026c23309617a",
     "plugins_output_en.arb": "fa74c2b8021e30b18fabb8b4de82228d59c1685751bd72573e395c8584a45009",
     "plugins_package_errors_en.arb": "1a06ffa480aca3187961c649b84bb6eced8d7323ea3e44e506de55db100c144f",
     "plugins_repository_errors_en.arb": "309fb7158604edde3b1245684fc8f032e22d92cd60364925a2e024d6baeabae0",

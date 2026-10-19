@@ -18,8 +18,6 @@
   "pluginCouldNotReadTheSelectedZip": "Die ausgewählte ZIP-Datei konnte nicht gelesen werden",
   "pluginBrowsePlugins": "Plugins durchsuchen",
   "pluginFindPluginsMadeByTheCommunity": "Von der Community erstellte Plugins finden",
-  "pluginListedInCommunityPlugins": "In Community-Plugins gelistet.",
-  "pluginNotListedInCommunityPlugins": "Nicht in Community-Plugins gelistet.",
   "pluginSearchPlugins": "Plugins suchen",
   "pluginUpdate": "Aktualisieren",
   "pluginInstalled": "Installiert",
@@ -44,5 +42,8 @@
   "pluginSortName": "Name",
   "pluginSortMostDownloads": "Meiste Downloads",
   "pluginPluginsPerPage": "Plugins pro Seite",
-  "pluginCountPerPage": "{count} pro Seite"
+  "pluginCountPerPage": "{count} pro Seite",
+  "pluginByAuthor": "von {author}",
+  "pluginListedChip": "In Community-Plugins gelistet",
+  "pluginNotListedChip": "Nicht in Community-Plugins gelistet"
 }

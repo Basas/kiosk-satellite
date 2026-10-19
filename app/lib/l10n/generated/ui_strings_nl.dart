@@ -3076,13 +3076,6 @@ class UiStringsNl extends UiStrings {
       'Vind plug-ins die de community heeft gemaakt';
 
   @override
-  String get pluginListedInCommunityPlugins => 'Staat in Communityplug-ins.';
-
-  @override
-  String get pluginNotListedInCommunityPlugins =>
-      'Staat niet in Communityplug-ins.';
-
-  @override
   String get pluginSearchPlugins => 'Plug-ins zoeken';
 
   @override
@@ -3166,6 +3159,17 @@ class UiStringsNl extends UiStrings {
   String pluginCountPerPage(String count) {
     return '$count per pagina';
   }
+
+  @override
+  String pluginByAuthor(String author) {
+    return 'door $author';
+  }
+
+  @override
+  String get pluginListedChip => 'Staat in Communityplug-ins';
+
+  @override
+  String get pluginNotListedChip => 'Staat niet in Communityplug-ins';
 
   @override
   String get pluginCharts => 'Grafieken';

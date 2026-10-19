@@ -204,8 +204,6 @@ const pluginTextMessageIds = <String, String>{
   "This choice is no longer listed.": "pluginThisChoiceIsNoLongerListed",
   "Browse plugins": "pluginBrowsePlugins",
   "Find plugins made by the community": "pluginFindPluginsMadeByTheCommunity",
-  "Listed in Community Plugins.": "pluginListedInCommunityPlugins",
-  "Not listed in Community Plugins.": "pluginNotListedInCommunityPlugins",
   "Search plugins": "pluginSearchPlugins",
   "Update": "pluginUpdate",
   "Installed": "pluginInstalled",
@@ -229,5 +227,7 @@ const pluginTextMessageIds = <String, String>{
   "Newest": "pluginSortNewest",
   "Name": "pluginSortName",
   "Most downloads": "pluginSortMostDownloads",
-  "Plugins per page": "pluginPluginsPerPage"
+  "Plugins per page": "pluginPluginsPerPage",
+  "Listed in Community Plugins": "pluginListedChip",
+  "Not listed in Community Plugins": "pluginNotListedChip"
 };

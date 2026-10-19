@@ -322,7 +322,8 @@ try:
         update_available = True
         installs_before = sum(name == 'installPluginRepository' for name, _ in requests)
         check.click()
-        expect(modal.get_by_text('Installed version', exact=True)).to_be_visible()
+        # The version chip shows the installed version and the release's.
+        expect(modal.locator('.plugin-review-chip').first).to_contain_text('1.0.0 → 1.0.0')
         modal.get_by_role('button', name='Cancel', exact=True).click()
         assert sum(name == 'installPluginRepository' for name, _ in requests) == installs_before
         compatible = False

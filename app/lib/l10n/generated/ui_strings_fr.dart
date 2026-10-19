@@ -3083,14 +3083,6 @@ class UiStringsFr extends UiStrings {
       'Trouver des plugins créés par la communauté';
 
   @override
-  String get pluginListedInCommunityPlugins =>
-      'Répertorié dans Plugins de la communauté.';
-
-  @override
-  String get pluginNotListedInCommunityPlugins =>
-      'Absent de Plugins de la communauté.';
-
-  @override
   String get pluginSearchPlugins => 'Rechercher des plugins';
 
   @override
@@ -3174,6 +3166,17 @@ class UiStringsFr extends UiStrings {
   String pluginCountPerPage(String count) {
     return '$count par page';
   }
+
+  @override
+  String pluginByAuthor(String author) {
+    return 'par $author';
+  }
+
+  @override
+  String get pluginListedChip => 'Répertorié dans Plugins de la communauté';
+
+  @override
+  String get pluginNotListedChip => 'Absent de Plugins de la communauté';
 
   @override
   String get pluginCharts => 'Graphiques';

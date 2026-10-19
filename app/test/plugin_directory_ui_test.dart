@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:kiosk_satellite/core/logging.dart';
 import 'package:kiosk_satellite/managers/plugins/plugin_directory.dart';
 import 'package:kiosk_satellite/managers/plugins/plugin_manager.dart';
 import 'package:kiosk_satellite/ui/plugin_directory.dart';
+import 'package:kiosk_satellite/ui/plugin_settings.dart';
 import 'package:kiosk_satellite/ui/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -205,4 +207,53 @@ void main() {
     expect(find.text('Plugin 44'), findsOneWidget);
     expect(find.text('Plugin 00'), findsNothing);
   });
+
+  for (final (name, size) in [
+    ('phone', const Size(390, 844)),
+    ('tablet', const Size(1280, 800)),
+  ]) {
+    testWidgets('the install review lays out on a $name', (tester) async {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      final preview = <String, Object?>{
+        'manifest': {
+          'name': 'Google Photos Screensaver',
+          'author': 'Coffmad',
+          'version': '1.2.0',
+          'license': 'Apache-2.0',
+          'description': 'Shows photos from shared albums. ' * 4,
+        },
+        'installedVersion': '1.1.0',
+        'readme': '# Title\n\n${'A long README paragraph. ' * 200}',
+        'readmeBaseUrl': 'https://raw.githubusercontent.com/a/b/c/',
+        'compatible': false,
+        'compatibilityError': 'Plugin needs Android API 99',
+        'listed': true,
+      };
+      late BuildContext context;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (c) {
+              context = c;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      unawaited(showPluginPreview(context, preview));
+      await settle(tester);
+      expect(tester.takeException(), isNull);
+      expect(find.text('by Coffmad'), findsOneWidget);
+      expect(find.text('1.1.0 → 1.2.0'), findsOneWidget);
+      expect(find.text('Listed in Community Plugins'), findsOneWidget);
+      expect(find.text('Plugin needs Android API 99'), findsOneWidget);
+      // An incompatible plugin cannot be installed.
+      final install = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Trust and update'),
+      );
+      expect(install.onPressed, isNull);
+    });
+  }
 }

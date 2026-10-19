@@ -130,7 +130,7 @@ try:
         # Picking a plugin opens the same review as Add plugin.
         rows.first.click()
         modal = page.locator('.modal-back')
-        expect(modal).to_contain_text('Listed in Community Plugins.')
+        expect(modal).to_contain_text('Listed in Community Plugins')
         modal.get_by_role('button', name='Trust and install').click()
         expect(modal).to_have_count(0)
         assert ('installPluginRepository', {'previewId': 'token-weather', 'trusted': True}) in requests
@@ -195,7 +195,7 @@ try:
         modal = page.locator('.modal-back')
         expect(modal).to_contain_text('Turn on Enable Plugins to install this plugin.')
         modal.get_by_role('button', name='Turn on').click()
-        expect(page.locator('.modal-back')).to_contain_text('Not listed in Community Plugins.')
+        expect(page.locator('.modal-back')).to_contain_text('Not listed in Community Plugins')
         assert ('setPluginsEnabled', {'enabled': True}) in requests
         assert ('previewPluginRepository', {'url': 'https://github.com/bob/unlisted'}) in requests
         page.locator('.modal-back').get_by_role('button', name='Cancel').click()

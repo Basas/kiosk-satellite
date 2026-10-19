@@ -3064,12 +3064,6 @@ class UiStringsRu extends UiStrings {
       'Найдите плагины, созданные сообществом';
 
   @override
-  String get pluginListedInCommunityPlugins => 'Есть в Плагинах сообщества.';
-
-  @override
-  String get pluginNotListedInCommunityPlugins => 'Нет в Плагинах сообщества.';
-
-  @override
   String get pluginSearchPlugins => 'Поиск плагинов';
 
   @override
@@ -3153,6 +3147,17 @@ class UiStringsRu extends UiStrings {
   String pluginCountPerPage(String count) {
     return '$count на странице';
   }
+
+  @override
+  String pluginByAuthor(String author) {
+    return 'от $author';
+  }
+
+  @override
+  String get pluginListedChip => 'Есть в Плагинах сообщества';
+
+  @override
+  String get pluginNotListedChip => 'Нет в Плагинах сообщества';
 
   @override
   String get pluginCharts => 'Графики';
