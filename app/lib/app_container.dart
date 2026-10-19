@@ -183,6 +183,8 @@ class AppContainer {
       ..plugins = plugins;
     plugins.fleetManaged = (id) =>
         fleetSync.following && fleetSync.syncedPlugins.containsKey(id);
+    plugins.onActivity = (name) =>
+        unawaited(UsageCounters.bump(settings, name));
     intercom = IntercomManager(bus, commands, log, settings);
     alarms = AlarmManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);

@@ -263,6 +263,11 @@ class PluginManager extends Manager implements FleetPluginHost {
   bool Function(String id) fleetManaged = _never;
   static bool _never(String _) => false;
 
+  /// Counts a plugin install, update, removal or failed install that
+  /// someone asked for here, by name, for usage analytics. Fleet pushes
+  /// do not count. Set by the app container.
+  void Function(String name)? onActivity;
+
   /// The Home Assistant connection plugins with the `ha` capability share.
   /// Set by the app container before [init].
   HaPluginSocket? haSocket;
@@ -894,7 +899,13 @@ class PluginManager extends Manager implements FleetPluginHost {
     String token, {
     required bool trusted,
   }) async {
-    final args = await repository.installArguments(token, trusted: trusted);
+    final Map<String, Object?> args;
+    try {
+      args = await repository.installArguments(token, trusted: trusted);
+    } catch (_) {
+      onActivity?.call('plugin_install_failures');
+      rethrow;
+    }
     return update('install', args);
   }
 
@@ -1013,7 +1024,7 @@ class PluginManager extends Manager implements FleetPluginHost {
       'trusted': true,
       'sha256': sha256,
       if (source != null) 'source': jsonEncode(source),
-    });
+    }, counted: false);
   }
 
   @override
@@ -1026,12 +1037,18 @@ class PluginManager extends Manager implements FleetPluginHost {
       });
 
   @override
-  Future<void> fleetRemove(String id) => update('remove', {'id': id});
+  Future<void> fleetRemove(String id) =>
+      update('remove', {'id': id}, counted: false);
 
   Future<List<Map<String, Object?>>> update(
     String method,
-    Map<String, Object?> args,
-  ) async {
+    Map<String, Object?> args, {
+    bool counted = true,
+  }) async {
+    final count = counted && (method == 'install' || method == 'remove');
+    final before = count
+        ? {for (final p in installed.value) '${p['id']}'}
+        : const <String>{};
     try {
       final result = await channel
           .invokeMethod<Object?>(method, args)
@@ -1040,11 +1057,42 @@ class PluginManager extends Manager implements FleetPluginHost {
         _readInstalled(result);
         status.value = '';
       }
+      if (count) unawaited(_countActivity(method, args, before));
       return installed.value;
     } catch (error) {
       if (!_disposed) status.value = _errorText(error);
+      if (count && method == 'install') {
+        onActivity?.call('plugin_install_failures');
+      }
       rethrow;
     }
+  }
+
+  /// Names what a user's install or removal did, for [onActivity]: a new
+  /// plugin by where it came from, a plugin already there as an update.
+  Future<void> _countActivity(
+    String method,
+    Map<String, Object?> args,
+    Set<String> before,
+  ) async {
+    final report = onActivity;
+    if (report == null) return;
+    if (method == 'remove') return report('plugin_removals');
+    final added = installed.value.any((p) => !before.contains('${p['id']}'));
+    if (!added) return report('plugin_updates');
+    String? repo;
+    try {
+      final source = args['source'];
+      final decoded = source is String ? jsonDecode(source) : null;
+      if (decoded is Map && decoded['repository'] is String) {
+        repo = decoded['repository'] as String;
+      }
+    } catch (_) {}
+    if (repo == null) return report('plugin_installs_zip');
+    final listed = await directory.lists(repo);
+    report(
+      listed == true ? 'plugin_installs_directory' : 'plugin_installs_github',
+    );
   }
 
   /// Starts a settings button ([target] `button`) or a choices refresh

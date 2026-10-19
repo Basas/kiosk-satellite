@@ -443,26 +443,7 @@ class AnalyticsManager extends Manager {
       }
     } catch (_) {}
 
-    // Which plugins are installed, by the id their manifest declares: a
-    // public name from the repository the plugin came from, never a
-    // setting or a value the plugin holds. Sorted, so two installs with
-    // the same plugins read the same.
-    var pluginIds = <String>[];
-    var pluginsEnabled = false;
-    try {
-      final r = await commands.execute('getPluginState', const {});
-      final data = r.data;
-      if (data is Map) {
-        pluginsEnabled = data['enabled'] == true;
-        final list = data['plugins'];
-        if (list is List) {
-          pluginIds = [
-            for (final item in list)
-              if (item is Map && item['id'] is String) item['id'] as String,
-          ]..sort();
-        }
-      }
-    } catch (_) {}
+    final plugins = await _plugins();
 
     // What Voice Satellite is listening for and with: the wake word
     // manager's state. Names only; a model name is a catalog label, not
@@ -545,6 +526,7 @@ class AnalyticsManager extends Manager {
     final rules = parseUrlFilter(s.get(defs.browserUrlFilter));
     _reportedCounts = {
       'duraspeed_blocked': counts['duraspeed_blocked'] ?? 0,
+      for (final k in pluginActivity) k: counts[k] ?? 0,
       if (pages.isNotEmpty)
         for (final k in ['custom_page_loads', 'custom_page_ha_sockets'])
           k: counts[k] ?? 0,
@@ -669,9 +651,12 @@ class AnalyticsManager extends Manager {
     } catch (_) {}
 
     return {
-      'screensaver': s.get(defs.screensaverEnabled)
-          ? s.get(defs.screensaverMode)
-          : 'off',
+      // A plugin's screensaver counts as 'plugin', without its id.
+      'screensaver': !s.get(defs.screensaverEnabled)
+          ? 'off'
+          : defs.isPluginScreensaver(s.get(defs.screensaverMode))
+          ? 'plugin'
+          : s.get(defs.screensaverMode),
       'screensaver_schedule': s.get(defs.screensaverScheduleEnabled),
       'glance': s.get(defs.screensaverGlanceEnabled),
       'widgets': widgets.toList()..sort(),
@@ -793,9 +778,12 @@ class AnalyticsManager extends Manager {
       'shizuku_updates': s.get(defs.shizukuInstallUpdates),
       'update_installer': installer,
       'update_helper': helper,
-      'plugins_enabled': pluginsEnabled,
-      'plugins': pluginIds.length,
-      'plugin_ids': pluginIds,
+      ...plugins,
+      for (final k in pluginActivity)
+        k: UsageCounters.bucket(_reportedCounts[k] ?? 0),
+      'plugin_screensaver':
+          s.get(defs.screensaverEnabled) &&
+          defs.isPluginScreensaver(s.get(defs.screensaverMode)),
       'theme': s.get(defs.uiTheme),
     };
   }
@@ -865,6 +853,131 @@ class AnalyticsManager extends Manager {
       }
     }
     return (state: 'off', skin: skin);
+  }
+
+  /// The plugin installs, updates, removals and failed installs people
+  /// asked for, counted since the last snapshot (PluginManager.onActivity).
+  static const pluginActivity = [
+    'plugin_installs_directory',
+    'plugin_installs_github',
+    'plugin_installs_zip',
+    'plugin_updates',
+    'plugin_removals',
+    'plugin_install_failures',
+  ];
+
+  /// What is installed, where it came from and how it is doing. A plugin
+  /// is named, by id and version, only when it comes from Community
+  /// Plugins: those names are public. Every other plugin, a ZIP or a
+  /// private repository, only adds to the counts.
+  Future<Map<String, Object?>> _plugins() async {
+    var enabled = false;
+    var list = <Map>[];
+    try {
+      final r = await commands.execute('getPluginState', const {});
+      final data = r.data;
+      if (data is Map) {
+        enabled = data['enabled'] == true;
+        if (data['plugins'] is List) {
+          list = (data['plugins'] as List).whereType<Map>().toList();
+        }
+      }
+    } catch (_) {}
+    bool fromRepository(Map p) {
+      final source = p['source'];
+      return source is Map && source['repository'] is String;
+    }
+
+    // Community Plugins' own view of what is installed: listed, from the
+    // same repository and whether a newer release waits. Only read when a
+    // plugin came from a repository, and null when the list cannot be read.
+    Map<String, Map>? listed;
+    if (list.any((p) => p['fleetManaged'] != true && fromRepository(p))) {
+      try {
+        final r = await commands.execute('getPluginDirectory', const {});
+        final data = r.data;
+        if (r.ok && data is Map && data['plugins'] is List) {
+          listed = {
+            for (final e in (data['plugins'] as List).whereType<Map>())
+              if (e['installed'] == true && e['sameSource'] == true)
+                '${e['id']}': e,
+          };
+        }
+      } catch (_) {}
+    }
+    final sources = {
+      'directory': 0,
+      'github': 0,
+      'zip': 0,
+      'fleet': 0,
+      'unknown': 0,
+    };
+    final ids = <String>[];
+    final versions = <String>[];
+    var updates = 0;
+    for (final p in list) {
+      final id = '${p['id']}';
+      final String kind;
+      if (p['fleetManaged'] == true) {
+        kind = 'fleet';
+      } else if (!fromRepository(p)) {
+        kind = 'zip';
+      } else if (listed == null) {
+        kind = 'unknown';
+      } else if (listed.containsKey(id)) {
+        kind = 'directory';
+      } else {
+        kind = 'github';
+      }
+      sources[kind] = sources[kind]! + 1;
+      if (kind != 'directory') continue;
+      ids.add(id);
+      final pair = '$id@${p['version'] ?? ''}';
+      if (pair.length <= 64) versions.add(pair);
+      if (listed![id]!['updateAvailable'] == true) updates++;
+    }
+    bool hasError(Map p) =>
+        '${p['error'] ?? ''}'.isNotEmpty || p['statusError'] == true;
+    final on = list.where((p) => p['enabled'] == true).toList();
+    var menuActions = 0;
+    var haActions = 0;
+    for (final p in list) {
+      final options = p['actionOptions'];
+      if (options is! Map) continue;
+      for (final o in options.values.whereType<Map>()) {
+        if (o['drawer'] == true) menuActions++;
+        if (o['homeAssistant'] == true) haActions++;
+      }
+    }
+    return {
+      'plugins_enabled': enabled,
+      'plugins': list.length,
+      'plugin_ids': ids..sort(),
+      if (list.isNotEmpty) ...{
+        'plugin_versions': versions..sort(),
+        'plugins_update_available': updates,
+        for (final e in sources.entries)
+          e.key == 'unknown'
+                  ? 'plugins_source_unknown'
+                  : 'plugins_from_${e.key}':
+              e.value,
+        'plugins_on': on.length,
+        'plugins_running': list.where((p) => p['running'] == true).length,
+        'plugins_errors': list.where(hasError).length,
+        // Switched on with plugins running, yet not running, and no error
+        // to say why.
+        'plugins_stalled': enabled
+            ? on.where((p) => p['running'] != true && !hasError(p)).length
+            : 0,
+        'plugin_capabilities': {
+          for (final p in on)
+            for (final c in (p['capabilities'] as List? ?? const []))
+              if (c is String && c.isNotEmpty && c.length <= 64) c,
+        }.toList()..sort(),
+        'plugin_menu_actions': menuActions,
+        'plugin_ha_actions': haActions,
+      },
+    };
   }
 
   /// The native journal's text, or nothing where there is no journal (a
