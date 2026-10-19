@@ -31,7 +31,7 @@ def listed(plugin_id, name, installs, **extra):
 
 directory = {'generated': '2026-10-19T06:00:00Z', 'plugins': [
     listed('quiet', 'Quiet Clock', None, installed=True, installedVersion='1.0.0', sameSource=True, updateAvailable=False),
-    listed('weather', 'Weather Mood', None, downloads=5000),
+    listed('weather', 'Weather Mood', None, downloads=5000, owner='weather-labs'),
 ]}
 plugins_enabled = True
 requests = []
@@ -117,6 +117,10 @@ try:
         search = root.get_by_role('textbox', name='Search plugins')
         search.fill('quiet')
         expect(rows).to_have_count(1)
+        # The GitHub owner matches too.
+        search.fill('weather-labs')
+        expect(rows).to_have_count(1)
+        expect(rows.first).to_contain_text('Weather Mood')
         search.fill('nothing like this')
         expect(root.get_by_text('No plugins match your search.')).to_be_visible()
         search.fill('')

@@ -380,7 +380,7 @@ function renderDirectory(page) {
   const fill = () => {
     const words = directoryQuery.toLowerCase().split(/\s+/).filter(Boolean);
     const shown = (directory?.plugins || []).filter((p) => {
-      const text = `${p.name} ${p.description} ${p.author} ${p.id}`.toLowerCase();
+      const text = `${p.name} ${p.description} ${p.author} ${p.owner || ''} ${p.id}`.toLowerCase();
       return words.every((word) => text.includes(word));
     }).sort((DIRECTORY_SORTS[directorySort] || DIRECTORY_SORTS.downloads)[1]);
     const pages = Math.ceil(shown.length / directoryPageSize);

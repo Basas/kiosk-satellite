@@ -162,8 +162,9 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
         p as Map<String, Object?>,
     ];
     return plugins.where((p) {
-      final text = '${p['name']} ${p['description']} ${p['author']} ${p['id']}'
-          .toLowerCase();
+      final text =
+          '${p['name']} ${p['description']} ${p['author']} ${p['owner'] ?? ''} ${p['id']}'
+              .toLowerCase();
       return words.every(text.contains);
     }).toList()..sort(comparator(_sort));
   }

@@ -75,6 +75,7 @@ void main() {
             'name': name,
             'description': '$name for the kiosk.',
             'author': 'Alice',
+            'owner': id == 'weather' ? 'weather-labs' : 'alice',
             'version': '1.0.0',
             'repository': 'https://github.com/alice/$id',
             'stars': 1,
@@ -124,6 +125,14 @@ void main() {
     await settle(tester);
     expect(find.text('Quiet Clock'), findsNothing);
     expect(find.text('Weather Mood'), findsOneWidget);
+    // The GitHub owner and the plugin ID match too.
+    await tester.enterText(find.byType(TextField), 'weather-labs');
+    await settle(tester);
+    expect(find.text('Weather Mood'), findsOneWidget);
+    expect(find.text('Quiet Clock'), findsNothing);
+    await tester.enterText(find.byType(TextField), 'quiet');
+    await settle(tester);
+    expect(find.text('Quiet Clock'), findsOneWidget);
     await tester.enterText(find.byType(TextField), 'nothing like this');
     await settle(tester);
     expect(find.text('No plugins match your search.'), findsOneWidget);
