@@ -128,7 +128,6 @@ class _PluginReviewDialog extends StatelessWidget {
     final manifest = preview['manifest'] as Map;
     final isUpdate = preview.containsKey('installedVersion');
     final compatible = preview['compatible'] == true;
-    final description = '${manifest['description'] ?? ''}';
     final muted = theme.textTheme.bodyMedium?.copyWith(
       color: scheme.onSurfaceVariant,
     );
@@ -196,10 +195,6 @@ class _PluginReviewDialog extends StatelessWidget {
               ),
             ],
           ),
-          if (description.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            Text(description, style: muted),
-          ],
         ],
       ),
     );
@@ -268,10 +263,6 @@ class _PluginReviewDialog extends StatelessWidget {
                   _ReviewNotice(
                     icon: Icons.warning_amber_rounded,
                     text: pluginText(context, pluginTrustNotice),
-                    detail: pluginText(
-                      context,
-                      'New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.',
-                    ),
                     background: scheme.tertiaryContainer,
                     foreground: scheme.onTertiaryContainer,
                   ),
@@ -367,11 +358,9 @@ class _ReviewNotice extends StatelessWidget {
     required this.text,
     required this.background,
     required this.foreground,
-    this.detail,
   });
   final IconData icon;
   final String text;
-  final String? detail;
   final Color background;
   final Color foreground;
 
@@ -393,23 +382,7 @@ class _ReviewNotice extends StatelessWidget {
         children: [
           Icon(icon, size: 18, color: foreground),
           const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(text, style: style),
-                if (detail != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    detail!,
-                    style: style?.copyWith(
-                      color: foreground.withValues(alpha: 0.75),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
+          Expanded(child: Text(text, style: style)),
         ],
       ),
     );

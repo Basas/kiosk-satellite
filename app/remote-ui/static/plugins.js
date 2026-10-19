@@ -152,13 +152,10 @@ function reviewChip(icon, text, { tone, title } = {}) {
   return chip;
 }
 
-function reviewNotice(icon, text, detail, tone) {
+function reviewNotice(icon, text, tone) {
   const notice = element('div', undefined, `plugin-review-notice ${tone}`);
   notice.innerHTML = SVG(REVIEW_ICONS[icon]);
-  const words = element('div');
-  words.append(element('div', text));
-  if (detail) words.append(element('div', detail, 'plugin-review-detail'));
-  notice.append(words);
+  notice.append(element('div', text));
   return notice;
 }
 
@@ -174,7 +171,7 @@ function confirmPreview(preview) {
     // The error is drawn again once the language catalogs arrive.
     let compatibilityNotice;
     function renderError() {
-      if (compatibilityNotice) compatibilityNotice.replaceWith(compatibilityNotice = reviewNotice('error', pluginError(preview.compatibilityError), '', 'error'));
+      if (compatibilityNotice) compatibilityNotice.replaceWith(compatibilityNotice = reviewNotice('error', pluginError(preview.compatibilityError), 'error'));
     }
     modal.card.classList.add('plugin-review');
     modal.head.remove();
@@ -198,7 +195,6 @@ function confirmPreview(preview) {
     names.append(chips);
     top.append(icon, names);
     header.append(top);
-    if (plugin.description) header.append(element('p', plugin.description, 'plugin-review-description'));
     modal.card.insertBefore(header, modal.body);
 
     modal.body.classList.add('plugin-review-body');
@@ -206,12 +202,11 @@ function confirmPreview(preview) {
 
     const footer = element('div', undefined, 'plugin-review-foot');
     if (!preview.compatible) {
-      compatibilityNotice = reviewNotice('error', pluginError(preview.compatibilityError), '', 'error');
+      compatibilityNotice = reviewNotice('error', pluginError(preview.compatibilityError), 'error');
       footer.append(compatibilityNotice);
       document.addEventListener('ks-settings-cached', renderError);
     }
-    footer.append(reviewNotice('warn', pluginText(trustNotice),
-      pluginText('New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.'), 'warn'));
+    footer.append(reviewNotice('warn', pluginText(trustNotice), 'warn'));
     modal.card.insertBefore(footer, modal.foot);
     footer.append(modal.foot);
 
