@@ -4039,6 +4039,13 @@ class UiStringsUk extends UiStrings {
       'Усі відео в цьому списку завеликі для відтворення на цьому пристрої.';
 
   @override
+  String get screensaverUrlNotSet =>
+      'URL-адресу зображення не задано. Додайте її у Налаштуваннях.';
+
+  @override
+  String get screensaverUrlLoadFailed => 'Не вдалося завантажити зображення.';
+
+  @override
   String get settingKioskAllowAlarmsTitle => 'Будильники';
 
   @override
@@ -10001,6 +10008,13 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'Показувати AM/PM';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Додавати AM або PM після часу.';
+
+  @override
   String get screensaverOverlayEntity => 'Сутність';
 
   @override
@@ -10310,6 +10324,9 @@ class UiStringsUk extends UiStrings {
   @override
   String get screensaverDashboardSection =>
       'Заставка панелі керування Home Assistant';
+
+  @override
+  String get screensaverModeUrl => 'URL-адреса зображення';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Масштаб рядка';
@@ -11229,6 +11246,24 @@ class UiStringsUk extends UiStrings {
   @override
   String get screensaverMediaLocalPageHint =>
       'Папка, тривалість, випадковий порядок, перехід, метадані';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'Адреса зображення, яке пристрій завантажує заново для кожного слайда.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'Скільки часу кожне фото показується перед завантаженням наступного.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Заставка URL-адреси зображення';
+
+  @override
+  String get screensaverMediaUrlPageHint =>
+      'URL-адреса, тривалість, перехід, метадані';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Метадані URL-адреси зображення';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Вихід за рухом';

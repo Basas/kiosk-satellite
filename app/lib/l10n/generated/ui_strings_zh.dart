@@ -3878,6 +3878,12 @@ class UiStringsZh extends UiStrings {
   String get screensaverVideosTooLarge => '此播放列表中的所有视频都过大，此设备无法播放。';
 
   @override
+  String get screensaverUrlNotSet => '未设置图片地址。请在设置中添加。';
+
+  @override
+  String get screensaverUrlLoadFailed => '无法加载图片。';
+
+  @override
   String get settingKioskAllowAlarmsTitle => '闹钟';
 
   @override
@@ -9418,6 +9424,12 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => '显示 AM/PM';
+
+  @override
+  String get settingScreensaverClockAmPmDescription => '在时间后显示 AM 或 PM。';
+
+  @override
   String get screensaverOverlayEntity => '实体';
 
   @override
@@ -9701,6 +9713,9 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get screensaverDashboardSection => 'Home Assistant 仪表盘屏保';
+
+  @override
+  String get screensaverModeUrl => '图片地址';
 
   @override
   String get settingScreensaverGlanceScaleTitle => '行缩放';
@@ -10552,6 +10567,21 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get screensaverMediaLocalPageHint => '文件夹、时长、随机播放、切换效果和元数据';
+
+  @override
+  String get settingScreensaverUrlImageDescription => '设备在每张幻灯片时重新获取的图片地址。';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription => '每张照片在获取下一张之前显示的时长。';
+
+  @override
+  String get screensaverMediaUrlPage => '图片地址屏保';
+
+  @override
+  String get screensaverMediaUrlPageHint => '地址、时长、切换效果和元数据';
+
+  @override
+  String get screensaverMediaUrlMetadata => '图片地址元数据';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => '检测到运动时关闭屏保';
@@ -17297,6 +17327,12 @@ class UiStringsZhCn extends UiStringsZh {
   String get screensaverVideosTooLarge => '此播放列表中的所有视频都过大，此设备无法播放。';
 
   @override
+  String get screensaverUrlNotSet => '未设置图片地址。请在设置中添加。';
+
+  @override
+  String get screensaverUrlLoadFailed => '无法加载图片。';
+
+  @override
   String get settingKioskAllowAlarmsTitle => '闹钟';
 
   @override
@@ -22837,6 +22873,12 @@ class UiStringsZhCn extends UiStringsZh {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => '显示 AM/PM';
+
+  @override
+  String get settingScreensaverClockAmPmDescription => '在时间后显示 AM 或 PM。';
+
+  @override
   String get screensaverOverlayEntity => '实体';
 
   @override
@@ -23120,6 +23162,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverDashboardSection => 'Home Assistant 仪表盘屏保';
+
+  @override
+  String get screensaverModeUrl => '图片地址';
 
   @override
   String get settingScreensaverGlanceScaleTitle => '行缩放';
@@ -23971,6 +24016,21 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverMediaLocalPageHint => '文件夹、时长、随机播放、切换效果和元数据';
+
+  @override
+  String get settingScreensaverUrlImageDescription => '设备在每张幻灯片时重新获取的图片地址。';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription => '每张照片在获取下一张之前显示的时长。';
+
+  @override
+  String get screensaverMediaUrlPage => '图片地址屏保';
+
+  @override
+  String get screensaverMediaUrlPageHint => '地址、时长、切换效果和元数据';
+
+  @override
+  String get screensaverMediaUrlMetadata => '图片地址元数据';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => '检测到运动时关闭屏保';

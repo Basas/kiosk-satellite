@@ -5856,6 +5856,16 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                       fontRow(),
                       fontWeightRow(),
                       toggle(screensaverText(context, '24-hour clock'), 'h24'),
+                      // On unless switched off: entries saved before the
+                      // switch existed carry no key.
+                      if (config['h24'] != true)
+                        SwitchListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(screensaverText(context, 'Show AM/PM')),
+                          value: config['ampm'] != false,
+                          onChanged: (v) =>
+                              setDialogState(() => config['ampm'] = v),
+                        ),
                       toggle(screensaverText(context, 'Show date'), 'date'),
                     ],
                     if (type == 'weather') ...[

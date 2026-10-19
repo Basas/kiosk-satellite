@@ -4097,6 +4097,14 @@ class UiStringsDe extends UiStrings {
       'Alle Videos in dieser Liste sind zu groß, um auf diesem Gerät wiedergegeben zu werden.';
 
   @override
+  String get screensaverUrlNotSet =>
+      'Es wurde keine Bild-URL festgelegt. Bitte füge eine in den Einstellungen hinzu.';
+
+  @override
+  String get screensaverUrlLoadFailed =>
+      'Das Bild konnte nicht geladen werden.';
+
+  @override
   String get settingKioskAllowAlarmsTitle => 'Wecker';
 
   @override
@@ -10120,6 +10128,13 @@ class UiStringsDe extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'AM/PM anzeigen';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Zeigt AM oder PM nach der Uhrzeit an.';
+
+  @override
   String get screensaverOverlayEntity => 'Entität';
 
   @override
@@ -10434,6 +10449,9 @@ class UiStringsDe extends UiStrings {
   @override
   String get screensaverDashboardSection =>
       'Bildschirmschoner: Home-Assistant-Dashboard';
+
+  @override
+  String get screensaverModeUrl => 'Bild-URL';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Skalierung der Leiste';
@@ -11366,6 +11384,24 @@ class UiStringsDe extends UiStrings {
   @override
   String get screensaverMediaLocalPageHint =>
       'Ordner, Anzeigedauer, Zufallswiedergabe, Übergänge und Metadaten';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'Eine Bildadresse, die das Gerät für jede Folie neu abruft.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'Wie lange jedes Foto angezeigt wird, bevor das nächste abgerufen wird.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Bildschirmschoner: Bild-URL';
+
+  @override
+  String get screensaverMediaUrlPageHint =>
+      'URL, Anzeigedauer, Übergänge und Metadaten';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Metadaten der Bild-URL';
 
   @override
   String get settingScreensaverDismissOnMotionTitle =>

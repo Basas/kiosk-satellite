@@ -1052,6 +1052,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'screensaverNoMediaSource' => strings.screensaverNoMediaSource,
       'screensaverImmichUnreachable' => strings.screensaverImmichUnreachable,
       'screensaverVideosTooLarge' => strings.screensaverVideosTooLarge,
+      'screensaverUrlNotSet' => strings.screensaverUrlNotSet,
+      'screensaverUrlLoadFailed' => strings.screensaverUrlLoadFailed,
       'settingKioskAllowAlarmsTitle' => strings.settingKioskAllowAlarmsTitle,
       'settingKioskAllowAlarmsDescription' =>
         strings.settingKioskAllowAlarmsDescription,
@@ -3127,6 +3129,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'screensaverBackgroundHint' => strings.screensaverBackgroundHint,
       'screensaverImageUrlError' => strings.screensaverImageUrlError,
       'screensaverRefreshError' => strings.screensaverRefreshError,
+      'settingScreensaverClockAmPmTitle' =>
+        strings.settingScreensaverClockAmPmTitle,
+      'settingScreensaverClockAmPmDescription' =>
+        strings.settingScreensaverClockAmPmDescription,
       'screensaverOverlayEntity' => strings.screensaverOverlayEntity,
       'screensaverOverlayNotSet' => strings.screensaverOverlayNotSet,
       'screensaverOverlayName' => strings.screensaverOverlayName,
@@ -3263,6 +3269,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'settingScreensaverDashboardViewDescription' =>
         strings.settingScreensaverDashboardViewDescription,
       'screensaverDashboardSection' => strings.screensaverDashboardSection,
+      'screensaverModeUrl' => strings.screensaverModeUrl,
       'settingScreensaverGlanceScaleTitle' =>
         strings.settingScreensaverGlanceScaleTitle,
       'settingScreensaverGlanceScaleDescription' =>
@@ -3673,6 +3680,13 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'screensaverMediaLocalMetadata' => strings.screensaverMediaLocalMetadata,
       'screensaverMediaLocalPage' => strings.screensaverMediaLocalPage,
       'screensaverMediaLocalPageHint' => strings.screensaverMediaLocalPageHint,
+      'settingScreensaverUrlImageDescription' =>
+        strings.settingScreensaverUrlImageDescription,
+      'settingScreensaverUrlIntervalDescription' =>
+        strings.settingScreensaverUrlIntervalDescription,
+      'screensaverMediaUrlPage' => strings.screensaverMediaUrlPage,
+      'screensaverMediaUrlPageHint' => strings.screensaverMediaUrlPageHint,
+      'screensaverMediaUrlMetadata' => strings.screensaverMediaUrlMetadata,
       'settingScreensaverDismissOnMotionTitle' =>
         strings.settingScreensaverDismissOnMotionTitle,
       'settingScreensaverDismissOnMotionDescription' =>

@@ -4006,6 +4006,12 @@ class UiStringsEn extends UiStrings {
       'Every video in this playlist is too large for this device to play.';
 
   @override
+  String get screensaverUrlNotSet => 'No image URL set. Add one in Settings.';
+
+  @override
+  String get screensaverUrlLoadFailed => 'Could not load the image.';
+
+  @override
   String get settingKioskAllowAlarmsTitle => 'Alarms';
 
   @override
@@ -9884,6 +9890,13 @@ class UiStringsEn extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'Show AM/PM';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Add AM or PM after the time.';
+
+  @override
   String get screensaverOverlayEntity => 'Entity';
 
   @override
@@ -10190,6 +10203,9 @@ class UiStringsEn extends UiStrings {
   @override
   String get screensaverDashboardSection =>
       'Home Assistant Dashboard screensaver';
+
+  @override
+  String get screensaverModeUrl => 'Image URL';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Row scaling';
@@ -11106,6 +11122,23 @@ class UiStringsEn extends UiStrings {
   @override
   String get screensaverMediaLocalPageHint =>
       'Folder, timing, shuffle, transition, metadata';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'An image address the device fetches again for every slide.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'How long each photo shows before the next fetch.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Image URL screensaver';
+
+  @override
+  String get screensaverMediaUrlPageHint => 'URL, timing, transition, metadata';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Image URL metadata';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Dismiss on motion';

@@ -7024,6 +7024,18 @@ abstract class UiStrings {
   /// **'Every video in this playlist is too large for this device to play.'**
   String get screensaverVideosTooLarge;
 
+  /// Translate the visible message. Keep placeholders and any technical names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'No image URL set. Add one in Settings.'**
+  String get screensaverUrlNotSet;
+
+  /// Translate the visible message. Keep placeholders and any technical names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the image.'**
+  String get screensaverUrlLoadFailed;
+
   /// Setting label.
   ///
   /// In en, this message translates to:
@@ -17195,6 +17207,18 @@ abstract class UiStrings {
   /// **'Use at most {count} characters'**
   String screensaverMaxCharacters(String count);
 
+  /// Setting label. A switch shown while the 24-hour clock is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Show AM/PM'**
+  String get settingScreensaverClockAmPmTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add AM or PM after the time.'**
+  String get settingScreensaverClockAmPmDescription;
+
   /// Label or guidance in this editor.
   ///
   /// In en, this message translates to:
@@ -17728,6 +17752,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Home Assistant Dashboard screensaver'**
   String get screensaverDashboardSection;
+
+  /// Screensaver mode that shows an image fetched from a web address. Also the title of the address field.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
+  String get screensaverModeUrl;
 
   /// Setting label.
   ///
@@ -19288,6 +19318,36 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Folder, timing, shuffle, transition, metadata'**
   String get screensaverMediaLocalPageHint;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'An image address the device fetches again for every slide.'**
+  String get settingScreensaverUrlImageDescription;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'How long each photo shows before the next fetch.'**
+  String get settingScreensaverUrlIntervalDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL screensaver'**
+  String get screensaverMediaUrlPage;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'URL, timing, transition, metadata'**
+  String get screensaverMediaUrlPageHint;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL metadata'**
+  String get screensaverMediaUrlMetadata;
 
   /// Setting label.
   ///

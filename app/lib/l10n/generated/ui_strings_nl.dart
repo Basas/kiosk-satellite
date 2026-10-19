@@ -4053,6 +4053,13 @@ class UiStringsNl extends UiStrings {
       'Elke video in deze afspeellijst is te groot voor dit apparaat om af te spelen.';
 
   @override
+  String get screensaverUrlNotSet =>
+      'Geen afbeeldings-URL ingesteld. Voeg er een toe in Instellingen.';
+
+  @override
+  String get screensaverUrlLoadFailed => 'Kon de afbeelding niet laden.';
+
+  @override
   String get settingKioskAllowAlarmsTitle => 'Alarmen';
 
   @override
@@ -10009,6 +10016,13 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'AM/PM tonen';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Toon AM of PM na de tijd.';
+
+  @override
   String get screensaverOverlayEntity => 'Entiteit';
 
   @override
@@ -10321,6 +10335,9 @@ class UiStringsNl extends UiStrings {
   @override
   String get screensaverDashboardSection =>
       'Home Assistant-dashboard als schermbeveiliging';
+
+  @override
+  String get screensaverModeUrl => 'Afbeeldings-URL';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Rij schalen';
@@ -11240,6 +11257,24 @@ class UiStringsNl extends UiStrings {
   @override
   String get screensaverMediaLocalPageHint =>
       'Map, timing, willekeurige volgorde, overgangen en metadata';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'Een afbeeldingsadres dat het apparaat voor elke dia opnieuw ophaalt.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'Hoelang elke foto wordt getoond voordat de volgende wordt opgehaald.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Afbeeldings-URL-schermbeveiliging';
+
+  @override
+  String get screensaverMediaUrlPageHint =>
+      'URL, timing, overgangen en metadata';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Metadata van afbeeldings-URL';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Sluiten bij beweging';

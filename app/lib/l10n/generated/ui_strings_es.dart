@@ -4069,6 +4069,13 @@ class UiStringsEs extends UiStrings {
       'Todos los videos de esta lista son demasiado grandes para que este dispositivo los reproduzca.';
 
   @override
+  String get screensaverUrlNotSet =>
+      'No hay ninguna URL de imagen. Añade una en Configuración.';
+
+  @override
+  String get screensaverUrlLoadFailed => 'No se pudo cargar la imagen.';
+
+  @override
   String get settingKioskAllowAlarmsTitle => 'Alarmas';
 
   @override
@@ -10081,6 +10088,13 @@ class UiStringsEs extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'Mostrar AM/PM';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Añade AM o PM después de la hora.';
+
+  @override
   String get screensaverOverlayEntity => 'Entidad';
 
   @override
@@ -10395,6 +10409,9 @@ class UiStringsEs extends UiStrings {
   @override
   String get screensaverDashboardSection =>
       'Protector de pantalla: Panel de control de Home Assistant';
+
+  @override
+  String get screensaverModeUrl => 'URL de imagen';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Escala de la fila';
@@ -11332,6 +11349,24 @@ class UiStringsEs extends UiStrings {
   @override
   String get screensaverMediaLocalPageHint =>
       'Carpeta, duración, orden aleatorio, transición y metadatos';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'Dirección de una imagen que el dispositivo vuelve a descargar en cada diapositiva.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'Tiempo que se muestra cada foto antes de descargar la siguiente.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Protector de pantalla: URL de imagen';
+
+  @override
+  String get screensaverMediaUrlPageHint =>
+      'URL, duración, transición y metadatos';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Metadatos de la URL de imagen';
 
   @override
   String get settingScreensaverDismissOnMotionTitle =>

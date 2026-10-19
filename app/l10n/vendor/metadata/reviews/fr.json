@@ -25200,5 +25200,65 @@
     "translation": "362ddae7358c227f3d59728a9baded8d95bbb1728e442a86c352e9984c9b391b",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingScreensaverClockAmPmDescription": {
+    "source": "3cc800cf80f3cc29719214df8ab3af965985ab1484e8b2e842e53893feb008df",
+    "translation": "6ec1b0de474117666cfbdcbd7465ff75f0b770781284633dbe15e1c5bb15171a",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverMediaUrlPageHint": {
+    "source": "05c6f86aaf0f44aef782b30788001fafd48f90bb115f3541ee360f6b813bdddd",
+    "translation": "0284e2008f8b4a08dd222edf3116e6af3065f6335a815ed26ee3e3c2d85ffd20",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverModeUrl": {
+    "source": "04aca71759143c123773e24b0a6bda93ed80f1510828e285d2d78eabb50c6e3a",
+    "translation": "2f48d993fd8a228bfcbf527217222ed7669a89c4d29d36c043c341150e51fabe",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverUrlLoadFailed": {
+    "source": "4b5c30f59aa298d18bd30cc87bb6bd625d3b14f61b134462c58f977f7e574bc4",
+    "translation": "5ad220b57ece72a954262a76f576e0b3654360661656052f9fe3f03a82169bf0",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverUrlNotSet": {
+    "source": "d5a16d60656bff57666b512afffb9955ec7d21194a4b3fe7b39edfa6d18ee9dd",
+    "translation": "cfa3bf9a89791d37dc2e84b0cbcfaf7fd39f7b6561a28e17e3c4f367028fca21",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverUrlImageDescription": {
+    "source": "ac1d175602afab416fe6a817ec41b5eebdd9f3b4788a8e058622176a8a2008cc",
+    "translation": "e0796884af437f46b60f850f26c109cf5121e6aa88ee4091deb63eaac00ddcb8",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverMediaUrlPage": {
+    "source": "1eda7e498be94f18736a44c2724463a6ad4d0bb1920ba952722098d216cc55a2",
+    "translation": "b116cda98ff84846333fd48de3c1aa07c49f47ec98a295d962a8bf5c631292c9",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverMediaUrlMetadata": {
+    "source": "572368d4bd8dcf34fa167e2587052b3e45e5ab09127008b34f206daeb3a6d2d9",
+    "translation": "ef9e6930178dd9416f074672e943538f564484a43649d123938b544ecc983ba9",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverClockAmPmTitle": {
+    "source": "dd5e53a43ec47066110a84ff60cb706c45d3f61a19b82195aba56ffbbbc801e9",
+    "translation": "48c8043d63e3b81cf0f154019c8893c7d2a70f2e12515f535f6d47858287b440",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverUrlIntervalDescription": {
+    "source": "8305517b3d06e36d6d36b24de00d9ba7a12c16fa75dc51e4a2e9255e572400eb",
+    "translation": "0dc72a2927ad1878157cafd1a727981139e99f8de15dc1a907c750df136e31f3",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }
