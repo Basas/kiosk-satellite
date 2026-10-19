@@ -119,7 +119,9 @@ class SettingsManager extends Manager {
       ? _cameraStreamResolutions ?? const []
       : _realtimeOptions(def) ??
             [
-              ...?def.options,
+              for (final option in def.options ?? const <String>[])
+                if (!(deviceHiddenOptions[def.key]?.contains(option) ?? false))
+                  option,
               if (def.key == screensaverMode.key) ...{
                 ...pluginScreensavers().keys,
                 if (isPluginScreensaver(get(def))) get(def) as String,

@@ -990,7 +990,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "sendspin.volume_keys": {
     "title": "settingSendspinVolumeKeysTitle",
-    "description": "settingSendspinVolumeKeysDescription",
+    "description": "settingSendspinVolumeKeysGroupDescription",
   },
   "sendspin.volume_key_step": {
     "title": "settingSendspinVolumeKeyStepTitle",

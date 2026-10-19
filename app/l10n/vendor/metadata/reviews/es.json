@@ -20953,5 +20953,10 @@
     "source": "571f9329db46c7e64993669bd8ec426ccfd10e83103c10ea65a2167856b5007f",
     "translation": "011efb7dba841ced2a1e51b08d9171901307dd910bdc80af12503dd81bcdaeff",
     "author": "Xavier Larrea"
+  },
+  "settingSendspinVolumeKeysGroupDescription": {
+    "source": "465b3b2d43eccaef82c58768a6261f3317d93464c0bdf142217ee8b6cb127663",
+    "translation": "bac82a6613550cebd315d1934f7b44736f311a550e2c3e9d9f559e8006abe830",
+    "author": "Xavier Larrea"
   }
 }

@@ -389,6 +389,7 @@ class AppContainer {
         intercom: intercom,
         voice: voice,
         voiceTimers: voiceTimers,
+        sendspin: sendspin,
       ).start();
     }
     log.info('app', 'all managers initialized');

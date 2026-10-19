@@ -8660,8 +8660,8 @@ class UiStringsNl extends UiStrings {
       'Volumeknoppen bedienen de speler';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'De volumeknoppen van dit apparaat wijzigen het volume van de gevolgde speler in plaats van het eigen apparaatvolume. Dit gebeurt alleen wanneer Speelt nu zichtbaar is of wanneer de speler muziek afspeelt.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'De volumeknoppen van dit apparaat wijzigen het volume van de gevolgde speler in plaats van het eigen apparaatvolume. Wanneer dit apparaat in een groep afspeelt, wijzigen ze het volume van de groep. Dit gebeurt alleen wanneer Speelt nu zichtbaar is of wanneer de speler muziek afspeelt.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => 'Stapgrootte van volumeknop';

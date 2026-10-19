@@ -14870,8 +14870,8 @@ abstract class UiStrings {
   /// Help below this setting.
   ///
   /// In en, this message translates to:
-  /// **'This device\'s volume buttons change the followed player\'s volume instead of its own. Only while the Now Playing view is on screen, or whenever the player is playing.'**
-  String get settingSendspinVolumeKeysDescription;
+  /// **'This device\'s volume buttons change the followed player\'s volume instead of its own. While this device plays in a group they change the group\'s volume. Only while the Now Playing view is on screen or whenever the player is playing.'**
+  String get settingSendspinVolumeKeysGroupDescription;
 
   /// Setting label.
   ///

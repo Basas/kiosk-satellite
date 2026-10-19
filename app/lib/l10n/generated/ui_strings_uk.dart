@@ -8644,8 +8644,8 @@ class UiStringsUk extends UiStrings {
       'Кнопки гучності керують плеєром';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'Кнопки гучності цього пристрою змінюють гучність плеєра, за яким слідують, замість власної. Лише поки на екрані режим «Зараз грає», або завжди, коли плеєр відтворює.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'Кнопки гучності цього пристрою змінюють гучність плеєра, за яким слідують, замість власної. Поки цей пристрій грає у групі, вони змінюють гучність групи. Лише поки на екрані режим «Зараз грає», або завжди, коли плеєр відтворює.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => 'Крок кнопки гучності';

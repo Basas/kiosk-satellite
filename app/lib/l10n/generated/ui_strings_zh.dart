@@ -8154,8 +8154,8 @@ class UiStringsZh extends UiStrings {
   String get settingSendspinVolumeKeysTitle => '用设备音量键控制播放器';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      '此设备的音量键改为调整所选播放器的音量，而非设备自身音量。可仅在“正在播放”页面显示时生效，或在播放器播放时生效。';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      '此设备的音量键改为调整所选播放器的音量，而非设备自身音量。此设备加入播放组时，音量键会调整整个组的音量。可仅在“正在播放”页面显示时生效，或在播放器播放时生效。';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => '音量键步长';
@@ -21573,8 +21573,8 @@ class UiStringsZhCn extends UiStringsZh {
   String get settingSendspinVolumeKeysTitle => '用设备音量键控制播放器';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      '此设备的音量键改为调整所选播放器的音量，而非设备自身音量。可仅在“正在播放”页面显示时生效，或在播放器播放时生效。';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      '此设备的音量键改为调整所选播放器的音量，而非设备自身音量。此设备加入播放组时，音量键会调整整个组的音量。可仅在“正在播放”页面显示时生效，或在播放器播放时生效。';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => '音量键步长';

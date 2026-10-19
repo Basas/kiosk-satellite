@@ -8760,8 +8760,8 @@ class UiStringsDe extends UiStrings {
       'Player mit den Lautstärketasten steuern';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'Die Lautstärketasten dieses Geräts ändern die Lautstärke des gesteuerten Players. Dies gilt entweder nur, solange „Jetzt läuft“ angezeigt wird, oder immer während der Player Musik wiedergibt.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'Die Lautstärketasten dieses Geräts ändern die Lautstärke des gesteuerten Players. Wenn dieses Gerät in einer Gruppe wiedergibt, ändern sie die Lautstärke der Gruppe. Dies gilt entweder nur, solange „Jetzt läuft“ angezeigt wird, oder immer während der Player Musik wiedergibt.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle =>

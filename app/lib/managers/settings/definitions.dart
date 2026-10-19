@@ -206,6 +206,12 @@ class SettingDef<T> {
 /// the remote's `describe()` alike, so both UIs hide the same rows.
 final Set<String> deviceHiddenKeys = {};
 
+/// Options of a select left out on this particular device, keyed by the
+/// setting: a choice that cannot work here, such as a mode that needs the
+/// screen on a device without one. Filled at boot like [deviceHiddenKeys]
+/// and applied by [SettingsManager.optionsFor], which both UIs read.
+final Map<String, Set<String>> deviceHiddenOptions = {};
+
 /// Settings this device holds at one value whatever is saved, such as the
 /// screensaver switch on a device without a screen. A fleet follower
 /// leaves the leader's value for them out, or it would put its own back
@@ -7944,9 +7950,11 @@ const sendspinEsphomeEntities = SettingDef<bool>(
 /// of the tablet's own volume (issue #544): a kiosk that only shows and
 /// remotes a speaker elsewhere has nothing of its own to make louder,
 /// and the buttons are the one control that needs no look at the
-/// screen. Only for a player elsewhere; with this device as the source
-/// the keys keep their Android meaning, since the music comes out of
-/// this device and the master volume is the right thing to move.
+/// screen. With this device's Sendspin player as the pick, the keys move
+/// the Music Assistant group it plays in (issue #1032), so the rooms keep
+/// their balance, and keep their Android meaning while it plays alone.
+/// The Local Media Session and the AirPlay receiver play out of this
+/// device with no group, so the row is gone for them.
 const sendspinVolumeKeys = SettingDef<String>(
   key: 'sendspin.volume_keys',
   type: SettingType.select,
@@ -7954,8 +7962,9 @@ const sendspinVolumeKeys = SettingDef<String>(
   title: 'Volume buttons control the player',
   description:
       "This device's volume buttons change the followed player's volume "
-      'instead of its own. Only while the Now Playing view is on screen, '
-      'or whenever the player is playing.',
+      'instead of its own. While this device plays in a group they change '
+      "the group's volume. Only while the Now Playing view is on screen or "
+      'whenever the player is playing.',
   category: 'Sendspin',
   options: ['off', 'now_playing', 'playing'],
   optionLabels: {
@@ -7964,7 +7973,11 @@ const sendspinVolumeKeys = SettingDef<String>(
     'playing': 'While the player is playing',
   },
   dependsOn: 'sendspin.player_source',
-  dependsOnValue: ['ha', 'ma', 'sonos'],
+  dependsOnValue: ['', 'ha', 'ma', 'sonos'],
+  alsoDependsOn: 'sendspin.player',
+  alsoDependsOnValue: {
+    'ne': ['session:*', 'airplay'],
+  },
 );
 
 /// How far one volume key press moves the followed player, in percent

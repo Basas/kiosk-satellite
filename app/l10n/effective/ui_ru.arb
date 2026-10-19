@@ -32390,8 +32390,8 @@
       ]
     }
   },
-  "settingSendspinVolumeKeysDescription": "Кнопки громкости этого устройства меняют громкость отслеживаемого плеера вместо собственной. Только пока вид «Сейчас играет» на экране или пока плеер воспроизводит.",
-  "@settingSendspinVolumeKeysDescription": {
+  "settingSendspinVolumeKeysGroupDescription": "Кнопки громкости этого устройства меняют громкость отслеживаемого плеера вместо собственной. Пока это устройство играет в группе, они меняют громкость группы. Только пока вид «Сейчас играет» на экране или пока плеер воспроизводит.",
+  "@settingSendspinVolumeKeysGroupDescription": {
     "context": "Settings > Media Player",
     "description": "Help below this setting.",
     "x-locations": {

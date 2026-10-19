@@ -8719,8 +8719,8 @@ class UiStringsEs extends UiStrings {
       'Controlar el reproductor con los botones de volumen';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'Los botones de volumen de este dispositivo cambian el volumen del reproductor controlado. Se aplican solo mientras se muestra Reproduciendo Ahora o siempre que el reproductor esté reproduciendo.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'Los botones de volumen de este dispositivo cambian el volumen del reproductor controlado. Cuando este dispositivo reproduce en un grupo, cambian el volumen del grupo. Se aplican solo mientras se muestra Reproduciendo Ahora o siempre que el reproductor esté reproduciendo.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle =>

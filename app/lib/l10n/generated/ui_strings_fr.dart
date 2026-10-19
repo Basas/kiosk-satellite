@@ -8715,8 +8715,8 @@ class UiStringsFr extends UiStrings {
       'Les boutons de volume contrôlent le lecteur';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'Les boutons de volume de cet appareil modifient le volume du lecteur suivi plutôt que le sien. Uniquement tant que la vue Lecture en cours est à l\'écran, ou tant que le lecteur joue.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'Les boutons de volume de cet appareil modifient le volume du lecteur suivi plutôt que le sien. Tant que cet appareil joue au sein d\'un groupe, ils règlent le volume du groupe. Uniquement tant que la vue Lecture en cours est à l\'écran, ou tant que le lecteur joue.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => 'Pas des boutons de volume';

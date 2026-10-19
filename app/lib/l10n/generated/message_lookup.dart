@@ -2595,8 +2595,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingSendspinEsphomeEntitiesDescription,
       'settingSendspinVolumeKeysTitle' =>
         strings.settingSendspinVolumeKeysTitle,
-      'settingSendspinVolumeKeysDescription' =>
-        strings.settingSendspinVolumeKeysDescription,
+      'settingSendspinVolumeKeysGroupDescription' =>
+        strings.settingSendspinVolumeKeysGroupDescription,
       'settingSendspinVolumeKeyStepTitle' =>
         strings.settingSendspinVolumeKeyStepTitle,
       'settingSendspinVolumeKeyStepDescription' =>
