@@ -47,7 +47,7 @@ import '../managers/gestures/gesture_mappings.dart';
 import '../managers/browser/browser_manager.dart';
 import '../managers/settings/definitions.dart' as defs;
 import 'app_launcher_overlay.dart';
-import 'ui_scale.dart' show UiScaleExempt;
+import 'ui_scale.dart' show UiScaleExempt, uiScaleFactor;
 import 'lockdown_shield.dart';
 import 'notification_overlay.dart';
 import 'plugin_overlay.dart';
@@ -483,6 +483,10 @@ class _KioskScreenState extends State<KioskScreen>
       _syncContentInsets();
       return;
     }
+    if (e.key == defs.uiScale.key) {
+      _syncContentInsets();
+      return;
+    }
     // Scroll lock rides the zoom path: applied live as page CSS, no rebuild.
     if (e.key == defs.disableScrolling.key) {
       await c.browser.runJs(_scrollLockJs);
@@ -880,10 +884,13 @@ class _KioskScreenState extends State<KioskScreen>
 
   /// The space plugins keep clear of their bars, in dp, as the page's CSS
   /// pixels: the Zoom level scales the page, so one CSS pixel spans that
-  /// many dp.
+  /// many dp. Plugins measure in their own dp, which the Scale UI factor
+  /// enlarges like their overlays.
   void _syncContentInsets() {
     final zoom = c.settings.get(defs.browserZoom).toDouble();
-    final dp = c.plugins.contentInsets.value;
+    final dp =
+        c.plugins.contentInsets.value *
+        uiScaleFactor(c.settings.get(defs.uiScale));
     unawaited(c.browser.setContentInsets(zoom > 0 ? dp / zoom : dp));
   }
 

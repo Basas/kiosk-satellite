@@ -17,6 +17,7 @@ import 'package:kiosk_satellite/core/events.dart';
 import 'package:kiosk_satellite/core/logging.dart';
 import 'package:kiosk_satellite/managers/plugins/plugin_manager.dart';
 import 'package:kiosk_satellite/ui/plugin_overlay.dart';
+import 'package:kiosk_satellite/ui/ui_scale.dart';
 import 'package:kiosk_satellite/ui/kit.dart';
 import 'package:kiosk_satellite/ui/plugin_settings.dart';
 
@@ -1801,6 +1802,82 @@ void main() {
     expect(ignoring(0), isFalse);
     expect(ignoring(2), isTrue);
   });
+  testWidgets('native overlays follow the Scale UI factor', (tester) async {
+    tester.view.physicalSize = const Size(800, 600);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final views = <MethodCall>[];
+    messenger.setMockMethodCallHandler(SystemChannels.platform_views, (
+      call,
+    ) async {
+      views.add(call);
+      final args = call.arguments;
+      return switch (call.method) {
+        'create' => 0,
+        'resize' => {'width': (args as Map)['width'], 'height': args['height']},
+        _ => null,
+      };
+    });
+    addTearDown(
+      () => messenger.setMockMethodCallHandler(
+        SystemChannels.platform_views,
+        null,
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        builder: (context, child) => UiScaler(scale: 1.25, child: child!),
+        home: PluginOverlay(plugins: plugins),
+      ),
+    );
+    await overlaySession('first');
+    await overlays('first', [
+      overlay('bar', 1, inset: 12),
+      overlay(
+        'panel',
+        2,
+        anchor: 'top-left',
+        width: 100,
+        height: 40,
+        offsetX: 8,
+        offsetY: 4,
+      ),
+    ]);
+    await tester.pump();
+    final params =
+        const StandardMessageCodec().decodeMessage(
+              ByteData.sublistView(
+                (views.firstWhere((c) => c.method == 'create').arguments
+                        as Map)['params']
+                    as Uint8List,
+              ),
+            )
+            as Map;
+    expect(params['scale'], 1.25);
+    expect(params['insets'], [12, 12, 12, 12]);
+    // Sizes, insets and offsets in dp grow by the factor.
+    expect(
+      tester.getRect(find.byType(AndroidView).at(1)),
+      const Rect.fromLTWH(10, 5, 125, 50),
+    );
+    await native('overlaySize', {
+      'id': 'hello-world',
+      'session': 'first',
+      'key': 'bar',
+      'generation': 1,
+      'width': 300,
+      'height': 64,
+    });
+    await tester.pump();
+    // A wrapped view already drew at the scaled density, so its measured
+    // pixels map one to one onto the screen: 300 x 64 at a ratio of 2,
+    // centered under a 15 dp inset.
+    expect(
+      tester.getRect(find.byType(AndroidView).at(0)),
+      const Rect.fromLTWH(125, 15, 150, 32),
+    );
+  });
+
   testWidgets('window stays reachable after a display resize', (tester) async {
     tester.view.physicalSize = const Size(320, 240);
     tester.view.devicePixelRatio = 1;
