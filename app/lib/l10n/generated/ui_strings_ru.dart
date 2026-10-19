@@ -3407,9 +3407,6 @@ class UiStringsRu extends UiStrings {
       'Плагин не остановился корректно. Перезапустите Kiosk Satellite перед заменой.';
 
   @override
-  String get pluginErrorPluginLimit => 'Можно установить не более 8 плагинов';
-
-  @override
   String get pluginErrorAlreadyInstalled => 'Этот пакет уже установлен';
 
   @override

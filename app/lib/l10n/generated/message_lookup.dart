@@ -918,7 +918,6 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'pluginErrorDifferentRepository' =>
         strings.pluginErrorDifferentRepository,
       'pluginErrorRestartReplace' => strings.pluginErrorRestartReplace,
-      'pluginErrorPluginLimit' => strings.pluginErrorPluginLimit,
       'pluginErrorAlreadyInstalled' => strings.pluginErrorAlreadyInstalled,
       'pluginErrorLoadedIntegrity' => strings.pluginErrorLoadedIntegrity,
       'pluginErrorRemovePackage' => strings.pluginErrorRemovePackage,

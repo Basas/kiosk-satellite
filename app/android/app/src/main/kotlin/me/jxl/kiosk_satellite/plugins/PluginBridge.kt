@@ -1009,7 +1009,6 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 require(file.length() <= MAX_THUMBNAIL_BYTES && PluginPackage.pngSize(file.readBytes()) == 256 to 256) { "icon must be a 256 by 256 PNG of at most 256 KB" }
             }
             require(manifest.id !in restartRequired) { "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it." }
-            require(records.has(manifest.id) || records.length() < 8) { "At most 8 plugins can be installed" }
             val previous = records.optJSONObject(manifest.id)
             // Keep only settings still declared by the new version. Reject changed types.
             val previousConfig = previous?.optJSONObject("config") ?: JSONObject()

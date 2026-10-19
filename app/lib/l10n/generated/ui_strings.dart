@@ -5995,12 +5995,6 @@ abstract class UiStrings {
   /// Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.
   ///
   /// In en, this message translates to:
-  /// **'At most 8 plugins can be installed'**
-  String get pluginErrorPluginLimit;
-
-  /// Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.
-  ///
-  /// In en, this message translates to:
   /// **'This package is already installed'**
   String get pluginErrorAlreadyInstalled;
 

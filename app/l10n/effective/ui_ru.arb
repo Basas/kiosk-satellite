@@ -13052,19 +13052,6 @@
       ]
     }
   },
-  "pluginErrorPluginLimit": "Можно установить не более 8 плагинов",
-  "@pluginErrorPluginLimit": {
-    "context": "Settings > Plugin Manager > Install, update or enable a plugin",
-    "description": "Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager"
-      ],
-      "remoteAdmin": [
-        "Settings > Plugin Manager"
-      ]
-    }
-  },
   "pluginErrorAlreadyInstalled": "Этот пакет уже установлен",
   "@pluginErrorAlreadyInstalled": {
     "context": "Settings > Plugin Manager > Install, update or enable a plugin",

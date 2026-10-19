@@ -3428,10 +3428,6 @@ class UiStringsNl extends UiStrings {
       'Deze plug-in is niet correct gestopt. Start Kiosk Satellite opnieuw voordat je hem vervangt.';
 
   @override
-  String get pluginErrorPluginLimit =>
-      'Er kunnen maximaal 8 plug-ins worden geïnstalleerd';
-
-  @override
   String get pluginErrorAlreadyInstalled => 'Dit pakket is al geïnstalleerd';
 
   @override

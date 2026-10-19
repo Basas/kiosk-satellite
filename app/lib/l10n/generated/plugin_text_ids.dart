@@ -162,7 +162,6 @@ const pluginTextMessageIds = <String, String>{
   "Package SHA-256 does not match": "pluginErrorChecksum",
   "This plugin ID belongs to another repository. Uninstall it before changing sources.": "pluginErrorDifferentRepository",
   "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it.": "pluginErrorRestartReplace",
-  "At most 8 plugins can be installed": "pluginErrorPluginLimit",
   "This package is already installed": "pluginErrorAlreadyInstalled",
   "Previously loaded package failed its integrity check. Restart Kiosk Satellite before reinstalling it.": "pluginErrorLoadedIntegrity",
   "Cannot remove unused package": "pluginErrorRemovePackage",

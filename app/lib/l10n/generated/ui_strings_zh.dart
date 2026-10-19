@@ -3285,9 +3285,6 @@ class UiStringsZh extends UiStrings {
   String get pluginErrorRestartReplace => '此插件未能正常停止。替换前请重启 Kiosk Satellite。';
 
   @override
-  String get pluginErrorPluginLimit => '最多可安装 8 个插件';
-
-  @override
   String get pluginErrorAlreadyInstalled => '此包已安装';
 
   @override
@@ -16846,9 +16843,6 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginErrorRestartReplace => '此插件未能正常停止。替换前请重启 Kiosk Satellite。';
-
-  @override
-  String get pluginErrorPluginLimit => '最多可安装 8 个插件';
 
   @override
   String get pluginErrorAlreadyInstalled => '此包已安装';

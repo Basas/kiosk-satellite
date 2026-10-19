@@ -3453,10 +3453,6 @@ class UiStringsDe extends UiStrings {
       'Dieses Plugin wurde nicht ordnungsgemäß beendet. Starte Kiosk Satellite neu, bevor du es ersetzt.';
 
   @override
-  String get pluginErrorPluginLimit =>
-      'Es können maximal 8 Plugins installiert werden';
-
-  @override
   String get pluginErrorAlreadyInstalled =>
       'Dieses Paket ist bereits installiert';
 
