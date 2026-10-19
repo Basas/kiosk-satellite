@@ -3028,9 +3028,6 @@ class UiStringsZh extends UiStrings {
   String get pluginSortBy => '排序方式';
 
   @override
-  String get pluginSortMostInstalls => '安装最多';
-
-  @override
   String get pluginSortMostStars => '星标最多';
 
   @override
@@ -3041,6 +3038,12 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get pluginSortName => '名称';
+
+  @override
+  String get pluginSortMostDownloads => '下载最多';
+
+  @override
+  String get pluginPluginsPerPage => '每页插件数';
 
   @override
   String get pluginCharts => '图表';
@@ -16572,9 +16575,6 @@ class UiStringsZhCn extends UiStringsZh {
   String get pluginSortBy => '排序方式';
 
   @override
-  String get pluginSortMostInstalls => '安装最多';
-
-  @override
   String get pluginSortMostStars => '星标最多';
 
   @override
@@ -16585,6 +16585,12 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginSortName => '名称';
+
+  @override
+  String get pluginSortMostDownloads => '下载最多';
+
+  @override
+  String get pluginPluginsPerPage => '每页插件数';
 
   @override
   String get pluginCharts => '图表';

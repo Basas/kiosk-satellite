@@ -66,7 +66,7 @@ void main() {
     final body = jsonEncode({
       'schemaVersion': 1,
       'plugins': [
-        for (final (id, name, installs) in [
+        for (final (id, name, downloads) in [
           ('quiet', 'Quiet Clock', 2),
           ('weather', 'Weather Mood', 40),
         ])
@@ -78,8 +78,7 @@ void main() {
             'version': '1.0.0',
             'repository': 'https://github.com/alice/$id',
             'stars': 1,
-            'downloads': 1,
-            'installs': installs,
+            'downloads': downloads,
             'status': 'ok',
           },
       ],
@@ -142,7 +141,7 @@ void main() {
             'version': '1.0.0',
             'repository': 'https://github.com/alice/plugin-$i',
             'stars': i,
-            'installs': 45 - i,
+            'downloads': 45 - i,
             'status': 'ok',
           },
       ],
@@ -170,17 +169,26 @@ void main() {
       ),
     );
     await settle(tester);
-    // Twenty rows a page, most installs first.
-    expect(find.text('Page 1 of 3'), findsOneWidget);
+    // Ten rows a page unless picked otherwise, most downloads first.
+    expect(find.text('Page 1 of 5'), findsOneWidget);
     expect(find.text('Plugin 00'), findsOneWidget);
-    expect(find.text('Plugin 20'), findsNothing);
+    expect(find.text('Plugin 10'), findsNothing);
     await tester.tap(find.byTooltip('Next page'));
     await settle(tester);
-    expect(find.text('Page 2 of 3'), findsOneWidget);
-    expect(find.text('Plugin 20'), findsOneWidget);
+    expect(find.text('Page 2 of 5'), findsOneWidget);
+    expect(find.text('Plugin 10'), findsOneWidget);
     expect(find.text('Plugin 00'), findsNothing);
+    // A new page size starts at its first page.
+    await tester.tap(find.byType(DropdownButton<int>));
+    await settle(tester);
+    await tester.tap(find.text('20').last);
+    await settle(tester);
+    expect(find.text('Page 1 of 3'), findsOneWidget);
+    expect(find.text('Plugin 19'), findsOneWidget);
     // A new order starts at its first page.
-    await tester.tap(find.text('Most installs'));
+    await tester.tap(find.byTooltip('Next page'));
+    await settle(tester);
+    await tester.tap(find.text('Most downloads'));
     await settle(tester);
     await tester.tap(find.text('Most stars').last);
     await settle(tester);

@@ -5521,12 +5521,6 @@ abstract class UiStrings {
   /// An order for the Browse plugins list, picked under Sort by.
   ///
   /// In en, this message translates to:
-  /// **'Most installs'**
-  String get pluginSortMostInstalls;
-
-  /// An order for the Browse plugins list, picked under Sort by.
-  ///
-  /// In en, this message translates to:
   /// **'Most stars'**
   String get pluginSortMostStars;
 
@@ -5547,6 +5541,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Name'**
   String get pluginSortName;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Most downloads'**
+  String get pluginSortMostDownloads;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Plugins per page'**
+  String get pluginPluginsPerPage;
 
   /// Visible label, help or status in this section.
   ///

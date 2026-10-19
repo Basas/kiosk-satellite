@@ -38,9 +38,10 @@
   "pluginNextPage": "Следующая страница",
   "pluginPageOfPages": "Страница {page} из {pages}",
   "pluginSortBy": "Сортировать по",
-  "pluginSortMostInstalls": "Больше всего установок",
   "pluginSortMostStars": "Больше всего звёзд",
   "pluginSortRecentlyUpdated": "Недавно обновлённые",
   "pluginSortNewest": "Новые",
-  "pluginSortName": "Название"
+  "pluginSortName": "Название",
+  "pluginSortMostDownloads": "Больше всего загрузок",
+  "pluginPluginsPerPage": "Плагинов на странице"
 }

@@ -31,7 +31,7 @@ def listed(plugin_id, name, installs, **extra):
 
 directory = {'generated': '2026-10-19T06:00:00Z', 'plugins': [
     listed('quiet', 'Quiet Clock', None, installed=True, installedVersion='1.0.0', sameSource=True, updateAvailable=False),
-    listed('weather', 'Weather Mood', 40),
+    listed('weather', 'Weather Mood', None, downloads=5000),
 ]}
 plugins_enabled = True
 requests = []
@@ -102,7 +102,11 @@ try:
         expect(rows).to_have_count(2)
         # Most active installs first, then the rest.
         expect(rows.first).to_contain_text('Weather Mood')
-        expect(rows.first).to_contain_text('1.3K')
+        expect(rows.first).to_contain_text('5K')
+        # Stars and downloads share the author's line, and there is no installs count.
+        expect(rows.first.locator('.plugin-directory-meta')).to_contain_text('Alice · 1.0.0')
+        expect(rows.first.locator('.plugin-directory-meta span[title="Downloads"]')).to_have_count(1)
+        expect(rows.first.locator('[title="Active installs"]')).to_have_count(0)
         expect(rows.nth(1)).to_contain_text('Installed')
         # Without an icon the row shows the generic plugin icon.
         expect(rows.first.locator('.plugin-icon svg')).to_have_count(1)
@@ -132,19 +136,28 @@ try:
         # A long list pages twenty rows at a time and sorts on demand.
         page = browser.new_page(viewport={'width': 1440, 'height': 1000})
         page.on('pageerror', lambda error: errors.append(str(error)))
-        long_list = [listed(f'plugin-{i}', f'Plugin {i:02d}', 45 - i, stars=i) for i in range(45)]
+        long_list = [listed(f'plugin-{i}', f'Plugin {i:02d}', None, stars=i, downloads=45 - i) for i in range(45)]
         directory['plugins'], saved = long_list, directory['plugins']
         open_app(page)
         page.locator('[data-search-id="x:plugins:browse"]').click()
         root = page.locator('#tab-plugins')
         pager = root.locator('.plugin-directory-pager')
-        expect(pager).to_contain_text('Page 1 of 3')
-        expect(root.locator('.plugin-directory-row')).to_have_count(20)
+        # Ten rows a page unless picked otherwise.
+        expect(pager).to_contain_text('Page 1 of 5')
+        expect(root.locator('.plugin-directory-row')).to_have_count(10)
         expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 00')
         expect(pager.get_by_role('button', name='Previous page')).to_be_disabled()
+        page.mouse.wheel(0, 3000)
         pager.get_by_role('button', name='Next page').click()
-        expect(pager).to_contain_text('Page 2 of 3')
-        expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 20')
+        expect(pager).to_contain_text('Page 2 of 5')
+        expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 10')
+        # A new page opens at the top of the page.
+        page.wait_for_function('() => (document.scrollingElement || document.documentElement).scrollTop === 0')
+        root.get_by_role('combobox', name='Plugins per page').select_option('20')
+        expect(pager).to_contain_text('Page 1 of 3')
+        expect(root.locator('.plugin-directory-row')).to_have_count(20)
+        assert page.evaluate("localStorage.getItem('ks_plugin_directory_page_size')") == '20'
+        pager.get_by_role('button', name='Next page').click()
         pager.get_by_role('button', name='Next page').click()
         expect(root.locator('.plugin-directory-row')).to_have_count(5)
         expect(pager.get_by_role('button', name='Next page')).to_be_disabled()

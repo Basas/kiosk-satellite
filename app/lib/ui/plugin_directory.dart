@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/messages.dart';
 import '../managers/plugins/plugin_directory.dart';
 import '../managers/plugins/plugin_manager.dart';
+import '../managers/settings/settings_manager.dart';
 import 'kit.dart';
 import 'plugin_settings.dart';
 import 'settings_search.dart';
@@ -16,7 +17,7 @@ const pluginSubmitUrl =
     'https://github.com/jxlarrea/kiosk-satellite-plugins#submit-your-plugin';
 
 /// Browse plugins: Community Plugins, searchable, with each plugin's
-/// stars, downloads and active installs. Picking one runs the same preview
+/// stars and downloads. Picking one runs the same preview
 /// and trust dialog as Add plugin. Mirrors the remote admin (plugins.js,
 /// renderDirectory).
 class PluginDirectoryPanel extends StatefulWidget {
@@ -24,20 +25,28 @@ class PluginDirectoryPanel extends StatefulWidget {
     super.key,
     required this.plugins,
     required this.onOpen,
+    this.settings,
   });
   final PluginManager plugins;
   final ValueChanged<String> onOpen;
+
+  /// Where the chosen page size is kept. Without it the choice lasts while
+  /// the page is open.
+  final SettingsManager? settings;
   @override
   State<PluginDirectoryPanel> createState() => _PluginDirectoryPanelState();
 }
 
 class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
-  /// Rows per page, so a directory of thousands still builds a short page.
-  static const pageSize = 20;
+  /// The page sizes Plugins per page offers, so a directory of thousands
+  /// still builds a short page.
+  static const pageSizes = [5, 10, 20, 50, 100];
+  static const _pageSizeKey = 'plugin_directory_page_size';
   final _query = TextEditingController();
-  final _listTop = GlobalKey();
   int _page = 0;
-  String _sort = 'installs';
+  late int _pageSize =
+      int.tryParse(widget.settings?.internal(_pageSizeKey) ?? '') ?? 10;
+  String _sort = 'downloads';
   Map<String, Object?>? _data;
   Object? _error;
   bool _loading = true;
@@ -113,7 +122,7 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
 
   /// The orders Sort by offers, the same as kiosksatellite.com's.
   static const sorts = {
-    'installs': 'Most installs',
+    'downloads': 'Most downloads',
     'stars': 'Most stars',
     'updated': 'Recently updated',
     'newest': 'Newest',
@@ -141,8 +150,8 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
     _ => (a, b) => _count(
       a,
       b,
-      'installs',
-    ).ifZero(() => _count(a, b, 'downloads')).ifZero(() => _byName(a, b)),
+      'downloads',
+    ).ifZero(() => _count(a, b, 'stars')).ifZero(() => _byName(a, b)),
   };
 
   List<Map<String, Object?>> _shown() {
@@ -161,16 +170,15 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
 
   void _turn(int page) {
     setState(() => _page = page);
-    // The new page starts at its first row, not where the last one ended.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final top = _listTop.currentContext;
-      if (top != null && top.mounted) {
-        Scrollable.ensureVisible(
-          top,
-          duration: const Duration(milliseconds: 200),
-        );
-      }
-    });
+    // A new page opens at the top of the page, like opening it again.
+    final position = Scrollable.maybeOf(context)?.position;
+    if (position != null && position.pixels > 0) {
+      position.animateTo(
+        0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
@@ -221,9 +229,22 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
               ],
               // A new order starts at its first page.
               onChanged: (value) => setState(() {
-                _sort = value ?? 'installs';
+                _sort = value ?? 'downloads';
                 _page = 0;
               }),
+            ),
+            DropdownRow<int>(
+              title: pluginText(context, 'Plugins per page'),
+              description: null,
+              value: pageSizes.contains(_pageSize) ? _pageSize : 10,
+              options: [for (final size in pageSizes) (size, '$size')],
+              onChanged: (value) {
+                setState(() {
+                  _pageSize = value ?? 10;
+                  _page = 0;
+                });
+                widget.settings?.setInternal(_pageSizeKey, '$_pageSize');
+              },
             ),
             if (error != null) WarnRow(pluginError(context, '$error')),
           ],
@@ -234,11 +255,11 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
             builder: (context, installed, _) {
               final shown = _shown();
               final byId = {for (final p in installed) p['id']: p};
-              final pages = (shown.length / pageSize).ceil();
+              final size = pageSizes.contains(_pageSize) ? _pageSize : 10;
+              final pages = (shown.length / size).ceil();
               final page = _page.clamp(0, pages == 0 ? 0 : pages - 1);
-              final rows = shown.skip(page * pageSize).take(pageSize);
+              final rows = shown.skip(page * size).take(size);
               return SettingsCard(
-                key: _listTop,
                 children: [
                   if (shown.isEmpty)
                     HintRow(
@@ -433,52 +454,72 @@ class _DirectoryRow extends StatelessWidget {
             onPressed: enabled ? () => onInstall(false) : null,
             icon: const Icon(Icons.add_rounded),
           );
-    return SettingsRow(
-      leading: PluginIcon(url: icon),
-      title: Text('${entry['name']}'),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('${entry['author']} · ${entry['version']}', style: muted),
-          if ('${entry['description']}'.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(
-                '${entry['description']}',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('${entry['name']}', style: theme.textTheme.bodyLarge),
+        const SizedBox(height: 2),
+        // Author, version, stars and downloads share a line.
+        Wrap(
+          spacing: 14,
+          runSpacing: 2,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text('${entry['author']} · ${entry['version']}', style: muted),
+            stat(
+              Icons.star_outline_rounded,
+              pluginText(context, 'Stars'),
+              entry['stars'] as int? ?? 0,
             ),
+            stat(
+              Icons.download_rounded,
+              pluginText(context, 'Downloads'),
+              entry['downloads'] as int? ?? 0,
+            ),
+            if (entry['installs'] is int)
+              stat(
+                Icons.devices_rounded,
+                pluginText(context, 'Active installs'),
+                entry['installs'] as int,
+              ),
+          ],
+        ),
+        if ('${entry['description']}'.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Wrap(
-              spacing: 16,
-              runSpacing: 4,
-              children: [
-                stat(
-                  Icons.star_outline_rounded,
-                  pluginText(context, 'Stars'),
-                  entry['stars'] as int? ?? 0,
-                ),
-                stat(
-                  Icons.download_rounded,
-                  pluginText(context, 'Downloads'),
-                  entry['downloads'] as int? ?? 0,
-                ),
-                if (entry['installs'] is int)
-                  stat(
-                    Icons.devices_rounded,
-                    pluginText(context, 'Active installs'),
-                    entry['installs'] as int,
-                  ),
-              ],
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(
+              '${entry['description']}',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodyMedium,
             ),
           ),
-        ],
+      ],
+    );
+    // The icon sits at the top of the row and the button in its middle,
+    // the way the remote admin lays these rows out.
+    return InkWell(
+      onTap: enabled
+          ? (installed && !update ? onOpen : () => onInstall(update))
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: PluginIcon(url: icon),
+              ),
+              const SizedBox(width: 16),
+              Expanded(child: body),
+              const SizedBox(width: 12),
+              Center(child: trailing),
+            ],
+          ),
+        ),
       ),
-      trailing: trailing,
-      enabled: enabled,
-      onTap: installed && !update ? onOpen : () => onInstall(update),
     );
   }
 }

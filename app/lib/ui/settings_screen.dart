@@ -3402,6 +3402,7 @@ class _CategoryContentState extends State<_CategoryContent> {
       return [
         PluginDirectoryPanel(
           plugins: container.plugins,
+          settings: container.settings,
           onOpen: (id) =>
               openSettingsSubpage(context, container, 'Plugins', id),
         ),

@@ -38,9 +38,10 @@
   "pluginNextPage": "Nächste Seite",
   "pluginPageOfPages": "Seite {page} von {pages}",
   "pluginSortBy": "Sortieren nach",
-  "pluginSortMostInstalls": "Meiste Installationen",
   "pluginSortMostStars": "Meiste Sterne",
   "pluginSortRecentlyUpdated": "Kürzlich aktualisiert",
   "pluginSortNewest": "Neueste",
-  "pluginSortName": "Name"
+  "pluginSortName": "Name",
+  "pluginSortMostDownloads": "Meiste Downloads",
+  "pluginPluginsPerPage": "Plugins pro Seite"
 }

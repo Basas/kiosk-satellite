@@ -3123,9 +3123,6 @@ class UiStringsUk extends UiStrings {
   String get pluginSortBy => 'Сортувати за';
 
   @override
-  String get pluginSortMostInstalls => 'Найбільше встановлень';
-
-  @override
   String get pluginSortMostStars => 'Найбільше зірок';
 
   @override
@@ -3136,6 +3133,12 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get pluginSortName => 'Назва';
+
+  @override
+  String get pluginSortMostDownloads => 'Найбільше завантажень';
+
+  @override
+  String get pluginPluginsPerPage => 'Плагінів на сторінці';
 
   @override
   String get pluginCharts => 'Графіки';

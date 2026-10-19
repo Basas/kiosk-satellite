@@ -497,19 +497,6 @@
       ]
     }
   },
-  "pluginSortMostInstalls": "Most installs",
-  "@pluginSortMostInstalls": {
-    "context": "Settings > Plugin Manager > Browse plugins",
-    "description": "An order for the Browse plugins list, picked under Sort by.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager > Browse plugins"
-      ],
-      "remoteAdmin": [
-        "Plugin Manager > Browse plugins"
-      ]
-    }
-  },
   "pluginSortMostStars": "Most stars",
   "@pluginSortMostStars": {
     "context": "Settings > Plugin Manager > Browse plugins",
@@ -553,6 +540,32 @@
   "@pluginSortName": {
     "context": "Settings > Plugin Manager > Browse plugins",
     "description": "An order for the Browse plugins list, picked under Sort by.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > Browse plugins"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > Browse plugins"
+      ]
+    }
+  },
+  "pluginSortMostDownloads": "Most downloads",
+  "@pluginSortMostDownloads": {
+    "context": "Settings > Plugin Manager > Browse plugins",
+    "description": "An order for the Browse plugins list, picked under Sort by.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > Browse plugins"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > Browse plugins"
+      ]
+    }
+  },
+  "pluginPluginsPerPage": "Plugins per page",
+  "@pluginPluginsPerPage": {
+    "context": "Settings > Plugin Manager > Browse plugins",
+    "description": "Visible label, help or status in this section.",
     "x-locations": {
       "device": [
         "Settings > Plugin Manager > Browse plugins"

@@ -199,8 +199,14 @@ let directoryError = '';
 let directoryReading = null;
 let directoryQuery = '';
 let directoryPageIndex = 0;
-// Rows per page, so a directory of thousands still builds a short page.
-const DIRECTORY_PAGE_SIZE = 20;
+// The page sizes Plugins per page offers, so a directory of thousands still
+// builds a short page. This browser remembers the choice.
+const DIRECTORY_PAGE_SIZES = [5, 10, 20, 50, 100];
+const PAGE_SIZE_KEY = 'ks_plugin_directory_page_size';
+let directoryPageSize = (() => {
+  try { const size = Number(localStorage.getItem(PAGE_SIZE_KEY)); return DIRECTORY_PAGE_SIZES.includes(size) ? size : 10; }
+  catch (_) { return 10; }
+})();
 
 async function pluginCommand(name, params) {
   const result = await cmd(name, params, { timeoutMs: 95000 });
@@ -238,13 +244,13 @@ function loadDirectory(refresh = false) {
 
 // The orders Sort by offers, the same as kiosksatellite.com's. Mirrors the
 // device (plugin_directory.dart, comparator).
-let directorySort = 'installs';
+let directorySort = 'downloads';
 const byName = (a, b) => String(a.name).localeCompare(String(b.name), undefined, { sensitivity: 'base' });
 const byCount = (key) => (a, b) => (Number.isInteger(b[key]) ? b[key] : -1) - (Number.isInteger(a[key]) ? a[key] : -1);
 const byDate = (key) => (a, b) => String(b[key] || '').localeCompare(String(a[key] || ''));
 const chain = (...steps) => (a, b) => { for (const step of steps) { const c = step(a, b); if (c) return c; } return 0; };
 const DIRECTORY_SORTS = {
-  installs: ['Most installs', chain(byCount('installs'), byCount('downloads'), byName)],
+  downloads: ['Most downloads', chain(byCount('downloads'), byCount('stars'), byName)],
   stars: ['Most stars', chain(byCount('stars'), byName)],
   updated: ['Recently updated', chain(byDate('released'), byName)],
   newest: ['Newest', chain(byDate('added'), byDate('released'), byName)],
@@ -261,8 +267,10 @@ function directoryRow(entry) {
     img.onerror = () => img.replaceWith(subpageIcon('Plugins'));
     img.src = entry.icon; avatar.append(img);
   } else avatar.append(subpageIcon('Plugins'));
-  const text = info(entry.name, `${entry.author} · ${entry.version}`);
-  if (entry.description) text.append(element('div', entry.description, 'desc plugin-directory-description'));
+  // Author, version, stars and downloads share a line.
+  const text = info(entry.name);
+  const meta = element('div', undefined, 'desc plugin-directory-meta');
+  meta.append(element('span', `${entry.author} · ${entry.version}`));
   const number = new Intl.NumberFormat(messageLanguage() || undefined, { notation: 'compact' });
   const stats = element('div', undefined, 'plugin-directory-stats');
   for (const [label, value, path] of [
@@ -274,7 +282,9 @@ function directoryRow(entry) {
     stat.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg>`;
     stat.append(number.format(value || 0)); stats.append(stat);
   }
-  text.append(stats);
+  meta.append(...stats.children);
+  text.append(meta);
+  if (entry.description) text.append(element('div', entry.description, 'desc plugin-directory-description'));
   let action;
   if (entry.updateAvailable) {
     action = element('button', pluginText('Update'), 'btn-ghost');
@@ -350,7 +360,15 @@ function renderDirectory(page) {
   }
   sort.value = directorySort;
   sortRow.append(sort);
-  searchCard.append(searchRow, sortRow);
+  const sizeRow = element('div', undefined, 'row');
+  sizeRow.append(info(pluginText('Plugins per page')));
+  const size = element('select'); size.setAttribute('aria-label', pluginText('Plugins per page'));
+  for (const value of DIRECTORY_PAGE_SIZES) {
+    const option = element('option', String(value)); option.value = String(value); size.append(option);
+  }
+  size.value = String(directoryPageSize);
+  sizeRow.append(size);
+  searchCard.append(searchRow, sortRow, sizeRow);
   if (directoryError) searchCard.append(hintRow(pluginError(directoryError), { warn: true }));
   const list = element('div', undefined, 'card');
   const fill = () => {
@@ -358,25 +376,29 @@ function renderDirectory(page) {
     const shown = (directory?.plugins || []).filter((p) => {
       const text = `${p.name} ${p.description} ${p.author} ${p.id}`.toLowerCase();
       return words.every((word) => text.includes(word));
-    }).sort((DIRECTORY_SORTS[directorySort] || DIRECTORY_SORTS.installs)[1]);
-    const pages = Math.ceil(shown.length / DIRECTORY_PAGE_SIZE);
+    }).sort((DIRECTORY_SORTS[directorySort] || DIRECTORY_SORTS.downloads)[1]);
+    const pages = Math.ceil(shown.length / directoryPageSize);
     directoryPageIndex = Math.max(0, Math.min(directoryPageIndex, pages - 1));
-    const start = directoryPageIndex * DIRECTORY_PAGE_SIZE;
-    list.replaceChildren(...shown.slice(start, start + DIRECTORY_PAGE_SIZE).map(directoryRow));
+    const start = directoryPageIndex * directoryPageSize;
+    list.replaceChildren(...shown.slice(start, start + directoryPageSize).map(directoryRow));
     if (!shown.length && directory) {
       list.append(hintRow(pluginText(words.length ? 'No plugins match your search.' : 'Community Plugins has no plugins yet.')));
     }
     if (pages > 1) list.append(directoryPager(pages, (page) => {
       directoryPageIndex = page;
       fill();
-      // The new page starts at its first row, not where the last one ended.
-      list.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      // A new page opens at the top of the page, like opening it again.
+      (document.scrollingElement || document.documentElement).scrollTo({ top: 0, behavior: 'smooth' });
     }));
   };
   // A new search starts at its first page.
   input.oninput = () => { directoryQuery = input.value; directoryPageIndex = 0; fill(); };
   // A new order starts at its first page.
   sort.onchange = () => { directorySort = sort.value; directoryPageIndex = 0; fill(); };
+  size.onchange = () => {
+    directoryPageSize = Number(size.value); directoryPageIndex = 0; fill();
+    try { localStorage.setItem(PAGE_SIZE_KEY, size.value); } catch (_) {}
+  };
   fill();
   const submitCard = element('div', undefined, 'card');
   const submit = element('a', undefined, 'row plugin-guide-row');

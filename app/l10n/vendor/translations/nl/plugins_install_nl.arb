@@ -38,9 +38,10 @@
   "pluginNextPage": "Volgende pagina",
   "pluginPageOfPages": "Pagina {page} van {pages}",
   "pluginSortBy": "Sorteren op",
-  "pluginSortMostInstalls": "Meeste installaties",
   "pluginSortMostStars": "Meeste sterren",
   "pluginSortRecentlyUpdated": "Onlangs bijgewerkt",
   "pluginSortNewest": "Nieuwste",
-  "pluginSortName": "Naam"
+  "pluginSortName": "Naam",
+  "pluginSortMostDownloads": "Meeste downloads",
+  "pluginPluginsPerPage": "Plug-ins per pagina"
 }

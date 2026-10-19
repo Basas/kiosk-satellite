@@ -225,9 +225,10 @@ const pluginTextMessageIds = <String, String>{
   "Previous page": "pluginPreviousPage",
   "Next page": "pluginNextPage",
   "Sort by": "pluginSortBy",
-  "Most installs": "pluginSortMostInstalls",
   "Most stars": "pluginSortMostStars",
   "Recently updated": "pluginSortRecentlyUpdated",
   "Newest": "pluginSortNewest",
-  "Name": "pluginSortName"
+  "Name": "pluginSortName",
+  "Most downloads": "pluginSortMostDownloads",
+  "Plugins per page": "pluginPluginsPerPage"
 };

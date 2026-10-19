@@ -3110,9 +3110,6 @@ class UiStringsEn extends UiStrings {
   String get pluginSortBy => 'Sort by';
 
   @override
-  String get pluginSortMostInstalls => 'Most installs';
-
-  @override
   String get pluginSortMostStars => 'Most stars';
 
   @override
@@ -3123,6 +3120,12 @@ class UiStringsEn extends UiStrings {
 
   @override
   String get pluginSortName => 'Name';
+
+  @override
+  String get pluginSortMostDownloads => 'Most downloads';
+
+  @override
+  String get pluginPluginsPerPage => 'Plugins per page';
 
   @override
   String get pluginCharts => 'Charts';

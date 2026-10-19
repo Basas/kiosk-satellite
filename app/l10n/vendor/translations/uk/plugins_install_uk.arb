@@ -38,9 +38,10 @@
   "pluginNextPage": "Наступна сторінка",
   "pluginPageOfPages": "Сторінка {page} з {pages}",
   "pluginSortBy": "Сортувати за",
-  "pluginSortMostInstalls": "Найбільше встановлень",
   "pluginSortMostStars": "Найбільше зірок",
   "pluginSortRecentlyUpdated": "Нещодавно оновлені",
   "pluginSortNewest": "Найновіші",
-  "pluginSortName": "Назва"
+  "pluginSortName": "Назва",
+  "pluginSortMostDownloads": "Найбільше завантажень",
+  "pluginPluginsPerPage": "Плагінів на сторінці"
 }

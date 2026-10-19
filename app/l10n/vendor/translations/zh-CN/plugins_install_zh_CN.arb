@@ -38,9 +38,10 @@
   "pluginNextPage": "下一页",
   "pluginPageOfPages": "第 {page} 页，共 {pages} 页",
   "pluginSortBy": "排序方式",
-  "pluginSortMostInstalls": "安装最多",
   "pluginSortMostStars": "星标最多",
   "pluginSortRecentlyUpdated": "最近更新",
   "pluginSortNewest": "最新",
-  "pluginSortName": "名称"
+  "pluginSortName": "名称",
+  "pluginSortMostDownloads": "下载最多",
+  "pluginPluginsPerPage": "每页插件数"
 }
