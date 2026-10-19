@@ -203,7 +203,7 @@ class _PluginReviewDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.all(24),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: 680,
+          maxWidth: 960,
           maxHeight: MediaQuery.sizeOf(context).height * 0.9,
         ),
         child: Column(
