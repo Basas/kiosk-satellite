@@ -506,7 +506,8 @@ class SoundPlayer(context: Context, messenger: BinaryMessenger) {
             )
                 // Media3's default HTTP stack announces itself, not the app;
                 // a Home Assistant access log should name the kiosk that
-                // pulled the TTS clip.
+                // pulled the TTS clip. A WAV streamed with no length takes
+                // its duration from the audio, not the header (issue #1030).
                 .setMediaSourceFactory(
                     DefaultMediaSourceFactory(
                         DefaultDataSource.Factory(
@@ -514,6 +515,7 @@ class SoundPlayer(context: Context, messenger: BinaryMessenger) {
                             DefaultHttpDataSource.Factory()
                                 .setUserAgent(AppIdentity.userAgent),
                         ),
+                        StreamedWavExtractorsFactory(),
                     ),
                 )
                 .setLoadControl(
