@@ -33,5 +33,14 @@
   "pluginCouldNotReachCommunityPlugins": "No se pudo conectar con Plugins de la comunidad. Revisa la conexión a internet.",
   "pluginCouldNotLoadCommunityPlugins": "No se pudo cargar Plugins de la comunidad. Inténtalo más tarde.",
   "pluginTurnOn": "Activar",
-  "pluginTurnOnEnablePluginsToInstall": "Activa «Activar plugins» para instalar este plugin."
+  "pluginTurnOnEnablePluginsToInstall": "Activa «Activar plugins» para instalar este plugin.",
+  "pluginPreviousPage": "Página anterior",
+  "pluginNextPage": "Página siguiente",
+  "pluginPageOfPages": "Página {page} de {pages}",
+  "pluginSortBy": "Ordenar por",
+  "pluginSortMostInstalls": "Más instalaciones",
+  "pluginSortMostStars": "Más estrellas",
+  "pluginSortRecentlyUpdated": "Actualizados recientemente",
+  "pluginSortNewest": "Más recientes",
+  "pluginSortName": "Nombre"
 }

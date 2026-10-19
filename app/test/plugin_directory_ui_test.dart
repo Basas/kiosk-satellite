@@ -129,4 +129,63 @@ void main() {
     await settle(tester);
     expect(find.text('No plugins match your search.'), findsOneWidget);
   });
+
+  testWidgets('pages a long list and sorts it', (tester) async {
+    final body = jsonEncode({
+      'schemaVersion': 1,
+      'plugins': [
+        for (var i = 0; i < 45; i++)
+          {
+            'id': 'plugin-$i',
+            'name': 'Plugin ${i.toString().padLeft(2, '0')}',
+            'author': 'Alice',
+            'version': '1.0.0',
+            'repository': 'https://github.com/alice/plugin-$i',
+            'stars': i,
+            'installs': 45 - i,
+            'status': 'ok',
+          },
+      ],
+    });
+    final plugins = PluginManager(
+      EventBus(),
+      CommandRegistry(Logger()),
+      Logger(),
+      directory: PluginDirectory(
+        clientFactory: () => MockClient((_) async => http.Response(body, 200)),
+        cacheFile: () async => null,
+      ),
+    );
+    await tester.runAsync(() => plugins.directory.read());
+    tester.view.physicalSize = const Size(800, 4000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: PluginDirectoryPanel(plugins: plugins, onOpen: (_) {}),
+          ),
+        ),
+      ),
+    );
+    await settle(tester);
+    // Twenty rows a page, most installs first.
+    expect(find.text('Page 1 of 3'), findsOneWidget);
+    expect(find.text('Plugin 00'), findsOneWidget);
+    expect(find.text('Plugin 20'), findsNothing);
+    await tester.tap(find.byTooltip('Next page'));
+    await settle(tester);
+    expect(find.text('Page 2 of 3'), findsOneWidget);
+    expect(find.text('Plugin 20'), findsOneWidget);
+    expect(find.text('Plugin 00'), findsNothing);
+    // A new order starts at its first page.
+    await tester.tap(find.text('Most installs'));
+    await settle(tester);
+    await tester.tap(find.text('Most stars').last);
+    await settle(tester);
+    expect(find.text('Page 1 of 3'), findsOneWidget);
+    expect(find.text('Plugin 44'), findsOneWidget);
+    expect(find.text('Plugin 00'), findsNothing);
+  });
 }

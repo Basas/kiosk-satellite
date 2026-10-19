@@ -3109,6 +3109,35 @@ class UiStringsUk extends UiStrings {
       'Увімкніть «Увімкнути плагіни», щоб встановити цей плагін.';
 
   @override
+  String get pluginPreviousPage => 'Попередня сторінка';
+
+  @override
+  String get pluginNextPage => 'Наступна сторінка';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Сторінка $page з $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Сортувати за';
+
+  @override
+  String get pluginSortMostInstalls => 'Найбільше встановлень';
+
+  @override
+  String get pluginSortMostStars => 'Найбільше зірок';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Нещодавно оновлені';
+
+  @override
+  String get pluginSortNewest => 'Найновіші';
+
+  @override
+  String get pluginSortName => 'Назва';
+
+  @override
   String get pluginCharts => 'Графіки';
 
   @override

@@ -3014,6 +3014,35 @@ class UiStringsZh extends UiStrings {
   String get pluginTurnOnEnablePluginsToInstall => '请开启“启用插件”以安装此插件。';
 
   @override
+  String get pluginPreviousPage => '上一页';
+
+  @override
+  String get pluginNextPage => '下一页';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return '第 $page 页，共 $pages 页';
+  }
+
+  @override
+  String get pluginSortBy => '排序方式';
+
+  @override
+  String get pluginSortMostInstalls => '安装最多';
+
+  @override
+  String get pluginSortMostStars => '星标最多';
+
+  @override
+  String get pluginSortRecentlyUpdated => '最近更新';
+
+  @override
+  String get pluginSortNewest => '最新';
+
+  @override
+  String get pluginSortName => '名称';
+
+  @override
   String get pluginCharts => '图表';
 
   @override
@@ -16527,6 +16556,35 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginTurnOnEnablePluginsToInstall => '请开启“启用插件”以安装此插件。';
+
+  @override
+  String get pluginPreviousPage => '上一页';
+
+  @override
+  String get pluginNextPage => '下一页';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return '第 $page 页，共 $pages 页';
+  }
+
+  @override
+  String get pluginSortBy => '排序方式';
+
+  @override
+  String get pluginSortMostInstalls => '安装最多';
+
+  @override
+  String get pluginSortMostStars => '星标最多';
+
+  @override
+  String get pluginSortRecentlyUpdated => '最近更新';
+
+  @override
+  String get pluginSortNewest => '最新';
+
+  @override
+  String get pluginSortName => '名称';
 
   @override
   String get pluginCharts => '图表';

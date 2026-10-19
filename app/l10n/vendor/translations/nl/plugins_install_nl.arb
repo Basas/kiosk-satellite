@@ -33,5 +33,14 @@
   "pluginCouldNotReachCommunityPlugins": "Kan Communityplug-ins niet bereiken. Controleer de internetverbinding.",
   "pluginCouldNotLoadCommunityPlugins": "Kan Communityplug-ins niet laden. Probeer het later opnieuw.",
   "pluginTurnOn": "Inschakelen",
-  "pluginTurnOnEnablePluginsToInstall": "Schakel ‘Plug-ins inschakelen’ in om deze plug-in te installeren."
+  "pluginTurnOnEnablePluginsToInstall": "Schakel ‘Plug-ins inschakelen’ in om deze plug-in te installeren.",
+  "pluginPreviousPage": "Vorige pagina",
+  "pluginNextPage": "Volgende pagina",
+  "pluginPageOfPages": "Pagina {page} van {pages}",
+  "pluginSortBy": "Sorteren op",
+  "pluginSortMostInstalls": "Meeste installaties",
+  "pluginSortMostStars": "Meeste sterren",
+  "pluginSortRecentlyUpdated": "Onlangs bijgewerkt",
+  "pluginSortNewest": "Nieuwste",
+  "pluginSortName": "Naam"
 }

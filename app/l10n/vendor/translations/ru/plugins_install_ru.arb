@@ -33,5 +33,14 @@
   "pluginCouldNotReachCommunityPlugins": "Не удалось связаться с Плагинами сообщества. Проверьте подключение к интернету.",
   "pluginCouldNotLoadCommunityPlugins": "Не удалось загрузить Плагины сообщества. Попробуйте позже.",
   "pluginTurnOn": "Включить",
-  "pluginTurnOnEnablePluginsToInstall": "Включите «Включить плагины», чтобы установить этот плагин."
+  "pluginTurnOnEnablePluginsToInstall": "Включите «Включить плагины», чтобы установить этот плагин.",
+  "pluginPreviousPage": "Предыдущая страница",
+  "pluginNextPage": "Следующая страница",
+  "pluginPageOfPages": "Страница {page} из {pages}",
+  "pluginSortBy": "Сортировать по",
+  "pluginSortMostInstalls": "Больше всего установок",
+  "pluginSortMostStars": "Больше всего звёзд",
+  "pluginSortRecentlyUpdated": "Недавно обновлённые",
+  "pluginSortNewest": "Новые",
+  "pluginSortName": "Название"
 }

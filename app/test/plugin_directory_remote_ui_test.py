@@ -129,6 +129,38 @@ try:
         assert not errors, errors
         page.close()
 
+        # A long list pages twenty rows at a time and sorts on demand.
+        page = browser.new_page(viewport={'width': 1440, 'height': 1000})
+        page.on('pageerror', lambda error: errors.append(str(error)))
+        long_list = [listed(f'plugin-{i}', f'Plugin {i:02d}', 45 - i, stars=i) for i in range(45)]
+        directory['plugins'], saved = long_list, directory['plugins']
+        open_app(page)
+        page.locator('[data-search-id="x:plugins:browse"]').click()
+        root = page.locator('#tab-plugins')
+        pager = root.locator('.plugin-directory-pager')
+        expect(pager).to_contain_text('Page 1 of 3')
+        expect(root.locator('.plugin-directory-row')).to_have_count(20)
+        expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 00')
+        expect(pager.get_by_role('button', name='Previous page')).to_be_disabled()
+        pager.get_by_role('button', name='Next page').click()
+        expect(pager).to_contain_text('Page 2 of 3')
+        expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 20')
+        pager.get_by_role('button', name='Next page').click()
+        expect(root.locator('.plugin-directory-row')).to_have_count(5)
+        expect(pager.get_by_role('button', name='Next page')).to_be_disabled()
+        # A new order starts at its first page.
+        root.get_by_role('combobox', name='Sort by').select_option('stars')
+        expect(pager).to_contain_text('Page 1 of 3')
+        expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 44')
+        root.get_by_role('combobox', name='Sort by').select_option('name')
+        expect(root.locator('.plugin-directory-row').first).to_contain_text('Plugin 00')
+        # A search fits on one page and drops the pager.
+        root.get_by_role('textbox', name='Search plugins').fill('Plugin 4')
+        expect(pager).to_have_count(0)
+        directory['plugins'] = saved
+        assert not errors, errors
+        page.close()
+
         # An install link: it leaves the address at once and asks before installing.
         plugins_enabled = False
         requests.clear()
@@ -155,4 +187,4 @@ try:
         browser.close()
 finally:
     server.shutdown()
-print('PASS: Browse plugins card, list, search, review, installed rows and install links.')
+print('PASS: Browse plugins card, list, search, paging, sorting, review, installed rows and install links.')

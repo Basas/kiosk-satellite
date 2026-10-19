@@ -3120,6 +3120,35 @@ class UiStringsNl extends UiStrings {
       'Schakel ‘Plug-ins inschakelen’ in om deze plug-in te installeren.';
 
   @override
+  String get pluginPreviousPage => 'Vorige pagina';
+
+  @override
+  String get pluginNextPage => 'Volgende pagina';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Pagina $page van $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Sorteren op';
+
+  @override
+  String get pluginSortMostInstalls => 'Meeste installaties';
+
+  @override
+  String get pluginSortMostStars => 'Meeste sterren';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Onlangs bijgewerkt';
+
+  @override
+  String get pluginSortNewest => 'Nieuwste';
+
+  @override
+  String get pluginSortName => 'Naam';
+
+  @override
   String get pluginCharts => 'Grafieken';
 
   @override

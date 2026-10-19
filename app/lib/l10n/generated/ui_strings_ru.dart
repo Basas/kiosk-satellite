@@ -3107,6 +3107,35 @@ class UiStringsRu extends UiStrings {
       'Включите «Включить плагины», чтобы установить этот плагин.';
 
   @override
+  String get pluginPreviousPage => 'Предыдущая страница';
+
+  @override
+  String get pluginNextPage => 'Следующая страница';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Страница $page из $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Сортировать по';
+
+  @override
+  String get pluginSortMostInstalls => 'Больше всего установок';
+
+  @override
+  String get pluginSortMostStars => 'Больше всего звёзд';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Недавно обновлённые';
+
+  @override
+  String get pluginSortNewest => 'Новые';
+
+  @override
+  String get pluginSortName => 'Название';
+
+  @override
   String get pluginCharts => 'Графики';
 
   @override

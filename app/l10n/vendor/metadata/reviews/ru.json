@@ -25803,5 +25803,59 @@
     "translation": "8631319c930a607355aadb5ca4d5dbdb151b8e58a5557c1214fe088867124d56",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "pluginSortRecentlyUpdated": {
+    "source": "56fc5f9993b3bb6860e0a26f786bd62e8a4fc95c37ee3f7b9139a2066e7e4f8a",
+    "translation": "28c18c8dfd242a4cc059e7d1dba8d5b4a08b97f265b5e878e30697977767469e",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginPreviousPage": {
+    "source": "f91bfd9807f544487b6817faca6eccf2f83a892112c4062847a1f45bac49333f",
+    "translation": "7dd0b83e6fa7eaffa8c2c7b87db572fcc61163b0b08d7b0930e0b4a162dbbd92",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginPageOfPages": {
+    "source": "e623587caf6c6d16bbae6963ba1df695b620a12bec4ce13919e7ac22f1482e5b",
+    "translation": "df697965f02ffce8edb99bb0454b27a040e1fa3614e269edac4734bc67c50e7f",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginNextPage": {
+    "source": "1361b08ffc339bd77275642145251e3e23a212f57122c426c5099f4dc1aa2faa",
+    "translation": "75072f638ed5954288716708168519f9e0f27a7e3350fdd2d6afd91713123eff",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginSortBy": {
+    "source": "f01bfd2aa9000aa007e7146ddcb7734836e49ef64e9c2b6a7b49638a8276b9e0",
+    "translation": "db005f61a6fc3fccea8ba9de50987e5bd4725469553af0af65ea4ead0e8eae47",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginSortNewest": {
+    "source": "70ac2bf3c42f38ad4224b948944aa6e26ca0e23a5f5626e51e31238fa6873fa4",
+    "translation": "32d5a2ea7ad3cfa91b6a68f25a8ad4467c3850d37d5d173f9b2b794d41257822",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginSortName": {
+    "source": "fcf2083a88cade21b49902616cc385f05d3928028903306838f9c5d97c68618d",
+    "translation": "0918b4ba92684eaa28459bf0d624ca4f720b413b839792afd9e11cdc62253995",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginSortMostInstalls": {
+    "source": "ba1c357647feae0a8cfd930a3dcb9257ff4993474068dbe8a6e54c7b9b87f234",
+    "translation": "607b67793dfa4995799ba72372e6adfa87bc0b192324b8c85642b4af289a138b",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "pluginSortMostStars": {
+    "source": "16e85c66971965723ae82ab9d525012f70bbd55036902612cfdf0b314f870af4",
+    "translation": "945fedb61def75d84aec325061dbf5280312094a9ddb0985a3e489ebaebdd11b",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

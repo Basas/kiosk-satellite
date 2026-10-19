@@ -445,6 +445,7 @@ class _PluginSettingsPanelState extends State<PluginSettingsPanel> {
               SearchLandingTarget(
                 id: 'x:plugins:browse',
                 child: SettingsRow(
+                  leading: const Icon(Icons.extension_rounded),
                   title: Text(pluginText(context, 'Browse plugins')),
                   subtitle: Text(
                     pluginText(context, 'Find plugins made by the community'),

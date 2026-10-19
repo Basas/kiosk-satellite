@@ -198,6 +198,9 @@ let directory = null;
 let directoryError = '';
 let directoryReading = null;
 let directoryQuery = '';
+let directoryPageIndex = 0;
+// Rows per page, so a directory of thousands still builds a short page.
+const DIRECTORY_PAGE_SIZE = 20;
 
 async function pluginCommand(name, params) {
   const result = await cmd(name, params, { timeoutMs: 95000 });
@@ -233,13 +236,20 @@ function loadDirectory(refresh = false) {
   return directoryReading;
 }
 
-function popularity(a, b) {
-  for (const key of ['installs', 'stars', 'downloads']) {
-    const c = (b[key] || 0) - (a[key] || 0);
-    if (c) return c;
-  }
-  return String(a.name).localeCompare(String(b.name));
-}
+// The orders Sort by offers, the same as kiosksatellite.com's. Mirrors the
+// device (plugin_directory.dart, comparator).
+let directorySort = 'installs';
+const byName = (a, b) => String(a.name).localeCompare(String(b.name), undefined, { sensitivity: 'base' });
+const byCount = (key) => (a, b) => (Number.isInteger(b[key]) ? b[key] : -1) - (Number.isInteger(a[key]) ? a[key] : -1);
+const byDate = (key) => (a, b) => String(b[key] || '').localeCompare(String(a[key] || ''));
+const chain = (...steps) => (a, b) => { for (const step of steps) { const c = step(a, b); if (c) return c; } return 0; };
+const DIRECTORY_SORTS = {
+  installs: ['Most installs', chain(byCount('installs'), byCount('downloads'), byName)],
+  stars: ['Most stars', chain(byCount('stars'), byName)],
+  updated: ['Recently updated', chain(byDate('released'), byName)],
+  newest: ['Newest', chain(byDate('added'), byDate('released'), byName)],
+  name: ['Name', byName],
+};
 
 function directoryRow(entry) {
   const row = element('div', undefined, 'row plugin-directory-row');
@@ -307,6 +317,21 @@ async function installListed(entry, update, trigger) {
   await loadPlugins();
 }
 
+// Previous and next page buttons around "Page 2 of 31".
+function directoryPager(pages, turn) {
+  const pager = element('div', undefined, 'plugin-directory-pager');
+  const number = new Intl.NumberFormat(messageLanguage() || undefined);
+  const previous = iconButton(pluginText('Previous page'), 'm15 18-6-6 6-6');
+  previous.disabled = directoryPageIndex === 0;
+  previous.onclick = () => turn(directoryPageIndex - 1);
+  const next = iconButton(pluginText('Next page'), 'm9 18 6-6-6-6');
+  next.disabled = directoryPageIndex >= pages - 1;
+  next.onclick = () => turn(directoryPageIndex + 1);
+  const label = element('span', t('pluginPageOfPages', { page: number.format(directoryPageIndex + 1), pages: number.format(pages) }));
+  pager.append(previous, label, next);
+  return pager;
+}
+
 function renderDirectory(page) {
   page.replaceChildren();
   const searchCard = element('div', undefined, 'card');
@@ -316,7 +341,16 @@ function renderDirectory(page) {
   const refreshButton = iconButton(pluginText('Refresh'), 'M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.3L3 16M3 21v-5h5');
   refreshButton.classList.add('plugin-directory-refresh');
   refreshButton.onclick = () => loadDirectory(true);
-  searchRow.append(input, refreshButton); searchCard.append(searchRow);
+  searchRow.append(input, refreshButton);
+  const sortRow = element('div', undefined, 'row');
+  sortRow.append(info(pluginText('Sort by')));
+  const sort = element('select'); sort.setAttribute('aria-label', pluginText('Sort by'));
+  for (const [value, [label]] of Object.entries(DIRECTORY_SORTS)) {
+    const option = element('option', pluginText(label)); option.value = value; sort.append(option);
+  }
+  sort.value = directorySort;
+  sortRow.append(sort);
+  searchCard.append(searchRow, sortRow);
   if (directoryError) searchCard.append(hintRow(pluginError(directoryError), { warn: true }));
   const list = element('div', undefined, 'card');
   const fill = () => {
@@ -324,13 +358,25 @@ function renderDirectory(page) {
     const shown = (directory?.plugins || []).filter((p) => {
       const text = `${p.name} ${p.description} ${p.author} ${p.id}`.toLowerCase();
       return words.every((word) => text.includes(word));
-    }).sort(popularity);
-    list.replaceChildren(...shown.map(directoryRow));
+    }).sort((DIRECTORY_SORTS[directorySort] || DIRECTORY_SORTS.installs)[1]);
+    const pages = Math.ceil(shown.length / DIRECTORY_PAGE_SIZE);
+    directoryPageIndex = Math.max(0, Math.min(directoryPageIndex, pages - 1));
+    const start = directoryPageIndex * DIRECTORY_PAGE_SIZE;
+    list.replaceChildren(...shown.slice(start, start + DIRECTORY_PAGE_SIZE).map(directoryRow));
     if (!shown.length && directory) {
       list.append(hintRow(pluginText(words.length ? 'No plugins match your search.' : 'Community Plugins has no plugins yet.')));
     }
+    if (pages > 1) list.append(directoryPager(pages, (page) => {
+      directoryPageIndex = page;
+      fill();
+      // The new page starts at its first row, not where the last one ended.
+      list.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }));
   };
-  input.oninput = () => { directoryQuery = input.value; fill(); };
+  // A new search starts at its first page.
+  input.oninput = () => { directoryQuery = input.value; directoryPageIndex = 0; fill(); };
+  // A new order starts at its first page.
+  sort.onchange = () => { directorySort = sort.value; directoryPageIndex = 0; fill(); };
   fill();
   const submitCard = element('div', undefined, 'card');
   const submit = element('a', undefined, 'row plugin-guide-row');

@@ -33,5 +33,14 @@
   "pluginCouldNotReachCommunityPlugins": "Community-Plugins ist nicht erreichbar. Prüfe die Internetverbindung.",
   "pluginCouldNotLoadCommunityPlugins": "Community-Plugins konnte nicht geladen werden. Versuche es später erneut.",
   "pluginTurnOn": "Einschalten",
-  "pluginTurnOnEnablePluginsToInstall": "Schalte „Plugins aktivieren“ ein, um dieses Plugin zu installieren."
+  "pluginTurnOnEnablePluginsToInstall": "Schalte „Plugins aktivieren“ ein, um dieses Plugin zu installieren.",
+  "pluginPreviousPage": "Vorherige Seite",
+  "pluginNextPage": "Nächste Seite",
+  "pluginPageOfPages": "Seite {page} von {pages}",
+  "pluginSortBy": "Sortieren nach",
+  "pluginSortMostInstalls": "Meiste Installationen",
+  "pluginSortMostStars": "Meiste Sterne",
+  "pluginSortRecentlyUpdated": "Kürzlich aktualisiert",
+  "pluginSortNewest": "Neueste",
+  "pluginSortName": "Name"
 }

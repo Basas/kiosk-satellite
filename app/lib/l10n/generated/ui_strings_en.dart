@@ -3096,6 +3096,35 @@ class UiStringsEn extends UiStrings {
       'Turn on Enable Plugins to install this plugin.';
 
   @override
+  String get pluginPreviousPage => 'Previous page';
+
+  @override
+  String get pluginNextPage => 'Next page';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Page $page of $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Sort by';
+
+  @override
+  String get pluginSortMostInstalls => 'Most installs';
+
+  @override
+  String get pluginSortMostStars => 'Most stars';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Recently updated';
+
+  @override
+  String get pluginSortNewest => 'Newest';
+
+  @override
+  String get pluginSortName => 'Name';
+
+  @override
   String get pluginCharts => 'Charts';
 
   @override

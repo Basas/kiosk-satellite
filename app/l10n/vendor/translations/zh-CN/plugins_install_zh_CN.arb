@@ -33,5 +33,14 @@
   "pluginCouldNotReachCommunityPlugins": "无法连接社区插件。请检查网络连接。",
   "pluginCouldNotLoadCommunityPlugins": "无法加载社区插件。请稍后重试。",
   "pluginTurnOn": "开启",
-  "pluginTurnOnEnablePluginsToInstall": "请开启“启用插件”以安装此插件。"
+  "pluginTurnOnEnablePluginsToInstall": "请开启“启用插件”以安装此插件。",
+  "pluginPreviousPage": "上一页",
+  "pluginNextPage": "下一页",
+  "pluginPageOfPages": "第 {page} 页，共 {pages} 页",
+  "pluginSortBy": "排序方式",
+  "pluginSortMostInstalls": "安装最多",
+  "pluginSortMostStars": "星标最多",
+  "pluginSortRecentlyUpdated": "最近更新",
+  "pluginSortNewest": "最新",
+  "pluginSortName": "名称"
 }

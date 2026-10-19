@@ -3128,6 +3128,35 @@ class UiStringsFr extends UiStrings {
       'Activez « Activer les plugins » pour installer ce plugin.';
 
   @override
+  String get pluginPreviousPage => 'Page précédente';
+
+  @override
+  String get pluginNextPage => 'Page suivante';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Page $page sur $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Trier par';
+
+  @override
+  String get pluginSortMostInstalls => 'Plus d\'installations';
+
+  @override
+  String get pluginSortMostStars => 'Plus d\'étoiles';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Mis à jour récemment';
+
+  @override
+  String get pluginSortNewest => 'Plus récents';
+
+  @override
+  String get pluginSortName => 'Nom';
+
+  @override
   String get pluginCharts => 'Graphiques';
 
   @override

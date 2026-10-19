@@ -32,7 +32,12 @@ class PluginDirectoryPanel extends StatefulWidget {
 }
 
 class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
+  /// Rows per page, so a directory of thousands still builds a short page.
+  static const pageSize = 20;
   final _query = TextEditingController();
+  final _listTop = GlobalKey();
+  int _page = 0;
+  String _sort = 'installs';
   Map<String, Object?>? _data;
   Object? _error;
   bool _loading = true;
@@ -41,7 +46,8 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
   @override
   void initState() {
     super.initState();
-    _query.addListener(() => setState(() {}));
+    // A new search starts at its first page.
+    _query.addListener(() => setState(() => _page = 0));
     unawaited(_load());
   }
 
@@ -105,13 +111,39 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
     }
   }
 
-  static int _popularity(Map a, Map b) {
-    for (final key in ['installs', 'stars', 'downloads']) {
-      final c = ((b[key] as int?) ?? 0).compareTo((a[key] as int?) ?? 0);
-      if (c != 0) return c;
-    }
-    return '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase());
-  }
+  /// The orders Sort by offers, the same as kiosksatellite.com's.
+  static const sorts = {
+    'installs': 'Most installs',
+    'stars': 'Most stars',
+    'updated': 'Recently updated',
+    'newest': 'Newest',
+    'name': 'Name',
+  };
+
+  static int _byName(Map a, Map b) =>
+      '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase());
+
+  static int _count(Map a, Map b, String key) =>
+      ((b[key] as int?) ?? -1).compareTo((a[key] as int?) ?? -1);
+
+  static int _date(Map a, Map b, String key) =>
+      '${b[key] ?? ''}'.compareTo('${a[key] ?? ''}');
+
+  static int Function(Map, Map) comparator(String sort) => switch (sort) {
+    'stars' => (a, b) => _count(a, b, 'stars').ifZero(() => _byName(a, b)),
+    'updated' => (a, b) => _date(a, b, 'released').ifZero(() => _byName(a, b)),
+    'newest' => (a, b) => _date(
+      a,
+      b,
+      'added',
+    ).ifZero(() => _date(a, b, 'released')).ifZero(() => _byName(a, b)),
+    'name' => _byName,
+    _ => (a, b) => _count(
+      a,
+      b,
+      'installs',
+    ).ifZero(() => _count(a, b, 'downloads')).ifZero(() => _byName(a, b)),
+  };
 
   List<Map<String, Object?>> _shown() {
     final words = _query.text.toLowerCase().split(RegExp(r'\s+'))
@@ -124,7 +156,21 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
       final text = '${p['name']} ${p['description']} ${p['author']} ${p['id']}'
           .toLowerCase();
       return words.every(text.contains);
-    }).toList()..sort(_popularity);
+    }).toList()..sort(comparator(_sort));
+  }
+
+  void _turn(int page) {
+    setState(() => _page = page);
+    // The new page starts at its first row, not where the last one ended.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final top = _listTop.currentContext;
+      if (top != null && top.mounted) {
+        Scrollable.ensureVisible(
+          top,
+          duration: const Duration(milliseconds: 200),
+        );
+      }
+    });
   }
 
   @override
@@ -165,6 +211,20 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
                 ],
               ),
             ),
+            DropdownRow<String>(
+              title: pluginText(context, 'Sort by'),
+              description: null,
+              value: _sort,
+              options: [
+                for (final entry in sorts.entries)
+                  (entry.key, pluginText(context, entry.value)),
+              ],
+              // A new order starts at its first page.
+              onChanged: (value) => setState(() {
+                _sort = value ?? 'installs';
+                _page = 0;
+              }),
+            ),
             if (error != null) WarnRow(pluginError(context, '$error')),
           ],
         ),
@@ -174,7 +234,11 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
             builder: (context, installed, _) {
               final shown = _shown();
               final byId = {for (final p in installed) p['id']: p};
+              final pages = (shown.length / pageSize).ceil();
+              final page = _page.clamp(0, pages == 0 ? 0 : pages - 1);
+              final rows = shown.skip(page * pageSize).take(pageSize);
               return SettingsCard(
+                key: _listTop,
                 children: [
                   if (shown.isEmpty)
                     HintRow(
@@ -185,7 +249,7 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
                             : 'No plugins match your search.',
                       ),
                     ),
-                  for (final entry in shown)
+                  for (final entry in rows)
                     _DirectoryRow(
                       entry: entry,
                       status: PluginDirectory.installStatus(
@@ -197,6 +261,8 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
                       onInstall: (update) => _install(entry, update),
                       onOpen: () => widget.onOpen(entry['id'] as String),
                     ),
+                  if (pages > 1)
+                    _Pager(page: page, pages: pages, onTurn: _turn),
                 ],
               );
             },
@@ -255,6 +321,49 @@ class PluginIcon extends StatelessWidget {
               fit: BoxFit.cover,
               errorBuilder: (_, _, _) => generic,
             ),
+    );
+  }
+}
+
+/// Previous and next page buttons around "Page 2 of 31".
+class _Pager extends StatelessWidget {
+  const _Pager({required this.page, required this.pages, required this.onTurn});
+  final int page;
+  final int pages;
+  final ValueChanged<int> onTurn;
+
+  @override
+  Widget build(BuildContext context) {
+    final number = NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toString(),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            tooltip: pluginText(context, 'Previous page'),
+            onPressed: page > 0 ? () => onTurn(page - 1) : null,
+            icon: const Icon(Icons.chevron_left_rounded),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              l10n(context).pluginPageOfPages(
+                number.format(page + 1),
+                number.format(pages),
+              ),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+          IconButton(
+            tooltip: pluginText(context, 'Next page'),
+            onPressed: page < pages - 1 ? () => onTurn(page + 1) : null,
+            icon: const Icon(Icons.chevron_right_rounded),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -372,4 +481,9 @@ class _DirectoryRow extends StatelessWidget {
       onTap: installed && !update ? onOpen : () => onInstall(update),
     );
   }
+}
+
+extension on int {
+  /// This comparison, or [next] when it is a tie.
+  int ifZero(int Function() next) => this == 0 ? next() : this;
 }

@@ -5497,6 +5497,60 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
+  /// **'Previous page'**
+  String get pluginPreviousPage;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Next page'**
+  String get pluginNextPage;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page} of {pages}'**
+  String pluginPageOfPages(String page, String pages);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get pluginSortBy;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Most installs'**
+  String get pluginSortMostInstalls;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Most stars'**
+  String get pluginSortMostStars;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently updated'**
+  String get pluginSortRecentlyUpdated;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get pluginSortNewest;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get pluginSortName;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Charts'**
   String get pluginCharts;
 

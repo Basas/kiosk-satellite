@@ -221,5 +221,13 @@ export const pluginTextMessageIds = {
   "Could not load Community Plugins. Try again later.": "pluginCouldNotLoadCommunityPlugins",
   "Turn on": "pluginTurnOn",
   "Turn on Enable Plugins to install this plugin.": "pluginTurnOnEnablePluginsToInstall",
-  "Install": "commonInstall"
+  "Install": "commonInstall",
+  "Previous page": "pluginPreviousPage",
+  "Next page": "pluginNextPage",
+  "Sort by": "pluginSortBy",
+  "Most installs": "pluginSortMostInstalls",
+  "Most stars": "pluginSortMostStars",
+  "Recently updated": "pluginSortRecentlyUpdated",
+  "Newest": "pluginSortNewest",
+  "Name": "pluginSortName"
 };

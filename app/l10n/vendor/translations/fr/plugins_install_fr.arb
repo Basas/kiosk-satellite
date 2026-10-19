@@ -33,5 +33,14 @@
   "pluginCouldNotReachCommunityPlugins": "Impossible de joindre Plugins de la communauté. Vérifiez la connexion Internet.",
   "pluginCouldNotLoadCommunityPlugins": "Impossible de charger Plugins de la communauté. Réessayez plus tard.",
   "pluginTurnOn": "Activer",
-  "pluginTurnOnEnablePluginsToInstall": "Activez « Activer les plugins » pour installer ce plugin."
+  "pluginTurnOnEnablePluginsToInstall": "Activez « Activer les plugins » pour installer ce plugin.",
+  "pluginPreviousPage": "Page précédente",
+  "pluginNextPage": "Page suivante",
+  "pluginPageOfPages": "Page {page} sur {pages}",
+  "pluginSortBy": "Trier par",
+  "pluginSortMostInstalls": "Plus d'installations",
+  "pluginSortMostStars": "Plus d'étoiles",
+  "pluginSortRecentlyUpdated": "Mis à jour récemment",
+  "pluginSortNewest": "Plus récents",
+  "pluginSortName": "Nom"
 }

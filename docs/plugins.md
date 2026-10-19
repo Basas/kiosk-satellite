@@ -11,7 +11,7 @@ A fleet leader can install its plugins on its followers with their settings. See
 
 ## Browse plugins
 
-**Settings > Plugin Manager > Browse plugins**, also in the remote admin, lists Community Plugins: plugins their authors submitted to the [plugins repository](https://github.com/jxlarrea/kiosk-satellite-plugins#submit-your-plugin). The same list is on [kiosksatellite.com](https://kiosksatellite.com/plugins/). Each plugin shows its icon, author, latest version, stars, downloads and active installs. Search narrows the list by name, description or author.
+**Settings > Plugin Manager > Browse plugins**, also in the remote admin, lists Community Plugins: plugins their authors submitted to the [plugins repository](https://github.com/jxlarrea/kiosk-satellite-plugins#submit-your-plugin). The same list is on [kiosksatellite.com](https://kiosksatellite.com/plugins/). Each plugin shows its icon, author, latest version, stars, downloads and active installs. Search narrows the list by name, description or author. **Sort by** orders it by Most installs, Most stars, Recently updated, Newest or Name. The list shows 20 plugins a page.
 
 Pick a plugin to see the same review that **Add plugin** shows, with its manifest and README, then choose **Trust and install**. A listed plugin you already have says **Installed**, or offers **Update** when the list knows a newer release. The review also says whether a repository is listed in Community Plugins.
 
