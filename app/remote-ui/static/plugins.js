@@ -167,7 +167,7 @@ function confirmPreview(preview) {
   return new Promise((resolve) => {
     const plugin = preview.manifest;
     const close = value => { document.removeEventListener('ks-settings-cached', renderError); modal.close(); resolve(value); };
-    const modal = modalShell({ title: '', width: 720, onDismiss: () => close(false) });
+    const modal = modalShell({ title: '', width: 960, onDismiss: () => close(false) });
     // The error is drawn again once the language catalogs arrive.
     let compatibilityNotice;
     function renderError() {
