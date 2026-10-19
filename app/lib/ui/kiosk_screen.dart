@@ -1741,16 +1741,20 @@ class _KioskScreenState extends State<KioskScreen>
                   // An announcement from Home Assistant: its own card, with
                   // the spoken text, in the same slot.
                   AnnouncementOverlay(container: c),
-                  // Plugin overlays that asked to be on top, in the voice
-                  // overlay's slot: over the screensaver, the menu and the
-                  // camera views, under a notification or call card, the
-                  // voice overlay itself and the lockdown shield. The rest
-                  // live in the kiosk plane.
-                  PluginNativeOverlays(plugins: c.plugins, onTop: true),
                   // The black timeout cover while a voice turn shows: the
                   // turn draws over it (issue #746). Outside a turn it
                   // sits above everything below.
                   ScreensaverBlankOverlay(container: c, underVoice: true),
+                  // A turn a plugin skin draws: double tap dismisses it.
+                  AssistPluginSkinTouch(container: c),
+                  // Plugin overlays that asked to be on top, in the voice
+                  // overlay's slot: over the screensaver, the menu and the
+                  // camera views, under a notification or call card, the
+                  // voice overlay itself and the lockdown shield. During a
+                  // turn they are over the black cover too, so a plugin
+                  // skin draws the turn there. The rest live in the kiosk
+                  // plane.
+                  PluginNativeOverlays(plugins: c.plugins, onTop: true),
                   // Native Voice Satellite: the assist overlay, in the same
                   // slot, over the screensaver and the camera views.
                   AssistOverlay(container: c),

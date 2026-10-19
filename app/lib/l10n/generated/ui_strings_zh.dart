@@ -11407,6 +11407,9 @@ class UiStringsZh extends UiStrings {
   String get voiceDashboardRequired => 'Kiosk 显示 Home Assistant 仪表盘时可用。';
 
   @override
+  String get voiceSkinUnavailablePlugin => '插件皮肤不可用';
+
+  @override
   String get voiceSkinDefault => '皮肤默认值';
 
   @override
@@ -24854,6 +24857,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get voiceDashboardRequired => 'Kiosk 显示 Home Assistant 仪表盘时可用。';
+
+  @override
+  String get voiceSkinUnavailablePlugin => '插件皮肤不可用';
 
   @override
   String get voiceSkinDefault => '皮肤默认值';

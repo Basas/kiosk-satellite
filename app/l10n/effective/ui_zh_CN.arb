@@ -45736,6 +45736,11 @@
       ]
     }
   },
+  "voiceSkinUnavailablePlugin": "插件皮肤不可用",
+  "@voiceSkinUnavailablePlugin": {
+    "context": "Settings > Voice Satellite > Appearance",
+    "description": "The Skin row's value when it picks a plugin that is no longer installed. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged."
+  },
   "voiceSkinDefault": "皮肤默认值",
   "@voiceSkinDefault": {
     "context": "Settings > Voice Satellite > Appearance",

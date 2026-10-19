@@ -20897,6 +20897,12 @@ abstract class UiStrings {
   /// **'Available while the kiosk is showing your Home Assistant dashboard.'**
   String get voiceDashboardRequired;
 
+  /// The Skin row's value when it picks a plugin that is no longer installed. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable plugin skin'**
+  String get voiceSkinUnavailablePlugin;
+
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:

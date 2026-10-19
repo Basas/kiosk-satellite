@@ -12109,6 +12109,9 @@ class UiStringsRu extends UiStrings {
       'Доступно, пока киоск показывает панель Home Assistant.';
 
   @override
+  String get voiceSkinUnavailablePlugin => 'Недоступный облик плагина';
+
+  @override
   String get voiceSkinDefault => 'Как у облика';
 
   @override

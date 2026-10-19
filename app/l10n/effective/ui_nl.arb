@@ -45736,6 +45736,11 @@
       ]
     }
   },
+  "voiceSkinUnavailablePlugin": "Vormgeving van plug-in niet beschikbaar",
+  "@voiceSkinUnavailablePlugin": {
+    "context": "Settings > Voice Satellite > Appearance",
+    "description": "The Skin row's value when it picks a plugin that is no longer installed. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged."
+  },
   "voiceSkinDefault": "Standaardvormgeving",
   "@voiceSkinDefault": {
     "context": "Settings > Voice Satellite > Appearance",

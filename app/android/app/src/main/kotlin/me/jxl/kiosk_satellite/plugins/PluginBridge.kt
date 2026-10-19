@@ -34,6 +34,9 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         /** Incomplete startups in a row that switch the enabled plugins off. */
         internal const val STARTUP_STRIKES = 2
 
+        /** The largest voice skin picture a plugin may name, in bytes. */
+        internal const val MAX_THUMBNAIL_BYTES = 256 * 1024L
+
         /**
          * Restart app and Exit end the process on purpose, so a startup still
          * inside its 30 seconds did not fail.
@@ -477,6 +480,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                     val value: Any? = when (call.method) {
                         "initialize" -> { initialize(); snapshot() }
                         "list" -> snapshot()
+                        "voiceSkinThumbnail" -> voiceSkinThumbnail(id(args))
                         "shizukuState" -> shizuku.state()
                         "requestShizukuPermission" -> {
                             check(pluginsEnabled && "shizuku" in manifest(id(args)).capabilities) { "Enable Plugins and select a plugin that declares Shizuku access" }
@@ -580,6 +584,18 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         val hash = records.getJSONObject(id).getString("hash")
         require(hash.matches(Regex("[a-f0-9]{64}"))) { "Invalid installed package hash" }
         return File(root, hash)
+    }
+
+    /** An installed plugin's voice skin picture, or null when it names none. Running or not. */
+    private fun voiceSkinThumbnail(id: String): ByteArray? {
+        val name = manifest(id).voiceSkinThumbnail ?: return null
+        val file = PluginPackage.assetFile(directory(id), name)
+        require(file.length() <= MAX_THUMBNAIL_BYTES) { "voiceSkinThumbnail is too large" }
+        val bytes = file.readBytes()
+        // The same digest the plugin's assets were installed with.
+        val expected = records.getJSONObject(id).optJSONObject("assetSha256")?.optString("assets/$name")
+        require(expected.isNullOrEmpty() || expected == PluginPackage.sha256(bytes)) { "voiceSkinThumbnail changed after install" }
+        return bytes
     }
 
     private fun manifest(id: String) = PluginManifest(JSONObject(PluginPackage.installedManifest(directory(id)).readText()))
@@ -715,6 +731,9 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             }
             require(manifest.minAndroidSdk <= Build.VERSION.SDK_INT) { "Plugin needs Android API ${manifest.minAndroidSdk}" }
             requireScreen(manifest)
+            manifest.voiceSkinThumbnail?.let {
+                require(PluginPackage.assetFile(staging, it).length() <= MAX_THUMBNAIL_BYTES) { "voiceSkinThumbnail must be at most 256 KB" }
+            }
             require(manifest.id !in restartRequired) { "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it." }
             require(records.has(manifest.id) || records.length() < 8) { "At most 8 plugins can be installed" }
             val previous = records.optJSONObject(manifest.id)

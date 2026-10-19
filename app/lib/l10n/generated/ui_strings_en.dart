@@ -12033,6 +12033,9 @@ class UiStringsEn extends UiStrings {
       'Available while the kiosk is showing your Home Assistant dashboard.';
 
   @override
+  String get voiceSkinUnavailablePlugin => 'Unavailable plugin skin';
+
+  @override
   String get voiceSkinDefault => 'Skin default';
 
   @override

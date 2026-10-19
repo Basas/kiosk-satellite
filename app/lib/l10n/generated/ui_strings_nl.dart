@@ -12175,6 +12175,10 @@ class UiStringsNl extends UiStrings {
       'Beschikbaar terwijl de kiosk je Home Assistant-dashboard toont.';
 
   @override
+  String get voiceSkinUnavailablePlugin =>
+      'Vormgeving van plug-in niet beschikbaar';
+
+  @override
   String get voiceSkinDefault => 'Standaardvormgeving';
 
   @override

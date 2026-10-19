@@ -175,6 +175,28 @@ class PluginPackageTest {
         rejects { PluginManifest(manifest().put("capabilities", org.json.JSONArray(listOf("host.control", "noise")))) }
         assertTrue(PluginHostPolicy.validEvent("audio.noise"))
     }
+    @Test fun voiceSkinsDrawOverlaysAndTheTextIsAHostRead() {
+        fun caps(vararg names: String) = manifest().put("capabilities", org.json.JSONArray(names.toList()))
+        assertTrue("voice.skin" in PluginManifest(caps("overlay", "host.read", "voice.skin")).capabilities)
+        rejects { PluginManifest(caps("voice.skin")) }
+        rejects { PluginManifest(caps("overlay", "voice.skin")) }
+        rejects { PluginManifest(caps("host.read", "voice.skin")) }
+        assertTrue("voice.text" in PluginManifest(caps("host.read", "voice.text")).capabilities)
+        rejects { PluginManifest(caps("voice.text")) }
+        rejects { PluginManifest(caps("host.control", "voice.text")) }
+        for (event in listOf("voice.text", "voice.level", "voice.overlay", "voice.skin", "voice.appearance")) assertTrue(PluginHostPolicy.validEvent(event))
+    }
+    @Test fun aVoiceSkinNamesItsPictureUnderAssets() {
+        fun skin(thumbnail: Any?) = manifest()
+            .put("capabilities", org.json.JSONArray(listOf("overlay", "host.read", "voice.skin")))
+            .put("voiceSkinThumbnail", thumbnail)
+        assertEquals("voice-skin.webp", PluginManifest(skin("voice-skin.webp")).voiceSkinThumbnail)
+        assertEquals("images/skin.PNG", PluginManifest(skin("images/skin.PNG")).voiceSkinThumbnail)
+        assertNull(PluginManifest(manifest()).voiceSkinThumbnail)
+        for (bad in listOf("../skin.webp", "skin.svg", "skin", "/skin.png", 7)) rejects { PluginManifest(skin(bad)) }
+        // Only a voice skin has a picture in the Skin picker.
+        rejects { PluginManifest(manifest().put("voiceSkinThumbnail", "voice-skin.webp")) }
+    }
     @Test fun overlaysAndScreensaversNeedAScreenUnlessThePluginGoesWithout() {
         fun caps(vararg names: String) = manifest().put("capabilities", org.json.JSONArray(names.toList()))
         assertTrue(PluginManifest(caps("overlay")).needsScreen)

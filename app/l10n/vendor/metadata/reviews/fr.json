@@ -25260,5 +25260,11 @@
     "translation": "0dc72a2927ad1878157cafd1a727981139e99f8de15dc1a907c750df136e31f3",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "voiceSkinUnavailablePlugin": {
+    "source": "202f82e0b822aa5d1933fb5f7148425b113013e5435c6e9b93eb7acabea3c471",
+    "translation": "96cf7b3d50c82ab64fd475576991b0ef5f9c1838eb5b238b3cda0dd41800e64b",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

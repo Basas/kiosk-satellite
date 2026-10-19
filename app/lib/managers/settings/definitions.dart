@@ -6831,6 +6831,12 @@ const voiceWakeArbitrationOffsetDb = SettingDef<num>(
   perDevice: true,
 );
 
+/// A plugin's voice skin: `plugin:` and the plugin's id. While that plugin
+/// runs, it draws the turn and the overlay draws none of its own.
+bool isPluginVoiceSkin(Object? value) =>
+    value is String &&
+    RegExp(r'^plugin:[a-z][a-z0-9_-]{0,63}$').hasMatch(value);
+
 const voiceSkin = SettingDef<String>(
   key: 'voice.skin',
   type: SettingType.select,

@@ -28,6 +28,13 @@ class PluginManifest(val json: JSONObject) {
         require(value == null || value is Boolean) { "Invalid headless" }
         value == true
     }
+    /** The voice skin's picture in the Skin picker: an image under assets/, or null for the plugin mark. */
+    val voiceSkinThumbnail: String? = json.opt("voiceSkinThumbnail").let { value ->
+        if (value == null) return@let null
+        require(value is String && PluginPackage.validAssetPath(value) && value.lowercase().substringAfterLast('.') in setOf("png", "jpg", "jpeg", "webp")) { "Invalid voiceSkinThumbnail" }
+        require("voice.skin" in capabilities) { "voiceSkinThumbnail needs the voice.skin capability" }
+        value
+    }
     /** Overlays and screensavers are all a device without a screen would load such a plugin for, unless it says otherwise. */
     val needsScreen get() = !headless && ("overlay" in capabilities || "screensaver" in capabilities)
 
@@ -35,9 +42,12 @@ class PluginManifest(val json: JSONObject) {
         require(json.getInt("schemaVersion") == 1) { "Unsupported manifest schema" }
         require(apiVersion == 1) { "This plugin needs a different SDK version" }
         require(minAndroidSdk >= 24) { "Minimum Android SDK must be at least 24" }
-        require(capabilities.all { it in setOf("overlay", "native", "entities", "host.read", "host.control", "shizuku", "screensaver", "noise", "ha") }) { "Unsupported plugin capability" }
-        // The room's noise level is a host read, opted into on its own.
+        require(capabilities.all { it in setOf("overlay", "native", "entities", "host.read", "host.control", "shizuku", "screensaver", "noise", "ha", "voice.skin", "voice.text") }) { "Unsupported plugin capability" }
+        // The room's noise level and the conversation's words are host reads, opted into on their own.
         require("noise" !in capabilities || "host.read" in capabilities) { "Unsupported plugin capability" }
+        require("voice.text" !in capabilities || "host.read" in capabilities) { "Unsupported plugin capability" }
+        // A voice skin draws overlays and follows the turn it draws.
+        require("voice.skin" !in capabilities || ("overlay" in capabilities && "host.read" in capabilities)) { "Unsupported plugin capability" }
         text(json, "description", 1000)
         text(json, "author", 120)
         text(json, "license", 120)

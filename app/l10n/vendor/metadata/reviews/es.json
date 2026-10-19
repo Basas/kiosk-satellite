@@ -21008,5 +21008,10 @@
     "source": "04aca71759143c123773e24b0a6bda93ed80f1510828e285d2d78eabb50c6e3a",
     "translation": "8336132605f350d69ffcb76b87167a6c44a0bcc371ac05bf0b743bb9ae18ed0b",
     "author": "Xavier Larrea"
+  },
+  "voiceSkinUnavailablePlugin": {
+    "source": "202f82e0b822aa5d1933fb5f7148425b113013e5435c6e9b93eb7acabea3c471",
+    "translation": "2b16102ec540bca7197e0a2ca1fd0711ff440b11c92533ddad8f2da130377a1e",
+    "author": "Xavier Larrea"
   }
 }

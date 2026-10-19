@@ -12313,6 +12313,10 @@ class UiStringsDe extends UiStrings {
       'Verfügbar, solange der Kiosk dein Home-Assistant-Dashboard anzeigt.';
 
   @override
+  String get voiceSkinUnavailablePlugin =>
+      'Design eines Plugins nicht verfügbar';
+
+  @override
   String get voiceSkinDefault => 'Wie im Design';
 
   @override

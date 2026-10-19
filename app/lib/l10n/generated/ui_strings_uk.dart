@@ -12166,6 +12166,9 @@ class UiStringsUk extends UiStrings {
       'Доступно, коли кіоск показує панель керування Home Assistant.';
 
   @override
+  String get voiceSkinUnavailablePlugin => 'Недоступне оформлення плагіна';
+
+  @override
   String get voiceSkinDefault => 'За оформленням';
 
   @override

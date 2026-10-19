@@ -4061,6 +4061,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'voiceScaleHelp' => strings.voiceScaleHelp,
       'voiceUpdateIntegration' => strings.voiceUpdateIntegration,
       'voiceDashboardRequired' => strings.voiceDashboardRequired,
+      'voiceSkinUnavailablePlugin' => strings.voiceSkinUnavailablePlugin,
       'voiceSkinDefault' => strings.voiceSkinDefault,
       'voiceBackground' => strings.voiceBackground,
       'voiceBackgroundHelp' => strings.voiceBackgroundHelp,

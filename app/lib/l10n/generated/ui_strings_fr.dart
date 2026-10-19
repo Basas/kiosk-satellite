@@ -12273,6 +12273,9 @@ class UiStringsFr extends UiStrings {
       'Disponible tant que le kiosque affiche votre tableau de bord Home Assistant.';
 
   @override
+  String get voiceSkinUnavailablePlugin => 'Habillage de plugin indisponible';
+
+  @override
   String get voiceSkinDefault => 'Selon l\'habillage';
 
   @override

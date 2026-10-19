@@ -141,6 +141,56 @@ class PluginManager extends Manager implements FleetPluginHost {
       entry.key:
           '${entry.value['title']} (${installed.value.where((p) => p['id'] == entry.value['pluginId']).firstOrNull?['name'] ?? entry.value['pluginId']})',
   };
+
+  /// Installed plugins that offer a voice skin, by the Skin setting's value.
+  Map<String, String> get voiceSkinOptions => {
+    for (final plugin in installed.value)
+      if ((plugin['capabilities'] as List? ?? const []).contains('voice.skin'))
+        'plugin:${plugin['id']}': '${plugin['name'] ?? plugin['id']}',
+  };
+
+  /// Plugin voice skin pictures by plugin id and package digest, so an
+  /// update shows its new one.
+  final _thumbnails = <String, Future<Uint8List?>>{};
+
+  /// The picture an installed plugin names for its voice skin, or null for
+  /// none. It need not be running.
+  Future<Uint8List?> voiceSkinThumbnail(String id) {
+    final plugin = installed.value.where((p) => p['id'] == id).firstOrNull;
+    if (plugin == null || plugin['voiceSkinThumbnail'] is! String) {
+      return Future.value(null);
+    }
+    final key = '$id@${plugin['sha256']}';
+    return _thumbnails[key] ??= channel
+        .invokeMethod<Uint8List>('voiceSkinThumbnail', {'id': id})
+        .timeout(const Duration(seconds: 10))
+        .catchError((Object _) {
+          _thumbnails.remove(key);
+          return null;
+        });
+  }
+
+  static String _imageMime(Uint8List bytes) {
+    bool starts(List<int> magic) =>
+        bytes.length >= magic.length &&
+        [for (var i = 0; i < magic.length; i++) bytes[i]].join(',') ==
+            magic.join(',');
+    if (starts([0x89, 0x50, 0x4E, 0x47])) return 'image/png';
+    if (starts([0xFF, 0xD8, 0xFF])) return 'image/jpeg';
+    return 'image/webp';
+  }
+
+  /// Whether [skin] is a plugin's voice skin and that plugin runs, so it
+  /// draws the turn. Otherwise the overlay draws a built-in skin.
+  bool voiceSkinRunning(String skin) =>
+      enabled.value &&
+      installed.value.any(
+        (p) =>
+            skin == 'plugin:${p['id']}' &&
+            p['running'] == true &&
+            (p['capabilities'] as List? ?? const []).contains('voice.skin'),
+      );
+
   final windows = ValueNotifier<List<PluginWindow>>(const []);
   // Bottom to top across plugins: a new or replaced overlay goes on top.
   final overlays = ValueNotifier<List<PluginNativeOverlay>>(const []);
@@ -190,6 +240,9 @@ class PluginManager extends Manager implements FleetPluginHost {
   /// The Home Assistant connection plugins with the `ha` capability share.
   /// Set by the app container before [init].
   HaPluginSocket? haSocket;
+
+  /// The voice turn plugins follow. Set by the app container before [init].
+  PluginVoiceFeed? voice;
 
   List<Map<String, Object?>> get actions => [
     for (final plugin in installed.value)
@@ -276,6 +329,7 @@ class PluginManager extends Manager implements FleetPluginHost {
       bus,
       (event) => channel.invokeMethod<void>('hostEvent', event),
       ha: haSocket,
+      voice: voice,
     );
     channel.setMethodCallHandler((call) async {
       if (_disposed) return null;
@@ -430,6 +484,16 @@ class PluginManager extends Manager implements FleetPluginHost {
       );
     }
 
+    register(
+      'getPluginVoiceSkinThumbnail',
+      'Read the picture a plugin voice skin shows in the Skin picker.',
+      (p) async {
+        final bytes = await voiceSkinThumbnail(p['id'] as String? ?? '');
+        if (bytes == null) return null;
+        return {'mime': _imageMime(bytes), 'data': base64Encode(bytes)};
+      },
+      const {'id': 'Installed plugin declaring the voice.skin capability'},
+    );
     register(
       'getPluginShizukuState',
       'Read Shizuku availability and the permission granted to KS.',

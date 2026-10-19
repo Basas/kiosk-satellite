@@ -12281,6 +12281,9 @@ class UiStringsEs extends UiStrings {
       'Disponible mientras el kiosko muestra tu panel de control de Home Assistant.';
 
   @override
+  String get voiceSkinUnavailablePlugin => 'Estilo de un plugin no disponible';
+
+  @override
   String get voiceSkinDefault => 'Según el estilo';
 
   @override
