@@ -117,7 +117,7 @@ A [plugin](plugins.md) can declare triggers and fire them when it notices someth
 * A mapping keeps its trigger when the plugin is disabled, but nothing fires until the plugin runs again.
 * Plugins are installed per device, so Fleet Management never syncs a gesture that uses a plugin trigger or a plugin action.
 
-Plugin authors can find the manifest format and `host.fireTrigger` in the [plugin SDK documentation](https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world/blob/main/docs/creating-plugins.md#gesture-triggers).
+Plugin authors can find the manifest format and `host.fireTrigger` in the [plugin SDK documentation](https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/creating-plugins.md#gesture-triggers).
 
 ## Timing
 

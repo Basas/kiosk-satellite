@@ -263,7 +263,7 @@ function render(root, state) {
   zipRow.append(upload, fileInput); developerTools.append(zipRow);
   const guideRow = element('a', undefined, 'row plugin-guide-row');
   guideRow.dataset.searchId = 'x:plugins:create';
-  guideRow.href = 'https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world';
+  guideRow.href = 'https://github.com/jxlarrea/kiosk-satellite-plugins';
   guideRow.target = '_blank'; guideRow.rel = 'noopener noreferrer';
   guideRow.append(info(pluginText('Create a plugin'), pluginText('Learn how to create plugins with the Hello World template and documentation.')));
   const guideIcon = element('span', undefined, 'icon-btn'); guideIcon.setAttribute('aria-hidden', 'true');

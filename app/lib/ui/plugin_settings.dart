@@ -598,7 +598,7 @@ class _PluginSettingsPanelState extends State<PluginSettingsPanel> {
                   onTap: () => _run(() async {
                     final opened = await launchUrl(
                       Uri.parse(
-                        'https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world',
+                        'https://github.com/jxlarrea/kiosk-satellite-plugins',
                       ),
                       mode: LaunchMode.externalApplication,
                     );
