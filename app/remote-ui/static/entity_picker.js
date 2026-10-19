@@ -324,11 +324,30 @@ function stateMessage(title, message, action) {
 
 /* ------------------------------------------------------------ the picker */
 
+// Rows go into the list a page at a time, more as it scrolls near the end.
+// Building thousands of entity rows on every keystroke stalled the search
+// (issue #1047).
+const PAGE = 100;
+const collator = new Intl.Collator();
+
+// Each item's lowercase search text, worked out once per list.
+const searchKeys = new WeakMap();
+function keysOf(item) {
+  let k = searchKeys.get(item);
+  if (!k) {
+    const sub = (item.sub || '').toLowerCase();
+    k = { name: item.name.toLowerCase(), sub, tail: sub.split('.').pop(),
+      group: (item.group || '').toLowerCase() };
+    searchKeys.set(item, k);
+  }
+  return k;
+}
+
 function buildPicker({ title, spec, selected = [], multiple = false, max = null,
   allowClear = false, onPick, onClear, onDone, onClose }) {
   const st = {
     list: cachedList(spec.key), failed: false, query: '', chip: null,
-    picked: [...selected], wide: true, scrolled: false,
+    picked: [...selected], wide: true, scrolled: false, limit: PAGE,
   };
   const root = el('div', 'dp ep');
   const head = el('div', 'dp-head');
@@ -345,7 +364,13 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
   search.type = 'search';
   search.autocomplete = 'off';
   search.placeholder = spec.searchHint;
-  search.addEventListener('input', () => { st.query = search.value.trim(); render(); });
+  search.addEventListener('input', () => {
+    const query = search.value.trim();
+    if (query === st.query) return;
+    st.query = query;
+    st.limit = PAGE;
+    render();
+  });
   head.append(bar, search);
   const chipsRow = el('div', 'ep-chips edge-fade-x');
   const content = el('div', 'dp-content');
@@ -355,9 +380,25 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
   const foot = el('div', 'dp-foot');
   root.append(head, chipsRow, columns, foot);
 
+  // The kept items and their chips change only with the list, the rows on
+  // show only with the list, the chip or the search.
+  let keptMemo = null;
+  let rowsMemo = null;
   const kept = () => {
-    const items = st.list?.items || [];
-    return spec.keep ? items.filter(spec.keep) : items;
+    if (keptMemo?.list !== st.list) {
+      const all = st.list?.items || [];
+      const items = spec.keep ? all.filter(spec.keep) : all;
+      const chips = [...new Set(items.map((i) => i.chip).filter(Boolean))].sort();
+      keptMemo = { list: st.list, items, chips };
+    }
+    return keptMemo;
+  };
+  const onShow = () => {
+    const { items } = kept();
+    if (rowsMemo?.items !== items || rowsMemo.chip !== st.chip || rowsMemo.query !== st.query) {
+      rowsMemo = { items, chip: st.chip, query: st.query, entries: entries(items) };
+    }
+    return rowsMemo.entries;
   };
   const full = () => multiple && max != null && st.picked.length >= max;
 
@@ -374,14 +415,12 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
     if (q) {
       const hits = [];
       for (const i of rows) {
-        const name = i.name.toLowerCase();
-        const sub = (i.sub || '').toLowerCase();
-        const group = (i.group || '').toLowerCase();
-        if (!name.includes(q) && !sub.includes(q) && !group.includes(q)) continue;
-        const rank = name.startsWith(q) || sub.split('.').pop().startsWith(q) ? 0 : name.includes(q) ? 1 : 2;
+        const k = keysOf(i);
+        if (!k.name.includes(q) && !k.sub.includes(q) && !k.group.includes(q)) continue;
+        const rank = k.name.startsWith(q) || k.tail.startsWith(q) ? 0 : k.name.includes(q) ? 1 : 2;
         hits.push([rank, i]);
       }
-      hits.sort((a, b) => a[0] - b[0] || a[1].name.localeCompare(b[1].name));
+      hits.sort((a, b) => a[0] - b[0] || collator.compare(a[1].name, b[1].name));
       return hits.map(([, i]) => ({ item: i }));
     }
     const groups = new Map();
@@ -393,8 +432,8 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
     for (const g of Object.keys(notes)) if (!groups.has(g)) groups.set(g, []);
     let order = [...groups.keys()];
     if (spec.byGroupName) {
-      order.sort((a, b) => (!a !== !b ? (a ? -1 : 1) : a.localeCompare(b)));
-      for (const g of order) groups.get(g).sort((a, b) => a.name.localeCompare(b.name));
+      order.sort((a, b) => (!a !== !b ? (a ? -1 : 1) : collator.compare(a, b)));
+      for (const g of order) groups.get(g).sort((a, b) => collator.compare(a.name, b.name));
     }
     const out = [];
     for (const g of order) {
@@ -407,15 +446,14 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
     return out;
   }
 
-  function renderChips(items) {
+  function renderChips(chips) {
     chipsRow.replaceChildren();
-    const chips = [...new Set(items.map((i) => i.chip).filter(Boolean))].sort();
     chipsRow.hidden = !spec.chips || chips.length < 2;
     if (chipsRow.hidden) return;
     const chip = (label, value) => {
       const b = el('button', 'ep-chip' + (st.chip === value ? ' active' : ''), label);
       b.type = 'button';
-      b.addEventListener('click', () => { st.chip = value; render(); });
+      b.addEventListener('click', () => { st.chip = value; st.limit = PAGE; render(); });
       chipsRow.appendChild(b);
     };
     chip(haText('All'), null);
@@ -500,11 +538,11 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
     root.classList.toggle('narrow', !st.wide);
     search.hidden = !(st.list && st.list.items.length);
     back.hidden = st.wide;
-    const items = kept();
-    renderChips(items);
+    renderChips(kept().chips);
     renderShowing();
     renderFoot();
     let node;
+    let fresh = false;
     if (!st.list) {
       if (st.failed) {
         const retry = el('button', 'btn-ghost', haText('Try again'));
@@ -519,32 +557,51 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
         node.appendChild(rows);
       }
     } else {
-      const list = entries(items);
+      const before = rowsMemo;
+      const list = onShow();
+      fresh = !!before && (before.query !== st.query || before.chip !== st.chip);
       if (!list.length) {
         node = stateMessage(haText('Nothing matches'));
       } else {
         node = el('div', 'dp-list edge-fade');
         let firstPick = null;
-        for (const e of list) {
-          if (e.heading != null) {
-            const h = el('div', 'dp-subhead ep-heading');
-            h.append(el('span', null, e.heading));
-            if (e.count) h.append(el('span', 'ep-count', String(e.count)));
-            node.appendChild(h);
-          } else if (e.note != null) {
-            node.appendChild(el('div', 'dp-note', e.note));
-          } else {
-            const picked = st.picked.includes(e.item.id);
-            const row = itemRow(e.item, {
-              picked, multiple, query: st.query,
-              disabled: multiple && !picked && full(),
-              onClick: () => tap(e.item),
-            });
-            if (picked && !firstPick) firstPick = row;
-            node.appendChild(row);
-          }
+        const lookFor = !st.scrolled && !st.query;
+        if (lookFor) {
+          const at = list.findIndex((e) => e.item && st.picked.includes(e.item.id));
+          if (at >= 0) st.limit = Math.max(st.limit, at + PAGE);
         }
-        if (firstPick && !st.scrolled && !st.query) {
+        let shown = 0;
+        const fill = () => {
+          const to = Math.min(st.limit, list.length);
+          for (; shown < to; shown++) {
+            const e = list[shown];
+            if (e.heading != null) {
+              const h = el('div', 'dp-subhead ep-heading');
+              h.append(el('span', null, e.heading));
+              if (e.count) h.append(el('span', 'ep-count', String(e.count)));
+              node.appendChild(h);
+            } else if (e.note != null) {
+              node.appendChild(el('div', 'dp-note', e.note));
+            } else {
+              const picked = st.picked.includes(e.item.id);
+              const row = itemRow(e.item, {
+                picked, multiple, query: st.query,
+                disabled: multiple && !picked && full(),
+                onClick: () => tap(e.item),
+              });
+              if (picked && !firstPick) firstPick = row;
+              node.appendChild(row);
+            }
+          }
+        };
+        fill();
+        node.addEventListener('scroll', () => {
+          if (shown >= list.length) return;
+          if (node.scrollTop + node.clientHeight < node.scrollHeight - 800) return;
+          st.limit = shown + PAGE;
+          fill();
+        }, { passive: true });
+        if (firstPick && lookFor) {
           st.scrolled = true;
           requestAnimationFrame(() => firstPick.scrollIntoView({ block: 'center' }));
         }
@@ -553,7 +610,8 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
     const prev = content.querySelector('.dp-list');
     const top = prev ? prev.scrollTop : 0;
     content.replaceChildren(node);
-    if (st.scrolled && node.classList?.contains('dp-list') && prev) node.scrollTop = top;
+    // A tap keeps the place in the list. A new search or chip starts at the top.
+    if (st.scrolled && !fresh && node.classList?.contains('dp-list') && prev) node.scrollTop = top;
     queueEdgeFades();
   }
 

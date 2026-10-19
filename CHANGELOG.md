@@ -6,6 +6,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ### Fixed
 - **Kiosk links in an iframe no longer show ERR_UNKNOWN_URL_SCHEME (#1044).** A `ks://` or `app://` link loaded inside an iframe, such as a Webpage dashboard or an iframe card, ran its action but left the frame on Chromium's "Webpage not available" error page. The error showed once whatever the link opened was closed, such as Music Assistant after Now Playing was dismissed. The frame now stays empty instead.
+- **The remote admin's entity picker keeps up with large Home Assistant setups (#1047).** With thousands of entities, each keystroke in the picker's search stalled while every matching row was rebuilt, and clearing the search rebuilt the whole list. The list now draws 100 rows at a time and adds more as you scroll, and the search works its filter out once per change. With 8,000 entities a keystroke now takes about 15 ms instead of up to 400 ms.
 
 ### Changed
 - **Installed plugins show their own icon.** A plugin that names an icon in its manifest now shows it at the top of its page in **Settings > Plugin Manager**, on the device and in the remote admin, in place of the generic plugin icon. Plugins without one keep the generic icon.
