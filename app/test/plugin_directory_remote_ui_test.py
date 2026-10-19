@@ -108,6 +108,10 @@ try:
         expect(rows.first.locator('.plugin-directory-meta span[title="Downloads"]')).to_have_count(1)
         expect(rows.first.locator('[title="Active installs"]')).to_have_count(0)
         expect(rows.nth(1)).to_contain_text('Installed')
+        # The icon sits at the top of the row, beside the name, like the device.
+        icon_box = rows.first.locator('.plugin-icon').bounding_box()
+        name_box = rows.first.locator('.name').bounding_box()
+        assert abs(icon_box['y'] - name_box['y']) < 6, (icon_box, name_box)
         # Without an icon the row shows the generic plugin icon.
         expect(rows.first.locator('.plugin-icon svg')).to_have_count(1)
         search = root.get_by_role('textbox', name='Search plugins')

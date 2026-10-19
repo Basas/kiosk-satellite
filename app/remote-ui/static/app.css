@@ -1351,9 +1351,30 @@
 }
 
 .plugin-add-row { cursor: pointer; }
-/* The ID keeps the phone layout of .row from splitting these rows up. */
-#tab-plugins .row.plugin-directory-search { flex-wrap: nowrap; }
-#tab-plugins .row.plugin-directory-search input[type=text] { flex: 1 1 auto; width: auto; min-width: 0; max-width: none; }
+/* Search, sort and page size share a line. Below 720px the search takes
+   its own line with refresh and the two pickers split the next one. */
+.plugin-directory-toolbar { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
+.plugin-directory-query { flex: 1 1 200px; }
+.plugin-directory-sort { flex: 0 0 210px; }
+.plugin-directory-size { flex: 0 0 172px; }
+.plugin-directory-refresh { flex: none; }
+.plugin-directory-field { position: relative; display: flex; align-items: center; min-width: 0; }
+.plugin-directory-field > svg { position: absolute; left: 12px; width: 18px; height: 18px; color: var(--muted); pointer-events: none; }
+#tab-plugins .plugin-directory-field .field { width: 100%; max-width: none; min-width: 0; margin: 0; padding-left: 38px; }
+@media (max-width: 720px) {
+  .plugin-directory-toolbar { flex-wrap: wrap; }
+  .plugin-directory-query { flex: 1 1 calc(100% - 56px); order: 1; }
+  .plugin-directory-refresh { order: 2; }
+  .plugin-directory-sort { flex: 1.3 1 0; order: 3; }
+  .plugin-directory-size { flex: 1 1 0; order: 4; }
+  /* The pickers' words need the room more than their icons. */
+  .plugin-directory-sort > svg, .plugin-directory-size > svg { display: none; }
+  #tab-plugins .plugin-directory-sort .field, #tab-plugins .plugin-directory-size .field { padding-left: 12px; padding-right: 34px; background-position: right 8px center; }
+}
+/* Too narrow for both words side by side: each picker gets a line. */
+@media (max-width: 380px) {
+  .plugin-directory-sort, .plugin-directory-size { flex: 1 1 100%; }
+}
 #tab-plugins .row.plugin-directory-row { cursor: pointer; flex-wrap: nowrap; gap: 12px; align-items: flex-start; }
 #tab-plugins .row.plugin-directory-row .info { display: block; flex: 1; min-width: 0; }
 .plugin-directory-row .info .desc { margin-left: 0; }

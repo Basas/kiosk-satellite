@@ -3139,6 +3139,11 @@ class UiStringsRu extends UiStrings {
   String get pluginPluginsPerPage => 'Плагинов на странице';
 
   @override
+  String pluginCountPerPage(String count) {
+    return '$count на странице';
+  }
+
+  @override
   String get pluginCharts => 'Графики';
 
   @override

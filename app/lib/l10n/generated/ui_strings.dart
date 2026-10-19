@@ -5554,6 +5554,12 @@ abstract class UiStrings {
   /// **'Plugins per page'**
   String get pluginPluginsPerPage;
 
+  /// A page size for the Browse plugins list, such as 10 per page.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} per page'**
+  String pluginCountPerPage(String count);
+
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:

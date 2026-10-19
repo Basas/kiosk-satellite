@@ -43,5 +43,6 @@
   "pluginSortNewest": "最新",
   "pluginSortName": "名称",
   "pluginSortMostDownloads": "下载最多",
-  "pluginPluginsPerPage": "每页插件数"
+  "pluginPluginsPerPage": "每页插件数",
+  "pluginCountPerPage": "每页 {count} 个"
 }

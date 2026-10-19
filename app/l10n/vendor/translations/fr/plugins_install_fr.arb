@@ -43,5 +43,6 @@
   "pluginSortNewest": "Plus récents",
   "pluginSortName": "Nom",
   "pluginSortMostDownloads": "Plus téléchargés",
-  "pluginPluginsPerPage": "Plugins par page"
+  "pluginPluginsPerPage": "Plugins par page",
+  "pluginCountPerPage": "{count} par page"
 }

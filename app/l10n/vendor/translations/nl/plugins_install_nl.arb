@@ -43,5 +43,6 @@
   "pluginSortNewest": "Nieuwste",
   "pluginSortName": "Naam",
   "pluginSortMostDownloads": "Meeste downloads",
-  "pluginPluginsPerPage": "Plug-ins per pagina"
+  "pluginPluginsPerPage": "Plug-ins per pagina",
+  "pluginCountPerPage": "{count} per pagina"
 }

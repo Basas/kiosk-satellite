@@ -345,30 +345,36 @@ function directoryPager(pages, turn) {
 function renderDirectory(page) {
   page.replaceChildren();
   const searchCard = element('div', undefined, 'card');
-  const searchRow = element('div', undefined, 'row plugin-directory-search');
-  const input = element('input'); input.type = 'text'; input.value = directoryQuery;
+  // Search, sort and page size on one line. A narrow page wraps the sort
+  // and page size under the search.
+  const toolbar = element('div', undefined, 'plugin-directory-toolbar');
+  const input = element('input', undefined, 'field'); input.type = 'text'; input.value = directoryQuery;
   input.placeholder = pluginText('Search plugins'); input.setAttribute('aria-label', pluginText('Search plugins'));
+  const search = element('label', undefined, 'plugin-directory-field plugin-directory-query');
+  search.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  search.append(input);
   const refreshButton = iconButton(pluginText('Refresh'), 'M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.3L3 16M3 21v-5h5');
   refreshButton.classList.add('plugin-directory-refresh');
   refreshButton.onclick = () => loadDirectory(true);
-  searchRow.append(input, refreshButton);
-  const sortRow = element('div', undefined, 'row');
-  sortRow.append(info(pluginText('Sort by')));
-  const sort = element('select'); sort.setAttribute('aria-label', pluginText('Sort by'));
+  const sort = element('select', undefined, 'field'); sort.setAttribute('aria-label', pluginText('Sort by')); sort.title = pluginText('Sort by');
   for (const [value, [label]] of Object.entries(DIRECTORY_SORTS)) {
     const option = element('option', pluginText(label)); option.value = value; sort.append(option);
   }
   sort.value = directorySort;
-  sortRow.append(sort);
-  const sizeRow = element('div', undefined, 'row');
-  sizeRow.append(info(pluginText('Plugins per page')));
-  const size = element('select'); size.setAttribute('aria-label', pluginText('Plugins per page'));
+  const sortField = element('label', undefined, 'plugin-directory-field plugin-directory-sort');
+  sortField.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M6 12h12M10 18h4"/></svg>';
+  sortField.append(sort);
+  const size = element('select', undefined, 'field'); size.setAttribute('aria-label', pluginText('Plugins per page')); size.title = pluginText('Plugins per page');
+  const count = new Intl.NumberFormat(messageLanguage() || undefined);
   for (const value of DIRECTORY_PAGE_SIZES) {
-    const option = element('option', String(value)); option.value = String(value); size.append(option);
+    const option = element('option', t('pluginCountPerPage', { count: count.format(value) })); option.value = String(value); size.append(option);
   }
   size.value = String(directoryPageSize);
-  sizeRow.append(size);
-  searchCard.append(searchRow, sortRow, sizeRow);
+  const sizeField = element('label', undefined, 'plugin-directory-field plugin-directory-size');
+  sizeField.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>';
+  sizeField.append(size);
+  toolbar.append(search, sortField, sizeField, refreshButton);
+  searchCard.append(toolbar);
   if (directoryError) searchCard.append(hintRow(pluginError(directoryError), { warn: true }));
   const list = element('div', undefined, 'card');
   const fill = () => {

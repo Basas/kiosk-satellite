@@ -3046,6 +3046,11 @@ class UiStringsZh extends UiStrings {
   String get pluginPluginsPerPage => '每页插件数';
 
   @override
+  String pluginCountPerPage(String count) {
+    return '每页 $count 个';
+  }
+
+  @override
   String get pluginCharts => '图表';
 
   @override
@@ -16591,6 +16596,11 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginPluginsPerPage => '每页插件数';
+
+  @override
+  String pluginCountPerPage(String count) {
+    return '每页 $count 个';
+  }
 
   @override
   String get pluginCharts => '图表';

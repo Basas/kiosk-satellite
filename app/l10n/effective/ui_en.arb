@@ -12064,6 +12064,25 @@
       ]
     }
   },
+  "pluginCountPerPage": "{count} per page",
+  "@pluginCountPerPage": {
+    "context": "Settings > Plugin Manager > Browse plugins",
+    "description": "A page size for the Browse plugins list, such as 10 per page.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > Browse plugins"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > Browse plugins"
+      ]
+    },
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    },
+    "x-notes": "Keep placeholders unchanged. Names and technical values are supplied by the app."
+  },
   "pluginCharts": "Charts",
   "@pluginCharts": {
     "context": "Settings > Plugin Manager > a plugin > Charts and Readings",

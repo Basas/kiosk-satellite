@@ -43,5 +43,6 @@
   "pluginSortNewest": "Новые",
   "pluginSortName": "Название",
   "pluginSortMostDownloads": "Больше всего загрузок",
-  "pluginPluginsPerPage": "Плагинов на странице"
+  "pluginPluginsPerPage": "Плагинов на странице",
+  "pluginCountPerPage": "{count} на странице"
 }

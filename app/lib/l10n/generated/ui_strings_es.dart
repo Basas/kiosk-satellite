@@ -3159,6 +3159,11 @@ class UiStringsEs extends UiStrings {
   String get pluginPluginsPerPage => 'Plugins por página';
 
   @override
+  String pluginCountPerPage(String count) {
+    return '$count por página';
+  }
+
+  @override
   String get pluginCharts => 'Gráficas';
 
   @override

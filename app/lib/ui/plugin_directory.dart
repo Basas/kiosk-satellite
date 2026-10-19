@@ -181,6 +181,127 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
     }
   }
 
+  /// Search, sort and page size on one line, or search over sort and page
+  /// size on a narrow pane.
+  Widget _toolbar(BuildContext context) {
+    final number = NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toString(),
+    );
+    InputDecoration box({required Widget icon, String? hint}) =>
+        InputDecoration(
+          prefixIcon: icon,
+          // The icon takes its own width and no more, so the picked value
+          // keeps the room.
+          prefixIconConstraints: const BoxConstraints(minWidth: 44),
+          hintText: hint,
+          border: const OutlineInputBorder(),
+          isDense: true,
+        );
+    final search = TextField(
+      controller: _query,
+      decoration: box(
+        icon: const Icon(Icons.search_rounded),
+        hint: pluginText(context, 'Search plugins'),
+      ),
+    );
+    final sort = Tooltip(
+      message: pluginText(context, 'Sort by'),
+      child: DropdownButtonFormField<String>(
+        initialValue: _sort,
+        isExpanded: true,
+        decoration: box(icon: const Icon(Icons.sort_rounded)),
+        items: [
+          for (final entry in sorts.entries)
+            DropdownMenuItem(
+              value: entry.key,
+              child: Text(
+                pluginText(context, entry.value),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+        ],
+        // A new order starts at its first page.
+        onChanged: (value) => setState(() {
+          _sort = value ?? 'downloads';
+          _page = 0;
+        }),
+      ),
+    );
+    final size = Tooltip(
+      message: pluginText(context, 'Plugins per page'),
+      child: DropdownButtonFormField<int>(
+        initialValue: pageSizes.contains(_pageSize) ? _pageSize : 10,
+        isExpanded: true,
+        decoration: box(icon: const Icon(Icons.view_list_rounded)),
+        items: [
+          for (final value in pageSizes)
+            DropdownMenuItem(
+              value: value,
+              child: Text(
+                l10n(context).pluginCountPerPage(number.format(value)),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+        ],
+        onChanged: (value) {
+          setState(() {
+            _pageSize = value ?? 10;
+            _page = 0;
+          });
+          widget.settings?.setInternal(_pageSizeKey, '$_pageSize');
+        },
+      ),
+    );
+    final refresh = IconButton(
+      tooltip: pluginText(context, 'Refresh'),
+      onPressed: _loading ? null : () => _load(refresh: true),
+      icon: _loading
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : const Icon(Icons.refresh_rounded),
+    );
+    return LayoutBuilder(
+      builder: (context, box) => box.maxWidth >= 600
+          ? Row(
+              children: [
+                Expanded(child: search),
+                const SizedBox(width: 12),
+                SizedBox(width: 220, child: sort),
+                const SizedBox(width: 12),
+                SizedBox(width: 196, child: size),
+                const SizedBox(width: 4),
+                refresh,
+              ],
+            )
+          : Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: search),
+                    const SizedBox(width: 4),
+                    refresh,
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  // Lines up with the search field, not the refresh button.
+                  padding: const EdgeInsets.only(right: 52),
+                  child: Row(
+                    children: [
+                      Expanded(flex: 3, child: sort),
+                      const SizedBox(width: 12),
+                      Expanded(flex: 2, child: size),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final error = _data?['error'] ?? _error;
@@ -191,60 +312,7 @@ class _PluginDirectoryPanelState extends State<PluginDirectoryPanel> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _query,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        hintText: pluginText(context, 'Search plugins'),
-                        border: const OutlineInputBorder(),
-                        isDense: true,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  IconButton(
-                    tooltip: pluginText(context, 'Refresh'),
-                    onPressed: _loading ? null : () => _load(refresh: true),
-                    icon: _loading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.refresh_rounded),
-                  ),
-                ],
-              ),
-            ),
-            DropdownRow<String>(
-              title: pluginText(context, 'Sort by'),
-              description: null,
-              value: _sort,
-              options: [
-                for (final entry in sorts.entries)
-                  (entry.key, pluginText(context, entry.value)),
-              ],
-              // A new order starts at its first page.
-              onChanged: (value) => setState(() {
-                _sort = value ?? 'downloads';
-                _page = 0;
-              }),
-            ),
-            DropdownRow<int>(
-              title: pluginText(context, 'Plugins per page'),
-              description: null,
-              value: pageSizes.contains(_pageSize) ? _pageSize : 10,
-              options: [for (final size in pageSizes) (size, '$size')],
-              onChanged: (value) {
-                setState(() {
-                  _pageSize = value ?? 10;
-                  _page = 0;
-                });
-                widget.settings?.setInternal(_pageSizeKey, '$_pageSize');
-              },
+              child: _toolbar(context),
             ),
             if (error != null) WarnRow(pluginError(context, '$error')),
           ],

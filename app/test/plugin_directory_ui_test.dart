@@ -181,7 +181,7 @@ void main() {
     // A new page size starts at its first page.
     await tester.tap(find.byType(DropdownButton<int>));
     await settle(tester);
-    await tester.tap(find.text('20').last);
+    await tester.tap(find.text('20 per page').last);
     await settle(tester);
     expect(find.text('Page 1 of 3'), findsOneWidget);
     expect(find.text('Plugin 19'), findsOneWidget);

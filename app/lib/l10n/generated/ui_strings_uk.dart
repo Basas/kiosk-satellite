@@ -3141,6 +3141,11 @@ class UiStringsUk extends UiStrings {
   String get pluginPluginsPerPage => 'Плагінів на сторінці';
 
   @override
+  String pluginCountPerPage(String count) {
+    return '$count на сторінці';
+  }
+
+  @override
   String get pluginCharts => 'Графіки';
 
   @override
