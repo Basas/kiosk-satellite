@@ -3357,10 +3357,6 @@ class UiStringsEs extends UiStrings {
       'La suma de verificación de la versión debe coincidir con el SHA-256 del archivo en GitHub';
 
   @override
-  String get pluginErrorTagRevision =>
-      'GitHub no devolvió la revisión de la etiqueta de la versión';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Confirma que confías en el autor del plugin';
 

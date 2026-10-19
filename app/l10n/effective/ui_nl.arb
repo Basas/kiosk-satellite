@@ -12781,19 +12781,6 @@
       ]
     }
   },
-  "pluginErrorTagRevision": "GitHub heeft de revisie van de releasetag niet teruggestuurd",
-  "@pluginErrorTagRevision": {
-    "context": "Settings > Plugin Manager > Add plugin, preview or install",
-    "description": "Explain the failure. Keep technical identifiers, file names and product names unchanged.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager > Add plugin, preview or install"
-      ],
-      "remoteAdmin": [
-        "Settings > Plugin Manager > Add plugin, preview or install"
-      ]
-    }
-  },
   "pluginErrorTrustAuthor": "Bevestig dat je de auteur van de plug-in vertrouwt",
   "@pluginErrorTrustAuthor": {
     "context": "Settings > Plugin Manager > Add plugin, preview or install",

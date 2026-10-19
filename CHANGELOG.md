@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Changed
+- **Fewer GitHub requests per plugin review.** Opening a plugin's review, from **Add plugin**, **Browse plugins**, an install link or **Check for updates**, now makes one GitHub API request instead of two. The README is read by the release tag instead of looking up the tag's commit first. GitHub allows 60 of these requests an hour per network without a login, so a home with several kiosks now runs into "GitHub denied the request" half as often. The package is still checked against its SHA-256 before it installs.
+
 ## v2026.10.31 - 2026-10-19
 
 ### Changed

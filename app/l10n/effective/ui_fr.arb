@@ -12781,19 +12781,6 @@
       ]
     }
   },
-  "pluginErrorTagRevision": "GitHub n'a pas renvoyé la révision de l'étiquette de version",
-  "@pluginErrorTagRevision": {
-    "context": "Settings > Plugin Manager > Add plugin, preview or install",
-    "description": "Explain the failure. Keep technical identifiers, file names and product names unchanged.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager > Add plugin, preview or install"
-      ],
-      "remoteAdmin": [
-        "Settings > Plugin Manager > Add plugin, preview or install"
-      ]
-    }
-  },
   "pluginErrorTrustAuthor": "Confirmez que vous faites confiance à l'auteur du plugin",
   "@pluginErrorTrustAuthor": {
     "context": "Settings > Plugin Manager > Add plugin, preview or install",

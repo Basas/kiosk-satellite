@@ -3350,10 +3350,6 @@ class UiStringsNl extends UiStrings {
       'De releasecontrolesom moet overeenkomen met de SHA-256-digest van het GitHub-releasebestand';
 
   @override
-  String get pluginErrorTagRevision =>
-      'GitHub heeft de revisie van de releasetag niet teruggestuurd';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Bevestig dat je de auteur van de plug-in vertrouwt';
 

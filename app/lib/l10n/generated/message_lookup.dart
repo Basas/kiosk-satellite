@@ -900,7 +900,6 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'pluginErrorIdVersion' => strings.pluginErrorIdVersion,
       'pluginErrorChecksumFilename' => strings.pluginErrorChecksumFilename,
       'pluginErrorGithubDigest' => strings.pluginErrorGithubDigest,
-      'pluginErrorTagRevision' => strings.pluginErrorTagRevision,
       'pluginErrorTrustAuthor' => strings.pluginErrorTrustAuthor,
       'pluginErrorPreviewExpired' => strings.pluginErrorPreviewExpired,
       'pluginErrorReviewedChecksum' => strings.pluginErrorReviewedChecksum,

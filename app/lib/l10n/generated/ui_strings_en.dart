@@ -3319,10 +3319,6 @@ class UiStringsEn extends UiStrings {
       'The release checksum must match GitHub asset SHA-256 digest';
 
   @override
-  String get pluginErrorTagRevision =>
-      'GitHub did not return the release tag revision';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Confirm that you trust the plugin author';
 

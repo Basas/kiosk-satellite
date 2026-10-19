@@ -96,7 +96,6 @@ const pluginTextMessageIds = <String, String>{
   "Invalid plugin ID or version": "pluginErrorIdVersion",
   "Invalid release checksum or package filename": "pluginErrorChecksumFilename",
   "The release checksum must match GitHub asset SHA-256 digest": "pluginErrorGithubDigest",
-  "GitHub did not return the release tag revision": "pluginErrorTagRevision",
   "Confirm that you trust the plugin author": "pluginErrorTrustAuthor",
   "This preview expired. Preview the repository again before installing.": "pluginErrorPreviewExpired",
   "Package SHA-256 does not match the reviewed release": "pluginErrorReviewedChecksum",

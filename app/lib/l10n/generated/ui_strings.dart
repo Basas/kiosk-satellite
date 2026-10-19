@@ -5881,12 +5881,6 @@ abstract class UiStrings {
   /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
   ///
   /// In en, this message translates to:
-  /// **'GitHub did not return the release tag revision'**
-  String get pluginErrorTagRevision;
-
-  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
-  ///
-  /// In en, this message translates to:
   /// **'Confirm that you trust the plugin author'**
   String get pluginErrorTrustAuthor;
 

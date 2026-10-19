@@ -3334,9 +3334,6 @@ class UiStringsRu extends UiStrings {
       'Контрольная сумма выпуска должна совпадать с дайджестом SHA-256 ресурса GitHub';
 
   @override
-  String get pluginErrorTagRevision => 'GitHub не вернул ревизию тега выпуска';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Подтвердите, что вы доверяете автору плагина';
 

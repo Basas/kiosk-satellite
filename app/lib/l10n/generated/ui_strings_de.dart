@@ -3374,10 +3374,6 @@ class UiStringsDe extends UiStrings {
       'Die Prüfsumme der Version muss mit dem SHA-256-Hash der Datei auf GitHub übereinstimmen';
 
   @override
-  String get pluginErrorTagRevision =>
-      'GitHub hat die Revision des Release-Tags nicht zurückgegeben';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Bitte bestätige, dass du dem Autor des Plugins vertraust';
 

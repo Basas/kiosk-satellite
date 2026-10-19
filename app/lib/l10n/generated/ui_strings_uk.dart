@@ -3337,9 +3337,6 @@ class UiStringsUk extends UiStrings {
       'Контрольна сума релізу має відповідати SHA-256 дайджесту ресурсу GitHub';
 
   @override
-  String get pluginErrorTagRevision => 'GitHub не повернув ревізію тега релізу';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Підтвердіть, що ви довіряєте автору плагіна';
 

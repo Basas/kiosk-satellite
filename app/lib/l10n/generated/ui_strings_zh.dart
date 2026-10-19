@@ -3220,9 +3220,6 @@ class UiStringsZh extends UiStrings {
   String get pluginErrorGithubDigest => '发布校验和必须与 GitHub 附件的 SHA-256 摘要匹配';
 
   @override
-  String get pluginErrorTagRevision => 'GitHub 未返回发布标签的修订版本';
-
-  @override
   String get pluginErrorTrustAuthor => '请确认你信任插件作者';
 
   @override
@@ -16783,9 +16780,6 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginErrorGithubDigest => '发布校验和必须与 GitHub 附件的 SHA-256 摘要匹配';
-
-  @override
-  String get pluginErrorTagRevision => 'GitHub 未返回发布标签的修订版本';
 
   @override
   String get pluginErrorTrustAuthor => '请确认你信任插件作者';

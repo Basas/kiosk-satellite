@@ -12781,19 +12781,6 @@
       ]
     }
   },
-  "pluginErrorTagRevision": "GitHub не повернув ревізію тега релізу",
-  "@pluginErrorTagRevision": {
-    "context": "Settings > Plugin Manager > Add plugin, preview or install",
-    "description": "Explain the failure. Keep technical identifiers, file names and product names unchanged.",
-    "x-locations": {
-      "device": [
-        "Settings > Plugin Manager > Add plugin, preview or install"
-      ],
-      "remoteAdmin": [
-        "Settings > Plugin Manager > Add plugin, preview or install"
-      ]
-    }
-  },
   "pluginErrorTrustAuthor": "Підтвердіть, що ви довіряєте автору плагіна",
   "@pluginErrorTrustAuthor": {
     "context": "Settings > Plugin Manager > Add plugin, preview or install",

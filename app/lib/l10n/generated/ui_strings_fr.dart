@@ -3357,10 +3357,6 @@ class UiStringsFr extends UiStrings {
       'La somme de contrôle de la version doit correspondre à l\'empreinte SHA-256 de la ressource GitHub';
 
   @override
-  String get pluginErrorTagRevision =>
-      'GitHub n\'a pas renvoyé la révision de l\'étiquette de version';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Confirmez que vous faites confiance à l\'auteur du plugin';
 
