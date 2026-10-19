@@ -2190,6 +2190,83 @@ void main() {
     },
   );
 
+  testWidgets('list rows show entity fields the way the entity picker does', (
+    tester,
+  ) async {
+    installed[0]['settings'] = [
+      {
+        'key': 'sensors',
+        'title': 'Sensors',
+        'type': 'list',
+        'row': {'title': 'entity'},
+        'default': [],
+        'fields': [
+          {'key': 'entity', 'title': 'Entity', 'type': 'entity'},
+        ],
+      },
+      {
+        'key': 'buttons',
+        'title': 'Buttons',
+        'type': 'list',
+        'row': {'title': 'label', 'subtitle': 'target'},
+        'default': [],
+        'fields': [
+          {'key': 'label', 'title': 'Label', 'type': 'string'},
+          {'key': 'target', 'title': 'Target', 'type': 'entity'},
+        ],
+      },
+    ];
+    installed[0]['values'] = {
+      'sensors': [
+        {'entity': 'sensor.room'},
+        {'entity': 'sensor.gone'},
+      ],
+      'buttons': [
+        {'label': 'Porch', 'target': 'light.porch'},
+      ],
+    };
+    PickCatalog.reset();
+    commands.register(
+      Command(
+        name: 'haListEntities',
+        description: 'test',
+        handler: (_) async => const CommandResult.ok([
+          {
+            'entity_id': 'sensor.room',
+            'name': 'Room temperature',
+            'state': '21 °C',
+            'icon': 'mdi:thermometer',
+            'domain': 'sensor',
+          },
+          {
+            'entity_id': 'light.porch',
+            'name': 'Porch light',
+            'state': 'On',
+            'domain': 'light',
+          },
+        ]),
+      ),
+    );
+    await plugins.refresh();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: PluginDetailPanel(plugins: plugins, id: 'hello-world'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Room temperature'), findsOneWidget);
+    expect(find.text('21 °C · sensor.room'), findsOneWidget);
+    expect(find.text('sensor.gone'), findsOneWidget);
+    expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
+    expect(find.text('Porch'), findsOneWidget);
+    expect(find.text('Porch light · On'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('demo output follows its settings with charts before readings', (
     tester,
   ) async {

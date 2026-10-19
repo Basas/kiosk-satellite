@@ -1707,6 +1707,7 @@
    nested list in a bordered box, and the icon picker's grid. */
 .plugin-list-row { cursor: pointer; }
 .plugin-list-row.dragging { opacity: .45; }
+.plugin-list-row .plugin-row-missing { color: var(--error); }
 .plugin-list-row .plugin-drag { cursor: grab; color: var(--muted); }
 .plugin-list-rows > .row + .row { border-top: 1px solid var(--divider); }
 .plugin-list > .row + .plugin-list-rows { border-top: 1px solid var(--divider); }
