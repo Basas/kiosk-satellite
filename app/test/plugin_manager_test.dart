@@ -2403,6 +2403,70 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('the plugin page shows the icon the plugin names', (
+    tester,
+  ) async {
+    final png = base64Decode(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    );
+    messenger.setMockMethodCallHandler(PluginManager.channel, (call) async {
+      calls.add(call);
+      if (call.method == 'icon') return png;
+      return {'enabled': true, 'plugins': installed};
+    });
+    Future<Finder> open() async {
+      await plugins.refresh();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: PluginDetailPanel(
+                key: UniqueKey(),
+                plugins: plugins,
+                id: 'hello-world',
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return find.byType(IntroRow);
+    }
+
+    // Without an icon the page keeps the generic glyph and never asks.
+    var intro = await open();
+    expect(
+      find.descendant(
+        of: intro,
+        matching: find.byIcon(Icons.extension_rounded),
+      ),
+      findsOneWidget,
+    );
+    expect(calls.where((c) => c.method == 'icon'), isEmpty);
+
+    installed[0] = {
+      ...installed[0],
+      'icon': 'assets/icon.png',
+      'sha256': 'a' * 64,
+    };
+    intro = await open();
+    expect(
+      find.descendant(of: intro, matching: find.byType(Image)),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: intro,
+        matching: find.byIcon(Icons.extension_rounded),
+      ),
+      findsNothing,
+    );
+    expect(calls.where((c) => c.method == 'icon').single.arguments, {
+      'id': 'hello-world',
+    });
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('secret settings stay masked and are only replaced', (
     tester,
   ) async {

@@ -167,20 +167,28 @@ class PluginManager extends Manager implements FleetPluginHost {
         'plugin:${plugin['id']}': '${plugin['name'] ?? plugin['id']}',
   };
 
-  /// Plugin voice skin pictures by plugin id and package digest, so an
-  /// update shows its new one.
+  /// Plugin pictures by field, plugin id and package digest, so an update
+  /// shows its new one.
   final _thumbnails = <String, Future<Uint8List?>>{};
 
   /// The picture an installed plugin names for its voice skin, or null for
   /// none. It need not be running.
-  Future<Uint8List?> voiceSkinThumbnail(String id) {
+  Future<Uint8List?> voiceSkinThumbnail(String id) =>
+      _picture('voiceSkinThumbnail', id);
+
+  /// The icon an installed plugin names in its manifest, or null for none.
+  /// It need not be running.
+  Future<Uint8List?> pluginIcon(String id) => _picture('icon', id);
+
+  /// [field] is both the manifest field and the channel method.
+  Future<Uint8List?> _picture(String field, String id) {
     final plugin = installed.value.where((p) => p['id'] == id).firstOrNull;
-    if (plugin == null || plugin['voiceSkinThumbnail'] is! String) {
+    if (plugin == null || plugin[field] is! String) {
       return Future.value(null);
     }
-    final key = '$id@${plugin['sha256']}';
+    final key = '$field:$id@${plugin['sha256']}';
     return _thumbnails[key] ??= channel
-        .invokeMethod<Uint8List>('voiceSkinThumbnail', {'id': id})
+        .invokeMethod<Uint8List>(field, {'id': id})
         .timeout(const Duration(seconds: 10))
         .catchError((Object _) {
           _thumbnails.remove(key);
@@ -538,6 +546,16 @@ class PluginManager extends Manager implements FleetPluginHost {
         return {'mime': _imageMime(bytes), 'data': base64Encode(bytes)};
       },
       const {'id': 'Installed plugin declaring the voice.skin capability'},
+    );
+    register(
+      'getPluginIcon',
+      'Read the icon an installed plugin names in its manifest.',
+      (p) async {
+        final bytes = await pluginIcon(p['id'] as String? ?? '');
+        if (bytes == null) return null;
+        return {'mime': _imageMime(bytes), 'data': base64Encode(bytes)};
+      },
+      const {'id': 'Installed plugin ID'},
     );
     register(
       'getPluginShizukuState',

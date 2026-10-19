@@ -738,6 +738,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                         "initialize" -> { initialize(); snapshot() }
                         "list" -> snapshot()
                         "voiceSkinThumbnail" -> voiceSkinThumbnail(id(args))
+                        "icon" -> icon(id(args))
                         "shizukuState" -> shizuku.state()
                         "requestShizukuPermission" -> {
                             check(pluginsEnabled && "shizuku" in manifest(id(args)).capabilities) { "Enable Plugins and select a plugin that declares Shizuku access" }
@@ -857,14 +858,19 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     }
 
     /** An installed plugin's voice skin picture, or null when it names none. Running or not. */
-    private fun voiceSkinThumbnail(id: String): ByteArray? {
-        val name = manifest(id).voiceSkinThumbnail ?: return null
+    private fun voiceSkinThumbnail(id: String): ByteArray? =
+        manifest(id).voiceSkinThumbnail?.let { picture(id, it, "voiceSkinThumbnail") }
+
+    /** An installed plugin's icon, or null when it names none. Running or not. */
+    private fun icon(id: String): ByteArray? = manifest(id).icon?.let { picture(id, it, "icon") }
+
+    /** A picture from an installed plugin's assets, checked against the digest it was installed with. */
+    private fun picture(id: String, name: String, field: String): ByteArray {
         val file = PluginPackage.assetFile(directory(id), name)
-        require(file.length() <= MAX_THUMBNAIL_BYTES) { "voiceSkinThumbnail is too large" }
+        require(file.length() <= MAX_THUMBNAIL_BYTES) { "$field is too large" }
         val bytes = file.readBytes()
-        // The same digest the plugin's assets were installed with.
         val expected = records.getJSONObject(id).optJSONObject("assetSha256")?.optString("assets/$name")
-        require(expected.isNullOrEmpty() || expected == PluginPackage.sha256(bytes)) { "voiceSkinThumbnail changed after install" }
+        require(expected.isNullOrEmpty() || expected == PluginPackage.sha256(bytes)) { "$field changed after install" }
         return bytes
     }
 
