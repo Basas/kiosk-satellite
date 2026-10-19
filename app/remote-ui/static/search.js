@@ -1,10 +1,9 @@
 import { tabHidden } from './headless.js';
 import { navigationText, t, settingsPageText, pluginText } from './localization.js';
-import { readRoute } from './routes.js';
 import { $, depSatisfied, state } from './core.js';
 import { permissionSpecs } from './permissions.js';
 import { loadPlugins, pluginSearchState, refreshPluginSearchState } from './plugins.js';
-import { TABS, TAB_TITLES, currentPath, setNav, showTab } from './tabs.js';
+import { TABS, TAB_TITLES, currentPath, followRoute, setNav, showTab } from './tabs.js';
 import { REALTIME_PROVIDERS, providerKeys } from './vs_native.js';
 
 /* ---- Settings search ---- */
@@ -471,6 +470,5 @@ $('#tabs').addEventListener('click', (e) => {
 document.querySelectorAll('[data-home]').forEach((el) =>
   el.addEventListener('click', () => { showTab('dashboard'); setNav(false); }));
 
-// Back/forward, and an address typed by hand.
-window.addEventListener('hashchange', () =>
-  showTab(readRoute(), { push: false }));
+window.addEventListener('popstate', followRoute);
+window.addEventListener('hashchange', followRoute);
