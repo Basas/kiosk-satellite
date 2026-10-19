@@ -7160,14 +7160,17 @@ class UiStringsFr extends UiStrings {
   String get settingClapStrictnessTitle => 'Détection des claquements';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Le mode Strict exige des claquements plus forts et régulièrement espacés ; essayez-le si le bruit ambiant provoque de faux déclenchements.';
+  String get settingClapDetectionDescription =>
+      'Le mode Strict exige des claquements plus forts et régulièrement espacés. Grande pièce laisse aux claquements le temps de s\'estomper dans une pièce qui résonne.';
 
   @override
   String get gestureStrictnessStandard => 'Standard';
 
   @override
   String get gestureStrictnessStrict => 'Strict';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Grande pièce';
 
   @override
   String get gestureOff => 'Les gestes sont désactivés';

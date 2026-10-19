@@ -26708,8 +26708,8 @@
       ]
     }
   },
-  "settingClapStrictnessDescription": "«Строго» требует более громких и равномерно распределённых хлопков; попробуйте, если бытовой шум вызывает ложные срабатывания.",
-  "@settingClapStrictnessDescription": {
+  "settingClapDetectionDescription": "«Строго» требует более громких и равномерно распределённых хлопков. «Большая комната» даёт хлопкам время затихнуть в помещении с эхом.",
+  "@settingClapDetectionDescription": {
     "context": "Settings > Gestures",
     "description": "Help below this setting.",
     "x-locations": {
@@ -26738,6 +26738,19 @@
   "@gestureStrictnessStrict": {
     "context": "Settings > Gestures",
     "description": "Clap detection option.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Clapper > Clap detection"
+      ],
+      "remoteAdmin": [
+        "Gestures > Clapper > Clap detection"
+      ]
+    }
+  },
+  "gestureStrictnessLargeRoom": "Большая комната",
+  "@gestureStrictnessLargeRoom": {
+    "context": "Settings > Gestures",
+    "description": "Clap detection option, for big rooms where claps echo.",
     "x-locations": {
       "device": [
         "Settings > Gestures > Clapper > Clap detection"

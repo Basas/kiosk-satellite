@@ -12248,8 +12248,8 @@ abstract class UiStrings {
   /// Help below this setting.
   ///
   /// In en, this message translates to:
-  /// **'Strict needs louder, evenly spaced claps; try it if household noise false-triggers.'**
-  String get settingClapStrictnessDescription;
+  /// **'Strict needs louder, evenly spaced claps. Large room gives claps time to fade in an echoey room.'**
+  String get settingClapDetectionDescription;
 
   /// Clap detection option.
   ///
@@ -12262,6 +12262,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Strict'**
   String get gestureStrictnessStrict;
+
+  /// Clap detection option, for big rooms where claps echo.
+  ///
+  /// In en, this message translates to:
+  /// **'Large room'**
+  String get gestureStrictnessLargeRoom;
 
   /// Label or guidance in this section.
   ///

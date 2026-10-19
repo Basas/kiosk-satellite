@@ -7104,14 +7104,17 @@ class UiStringsUk extends UiStrings {
   String get settingClapStrictnessTitle => 'Розпізнавання оплесків';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Суворий режим вимагає гучніших і рівномірніших оплесків; спробуйте його, якщо побутовий шум викликає хибні спрацьовування.';
+  String get settingClapDetectionDescription =>
+      'Суворий режим вимагає гучніших і рівномірніших оплесків. «Велике приміщення» дає оплескам час затихнути в приміщенні з луною.';
 
   @override
   String get gestureStrictnessStandard => 'Стандартне';
 
   @override
   String get gestureStrictnessStrict => 'Суворе';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Велике приміщення';
 
   @override
   String get gestureOff => 'Жести вимкнено';

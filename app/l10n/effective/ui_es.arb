@@ -26708,8 +26708,8 @@
       ]
     }
   },
-  "settingClapStrictnessDescription": "El modo estricto necesita palmadas más fuertes y espaciadas de forma regular. Pruébalo si los ruidos de casa activan los gestos por error.",
-  "@settingClapStrictnessDescription": {
+  "settingClapDetectionDescription": "El modo estricto necesita palmadas más fuertes y espaciadas de forma regular. Sala grande da tiempo a que las palmadas se apaguen en una sala con eco.",
+  "@settingClapDetectionDescription": {
     "context": "Settings > Gestures",
     "description": "Help below this setting.",
     "x-locations": {
@@ -26738,6 +26738,19 @@
   "@gestureStrictnessStrict": {
     "context": "Settings > Gestures",
     "description": "Clap detection option.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Clapper > Clap detection"
+      ],
+      "remoteAdmin": [
+        "Gestures > Clapper > Clap detection"
+      ]
+    }
+  },
+  "gestureStrictnessLargeRoom": "Sala grande",
+  "@gestureStrictnessLargeRoom": {
+    "context": "Settings > Gestures",
+    "description": "Clap detection option, for big rooms where claps echo.",
     "x-locations": {
       "device": [
         "Settings > Gestures > Clapper > Clap detection"

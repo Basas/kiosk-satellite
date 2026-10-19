@@ -7082,14 +7082,17 @@ class UiStringsRu extends UiStrings {
   String get settingClapStrictnessTitle => 'Определение хлопков';
 
   @override
-  String get settingClapStrictnessDescription =>
-      '«Строго» требует более громких и равномерно распределённых хлопков; попробуйте, если бытовой шум вызывает ложные срабатывания.';
+  String get settingClapDetectionDescription =>
+      '«Строго» требует более громких и равномерно распределённых хлопков. «Большая комната» даёт хлопкам время затихнуть в помещении с эхом.';
 
   @override
   String get gestureStrictnessStandard => 'Стандартно';
 
   @override
   String get gestureStrictnessStrict => 'Строго';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Большая комната';
 
   @override
   String get gestureOff => 'Жесты выключены';

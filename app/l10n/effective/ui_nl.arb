@@ -26708,8 +26708,8 @@
       ]
     }
   },
-  "settingClapStrictnessDescription": "Strikt vereist luider en gelijkmatiger handgeklap. Probeer dit als omgevingsgeluiden gebaren ten onrechte activeren.",
-  "@settingClapStrictnessDescription": {
+  "settingClapDetectionDescription": "Strikt vereist luider en gelijkmatiger handgeklap. Grote ruimte geeft handgeklap de tijd om weg te sterven in een galmende ruimte.",
+  "@settingClapDetectionDescription": {
     "context": "Settings > Gestures",
     "description": "Help below this setting.",
     "x-locations": {
@@ -26738,6 +26738,19 @@
   "@gestureStrictnessStrict": {
     "context": "Settings > Gestures",
     "description": "Clap detection option.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Clapper > Clap detection"
+      ],
+      "remoteAdmin": [
+        "Gestures > Clapper > Clap detection"
+      ]
+    }
+  },
+  "gestureStrictnessLargeRoom": "Grote ruimte",
+  "@gestureStrictnessLargeRoom": {
+    "context": "Settings > Gestures",
+    "description": "Clap detection option, for big rooms where claps echo.",
     "x-locations": {
       "device": [
         "Settings > Gestures > Clapper > Clap detection"

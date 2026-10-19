@@ -7039,14 +7039,17 @@ class UiStringsEn extends UiStrings {
   String get settingClapStrictnessTitle => 'Clap detection';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Strict needs louder, evenly spaced claps; try it if household noise false-triggers.';
+  String get settingClapDetectionDescription =>
+      'Strict needs louder, evenly spaced claps. Large room gives claps time to fade in an echoey room.';
 
   @override
   String get gestureStrictnessStandard => 'Standard';
 
   @override
   String get gestureStrictnessStrict => 'Strict';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Large room';
 
   @override
   String get gestureOff => 'Gestures are off';

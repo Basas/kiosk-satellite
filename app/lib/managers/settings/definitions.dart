@@ -991,16 +991,22 @@ const gestureMappings = SettingDef<String>(
 // playing with toys near the device produced enough clap-shaped impulses to
 // false-trigger). Standard already requires a quiet lead-in and consistent
 // rhythm and loudness; Strict tightens all three and wants louder claps.
+// Large room (#1026) gives a clap that is still ringing in a big, hard room
+// time to fade instead of reading it as sustained sound.
 const clapStrictness = SettingDef<String>(
   key: 'gestures.clap_strictness',
   type: SettingType.select,
   defaultValue: 'standard',
-  options: ['standard', 'strict'],
-  optionLabels: {'standard': 'Standard', 'strict': 'Strict'},
+  options: ['standard', 'strict', 'large_room'],
+  optionLabels: {
+    'standard': 'Standard',
+    'strict': 'Strict',
+    'large_room': 'Large room',
+  },
   title: 'Clap detection',
   description:
-      'Strict needs louder, evenly spaced claps; try it if household '
-      'noise false-triggers.',
+      'Strict needs louder, evenly spaced claps. Large room gives claps '
+      'time to fade in an echoey room.',
   category: 'Gestures',
 );
 

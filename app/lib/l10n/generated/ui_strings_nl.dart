@@ -7124,14 +7124,17 @@ class UiStringsNl extends UiStrings {
   String get settingClapStrictnessTitle => 'Klapdetectie';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Strikt vereist luider en gelijkmatiger handgeklap. Probeer dit als omgevingsgeluiden gebaren ten onrechte activeren.';
+  String get settingClapDetectionDescription =>
+      'Strikt vereist luider en gelijkmatiger handgeklap. Grote ruimte geeft handgeklap de tijd om weg te sterven in een galmende ruimte.';
 
   @override
   String get gestureStrictnessStandard => 'Standaard';
 
   @override
   String get gestureStrictnessStrict => 'Strikt';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Grote ruimte';
 
   @override
   String get gestureOff => 'Gebaren zijn uitgeschakeld';

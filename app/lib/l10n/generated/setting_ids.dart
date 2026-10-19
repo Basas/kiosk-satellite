@@ -1358,7 +1358,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "gestures.clap_strictness": {
     "title": "settingClapStrictnessTitle",
-    "description": "settingClapStrictnessDescription",
+    "description": "settingClapDetectionDescription",
   },
   "fleet.leader": {
     "title": "fleetLeadThisFleet",

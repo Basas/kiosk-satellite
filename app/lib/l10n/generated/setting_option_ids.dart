@@ -258,7 +258,8 @@ const settingOptionMessageIds = <String, Map<String, String>>{
   },
   "gestures.clap_strictness": {
     "standard": "gestureStrictnessStandard",
-    "strict": "gestureStrictnessStrict"
+    "strict": "gestureStrictnessStrict",
+    "large_room": "gestureStrictnessLargeRoom"
   },
   "lockdown.exit_gesture": {
     "taps5": "kioskGestureTaps5",

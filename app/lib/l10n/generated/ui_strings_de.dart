@@ -7210,14 +7210,17 @@ class UiStringsDe extends UiStrings {
   String get settingClapStrictnessTitle => 'Klatscherkennung';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Der strikte Modus erfordert lautere und gleichmäßiger verteilte Klatscher. Probiere ihn aus, wenn Haushaltsgeräusche die Gesten versehentlich auslösen.';
+  String get settingClapDetectionDescription =>
+      'Der strikte Modus erfordert lautere und gleichmäßiger verteilte Klatscher. Großer Raum gibt Klatschern in einem halligen Raum Zeit zum Ausklingen.';
 
   @override
   String get gestureStrictnessStandard => 'Standard';
 
   @override
   String get gestureStrictnessStrict => 'Strikt';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Großer Raum';
 
   @override
   String get gestureOff => 'Gesten sind deaktiviert';

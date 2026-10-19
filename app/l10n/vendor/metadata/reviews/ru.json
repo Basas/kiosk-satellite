@@ -25593,5 +25593,17 @@
     "translation": "6b2b9ff85d40ae016499711fa945e5e65c985898eb8efe98f76a3bf487a9ca76",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingClapDetectionDescription": {
+    "source": "571f9329db46c7e64993669bd8ec426ccfd10e83103c10ea65a2167856b5007f",
+    "translation": "ea3c8e327e3620dd2929cefeb7baadf0635792e65ef959ab6e990e9e604d6d0b",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "gestureStrictnessLargeRoom": {
+    "source": "19cfc67e85ff3082684750e57d49df2f44c138d5e9dbd90487ea1e3b9e898059",
+    "translation": "57133ae464a6ba1673163838d34a174f57c33733385931e3207bdaad04702897",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

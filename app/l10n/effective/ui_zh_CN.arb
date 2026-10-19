@@ -26708,8 +26708,8 @@
       ]
     }
   },
-  "settingClapStrictnessDescription": "严格模式要求拍手声音更大、间隔更均匀。家庭噪声造成误触发时可尝试此模式。",
-  "@settingClapStrictnessDescription": {
+  "settingClapDetectionDescription": "严格模式要求拍手声音更大、间隔更均匀。大房间模式会给有回声的房间里的拍手声留出消散时间。",
+  "@settingClapDetectionDescription": {
     "context": "Settings > Gestures",
     "description": "Help below this setting.",
     "x-locations": {
@@ -26738,6 +26738,19 @@
   "@gestureStrictnessStrict": {
     "context": "Settings > Gestures",
     "description": "Clap detection option.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Clapper > Clap detection"
+      ],
+      "remoteAdmin": [
+        "Gestures > Clapper > Clap detection"
+      ]
+    }
+  },
+  "gestureStrictnessLargeRoom": "大房间",
+  "@gestureStrictnessLargeRoom": {
+    "context": "Settings > Gestures",
+    "description": "Clap detection option, for big rooms where claps echo.",
     "x-locations": {
       "device": [
         "Settings > Gestures > Clapper > Clap detection"

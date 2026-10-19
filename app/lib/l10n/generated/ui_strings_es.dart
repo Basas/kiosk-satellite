@@ -7170,14 +7170,17 @@ class UiStringsEs extends UiStrings {
   String get settingClapStrictnessTitle => 'Detección de palmadas';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'El modo estricto necesita palmadas más fuertes y espaciadas de forma regular. Pruébalo si los ruidos de casa activan los gestos por error.';
+  String get settingClapDetectionDescription =>
+      'El modo estricto necesita palmadas más fuertes y espaciadas de forma regular. Sala grande da tiempo a que las palmadas se apaguen en una sala con eco.';
 
   @override
   String get gestureStrictnessStandard => 'Estándar';
 
   @override
   String get gestureStrictnessStrict => 'Estricto';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Sala grande';
 
   @override
   String get gestureOff => 'Los gestos están desactivados';

@@ -2003,10 +2003,11 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'esphomeExcludedInvalid' => strings.esphomeExcludedInvalid,
       'settingsBuyCoffee' => strings.settingsBuyCoffee,
       'settingClapStrictnessTitle' => strings.settingClapStrictnessTitle,
-      'settingClapStrictnessDescription' =>
-        strings.settingClapStrictnessDescription,
+      'settingClapDetectionDescription' =>
+        strings.settingClapDetectionDescription,
       'gestureStrictnessStandard' => strings.gestureStrictnessStandard,
       'gestureStrictnessStrict' => strings.gestureStrictnessStrict,
+      'gestureStrictnessLargeRoom' => strings.gestureStrictnessLargeRoom,
       'gestureOff' => strings.gestureOff,
       'gestureOffHelp' => strings.gestureOffHelp,
       'gestureEmpty' => strings.gestureEmpty,

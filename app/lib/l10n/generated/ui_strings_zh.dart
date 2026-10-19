@@ -6739,14 +6739,17 @@ class UiStringsZh extends UiStrings {
   String get settingClapStrictnessTitle => '拍手检测';
 
   @override
-  String get settingClapStrictnessDescription =>
-      '严格模式要求拍手声音更大、间隔更均匀。家庭噪声造成误触发时可尝试此模式。';
+  String get settingClapDetectionDescription =>
+      '严格模式要求拍手声音更大、间隔更均匀。大房间模式会给有回声的房间里的拍手声留出消散时间。';
 
   @override
   String get gestureStrictnessStandard => '标准';
 
   @override
   String get gestureStrictnessStrict => '严格';
+
+  @override
+  String get gestureStrictnessLargeRoom => '大房间';
 
   @override
   String get gestureOff => '手势已关闭';
@@ -20155,14 +20158,17 @@ class UiStringsZhCn extends UiStringsZh {
   String get settingClapStrictnessTitle => '拍手检测';
 
   @override
-  String get settingClapStrictnessDescription =>
-      '严格模式要求拍手声音更大、间隔更均匀。家庭噪声造成误触发时可尝试此模式。';
+  String get settingClapDetectionDescription =>
+      '严格模式要求拍手声音更大、间隔更均匀。大房间模式会给有回声的房间里的拍手声留出消散时间。';
 
   @override
   String get gestureStrictnessStandard => '标准';
 
   @override
   String get gestureStrictnessStrict => '严格';
+
+  @override
+  String get gestureStrictnessLargeRoom => '大房间';
 
   @override
   String get gestureOff => '手势已关闭';
