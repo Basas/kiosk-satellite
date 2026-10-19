@@ -12,6 +12,7 @@ import '../../core/manager.dart';
 import '../../core/events.dart';
 import '../../ui/mdi_icon.dart';
 import 'fleet_plugin_host.dart';
+import 'plugin_directory.dart';
 import 'plugin_repository.dart';
 import '../home_assistant/plugin_ha_socket.dart';
 import 'plugin_host_api.dart';
@@ -128,9 +129,12 @@ class PluginManager extends Manager implements FleetPluginHost {
     super.commands,
     super.log, {
     PluginRepository? repository,
-  }) : repository = repository ?? PluginRepository();
+    PluginDirectory? directory,
+  }) : repository = repository ?? PluginRepository(),
+       directory = directory ?? PluginDirectory();
 
   final PluginRepository repository;
+  final PluginDirectory directory;
   List<Map<String, Object?>> _entities = [];
   final _runtimeEntities = <String, List<Map<String, Object?>>>{};
   static const maxZipBytes = PluginRepository.maxPackageBytes;
@@ -641,6 +645,12 @@ class PluginManager extends Manager implements FleetPluginHost {
       const {'url': 'Public GitHub repository URL'},
     );
     register(
+      'getPluginDirectory',
+      'Read Community Plugins, the plugin directory, with how each listed plugin stands against the installed ones.',
+      (p) => directoryState(refresh: p['refresh'] == true),
+      const {'refresh': 'True to download the list again now'},
+    );
+    register(
       'checkPluginUpdate',
       'Check an installed plugin repository for an updated release without installing it.',
       (p) => checkUpdate(p['id'] as String? ?? ''),
@@ -794,7 +804,30 @@ class PluginManager extends Manager implements FleetPluginHost {
           'manifest': jsonEncode(preview['manifest']),
         })
         .timeout(const Duration(seconds: 10));
-    return {...preview, ...?compatibility};
+    return {
+      ...preview,
+      ...?compatibility,
+      'listed': await directory.lists(preview['repository'] as String),
+    };
+  }
+
+  /// Community Plugins with each entry's install state, for Browse plugins.
+  Future<Map<String, Object?>> directoryState({bool refresh = false}) async {
+    final data = await directory.read(refresh: refresh);
+    try {
+      await this.refresh();
+    } catch (_) {}
+    final byId = {for (final p in installed.value) p['id']: p};
+    return {
+      ...data,
+      'plugins': [
+        for (final entry in data['plugins'] as List)
+          {
+            ...entry as Map<String, Object?>,
+            ...PluginDirectory.installStatus(entry, byId[entry['id']]),
+          },
+      ],
+    };
   }
 
   Future<Map<String, Object?>> checkUpdate(String id) async {

@@ -3065,6 +3065,69 @@ class UiStringsFr extends UiStrings {
       'Impossible de lire le ZIP sélectionné';
 
   @override
+  String get pluginBrowsePlugins => 'Parcourir les plugins';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Trouver des plugins créés par la communauté';
+
+  @override
+  String get pluginListedInCommunityPlugins =>
+      'Répertorié dans Plugins de la communauté.';
+
+  @override
+  String get pluginNotListedInCommunityPlugins =>
+      'Absent de Plugins de la communauté.';
+
+  @override
+  String get pluginSearchPlugins => 'Rechercher des plugins';
+
+  @override
+  String get pluginUpdate => 'Mettre à jour';
+
+  @override
+  String get pluginInstalled => 'Installé';
+
+  @override
+  String get pluginStars => 'Étoiles';
+
+  @override
+  String get pluginDownloads => 'Téléchargements';
+
+  @override
+  String get pluginActiveInstalls => 'Installations actives';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch =>
+      'Aucun plugin ne correspond à votre recherche.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'Plugins de la communauté ne contient encore aucun plugin.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Proposer votre plugin';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'Ajoutez votre plugin à Plugins de la communauté.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'Impossible de joindre Plugins de la communauté. Vérifiez la connexion Internet.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'Impossible de charger Plugins de la communauté. Réessayez plus tard.';
+
+  @override
+  String get pluginTurnOn => 'Activer';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Activez « Activer les plugins » pour installer ce plugin.';
+
+  @override
   String get pluginCharts => 'Graphiques';
 
   @override

@@ -3058,6 +3058,68 @@ class UiStringsNl extends UiStrings {
       'Kon de geselecteerde ZIP niet lezen';
 
   @override
+  String get pluginBrowsePlugins => 'Plug-ins bekijken';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Vind plug-ins die de community heeft gemaakt';
+
+  @override
+  String get pluginListedInCommunityPlugins => 'Staat in Communityplug-ins.';
+
+  @override
+  String get pluginNotListedInCommunityPlugins =>
+      'Staat niet in Communityplug-ins.';
+
+  @override
+  String get pluginSearchPlugins => 'Plug-ins zoeken';
+
+  @override
+  String get pluginUpdate => 'Bijwerken';
+
+  @override
+  String get pluginInstalled => 'Geïnstalleerd';
+
+  @override
+  String get pluginStars => 'Sterren';
+
+  @override
+  String get pluginDownloads => 'Downloads';
+
+  @override
+  String get pluginActiveInstalls => 'Actieve installaties';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch =>
+      'Geen plug-ins gevonden voor je zoekopdracht.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'Communityplug-ins heeft nog geen plug-ins.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Je plug-in indienen';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'Zet je plug-in in Communityplug-ins.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'Kan Communityplug-ins niet bereiken. Controleer de internetverbinding.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'Kan Communityplug-ins niet laden. Probeer het later opnieuw.';
+
+  @override
+  String get pluginTurnOn => 'Inschakelen';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Schakel ‘Plug-ins inschakelen’ in om deze plug-in te installeren.';
+
+  @override
   String get pluginCharts => 'Grafieken';
 
   @override

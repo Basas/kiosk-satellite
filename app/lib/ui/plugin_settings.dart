@@ -26,6 +26,10 @@ import 'settings_search.dart';
 const pluginIntro =
     'Plugins add additional community developed features to Kiosk Satellite.';
 
+/// The Plugin Manager page that lists Community Plugins. Plugin IDs never
+/// hold an underscore, so it cannot clash with a plugin's own page.
+const pluginDirectoryPage = '_browse';
+
 const pluginTrustNotice =
     'Plugins run code inside Kiosk Satellite and can access '
     'app data and granted Android permissions. A faulty or malicious plugin can '
@@ -95,6 +99,86 @@ class PluginReadme extends StatelessWidget {
             );
     },
   );
+}
+
+/// The review before an install or update: the manifest, the README and
+/// the trust notice. True once the person chooses to trust and install.
+Future<bool> showPluginPreview(
+  BuildContext context,
+  Map<String, Object?> preview,
+) async {
+  final isUpdate = preview.containsKey('installedVersion');
+  final manifest = preview['manifest'] as Map;
+  final install = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('${manifest['name']}'),
+      content: SizedBox(
+        width: 640,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('${manifest['description']}'),
+              const SizedBox(height: 16),
+              for (final entry in {
+                if (isUpdate)
+                  pluginText(context, 'Installed version'):
+                      preview['installedVersion'],
+                pluginText(context, 'Version'): manifest['version'],
+                pluginText(context, 'Author'): manifest['author'],
+                pluginText(context, 'License'): manifest['license'],
+              }.entries)
+                SettingsRow(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(entry.key),
+                  trailing: Text('${entry.value}'),
+                ),
+              if (preview['listed'] == true)
+                HintRow(pluginText(context, 'Listed in Community Plugins.'))
+              else if (preview['listed'] == false)
+                WarnRow(
+                  pluginText(context, 'Not listed in Community Plugins.'),
+                ),
+              const SizedBox(height: 16),
+              PluginReadme(source: preview),
+              const Divider(height: 32),
+              WarnRow(pluginText(context, pluginTrustNotice)),
+              const SizedBox(height: 12),
+              HintRow(
+                pluginText(
+                  context,
+                  'New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.',
+                ),
+              ),
+              if (preview['compatible'] != true)
+                Text(
+                  pluginError(context, '${preview['compatibilityError']}'),
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(pluginText(context, 'Cancel')),
+        ),
+        FilledButton(
+          onPressed: preview['compatible'] == true
+              ? () => Navigator.pop(context, true)
+              : null,
+          child: Text(
+            isUpdate
+                ? pluginText(context, 'Trust and update')
+                : pluginText(context, 'Trust and install'),
+          ),
+        ),
+      ],
+    ),
+  );
+  return install == true;
 }
 
 class PluginSettingsPanel extends StatefulWidget {
@@ -203,74 +287,7 @@ class _PluginSettingsPanelState extends State<PluginSettingsPanel> {
 
   Future<void> _confirmPreview(Map<String, Object?> preview) async {
     if (!mounted) return;
-    final isUpdate = preview.containsKey('installedVersion');
-    final manifest = preview['manifest'] as Map;
-    final install = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('${manifest['name']}'),
-        content: SizedBox(
-          width: 640,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('${manifest['description']}'),
-                const SizedBox(height: 16),
-                for (final entry in {
-                  if (isUpdate)
-                    pluginText(context, 'Installed version'):
-                        preview['installedVersion'],
-                  pluginText(context, 'Version'): manifest['version'],
-                  pluginText(context, 'Author'): manifest['author'],
-                  pluginText(context, 'License'): manifest['license'],
-                }.entries)
-                  SettingsRow(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(entry.key),
-                    trailing: Text('${entry.value}'),
-                  ),
-                const SizedBox(height: 16),
-                PluginReadme(source: preview),
-                const Divider(height: 32),
-                WarnRow(pluginText(context, pluginTrustNotice)),
-                const SizedBox(height: 12),
-                HintRow(
-                  pluginText(
-                    context,
-                    'New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.',
-                  ),
-                ),
-                if (preview['compatible'] != true)
-                  Text(
-                    pluginError(context, '${preview['compatibilityError']}'),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(pluginText(context, 'Cancel')),
-          ),
-          FilledButton(
-            onPressed: preview['compatible'] == true
-                ? () => Navigator.pop(context, true)
-                : null,
-            child: Text(
-              isUpdate
-                  ? pluginText(context, 'Trust and update')
-                  : pluginText(context, 'Trust and install'),
-            ),
-          ),
-        ],
-      ),
-    );
-    if (install == true) {
+    if (await showPluginPreview(context, preview)) {
       await widget.plugins.installRepository(
         preview['previewId'] as String,
         trusted: true,
@@ -423,6 +440,22 @@ class _PluginSettingsPanelState extends State<PluginSettingsPanel> {
           ],
         ),
         if (enabled) ...[
+          SettingsCard(
+            children: [
+              SearchLandingTarget(
+                id: 'x:plugins:browse',
+                child: SettingsRow(
+                  title: Text(pluginText(context, 'Browse plugins')),
+                  subtitle: Text(
+                    pluginText(context, 'Find plugins made by the community'),
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  enabled: !_busy,
+                  onTap: () => widget.onOpen(pluginDirectoryPage),
+                ),
+              ),
+            ],
+          ),
           SettingsCard(
             children: [
               SearchLandingTarget(
@@ -598,7 +631,7 @@ class _PluginSettingsPanelState extends State<PluginSettingsPanel> {
                   onTap: () => _run(() async {
                     final opened = await launchUrl(
                       Uri.parse(
-                        'https://github.com/jxlarrea/kiosk-satellite-plugins',
+                        'https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/getting-started.md',
                       ),
                       mode: LaunchMode.externalApplication,
                     );

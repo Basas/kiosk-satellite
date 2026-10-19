@@ -5389,6 +5389,114 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
+  /// **'Browse plugins'**
+  String get pluginBrowsePlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Find plugins made by the community'**
+  String get pluginFindPluginsMadeByTheCommunity;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed in Community Plugins.'**
+  String get pluginListedInCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Not listed in Community Plugins.'**
+  String get pluginNotListedInCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Search plugins'**
+  String get pluginSearchPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get pluginUpdate;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed'**
+  String get pluginInstalled;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Stars'**
+  String get pluginStars;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads'**
+  String get pluginDownloads;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Active installs'**
+  String get pluginActiveInstalls;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'No plugins match your search.'**
+  String get pluginNoPluginsMatchYourSearch;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Plugins has no plugins yet.'**
+  String get pluginCommunityPluginsHasNoPluginsYet;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit your plugin'**
+  String get pluginSubmitYourPlugin;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'List your plugin in Community Plugins.'**
+  String get pluginListYourPluginInCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach Community Plugins. Check the internet connection.'**
+  String get pluginCouldNotReachCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load Community Plugins. Try again later.'**
+  String get pluginCouldNotLoadCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get pluginTurnOn;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Enable Plugins to install this plugin.'**
+  String get pluginTurnOnEnablePluginsToInstall;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Charts'**
   String get pluginCharts;
 

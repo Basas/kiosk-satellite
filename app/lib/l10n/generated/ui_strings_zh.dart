@@ -2960,6 +2960,60 @@ class UiStringsZh extends UiStrings {
   String get pluginCouldNotReadTheSelectedZip => '无法读取所选 ZIP';
 
   @override
+  String get pluginBrowsePlugins => '浏览插件';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity => '查找社区制作的插件';
+
+  @override
+  String get pluginListedInCommunityPlugins => '已收录于社区插件。';
+
+  @override
+  String get pluginNotListedInCommunityPlugins => '未收录于社区插件。';
+
+  @override
+  String get pluginSearchPlugins => '搜索插件';
+
+  @override
+  String get pluginUpdate => '更新';
+
+  @override
+  String get pluginInstalled => '已安装';
+
+  @override
+  String get pluginStars => '星标';
+
+  @override
+  String get pluginDownloads => '下载量';
+
+  @override
+  String get pluginActiveInstalls => '活跃安装';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch => '没有与搜索匹配的插件。';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet => '社区插件中还没有插件。';
+
+  @override
+  String get pluginSubmitYourPlugin => '提交你的插件';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins => '将你的插件收录到社区插件。';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins => '无法连接社区插件。请检查网络连接。';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins => '无法加载社区插件。请稍后重试。';
+
+  @override
+  String get pluginTurnOn => '开启';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall => '请开启“启用插件”以安装此插件。';
+
+  @override
   String get pluginCharts => '图表';
 
   @override
@@ -16419,6 +16473,60 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get pluginCouldNotReadTheSelectedZip => '无法读取所选 ZIP';
+
+  @override
+  String get pluginBrowsePlugins => '浏览插件';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity => '查找社区制作的插件';
+
+  @override
+  String get pluginListedInCommunityPlugins => '已收录于社区插件。';
+
+  @override
+  String get pluginNotListedInCommunityPlugins => '未收录于社区插件。';
+
+  @override
+  String get pluginSearchPlugins => '搜索插件';
+
+  @override
+  String get pluginUpdate => '更新';
+
+  @override
+  String get pluginInstalled => '已安装';
+
+  @override
+  String get pluginStars => '星标';
+
+  @override
+  String get pluginDownloads => '下载量';
+
+  @override
+  String get pluginActiveInstalls => '活跃安装';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch => '没有与搜索匹配的插件。';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet => '社区插件中还没有插件。';
+
+  @override
+  String get pluginSubmitYourPlugin => '提交你的插件';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins => '将你的插件收录到社区插件。';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins => '无法连接社区插件。请检查网络连接。';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins => '无法加载社区插件。请稍后重试。';
+
+  @override
+  String get pluginTurnOn => '开启';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall => '请开启“启用插件”以安装此插件。';
 
   @override
   String get pluginCharts => '图表';

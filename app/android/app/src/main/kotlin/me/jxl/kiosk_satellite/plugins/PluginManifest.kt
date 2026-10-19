@@ -37,6 +37,12 @@ class PluginManifest(val json: JSONObject) {
         require("voice.skin" in capabilities) { "voiceSkinThumbnail needs the voice.skin capability" }
         value
     }
+    /** The plugin's icon: a 256 by 256 PNG under assets/ that Community Plugins shows, or null for the plugin mark. */
+    val icon: String? = json.opt("icon").let { value ->
+        if (value == null) return@let null
+        require(value is String && PluginPackage.validAssetPath(value) && value.lowercase().endsWith(".png")) { "Invalid icon" }
+        value
+    }
     /** Overlays and screensavers are all a device without a screen would load such a plugin for, unless it says otherwise. */
     val needsScreen get() = !headless && ("overlay" in capabilities || "screensaver" in capabilities)
 

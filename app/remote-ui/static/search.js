@@ -44,6 +44,8 @@ export const SEARCH_EXTRAS = [
     desc: "Show a short notice with the rule's name when a page is blocked." },
   { tab: 'plugins', title: 'Enable Plugins',
     desc: 'Plugins add additional community developed features to Kiosk Satellite.', anchor: 'x:plugins:master' },
+  { tab: 'plugins', title: 'Browse plugins',
+    desc: 'Find plugins made by the community', anchor: 'x:plugins:browse' },
   { tab: 'plugins', title: 'Add plugin',
     desc: 'Install from a GitHub repository', anchor: 'x:plugins:add' },
   { tab: 'plugins', title: 'Install from ZIP',

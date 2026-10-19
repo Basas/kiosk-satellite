@@ -138,6 +138,12 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
   ),
   SettingsSearchEntry(
     category: "Plugins",
+    title: "Browse plugins",
+    description: "Find plugins made by the community",
+    anchorId: "x:plugins:browse",
+  ),
+  SettingsSearchEntry(
+    category: "Plugins",
     title: "Add plugin",
     description: "Install from a GitHub repository",
     anchorId: "x:plugins:add",

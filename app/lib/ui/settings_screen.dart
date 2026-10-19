@@ -77,6 +77,7 @@ import '../managers/wake_word/permission_descriptions.dart';
 import 'wake_word_tester.dart';
 import 'wake_activations.dart';
 import 'update_helper_settings.dart';
+import 'plugin_directory.dart';
 import 'plugin_settings.dart';
 import 'package:kiosk_satellite/core/lifecycle.dart';
 
@@ -971,6 +972,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           _subpage!,
                                         )
                                       : pluginSubpageTitle(
+                                          context,
                                           widget.container,
                                           category,
                                           _subpage!,
@@ -1468,11 +1470,15 @@ class _SubpageEntryTile extends StatelessWidget {
 /// bar carries the entry row's title and the implicit back arrow; the system
 /// back gesture pops the same route.
 String pluginSubpageTitle(
+  BuildContext context,
   AppContainer container,
   String category,
   String subpage,
 ) {
   if (category != 'Plugins') return subpage;
+  if (subpage == pluginDirectoryPage) {
+    return pluginText(context, 'Browse plugins');
+  }
   return container.plugins.installed.value
               .where((p) => p['id'] == subpage)
               .firstOrNull?['name']
@@ -1525,7 +1531,7 @@ class SubpageSettingsScreen extends StatelessWidget {
                         category,
                         subpage,
                       )
-                    : pluginSubpageTitle(container, category, subpage),
+                    : pluginSubpageTitle(context, container, category, subpage),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -3390,6 +3396,15 @@ class _CategoryContentState extends State<_CategoryContent> {
           ),
         ],
         _MadeByFooter(container: container),
+      ];
+    }
+    if (widget.category == 'Plugins' && subpage == pluginDirectoryPage) {
+      return [
+        PluginDirectoryPanel(
+          plugins: container.plugins,
+          onOpen: (id) =>
+              openSettingsSubpage(context, container, 'Plugins', id),
+        ),
       ];
     }
     if (widget.category == 'Plugins') {

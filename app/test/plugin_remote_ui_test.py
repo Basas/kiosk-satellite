@@ -138,7 +138,7 @@ try:
           (await import('/static/tabs.js')).showTab('plugins', {refresh: false});
         }""")
         root = page.locator('#tab-plugins')
-        row = root.locator('.subpage-entry')
+        row = root.locator('.subpage-entry[data-subpage-entry="hello-world"]')
         expect(row.get_by_text('Hello World', exact=True)).to_be_visible()
         expect(root.get_by_role('button', name='Save settings')).not_to_be_visible()
         master = root.get_by_role('checkbox', name='Enable Plugins', exact=True)

@@ -3046,6 +3046,67 @@ class UiStringsRu extends UiStrings {
       'Не удалось прочитать выбранный ZIP';
 
   @override
+  String get pluginBrowsePlugins => 'Обзор плагинов';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Найдите плагины, созданные сообществом';
+
+  @override
+  String get pluginListedInCommunityPlugins => 'Есть в Плагинах сообщества.';
+
+  @override
+  String get pluginNotListedInCommunityPlugins => 'Нет в Плагинах сообщества.';
+
+  @override
+  String get pluginSearchPlugins => 'Поиск плагинов';
+
+  @override
+  String get pluginUpdate => 'Обновить';
+
+  @override
+  String get pluginInstalled => 'Установлен';
+
+  @override
+  String get pluginStars => 'Звёзды';
+
+  @override
+  String get pluginDownloads => 'Загрузки';
+
+  @override
+  String get pluginActiveInstalls => 'Активные установки';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch =>
+      'Нет плагинов, подходящих под запрос.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'В Плагинах сообщества пока нет плагинов.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Отправить свой плагин';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'Добавьте свой плагин в Плагины сообщества.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'Не удалось связаться с Плагинами сообщества. Проверьте подключение к интернету.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'Не удалось загрузить Плагины сообщества. Попробуйте позже.';
+
+  @override
+  String get pluginTurnOn => 'Включить';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Включите «Включить плагины», чтобы установить этот плагин.';
+
+  @override
   String get pluginCharts => 'Графики';
 
   @override

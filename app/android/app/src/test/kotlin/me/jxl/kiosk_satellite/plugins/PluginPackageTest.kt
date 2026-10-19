@@ -197,6 +197,19 @@ class PluginPackageTest {
         // Only a voice skin has a picture in the Skin picker.
         rejects { PluginManifest(manifest().put("voiceSkinThumbnail", "voice-skin.webp")) }
     }
+    @Test fun anIconIsAPngUnderAssets() {
+        assertEquals("icon.png", PluginManifest(manifest().put("icon", "icon.png")).icon)
+        assertEquals("images/Icon.PNG", PluginManifest(manifest().put("icon", "images/Icon.PNG")).icon)
+        assertNull(PluginManifest(manifest()).icon)
+        for (bad in listOf("../icon.png", "icon.webp", "icon", "/icon.png", 7)) rejects { PluginManifest(manifest().put("icon", bad)) }
+    }
+    @Test fun readsThePngHeader() {
+        fun png(width: Int, height: Int) = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13) + "IHDR".toByteArray() +
+            java.nio.ByteBuffer.allocate(8).putInt(width).putInt(height).array() + ByteArray(5)
+        assertEquals(256 to 256, PluginPackage.pngSize(png(256, 256)))
+        assertEquals(512 to 128, PluginPackage.pngSize(png(512, 128)))
+        assertNull(PluginPackage.pngSize("GIF89a not a png at all".toByteArray()))
+    }
     @Test fun overlaysAndScreensaversNeedAScreenUnlessThePluginGoesWithout() {
         fun caps(vararg names: String) = manifest().put("capabilities", org.json.JSONArray(names.toList()))
         assertTrue(PluginManifest(caps("overlay")).needsScreen)

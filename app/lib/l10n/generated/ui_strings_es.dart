@@ -3064,6 +3064,69 @@ class UiStringsEs extends UiStrings {
       'No se pudo leer el ZIP seleccionado';
 
   @override
+  String get pluginBrowsePlugins => 'Explorar plugins';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Encuentra plugins hechos por la comunidad';
+
+  @override
+  String get pluginListedInCommunityPlugins =>
+      'Está en Plugins de la comunidad.';
+
+  @override
+  String get pluginNotListedInCommunityPlugins =>
+      'No está en Plugins de la comunidad.';
+
+  @override
+  String get pluginSearchPlugins => 'Buscar plugins';
+
+  @override
+  String get pluginUpdate => 'Actualizar';
+
+  @override
+  String get pluginInstalled => 'Instalado';
+
+  @override
+  String get pluginStars => 'Estrellas';
+
+  @override
+  String get pluginDownloads => 'Descargas';
+
+  @override
+  String get pluginActiveInstalls => 'Instalaciones activas';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch =>
+      'Ningún plugin coincide con tu búsqueda.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'Plugins de la comunidad aún no tiene plugins.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Envía tu plugin';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'Publica tu plugin en Plugins de la comunidad.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'No se pudo conectar con Plugins de la comunidad. Revisa la conexión a internet.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'No se pudo cargar Plugins de la comunidad. Inténtalo más tarde.';
+
+  @override
+  String get pluginTurnOn => 'Activar';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Activa «Activar plugins» para instalar este plugin.';
+
+  @override
   String get pluginCharts => 'Gráficas';
 
   @override

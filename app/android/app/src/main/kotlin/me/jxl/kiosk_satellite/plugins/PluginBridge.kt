@@ -797,6 +797,10 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             manifest.voiceSkinThumbnail?.let {
                 require(PluginPackage.assetFile(staging, it).length() <= MAX_THUMBNAIL_BYTES) { "voiceSkinThumbnail must be at most 256 KB" }
             }
+            manifest.icon?.let {
+                val file = PluginPackage.assetFile(staging, it)
+                require(file.length() <= MAX_THUMBNAIL_BYTES && PluginPackage.pngSize(file.readBytes()) == 256 to 256) { "icon must be a 256 by 256 PNG of at most 256 KB" }
+            }
             require(manifest.id !in restartRequired) { "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it." }
             require(records.has(manifest.id) || records.length() < 8) { "At most 8 plugins can be installed" }
             val previous = records.optJSONObject(manifest.id)

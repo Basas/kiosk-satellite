@@ -814,6 +814,33 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.pluginPluginZipMustBeAtMost4Mb,
       'pluginCouldNotReadTheSelectedZip' =>
         strings.pluginCouldNotReadTheSelectedZip,
+      'pluginBrowsePlugins' => strings.pluginBrowsePlugins,
+      'pluginFindPluginsMadeByTheCommunity' =>
+        strings.pluginFindPluginsMadeByTheCommunity,
+      'pluginListedInCommunityPlugins' =>
+        strings.pluginListedInCommunityPlugins,
+      'pluginNotListedInCommunityPlugins' =>
+        strings.pluginNotListedInCommunityPlugins,
+      'pluginSearchPlugins' => strings.pluginSearchPlugins,
+      'pluginUpdate' => strings.pluginUpdate,
+      'pluginInstalled' => strings.pluginInstalled,
+      'pluginStars' => strings.pluginStars,
+      'pluginDownloads' => strings.pluginDownloads,
+      'pluginActiveInstalls' => strings.pluginActiveInstalls,
+      'pluginNoPluginsMatchYourSearch' =>
+        strings.pluginNoPluginsMatchYourSearch,
+      'pluginCommunityPluginsHasNoPluginsYet' =>
+        strings.pluginCommunityPluginsHasNoPluginsYet,
+      'pluginSubmitYourPlugin' => strings.pluginSubmitYourPlugin,
+      'pluginListYourPluginInCommunityPlugins' =>
+        strings.pluginListYourPluginInCommunityPlugins,
+      'pluginCouldNotReachCommunityPlugins' =>
+        strings.pluginCouldNotReachCommunityPlugins,
+      'pluginCouldNotLoadCommunityPlugins' =>
+        strings.pluginCouldNotLoadCommunityPlugins,
+      'pluginTurnOn' => strings.pluginTurnOn,
+      'pluginTurnOnEnablePluginsToInstall' =>
+        strings.pluginTurnOnEnablePluginsToInstall,
       'pluginCharts' => strings.pluginCharts,
       'pluginReadings' => strings.pluginReadings,
       'pluginWaitingForSamples' => strings.pluginWaitingForSamples,

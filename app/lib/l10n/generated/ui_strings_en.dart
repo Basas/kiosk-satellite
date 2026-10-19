@@ -3035,6 +3035,67 @@ class UiStringsEn extends UiStrings {
       'Could not read the selected ZIP';
 
   @override
+  String get pluginBrowsePlugins => 'Browse plugins';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Find plugins made by the community';
+
+  @override
+  String get pluginListedInCommunityPlugins => 'Listed in Community Plugins.';
+
+  @override
+  String get pluginNotListedInCommunityPlugins =>
+      'Not listed in Community Plugins.';
+
+  @override
+  String get pluginSearchPlugins => 'Search plugins';
+
+  @override
+  String get pluginUpdate => 'Update';
+
+  @override
+  String get pluginInstalled => 'Installed';
+
+  @override
+  String get pluginStars => 'Stars';
+
+  @override
+  String get pluginDownloads => 'Downloads';
+
+  @override
+  String get pluginActiveInstalls => 'Active installs';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch => 'No plugins match your search.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'Community Plugins has no plugins yet.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Submit your plugin';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'List your plugin in Community Plugins.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'Could not reach Community Plugins. Check the internet connection.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'Could not load Community Plugins. Try again later.';
+
+  @override
+  String get pluginTurnOn => 'Turn on';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Turn on Enable Plugins to install this plugin.';
+
+  @override
   String get pluginCharts => 'Charts';
 
   @override

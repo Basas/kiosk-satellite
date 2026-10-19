@@ -11,7 +11,7 @@ import { dashboardField } from './dashboard_picker.js';
 import { cameraViewSpec, fieldVisible, iconField, listSetting } from './plugin_lists.js';
 import { choiceControl, refreshPluginSetup, setupButtonRow } from './plugin_setup.js';
 import { hintRow, introRow, messageBox, modalShell, showToast, swatch } from './widgets.js';
-import { SUBPAGE_ICONS } from './icons.js';
+import { SUBPAGE_ICONS, subpageIcon } from './icons.js';
 import { marked } from './vendor-marked.js';
 import DOMPurify from './vendor-purify.js';
 
@@ -149,6 +149,8 @@ function confirmPreview(preview) {
       const row = element('div', undefined, 'row');
       row.append(element('span', pluginText(title), 'info'), element('span', value, 'desc')); modal.body.append(row);
     }
+    if (preview.listed === true) modal.body.append(hintRow(pluginText('Listed in Community Plugins.')));
+    else if (preview.listed === false) modal.body.append(hintRow(pluginText('Not listed in Community Plugins.'), { warn: true }));
     modal.body.append(pluginReadme(preview), hintRow(pluginText(trustNotice), { warn: true }),
       hintRow(pluginText('New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.')));
     if (!preview.compatible) {
@@ -186,6 +188,203 @@ async function zipBase64(file) {
     binary += String.fromCharCode(...bytes.subarray(start, start + 8192));
   }
   return btoa(binary);
+}
+
+// Browse plugins: Community Plugins, the directory kiosksatellite.com builds
+// from the plugins repository. Mirrors the device (plugin_directory.dart).
+const DIRECTORY_PAGE = '_browse';
+const SUBMIT_URL = 'https://github.com/jxlarrea/kiosk-satellite-plugins#submit-your-plugin';
+let directory = null;
+let directoryError = '';
+let directoryReading = null;
+let directoryQuery = '';
+
+async function pluginCommand(name, params) {
+  const result = await cmd(name, params, { timeoutMs: 95000 });
+  if (!result.ok) throw new Error(result.error);
+  return result.data;
+}
+
+// The same preview and trust dialog as Add plugin. True once installed.
+async function installRepository(url) {
+  const preview = await pluginCommand('previewPluginRepository', { url });
+  if (!await confirmPreview(preview)) return false;
+  await pluginCommand('installPluginRepository', { previewId: preview.previewId, trusted: true });
+  return true;
+}
+
+function directoryPage() {
+  return [...document.querySelectorAll('#tab-plugins > .subpage')].find((el) => el.dataset.subpage === DIRECTORY_PAGE);
+}
+
+function loadDirectory(refresh = false) {
+  if (directoryReading) return directoryReading;
+  directoryReading = (async () => {
+    const page = directoryPage();
+    page?.querySelector('.plugin-directory-refresh')?.classList.add('plugin-busy');
+    try {
+      directory = await pluginCommand('getPluginDirectory', { refresh });
+      directoryError = directory.error || '';
+    } catch (error) { directoryError = error.message; }
+    finally { directoryReading = null; }
+    const shown = directoryPage();
+    if (shown) renderDirectory(shown);
+  })();
+  return directoryReading;
+}
+
+function popularity(a, b) {
+  for (const key of ['installs', 'stars', 'downloads']) {
+    const c = (b[key] || 0) - (a[key] || 0);
+    if (c) return c;
+  }
+  return String(a.name).localeCompare(String(b.name));
+}
+
+function directoryRow(entry) {
+  const row = element('div', undefined, 'row plugin-directory-row');
+  row.tabIndex = 0; row.setAttribute('role', 'button');
+  // The plugin's icon, or the generic plugin icon without one.
+  const avatar = element('span', undefined, 'plugin-icon');
+  if (entry.icon) {
+    const img = element('img'); img.alt = ''; img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
+    img.onerror = () => img.replaceWith(subpageIcon('Plugins'));
+    img.src = entry.icon; avatar.append(img);
+  } else avatar.append(subpageIcon('Plugins'));
+  const text = info(entry.name, `${entry.author} · ${entry.version}`);
+  if (entry.description) text.append(element('div', entry.description, 'desc plugin-directory-description'));
+  const number = new Intl.NumberFormat(messageLanguage() || undefined, { notation: 'compact' });
+  const stats = element('div', undefined, 'plugin-directory-stats');
+  for (const [label, value, path] of [
+    [pluginText('Stars'), entry.stars, 'm12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z'],
+    [pluginText('Downloads'), entry.downloads, 'M12 4v11m-4-4 4 4 4-4M5 20h14'],
+    ...(Number.isInteger(entry.installs) ? [[pluginText('Active installs'), entry.installs, 'M4 5h16v11H4zM8 20h8M12 16v4']] : []),
+  ]) {
+    const stat = element('span'); stat.title = label; stat.setAttribute('aria-label', `${label}: ${value || 0}`);
+    stat.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg>`;
+    stat.append(number.format(value || 0)); stats.append(stat);
+  }
+  text.append(stats);
+  let action;
+  if (entry.updateAvailable) {
+    action = element('button', pluginText('Update'), 'btn-ghost');
+    action.onclick = (event) => { event.stopPropagation(); installListed(entry, true, action); };
+  } else if (entry.installed) {
+    action = element('span', pluginText('Installed'), 'plugin-directory-installed');
+  } else {
+    action = iconButton(pluginText('Install'), 'M12 5v14M5 12h14');
+    action.onclick = (event) => { event.stopPropagation(); installListed(entry, false, action); };
+  }
+  row.append(avatar, text, action);
+  const open = () => {
+    if (busy) return;
+    if (entry.installed && !entry.updateAvailable) showTab(`plugins/${entry.id}`);
+    else installListed(entry, entry.updateAvailable === true, action);
+  };
+  row.onclick = open;
+  row.onkeydown = (event) => { if (event.target === row && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); open(); } };
+  return row;
+}
+
+async function installListed(entry, update, trigger) {
+  if (busy) return;
+  busy = true;
+  trigger?.classList.add('plugin-busy');
+  try {
+    if (update) {
+      const preview = await pluginCommand('checkPluginUpdate', { id: entry.id });
+      if (!preview.updateAvailable) showToast({ title: entry.name, message: pluginText('No updates available.') });
+      else if (await confirmPreview(preview)) await pluginCommand('installPluginRepository', { previewId: preview.previewId, trusted: true });
+    } else {
+      await installRepository(entry.repository);
+    }
+  } catch (failure) {
+    showToast({ title: pluginText('Plugin Manager'), message: pluginError(failure.message), kind: 'error' });
+  } finally {
+    trigger?.classList.remove('plugin-busy');
+    busy = false;
+  }
+  await loadPlugins();
+}
+
+function renderDirectory(page) {
+  page.replaceChildren();
+  const searchCard = element('div', undefined, 'card');
+  const searchRow = element('div', undefined, 'row plugin-directory-search');
+  const input = element('input'); input.type = 'text'; input.value = directoryQuery;
+  input.placeholder = pluginText('Search plugins'); input.setAttribute('aria-label', pluginText('Search plugins'));
+  const refreshButton = iconButton(pluginText('Refresh'), 'M3 12a9 9 0 0 1 15.5-6.3L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.3L3 16M3 21v-5h5');
+  refreshButton.classList.add('plugin-directory-refresh');
+  refreshButton.onclick = () => loadDirectory(true);
+  searchRow.append(input, refreshButton); searchCard.append(searchRow);
+  if (directoryError) searchCard.append(hintRow(pluginError(directoryError), { warn: true }));
+  const list = element('div', undefined, 'card');
+  const fill = () => {
+    const words = directoryQuery.toLowerCase().split(/\s+/).filter(Boolean);
+    const shown = (directory?.plugins || []).filter((p) => {
+      const text = `${p.name} ${p.description} ${p.author} ${p.id}`.toLowerCase();
+      return words.every((word) => text.includes(word));
+    }).sort(popularity);
+    list.replaceChildren(...shown.map(directoryRow));
+    if (!shown.length && directory) {
+      list.append(hintRow(pluginText(words.length ? 'No plugins match your search.' : 'Community Plugins has no plugins yet.')));
+    }
+  };
+  input.oninput = () => { directoryQuery = input.value; fill(); };
+  fill();
+  const submitCard = element('div', undefined, 'card');
+  const submit = element('a', undefined, 'row plugin-guide-row');
+  submit.dataset.searchId = 'x:plugins:submit';
+  submit.href = SUBMIT_URL; submit.target = '_blank'; submit.rel = 'noopener noreferrer';
+  const submitIcon = element('span', undefined, 'icon-btn'); submitIcon.setAttribute('aria-hidden', 'true');
+  submitIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M21 3 10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></svg>';
+  submit.append(info(pluginText('Submit your plugin'), pluginText('List your plugin in Community Plugins.')), submitIcon);
+  submitCard.append(submit);
+  page.append(searchCard, ...(directory ? [list] : []), submitCard);
+}
+
+document.addEventListener('ks-route', () => {
+  if (currentPath === `plugins/${DIRECTORY_PAGE}`) loadDirectory();
+});
+
+// An install link from kiosksatellite.com: ?install_plugin=owner/repo. It
+// leaves the address at once, so a reload or Back never asks again, and it
+// only opens the same review Add plugin shows. Nothing installs without the
+// person choosing Trust and install.
+let linkedInstall = (() => {
+  try {
+    const params = new URLSearchParams(location.search);
+    const value = params.get('install_plugin');
+    if (value === null) return '';
+    params.delete('install_plugin');
+    const query = params.toString();
+    history.replaceState(history.state, '', location.pathname + (query ? `?${query}` : '') + location.hash);
+    return value.trim().slice(0, 300);
+  } catch (_) { return ''; }
+})();
+
+export async function installFromLink() {
+  const repository = linkedInstall;
+  linkedInstall = '';
+  if (!repository) return;
+  const url = /^https:\/\//i.test(repository) ? repository : `https://github.com/${repository}`;
+  showTab('plugins', { refresh: false });
+  await loadPlugins();
+  try {
+    if (pluginSearchState?.enabled !== true) {
+      const turnOn = pluginText('Turn on');
+      const answer = await messageBox({ title: pluginText('Enable Plugins'), message: pluginText('Turn on Enable Plugins to install this plugin.'),
+        buttons: [pluginText('Cancel'), turnOn] });
+      if (answer !== turnOn) return;
+      await pluginCommand('setPluginsEnabled', { enabled: true });
+      await loadPlugins();
+    }
+    busy = true;
+    await installRepository(url);
+  } catch (failure) {
+    showToast({ title: pluginText('Plugin Manager'), message: pluginError(failure.message), kind: 'error' });
+  } finally { busy = false; }
+  await loadPlugins();
 }
 
 const EYE = 'M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z';
@@ -251,6 +450,13 @@ function render(root, state) {
   addRow.append(info(pluginText('Add plugin'), pluginText('Install from a GitHub repository')));
   const add = iconButton(pluginText('Add plugin'), 'M12 5v14M5 12h14'); addRow.append(add);
   const warning = hintRow(pluginText(trustNotice), { warn: true }); warning.classList.add('plugin-install-warning');
+  const browseRow = subpageEntry('plugins', DIRECTORY_PAGE, { iconName: 'Plugins' });
+  browseRow.dataset.searchId = 'x:plugins:browse';
+  browseRow.querySelector('.name').textContent = pluginText('Browse plugins');
+  browseRow.querySelector('.desc').textContent = pluginText('Find plugins made by the community');
+  browseRow.addEventListener('click', (event) => { if (busy) event.stopImmediatePropagation(); }, true);
+  const browseCard = element('div', undefined, 'card');
+  browseCard.append(browseRow);
   installCard.append(addRow, warning);
   const list = element('div', undefined, 'card');
   const developerTools = element('div', undefined, 'card');
@@ -263,7 +469,7 @@ function render(root, state) {
   zipRow.append(upload, fileInput); developerTools.append(zipRow);
   const guideRow = element('a', undefined, 'row plugin-guide-row');
   guideRow.dataset.searchId = 'x:plugins:create';
-  guideRow.href = 'https://github.com/jxlarrea/kiosk-satellite-plugins';
+  guideRow.href = 'https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/getting-started.md';
   guideRow.target = '_blank'; guideRow.rel = 'noopener noreferrer';
   guideRow.append(info(pluginText('Create a plugin'), pluginText('Learn how to create plugins with the Hello World template and documentation.')));
   const guideIcon = element('span', undefined, 'icon-btn'); guideIcon.setAttribute('aria-hidden', 'true');
@@ -302,7 +508,11 @@ function render(root, state) {
     if (currentPath.split('/')[0] === 'plugins') showTab('plugins', { refresh: false });
     return;
   }
-  root.append(installCard, heading(pluginText('Installed plugins')), list, heading(pluginText('Developer Tools')), developerTools);
+  root.append(browseCard, installCard, heading(pluginText('Installed plugins')), list, heading(pluginText('Developer Tools')), developerTools);
+  const browsePage = element('div', undefined, 'subpage');
+  browsePage.dataset.subpage = DIRECTORY_PAGE; browsePage.dataset.title = pluginText('Browse plugins');
+  renderDirectory(browsePage);
+  root.append(browsePage);
   add.onclick = () => run(async () => {
     const url = await repositoryDialog();
     if (url === null) return;
