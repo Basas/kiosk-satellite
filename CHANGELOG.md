@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.30 - 2026-10-19
 
 ### Added
 - **Plugin camera and barcode scanning (#1041).** Plugins can now use the device camera through two new capabilities. With `barcode`, a plugin opens the Kiosk Satellite scanner over whatever is showing and gets back the code it reads with its format, from QR codes to EAN-13 and Code 128. The plugin picks the formats, the camera, a time limit and the scanner's text, and the scanner names the plugin that opened it. Expose the plugin's scan action as an ESPHome button to start a scan from a Home Assistant automation. With `camera`, a plugin receives frames from the same camera session motion detection uses, at 320x240, 640x480 or 1280x720 and up to 15 frames a second, for as long as it asks, up to 10 minutes at a time. One plugin holds the camera at a time. While the scanner is open, motion detection, face detection, hand gestures and the RTSP stream pause and snapshots fail, and they come back when it closes. The setup wizard's token scanner now pauses them the same way. Both capabilities need **Enable camera** on. See [Camera and barcodes](https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/camera.md).
