@@ -2,10 +2,10 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.31 - 2026-10-19
 
 ### Changed
-- **Redesigned plugin install review.** The review that **Add plugin**, **Browse plugins** and install links open, on the device and in the remote admin, now has a header with the plugin's icon, name and author and chips for its version, license and whether it is listed in Community Plugins. An update shows the installed and new version on one chip. The README sits under a README label and scrolls on its own. The trust notice moved to a footer above the buttons. On a phone the header scrolls away with the README so it has the room.
+- **Redesigned plugin install review.** The review that **Add plugin**, **Browse plugins** and install links open, on the device and in the remote admin, now has a header with the plugin's icon, name and author and chips for its version, license and whether it is listed in Community Plugins. An update shows the installed and new version on one chip. The README sits under a README label and scrolls on its own. The trust notice moved to a footer above the buttons. The review is larger too, up to 960 wide and 88% of the window's height in the remote admin, so the README has the room. On a phone the header scrolls away with the README.
 
 ## v2026.10.30 - 2026-10-19
 
