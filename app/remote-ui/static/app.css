@@ -1354,7 +1354,7 @@
 /* The install review: a header band with the plugin's icon, name, author
    and chips, the README scrolling under it and a footer band with the trust
    notice above the buttons. Mirrors the device's showPluginPreview. */
-.modal-card.plugin-review { padding: 0; overflow: hidden; max-height: 70vh; }
+.modal-card.plugin-review { padding: 0; overflow: hidden; max-height: 88vh; }
 .plugin-review-head { flex: none; padding: 24px 24px 20px; background: var(--surface-high);
   border-bottom: 1px solid var(--divider); }
 .plugin-review-top { display: flex; gap: 16px; align-items: flex-start; }
@@ -1382,7 +1382,7 @@
 @media (max-width: 640px) {
   /* A phone gives the README the room: the header scrolls away with it and
      only the footer with the buttons stays put. */
-  .modal-card.plugin-review { overflow-y: auto; overscroll-behavior: contain; max-height: 88vh; }
+  .modal-card.plugin-review { overflow-y: auto; overscroll-behavior: contain; }
   .modal-card.plugin-review .modal-body.plugin-review-body { flex: none; overflow: visible; }
   .plugin-review-foot { position: sticky; bottom: 0; z-index: 1; }
   .plugin-review-head { padding: 20px 18px 16px; }
