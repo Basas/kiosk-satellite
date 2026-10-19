@@ -407,10 +407,15 @@ class SoundPlayer(context: Context, messenger: BinaryMessenger) {
             // Pin before the write. A pin rebuilds the track, and a rebuilt
             // streaming track starts empty, so a clip written first is lost
             // and the chime plays silence (issue #868).
+            // Some builds (Android 11 on the Echo Show 5) only mark the track
+            // invalid here and rebuild it on the write's first buffer
+            // request, which drops the whole clip (issue #1035). Reading the
+            // position rebuilds it now, while it is still empty.
             if (Build.VERSION.SDK_INT >= 28) {
                 target?.let {
                     track.preferredDevice = it
                     enforceRouting(id, track)
+                    track.playbackHeadPosition
                 }
             }
             // No lead-in for a chime (see LeadInProcessor): a chime is short,
