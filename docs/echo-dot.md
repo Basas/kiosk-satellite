@@ -77,4 +77,4 @@ Then set up the Button gestures on the Dot's own remote admin. The other categor
 
 The Overview's RAM tile counts only memory nobody holds, usually about 0.3 GB on the Dot. Android keeps the rest filled with cached apps and files it gives back on demand. The image already leaves out the system apps the Dot does not need and sets up 256 MB of compressed swap (zram).
 
-If you are not using the [Bluetooth proxy](esphome.md), turning Bluetooth off frees another 15 to 20 MB. `adb shell biscuit_service bt off` turns it off, and it stays off across reboots. `adb shell biscuit_service bt on` turns it back on, in pairing mode.
+Bluetooth is off on a fresh install, which saves 15 to 20 MB. If you want the [Bluetooth proxy](esphome.md), turn it on with `adb shell biscuit_service bt on`. It stays on across reboots, and `adb shell biscuit_service bt off` turns it off again.
