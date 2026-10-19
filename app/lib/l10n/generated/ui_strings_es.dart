@@ -2878,6 +2878,18 @@ class UiStringsEs extends UiStrings {
   }
 
   @override
+  String get pluginThePluginDidNotAnswerInTime =>
+      'El plugin no respondió a tiempo.';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem =>
+      'Todavía no hay opciones. Actualiza para buscarlas.';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed =>
+      'Esta opción ya no aparece en la lista.';
+
+  @override
   String get pluginPlugin => 'Plugin';
 
   @override

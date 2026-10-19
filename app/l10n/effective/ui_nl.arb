@@ -10994,6 +10994,45 @@
     },
     "x-notes": "Keep placeholders unchanged. Names and technical values are supplied by the app."
   },
+  "pluginThePluginDidNotAnswerInTime": "De plug-in heeft niet op tijd geantwoord.",
+  "@pluginThePluginDidNotAnswerInTime": {
+    "context": "Settings > Plugin Manager > a plugin > Settings",
+    "description": "Visible label, help or status in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > a plugin > Settings"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > a plugin > Settings"
+      ]
+    }
+  },
+  "pluginNoChoicesYetRefreshToLookForThem": "Nog geen keuzes. Vernieuw om ernaar te zoeken.",
+  "@pluginNoChoicesYetRefreshToLookForThem": {
+    "context": "Settings > Plugin Manager > a plugin > Settings",
+    "description": "Visible label, help or status in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > a plugin > Settings"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > a plugin > Settings"
+      ]
+    }
+  },
+  "pluginThisChoiceIsNoLongerListed": "Deze keuze staat niet meer in de lijst.",
+  "@pluginThisChoiceIsNoLongerListed": {
+    "context": "Settings > Plugin Manager > a plugin > Settings",
+    "description": "Visible label, help or status in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > a plugin > Settings"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > a plugin > Settings"
+      ]
+    }
+  },
   "pluginPlugin": "Plug-in",
   "@pluginPlugin": {
     "context": "Settings > Plugin Manager",

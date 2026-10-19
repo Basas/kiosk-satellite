@@ -2861,6 +2861,17 @@ class UiStringsRu extends UiStrings {
   }
 
   @override
+  String get pluginThePluginDidNotAnswerInTime => 'Плагин не ответил вовремя.';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem =>
+      'Вариантов пока нет. Обновите, чтобы найти их.';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed =>
+      'Этого варианта больше нет в списке.';
+
+  @override
   String get pluginPlugin => 'Плагин';
 
   @override

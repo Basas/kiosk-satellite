@@ -749,6 +749,12 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'pluginExposeToHomeAssistant' => strings.pluginExposeToHomeAssistant,
       'pluginAddsAButtonToTheKioskEsphomeDeviceRequires' =>
         strings.pluginAddsAButtonToTheKioskEsphomeDeviceRequires,
+      'pluginThePluginDidNotAnswerInTime' =>
+        strings.pluginThePluginDidNotAnswerInTime,
+      'pluginNoChoicesYetRefreshToLookForThem' =>
+        strings.pluginNoChoicesYetRefreshToLookForThem,
+      'pluginThisChoiceIsNoLongerListed' =>
+        strings.pluginThisChoiceIsNoLongerListed,
       'pluginPlugin' => strings.pluginPlugin,
       'pluginEnablePlugins' => strings.pluginEnablePlugins,
       'pluginPluginsAddAdditionalCommunityDevelopedFeaturesToKioskSatellite' =>

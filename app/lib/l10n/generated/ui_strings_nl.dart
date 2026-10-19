@@ -2872,6 +2872,18 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get pluginThePluginDidNotAnswerInTime =>
+      'De plug-in heeft niet op tijd geantwoord.';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem =>
+      'Nog geen keuzes. Vernieuw om ernaar te zoeken.';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed =>
+      'Deze keuze staat niet meer in de lijst.';
+
+  @override
   String get pluginPlugin => 'Plug-in';
 
   @override

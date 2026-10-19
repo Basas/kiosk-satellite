@@ -680,13 +680,21 @@ void main() {
             if (plugin['id'] == args['id'])
               {
                 ...plugin,
-                'values': Map<String, Object?>.from(args['values'] as Map),
+                // A patch writes over the saved values, like the host.
+                'values': <String, Object?>{
+                  if (args['patch'] == true) ...plugin['values'] as Map,
+                  ...args['values'] as Map,
+                },
               }
             else
               plugin,
         ];
       }
       if (call.method == 'remove') installed = [];
+      if (call.method == 'setupRun') return {'run': 'run-${calls.length}'};
+      if (call.method == 'setupCancel' || call.method == 'setupConfirm') {
+        return null;
+      }
       return {'enabled': masterEnabled, 'plugins': installed};
     });
     await plugins.init();
@@ -1203,6 +1211,256 @@ void main() {
       expect(plugins.contentInsets.value, EdgeInsets.zero);
     },
   );
+
+  test(
+    'setup runs and choices are session scoped and reach remote commands',
+    () async {
+      Future<void> open(String token) => native('hostSession', {
+        'id': 'hello-world',
+        'session': token,
+        'capabilities': <String>[],
+      });
+      Future<void> publish(String token, Map setup) => native('setup', {
+        'id': 'hello-world',
+        'session': token,
+        'setup': setup,
+      });
+      const state = {
+        'runs': {
+          'button:test': {
+            'run': 'r1',
+            'state': 'running',
+            'message': 'Connecting',
+            'code': '',
+            'origin': 'remote',
+            'confirm': null,
+          },
+        },
+        'choices': {
+          'device': [
+            {'id': 'lamp-1', 'label': 'Kitchen'},
+          ],
+        },
+      };
+      await open('first');
+      await publish('first', state);
+      final read = await commands.execute('getPluginSetup', {
+        'id': 'hello-world',
+      });
+      expect(
+        ((read.data as Map)['runs'] as Map)['button:test']['message'],
+        'Connecting',
+      );
+      // A stale session changes nothing, and a new one starts empty.
+      await open('second');
+      expect(plugins.setup.value, isEmpty);
+      await publish('first', state);
+      expect(plugins.setup.value, isEmpty);
+      expect(
+        (await commands.execute('getPluginSetup', {'id': 'hello-world'})).data,
+        {'runs': {}, 'choices': {}},
+      );
+      final run = await commands.execute('runPluginSetup', {
+        'id': 'hello-world',
+        'target': 'button',
+        'key': 'test',
+      });
+      expect(run.ok, isTrue);
+      expect(calls.last.method, 'setupRun');
+      expect(calls.last.arguments, {
+        'id': 'hello-world',
+        'target': 'button',
+        'key': 'test',
+        'origin': 'remote',
+      });
+      await commands.execute('cancelPluginSetup', {
+        'id': 'hello-world',
+        'run': 'r1',
+      });
+      expect(calls.last.method, 'setupCancel');
+      await commands.execute('answerPluginSetup', {
+        'id': 'hello-world',
+        'run': 'r1',
+        'accepted': true,
+      });
+      expect(calls.last.arguments, {
+        'id': 'hello-world',
+        'run': 'r1',
+        'accepted': true,
+      });
+      await publish('second', state);
+      await native('hostSessionClosed', {
+        'id': 'hello-world',
+        'session': 'second',
+      });
+      expect(plugins.setup.value, isEmpty);
+    },
+  );
+
+  testWidgets('settings buttons and plugin choices run through the host', (
+    tester,
+  ) async {
+    installed[0]['settings'] = [
+      {
+        'key': 'host',
+        'title': 'Host',
+        'type': 'string',
+        'default': '',
+        'group': 'Connection',
+      },
+      {
+        'key': 'device',
+        'title': 'Device',
+        'type': 'string',
+        'default': '',
+        'choices': 'plugin',
+        'group': 'Connection',
+      },
+    ];
+    installed[0]['buttons'] = [
+      {
+        'id': 'test',
+        'title': 'Test connection',
+        'label': 'Test',
+        'group': 'Connection',
+        'visibleWhen': {'key': 'host', 'notEmpty': true},
+      },
+      {
+        'id': 'pair',
+        'title': 'Pair with the bridge',
+        'label': 'Pair',
+        'group': 'Connection',
+        'confirm': {
+          'title': 'Pair now?',
+          'message': 'Press the button on the bridge first.',
+          'confirmLabel': 'Pair now',
+        },
+      },
+    ];
+    installed[0]['values'] = {'host': '', 'device': 'lamp-2'};
+    await plugins.refresh();
+    await native('hostSession', {
+      'id': 'hello-world',
+      'session': 's',
+      'capabilities': <String>[],
+    });
+    Future<void> publish(Map runs, [Map choices = const {}]) =>
+        native('setup', {
+          'id': 'hello-world',
+          'session': 's',
+          'setup': {'runs': runs, 'choices': choices},
+        });
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: PluginDetailPanel(plugins: plugins, id: 'hello-world'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    // The test button waits for a host. The pair button asks first.
+    expect(find.text('Test connection'), findsNothing);
+    expect(find.text('Connection'), findsOneWidget);
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Pair'));
+    await tester.pumpAndSettle();
+    expect(find.text('Press the button on the bridge first.'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(calls.where((c) => c.method == 'setupRun'), isEmpty);
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Pair'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Pair now'));
+    await tester.pumpAndSettle();
+    expect(calls.lastWhere((c) => c.method == 'setupRun').arguments, {
+      'id': 'hello-world',
+      'target': 'button',
+      'key': 'pair',
+      'origin': 'device',
+    });
+    // While it runs the row shows its progress and Cancel.
+    final pairing = {
+      'run': 'p1',
+      'state': 'running',
+      'message': 'Waiting for the bridge',
+      'code': '',
+      'origin': 'device',
+      'confirm': null,
+    };
+    await publish({'button:pair': pairing});
+    await tester.pump();
+    expect(find.text('Waiting for the bridge'), findsOneWidget);
+    // A question from the plugin opens on the device that started the run.
+    await publish({
+      'button:pair': {
+        ...pairing,
+        'confirm': {
+          'title': 'Trust this bridge?',
+          'message': 'SHA-256 AB:CD',
+          'confirmLabel': 'Trust',
+        },
+      },
+    });
+    // The spinner keeps running, so pump past the dialog's entrance.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('SHA-256 AB:CD'), findsOneWidget);
+    await tester.tap(find.text('Trust'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(calls.lastWhere((c) => c.method == 'setupConfirm').arguments, {
+      'id': 'hello-world',
+      'run': 'p1',
+      'accepted': true,
+    });
+    await publish({'button:pair': pairing});
+    await tester.pump();
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Cancel'));
+    await tester.pump();
+    expect(calls.lastWhere((c) => c.method == 'setupCancel').arguments, {
+      'id': 'hello-world',
+      'run': 'p1',
+    });
+    await publish({
+      'button:pair': {
+        ...pairing,
+        'state': 'error',
+        'message': '',
+        'code': 'timeout',
+      },
+    });
+    await tester.pump();
+    expect(find.text('The plugin did not answer in time.'), findsOneWidget);
+    // The choice shows its label once the plugin lists it, and a saved one
+    // the list lacks is flagged.
+    await publish(const {}, {
+      'device': [
+        {'id': 'lamp-1', 'label': 'Kitchen'},
+      ],
+    });
+    await tester.pump();
+    expect(find.text('This choice is no longer listed.'), findsOneWidget);
+    await tester.tap(find.byTooltip('Refresh'));
+    await tester.pump();
+    expect(calls.lastWhere((c) => c.method == 'setupRun').arguments, {
+      'id': 'hello-world',
+      'target': 'choices',
+      'key': 'device',
+      'origin': 'device',
+    });
+    await tester.tap(find.byType(PickField));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Kitchen').last);
+    await tester.pumpAndSettle();
+    final save =
+        calls.lastWhere((c) => c.method == 'configure').arguments as Map;
+    expect(save['values'], {'device': 'lamp-1'});
+    expect(save['patch'], isTrue);
+    expect(find.text('This choice is no longer listed.'), findsNothing);
+    expect(find.text('Kitchen'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
   test('native overlays are session scoped and keep their stacking', () async {
     await overlaySession('first');
@@ -2036,9 +2294,10 @@ void main() {
     expect(
       (calls.lastWhere((c) => c.method == 'configure').arguments
           as Map)['values'],
-      {'token': 'rotated', 'host': 'nas.local'},
+      // Only the replaced secret. The host keeps the rest.
+      {'token': 'rotated'},
     );
-    // Editing another setting echoes the mask, which the host keeps.
+    // Editing another setting sends only that one, so the secret stays.
     installed[0]['values'] = {'token': '__set__', 'host': 'nas.local'};
     await plugins.refresh();
     await tester.pumpAndSettle();
@@ -2051,7 +2310,7 @@ void main() {
     expect(
       (calls.lastWhere((c) => c.method == 'configure').arguments
           as Map)['values'],
-      {'token': '__set__', 'host': 'nas.lan'},
+      {'host': 'nas.lan'},
     );
     expect(tester.takeException(), isNull);
   });
@@ -2318,7 +2577,7 @@ void main() {
     expect(
       (calls.lastWhere((c) => c.method == 'configure').arguments
           as Map)['values'],
-      {'brightness': 75.0, 'effect': 'None', 'color': '#123456'},
+      {'brightness': 75.0},
     );
     await tester.tap(find.text('None'));
     await tester.pumpAndSettle();
@@ -2328,7 +2587,7 @@ void main() {
     expect(
       (calls.lastWhere((c) => c.method == 'configure').arguments
           as Map)['values'],
-      {'brightness': 75.0, 'effect': 'Pulse', 'color': '#123456'},
+      {'effect': 'Pulse'},
     );
     expect(tester.takeException(), isNull);
   });
@@ -2394,6 +2653,7 @@ void main() {
       expect(configure.arguments, {
         'id': 'hello-world',
         'values': {'message': 'Edited greeting'},
+        'patch': true,
       });
       expect(find.widgetWithText(FilledButton, 'Save settings'), findsNothing);
       expect(find.text('Edited greeting'), findsOneWidget);

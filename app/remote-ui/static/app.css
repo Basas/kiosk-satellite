@@ -1392,6 +1392,21 @@
 .plugin-chart.compact .plugin-chart-scale, .plugin-chart.compact .plugin-chart-dates, .plugin-chart.compact .plugin-chart-help { display: none; }
 
 .plugin-runtime-status { white-space: pre-line; }
+/* Settings buttons and plugin choices: the run's line under the name, a
+   spinner while the plugin works. */
+.plugin-setup-status { white-space: pre-line; }
+.plugin-setup-status[hidden] { display: none; }
+.plugin-setup-status.error { color: var(--error); }
+.plugin-setup-row .btn-ghost { flex: none; }
+.plugin-setup-running::before { content: ''; display: inline-block; width: 12px; height: 12px;
+  margin-right: 8px; vertical-align: -1px; box-sizing: border-box; border: 2px solid currentColor;
+  border-right-color: transparent; border-radius: 50%; animation: plugin-spin .8s linear infinite; }
+.plugin-setup-spinning > svg { animation: plugin-spin .8s linear infinite; }
+.plugin-choice { display: flex; align-items: center; gap: 4px; flex: none; }
+@media (max-width: 640px) {
+  .row.dp-field-row .plugin-choice { flex: 1 1 100%; }
+  .row.dp-field-row .plugin-choice .dp-field { flex: 1 1 auto; width: auto; min-width: 0; }
+}
 .plugin-readings-list { margin-top: 0; padding-top: 0; padding-bottom: 0; }
 .plugin-reading { display: grid; grid-template-columns: minmax(0, 9fr) minmax(0, 11fr);
   gap: 8px 16px; padding: 16px 0; border-bottom: 1px solid var(--divider);

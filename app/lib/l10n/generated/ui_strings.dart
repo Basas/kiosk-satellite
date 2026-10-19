@@ -5076,6 +5076,24 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
+  /// **'The plugin did not answer in time.'**
+  String get pluginThePluginDidNotAnswerInTime;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'No choices yet. Refresh to look for them.'**
+  String get pluginNoChoicesYetRefreshToLookForThem;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'This choice is no longer listed.'**
+  String get pluginThisChoiceIsNoLongerListed;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Plugin'**
   String get pluginPlugin;
 

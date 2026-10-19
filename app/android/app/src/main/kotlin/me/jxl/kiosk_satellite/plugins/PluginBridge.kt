@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.view.KeyEvent
 import dalvik.system.DexClassLoader
 import io.flutter.plugin.common.BinaryMessenger
@@ -33,6 +34,9 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     companion object {
         /** Incomplete startups in a row that switch the enabled plugins off. */
         internal const val STARTUP_STRIKES = 2
+
+        /** How often running setup runs are checked for a quiet plugin. */
+        internal const val SETUP_CHECK_MS = 5_000L
 
         /** The largest voice skin picture a plugin may name, in bytes. */
         internal const val MAX_THUMBNAIL_BYTES = 256 * 1024L
@@ -164,6 +168,32 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         val overlays = PluginOverlays<OverlayFactory>()
         fun notifyOverlays() = emit("overlays", mapOf("id" to id, "session" to token, "overlays" to overlays.snapshot()), alive)
         val triggers = PluginTriggers(manifest::hasTrigger)
+        val setup = PluginSetup(manifest)
+        private val setupPending = AtomicBoolean(false)
+        private val setupUpdate = Runnable {
+            setupPending.set(false)
+            if (alive.get()) emit("setup", mapOf("id" to id, "session" to token, "setup" to setup.snapshot()), alive)
+        }
+        fun notifySetup() {
+            if (setupPending.compareAndSet(false, true)) main.postDelayed(setupUpdate, 100)
+        }
+        fun closeSetup() = main.removeCallbacks(setupUpdate)
+        private val setupWatched = AtomicBoolean(false)
+        /** Fails runs the plugin went quiet on, checking while any is running. Called on the worker. */
+        fun watchSetup() {
+            if (!setupWatched.compareAndSet(false, true)) return
+            main.postDelayed(object : Runnable {
+                override fun run() {
+                    worker.execute {
+                        if (!alive.get() || sessions[id] !== this@Session) { setupWatched.set(false); return@execute }
+                        val ended = setup.expire(SystemClock.elapsedRealtime())
+                        if (ended.isNotEmpty()) notifySetup()
+                        for (run in ended) deliverSetup(this@Session, "settings.cancel", mapOf("run" to run.run, "reason" to run.reason))
+                        if (alive.get() && setup.hasRunning()) main.postDelayed(this, SETUP_CHECK_MS) else setupWatched.set(false)
+                    }
+                }
+            }, SETUP_CHECK_MS)
+        }
         var status = ""
         var statusError = false
         val lights = linkedMapOf<String, Map<String, Any?>>()
@@ -401,6 +431,36 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                     emit("changed", snapshot())
                 } }
             }
+            override fun updateSettings(values: Map<String, Any>) {
+                check(alive.get()) { "Plugin session has ended" }
+                val partial = JSONObject(values)
+                // Each value is checked here, so a bad one throws in the plugin. Rules
+                // that depend on other settings wait for the merge with the saved ones.
+                manifest.checkValues(partial)
+                worker.execute { if (alive.get()) {
+                    val record = records.getJSONObject(id)
+                    try {
+                        val config = manifest.config(manifest.merged(record.optJSONObject("config") ?: JSONObject(), partial))
+                        record.put("config", JSONObject(config)); save()
+                        emit("changed", snapshot())
+                    } catch (error: IllegalArgumentException) {
+                        log("updateSettings: ${error.message}")
+                    }
+                } }
+            }
+            override fun setupResult(run: String, state: String, message: String): Boolean {
+                check(alive.get()) { "Plugin session has ended" }
+                return setup.result(run, state, message, SystemClock.elapsedRealtime()).also { if (it) notifySetup() }
+            }
+            override fun confirmSetup(run: String, title: String, message: String, confirmLabel: String): Boolean {
+                check(alive.get()) { "Plugin session has ended" }
+                return setup.confirm(run, title, message, confirmLabel, SystemClock.elapsedRealtime()).also { if (it) notifySetup() }
+            }
+            override fun setSettingChoices(key: String, ids: Array<String>, labels: Array<String>?) {
+                check(alive.get()) { "Plugin session has ended" }
+                setup.setChoices(key, ids, labels)
+                notifySetup()
+            }
             private fun publishEntity(type: String, key: String, name: String, metadata: Map<String, Any>, state: Any?) {
                 check(alive.get() && "entities" in manifest.capabilities) { "SDK 1 entities access is required" }
                 entities.publish(type, key, name, metadata, state)
@@ -520,6 +580,9 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                             packageFile(id)?.absolutePath
                         }
                         "execute" -> { execute(id(args), args); snapshot() }
+                        "setupRun" -> setupRun(id(args), args)
+                        "setupCancel" -> { setupCancel(id(args), args); null }
+                        "setupConfirm" -> { setupConfirm(id(args), args); null }
                         "entityCommand" -> {
                             val session = sessions[id(args)] ?: throw IllegalStateException("Enable the plugin first")
                             val key = args["key"] as? String ?: throw IllegalArgumentException("Missing entity key")
@@ -698,7 +761,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             // Revoke every host before waiting for stop callbacks from individual plugins.
             sessions.forEach { (id, session) ->
                 session.alive.set(false)
-                session.closeShizuku(); session.closeCharts(); session.closeStatusTiles(); session.triggers.close(); session.closeEntities(); session.closeScreensavers(); session.overlays.close()
+                session.closeShizuku(); session.closeCharts(); session.closeStatusTiles(); session.triggers.close(); session.closeEntities(); session.closeScreensavers(); session.overlays.close(); session.closeSetup()
                 emit("hideWindow", mapOf("id" to id))
             }
             for (id in sessions.keys.toList()) {
@@ -881,7 +944,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     private fun stopSession(id: String) {
         val session = sessions.remove(id) ?: return
         session.alive.set(false)
-        session.closeShizuku(); session.closeCharts(); session.closeStatusTiles(); session.triggers.close(); session.closeEntities(); session.closeScreensavers(); session.overlays.close()
+        session.closeShizuku(); session.closeCharts(); session.closeStatusTiles(); session.triggers.close(); session.closeEntities(); session.closeScreensavers(); session.overlays.close(); session.closeSetup()
         session.subscriptions.clear()
         emit("hostSessionClosed", mapOf("id" to id, "session" to session.token))
         emit("hideWindow", mapOf("id" to id))
@@ -993,11 +1056,17 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         }
     }
 
+    /**
+     * Saves settings from an admin page. With patch, [args] holds only the
+     * settings that changed and the rest keep their saved values, so an edit
+     * never writes back a value the plugin changed in the meantime.
+     */
     private fun configure(id: String, args: Map<String, Any?>) {
         val values = args["values"] as? Map<*, *> ?: throw IllegalArgumentException("Missing settings")
         val manifest = manifest(id)
         val saved = records.getJSONObject(id).optJSONObject("config") ?: JSONObject()
-        val config = manifest.config(manifest.unmasked(JSONObject(values), saved))
+        val unmasked = manifest.unmasked(JSONObject(values), saved)
+        val config = manifest.config(if (args["patch"] == true) manifest.merged(saved, unmasked) else unmasked)
         sessions[id]?.let { session ->
             try { session.call { session.plugin!!.configure(Collections.unmodifiableMap(config)) } }
             catch (error: Throwable) { fail(id, error); throw error }
@@ -1020,6 +1089,60 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         require(session.manifest.hasCommand(command)) { "Unknown plugin command" }
         try { session.call { session.plugin!!.execute(command, emptyMap()) } }
         catch (error: Throwable) { fail(id, error); throw error }
+    }
+
+    /**
+     * Starts a settings button or a choices refresh. The plugin hears
+     * settings.button {id, run} or settings.choices {key, run} and answers
+     * through setupResult. A run still going on the same target is replaced.
+     */
+    private fun setupRun(id: String, args: Map<String, Any?>): Map<String, Any?> {
+        check(pluginsEnabled) { "Enable Plugins first" }
+        val session = sessions[id] ?: throw IllegalStateException("Enable the plugin first")
+        val manifest = session.manifest
+        val key = args["key"] as? String ?: throw IllegalArgumentException("Missing setup target")
+        val config = records.getJSONObject(id).optJSONObject("config") ?: JSONObject()
+        val (target, event, field) = when (args["target"]) {
+            "button" -> {
+                require(manifest.buttonVisible(key, config)) { "Unknown or hidden button" }
+                Triple("button:$key", "settings.button", "id")
+            }
+            "choices" -> {
+                require(key in manifest.choiceKeys && manifest.settingVisible(key, config)) { "Unknown or hidden choices setting" }
+                Triple("choices:$key", "settings.choices", "key")
+            }
+            else -> throw IllegalArgumentException("Unknown setup target")
+        }
+        val (run, replaced) = session.setup.start(target, args["origin"] as? String ?: "remote", SystemClock.elapsedRealtime())
+        session.notifySetup()
+        session.watchSetup()
+        replaced?.let { deliverSetup(session, "settings.cancel", mapOf("run" to it.run, "reason" to it.reason)) }
+        try { session.call { session.plugin!!.onEvent(event, mapOf(field to key, "run" to run.id)) } }
+        catch (error: Throwable) { fail(id, error); throw error }
+        return mapOf("run" to run.id)
+    }
+
+    private fun setupCancel(id: String, args: Map<String, Any?>) {
+        val session = sessions[id] ?: return
+        val run = args["run"] as? String ?: throw IllegalArgumentException("Missing run")
+        if (!session.setup.cancel(run)) return
+        session.notifySetup()
+        deliverSetup(session, "settings.cancel", mapOf("run" to run, "reason" to "canceled"))
+    }
+
+    private fun setupConfirm(id: String, args: Map<String, Any?>) {
+        val session = sessions[id] ?: return
+        val run = args["run"] as? String ?: throw IllegalArgumentException("Missing run")
+        if (!session.setup.answer(run, SystemClock.elapsedRealtime())) return
+        session.notifySetup()
+        deliverSetup(session, "settings.confirm", mapOf("run" to run, "accepted" to (args["accepted"] == true)))
+    }
+
+    /** Tells the plugin about its run. A plugin that throws is stopped like any failed callback. */
+    private fun deliverSetup(session: Session, event: String, payload: Map<String, Any?>) {
+        if (!session.alive.get() || sessions[session.id] !== session) return
+        try { session.call { session.plugin!!.onEvent(event, payload) } }
+        catch (error: Throwable) { fail(session.id, error); emit("changed", snapshot()) }
     }
 
     private fun windowEvent(id: String, args: Map<String, Any?>) {

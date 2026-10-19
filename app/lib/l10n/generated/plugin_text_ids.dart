@@ -197,5 +197,10 @@ const pluginTextMessageIds = <String, String>{
   "Expected a list setting": "pluginErrorListValue",
   "Too many or too few list items": "pluginErrorListCount",
   "Fill in every required field": "pluginErrorRequiredField",
-  "List settings must be at most 32 KB": "pluginErrorListSize"
+  "List settings must be at most 32 KB": "pluginErrorListSize",
+  "Refresh": "commonRefresh",
+  "Search": "mediaSonosSearch",
+  "The plugin did not answer in time.": "pluginThePluginDidNotAnswerInTime",
+  "No choices yet. Refresh to look for them.": "pluginNoChoicesYetRefreshToLookForThem",
+  "This choice is no longer listed.": "pluginThisChoiceIsNoLongerListed"
 };

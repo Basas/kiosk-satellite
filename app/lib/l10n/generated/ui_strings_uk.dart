@@ -2863,6 +2863,17 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get pluginThePluginDidNotAnswerInTime => 'Плагін не відповів вчасно.';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem =>
+      'Варіантів поки немає. Оновіть, щоб знайти їх.';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed =>
+      'Цього варіанта більше немає в списку.';
+
+  @override
   String get pluginPlugin => 'Плагін';
 
   @override

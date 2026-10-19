@@ -10994,6 +10994,45 @@
     },
     "x-notes": "Keep placeholders unchanged. Names and technical values are supplied by the app."
   },
+  "pluginThePluginDidNotAnswerInTime": "Плагин не ответил вовремя.",
+  "@pluginThePluginDidNotAnswerInTime": {
+    "context": "Settings > Plugin Manager > a plugin > Settings",
+    "description": "Visible label, help or status in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > a plugin > Settings"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > a plugin > Settings"
+      ]
+    }
+  },
+  "pluginNoChoicesYetRefreshToLookForThem": "Вариантов пока нет. Обновите, чтобы найти их.",
+  "@pluginNoChoicesYetRefreshToLookForThem": {
+    "context": "Settings > Plugin Manager > a plugin > Settings",
+    "description": "Visible label, help or status in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > a plugin > Settings"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > a plugin > Settings"
+      ]
+    }
+  },
+  "pluginThisChoiceIsNoLongerListed": "Этого варианта больше нет в списке.",
+  "@pluginThisChoiceIsNoLongerListed": {
+    "context": "Settings > Plugin Manager > a plugin > Settings",
+    "description": "Visible label, help or status in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Plugin Manager > a plugin > Settings"
+      ],
+      "remoteAdmin": [
+        "Plugin Manager > a plugin > Settings"
+      ]
+    }
+  },
   "pluginPlugin": "Плагин",
   "@pluginPlugin": {
     "context": "Settings > Plugin Manager",

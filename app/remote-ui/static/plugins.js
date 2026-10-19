@@ -9,6 +9,7 @@ import { updatePluginReadings } from './plugin-readings.js';
 import { currentPath, showTab, subpageEntry } from './tabs.js';
 import { dashboardField } from './dashboard_picker.js';
 import { cameraViewSpec, fieldVisible, iconField, listSetting } from './plugin_lists.js';
+import { choiceControl, refreshPluginSetup, setupButtonRow } from './plugin_setup.js';
 import { hintRow, introRow, messageBox, modalShell, showToast, swatch } from './widgets.js';
 import { SUBPAGE_ICONS } from './icons.js';
 import { marked } from './vendor-marked.js';
@@ -18,6 +19,14 @@ const introText = 'Plugins add additional community developed features to Kiosk 
 const trustNotice = 'Plugins run code inside Kiosk Satellite and can access app data and granted Android permissions. A faulty or malicious plugin can expose private information or stop the app from working. Only install plugins from authors you trust.';
 let busy = false;
 const maxZipBytes = 4 * 1024 * 1024;
+
+const LOCKED = 'button:not(.plugin-setup-start),input,select';
+
+// Waits out a save in flight, at most 10 seconds, so a settings button
+// press reaches the plugin after the field the user just left.
+async function settled() {
+  for (let i = 0; busy && i < 200; i++) await new Promise((resolve) => setTimeout(resolve, 50));
+}
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -271,14 +280,16 @@ function render(root, state) {
     if (busy) return;
     busy = true;
     root.setAttribute('aria-busy', 'true');
-    root.querySelectorAll('button,input,select').forEach((el) => { el.disabled = true; });
+    // Settings buttons stay pressable: a press right after a text edit
+    // lands while that edit saves, and the button waits for it.
+    root.querySelectorAll(LOCKED).forEach((el) => { el.disabled = true; });
     trigger.classList.add('plugin-busy');
     try { await action(); }
     catch (failure) { showToast({ title: pluginText('Plugin Manager'), message: pluginError(failure.message), kind: 'error' }); }
     finally {
       trigger.classList.remove('plugin-busy'); busy = false;
       root.removeAttribute('aria-busy');
-      root.querySelectorAll('button,input,select').forEach((el) => { el.disabled = el.dataset.pluginDisabled === 'true'; });
+      root.querySelectorAll(LOCKED).forEach((el) => { el.disabled = el.dataset.pluginDisabled === 'true'; });
     }
   }
   const refresh = async () => render(root, await command('getPluginState'));
@@ -375,6 +386,7 @@ function render(root, state) {
     row.insertBefore(actions, row.lastChild);
     list.append(row);
     const page = element('div', undefined, 'subpage'); page.dataset.subpage = plugin.id; page.dataset.title = plugin.name;
+    page.dataset.pluginRunning = String(plugin.running === true);
     const description = element('div', undefined, 'card');
     const intro = introRow(SUBPAGE_ICONS.Plugins, plugin.name || plugin.id, plugin.description || '');
     intro.dataset.searchId = `plugin:${plugin.id}:intro`;
@@ -415,15 +427,16 @@ function render(root, state) {
     const ensureGroup = (group) => {
       if (groups.has(group)) return groups.get(group);
       const panel = element('div', undefined, 'card'); groups.set(group, panel);
-      page.append(heading(group === 'Settings' && !plugin.groups?.some(entry => entry.title === group) && !plugin.settings?.some(entry => entry.group === group) ? pluginText('Settings') : group), panel);
+      page.append(heading(group === 'Settings' && !plugin.groups?.some(entry => entry.title === group) && !plugin.settings?.some(entry => entry.group === group) && !plugin.buttons?.some(entry => entry.group === group) ? pluginText('Settings') : group), panel);
       if (page.pluginGroups.some((entry) => entry.title === group && (entry.charts?.length || entry.readings?.length))) appendOutput(group);
       return panel;
     };
     for (const group of plugin.groups || []) ensureGroup(group.title);
     const values = { ...plugin.values };
+    // Only the changed setting, so a value the plugin saved meanwhile stays.
     const saveSetting = (key, value, trigger) => run(async () => {
       try {
-        await command('configurePlugin', { id: plugin.id, values: { ...plugin.values, [key]: value } });
+        await command('configurePlugin', { id: plugin.id, values: { [key]: value }, patch: true });
       } finally {
         await refresh();
       }
@@ -501,6 +514,14 @@ function render(root, state) {
         }
         settingRow.replaceChildren(info(setting.title, setting.description || ''), field.el);
         settingRow.classList.add('dp-field-row');
+      } else if (setting.type === 'string' && setting.choices === 'plugin') {
+        // The plugin lists the choices. The setting stores the picked ID.
+        const choice = choiceControl(plugin, setting, values[setting.key] ?? setting.default ?? '', settled,
+          (picked, trigger) => saveSetting(setting.key, picked, trigger));
+        const text = info(setting.title, setting.description || ''); text.append(...choice.lines);
+        settingRow.replaceChildren(text, choice.control);
+        settingRow.classList.add('dp-field-row');
+        choice.attach(settingRow);
       } else if (setting.type === 'select') {
         const select = element('select'); select.setAttribute('aria-label', setting.title);
         for (const choice of setting.options) { const option = element('option', choice); option.value = choice; select.append(option); }
@@ -529,7 +550,7 @@ function render(root, state) {
         // event. A saved secret leaves the field empty and hidden again.
         input.onblur = () => input.value && run(async () => {
           try {
-            await command('configurePlugin', { id: plugin.id, values: { ...plugin.values, [setting.key]: input.value } });
+            await command('configurePlugin', { id: plugin.id, values: { [setting.key]: input.value }, patch: true });
             input.value = ''; show(false); reveal.hidden = true;
           } finally {
             await refresh();
@@ -552,6 +573,10 @@ function render(root, state) {
         input.onkeydown = (event) => { if (event.key === 'Enter') input.blur(); }; settingRow.append(input);
       }
       panel.append(settingRow);
+    }
+    // Buttons close their group, shown by the settings they name.
+    for (const button of (plugin.buttons || []).filter((entry) => fieldVisible(entry, values, plugin.settings || []))) {
+      ensureGroup(button.group || 'Settings').append(setupButtonRow(plugin, button, settled));
     }
     appendOutput();
     if (plugin.commands?.length) {
@@ -621,14 +646,17 @@ watchUpdates(['plugins'], async () => {
   if (!container) return;
   runtimeLoading = true;
   try {
-    await Promise.allSettled([
+    const outputs = [
       ['getPluginCharts', page, (target, items) => updateGroupedPluginOutput(target, 'charts', items)],
       ['getPluginReadings', page, (target, items) => updateGroupedPluginOutput(target, 'readings', items)],
       ...(page.querySelector('.plugin-shizuku') ? [['getPluginShizukuState', page.querySelector('.plugin-shizuku'), updatePluginShizuku]] : []),
     ].map(async ([command, target, update]) => {
       const result = await cmd(command, { id }, { timeoutMs: 5000 });
       if (target?.isConnected && currentPath === `plugins/${id}` && result.ok) update(target, result.data);
-    }));
+    });
+    // Settings buttons and plugin choices follow their runs.
+    if (page.querySelector('[data-setup-target]')) outputs.push(refreshPluginSetup(id));
+    await Promise.allSettled(outputs);
   } catch (_) { /* Reconnect reads the latest plugin output. */ }
   finally { runtimeLoading = false; }
 }, { visible: () => currentPath.startsWith('plugins/'), intervalMs: 1000 });

@@ -2786,6 +2786,15 @@ class UiStringsZh extends UiStrings {
   }
 
   @override
+  String get pluginThePluginDidNotAnswerInTime => '插件未及时响应。';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem => '暂无选项。请刷新以查找。';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed => '此选项已不在列表中。';
+
+  @override
   String get pluginPlugin => '插件';
 
   @override
@@ -16236,6 +16245,15 @@ class UiStringsZhCn extends UiStringsZh {
   String pluginConfigureName(String name) {
     return '配置 $name';
   }
+
+  @override
+  String get pluginThePluginDidNotAnswerInTime => '插件未及时响应。';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem => '暂无选项。请刷新以查找。';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed => '此选项已不在列表中。';
 
   @override
   String get pluginPlugin => '插件';

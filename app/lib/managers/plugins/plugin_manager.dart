@@ -112,6 +112,15 @@ class PluginNativeOverlay {
   );
 }
 
+/// A refused setup run, whose text is the host's message as is, ready for
+/// pluginError.
+class PluginSetupError implements Exception {
+  const PluginSetupError(this.message);
+  final String message;
+  @override
+  String toString() => message;
+}
+
 /// Owns the Flutter surface of the Android plugin runtime.
 class PluginManager extends Manager implements FleetPluginHost {
   PluginManager(
@@ -135,6 +144,10 @@ class PluginManager extends Manager implements FleetPluginHost {
     {},
   );
   final _runtimeSessions = <String, String>{};
+
+  /// Settings page buttons and plugin choices by plugin id: each run's
+  /// state and what the plugin listed. Session scoped like charts.
+  final setup = ValueNotifier<Map<String, Map<String, Object?>>>({});
   final screensavers = ValueNotifier<Map<String, Map<String, Object?>>>({});
   Map<String, String> get screensaverOptions => {
     for (final entry in screensavers.value.entries)
@@ -296,6 +309,7 @@ class PluginManager extends Manager implements FleetPluginHost {
       charts,
       statusTiles,
       shizuku,
+      setup,
     ]) {
       listenable.addListener(() {
         if (!_disposed) bus.publish(const RemoteStatusChanged('plugins'));
@@ -343,6 +357,7 @@ class PluginManager extends Manager implements FleetPluginHost {
           _setEntities(data['id'] as String, const []);
           _setOverlays(data['id'] as String, const []);
           _setContentInsets(data['id'] as String, null);
+          _setSetup(data['id'] as String, null);
           _hostReads.open(call.arguments as Map);
         case 'hostSessionClosed':
           final data = call.arguments as Map;
@@ -354,6 +369,7 @@ class PluginManager extends Manager implements FleetPluginHost {
             _setEntities(data['id'] as String, const []);
             _setOverlays(data['id'] as String, const []);
             _setContentInsets(data['id'] as String, null);
+            _setSetup(data['id'] as String, null);
           }
           _hostReads.close(call.arguments as Map);
         case 'hostSubscription':
@@ -410,6 +426,12 @@ class PluginManager extends Manager implements FleetPluginHost {
           if (_runtimeSessions[data['id']] == data['session'] &&
               data['session'] != null) {
             _setContentInsets(data['id'] as String, _insets(data['insets']));
+          }
+        case 'setup':
+          final data = call.arguments as Map;
+          if (_runtimeSessions[data['id']] == data['session'] &&
+              data['session'] != null) {
+            _setSetup(data['id'] as String, data['setup'] as Map?);
           }
         case 'overlays':
           final data = call.arguments as Map;
@@ -672,7 +694,11 @@ class PluginManager extends Manager implements FleetPluginHost {
       'configurePlugin',
       'Save validated plugin settings.',
       (p) => update('configure', p),
-      const {'id': 'Plugin ID', 'values': 'Complete settings object'},
+      const {
+        'id': 'Plugin ID',
+        'values': 'Settings object, complete unless patch is set',
+        'patch': 'True to save only the settings in values',
+      },
     );
     register(
       'searchIcons',
@@ -695,6 +721,47 @@ class PluginManager extends Manager implements FleetPluginHost {
         'query': 'Words the icon name contains. Empty lists the first icons.',
         'names': 'Exact icon names to resolve instead of a search, at most 100',
         'limit': 'Most results to return, 60 unless set, at most 200',
+      },
+    );
+    register(
+      'getPluginSetup',
+      'Read the settings button runs and listed choices of a running plugin.',
+      (p) async => setup.value[p['id']] ?? const {'runs': {}, 'choices': {}},
+      const {'id': 'Plugin ID'},
+    );
+    register(
+      'runPluginSetup',
+      'Press a settings button or ask a plugin to refresh the choices of a setting. The plugin answers through the run.',
+      (p) => runSetup(
+        p['id'] as String? ?? '',
+        target: p['target'] as String? ?? '',
+        key: p['key'] as String? ?? '',
+        origin: 'remote',
+      ),
+      const {
+        'id': 'Plugin ID',
+        'target': 'button or choices',
+        'key': 'Button ID or setting key',
+      },
+    );
+    register(
+      'cancelPluginSetup',
+      'Cancel a running settings button or choices refresh.',
+      (p) => cancelSetup(p['id'] as String? ?? '', p['run'] as String? ?? ''),
+      const {'id': 'Plugin ID', 'run': 'Run ID'},
+    );
+    register(
+      'answerPluginSetup',
+      'Answer the question a plugin asked during a run.',
+      (p) => answerSetup(
+        p['id'] as String? ?? '',
+        p['run'] as String? ?? '',
+        accepted: p['accepted'] == true,
+      ),
+      const {
+        'id': 'Plugin ID',
+        'run': 'Run ID',
+        'accepted': 'True to go ahead',
       },
     );
     register(
@@ -906,6 +973,47 @@ class PluginManager extends Manager implements FleetPluginHost {
       if (!_disposed) status.value = _errorText(error);
       rethrow;
     }
+  }
+
+  /// Starts a settings button ([target] `button`) or a choices refresh
+  /// (`choices`) and returns the run's id.
+  Future<String> runSetup(
+    String id, {
+    required String target,
+    required String key,
+    String origin = 'device',
+  }) async {
+    final result = await _setupCall('setupRun', {
+      'id': id,
+      'target': target,
+      'key': key,
+      'origin': origin,
+    });
+    return '${(result as Map)['run']}';
+  }
+
+  Future<void> cancelSetup(String id, String run) =>
+      _setupCall('setupCancel', {'id': id, 'run': run});
+
+  Future<void> answerSetup(String id, String run, {required bool accepted}) =>
+      _setupCall('setupConfirm', {'id': id, 'run': run, 'accepted': accepted});
+
+  Future<Object?> _setupCall(String method, Map<String, Object?> args) async {
+    try {
+      return await channel
+          .invokeMethod<Object?>(method, args)
+          .timeout(const Duration(seconds: 10));
+    } catch (error) {
+      throw PluginSetupError(_errorText(error));
+    }
+  }
+
+  void _setSetup(String id, Map? value) {
+    final next = value == null ? null : jsonDecode(jsonEncode(value)) as Map;
+    if (jsonEncode(setup.value[id]) == jsonEncode(next)) return;
+    setup.value = {...setup.value}
+      ..remove(id)
+      ..addAll(next == null ? {} : {id: next.cast<String, Object?>()});
   }
 
   void _setScreensavers(String id, List value) {
@@ -1281,6 +1389,7 @@ class PluginManager extends Manager implements FleetPluginHost {
     readings.dispose();
     charts.dispose();
     statusTiles.dispose();
+    setup.dispose();
     screensavers.dispose();
     installed.dispose();
     windows.dispose();

@@ -68,7 +68,8 @@ def api(route):
     if name == 'getPluginState':
         result = {'enabled': True, 'plugins': installed}
     elif name == 'configurePlugin':
-        installed[0]['values'] = copy.deepcopy(params['values'])
+        # A patch writes over the saved values, like the host.
+        installed[0]['values'] = {**(installed[0]['values'] if params.get('patch') else {}), **copy.deepcopy(params['values'])}
         saved.append(copy.deepcopy(params['values']))
         result = installed
     elif name == 'searchIcons':

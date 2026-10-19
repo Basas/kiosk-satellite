@@ -844,6 +844,14 @@ List<SettingsSearchEntry> pluginSettingsSearchEntries(
         subpage: '${plugin['id']}',
         anchorId: 'plugin:${plugin['id']}:setting:${raw['key']}',
       ),
+    for (final raw in (plugin['buttons'] as List? ?? const []).whereType<Map>())
+      SettingsSearchEntry(
+        category: 'Plugins',
+        title: '${raw['title']}',
+        description: '${raw['description'] ?? ''}',
+        subpage: '${plugin['id']}',
+        anchorId: 'plugin:${plugin['id']}:button:${raw['id']}',
+      ),
     for (final raw
         in (plugin['commands'] as List? ?? const []).whereType<Map>())
       SettingsSearchEntry(

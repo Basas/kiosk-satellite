@@ -17,6 +17,7 @@ import 'kit.dart';
 import 'plugin_list_setting.dart';
 import 'plugin_chart.dart';
 import 'plugin_readings.dart';
+import 'plugin_setup.dart';
 import 'plugin_shizuku.dart';
 import 'color_picker.dart';
 import 'toast.dart';
@@ -780,10 +781,24 @@ class _PluginSettingsState extends State<_PluginSettings> {
   late Map<String, Object?> _values;
   bool _saving = false;
   bool get _busy => widget.busy || _saving;
+  late final _prompts = PluginSetupPrompts(
+    widget.plugins,
+    '${widget.plugin['id']}',
+  );
   @override
   void initState() {
     super.initState();
     _reset();
+    // A question can be waiting already, and a dialog needs a built page.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _prompts.attach(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    _prompts.detach();
+    super.dispose();
   }
 
   @override
@@ -816,9 +831,11 @@ class _PluginSettingsState extends State<_PluginSettings> {
       _values[key] = value;
     });
     try {
+      // Only this setting, so a value the plugin saved meanwhile stays.
       await widget.run('configure', {
         'id': widget.plugin['id'],
-        'values': {...?widget.plugin['values'] as Map?, key: value},
+        'values': {key: value},
+        'patch': true,
       });
     } finally {
       if (mounted) {
@@ -1004,6 +1021,19 @@ class _PluginSettingsState extends State<_PluginSettings> {
         enabled: !_busy,
         onPick: (id) async {
           if (mounted && !_busy) await _saveValue('${raw['key']}', id ?? '');
+        },
+      );
+    }
+    if (raw['type'] == 'string' && raw['choices'] == 'plugin') {
+      return PluginChoiceRow(
+        plugins: widget.plugins,
+        pluginId: '${widget.plugin['id']}',
+        setting: raw,
+        value: '${_values[raw['key']] ?? raw['default']}',
+        running: widget.plugin['running'] == true,
+        enabled: !_busy,
+        onPick: (id) {
+          if (mounted && !_busy) _saveValue('${raw['key']}', id);
         },
       );
     }
@@ -1207,18 +1237,25 @@ class _PluginSettingsState extends State<_PluginSettings> {
       for (final raw in declared.whereType<Map>())
         if (pluginFieldVisible(raw, _values, declared)) raw,
     ];
+    // Buttons follow the same conditions, by the settings they name.
+    final buttons = [
+      for (final raw
+          in (plugin['buttons'] as List? ?? const []).whereType<Map>())
+        if (pluginFieldVisible(raw, _values, declared)) raw,
+    ];
     final commands = plugin['commands'] as List? ?? const [];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (settings.isNotEmpty) ...[
+        if (settings.isNotEmpty || buttons.isNotEmpty) ...[
           for (final group in pluginSettingsGroups(plugin)) ...[
             SectionHeading(
               group == 'Settings' &&
                       !(plugin['groups'] as List? ?? []).any(
                         (g) => g['title'] == group,
                       ) &&
-                      !settings.any((entry) => entry['group'] == group)
+                      !settings.any((entry) => entry['group'] == group) &&
+                      !buttons.any((entry) => entry['group'] == group)
                   ? pluginText(context, 'Settings')
                   : group,
             ),
@@ -1228,13 +1265,32 @@ class _PluginSettingsState extends State<_PluginSettings> {
                   for (final raw in settings)
                     if ('${raw['group'] ?? 'Settings'}' == group) raw,
                 ];
-                if (rows.isEmpty) return const SizedBox.shrink();
+                final pressable = [
+                  for (final raw in buttons)
+                    if ('${raw['group'] ?? 'Settings'}' == group) raw,
+                ];
+                if (rows.isEmpty && pressable.isEmpty) {
+                  return const SizedBox.shrink();
+                }
                 return SettingsCard(
                   children: [
                     for (final raw in rows)
                       SearchLandingTarget(
                         id: 'plugin:${plugin['id']}:setting:${raw['key']}',
-                        child: _settingRow(raw, alone: rows.length == 1),
+                        child: _settingRow(
+                          raw,
+                          alone: rows.length + pressable.length == 1,
+                        ),
+                      ),
+                    for (final raw in pressable)
+                      SearchLandingTarget(
+                        id: 'plugin:${plugin['id']}:button:${raw['id']}',
+                        child: PluginSetupButtonRow(
+                          plugins: widget.plugins,
+                          pluginId: '${plugin['id']}',
+                          button: raw,
+                          running: plugin['running'] == true,
+                        ),
                       ),
                   ],
                 );
@@ -1277,6 +1333,9 @@ List<String> pluginSettingsGroups(Map plugin) => {
   for (final setting
       in (plugin['settings'] as List? ?? const []).whereType<Map>())
     '${setting['group'] ?? 'Settings'}',
+  for (final button
+      in (plugin['buttons'] as List? ?? const []).whereType<Map>())
+    '${button['group'] ?? 'Settings'}',
 }.toList();
 
 /// Runtime updates stay below their settings without rebuilding editing controls.

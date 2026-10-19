@@ -110,7 +110,8 @@ def api(route):
         if name in ('enablePlugin', 'disablePlugin'):
             installed[0]['enabled'] = name == 'enablePlugin'
         elif name == 'configurePlugin':
-            installed[0]['values'] = dict(params['values'])
+            # A patch writes over the saved values, like the host.
+            installed[0]['values'] = {**(installed[0]['values'] if params.get('patch') else {}), **params['values']}
             # The host lists a saved secret as __set__, never its value.
             if installed[0]['values'].get('token'):
                 installed[0]['values']['token'] = '__set__'
@@ -220,13 +221,14 @@ try:
         expect(root.get_by_role('button', name='Save settings')).to_have_count(0)
         expect(root.get_by_role('textbox', name='Greeting')).to_have_value('Changed on the subpage')
         # A saved secret shows only a placeholder. Typing replaces it and
-        # other edits echo the mask. The eye shows only what is typed.
+        # other edits leave it out. The eye shows only what is typed.
         token = root.get_by_label('API token', exact=True)
         expect(token).to_have_attribute('type', 'password')
         expect(token).to_have_value('')
         expect(token).to_have_attribute('placeholder', '•••••• (set)')
         configured = lambda: [r for r in requests if r[0] == 'configurePlugin'][-1][1]['values']
-        assert configured()['token'] == '__set__'
+        assert configured() == {'message': 'Changed on the subpage'}
+        assert [r for r in requests if r[0] == 'configurePlugin'][-1][1]['patch'] is True
         expect(root.locator('.plugin-secret').get_by_role('button', name='Clear')).to_have_count(0)
         reveal = root.locator('.plugin-secret').get_by_role('button', name='Show password')
         expect(reveal).to_be_hidden()

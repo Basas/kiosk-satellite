@@ -21013,5 +21013,20 @@
     "source": "202f82e0b822aa5d1933fb5f7148425b113013e5435c6e9b93eb7acabea3c471",
     "translation": "2b16102ec540bca7197e0a2ca1fd0711ff440b11c92533ddad8f2da130377a1e",
     "author": "Xavier Larrea"
+  },
+  "pluginNoChoicesYetRefreshToLookForThem": {
+    "source": "0d521414f0c45b59052751847c59f04ffc31376728fe41e82adb2163d58968e3",
+    "translation": "8164f111ee139f1bc83991da50d23d40c54c7fdf920496b5cdc9e0e11377b84f",
+    "author": "Xavier Larrea"
+  },
+  "pluginThisChoiceIsNoLongerListed": {
+    "source": "691fef2428fc323f4fc9b9ff7bf7ac018bbe23820875d42d9d71d4bdd76e7685",
+    "translation": "11f8492f49a5096b09deceef4047c8583bc3a17238070279ad8b55cb11f3dbf4",
+    "author": "Xavier Larrea"
+  },
+  "pluginThePluginDidNotAnswerInTime": {
+    "source": "32a62a316274b7a932af0ab42df8f1a0c56f0128de90cfcea5669e4e8717b4a8",
+    "translation": "a8a5ec0d1a211185ebe1b53c49aceaa29c5fc4ce90a4804c107c4ab3f87b18ca",
+    "author": "Xavier Larrea"
   }
 }

@@ -221,6 +221,8 @@ function pluginSearchEntries() {
     ...(plugin.capabilities?.includes('shizuku') ? [{tab:'plugins', sub:plugin.id, title:pluginText('Shizuku access'), desc:'', englishAlias:'Shizuku access', anchor:`plugin:${plugin.id}:shizuku`}] : []),
     ...(plugin.settings || []).map(setting => ({tab:'plugins', sub:plugin.id,
       title:setting.title, desc:setting.description || '', anchor:`plugin:${plugin.id}:setting:${setting.key}`})),
+    ...(plugin.buttons || []).map(button => ({tab:'plugins', sub:plugin.id,
+      title:button.title, desc:button.description || '', anchor:`plugin:${plugin.id}:button:${button.id}`})),
     ...(plugin.commands || []).map(action => ({tab:'plugins', sub:plugin.id,
       title:action.title, desc:[pluginText('Gestures'), plugin.actionOptions?.[action.id]?.drawer && pluginText('Kiosk drawer'),
         plugin.actionOptions?.[action.id]?.homeAssistant && pluginText('Home Assistant')].filter(Boolean).join(' · '),
