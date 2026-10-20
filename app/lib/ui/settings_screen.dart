@@ -47,6 +47,7 @@ import '../managers/voice/realtime/openai_realtime_backend.dart';
 import '../managers/wake_word/background_listening.dart';
 import '../managers/wake_word/system_permissions.dart';
 import 'color_picker.dart';
+import 'celestial_settings.dart';
 import 'weather_mood_settings.dart';
 import 'date_picker.dart';
 import 'gesture_settings.dart';
@@ -3241,6 +3242,26 @@ class _CategoryContentState extends State<_CategoryContent> {
     if (widget.category == 'ESPHome' &&
         !container.location.locationKnownUnsupported)
       locationEnabled.key: _LocationStatusRow(container: container),
+    // Where the Celestial sky's location source places it, or why it
+    // cannot: under the Location select for the GPS and the home zone,
+    // under the picker for an entity. Manual shows its own field.
+    // Mirrored on the remote (settings.js).
+    if (widget.category == 'Screensaver' &&
+        const {
+          'gps',
+          'ha_home',
+        }.contains(container.settings.get(screensaverCelestialLocation)))
+      screensaverCelestialLocation.key: CelestialLocationStatusRow(
+        key: ValueKey(container.settings.get(screensaverCelestialLocation)),
+        container: container,
+        source: container.settings.get(screensaverCelestialLocation),
+      ),
+    if (widget.category == 'Screensaver' &&
+        container.settings.get(screensaverCelestialLocation) == 'ha_entity')
+      screensaverCelestialEntity.key: CelestialLocationStatusRow(
+        container: container,
+        source: 'ha_entity',
+      ),
     // What the device's person sensor is reporting, live, under Dismiss
     // on person: someone in view or not and the age of the last heartbeat,
     // or why nothing is being read. Mirrored on the remote (settings.js,
@@ -11022,6 +11043,9 @@ class SettingTile extends StatelessWidget {
         }
         if (def.key == screensaverWeatherEntity.key) {
           return WeatherMoodEntityRow(container: c);
+        }
+        if (def.key == screensaverCelestialEntity.key) {
+          return CelestialEntityRow(container: c);
         }
         // Adaptive brightness's light sensor entity (issue #911), picked
         // with the entity search the plugins' entity fields use.

@@ -17528,6 +17528,696 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Location'**
+  String get settingScreensaverCelestialLocationTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the sky is seen from.'**
+  String get settingScreensaverCelestialLocationDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Entity'**
+  String get settingScreensaverCelestialEntityTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'A person, device tracker or zone with a location.'**
+  String get settingScreensaverCelestialEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get settingScreensaverCelestialCoordinatesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude and longitude, like 40.71, -74.01.'**
+  String get settingScreensaverCelestialCoordinatesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Landscape'**
+  String get settingScreensaverCelestialTerrainTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The ground along the horizon.'**
+  String get settingScreensaverCelestialTerrainDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at the sky'**
+  String get settingScreensaverCelestialFollowDeviceTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the device up and the sky on screen turns with it, so you can name what you are looking at. Needs a compass sensor.'**
+  String get settingScreensaverCelestialFollowDeviceDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Daytime sky'**
+  String get settingScreensaverCelestialDaytimeTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Brighten the sky and fade the stars while the Sun is up. Turn off to show the night sky all day.'**
+  String get settingScreensaverCelestialDaytimeDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Milky Way'**
+  String get settingScreensaverCelestialMilkyWayTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the glow of our galaxy across the night sky.'**
+  String get settingScreensaverCelestialMilkyWayDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Planets'**
+  String get settingScreensaverCelestialPlanetsTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the planets where they are tonight.'**
+  String get settingScreensaverCelestialPlanetsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Galaxies and nebulae'**
+  String get settingScreensaverCelestialDeepSkyTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the Andromeda Galaxy, the Orion Nebula and other objects you can see without a telescope.'**
+  String get settingScreensaverCelestialDeepSkyDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Light pollution'**
+  String get settingScreensaverCelestialLightPollutionTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate the glow of city lights. Higher values hide the fainter stars and the Milky Way.'**
+  String get settingScreensaverCelestialLightPollutionDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Twinkling stars'**
+  String get settingScreensaverCelestialTwinkleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the stars shimmer, most of all near the horizon. Turn off to save power.'**
+  String get settingScreensaverCelestialTwinkleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger Moon'**
+  String get settingScreensaverCelestialLargeMoonTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw the Moon at three times its real size and the Sun at twice, so the phase is easy to see.'**
+  String get settingScreensaverCelestialLargeMoonDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Constellation lines'**
+  String get settingScreensaverCelestialLinesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the stars of each constellation.'**
+  String get settingScreensaverCelestialLinesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Constellation names'**
+  String get settingScreensaverCelestialConstellationNamesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Name the constellations. More appear as you zoom in.'**
+  String get settingScreensaverCelestialConstellationNamesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Star and planet names'**
+  String get settingScreensaverCelestialNamesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Name the Sun, the Moon, the planets, the brightest stars and the galaxies. More stars get names as you zoom in.'**
+  String get settingScreensaverCelestialNamesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass points'**
+  String get settingScreensaverCelestialCompassTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark north, east, south and west on the horizon.'**
+  String get settingScreensaverCelestialCompassDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Position'**
+  String get settingScreensaverCelestialControlCoordinatesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the latitude and longitude the sky is seen from.'**
+  String get settingScreensaverCelestialControlCoordinatesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Azimuth'**
+  String get settingScreensaverCelestialControlAzimuthTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the compass direction the center of the screen faces.'**
+  String get settingScreensaverCelestialControlAzimuthDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get settingScreensaverCelestialControlAltitudeTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show how high above the horizon the center of the screen is.'**
+  String get settingScreensaverCelestialControlAltitudeDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Field of view'**
+  String get settingScreensaverCelestialControlFovTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show how much of the sky the screen spans, in degrees.'**
+  String get settingScreensaverCelestialControlFovDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get settingScreensaverCelestialControlTimeTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the time of the sky, with a Now button after a timelapse.'**
+  String get settingScreensaverCelestialControlTimeDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Timelapse'**
+  String get settingScreensaverCelestialControlTimelapseTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed up time to watch the sky turn. Tap to change the speed.'**
+  String get settingScreensaverCelestialControlTimelapseDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at the sky switch'**
+  String get settingScreensaverCelestialControlPointAtSkyTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn Point at the sky on and off. Shows only on devices with a compass.'**
+  String get settingScreensaverCelestialControlPointAtSkyDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon phase'**
+  String get settingScreensaverCelestialControlMoonPhaseTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the phase of the Moon and how much of it is lit.'**
+  String get settingScreensaverCelestialControlMoonPhaseDescription;
+
+  /// Screensaver mode choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Celestial'**
+  String get screensaverModeCelestial;
+
+  /// Landscape choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Hills'**
+  String get screensaverCelestialTerrainHills;
+
+  /// Landscape choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountains'**
+  String get screensaverCelestialTerrainMountains;
+
+  /// Landscape choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Plains'**
+  String get screensaverCelestialTerrainPlains;
+
+  /// Landscape choice: no ground at all, so the whole screen shows the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get screensaverCelestialTerrainNone;
+
+  /// Location source choice.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS'**
+  String get screensaverCelestialLocationGps;
+
+  /// Location source choice: the home zone in Home Assistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant home'**
+  String get screensaverCelestialLocationHaHome;
+
+  /// Location source choice: a person, device tracker or zone.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant entity'**
+  String get screensaverCelestialLocationHaEntity;
+
+  /// Location source choice: coordinates typed in.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get screensaverCelestialLocationManual;
+
+  /// Status row title under the location source.
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get screensaverCelestialCurrentLocation;
+
+  /// Location status when the GPS source is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no GPS receiver.'**
+  String get screensaverCelestialNoGpsReceiver;
+
+  /// Location status when the GPS source is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission not granted.'**
+  String get screensaverCelestialLocationPermission;
+
+  /// Location status when the GPS source is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'No GPS fix yet.'**
+  String get screensaverCelestialNoGpsFix;
+
+  /// Location status for the Home Assistant home source.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant has no home zone.'**
+  String get screensaverCelestialNoHomeZone;
+
+  /// Location status for the Home Assistant sources.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant is not connected.'**
+  String get screensaverCelestialHaNotConnected;
+
+  /// Location status for the Home Assistant entity source.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an entity with a location.'**
+  String get screensaverCelestialPickEntity;
+
+  /// Location status for the Home Assistant entity source.
+  ///
+  /// In en, this message translates to:
+  /// **'This entity has no location.'**
+  String get screensaverCelestialEntityNoLocation;
+
+  /// Settings page and section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Celestial screensaver'**
+  String get screensaverCelestialPage;
+
+  /// Summary under the page entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Location, landscape, sky, labels, controls'**
+  String get screensaverCelestialSummary;
+
+  /// Group heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Sky'**
+  String get screensaverCelestialSkyGroup;
+
+  /// Group heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Labels'**
+  String get screensaverCelestialLabelsGroup;
+
+  /// Group heading: switches for the chips a touch brings up over the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls'**
+  String get screensaverCelestialControlsGroup;
+
+  /// Error under the coordinates field.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a latitude and longitude, like 40.71, -74.01'**
+  String get screensaverCelestialCoordinatesInvalid;
+
+  /// Prompt shown on a black screen when the location source has no position.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a location in Settings > Screensaver > Celestial.'**
+  String get screensaverCelestialNoLocation;
+
+  /// Hint shown after a single tap on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to close'**
+  String get screensaverCelestialDoubleTapHint;
+
+  /// Note over the sky while the compass is not calibrated.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the device in a figure eight to calibrate the compass.'**
+  String get screensaverCelestialCalibrate;
+
+  /// Label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get celestialSun;
+
+  /// Label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon'**
+  String get celestialMoon;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Mercury'**
+  String get celestialMercury;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Venus'**
+  String get celestialVenus;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Mars'**
+  String get celestialMars;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Jupiter'**
+  String get celestialJupiter;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturn'**
+  String get celestialSaturn;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Uranus'**
+  String get celestialUranus;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Neptune'**
+  String get celestialNeptune;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Andromeda Galaxy'**
+  String get celestialAndromedaGalaxy;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Triangulum Galaxy'**
+  String get celestialTriangulumGalaxy;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Large Magellanic Cloud'**
+  String get celestialLargeMagellanicCloud;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Small Magellanic Cloud'**
+  String get celestialSmallMagellanicCloud;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Orion Nebula'**
+  String get celestialOrionNebula;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Lagoon Nebula'**
+  String get celestialLagoonNebula;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Carina Nebula'**
+  String get celestialCarinaNebula;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Pleiades'**
+  String get celestialPleiades;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Beehive Cluster'**
+  String get celestialBeehiveCluster;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Double Cluster'**
+  String get celestialDoubleCluster;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Omega Centauri'**
+  String get celestialOmegaCentauri;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'47 Tucanae'**
+  String get celestialTucanae47;
+
+  /// Compass point on the horizon: north, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'N'**
+  String get celestialCompassNorth;
+
+  /// Compass point on the horizon: east, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'E'**
+  String get celestialCompassEast;
+
+  /// Compass point on the horizon: south, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get celestialCompassSouth;
+
+  /// Compass point on the horizon: west, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get celestialCompassWest;
+
+  /// Compass direction in the Azimuth chip: northeast, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'NE'**
+  String get celestialCompassNorthEast;
+
+  /// Compass direction in the Azimuth chip: southeast, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'SE'**
+  String get celestialCompassSouthEast;
+
+  /// Compass direction in the Azimuth chip: southwest, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'SW'**
+  String get celestialCompassSouthWest;
+
+  /// Compass direction in the Azimuth chip: northwest, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'NW'**
+  String get celestialCompassNorthWest;
+
+  /// Short label before the azimuth in the bar over the sky, like astronomy programs use. Keep it to a few letters.
+  ///
+  /// In en, this message translates to:
+  /// **'Az'**
+  String get celestialAzimuthShort;
+
+  /// Short label before the altitude in the bar over the sky, like astronomy programs use. Keep it to a few letters.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt'**
+  String get celestialAltitudeShort;
+
+  /// Short label before the field of view in the bar over the sky, like astronomy programs use. Keep it to a few letters.
+  ///
+  /// In en, this message translates to:
+  /// **'FOV'**
+  String get celestialFovShort;
+
+  /// Button in the bar over the sky that brings the sky back to the current time after a timelapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get celestialNow;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'New Moon'**
+  String get celestialMoonNew;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing crescent'**
+  String get celestialMoonWaxingCrescent;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'First quarter'**
+  String get celestialMoonFirstQuarter;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing gibbous'**
+  String get celestialMoonWaxingGibbous;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Moon'**
+  String get celestialMoonFull;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning gibbous'**
+  String get celestialMoonWaningGibbous;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Last quarter'**
+  String get celestialMoonLastQuarter;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning crescent'**
+  String get celestialMoonWaningCrescent;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Style'**
   String get settingScreensaverClockStyleTitle;
 

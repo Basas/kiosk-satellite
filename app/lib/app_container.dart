@@ -47,6 +47,7 @@ import 'managers/analytics/analytics_manager.dart';
 import 'managers/analytics/usage_counters.dart';
 import 'managers/broadcasts/event_broadcast_manager.dart';
 import 'managers/location/location_manager.dart';
+import 'managers/screensaver/celestial_location.dart';
 import 'managers/person/person_sensor_manager.dart';
 import 'managers/proximity/proximity_manager.dart';
 import 'managers/proxy/proxy_manager.dart';
@@ -115,6 +116,14 @@ class AppContainer {
     );
     proximity = ProximityManager(bus, commands, log, settings);
     location = LocationManager(bus, commands, log, settings);
+    celestial = CelestialLocator(
+      bus,
+      commands,
+      log,
+      settings,
+      location,
+      homeAssistant,
+    );
     analytics = AnalyticsManager(bus, commands, log, settings);
     personSensor = PersonSensorManager(bus, commands, log, settings);
     // Before wakeWord: its init seeds the mic selector the engine reads at
@@ -244,6 +253,7 @@ class AppContainer {
   late final MotionEntityManager motionEntity;
   late final ProximityManager proximity;
   late final LocationManager location;
+  late final CelestialLocator celestial;
   late final AnalyticsManager analytics;
   late final PersonSensorManager personSensor;
   late final HomeAssistantManager homeAssistant;
@@ -307,6 +317,7 @@ class AppContainer {
     motionEntity,
     proximity,
     location,
+    celestial,
     // After device (its info feeds every report) and settings; its first
     // report waits minutes anyway.
     analytics,

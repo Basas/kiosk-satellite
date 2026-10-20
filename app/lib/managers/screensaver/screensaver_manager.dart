@@ -353,6 +353,11 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
 
   void markControlTouch() => _controlTouchAt = clock();
 
+  /// Set while the Celestial screensaver follows the device held up to the
+  /// sky: someone moving the tablet around would otherwise read as motion,
+  /// a face or something close, and close it. Cleared on stop.
+  bool holdSensorDismiss = false;
+
   bool get _touchOnControl => _within(_controlTouchAt);
 
   /// When a touch last landed on a slideshow's edge zone (issue #453):
@@ -1052,6 +1057,11 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
         return;
       }
     }
+    if (_active &&
+        holdSensorDismiss &&
+        const {'motion', 'face', 'person', 'proximity'}.contains(source)) {
+      return;
+    }
     // Overlay controls consume their touch without dismissing the view.
     if (_touchOnControl &&
         (source == 'touch' || source == 'touch_page' || source == 'tap')) {
@@ -1330,6 +1340,11 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
   /// measured after layout, so bottom corner widgets sit just above them.
   /// Zero whenever the chips are not showing.
   final ValueNotifier<double> weatherChipsHeight = ValueNotifier(0);
+
+  /// Whether the running mode shows its own controls, which the corner
+  /// widgets and the At a Glance row step aside for. The Celestial sky
+  /// raises it for the few seconds its chips are up after a touch.
+  final ValueNotifier<bool> modeControlsShown = ValueNotifier(false);
 
   /// The room the Immich metadata takes in each bottom corner it sits in,
   /// measured after layout, so the At a Glance row can wrap between the
@@ -1838,6 +1853,7 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     if (!_active) return;
     final nowPlaying = _nowPlayingSession;
     _active = false;
+    holdSensorDismiss = false;
     _startedForNowPlaying = false;
     alarmTakeover.value = null;
     renderPaused.value = false;
@@ -1877,6 +1893,7 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     scheduleGlance.value = null;
     claimedCorners.value = const {};
     weatherChipsHeight.value = 0;
+    modeControlsShown.value = false;
     metadataFootprint.value = const {};
     mediaSlide.value = null;
     _slides = null;

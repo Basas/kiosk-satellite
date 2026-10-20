@@ -10148,6 +10148,391 @@ class UiStringsRu extends UiStrings {
   String get screensaverBlackSection => 'Чёрная заставка';
 
   @override
+  String get settingScreensaverCelestialLocationTitle => 'Местоположение';
+
+  @override
+  String get settingScreensaverCelestialLocationDescription =>
+      'Откуда видно небо.';
+
+  @override
+  String get settingScreensaverCelestialEntityTitle => 'Сущность';
+
+  @override
+  String get settingScreensaverCelestialEntityDescription =>
+      'Человек, трекер устройства или зона с местоположением.';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesTitle => 'Координаты';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesDescription =>
+      'Широта и долгота, например 40.71, -74.01.';
+
+  @override
+  String get settingScreensaverCelestialTerrainTitle => 'Пейзаж';
+
+  @override
+  String get settingScreensaverCelestialTerrainDescription =>
+      'Рельеф вдоль горизонта.';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceTitle => 'Наведите на небо';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceDescription =>
+      'Поднимите устройство, и небо на экране будет поворачиваться вместе с ним, чтобы вы могли узнать, на что смотрите. Нужен датчик компаса.';
+
+  @override
+  String get settingScreensaverCelestialDaytimeTitle => 'Дневное небо';
+
+  @override
+  String get settingScreensaverCelestialDaytimeDescription =>
+      'Осветлять небо и приглушать звёзды, пока Солнце над горизонтом. Выключите, чтобы показывать ночное небо весь день.';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayTitle => 'Млечный Путь';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayDescription =>
+      'Показывать свечение нашей галактики на ночном небе.';
+
+  @override
+  String get settingScreensaverCelestialPlanetsTitle => 'Планеты';
+
+  @override
+  String get settingScreensaverCelestialPlanetsDescription =>
+      'Показывать планеты там, где они находятся этой ночью.';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyTitle =>
+      'Галактики и туманности';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyDescription =>
+      'Показывать галактику Андромеды, туманность Ориона и другие объекты, видимые без телескопа.';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionTitle =>
+      'Световое загрязнение';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionDescription =>
+      'Имитировать свечение городских огней. Чем выше значение, тем меньше видно тусклых звёзд и Млечного Пути.';
+
+  @override
+  String get settingScreensaverCelestialTwinkleTitle => 'Мерцание звёзд';
+
+  @override
+  String get settingScreensaverCelestialTwinkleDescription =>
+      'Звёзды мерцают, сильнее всего у горизонта. Выключите для экономии энергии.';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonTitle => 'Крупная Луна';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonDescription =>
+      'Рисовать Луну втрое, а Солнце вдвое больше настоящего размера, чтобы фазу было легко разглядеть.';
+
+  @override
+  String get settingScreensaverCelestialLinesTitle => 'Линии созвездий';
+
+  @override
+  String get settingScreensaverCelestialLinesDescription =>
+      'Соединять звёзды каждого созвездия.';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesTitle =>
+      'Названия созвездий';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesDescription =>
+      'Подписывать созвездия. При увеличении их становится больше.';
+
+  @override
+  String get settingScreensaverCelestialNamesTitle => 'Названия звёзд и планет';
+
+  @override
+  String get settingScreensaverCelestialNamesDescription =>
+      'Подписывать Солнце, Луну, планеты, самые яркие звёзды и галактики. При увеличении подписей звёзд становится больше.';
+
+  @override
+  String get settingScreensaverCelestialCompassTitle => 'Стороны света';
+
+  @override
+  String get settingScreensaverCelestialCompassDescription =>
+      'Отмечать север, восток, юг и запад на горизонте.';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesTitle => 'Положение';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesDescription =>
+      'Показывает широту и долготу, откуда видно небо.';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthTitle => 'Азимут';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthDescription =>
+      'Показывает сторону света, куда смотрит центр экрана.';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeTitle => 'Высота';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeDescription =>
+      'Показывает, насколько высоко над горизонтом центр экрана.';
+
+  @override
+  String get settingScreensaverCelestialControlFovTitle => 'Поле зрения';
+
+  @override
+  String get settingScreensaverCelestialControlFovDescription =>
+      'Показывает, какую часть неба охватывает экран, в градусах.';
+
+  @override
+  String get settingScreensaverCelestialControlTimeTitle => 'Время';
+
+  @override
+  String get settingScreensaverCelestialControlTimeDescription =>
+      'Показывает время неба с кнопкой «Сейчас» после ускорения.';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseTitle =>
+      'Ускорение времени';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseDescription =>
+      'Ускоряет время, чтобы увидеть, как вращается небо. Коснитесь, чтобы изменить скорость.';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyTitle =>
+      'Переключатель «Наведите на небо»';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyDescription =>
+      'Включает и выключает режим «Наведите на небо». Показывается только на устройствах с компасом.';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseTitle => 'Фаза Луны';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseDescription =>
+      'Показывает фазу Луны и долю освещённого диска.';
+
+  @override
+  String get screensaverModeCelestial => 'Звёздное небо';
+
+  @override
+  String get screensaverCelestialTerrainHills => 'Холмы';
+
+  @override
+  String get screensaverCelestialTerrainMountains => 'Горы';
+
+  @override
+  String get screensaverCelestialTerrainPlains => 'Равнина';
+
+  @override
+  String get screensaverCelestialTerrainNone => 'Нет';
+
+  @override
+  String get screensaverCelestialLocationGps => 'GPS';
+
+  @override
+  String get screensaverCelestialLocationHaHome => 'Дом в Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationHaEntity => 'Сущность Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationManual => 'Вручную';
+
+  @override
+  String get screensaverCelestialCurrentLocation => 'Текущее местоположение';
+
+  @override
+  String get screensaverCelestialNoGpsReceiver =>
+      'На этом устройстве нет GPS-приёмника.';
+
+  @override
+  String get screensaverCelestialLocationPermission =>
+      'Разрешение на доступ к местоположению не предоставлено.';
+
+  @override
+  String get screensaverCelestialNoGpsFix => 'GPS-координат пока нет.';
+
+  @override
+  String get screensaverCelestialNoHomeZone =>
+      'В Home Assistant нет домашней зоны.';
+
+  @override
+  String get screensaverCelestialHaNotConnected =>
+      'Home Assistant не подключён.';
+
+  @override
+  String get screensaverCelestialPickEntity =>
+      'Выберите сущность с местоположением.';
+
+  @override
+  String get screensaverCelestialEntityNoLocation =>
+      'У этой сущности нет местоположения.';
+
+  @override
+  String get screensaverCelestialPage => 'Заставка «Звёздное небо»';
+
+  @override
+  String get screensaverCelestialSummary =>
+      'Место, пейзаж, небо, подписи, элементы управления';
+
+  @override
+  String get screensaverCelestialSkyGroup => 'Небо';
+
+  @override
+  String get screensaverCelestialLabelsGroup => 'Подписи';
+
+  @override
+  String get screensaverCelestialControlsGroup => 'Элементы управления';
+
+  @override
+  String get screensaverCelestialCoordinatesInvalid =>
+      'Введите широту и долготу, например 40.71, -74.01';
+
+  @override
+  String get screensaverCelestialNoLocation =>
+      'Выберите местоположение в «Настройки > Заставка > Звёздное небо».';
+
+  @override
+  String get screensaverCelestialDoubleTapHint =>
+      'Коснитесь дважды, чтобы закрыть';
+
+  @override
+  String get screensaverCelestialCalibrate =>
+      'Двигайте устройство восьмёркой, чтобы откалибровать компас.';
+
+  @override
+  String get celestialSun => 'Солнце';
+
+  @override
+  String get celestialMoon => 'Луна';
+
+  @override
+  String get celestialMercury => 'Меркурий';
+
+  @override
+  String get celestialVenus => 'Венера';
+
+  @override
+  String get celestialMars => 'Марс';
+
+  @override
+  String get celestialJupiter => 'Юпитер';
+
+  @override
+  String get celestialSaturn => 'Сатурн';
+
+  @override
+  String get celestialUranus => 'Уран';
+
+  @override
+  String get celestialNeptune => 'Нептун';
+
+  @override
+  String get celestialAndromedaGalaxy => 'Галактика Андромеды';
+
+  @override
+  String get celestialTriangulumGalaxy => 'Галактика Треугольника';
+
+  @override
+  String get celestialLargeMagellanicCloud => 'Большое Магелланово Облако';
+
+  @override
+  String get celestialSmallMagellanicCloud => 'Малое Магелланово Облако';
+
+  @override
+  String get celestialOrionNebula => 'Туманность Ориона';
+
+  @override
+  String get celestialLagoonNebula => 'Туманность Лагуна';
+
+  @override
+  String get celestialCarinaNebula => 'Туманность Киля';
+
+  @override
+  String get celestialPleiades => 'Плеяды';
+
+  @override
+  String get celestialBeehiveCluster => 'Ясли';
+
+  @override
+  String get celestialDoubleCluster => 'Двойное скопление Персея';
+
+  @override
+  String get celestialOmegaCentauri => 'Омега Центавра';
+
+  @override
+  String get celestialTucanae47 => '47 Тукана';
+
+  @override
+  String get celestialCompassNorth => 'С';
+
+  @override
+  String get celestialCompassEast => 'В';
+
+  @override
+  String get celestialCompassSouth => 'Ю';
+
+  @override
+  String get celestialCompassWest => 'З';
+
+  @override
+  String get celestialCompassNorthEast => 'СВ';
+
+  @override
+  String get celestialCompassSouthEast => 'ЮВ';
+
+  @override
+  String get celestialCompassSouthWest => 'ЮЗ';
+
+  @override
+  String get celestialCompassNorthWest => 'СЗ';
+
+  @override
+  String get celestialAzimuthShort => 'Аз';
+
+  @override
+  String get celestialAltitudeShort => 'Выс';
+
+  @override
+  String get celestialFovShort => 'ПЗ';
+
+  @override
+  String get celestialNow => 'Сейчас';
+
+  @override
+  String get celestialMoonNew => 'Новолуние';
+
+  @override
+  String get celestialMoonWaxingCrescent => 'Растущий серп';
+
+  @override
+  String get celestialMoonFirstQuarter => 'Первая четверть';
+
+  @override
+  String get celestialMoonWaxingGibbous => 'Растущая Луна';
+
+  @override
+  String get celestialMoonFull => 'Полнолуние';
+
+  @override
+  String get celestialMoonWaningGibbous => 'Убывающая Луна';
+
+  @override
+  String get celestialMoonLastQuarter => 'Последняя четверть';
+
+  @override
+  String get celestialMoonWaningCrescent => 'Убывающий серп';
+
+  @override
   String get settingScreensaverClockStyleTitle => 'Стиль';
 
   @override

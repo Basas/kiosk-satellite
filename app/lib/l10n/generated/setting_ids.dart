@@ -2284,4 +2284,100 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingKioskAllowCalendarTitle",
     "description": "settingKioskAllowCalendarDescription",
   },
+  "screensaver.celestial_coordinates": {
+    "title": "settingScreensaverCelestialCoordinatesTitle",
+    "description": "settingScreensaverCelestialCoordinatesDescription",
+  },
+  "screensaver.celestial_terrain": {
+    "title": "settingScreensaverCelestialTerrainTitle",
+    "description": "settingScreensaverCelestialTerrainDescription",
+  },
+  "screensaver.celestial_daytime": {
+    "title": "settingScreensaverCelestialDaytimeTitle",
+    "description": "settingScreensaverCelestialDaytimeDescription",
+  },
+  "screensaver.celestial_milky_way": {
+    "title": "settingScreensaverCelestialMilkyWayTitle",
+    "description": "settingScreensaverCelestialMilkyWayDescription",
+  },
+  "screensaver.celestial_planets": {
+    "title": "settingScreensaverCelestialPlanetsTitle",
+    "description": "settingScreensaverCelestialPlanetsDescription",
+  },
+  "screensaver.celestial_deep_sky": {
+    "title": "settingScreensaverCelestialDeepSkyTitle",
+    "description": "settingScreensaverCelestialDeepSkyDescription",
+  },
+  "screensaver.celestial_twinkle": {
+    "title": "settingScreensaverCelestialTwinkleTitle",
+    "description": "settingScreensaverCelestialTwinkleDescription",
+  },
+  "screensaver.celestial_large_moon": {
+    "title": "settingScreensaverCelestialLargeMoonTitle",
+    "description": "settingScreensaverCelestialLargeMoonDescription",
+  },
+  "screensaver.celestial_lines": {
+    "title": "settingScreensaverCelestialLinesTitle",
+    "description": "settingScreensaverCelestialLinesDescription",
+  },
+  "screensaver.celestial_constellation_names": {
+    "title": "settingScreensaverCelestialConstellationNamesTitle",
+    "description": "settingScreensaverCelestialConstellationNamesDescription",
+  },
+  "screensaver.celestial_names": {
+    "title": "settingScreensaverCelestialNamesTitle",
+    "description": "settingScreensaverCelestialNamesDescription",
+  },
+  "screensaver.celestial_compass": {
+    "title": "settingScreensaverCelestialCompassTitle",
+    "description": "settingScreensaverCelestialCompassDescription",
+  },
+  "screensaver.celestial_location": {
+    "title": "settingScreensaverCelestialLocationTitle",
+    "description": "settingScreensaverCelestialLocationDescription",
+  },
+  "screensaver.celestial_entity": {
+    "title": "settingScreensaverCelestialEntityTitle",
+    "description": "settingScreensaverCelestialEntityDescription",
+  },
+  "screensaver.celestial_light_pollution": {
+    "title": "settingScreensaverCelestialLightPollutionTitle",
+    "description": "settingScreensaverCelestialLightPollutionDescription",
+  },
+  "screensaver.celestial_follow_device": {
+    "title": "settingScreensaverCelestialFollowDeviceTitle",
+    "description": "settingScreensaverCelestialFollowDeviceDescription",
+  },
+  "screensaver.celestial_control_coordinates": {
+    "title": "settingScreensaverCelestialControlCoordinatesTitle",
+    "description": "settingScreensaverCelestialControlCoordinatesDescription",
+  },
+  "screensaver.celestial_control_azimuth": {
+    "title": "settingScreensaverCelestialControlAzimuthTitle",
+    "description": "settingScreensaverCelestialControlAzimuthDescription",
+  },
+  "screensaver.celestial_control_altitude": {
+    "title": "settingScreensaverCelestialControlAltitudeTitle",
+    "description": "settingScreensaverCelestialControlAltitudeDescription",
+  },
+  "screensaver.celestial_control_time": {
+    "title": "settingScreensaverCelestialControlTimeTitle",
+    "description": "settingScreensaverCelestialControlTimeDescription",
+  },
+  "screensaver.celestial_control_timelapse": {
+    "title": "settingScreensaverCelestialControlTimelapseTitle",
+    "description": "settingScreensaverCelestialControlTimelapseDescription",
+  },
+  "screensaver.celestial_control_point_at_sky": {
+    "title": "settingScreensaverCelestialControlPointAtSkyTitle",
+    "description": "settingScreensaverCelestialControlPointAtSkyDescription",
+  },
+  "screensaver.celestial_control_moon_phase": {
+    "title": "settingScreensaverCelestialControlMoonPhaseTitle",
+    "description": "settingScreensaverCelestialControlMoonPhaseDescription",
+  },
+  "screensaver.celestial_control_fov": {
+    "title": "settingScreensaverCelestialControlFovTitle",
+    "description": "settingScreensaverCelestialControlFovDescription",
+  },
 };

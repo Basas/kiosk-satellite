@@ -9595,6 +9595,370 @@ class UiStringsZh extends UiStrings {
   String get screensaverBlackSection => '黑屏屏保';
 
   @override
+  String get settingScreensaverCelestialLocationTitle => '位置';
+
+  @override
+  String get settingScreensaverCelestialLocationDescription => '观测天空的位置。';
+
+  @override
+  String get settingScreensaverCelestialEntityTitle => '实体';
+
+  @override
+  String get settingScreensaverCelestialEntityDescription =>
+      '带有位置的人员、设备追踪器或区域。';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesTitle => '坐标';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesDescription =>
+      '纬度和经度，例如 40.71, -74.01。';
+
+  @override
+  String get settingScreensaverCelestialTerrainTitle => '地貌';
+
+  @override
+  String get settingScreensaverCelestialTerrainDescription => '地平线上的地形。';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceTitle => '对准天空';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceDescription =>
+      '举起设备，屏幕上的天空会随之转动，便于识别你正看着的天体。需要指南针传感器。';
+
+  @override
+  String get settingScreensaverCelestialDaytimeTitle => '白天天空';
+
+  @override
+  String get settingScreensaverCelestialDaytimeDescription =>
+      '太阳升起时天空变亮、星星淡出。关闭后全天显示夜空。';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayTitle => '银河';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayDescription => '在夜空中显示银河系的光带。';
+
+  @override
+  String get settingScreensaverCelestialPlanetsTitle => '行星';
+
+  @override
+  String get settingScreensaverCelestialPlanetsDescription => '显示行星今晚所在的位置。';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyTitle => '星系与星云';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyDescription =>
+      '显示仙女座星系、猎户座大星云等无需望远镜即可看到的天体。';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionTitle => '光污染';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionDescription =>
+      '模拟城市灯光的光晕。数值越高，较暗的星星和银河越不可见。';
+
+  @override
+  String get settingScreensaverCelestialTwinkleTitle => '星星闪烁';
+
+  @override
+  String get settingScreensaverCelestialTwinkleDescription =>
+      '让星星闪烁，越靠近地平线越明显。关闭可省电。';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonTitle => '放大月亮';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonDescription =>
+      '将月亮放大为实际大小的三倍、太阳放大为两倍，便于看清月相。';
+
+  @override
+  String get settingScreensaverCelestialLinesTitle => '星座连线';
+
+  @override
+  String get settingScreensaverCelestialLinesDescription => '连接每个星座的恒星。';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesTitle => '星座名称';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesDescription =>
+      '标注星座名称。放大后会显示更多。';
+
+  @override
+  String get settingScreensaverCelestialNamesTitle => '恒星和行星名称';
+
+  @override
+  String get settingScreensaverCelestialNamesDescription =>
+      '标注太阳、月亮、行星、最亮的恒星和星系。放大后会标注更多恒星。';
+
+  @override
+  String get settingScreensaverCelestialCompassTitle => '方位';
+
+  @override
+  String get settingScreensaverCelestialCompassDescription => '在地平线上标出北、东、南、西。';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesTitle => '位置';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesDescription =>
+      '显示观看天空的纬度和经度。';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthTitle => '方位角';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthDescription =>
+      '显示屏幕中心朝向的方位。';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeTitle => '高度角';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeDescription =>
+      '显示屏幕中心在地平线以上的高度。';
+
+  @override
+  String get settingScreensaverCelestialControlFovTitle => '视场';
+
+  @override
+  String get settingScreensaverCelestialControlFovDescription =>
+      '显示屏幕覆盖的天空范围，以度为单位。';
+
+  @override
+  String get settingScreensaverCelestialControlTimeTitle => '时间';
+
+  @override
+  String get settingScreensaverCelestialControlTimeDescription =>
+      '显示天空的时间，延时播放后会出现“现在”按钮。';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseTitle => '延时';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseDescription =>
+      '加快时间，观看天空转动。轻点可更改速度。';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyTitle => '“对准天空”开关';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyDescription =>
+      '开启或关闭“对准天空”。仅在带有指南针的设备上显示。';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseTitle => '月相';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseDescription =>
+      '显示月相以及月面被照亮的比例。';
+
+  @override
+  String get screensaverModeCelestial => '星空';
+
+  @override
+  String get screensaverCelestialTerrainHills => '丘陵';
+
+  @override
+  String get screensaverCelestialTerrainMountains => '山脉';
+
+  @override
+  String get screensaverCelestialTerrainPlains => '平原';
+
+  @override
+  String get screensaverCelestialTerrainNone => '无';
+
+  @override
+  String get screensaverCelestialLocationGps => 'GPS';
+
+  @override
+  String get screensaverCelestialLocationHaHome => 'Home Assistant 家庭位置';
+
+  @override
+  String get screensaverCelestialLocationHaEntity => 'Home Assistant 实体';
+
+  @override
+  String get screensaverCelestialLocationManual => '手动';
+
+  @override
+  String get screensaverCelestialCurrentLocation => '当前位置';
+
+  @override
+  String get screensaverCelestialNoGpsReceiver => '此设备没有 GPS 接收器。';
+
+  @override
+  String get screensaverCelestialLocationPermission => '未授予位置权限。';
+
+  @override
+  String get screensaverCelestialNoGpsFix => '尚无 GPS 定位。';
+
+  @override
+  String get screensaverCelestialNoHomeZone => 'Home Assistant 中没有家庭区域。';
+
+  @override
+  String get screensaverCelestialHaNotConnected => 'Home Assistant 未连接。';
+
+  @override
+  String get screensaverCelestialPickEntity => '请选择带有位置的实体。';
+
+  @override
+  String get screensaverCelestialEntityNoLocation => '此实体没有位置。';
+
+  @override
+  String get screensaverCelestialPage => '星空屏保';
+
+  @override
+  String get screensaverCelestialSummary => '位置、地景、天空、标签、控件';
+
+  @override
+  String get screensaverCelestialSkyGroup => '天空';
+
+  @override
+  String get screensaverCelestialLabelsGroup => '标注';
+
+  @override
+  String get screensaverCelestialControlsGroup => '控件';
+
+  @override
+  String get screensaverCelestialCoordinatesInvalid =>
+      '请输入纬度和经度，例如 40.71, -74.01';
+
+  @override
+  String get screensaverCelestialNoLocation => '请在“设置 > 屏保 > 星空”中选择位置。';
+
+  @override
+  String get screensaverCelestialDoubleTapHint => '双击关闭';
+
+  @override
+  String get screensaverCelestialCalibrate => '请将设备按“8”字形移动以校准指南针。';
+
+  @override
+  String get celestialSun => '太阳';
+
+  @override
+  String get celestialMoon => '月亮';
+
+  @override
+  String get celestialMercury => '水星';
+
+  @override
+  String get celestialVenus => '金星';
+
+  @override
+  String get celestialMars => '火星';
+
+  @override
+  String get celestialJupiter => '木星';
+
+  @override
+  String get celestialSaturn => '土星';
+
+  @override
+  String get celestialUranus => '天王星';
+
+  @override
+  String get celestialNeptune => '海王星';
+
+  @override
+  String get celestialAndromedaGalaxy => '仙女座星系';
+
+  @override
+  String get celestialTriangulumGalaxy => '三角座星系';
+
+  @override
+  String get celestialLargeMagellanicCloud => '大麦哲伦云';
+
+  @override
+  String get celestialSmallMagellanicCloud => '小麦哲伦云';
+
+  @override
+  String get celestialOrionNebula => '猎户座大星云';
+
+  @override
+  String get celestialLagoonNebula => '礁湖星云';
+
+  @override
+  String get celestialCarinaNebula => '船底座星云';
+
+  @override
+  String get celestialPleiades => '昴星团';
+
+  @override
+  String get celestialBeehiveCluster => '蜂巢星团';
+
+  @override
+  String get celestialDoubleCluster => '英仙座双星团';
+
+  @override
+  String get celestialOmegaCentauri => '半人马座ω';
+
+  @override
+  String get celestialTucanae47 => '杜鹃座47';
+
+  @override
+  String get celestialCompassNorth => '北';
+
+  @override
+  String get celestialCompassEast => '东';
+
+  @override
+  String get celestialCompassSouth => '南';
+
+  @override
+  String get celestialCompassWest => '西';
+
+  @override
+  String get celestialCompassNorthEast => '东北';
+
+  @override
+  String get celestialCompassSouthEast => '东南';
+
+  @override
+  String get celestialCompassSouthWest => '西南';
+
+  @override
+  String get celestialCompassNorthWest => '西北';
+
+  @override
+  String get celestialAzimuthShort => '方位';
+
+  @override
+  String get celestialAltitudeShort => '高度';
+
+  @override
+  String get celestialFovShort => '视场';
+
+  @override
+  String get celestialNow => '现在';
+
+  @override
+  String get celestialMoonNew => '新月';
+
+  @override
+  String get celestialMoonWaxingCrescent => '娥眉月';
+
+  @override
+  String get celestialMoonFirstQuarter => '上弦月';
+
+  @override
+  String get celestialMoonWaxingGibbous => '盈凸月';
+
+  @override
+  String get celestialMoonFull => '满月';
+
+  @override
+  String get celestialMoonWaningGibbous => '亏凸月';
+
+  @override
+  String get celestialMoonLastQuarter => '下弦月';
+
+  @override
+  String get celestialMoonWaningCrescent => '残月';
+
+  @override
   String get settingScreensaverClockStyleTitle => '样式';
 
   @override
@@ -23417,6 +23781,370 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverBlackSection => '黑屏屏保';
+
+  @override
+  String get settingScreensaverCelestialLocationTitle => '位置';
+
+  @override
+  String get settingScreensaverCelestialLocationDescription => '观测天空的位置。';
+
+  @override
+  String get settingScreensaverCelestialEntityTitle => '实体';
+
+  @override
+  String get settingScreensaverCelestialEntityDescription =>
+      '带有位置的人员、设备追踪器或区域。';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesTitle => '坐标';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesDescription =>
+      '纬度和经度，例如 40.71, -74.01。';
+
+  @override
+  String get settingScreensaverCelestialTerrainTitle => '地貌';
+
+  @override
+  String get settingScreensaverCelestialTerrainDescription => '地平线上的地形。';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceTitle => '对准天空';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceDescription =>
+      '举起设备，屏幕上的天空会随之转动，便于识别你正看着的天体。需要指南针传感器。';
+
+  @override
+  String get settingScreensaverCelestialDaytimeTitle => '白天天空';
+
+  @override
+  String get settingScreensaverCelestialDaytimeDescription =>
+      '太阳升起时天空变亮、星星淡出。关闭后全天显示夜空。';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayTitle => '银河';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayDescription => '在夜空中显示银河系的光带。';
+
+  @override
+  String get settingScreensaverCelestialPlanetsTitle => '行星';
+
+  @override
+  String get settingScreensaverCelestialPlanetsDescription => '显示行星今晚所在的位置。';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyTitle => '星系与星云';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyDescription =>
+      '显示仙女座星系、猎户座大星云等无需望远镜即可看到的天体。';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionTitle => '光污染';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionDescription =>
+      '模拟城市灯光的光晕。数值越高，较暗的星星和银河越不可见。';
+
+  @override
+  String get settingScreensaverCelestialTwinkleTitle => '星星闪烁';
+
+  @override
+  String get settingScreensaverCelestialTwinkleDescription =>
+      '让星星闪烁，越靠近地平线越明显。关闭可省电。';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonTitle => '放大月亮';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonDescription =>
+      '将月亮放大为实际大小的三倍、太阳放大为两倍，便于看清月相。';
+
+  @override
+  String get settingScreensaverCelestialLinesTitle => '星座连线';
+
+  @override
+  String get settingScreensaverCelestialLinesDescription => '连接每个星座的恒星。';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesTitle => '星座名称';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesDescription =>
+      '标注星座名称。放大后会显示更多。';
+
+  @override
+  String get settingScreensaverCelestialNamesTitle => '恒星和行星名称';
+
+  @override
+  String get settingScreensaverCelestialNamesDescription =>
+      '标注太阳、月亮、行星、最亮的恒星和星系。放大后会标注更多恒星。';
+
+  @override
+  String get settingScreensaverCelestialCompassTitle => '方位';
+
+  @override
+  String get settingScreensaverCelestialCompassDescription => '在地平线上标出北、东、南、西。';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesTitle => '位置';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesDescription =>
+      '显示观看天空的纬度和经度。';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthTitle => '方位角';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthDescription =>
+      '显示屏幕中心朝向的方位。';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeTitle => '高度角';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeDescription =>
+      '显示屏幕中心在地平线以上的高度。';
+
+  @override
+  String get settingScreensaverCelestialControlFovTitle => '视场';
+
+  @override
+  String get settingScreensaverCelestialControlFovDescription =>
+      '显示屏幕覆盖的天空范围，以度为单位。';
+
+  @override
+  String get settingScreensaverCelestialControlTimeTitle => '时间';
+
+  @override
+  String get settingScreensaverCelestialControlTimeDescription =>
+      '显示天空的时间，延时播放后会出现“现在”按钮。';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseTitle => '延时';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseDescription =>
+      '加快时间，观看天空转动。轻点可更改速度。';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyTitle => '“对准天空”开关';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyDescription =>
+      '开启或关闭“对准天空”。仅在带有指南针的设备上显示。';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseTitle => '月相';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseDescription =>
+      '显示月相以及月面被照亮的比例。';
+
+  @override
+  String get screensaverModeCelestial => '星空';
+
+  @override
+  String get screensaverCelestialTerrainHills => '丘陵';
+
+  @override
+  String get screensaverCelestialTerrainMountains => '山脉';
+
+  @override
+  String get screensaverCelestialTerrainPlains => '平原';
+
+  @override
+  String get screensaverCelestialTerrainNone => '无';
+
+  @override
+  String get screensaverCelestialLocationGps => 'GPS';
+
+  @override
+  String get screensaverCelestialLocationHaHome => 'Home Assistant 家庭位置';
+
+  @override
+  String get screensaverCelestialLocationHaEntity => 'Home Assistant 实体';
+
+  @override
+  String get screensaverCelestialLocationManual => '手动';
+
+  @override
+  String get screensaverCelestialCurrentLocation => '当前位置';
+
+  @override
+  String get screensaverCelestialNoGpsReceiver => '此设备没有 GPS 接收器。';
+
+  @override
+  String get screensaverCelestialLocationPermission => '未授予位置权限。';
+
+  @override
+  String get screensaverCelestialNoGpsFix => '尚无 GPS 定位。';
+
+  @override
+  String get screensaverCelestialNoHomeZone => 'Home Assistant 中没有家庭区域。';
+
+  @override
+  String get screensaverCelestialHaNotConnected => 'Home Assistant 未连接。';
+
+  @override
+  String get screensaverCelestialPickEntity => '请选择带有位置的实体。';
+
+  @override
+  String get screensaverCelestialEntityNoLocation => '此实体没有位置。';
+
+  @override
+  String get screensaverCelestialPage => '星空屏保';
+
+  @override
+  String get screensaverCelestialSummary => '位置、地景、天空、标签、控件';
+
+  @override
+  String get screensaverCelestialSkyGroup => '天空';
+
+  @override
+  String get screensaverCelestialLabelsGroup => '标注';
+
+  @override
+  String get screensaverCelestialControlsGroup => '控件';
+
+  @override
+  String get screensaverCelestialCoordinatesInvalid =>
+      '请输入纬度和经度，例如 40.71, -74.01';
+
+  @override
+  String get screensaverCelestialNoLocation => '请在“设置 > 屏保 > 星空”中选择位置。';
+
+  @override
+  String get screensaverCelestialDoubleTapHint => '双击关闭';
+
+  @override
+  String get screensaverCelestialCalibrate => '请将设备按“8”字形移动以校准指南针。';
+
+  @override
+  String get celestialSun => '太阳';
+
+  @override
+  String get celestialMoon => '月亮';
+
+  @override
+  String get celestialMercury => '水星';
+
+  @override
+  String get celestialVenus => '金星';
+
+  @override
+  String get celestialMars => '火星';
+
+  @override
+  String get celestialJupiter => '木星';
+
+  @override
+  String get celestialSaturn => '土星';
+
+  @override
+  String get celestialUranus => '天王星';
+
+  @override
+  String get celestialNeptune => '海王星';
+
+  @override
+  String get celestialAndromedaGalaxy => '仙女座星系';
+
+  @override
+  String get celestialTriangulumGalaxy => '三角座星系';
+
+  @override
+  String get celestialLargeMagellanicCloud => '大麦哲伦云';
+
+  @override
+  String get celestialSmallMagellanicCloud => '小麦哲伦云';
+
+  @override
+  String get celestialOrionNebula => '猎户座大星云';
+
+  @override
+  String get celestialLagoonNebula => '礁湖星云';
+
+  @override
+  String get celestialCarinaNebula => '船底座星云';
+
+  @override
+  String get celestialPleiades => '昴星团';
+
+  @override
+  String get celestialBeehiveCluster => '蜂巢星团';
+
+  @override
+  String get celestialDoubleCluster => '英仙座双星团';
+
+  @override
+  String get celestialOmegaCentauri => '半人马座ω';
+
+  @override
+  String get celestialTucanae47 => '杜鹃座47';
+
+  @override
+  String get celestialCompassNorth => '北';
+
+  @override
+  String get celestialCompassEast => '东';
+
+  @override
+  String get celestialCompassSouth => '南';
+
+  @override
+  String get celestialCompassWest => '西';
+
+  @override
+  String get celestialCompassNorthEast => '东北';
+
+  @override
+  String get celestialCompassSouthEast => '东南';
+
+  @override
+  String get celestialCompassSouthWest => '西南';
+
+  @override
+  String get celestialCompassNorthWest => '西北';
+
+  @override
+  String get celestialAzimuthShort => '方位';
+
+  @override
+  String get celestialAltitudeShort => '高度';
+
+  @override
+  String get celestialFovShort => '视场';
+
+  @override
+  String get celestialNow => '现在';
+
+  @override
+  String get celestialMoonNew => '新月';
+
+  @override
+  String get celestialMoonWaxingCrescent => '娥眉月';
+
+  @override
+  String get celestialMoonFirstQuarter => '上弦月';
+
+  @override
+  String get celestialMoonWaxingGibbous => '盈凸月';
+
+  @override
+  String get celestialMoonFull => '满月';
+
+  @override
+  String get celestialMoonWaningGibbous => '亏凸月';
+
+  @override
+  String get celestialMoonLastQuarter => '下弦月';
+
+  @override
+  String get celestialMoonWaningCrescent => '残月';
 
   @override
   String get settingScreensaverClockStyleTitle => '样式';

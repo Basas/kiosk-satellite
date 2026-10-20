@@ -56,6 +56,7 @@ import 'digital_clock_face.dart';
 import 'weather_readings.dart';
 import 'photo_frames.dart';
 import 'plugin_screensaver.dart';
+import 'celestial_screensaver.dart';
 import 'weather_mood_screensaver.dart';
 
 import 'glance_row.dart';
@@ -288,6 +289,11 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                       child: WeatherMoodScreensaver(container: container),
                     ),
                   ),
+                  // Not wrapped in _Dismissable: a drag looks around the
+                  // sky, and the view closes itself on a double tap.
+                  'celestial' => UiScaleExempt(
+                    child: CelestialScreensaver(container: container),
+                  ),
                   'clock' => _Dismissable(
                     container: container,
                     child: ClockScreensaver(
@@ -393,52 +399,57 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                     view != 'clock' &&
                     view != 'weather_mood' &&
                     view != 'camera')
-                  ValueListenableBuilder<bool?>(
-                    valueListenable: container.screensaver.scheduleGlance,
-                    builder: (context, scheduled, _) {
-                      if (!(scheduled ??
-                          container.settings.get(
-                            defs.screensaverGlanceEnabled,
-                          ))) {
-                        return const SizedBox.shrink();
-                      }
-                      return ValueListenableBuilder<Set<String>>(
-                        valueListenable: container.screensaver.claimedCorners,
-                        builder: (context, claimed, _) {
-                          // Photo metadata in a bottom corner, whether
-                          // the Immich pair's two panels (which claim
-                          // theirs live) or the single-photo panel's
-                          // settled spot, and the row narrows to
-                          // portrait's two columns so it wraps clear of
-                          // the panels instead of spreading into them.
-                          final metadata = photoMetadataCorner(
-                            container.settings,
-                            view,
-                          );
-                          final narrow =
-                              claimed.any((c) => c.startsWith('bottom_')) ||
-                              metadata == 'bottom_left' ||
-                              metadata == 'bottom_right';
-                          if (!narrow || !photoMetadataDefs.containsKey(view)) {
-                            return _GlanceOverlay(
-                              container: container,
-                              narrow: narrow,
+                  _StepAside(
+                    container: container,
+                    child: ValueListenableBuilder<bool?>(
+                      valueListenable: container.screensaver.scheduleGlance,
+                      builder: (context, scheduled, _) {
+                        if (!(scheduled ??
+                            container.settings.get(
+                              defs.screensaverGlanceEnabled,
+                            ))) {
+                          return const SizedBox.shrink();
+                        }
+                        return ValueListenableBuilder<Set<String>>(
+                          valueListenable: container.screensaver.claimedCorners,
+                          builder: (context, claimed, _) {
+                            // Photo metadata in a bottom corner, whether
+                            // the Immich pair's two panels (which claim
+                            // theirs live) or the single-photo panel's
+                            // settled spot, and the row narrows to
+                            // portrait's two columns so it wraps clear of
+                            // the panels instead of spreading into them.
+                            final metadata = photoMetadataCorner(
+                              container.settings,
+                              view,
                             );
-                          }
-                          // Once the panels have been measured, the row
-                          // fits itself to the room they leave.
-                          return ValueListenableBuilder<Map<String, Size>>(
-                            valueListenable:
-                                container.screensaver.metadataFootprint,
-                            builder: (context, footprint, _) => _GlanceOverlay(
-                              container: container,
-                              narrow: true,
-                              corners: footprint.values,
-                            ),
-                          );
-                        },
-                      );
-                    },
+                            final narrow =
+                                claimed.any((c) => c.startsWith('bottom_')) ||
+                                metadata == 'bottom_left' ||
+                                metadata == 'bottom_right';
+                            if (!narrow ||
+                                !photoMetadataDefs.containsKey(view)) {
+                              return _GlanceOverlay(
+                                container: container,
+                                narrow: narrow,
+                              );
+                            }
+                            // Once the panels have been measured, the row
+                            // fits itself to the room they leave.
+                            return ValueListenableBuilder<Map<String, Size>>(
+                              valueListenable:
+                                  container.screensaver.metadataFootprint,
+                              builder: (context, footprint, _) =>
+                                  _GlanceOverlay(
+                                    container: container,
+                                    narrow: true,
+                                    corners: footprint.values,
+                                  ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 // The corner widgets ride over every mode their type
                 // allows (the small clock stays off Clock, which is one
@@ -449,71 +460,90 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                 // boundary between two entries of the same mode changes
                 // nothing else this widget rebuilds on.
                 if (!blackBare && !weatherUnset)
-                  ValueListenableBuilder<bool?>(
-                    valueListenable: container.screensaver.scheduleWidgets,
-                    // A mode can also claim corners for itself while it
-                    // runs (the Immich pair's two metadata panels): a
-                    // widget in a claimed corner stands down until the
-                    // corner is free again, rather than sitting on top of
-                    // what claimed it.
-                    builder: (context, scheduled, _) =>
-                        ValueListenableBuilder<Set<String>>(
-                          valueListenable: container.screensaver.claimedCorners,
-                          builder: (context, claimed, _) => _AboveWeatherChips(
-                            container: container,
-                            enabled: view == 'weather_mood',
-                            child: Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                if ((scheduled ?? true) &&
-                                    !_widgetsNightHidden(view))
-                                  for (final spec in decodeScreensaverWidgets(
-                                    container.settings.get(
-                                      defs.screensaverWidgets,
-                                    ),
-                                  ))
-                                    if (screensaverWidgetAllowedOnMode(
-                                          spec.type,
-                                          view,
-                                        ) &&
-                                        !claimed.contains(spec.position))
-                                      switch (spec.type) {
-                                        'clock' => ClockWidgetOverlay(
-                                          container: container,
-                                          spec: spec,
-                                          nightColor: _widgetNightColor(view),
-                                        ),
-                                        'weather' => WeatherWidgetOverlay(
-                                          container: container,
-                                          spec: spec,
-                                          nightColor: _widgetNightColor(view),
-                                        ),
-                                        'battery' => BatteryWidgetOverlay(
-                                          container: container,
-                                          spec: spec,
-                                          nightColor: _widgetNightColor(view),
-                                        ),
-                                        'entity' => EntityWidgetOverlay(
-                                          container: container,
-                                          spec: spec,
-                                          nightColor: _widgetNightColor(view),
-                                        ),
-                                        'alarm' => AlarmWidgetOverlay(
-                                          container: container,
-                                          spec: spec,
-                                          nightColor: _widgetNightColor(view),
-                                        ),
-                                        'calendar' => CalendarWidgetOverlay(
-                                          container: container,
-                                          spec: spec,
-                                          nightColor: _widgetNightColor(view),
-                                        ),
-                                        _ => const SizedBox.shrink(),
-                                      },
-                              ],
-                            ),
+                  _StepAside(
+                    container: container,
+                    child: ValueListenableBuilder<bool?>(
+                      valueListenable: container.screensaver.scheduleWidgets,
+                      // A mode can also claim corners for itself while it
+                      // runs (the Immich pair's two metadata panels): a
+                      // widget in a claimed corner stands down until the
+                      // corner is free again, rather than sitting on top of
+                      // what claimed it.
+                      builder: (context, scheduled, _) =>
+                          ValueListenableBuilder<Set<String>>(
+                            valueListenable:
+                                container.screensaver.claimedCorners,
+                            builder: (context, claimed, _) =>
+                                _AboveWeatherChips(
+                                  container: container,
+                                  enabled: view == 'weather_mood',
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      if ((scheduled ?? true) &&
+                                          !_widgetsNightHidden(view))
+                                        for (final spec
+                                            in decodeScreensaverWidgets(
+                                              container.settings.get(
+                                                defs.screensaverWidgets,
+                                              ),
+                                            ))
+                                          if (screensaverWidgetAllowedOnMode(
+                                                spec.type,
+                                                view,
+                                              ) &&
+                                              !claimed.contains(spec.position))
+                                            switch (spec.type) {
+                                              'clock' => ClockWidgetOverlay(
+                                                container: container,
+                                                spec: spec,
+                                                nightColor: _widgetNightColor(
+                                                  view,
+                                                ),
+                                              ),
+                                              'weather' => WeatherWidgetOverlay(
+                                                container: container,
+                                                spec: spec,
+                                                nightColor: _widgetNightColor(
+                                                  view,
+                                                ),
+                                              ),
+                                              'battery' => BatteryWidgetOverlay(
+                                                container: container,
+                                                spec: spec,
+                                                nightColor: _widgetNightColor(
+                                                  view,
+                                                ),
+                                              ),
+                                              'entity' => EntityWidgetOverlay(
+                                                container: container,
+                                                spec: spec,
+                                                nightColor: _widgetNightColor(
+                                                  view,
+                                                ),
+                                              ),
+                                              'alarm' => AlarmWidgetOverlay(
+                                                container: container,
+                                                spec: spec,
+                                                nightColor: _widgetNightColor(
+                                                  view,
+                                                ),
+                                              ),
+                                              'calendar' =>
+                                                CalendarWidgetOverlay(
+                                                  container: container,
+                                                  spec: spec,
+                                                  nightColor: _widgetNightColor(
+                                                    view,
+                                                  ),
+                                                ),
+                                              _ => const SizedBox.shrink(),
+                                            },
+                                    ],
+                                  ),
+                                ),
                           ),
-                        ),
+                    ),
                   ),
               ],
             ),
@@ -522,6 +552,28 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
       },
     );
   }
+}
+
+/// Fades the corner widgets and the At a Glance row out while the running
+/// mode shows its own controls, so the two never stack.
+class _StepAside extends StatelessWidget {
+  const _StepAside({required this.container, required this.child});
+  final AppContainer container;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+    valueListenable: container.screensaver.modeControlsShown,
+    builder: (context, shown, child) => IgnorePointer(
+      ignoring: shown,
+      child: AnimatedOpacity(
+        opacity: shown ? 0 : 1,
+        duration: const Duration(milliseconds: 250),
+        child: child,
+      ),
+    ),
+    child: child,
+  );
 }
 
 /// Gives each surface its own viewport so clocks, photos and player controls

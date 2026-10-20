@@ -38196,6 +38196,1149 @@
       ]
     }
   },
+  "settingScreensaverCelestialLocationTitle": "Розташування",
+  "@settingScreensaverCelestialLocationTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLocationDescription": "Місце, звідки видно небо.",
+  "@settingScreensaverCelestialLocationDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialEntityTitle": "Об’єкт",
+  "@settingScreensaverCelestialEntityTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialEntityDescription": "Людина, трекер пристрою або зона з розташуванням.",
+  "@settingScreensaverCelestialEntityDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCoordinatesTitle": "Координати",
+  "@settingScreensaverCelestialCoordinatesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCoordinatesDescription": "Широта й довгота, наприклад 40.71, -74.01.",
+  "@settingScreensaverCelestialCoordinatesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTerrainTitle": "Краєвид",
+  "@settingScreensaverCelestialTerrainTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTerrainDescription": "Рельєф уздовж горизонту.",
+  "@settingScreensaverCelestialTerrainDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialFollowDeviceTitle": "Наведіть на небо",
+  "@settingScreensaverCelestialFollowDeviceTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialFollowDeviceDescription": "Підніміть пристрій, і небо на екрані повертатиметься разом із ним, щоб ви могли назвати те, на що дивитеся. Потрібен датчик компаса.",
+  "@settingScreensaverCelestialFollowDeviceDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDaytimeTitle": "Денне небо",
+  "@settingScreensaverCelestialDaytimeTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDaytimeDescription": "Освітлювати небо та приглушувати зорі, поки Сонце над горизонтом. Вимкніть, щоб показувати нічне небо цілий день.",
+  "@settingScreensaverCelestialDaytimeDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialMilkyWayTitle": "Чумацький Шлях",
+  "@settingScreensaverCelestialMilkyWayTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialMilkyWayDescription": "Показувати сяйво нашої галактики на нічному небі.",
+  "@settingScreensaverCelestialMilkyWayDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialPlanetsTitle": "Планети",
+  "@settingScreensaverCelestialPlanetsTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialPlanetsDescription": "Показувати планети там, де вони сьогодні вночі.",
+  "@settingScreensaverCelestialPlanetsDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDeepSkyTitle": "Галактики й туманності",
+  "@settingScreensaverCelestialDeepSkyTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDeepSkyDescription": "Показувати галактику Андромеди, туманність Оріона та інші об’єкти, які видно без телескопа.",
+  "@settingScreensaverCelestialDeepSkyDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLightPollutionTitle": "Світлове забруднення",
+  "@settingScreensaverCelestialLightPollutionTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLightPollutionDescription": "Імітувати сяйво міських вогнів. Вищі значення приховують тьмяніші зорі та Чумацький Шлях.",
+  "@settingScreensaverCelestialLightPollutionDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTwinkleTitle": "Мерехтіння зір",
+  "@settingScreensaverCelestialTwinkleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTwinkleDescription": "Зорі мерехтять, найсильніше біля горизонту. Вимкніть, щоб заощадити енергію.",
+  "@settingScreensaverCelestialTwinkleDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLargeMoonTitle": "Більший Місяць",
+  "@settingScreensaverCelestialLargeMoonTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLargeMoonDescription": "Малювати Місяць утричі, а Сонце вдвічі більшими за справжній розмір, щоб фазу було легко розгледіти.",
+  "@settingScreensaverCelestialLargeMoonDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLinesTitle": "Лінії сузір’їв",
+  "@settingScreensaverCelestialLinesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLinesDescription": "З’єднувати зорі кожного сузір’я.",
+  "@settingScreensaverCelestialLinesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialConstellationNamesTitle": "Назви сузір’їв",
+  "@settingScreensaverCelestialConstellationNamesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialConstellationNamesDescription": "Підписувати сузір’я. Під час наближення з’являється більше.",
+  "@settingScreensaverCelestialConstellationNamesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialNamesTitle": "Назви зір і планет",
+  "@settingScreensaverCelestialNamesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialNamesDescription": "Підписувати Сонце, Місяць, планети, найяскравіші зорі та галактики. Під час наближення підписів зір стає більше.",
+  "@settingScreensaverCelestialNamesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCompassTitle": "Сторони світу",
+  "@settingScreensaverCelestialCompassTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCompassDescription": "Позначати північ, схід, південь і захід на горизонті.",
+  "@settingScreensaverCelestialCompassDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlCoordinatesTitle": "Положення",
+  "@settingScreensaverCelestialControlCoordinatesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlCoordinatesDescription": "Показує широту й довготу, звідки видно небо.",
+  "@settingScreensaverCelestialControlCoordinatesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAzimuthTitle": "Азимут",
+  "@settingScreensaverCelestialControlAzimuthTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAzimuthDescription": "Показує сторону світу, куди дивиться центр екрана.",
+  "@settingScreensaverCelestialControlAzimuthDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAltitudeTitle": "Висота",
+  "@settingScreensaverCelestialControlAltitudeTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAltitudeDescription": "Показує, наскільки високо над горизонтом центр екрана.",
+  "@settingScreensaverCelestialControlAltitudeDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlFovTitle": "Поле зору",
+  "@settingScreensaverCelestialControlFovTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlFovDescription": "Показує, яку частину неба охоплює екран, у градусах.",
+  "@settingScreensaverCelestialControlFovDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimeTitle": "Час",
+  "@settingScreensaverCelestialControlTimeTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimeDescription": "Показує час неба з кнопкою «Зараз» після прискорення.",
+  "@settingScreensaverCelestialControlTimeDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimelapseTitle": "Прискорення часу",
+  "@settingScreensaverCelestialControlTimelapseTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimelapseDescription": "Прискорює час, щоб побачити, як обертається небо. Торкніться, щоб змінити швидкість.",
+  "@settingScreensaverCelestialControlTimelapseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlPointAtSkyTitle": "Перемикач «Наведіть на небо»",
+  "@settingScreensaverCelestialControlPointAtSkyTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlPointAtSkyDescription": "Вмикає та вимикає режим «Наведіть на небо». Показується лише на пристроях із компасом.",
+  "@settingScreensaverCelestialControlPointAtSkyDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlMoonPhaseTitle": "Фаза Місяця",
+  "@settingScreensaverCelestialControlMoonPhaseTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlMoonPhaseDescription": "Показує фазу Місяця й частку його освітленого диска.",
+  "@settingScreensaverCelestialControlMoonPhaseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "screensaverModeCelestial": "Зоряне небо",
+  "@screensaverModeCelestial": {
+    "context": "Settings:Screensaver",
+    "description": "Screensaver mode choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainHills": "Пагорби",
+  "@screensaverCelestialTerrainHills": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainMountains": "Гори",
+  "@screensaverCelestialTerrainMountains": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainPlains": "Рівнина",
+  "@screensaverCelestialTerrainPlains": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainNone": "Немає",
+  "@screensaverCelestialTerrainNone": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice: no ground at all, so the whole screen shows the sky.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationGps": "GPS",
+  "@screensaverCelestialLocationGps": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationHaHome": "Дім у Home Assistant",
+  "@screensaverCelestialLocationHaHome": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice: the home zone in Home Assistant.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationHaEntity": "Об’єкт Home Assistant",
+  "@screensaverCelestialLocationHaEntity": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice: a person, device tracker or zone.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationManual": "Вручну",
+  "@screensaverCelestialLocationManual": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice: coordinates typed in.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialCurrentLocation": "Поточне розташування",
+  "@screensaverCelestialCurrentLocation": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Status row title under the location source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoGpsReceiver": "Цей пристрій не має приймача GPS.",
+  "@screensaverCelestialNoGpsReceiver": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status when the GPS source is chosen.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationPermission": "Дозвіл на розташування не надано.",
+  "@screensaverCelestialLocationPermission": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status when the GPS source is chosen.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoGpsFix": "Ще немає GPS-координат.",
+  "@screensaverCelestialNoGpsFix": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status when the GPS source is chosen.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoHomeZone": "У Home Assistant немає домашньої зони.",
+  "@screensaverCelestialNoHomeZone": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant home source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialHaNotConnected": "Home Assistant не підключено.",
+  "@screensaverCelestialHaNotConnected": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant sources.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialPickEntity": "Виберіть об’єкт із розташуванням.",
+  "@screensaverCelestialPickEntity": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant entity source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialEntityNoLocation": "Цей об’єкт не має розташування.",
+  "@screensaverCelestialEntityNoLocation": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant entity source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialPage": "Заставка «Зоряне небо»",
+  "@screensaverCelestialPage": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Settings page and section title.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialSummary": "Місце, пейзаж, небо, підписи, елементи керування",
+  "@screensaverCelestialSummary": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Summary under the page entry.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialSkyGroup": "Небо",
+  "@screensaverCelestialSkyGroup": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Group heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLabelsGroup": "Підписи",
+  "@screensaverCelestialLabelsGroup": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Group heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialControlsGroup": "Елементи керування",
+  "@screensaverCelestialControlsGroup": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Group heading: switches for the chips a touch brings up over the sky.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialCoordinatesInvalid": "Введіть широту й довготу, наприклад 40.71, -74.01",
+  "@screensaverCelestialCoordinatesInvalid": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Error under the coordinates field.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoLocation": "Виберіть розташування в меню Налаштування > Заставка > Зоряне небо.",
+  "@screensaverCelestialNoLocation": {
+    "context": "Screensaver:Celestial",
+    "description": "Prompt shown on a black screen when the location source has no position."
+  },
+  "screensaverCelestialDoubleTapHint": "Торкніться двічі, щоб закрити",
+  "@screensaverCelestialDoubleTapHint": {
+    "context": "Screensaver:Celestial",
+    "description": "Hint shown after a single tap on the sky."
+  },
+  "screensaverCelestialCalibrate": "Рухайте пристроєм вісімкою, щоб відкалібрувати компас.",
+  "@screensaverCelestialCalibrate": {
+    "context": "Screensaver:Celestial",
+    "description": "Note over the sky while the compass is not calibrated."
+  },
+  "celestialSun": "Сонце",
+  "@celestialSun": {
+    "context": "Screensaver:Celestial",
+    "description": "Label on the sky."
+  },
+  "celestialMoon": "Місяць",
+  "@celestialMoon": {
+    "context": "Screensaver:Celestial",
+    "description": "Label on the sky."
+  },
+  "celestialMercury": "Меркурій",
+  "@celestialMercury": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialVenus": "Венера",
+  "@celestialVenus": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialMars": "Марс",
+  "@celestialMars": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialJupiter": "Юпітер",
+  "@celestialJupiter": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialSaturn": "Сатурн",
+  "@celestialSaturn": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialUranus": "Уран",
+  "@celestialUranus": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialNeptune": "Нептун",
+  "@celestialNeptune": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialAndromedaGalaxy": "Галактика Андромеди",
+  "@celestialAndromedaGalaxy": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialTriangulumGalaxy": "Галактика Трикутника",
+  "@celestialTriangulumGalaxy": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialLargeMagellanicCloud": "Велика Магелланова Хмара",
+  "@celestialLargeMagellanicCloud": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialSmallMagellanicCloud": "Мала Магелланова Хмара",
+  "@celestialSmallMagellanicCloud": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialOrionNebula": "Туманність Оріона",
+  "@celestialOrionNebula": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialLagoonNebula": "Туманність Лагуна",
+  "@celestialLagoonNebula": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialCarinaNebula": "Туманність Кіля",
+  "@celestialCarinaNebula": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialPleiades": "Плеяди",
+  "@celestialPleiades": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialBeehiveCluster": "Ясла",
+  "@celestialBeehiveCluster": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialDoubleCluster": "Подвійне скупчення Персея",
+  "@celestialDoubleCluster": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialOmegaCentauri": "Омега Центавра",
+  "@celestialOmegaCentauri": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialTucanae47": "47 Тукана",
+  "@celestialTucanae47": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialCompassNorth": "Пн",
+  "@celestialCompassNorth": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: north, one or two letters."
+  },
+  "celestialCompassEast": "Сх",
+  "@celestialCompassEast": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: east, one or two letters."
+  },
+  "celestialCompassSouth": "Пд",
+  "@celestialCompassSouth": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: south, one or two letters."
+  },
+  "celestialCompassWest": "Зх",
+  "@celestialCompassWest": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: west, one or two letters."
+  },
+  "celestialCompassNorthEast": "ПнСх",
+  "@celestialCompassNorthEast": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: northeast, short like N or E."
+  },
+  "celestialCompassSouthEast": "ПдСх",
+  "@celestialCompassSouthEast": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: southeast, short like N or E."
+  },
+  "celestialCompassSouthWest": "ПдЗх",
+  "@celestialCompassSouthWest": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: southwest, short like N or E."
+  },
+  "celestialCompassNorthWest": "ПнЗх",
+  "@celestialCompassNorthWest": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: northwest, short like N or E."
+  },
+  "celestialAzimuthShort": "Аз",
+  "@celestialAzimuthShort": {
+    "context": "Screensaver:Celestial",
+    "description": "Short label before the azimuth in the bar over the sky, like astronomy programs use. Keep it to a few letters."
+  },
+  "celestialAltitudeShort": "Вис",
+  "@celestialAltitudeShort": {
+    "context": "Screensaver:Celestial",
+    "description": "Short label before the altitude in the bar over the sky, like astronomy programs use. Keep it to a few letters."
+  },
+  "celestialFovShort": "ПЗ",
+  "@celestialFovShort": {
+    "context": "Screensaver:Celestial",
+    "description": "Short label before the field of view in the bar over the sky, like astronomy programs use. Keep it to a few letters."
+  },
+  "celestialNow": "Зараз",
+  "@celestialNow": {
+    "context": "Screensaver:Celestial",
+    "description": "Button in the bar over the sky that brings the sky back to the current time after a timelapse."
+  },
+  "celestialMoonNew": "Новий місяць",
+  "@celestialMoonNew": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaxingCrescent": "Молодий місяць",
+  "@celestialMoonWaxingCrescent": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonFirstQuarter": "Перша чверть",
+  "@celestialMoonFirstQuarter": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaxingGibbous": "Зростаючий місяць",
+  "@celestialMoonWaxingGibbous": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonFull": "Повня",
+  "@celestialMoonFull": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaningGibbous": "Спадний місяць",
+  "@celestialMoonWaningGibbous": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonLastQuarter": "Остання чверть",
+  "@celestialMoonLastQuarter": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaningCrescent": "Старий місяць",
+  "@celestialMoonWaningCrescent": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
   "settingScreensaverClockStyleTitle": "Стиль",
   "@settingScreensaverClockStyleTitle": {
     "context": "Settings:Screensaver:Clock screensaver",

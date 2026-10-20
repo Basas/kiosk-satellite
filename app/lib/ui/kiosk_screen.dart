@@ -1690,7 +1690,10 @@ class _KioskScreenState extends State<KioskScreen>
                             builder: (context, frozen, child) => Offstage(
                               // Skip platform view compositing only after the
                               // browser confirms it is safe to hide the dashboard.
-                              offstage: view == 'weather_mood' && frozen,
+                              offstage:
+                                  (view == 'weather_mood' ||
+                                      view == 'celestial') &&
+                                  frozen,
                               child: child,
                             ),
                           ),

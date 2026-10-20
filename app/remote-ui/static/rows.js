@@ -37,7 +37,7 @@ import {
   openWakeSourcesPicker,
   wakeSourcesText,
 } from './pickers.js';
-import { loadSettings, refreshRealMacNote, syncSubpages, updatePersonSensorRows, updateRtspRows } from './settings.js';
+import { loadSettings, refreshRealMacNote, syncSubpages, updateCelestialLocationRow, updatePersonSensorRows, updateRtspRows } from './settings.js';
 import { dashboardField } from './dashboard_picker.js';
 import { updatePlayerRow } from './panels.js';
 import {
@@ -332,6 +332,10 @@ export function settingRow(s) {
     // adaptive brightness switch (issue #343). After the gated sync, so
     // the curve rows the switch reveals are in place first.
     if (s.key === 'screen.adaptive_brightness') updateAdaptiveBrightnessRows();
+    // The Celestial location status follows its source and entity.
+    if (s.key === 'screensaver.celestial_location' || s.key === 'screensaver.celestial_entity') {
+      updateCelestialLocationRow();
+    }
     // The Ambient light row follows the reading's source (issue #911).
     if (s.key === 'screen.adaptive_use_entity' || s.key === 'screen.adaptive_light_entity') {
       updateAdaptiveBrightnessRows({ reprobe: true });
@@ -424,6 +428,12 @@ export function settingRow(s) {
   // Weather Mood's and the calendar's weather entity: weather only.
   if (s.key === 'screensaver.weather_entity' || s.key === 'calendar.weather_entity') {
     entityRow(entitySpec({ domains: ['weather'] }), { allowClear: true });
+    return row;
+  }
+  // The Celestial screensaver's location entity: anything with a latitude
+  // and longitude.
+  if (s.key === 'screensaver.celestial_entity') {
+    entityRow(entitySpec({ domains: ['person', 'device_tracker', 'zone'] }), { allowClear: true });
     return row;
   }
   // Adaptive brightness's light sensor entity (issue #911), mirroring the

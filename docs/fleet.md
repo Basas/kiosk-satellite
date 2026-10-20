@@ -142,6 +142,7 @@ Certain settings remain unique to each kiosk regardless of the profile configura
 | Hardware picks | `camera.device`, `camera.rtsp.tls`, `camera.rtsp.resolution`, `camera.rtsp.analysis`, `motion.camera`, `audio.mic_device`, `audio.speaker_device`, `audio.mic_channel`, `audio.mic_capture_mode`, `audio.software_echo_cancellation`, `audio.mic_noise_suppression`, `audio.mic_gain_db`, `audio.mic_capture_format`, `render.disable_impeller`, `render.legacy_webview`, `ui.scale`, `screen.ambient_display` |
 | Followed player | `sendspin.player`, `sendspin.player_source`, `sendspin.player_name`, `sendspin.speaker_pill_players` |
 | Weather preview | `screensaver.weather_preview`, `screensaver.weather_preview_condition`, `screensaver.weather_preview_period` |
+| Celestial view | `screensaver.celestial_view` |
 | Voice Satellite chimes | `voice_chimes.wake`, `voice_chimes.done`, `voice_chimes.error`, `voice_chimes.alert`, `voice_chimes.announce` |
 | Diagnostics | `wake_word.diagnostics` |
 | Wake word arbitration offset | `voice.wake_arbitration_offset_db` |

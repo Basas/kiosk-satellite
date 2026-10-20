@@ -20,7 +20,7 @@ Navigate to **Settings > Screensaver** (available in the on device settings and 
 | Wake to screensaver | Off | Picks what brings the screensaver back instead of the dashboard after the screen has turned off: motion, face, proximity, person, the power button and touch. The **Turn screen off after** countdown starts over. See [Turning the Screen Off](#turning-the-screen-off). |
 | Pixel shift | off | Periodically shifts on screen elements every minute to prevent image retention on OLED displays. Not applicable to Black mode. |
 | Show in the kiosk menu | on | Keeps the **Start Screensaver** entry in the kiosk menu. Turn it off to shorten the menu on a device that never starts the screensaver by hand. The idle timeout, gestures, the ESPHome switch and the API commands still start it. |
-| Follow Android animation settings | off | Pauses Weather Mood on a still frame while Android's **Transition animation scale** is off in Developer options. Turn it on to save CPU on low-power devices where the animation scales are zeroed. |
+| Follow Android animation settings | off | Pauses Weather Mood and the Celestial twinkle on a still frame while Android's **Transition animation scale** is off in Developer options. Turn it on to save CPU on low-power devices where the animation scales are zeroed. |
 | Screensaver mode | Black | Selects the active screensaver display mode. Options for the chosen mode appear directly below this selector. |
 
 The **Widgets** configuration group sits directly beneath the mode settings, allowing small overlays to be anchored to display corners.
@@ -48,6 +48,59 @@ The **Weather Preview** group on the device and in Remote Admin lets you try any
 Turn off **Lightning flashes** to keep thunderstorm clouds and rain without the flashes. Rainy scenes add drops that land on the glass in front of the sky, rest and sometimes slide down leaving a wet trail. Heavier rain brings more of them. The renderer uses Flutter GPU shaders and canvas drawing from bundled assets. Clouds render a few rows at a time across several frames and fade from one cloud image to the next, so older devices keep a steady frame rate. Each cloud image slides along with the wind until the next one is ready, low clouds faster than high ones, so moving clouds glide instead of jumping. It pauses when the display turns off or the app goes into the background. Android's animation scale does not stop the scene unless **Follow Android animation settings** is on. If weather data becomes unavailable, the scene retains its last known condition. Before the first valid reading it shows a neutral cloudy sky.
 
 Older devices use fewer cloud samples and a smaller cloud image that adjusts when frames remain slow. The renderer caches the sky at the display's resolution and renders a fresh cloud image about once a second, twice as often in full wind. Precipitation, twinkling stars and lightning animate separately at up to 20 frames per second. This reduces repeated GPU work while keeping the sun, moon and stars sharp. Weather Preview changes refresh the background immediately.
+
+### Celestial
+
+Celestial shows the sky above the kiosk as it is right now: the stars down to the faintest you can see by eye, the planets, the Moon in its current phase, the Sun, constellation figures and names, the Milky Way and the brightest galaxies and nebulae. Hills, mountains or plains run along the horizon, or nothing at all. Everything is computed on the kiosk from bundled data, so the screensaver needs no internet connection.
+
+Celestial needs to know where the kiosk is. Pick where that comes from under **Location**:
+
+* **GPS** reads the device's GPS receiver, whether or not **Report location** is on in ESPHome. Most tablets have no receiver.
+* **Home Assistant home** (the default) uses the home zone set in Home Assistant.
+* **Home Assistant entity** uses a person, device tracker or zone you pick.
+* **Manual** takes a latitude and longitude you type, like `40.71, -74.01`.
+
+With **GPS**, the sky follows the device's live position while the screensaver runs, so a kiosk that travels keeps the right sky.
+
+A **Current location** row shows the coordinates the source found, or why it has none, such as a device without a GPS receiver or an entity without a location. If the chosen source has no position, the screensaver shows a black screen that asks you to choose another.
+
+Turn on **Point at the sky** to make the kiosk a sky viewer on a device with a compass, which Android fuses with the tilt sensors into its rotation vector sensor. Hold the device up and the sky on screen turns with it, roll included, so whatever is in front of you is named on screen. It works with any location source. A pinch still zooms and a double tap still closes the screensaver. While it runs, motion, face, person and proximity detection do not close the screensaver, since moving the device around would trigger them. On a device without a compass, the view stays on touch. A compass that has not moved for a while can be far off, even facing the wrong way. While Android reports it as uncalibrated, a note asks you to move the device in a figure eight, and it goes away once the compass settles.
+
+Drag to look around the sky and pinch to zoom in or out. A single tap does nothing but show a reminder, and a double tap closes the screensaver. The kiosk remembers where you left the view and starts there next time. Until you move it, the view faces the equator with the horizon near the bottom of the screen.
+
+Any touch also brings up a quiet status bar along the bottom of the screen, dim enough for dark-adapted eyes, which goes away after 5 seconds without a touch. Widgets and the At a Glance row step aside while the controls are up. Each control has its own switch under **Controls**:
+
+* **Position** shows the latitude and longitude the sky is seen from.
+* **Azimuth** and **Altitude** show the compass direction the center of the screen faces and how high above the horizon it is.
+* **Field of view** shows how much of the sky the screen spans, in degrees across its long side.
+* **Time** shows the time of the sky. After a timelapse, **Now** returns the sky to the present.
+* **Timelapse** speeds up time so you can watch the sky turn. Tap its button to step through 60×, 600× and 3600×, which is one minute, ten minutes and one hour of sky per second, then back to off. Turning it off keeps the sky at the time it reached.
+* **Point at the sky switch** is a button that turns Point at the sky on and off. It shows only on devices with a compass.
+* **Moon phase** shows the phase of the Moon and how much of it is lit.
+
+| Setting | Default | What it does |
+| --- | --- | --- |
+| Location | Home Assistant home | Where the sky is seen from: **GPS**, **Home Assistant home**, **Home Assistant entity** or **Manual**. |
+| Entity | empty | With **Home Assistant entity**, the person, device tracker or zone to follow. |
+| Coordinates | empty | With **Manual**, the latitude and longitude of the kiosk. |
+| Landscape | Hills | The ground along the horizon: **Hills**, **Mountains** or **Plains**. **None** leaves out the ground, so the whole screen shows the sky, stars below the horizon included. The air no longer dims stars near the horizon, and the Sun stays hidden while it is down. |
+| Point at the sky | off | The view turns with the device's compass and tilt. Needs a compass sensor. |
+| Daytime sky | on | Brightens the sky and fades the stars while the Sun is up. Turn it off to show the night sky all day, with the Sun drawn where it is. |
+| Milky Way | on | The glow of our galaxy, from NASA's Deep Star Maps. |
+| Planets | on | Mercury to Neptune, each shown only when it is bright enough to see. |
+| Galaxies and nebulae | on | Soft glows for the Andromeda and Triangulum galaxies and the Orion, Lagoon and Carina nebulae, with names for them and a few star clusters. |
+| Light pollution | 0% | Simulates the glow of city lights. Higher values hide the fainter stars, then the Milky Way, and warm the sky near the horizon. At 100% only stars brighter than about magnitude 2 remain, as in a city center. |
+| Twinkling stars | on | The stars shimmer, most of all near the horizon. Turn it off to save power: the sky then redraws only every 10 seconds and when you move it. |
+| Larger Moon | on | Draws the Moon at three times its real size and the Sun at twice. Off shows both at their true size. |
+| Constellation lines | on | Connects the stars of each constellation. The lines are clearest in the middle of the screen and fade out toward its edges. |
+| Constellation names | on | Names the constellations. More appear as you zoom in, and names fade out toward the edges of the screen like the lines. |
+| Star and planet names | on | Names the Sun, the Moon, the planets, the brightest stars and the galaxies. More stars get names as you zoom in. |
+| Compass points | on | Marks north, east, south and west on the horizon. |
+| Controls | all on | The controls a touch brings up: **Position**, **Azimuth**, **Altitude**, **Field of view**, **Time**, **Timelapse**, **Point at the sky switch** and **Moon phase**. |
+
+Positions come from orbital elements and are accurate to a few arcminutes, about a pixel at the closest zoom. Each star is drawn from its apparent magnitude, so brightness and size follow what you would see. Stars dim and redden near the horizon the way the air dims them, and moonlight, twilight and light pollution wash out the fainter ones. The sky follows the clock in real time, unless a timelapse runs.
+
+Constellation names follow the interface language in Spanish, German, French, Russian and Chinese and use the Latin names in the other languages. Star names are the official IAU names.
 
 ### Dim
 
@@ -386,7 +439,7 @@ What a detection does once the display has turned off is decided by **Wake to sc
 
 The standard method for launching the screensaver is the idle timeout clock. Manual launch options include selecting **Start Screensaver** in the kiosk menu, triggering a mapped [gesture](gestures.md), toggling the ESPHome **Screensaver active** switch, or sending the `startScreensaver` command via the [remote API](remote-api.md) or [JavaScript API](js-api.md).
 
-Touch interactions instantly dismiss the screensaver and reset the idle clock. The one exception is a tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on, which steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). Additional dismissal triggers include:
+Touch interactions instantly dismiss the screensaver and reset the idle clock. There are two exceptions. A tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). The [Celestial](#celestial) screensaver takes a double tap, since a drag there looks around the sky. Additional dismissal triggers include:
 
 * **Wake Word**: Dismisses the screensaver immediately and pauses the idle clock for the entire voice turn so the display remains active during conversation.
 * **Camera Motion**: Triggers wake when Dismiss on motion is active.

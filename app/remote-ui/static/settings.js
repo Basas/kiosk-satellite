@@ -1190,6 +1190,7 @@ async function renderSettings({ cached = false } = {}) {
 
   updatePersonSensorRows();
   updateRtspRows();
+  updateCelestialLocationRow();
 
   // ── Bluetooth Proxy nearby devices ───────────────────────────────────
   // The live list the device shows under the lookup toggle, same data:
@@ -2810,6 +2811,40 @@ const PERSON_SENSOR_PAGES = [
   { tab: 'tab-screensaver', subpage: 'Person Detection', key: 'screensaver.dismiss_on_person' },
   { tab: 'tab-camera', subpage: 'Person Sensor', key: 'person.sensor' },
 ];
+
+// Where the Celestial sky's location source places it, or why it cannot,
+// mirroring the device's CelestialLocationStatusRow: under the Location
+// select for the GPS and the home zone, under the entity picker for an
+// entity. Manual shows its own field.
+export function updateCelestialLocationRow() {
+  const panel = document.getElementById('tab-screensaver')
+    ?.querySelector('.subpage[data-subpage="Celestial screensaver"]');
+  if (!panel) return;
+  for (const stale of panel.querySelectorAll('.celestial-location')) stale.remove();
+  const source = (state.settings || [])
+    .find((o) => o.key === 'screensaver.celestial_location')?.value;
+  const key = source === 'ha_entity' ? 'screensaver.celestial_entity'
+    : source === 'gps' || source === 'ha_home' ? 'screensaver.celestial_location' : null;
+  const row = key && panel.querySelector(`[data-key="${key}"]`);
+  if (!row) return;
+  const status = readOnlyRow(screensaverText('Current location'),
+    screensaverText('Checking...'), '', false);
+  status.classList.add('celestial-location');
+  row.insertAdjacentElement('afterend', status);
+  // A GPS without a recent fix asks the receiver for one, which can take
+  // up to half a minute.
+  cmd('getCelestialLocation', { source }, { timeoutMs: 40000 })
+    .then((r) => r.data || null)
+    .catch(() => null)
+    .then((st) => {
+      if (!status.isConnected) return;
+      status.querySelector('.desc').textContent = !st
+        ? screensaverText('Status unavailable.')
+        : st.available
+          ? `${st.latitude.toFixed(4)}, ${st.longitude.toFixed(4)}`
+          : screensaverText(st.message || 'Status unavailable.');
+    });
+}
 
 export function updatePersonSensorRows() {
   PERSON_SENSOR_PAGES.forEach(personSensorPage);

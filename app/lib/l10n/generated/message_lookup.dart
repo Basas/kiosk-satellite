@@ -3152,6 +3152,189 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'settingScreensaverBlackHideExtrasDescription' =>
         strings.settingScreensaverBlackHideExtrasDescription,
       'screensaverBlackSection' => strings.screensaverBlackSection,
+      'settingScreensaverCelestialLocationTitle' =>
+        strings.settingScreensaverCelestialLocationTitle,
+      'settingScreensaverCelestialLocationDescription' =>
+        strings.settingScreensaverCelestialLocationDescription,
+      'settingScreensaverCelestialEntityTitle' =>
+        strings.settingScreensaverCelestialEntityTitle,
+      'settingScreensaverCelestialEntityDescription' =>
+        strings.settingScreensaverCelestialEntityDescription,
+      'settingScreensaverCelestialCoordinatesTitle' =>
+        strings.settingScreensaverCelestialCoordinatesTitle,
+      'settingScreensaverCelestialCoordinatesDescription' =>
+        strings.settingScreensaverCelestialCoordinatesDescription,
+      'settingScreensaverCelestialTerrainTitle' =>
+        strings.settingScreensaverCelestialTerrainTitle,
+      'settingScreensaverCelestialTerrainDescription' =>
+        strings.settingScreensaverCelestialTerrainDescription,
+      'settingScreensaverCelestialFollowDeviceTitle' =>
+        strings.settingScreensaverCelestialFollowDeviceTitle,
+      'settingScreensaverCelestialFollowDeviceDescription' =>
+        strings.settingScreensaverCelestialFollowDeviceDescription,
+      'settingScreensaverCelestialDaytimeTitle' =>
+        strings.settingScreensaverCelestialDaytimeTitle,
+      'settingScreensaverCelestialDaytimeDescription' =>
+        strings.settingScreensaverCelestialDaytimeDescription,
+      'settingScreensaverCelestialMilkyWayTitle' =>
+        strings.settingScreensaverCelestialMilkyWayTitle,
+      'settingScreensaverCelestialMilkyWayDescription' =>
+        strings.settingScreensaverCelestialMilkyWayDescription,
+      'settingScreensaverCelestialPlanetsTitle' =>
+        strings.settingScreensaverCelestialPlanetsTitle,
+      'settingScreensaverCelestialPlanetsDescription' =>
+        strings.settingScreensaverCelestialPlanetsDescription,
+      'settingScreensaverCelestialDeepSkyTitle' =>
+        strings.settingScreensaverCelestialDeepSkyTitle,
+      'settingScreensaverCelestialDeepSkyDescription' =>
+        strings.settingScreensaverCelestialDeepSkyDescription,
+      'settingScreensaverCelestialLightPollutionTitle' =>
+        strings.settingScreensaverCelestialLightPollutionTitle,
+      'settingScreensaverCelestialLightPollutionDescription' =>
+        strings.settingScreensaverCelestialLightPollutionDescription,
+      'settingScreensaverCelestialTwinkleTitle' =>
+        strings.settingScreensaverCelestialTwinkleTitle,
+      'settingScreensaverCelestialTwinkleDescription' =>
+        strings.settingScreensaverCelestialTwinkleDescription,
+      'settingScreensaverCelestialLargeMoonTitle' =>
+        strings.settingScreensaverCelestialLargeMoonTitle,
+      'settingScreensaverCelestialLargeMoonDescription' =>
+        strings.settingScreensaverCelestialLargeMoonDescription,
+      'settingScreensaverCelestialLinesTitle' =>
+        strings.settingScreensaverCelestialLinesTitle,
+      'settingScreensaverCelestialLinesDescription' =>
+        strings.settingScreensaverCelestialLinesDescription,
+      'settingScreensaverCelestialConstellationNamesTitle' =>
+        strings.settingScreensaverCelestialConstellationNamesTitle,
+      'settingScreensaverCelestialConstellationNamesDescription' =>
+        strings.settingScreensaverCelestialConstellationNamesDescription,
+      'settingScreensaverCelestialNamesTitle' =>
+        strings.settingScreensaverCelestialNamesTitle,
+      'settingScreensaverCelestialNamesDescription' =>
+        strings.settingScreensaverCelestialNamesDescription,
+      'settingScreensaverCelestialCompassTitle' =>
+        strings.settingScreensaverCelestialCompassTitle,
+      'settingScreensaverCelestialCompassDescription' =>
+        strings.settingScreensaverCelestialCompassDescription,
+      'settingScreensaverCelestialControlCoordinatesTitle' =>
+        strings.settingScreensaverCelestialControlCoordinatesTitle,
+      'settingScreensaverCelestialControlCoordinatesDescription' =>
+        strings.settingScreensaverCelestialControlCoordinatesDescription,
+      'settingScreensaverCelestialControlAzimuthTitle' =>
+        strings.settingScreensaverCelestialControlAzimuthTitle,
+      'settingScreensaverCelestialControlAzimuthDescription' =>
+        strings.settingScreensaverCelestialControlAzimuthDescription,
+      'settingScreensaverCelestialControlAltitudeTitle' =>
+        strings.settingScreensaverCelestialControlAltitudeTitle,
+      'settingScreensaverCelestialControlAltitudeDescription' =>
+        strings.settingScreensaverCelestialControlAltitudeDescription,
+      'settingScreensaverCelestialControlFovTitle' =>
+        strings.settingScreensaverCelestialControlFovTitle,
+      'settingScreensaverCelestialControlFovDescription' =>
+        strings.settingScreensaverCelestialControlFovDescription,
+      'settingScreensaverCelestialControlTimeTitle' =>
+        strings.settingScreensaverCelestialControlTimeTitle,
+      'settingScreensaverCelestialControlTimeDescription' =>
+        strings.settingScreensaverCelestialControlTimeDescription,
+      'settingScreensaverCelestialControlTimelapseTitle' =>
+        strings.settingScreensaverCelestialControlTimelapseTitle,
+      'settingScreensaverCelestialControlTimelapseDescription' =>
+        strings.settingScreensaverCelestialControlTimelapseDescription,
+      'settingScreensaverCelestialControlPointAtSkyTitle' =>
+        strings.settingScreensaverCelestialControlPointAtSkyTitle,
+      'settingScreensaverCelestialControlPointAtSkyDescription' =>
+        strings.settingScreensaverCelestialControlPointAtSkyDescription,
+      'settingScreensaverCelestialControlMoonPhaseTitle' =>
+        strings.settingScreensaverCelestialControlMoonPhaseTitle,
+      'settingScreensaverCelestialControlMoonPhaseDescription' =>
+        strings.settingScreensaverCelestialControlMoonPhaseDescription,
+      'screensaverModeCelestial' => strings.screensaverModeCelestial,
+      'screensaverCelestialTerrainHills' =>
+        strings.screensaverCelestialTerrainHills,
+      'screensaverCelestialTerrainMountains' =>
+        strings.screensaverCelestialTerrainMountains,
+      'screensaverCelestialTerrainPlains' =>
+        strings.screensaverCelestialTerrainPlains,
+      'screensaverCelestialTerrainNone' =>
+        strings.screensaverCelestialTerrainNone,
+      'screensaverCelestialLocationGps' =>
+        strings.screensaverCelestialLocationGps,
+      'screensaverCelestialLocationHaHome' =>
+        strings.screensaverCelestialLocationHaHome,
+      'screensaverCelestialLocationHaEntity' =>
+        strings.screensaverCelestialLocationHaEntity,
+      'screensaverCelestialLocationManual' =>
+        strings.screensaverCelestialLocationManual,
+      'screensaverCelestialCurrentLocation' =>
+        strings.screensaverCelestialCurrentLocation,
+      'screensaverCelestialNoGpsReceiver' =>
+        strings.screensaverCelestialNoGpsReceiver,
+      'screensaverCelestialLocationPermission' =>
+        strings.screensaverCelestialLocationPermission,
+      'screensaverCelestialNoGpsFix' => strings.screensaverCelestialNoGpsFix,
+      'screensaverCelestialNoHomeZone' =>
+        strings.screensaverCelestialNoHomeZone,
+      'screensaverCelestialHaNotConnected' =>
+        strings.screensaverCelestialHaNotConnected,
+      'screensaverCelestialPickEntity' =>
+        strings.screensaverCelestialPickEntity,
+      'screensaverCelestialEntityNoLocation' =>
+        strings.screensaverCelestialEntityNoLocation,
+      'screensaverCelestialPage' => strings.screensaverCelestialPage,
+      'screensaverCelestialSummary' => strings.screensaverCelestialSummary,
+      'screensaverCelestialSkyGroup' => strings.screensaverCelestialSkyGroup,
+      'screensaverCelestialLabelsGroup' =>
+        strings.screensaverCelestialLabelsGroup,
+      'screensaverCelestialControlsGroup' =>
+        strings.screensaverCelestialControlsGroup,
+      'screensaverCelestialCoordinatesInvalid' =>
+        strings.screensaverCelestialCoordinatesInvalid,
+      'screensaverCelestialNoLocation' =>
+        strings.screensaverCelestialNoLocation,
+      'screensaverCelestialDoubleTapHint' =>
+        strings.screensaverCelestialDoubleTapHint,
+      'screensaverCelestialCalibrate' => strings.screensaverCelestialCalibrate,
+      'celestialSun' => strings.celestialSun,
+      'celestialMoon' => strings.celestialMoon,
+      'celestialMercury' => strings.celestialMercury,
+      'celestialVenus' => strings.celestialVenus,
+      'celestialMars' => strings.celestialMars,
+      'celestialJupiter' => strings.celestialJupiter,
+      'celestialSaturn' => strings.celestialSaturn,
+      'celestialUranus' => strings.celestialUranus,
+      'celestialNeptune' => strings.celestialNeptune,
+      'celestialAndromedaGalaxy' => strings.celestialAndromedaGalaxy,
+      'celestialTriangulumGalaxy' => strings.celestialTriangulumGalaxy,
+      'celestialLargeMagellanicCloud' => strings.celestialLargeMagellanicCloud,
+      'celestialSmallMagellanicCloud' => strings.celestialSmallMagellanicCloud,
+      'celestialOrionNebula' => strings.celestialOrionNebula,
+      'celestialLagoonNebula' => strings.celestialLagoonNebula,
+      'celestialCarinaNebula' => strings.celestialCarinaNebula,
+      'celestialPleiades' => strings.celestialPleiades,
+      'celestialBeehiveCluster' => strings.celestialBeehiveCluster,
+      'celestialDoubleCluster' => strings.celestialDoubleCluster,
+      'celestialOmegaCentauri' => strings.celestialOmegaCentauri,
+      'celestialTucanae47' => strings.celestialTucanae47,
+      'celestialCompassNorth' => strings.celestialCompassNorth,
+      'celestialCompassEast' => strings.celestialCompassEast,
+      'celestialCompassSouth' => strings.celestialCompassSouth,
+      'celestialCompassWest' => strings.celestialCompassWest,
+      'celestialCompassNorthEast' => strings.celestialCompassNorthEast,
+      'celestialCompassSouthEast' => strings.celestialCompassSouthEast,
+      'celestialCompassSouthWest' => strings.celestialCompassSouthWest,
+      'celestialCompassNorthWest' => strings.celestialCompassNorthWest,
+      'celestialAzimuthShort' => strings.celestialAzimuthShort,
+      'celestialAltitudeShort' => strings.celestialAltitudeShort,
+      'celestialFovShort' => strings.celestialFovShort,
+      'celestialNow' => strings.celestialNow,
+      'celestialMoonNew' => strings.celestialMoonNew,
+      'celestialMoonWaxingCrescent' => strings.celestialMoonWaxingCrescent,
+      'celestialMoonFirstQuarter' => strings.celestialMoonFirstQuarter,
+      'celestialMoonWaxingGibbous' => strings.celestialMoonWaxingGibbous,
+      'celestialMoonFull' => strings.celestialMoonFull,
+      'celestialMoonWaningGibbous' => strings.celestialMoonWaningGibbous,
+      'celestialMoonLastQuarter' => strings.celestialMoonLastQuarter,
+      'celestialMoonWaningCrescent' => strings.celestialMoonWaningCrescent,
       'settingScreensaverClockStyleTitle' =>
         strings.settingScreensaverClockStyleTitle,
       'settingScreensaverClockStyleDescription' =>

@@ -10257,6 +10257,391 @@ class UiStringsEs extends UiStrings {
   String get screensaverBlackSection => 'Protector de pantalla: Negro';
 
   @override
+  String get settingScreensaverCelestialLocationTitle => 'Ubicación';
+
+  @override
+  String get settingScreensaverCelestialLocationDescription =>
+      'Desde dónde se ve el cielo.';
+
+  @override
+  String get settingScreensaverCelestialEntityTitle => 'Entidad';
+
+  @override
+  String get settingScreensaverCelestialEntityDescription =>
+      'Una persona, un rastreador de dispositivo o una zona con ubicación.';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesTitle => 'Coordenadas';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesDescription =>
+      'Latitud y longitud, como 40.71, -74.01.';
+
+  @override
+  String get settingScreensaverCelestialTerrainTitle => 'Paisaje';
+
+  @override
+  String get settingScreensaverCelestialTerrainDescription =>
+      'El terreno a lo largo del horizonte.';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceTitle => 'Apuntar al cielo';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceDescription =>
+      'Sostén el dispositivo en alto y el cielo de la pantalla gira con él, para que puedas identificar lo que estás mirando. Necesita un sensor de brújula.';
+
+  @override
+  String get settingScreensaverCelestialDaytimeTitle => 'Cielo diurno';
+
+  @override
+  String get settingScreensaverCelestialDaytimeDescription =>
+      'Aclara el cielo y desvanece las estrellas mientras el Sol está arriba. Desactívalo para ver el cielo nocturno todo el día.';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayTitle => 'Vía Láctea';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayDescription =>
+      'Muestra el brillo de nuestra galaxia en el cielo nocturno.';
+
+  @override
+  String get settingScreensaverCelestialPlanetsTitle => 'Planetas';
+
+  @override
+  String get settingScreensaverCelestialPlanetsDescription =>
+      'Muestra los planetas donde están esta noche.';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyTitle => 'Galaxias y nebulosas';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyDescription =>
+      'Muestra la galaxia de Andrómeda, la nebulosa de Orión y otros objetos visibles sin telescopio.';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionTitle =>
+      'Contaminación lumínica';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionDescription =>
+      'Simula el resplandor de las luces de la ciudad. Los valores altos ocultan las estrellas más débiles y la Vía Láctea.';
+
+  @override
+  String get settingScreensaverCelestialTwinkleTitle => 'Estrellas titilantes';
+
+  @override
+  String get settingScreensaverCelestialTwinkleDescription =>
+      'Haz que las estrellas titilen, sobre todo cerca del horizonte. Desactívalo para ahorrar energía.';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonTitle => 'Luna más grande';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonDescription =>
+      'Dibuja la Luna al triple de su tamaño real y el Sol al doble, para que la fase se vea fácilmente.';
+
+  @override
+  String get settingScreensaverCelestialLinesTitle =>
+      'Líneas de constelaciones';
+
+  @override
+  String get settingScreensaverCelestialLinesDescription =>
+      'Une las estrellas de cada constelación.';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesTitle =>
+      'Nombres de constelaciones';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesDescription =>
+      'Nombra las constelaciones. Aparecen más al acercar la vista.';
+
+  @override
+  String get settingScreensaverCelestialNamesTitle =>
+      'Nombres de estrellas y planetas';
+
+  @override
+  String get settingScreensaverCelestialNamesDescription =>
+      'Nombra el Sol, la Luna, los planetas, las estrellas más brillantes y las galaxias. Más estrellas reciben nombre al acercar la vista.';
+
+  @override
+  String get settingScreensaverCelestialCompassTitle => 'Puntos cardinales';
+
+  @override
+  String get settingScreensaverCelestialCompassDescription =>
+      'Marca el norte, el este, el sur y el oeste en el horizonte.';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesTitle => 'Posición';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesDescription =>
+      'Muestra la latitud y la longitud desde donde se ve el cielo.';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthTitle => 'Acimut';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthDescription =>
+      'Muestra la dirección de la brújula hacia la que mira el centro de la pantalla.';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeTitle => 'Altura';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeDescription =>
+      'Muestra a qué altura sobre el horizonte está el centro de la pantalla.';
+
+  @override
+  String get settingScreensaverCelestialControlFovTitle => 'Campo de visión';
+
+  @override
+  String get settingScreensaverCelestialControlFovDescription =>
+      'Muestra cuánto cielo abarca la pantalla, en grados.';
+
+  @override
+  String get settingScreensaverCelestialControlTimeTitle => 'Hora';
+
+  @override
+  String get settingScreensaverCelestialControlTimeDescription =>
+      'Muestra la hora del cielo, con un botón Ahora después de un timelapse.';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseTitle => 'Timelapse';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseDescription =>
+      'Acelera el tiempo para ver girar el cielo. Toca para cambiar la velocidad.';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyTitle =>
+      'Interruptor de Apuntar al cielo';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyDescription =>
+      'Activa y desactiva Apuntar al cielo. Solo aparece en dispositivos con brújula.';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseTitle => 'Fase lunar';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseDescription =>
+      'Muestra la fase de la Luna y cuánto de ella está iluminado.';
+
+  @override
+  String get screensaverModeCelestial => 'Celeste';
+
+  @override
+  String get screensaverCelestialTerrainHills => 'Colinas';
+
+  @override
+  String get screensaverCelestialTerrainMountains => 'Montañas';
+
+  @override
+  String get screensaverCelestialTerrainPlains => 'Llanuras';
+
+  @override
+  String get screensaverCelestialTerrainNone => 'Ninguno';
+
+  @override
+  String get screensaverCelestialLocationGps => 'GPS';
+
+  @override
+  String get screensaverCelestialLocationHaHome => 'Casa en Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationHaEntity =>
+      'Entidad de Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationManual => 'Manual';
+
+  @override
+  String get screensaverCelestialCurrentLocation => 'Ubicación actual';
+
+  @override
+  String get screensaverCelestialNoGpsReceiver =>
+      'Este dispositivo no tiene receptor GPS.';
+
+  @override
+  String get screensaverCelestialLocationPermission =>
+      'No se ha concedido el permiso de ubicación.';
+
+  @override
+  String get screensaverCelestialNoGpsFix => 'Aún no hay posición GPS.';
+
+  @override
+  String get screensaverCelestialNoHomeZone =>
+      'Home Assistant no tiene una zona de casa.';
+
+  @override
+  String get screensaverCelestialHaNotConnected =>
+      'Home Assistant no está conectado.';
+
+  @override
+  String get screensaverCelestialPickEntity =>
+      'Elige una entidad con ubicación.';
+
+  @override
+  String get screensaverCelestialEntityNoLocation =>
+      'Esta entidad no tiene ubicación.';
+
+  @override
+  String get screensaverCelestialPage => 'Salvapantallas Celeste';
+
+  @override
+  String get screensaverCelestialSummary =>
+      'Ubicación, paisaje, cielo, etiquetas, controles';
+
+  @override
+  String get screensaverCelestialSkyGroup => 'Cielo';
+
+  @override
+  String get screensaverCelestialLabelsGroup => 'Etiquetas';
+
+  @override
+  String get screensaverCelestialControlsGroup => 'Controles';
+
+  @override
+  String get screensaverCelestialCoordinatesInvalid =>
+      'Introduce una latitud y una longitud, como 40.71, -74.01';
+
+  @override
+  String get screensaverCelestialNoLocation =>
+      'Elige una ubicación en Ajustes > Salvapantallas > Celeste.';
+
+  @override
+  String get screensaverCelestialDoubleTapHint => 'Toca dos veces para cerrar';
+
+  @override
+  String get screensaverCelestialCalibrate =>
+      'Mueve el dispositivo describiendo un ocho para calibrar la brújula.';
+
+  @override
+  String get celestialSun => 'Sol';
+
+  @override
+  String get celestialMoon => 'Luna';
+
+  @override
+  String get celestialMercury => 'Mercurio';
+
+  @override
+  String get celestialVenus => 'Venus';
+
+  @override
+  String get celestialMars => 'Marte';
+
+  @override
+  String get celestialJupiter => 'Júpiter';
+
+  @override
+  String get celestialSaturn => 'Saturno';
+
+  @override
+  String get celestialUranus => 'Urano';
+
+  @override
+  String get celestialNeptune => 'Neptuno';
+
+  @override
+  String get celestialAndromedaGalaxy => 'Galaxia de Andrómeda';
+
+  @override
+  String get celestialTriangulumGalaxy => 'Galaxia del Triángulo';
+
+  @override
+  String get celestialLargeMagellanicCloud => 'Gran Nube de Magallanes';
+
+  @override
+  String get celestialSmallMagellanicCloud => 'Pequeña Nube de Magallanes';
+
+  @override
+  String get celestialOrionNebula => 'Nebulosa de Orión';
+
+  @override
+  String get celestialLagoonNebula => 'Nebulosa de la Laguna';
+
+  @override
+  String get celestialCarinaNebula => 'Nebulosa de Carina';
+
+  @override
+  String get celestialPleiades => 'Pléyades';
+
+  @override
+  String get celestialBeehiveCluster => 'Cúmulo del Pesebre';
+
+  @override
+  String get celestialDoubleCluster => 'Doble Cúmulo';
+
+  @override
+  String get celestialOmegaCentauri => 'Omega Centauri';
+
+  @override
+  String get celestialTucanae47 => '47 Tucanae';
+
+  @override
+  String get celestialCompassNorth => 'N';
+
+  @override
+  String get celestialCompassEast => 'E';
+
+  @override
+  String get celestialCompassSouth => 'S';
+
+  @override
+  String get celestialCompassWest => 'O';
+
+  @override
+  String get celestialCompassNorthEast => 'NE';
+
+  @override
+  String get celestialCompassSouthEast => 'SE';
+
+  @override
+  String get celestialCompassSouthWest => 'SO';
+
+  @override
+  String get celestialCompassNorthWest => 'NO';
+
+  @override
+  String get celestialAzimuthShort => 'Az';
+
+  @override
+  String get celestialAltitudeShort => 'Alt';
+
+  @override
+  String get celestialFovShort => 'CdV';
+
+  @override
+  String get celestialNow => 'Ahora';
+
+  @override
+  String get celestialMoonNew => 'Luna nueva';
+
+  @override
+  String get celestialMoonWaxingCrescent => 'Luna creciente';
+
+  @override
+  String get celestialMoonFirstQuarter => 'Cuarto creciente';
+
+  @override
+  String get celestialMoonWaxingGibbous => 'Gibosa creciente';
+
+  @override
+  String get celestialMoonFull => 'Luna llena';
+
+  @override
+  String get celestialMoonWaningGibbous => 'Gibosa menguante';
+
+  @override
+  String get celestialMoonLastQuarter => 'Cuarto menguante';
+
+  @override
+  String get celestialMoonWaningCrescent => 'Luna menguante';
+
+  @override
   String get settingScreensaverClockStyleTitle => 'Estilo';
 
   @override

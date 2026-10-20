@@ -38196,6 +38196,1149 @@
       ]
     }
   },
+  "settingScreensaverCelestialLocationTitle": "Standort",
+  "@settingScreensaverCelestialLocationTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLocationDescription": "Von wo aus der Himmel gesehen wird.",
+  "@settingScreensaverCelestialLocationDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialEntityTitle": "Entität",
+  "@settingScreensaverCelestialEntityTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialEntityDescription": "Eine Person, ein Geräte-Tracker oder eine Zone mit Standort.",
+  "@settingScreensaverCelestialEntityDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCoordinatesTitle": "Koordinaten",
+  "@settingScreensaverCelestialCoordinatesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCoordinatesDescription": "Breiten- und Längengrad, etwa 40.71, -74.01.",
+  "@settingScreensaverCelestialCoordinatesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTerrainTitle": "Landschaft",
+  "@settingScreensaverCelestialTerrainTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTerrainDescription": "Das Gelände entlang des Horizonts.",
+  "@settingScreensaverCelestialTerrainDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialFollowDeviceTitle": "Auf den Himmel richten",
+  "@settingScreensaverCelestialFollowDeviceTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialFollowDeviceDescription": "Halte das Gerät hoch und der Himmel auf dem Bildschirm dreht sich mit, damit du erkennst, was du gerade siehst. Benötigt einen Kompasssensor.",
+  "@settingScreensaverCelestialFollowDeviceDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDaytimeTitle": "Taghimmel",
+  "@settingScreensaverCelestialDaytimeTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDaytimeDescription": "Den Himmel aufhellen und die Sterne ausblenden, solange die Sonne am Himmel steht. Ausschalten, um den ganzen Tag den Nachthimmel zu zeigen.",
+  "@settingScreensaverCelestialDaytimeDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialMilkyWayTitle": "Milchstraße",
+  "@settingScreensaverCelestialMilkyWayTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialMilkyWayDescription": "Das Leuchten unserer Galaxie am Nachthimmel zeigen.",
+  "@settingScreensaverCelestialMilkyWayDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialPlanetsTitle": "Planeten",
+  "@settingScreensaverCelestialPlanetsTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialPlanetsDescription": "Die Planeten dort zeigen, wo sie heute Nacht stehen.",
+  "@settingScreensaverCelestialPlanetsDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDeepSkyTitle": "Galaxien und Nebel",
+  "@settingScreensaverCelestialDeepSkyTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialDeepSkyDescription": "Die Andromedagalaxie, den Orionnebel und andere Objekte zeigen, die ohne Teleskop sichtbar sind.",
+  "@settingScreensaverCelestialDeepSkyDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLightPollutionTitle": "Lichtverschmutzung",
+  "@settingScreensaverCelestialLightPollutionTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLightPollutionDescription": "Das Leuchten von Stadtlichtern nachbilden. Höhere Werte blenden die schwächeren Sterne und die Milchstraße aus.",
+  "@settingScreensaverCelestialLightPollutionDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTwinkleTitle": "Funkelnde Sterne",
+  "@settingScreensaverCelestialTwinkleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialTwinkleDescription": "Die Sterne funkeln lassen, am stärksten nahe am Horizont. Ausschalten, um Energie zu sparen.",
+  "@settingScreensaverCelestialTwinkleDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLargeMoonTitle": "Größerer Mond",
+  "@settingScreensaverCelestialLargeMoonTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLargeMoonDescription": "Den Mond in dreifacher und die Sonne in doppelter Größe zeichnen, damit die Mondphase gut zu erkennen ist.",
+  "@settingScreensaverCelestialLargeMoonDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Sky",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Sky"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Sky"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLinesTitle": "Sternbildlinien",
+  "@settingScreensaverCelestialLinesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLinesDescription": "Die Sterne jedes Sternbilds verbinden.",
+  "@settingScreensaverCelestialLinesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialConstellationNamesTitle": "Namen der Sternbilder",
+  "@settingScreensaverCelestialConstellationNamesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialConstellationNamesDescription": "Die Sternbilder benennen. Beim Hineinzoomen erscheinen mehr.",
+  "@settingScreensaverCelestialConstellationNamesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialNamesTitle": "Namen von Sternen und Planeten",
+  "@settingScreensaverCelestialNamesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialNamesDescription": "Die Sonne, den Mond, die Planeten, die hellsten Sterne und die Galaxien benennen. Beim Hineinzoomen bekommen mehr Sterne einen Namen.",
+  "@settingScreensaverCelestialNamesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCompassTitle": "Himmelsrichtungen",
+  "@settingScreensaverCelestialCompassTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialCompassDescription": "Norden, Osten, Süden und Westen am Horizont markieren.",
+  "@settingScreensaverCelestialCompassDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlCoordinatesTitle": "Position",
+  "@settingScreensaverCelestialControlCoordinatesTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlCoordinatesDescription": "Zeigt den Breiten- und Längengrad, von dem aus der Himmel gesehen wird.",
+  "@settingScreensaverCelestialControlCoordinatesDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAzimuthTitle": "Azimut",
+  "@settingScreensaverCelestialControlAzimuthTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAzimuthDescription": "Zeigt die Himmelsrichtung, in die die Bildschirmmitte zeigt.",
+  "@settingScreensaverCelestialControlAzimuthDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAltitudeTitle": "Höhe",
+  "@settingScreensaverCelestialControlAltitudeTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlAltitudeDescription": "Zeigt, wie hoch über dem Horizont die Bildschirmmitte liegt.",
+  "@settingScreensaverCelestialControlAltitudeDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlFovTitle": "Sichtfeld",
+  "@settingScreensaverCelestialControlFovTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlFovDescription": "Zeigt, wie viel vom Himmel der Bildschirm umfasst, in Grad.",
+  "@settingScreensaverCelestialControlFovDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimeTitle": "Uhrzeit",
+  "@settingScreensaverCelestialControlTimeTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimeDescription": "Zeigt die Uhrzeit des Himmels, nach einem Zeitraffer mit einer Jetzt-Taste.",
+  "@settingScreensaverCelestialControlTimeDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimelapseTitle": "Zeitraffer",
+  "@settingScreensaverCelestialControlTimelapseTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlTimelapseDescription": "Beschleunigt die Zeit, damit sich der Himmel sichtbar dreht. Tippe, um die Geschwindigkeit zu ändern.",
+  "@settingScreensaverCelestialControlTimelapseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlPointAtSkyTitle": "Schalter für Auf den Himmel richten",
+  "@settingScreensaverCelestialControlPointAtSkyTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlPointAtSkyDescription": "Schaltet Auf den Himmel richten ein und aus. Erscheint nur auf Geräten mit Kompass.",
+  "@settingScreensaverCelestialControlPointAtSkyDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlMoonPhaseTitle": "Mondphase",
+  "@settingScreensaverCelestialControlMoonPhaseTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlMoonPhaseDescription": "Zeigt die Phase des Mondes und wie viel davon beleuchtet ist.",
+  "@settingScreensaverCelestialControlMoonPhaseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "screensaverModeCelestial": "Sternenhimmel",
+  "@screensaverModeCelestial": {
+    "context": "Settings:Screensaver",
+    "description": "Screensaver mode choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainHills": "Hügel",
+  "@screensaverCelestialTerrainHills": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainMountains": "Berge",
+  "@screensaverCelestialTerrainMountains": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainPlains": "Ebene",
+  "@screensaverCelestialTerrainPlains": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialTerrainNone": "Keine",
+  "@screensaverCelestialTerrainNone": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Landscape choice: no ground at all, so the whole screen shows the sky.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationGps": "GPS",
+  "@screensaverCelestialLocationGps": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationHaHome": "Zuhause in Home Assistant",
+  "@screensaverCelestialLocationHaHome": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice: the home zone in Home Assistant.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationHaEntity": "Home Assistant-Entität",
+  "@screensaverCelestialLocationHaEntity": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice: a person, device tracker or zone.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationManual": "Manuell",
+  "@screensaverCelestialLocationManual": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location source choice: coordinates typed in.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialCurrentLocation": "Aktueller Standort",
+  "@screensaverCelestialCurrentLocation": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Status row title under the location source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoGpsReceiver": "Dieses Gerät hat keinen GPS-Empfänger.",
+  "@screensaverCelestialNoGpsReceiver": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status when the GPS source is chosen.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationPermission": "Standortberechtigung nicht erteilt.",
+  "@screensaverCelestialLocationPermission": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status when the GPS source is chosen.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoGpsFix": "Noch keine GPS-Position.",
+  "@screensaverCelestialNoGpsFix": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status when the GPS source is chosen.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoHomeZone": "Home Assistant hat keine Zuhause-Zone.",
+  "@screensaverCelestialNoHomeZone": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant home source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialHaNotConnected": "Home Assistant ist nicht verbunden.",
+  "@screensaverCelestialHaNotConnected": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant sources.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialPickEntity": "Wähle eine Entität mit Standort.",
+  "@screensaverCelestialPickEntity": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant entity source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialEntityNoLocation": "Diese Entität hat keinen Standort.",
+  "@screensaverCelestialEntityNoLocation": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location status for the Home Assistant entity source.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialPage": "Bildschirmschoner Sternenhimmel",
+  "@screensaverCelestialPage": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Settings page and section title.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialSummary": "Standort, Landschaft, Himmel, Beschriftungen, Steuerelemente",
+  "@screensaverCelestialSummary": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Summary under the page entry.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialSkyGroup": "Himmel",
+  "@screensaverCelestialSkyGroup": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Group heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLabelsGroup": "Beschriftungen",
+  "@screensaverCelestialLabelsGroup": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Group heading.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialControlsGroup": "Steuerelemente",
+  "@screensaverCelestialControlsGroup": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Group heading: switches for the chips a touch brings up over the sky.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialCoordinatesInvalid": "Gib Breiten- und Längengrad ein, etwa 40.71, -74.01",
+  "@screensaverCelestialCoordinatesInvalid": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Error under the coordinates field.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialNoLocation": "Wähle einen Standort unter Einstellungen > Bildschirmschoner > Sternenhimmel.",
+  "@screensaverCelestialNoLocation": {
+    "context": "Screensaver:Celestial",
+    "description": "Prompt shown on a black screen when the location source has no position."
+  },
+  "screensaverCelestialDoubleTapHint": "Zum Schließen doppelt tippen",
+  "@screensaverCelestialDoubleTapHint": {
+    "context": "Screensaver:Celestial",
+    "description": "Hint shown after a single tap on the sky."
+  },
+  "screensaverCelestialCalibrate": "Bewege das Gerät in Form einer Acht, um den Kompass zu kalibrieren.",
+  "@screensaverCelestialCalibrate": {
+    "context": "Screensaver:Celestial",
+    "description": "Note over the sky while the compass is not calibrated."
+  },
+  "celestialSun": "Sonne",
+  "@celestialSun": {
+    "context": "Screensaver:Celestial",
+    "description": "Label on the sky."
+  },
+  "celestialMoon": "Mond",
+  "@celestialMoon": {
+    "context": "Screensaver:Celestial",
+    "description": "Label on the sky."
+  },
+  "celestialMercury": "Merkur",
+  "@celestialMercury": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialVenus": "Venus",
+  "@celestialVenus": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialMars": "Mars",
+  "@celestialMars": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialJupiter": "Jupiter",
+  "@celestialJupiter": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialSaturn": "Saturn",
+  "@celestialSaturn": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialUranus": "Uranus",
+  "@celestialUranus": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialNeptune": "Neptun",
+  "@celestialNeptune": {
+    "context": "Screensaver:Celestial",
+    "description": "Planet label on the sky."
+  },
+  "celestialAndromedaGalaxy": "Andromedagalaxie",
+  "@celestialAndromedaGalaxy": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialTriangulumGalaxy": "Dreiecksgalaxie",
+  "@celestialTriangulumGalaxy": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialLargeMagellanicCloud": "Große Magellansche Wolke",
+  "@celestialLargeMagellanicCloud": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialSmallMagellanicCloud": "Kleine Magellansche Wolke",
+  "@celestialSmallMagellanicCloud": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialOrionNebula": "Orionnebel",
+  "@celestialOrionNebula": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialLagoonNebula": "Lagunennebel",
+  "@celestialLagoonNebula": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialCarinaNebula": "Carinanebel",
+  "@celestialCarinaNebula": {
+    "context": "Screensaver:Celestial",
+    "description": "Deep-sky object label on the sky."
+  },
+  "celestialPleiades": "Plejaden",
+  "@celestialPleiades": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialBeehiveCluster": "Praesepe",
+  "@celestialBeehiveCluster": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialDoubleCluster": "h und χ Persei",
+  "@celestialDoubleCluster": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialOmegaCentauri": "Omega Centauri",
+  "@celestialOmegaCentauri": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialTucanae47": "47 Tucanae",
+  "@celestialTucanae47": {
+    "context": "Screensaver:Celestial",
+    "description": "Star cluster label on the sky."
+  },
+  "celestialCompassNorth": "N",
+  "@celestialCompassNorth": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: north, one or two letters."
+  },
+  "celestialCompassEast": "O",
+  "@celestialCompassEast": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: east, one or two letters."
+  },
+  "celestialCompassSouth": "S",
+  "@celestialCompassSouth": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: south, one or two letters."
+  },
+  "celestialCompassWest": "W",
+  "@celestialCompassWest": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass point on the horizon: west, one or two letters."
+  },
+  "celestialCompassNorthEast": "NO",
+  "@celestialCompassNorthEast": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: northeast, short like N or E."
+  },
+  "celestialCompassSouthEast": "SO",
+  "@celestialCompassSouthEast": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: southeast, short like N or E."
+  },
+  "celestialCompassSouthWest": "SW",
+  "@celestialCompassSouthWest": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: southwest, short like N or E."
+  },
+  "celestialCompassNorthWest": "NW",
+  "@celestialCompassNorthWest": {
+    "context": "Screensaver:Celestial",
+    "description": "Compass direction in the Azimuth chip: northwest, short like N or E."
+  },
+  "celestialAzimuthShort": "Az",
+  "@celestialAzimuthShort": {
+    "context": "Screensaver:Celestial",
+    "description": "Short label before the azimuth in the bar over the sky, like astronomy programs use. Keep it to a few letters."
+  },
+  "celestialAltitudeShort": "Höhe",
+  "@celestialAltitudeShort": {
+    "context": "Screensaver:Celestial",
+    "description": "Short label before the altitude in the bar over the sky, like astronomy programs use. Keep it to a few letters."
+  },
+  "celestialFovShort": "FOV",
+  "@celestialFovShort": {
+    "context": "Screensaver:Celestial",
+    "description": "Short label before the field of view in the bar over the sky, like astronomy programs use. Keep it to a few letters."
+  },
+  "celestialNow": "Jetzt",
+  "@celestialNow": {
+    "context": "Screensaver:Celestial",
+    "description": "Button in the bar over the sky that brings the sky back to the current time after a timelapse."
+  },
+  "celestialMoonNew": "Neumond",
+  "@celestialMoonNew": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaxingCrescent": "Zunehmende Sichel",
+  "@celestialMoonWaxingCrescent": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonFirstQuarter": "Erstes Viertel",
+  "@celestialMoonFirstQuarter": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaxingGibbous": "Zunehmender Mond",
+  "@celestialMoonWaxingGibbous": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonFull": "Vollmond",
+  "@celestialMoonFull": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaningGibbous": "Abnehmender Mond",
+  "@celestialMoonWaningGibbous": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonLastQuarter": "Letztes Viertel",
+  "@celestialMoonLastQuarter": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
+  "celestialMoonWaningCrescent": "Abnehmende Sichel",
+  "@celestialMoonWaningCrescent": {
+    "context": "Screensaver:Celestial",
+    "description": "Moon phase in the Moon phase chip, followed by the lit percentage."
+  },
   "settingScreensaverClockStyleTitle": "Stil",
   "@settingScreensaverClockStyleTitle": {
     "context": "Settings:Screensaver:Clock screensaver",

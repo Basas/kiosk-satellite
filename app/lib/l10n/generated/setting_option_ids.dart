@@ -52,7 +52,8 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "website": "screensaverModeWebsite",
     "camera": "screensaverModeCamera",
     "weather_mood": "screensaverWeatherMood",
-    "dashboard": "screensaverModeDashboard"
+    "dashboard": "screensaverModeDashboard",
+    "celestial": "screensaverModeCelestial"
   },
   "screensaver.clock_style": {
     "digital": "screensaverStyleDigital",
@@ -454,6 +455,18 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "2": "calendarIdle2Minutes",
     "5": "alarmsOption5Minutes",
     "10": "alarmsOption10Minutes"
+  },
+  "screensaver.celestial_terrain": {
+    "hills": "screensaverCelestialTerrainHills",
+    "mountains": "screensaverCelestialTerrainMountains",
+    "plains": "screensaverCelestialTerrainPlains",
+    "none": "screensaverCelestialTerrainNone"
+  },
+  "screensaver.celestial_location": {
+    "gps": "screensaverCelestialLocationGps",
+    "ha_home": "screensaverCelestialLocationHaHome",
+    "ha_entity": "screensaverCelestialLocationHaEntity",
+    "manual": "screensaverCelestialLocationManual"
   }
 };
 const settingPlaceholderMessageIds = <String, String>{

@@ -100,6 +100,9 @@ flutter:
     - shaders/weather_mood_clouds_height.frag
     - shaders/weather_mood_blend.frag
     - shaders/weather_mood_glass.frag
+    - shaders/celestial_sky.frag
+    - shaders/celestial_moon.frag
+    - shaders/celestial_terrain.frag
     - shaders/ink_splat_velocity.frag
     - shaders/ink_curl.frag
     - shaders/ink_vorticity.frag
@@ -117,6 +120,13 @@ flutter:
     - assets/screensaver/screensaver.js
     # The Weather Mood moon, from NASA imagery (see moon-NASA.txt).
     - assets/screensaver/moon.png
+    # The Celestial sky: stars, constellations, the Milky Way and the Moon
+    # (see assets/celestial/SOURCES.md).
+    - assets/celestial/stars.bin
+    - assets/celestial/sky.json
+    - assets/celestial/milky_way.jpg
+    - assets/celestial/moon.jpg
+    - assets/celestial/SOURCES.md
     - assets/camera-view/index.html
     - assets/camera-view/camera-view.js
     - assets/camera-view/messages.js
