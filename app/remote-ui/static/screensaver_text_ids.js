@@ -549,5 +549,6 @@ export const screensaverTextMessageIds = {
   "Show AM/PM": "settingScreensaverClockAmPmTitle",
   "Add AM or PM after the time.": "settingScreensaverClockAmPmDescription",
   "No image URL set. Add one in Settings.": "screensaverUrlNotSet",
-  "Could not load the image.": "screensaverUrlLoadFailed"
+  "Could not load the image.": "screensaverUrlLoadFailed",
+  "Up next": "calendarUpNext"
 };

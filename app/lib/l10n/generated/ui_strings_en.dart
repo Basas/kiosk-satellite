@@ -325,6 +325,171 @@ class UiStringsEn extends UiStrings {
   String get launcherEmpty => 'No launchable apps found.';
 
   @override
+  String get calendarTitle => 'Calendar';
+
+  @override
+  String get calendarViewDay => 'Day';
+
+  @override
+  String get calendarViewWeek => 'Week';
+
+  @override
+  String get calendarViewMonth => 'Month';
+
+  @override
+  String get calendarViewSchedule => 'Schedule';
+
+  @override
+  String get calendarToday => 'Today';
+
+  @override
+  String get calendarTomorrow => 'Tomorrow';
+
+  @override
+  String get calendarPrevious => 'Previous';
+
+  @override
+  String get calendarNext => 'Next';
+
+  @override
+  String get calendarAllDay => 'All day';
+
+  @override
+  String calendarMore(String count) {
+    return '+$count more';
+  }
+
+  @override
+  String get calendarUpNext => 'Up next';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return 'in $duration';
+  }
+
+  @override
+  String get calendarHappeningNow => 'Now';
+
+  @override
+  String get calendarLaterToday => 'Later today';
+
+  @override
+  String get calendarNothingElseToday => 'Nothing else today';
+
+  @override
+  String get calendarNothingPlanned => 'Nothing planned';
+
+  @override
+  String get calendarNothingThisWeek => 'Nothing planned this week';
+
+  @override
+  String get calendarEmptyTitle => 'No calendars yet';
+
+  @override
+  String get calendarEmptyHint =>
+      'Add the Home Assistant calendars to show in Settings > Calendar.';
+
+  @override
+  String calendarOffline(String time) {
+    return 'Home Assistant is not reachable. Showing the events from $time.';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return '$start to $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first and $second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => 'Every day';
+
+  @override
+  String get calendarRepeatsWeekly => 'Every week';
+
+  @override
+  String get calendarRepeatsMonthly => 'Every month';
+
+  @override
+  String get calendarRepeatsYearly => 'Every year';
+
+  @override
+  String get calendarRepeats => 'Repeats';
+
+  @override
+  String get calendarDone => 'Done';
+
+  @override
+  String get calendarCalendarsSection => 'Calendars';
+
+  @override
+  String get calendarAdd => 'Add a calendar';
+
+  @override
+  String get calendarAlreadyAdded => 'That calendar is already on the list.';
+
+  @override
+  String get calendarOpen => 'Open calendar';
+
+  @override
+  String get calendarOpenHint => 'Show the calendar on this kiosk.';
+
+  @override
+  String get calendarEditName => 'Name';
+
+  @override
+  String get calendarEditColor => 'Color';
+
+  @override
+  String get calendarEditPerson => 'Person';
+
+  @override
+  String get calendarEditPersonHint =>
+      'Shows their picture on the calendar chips.';
+
+  @override
+  String get calendarEditPersonNone => 'None';
+
+  @override
+  String get calendarPickCalendar => 'Choose a calendar';
+
+  @override
+  String get calendarPickPerson => 'Choose a person';
+
+  @override
+  String get calendarColorTeal => 'Teal';
+
+  @override
+  String get calendarColorRust => 'Rust';
+
+  @override
+  String get calendarColorBlue => 'Blue';
+
+  @override
+  String get calendarColorPlum => 'Plum';
+
+  @override
+  String get calendarColorOchre => 'Ochre';
+
+  @override
+  String get calendarColorSage => 'Sage';
+
+  @override
+  String get calendarColorRose => 'Rose';
+
+  @override
+  String get calendarColorSlate => 'Slate';
+
+  @override
+  String get calendarColorCustom => 'Custom';
+
+  @override
+  String get calendarWidgetEvents => 'Events shown';
+
+  @override
   String get cameraViewerTitle => 'Camera view';
 
   @override
@@ -1706,6 +1871,9 @@ class UiStringsEn extends UiStrings {
 
   @override
   String get gestureAndroidSettings => 'Open Android Settings';
+
+  @override
+  String get gestureOpenCalendar => 'Open the calendar';
 
   @override
   String get gestureService => 'Call a service';
@@ -4299,6 +4467,80 @@ class UiStringsEn extends UiStrings {
   @override
   String get launcherPermissionsSearch =>
       'The grants Return automatically leans on.';
+
+  @override
+  String get settingCalendarDefaultViewTitle => 'Default view';
+
+  @override
+  String get settingCalendarDefaultViewDescription =>
+      'The view Calendar opens on.';
+
+  @override
+  String get settingCalendarWeekStartTitle => 'Week starts on';
+
+  @override
+  String get settingCalendarWeekStartDescription =>
+      'Follows the device language unless set.';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => 'Weather';
+
+  @override
+  String get settingCalendarWeatherEntityDescription =>
+      'Adds the forecast to each day.';
+
+  @override
+  String get settingCalendarMenuTitle => 'Show in the kiosk menu';
+
+  @override
+  String get settingCalendarMenuDescription =>
+      'Add a Calendar entry to the kiosk menu.';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle => 'Close when idle';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription =>
+      'Returns to the dashboard after no touch for this long.';
+
+  @override
+  String get settingKioskAllowCalendarTitle => 'Calendar';
+
+  @override
+  String get settingKioskAllowCalendarDescription =>
+      'Open the family calendar from the kiosk menu.';
+
+  @override
+  String get calendarWeekStartLocale => 'Language default';
+
+  @override
+  String get calendarWeekStartSunday => 'Sunday';
+
+  @override
+  String get calendarWeekStartMonday => 'Monday';
+
+  @override
+  String get calendarWeekStartSaturday => 'Saturday';
+
+  @override
+  String get calendarIdleNever => 'Never';
+
+  @override
+  String get calendarIdle1Minute => '1 minute';
+
+  @override
+  String get calendarIdle2Minutes => '2 minutes';
+
+  @override
+  String get settingsMenuCalendar => 'Calendar';
+
+  @override
+  String get settingsMenuCalendarSummary =>
+      'Family calendars from Home Assistant';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips =>
+      'the calendars hidden with their chips';
 
   @override
   String get settingCameraEnabledTitle => 'Enable camera';
@@ -9360,6 +9602,9 @@ class UiStringsEn extends UiStrings {
 
   @override
   String get settingsGroupMediaCameras => 'Media & Cameras';
+
+  @override
+  String get settingsGroupHousehold => 'Household';
 
   @override
   String get settingsGroupKiosk => 'Kiosk';

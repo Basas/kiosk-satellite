@@ -330,6 +330,171 @@ class UiStringsDe extends UiStrings {
   String get launcherEmpty => 'Es wurden keine startbaren Apps gefunden.';
 
   @override
+  String get calendarTitle => 'Kalender';
+
+  @override
+  String get calendarViewDay => 'Tag';
+
+  @override
+  String get calendarViewWeek => 'Woche';
+
+  @override
+  String get calendarViewMonth => 'Monat';
+
+  @override
+  String get calendarViewSchedule => 'Terminliste';
+
+  @override
+  String get calendarToday => 'Heute';
+
+  @override
+  String get calendarTomorrow => 'Morgen';
+
+  @override
+  String get calendarPrevious => 'Zurück';
+
+  @override
+  String get calendarNext => 'Weiter';
+
+  @override
+  String get calendarAllDay => 'Ganztägig';
+
+  @override
+  String calendarMore(String count) {
+    return '+$count weitere';
+  }
+
+  @override
+  String get calendarUpNext => 'Als Nächstes';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return 'in $duration';
+  }
+
+  @override
+  String get calendarHappeningNow => 'Jetzt';
+
+  @override
+  String get calendarLaterToday => 'Später heute';
+
+  @override
+  String get calendarNothingElseToday => 'Heute nichts mehr';
+
+  @override
+  String get calendarNothingPlanned => 'Nichts geplant';
+
+  @override
+  String get calendarNothingThisWeek => 'Diese Woche nichts geplant';
+
+  @override
+  String get calendarEmptyTitle => 'Noch keine Kalender';
+
+  @override
+  String get calendarEmptyHint =>
+      'Füge unter Einstellungen > Kalender die Home-Assistant-Kalender hinzu, die angezeigt werden sollen.';
+
+  @override
+  String calendarOffline(String time) {
+    return 'Home Assistant ist nicht erreichbar. Angezeigt werden die Termine von $time.';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return '$start bis $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first und $second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => 'Täglich';
+
+  @override
+  String get calendarRepeatsWeekly => 'Wöchentlich';
+
+  @override
+  String get calendarRepeatsMonthly => 'Monatlich';
+
+  @override
+  String get calendarRepeatsYearly => 'Jährlich';
+
+  @override
+  String get calendarRepeats => 'Wiederholt sich';
+
+  @override
+  String get calendarDone => 'Fertig';
+
+  @override
+  String get calendarCalendarsSection => 'Kalender';
+
+  @override
+  String get calendarAdd => 'Kalender hinzufügen';
+
+  @override
+  String get calendarAlreadyAdded => 'Dieser Kalender ist schon in der Liste.';
+
+  @override
+  String get calendarOpen => 'Kalender öffnen';
+
+  @override
+  String get calendarOpenHint => 'Zeigt den Kalender auf diesem Kiosk.';
+
+  @override
+  String get calendarEditName => 'Name';
+
+  @override
+  String get calendarEditColor => 'Farbe';
+
+  @override
+  String get calendarEditPerson => 'Person';
+
+  @override
+  String get calendarEditPersonHint =>
+      'Zeigt das Bild der Person auf den Kalender-Chips.';
+
+  @override
+  String get calendarEditPersonNone => 'Keine';
+
+  @override
+  String get calendarPickCalendar => 'Kalender auswählen';
+
+  @override
+  String get calendarPickPerson => 'Person auswählen';
+
+  @override
+  String get calendarColorTeal => 'Petrol';
+
+  @override
+  String get calendarColorRust => 'Rost';
+
+  @override
+  String get calendarColorBlue => 'Blau';
+
+  @override
+  String get calendarColorPlum => 'Pflaume';
+
+  @override
+  String get calendarColorOchre => 'Ocker';
+
+  @override
+  String get calendarColorSage => 'Salbei';
+
+  @override
+  String get calendarColorRose => 'Rosé';
+
+  @override
+  String get calendarColorSlate => 'Schiefer';
+
+  @override
+  String get calendarColorCustom => 'Eigene';
+
+  @override
+  String get calendarWidgetEvents => 'Angezeigte Termine';
+
+  @override
   String get cameraViewerTitle => 'Kameraansicht';
 
   @override
@@ -1728,6 +1893,9 @@ class UiStringsDe extends UiStrings {
 
   @override
   String get gestureAndroidSettings => 'Android-Einstellungen öffnen';
+
+  @override
+  String get gestureOpenCalendar => 'Kalender öffnen';
 
   @override
   String get gestureService => 'Einen Dienst aufrufen';
@@ -4396,6 +4564,81 @@ class UiStringsDe extends UiStrings {
   @override
   String get launcherPermissionsSearch =>
       'Die Berechtigungen, die für die Funktion „Automatisch zurückkehren“ benötigt werden.';
+
+  @override
+  String get settingCalendarDefaultViewTitle => 'Standardansicht';
+
+  @override
+  String get settingCalendarDefaultViewDescription =>
+      'Die Ansicht, mit der der Kalender öffnet.';
+
+  @override
+  String get settingCalendarWeekStartTitle => 'Woche beginnt am';
+
+  @override
+  String get settingCalendarWeekStartDescription =>
+      'Folgt der Gerätesprache, sofern nicht festgelegt.';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => 'Wetter';
+
+  @override
+  String get settingCalendarWeatherEntityDescription =>
+      'Zeigt die Vorhersage für jeden Tag.';
+
+  @override
+  String get settingCalendarMenuTitle => 'Im Kiosk-Menü anzeigen';
+
+  @override
+  String get settingCalendarMenuDescription =>
+      'Fügt dem Kiosk-Menü den Eintrag „Kalender“ hinzu.';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle =>
+      'Bei Inaktivität schließen';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription =>
+      'Kehrt nach dieser Zeit ohne Berührung zum Dashboard zurück.';
+
+  @override
+  String get settingKioskAllowCalendarTitle => 'Kalender';
+
+  @override
+  String get settingKioskAllowCalendarDescription =>
+      'Den Familienkalender über das Kiosk-Menü öffnen.';
+
+  @override
+  String get calendarWeekStartLocale => 'Wie die Sprache';
+
+  @override
+  String get calendarWeekStartSunday => 'Sonntag';
+
+  @override
+  String get calendarWeekStartMonday => 'Montag';
+
+  @override
+  String get calendarWeekStartSaturday => 'Samstag';
+
+  @override
+  String get calendarIdleNever => 'Nie';
+
+  @override
+  String get calendarIdle1Minute => '1 Minute';
+
+  @override
+  String get calendarIdle2Minutes => '2 Minuten';
+
+  @override
+  String get settingsMenuCalendar => 'Kalender';
+
+  @override
+  String get settingsMenuCalendarSummary =>
+      'Familienkalender aus Home Assistant';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips =>
+      'die mit ihren Chips ausgeblendeten Kalender';
 
   @override
   String get settingCameraEnabledTitle => 'Kamera aktivieren';
@@ -9590,6 +9833,9 @@ class UiStringsDe extends UiStrings {
 
   @override
   String get settingsGroupMediaCameras => 'Medien und Kameras';
+
+  @override
+  String get settingsGroupHousehold => 'Haushalt';
 
   @override
   String get settingsGroupKiosk => 'Kiosk';

@@ -44,6 +44,7 @@ import {
 import { applyManagedBanners, renderFleetPage } from './fleetsync.js';
 import { decorateAnnouncementsPage, renderIntercomPage } from './intercom.js';
 import { renderAlarmsPage } from './alarms.js';
+import { renderCalendarPage } from './calendar.js';
 import { renderCustomPagesPage } from './custom_pages.js';
 import { renderUrlFilterPage } from './url_filter.js';
 import { renderPluginScreensaverEntry } from './plugins.js';
@@ -229,6 +230,8 @@ const runtimeStateSettings = new Set([
   // The alarms and their ring state: the Alarms page redraws from the
   // alarms event, not from a settings rebuild.
   'alarms.list', 'alarms.runtime',
+  // The Calendar page redraws its Calendars card itself.
+  'calendar.calendars', 'calendar.hidden',
 ]);
 // The Announcements and Alarms text to speech rows and Voice Satellite's
 // Play sounds on, each a picker that repaints itself (intercom.js,
@@ -273,7 +276,10 @@ async function flushSettingsUpdates() {
     const rows = [...document.querySelectorAll(`[data-key="${setting.key}"]`)];
     const previous = JSON.parse(renderedSettings.get(setting.key) || '{}');
     renderedSettings.set(setting.key, JSON.stringify(setting));
-    if (runtimeStateSettings.has(setting.key)) continue;
+    if (runtimeStateSettings.has(setting.key)) {
+      if (setting.key === 'calendar.calendars') renderCalendarPage();
+      continue;
+    }
     const shapeChanged = JSON.stringify({ ...previous, value: null })
       !== JSON.stringify({ ...setting, value: null });
     const hasDependants = state.settings.some(s => s.dependsOn === setting.key || s.alsoDependsOn === setting.key);
@@ -1635,6 +1641,9 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
   // The Alarms tab: the list and the Set an alarm button over the
   // Defaults rows, from the alarmsStatus command, and the tone picker.
   await renderAlarmsPage();
+  // The Calendar tab: Open on the kiosk and the Calendars card over the
+  // Display and Kiosk rows.
+  renderCalendarPage();
 
   const tlsPanel = document.querySelector('#tab-device .subpage[data-subpage="TLS"]');
   if (tlsPanel) renderTlsSettings(tlsPanel);

@@ -18,6 +18,9 @@ import 'package:video_player/video_player.dart';
 import 'alarms_overlay.dart' show alarmTimeText;
 import '../managers/alarms/alarm_manager.dart';
 import 'alarm_ring_overlay.dart';
+import 'calendar_overlay.dart' show CalendarBands, calendarTime;
+import '../managers/calendar/calendar_manager.dart';
+import '../managers/calendar/calendar_model.dart' as cal_model;
 import '../app_container.dart';
 import '../l10n/messages.dart';
 import '../core/events.dart';
@@ -496,6 +499,11 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                                           nightColor: _widgetNightColor(view),
                                         ),
                                         'alarm' => AlarmWidgetOverlay(
+                                          container: container,
+                                          spec: spec,
+                                          nightColor: _widgetNightColor(view),
+                                        ),
+                                        'calendar' => CalendarWidgetOverlay(
                                           container: container,
                                           spec: spec,
                                           nightColor: _widgetNightColor(view),
@@ -1981,6 +1989,218 @@ class _AlarmWidgetOverlayState extends State<AlarmWidgetOverlay> {
                       glyph,
                       if (!right) ...[gap, label],
                     ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+/// The family calendar's next events today in a corner: a dot in each
+/// event's calendar color (split for a shared one), the start time and the
+/// title. Empty once nothing more is on today, so the corner stays clear.
+/// A tap opens the calendar, the alarm widget's twin.
+class CalendarWidgetOverlay extends StatefulWidget {
+  const CalendarWidgetOverlay({
+    super.key,
+    required this.container,
+    required this.spec,
+    this.nightColor,
+  });
+
+  final AppContainer container;
+  final ScreensaverWidget spec;
+  final Color? nightColor;
+
+  @override
+  State<CalendarWidgetOverlay> createState() => _CalendarWidgetOverlayState();
+}
+
+class _CalendarWidgetOverlayState extends State<CalendarWidgetOverlay> {
+  Timer? _shift;
+  Offset _offset = Offset.zero;
+
+  CalendarManager get _cal => widget.container.calendar;
+
+  @override
+  void initState() {
+    super.initState();
+    _watchToday();
+    _shift = Timer.periodic(const Duration(minutes: 1), (_) {
+      // The day and what is still to come move with the clock.
+      _watchToday();
+      if (!widget.container.settings.get(defs.screensaverPixelShift)) {
+        setState(() {});
+        return;
+      }
+      final r = Random();
+      const max = 10.0;
+      setState(() {
+        _offset = Offset(
+          (r.nextDouble() * 2 - 1) * max,
+          (r.nextDouble() * 2 - 1) * max,
+        );
+      });
+    });
+  }
+
+  void _watchToday() {
+    final today = cal_model.dateOnly(DateTime.now());
+    _cal.watch(this, today, cal_model.addDays(today, 1));
+  }
+
+  @override
+  void dispose() {
+    _shift?.cancel();
+    _cal.unwatch(this);
+    super.dispose();
+  }
+
+  Color _dotColor(String entity) {
+    final rgb = cal_model.parseRgb(_cal.source(entity)?.color ?? '');
+    final base = rgb == null
+        ? const Color(0xFF6C9B9F)
+        : Color.fromARGB(255, rgb.$1, rgb.$2, rgb.$3);
+    return Color.lerp(base, Colors.white, .3)!;
+  }
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: Listenable.merge([_cal.snapshot, _cal.hidden, _cal.calendars]),
+    builder: (context, _) {
+      final now = DateTime.now();
+      final count = ((widget.spec.config['count'] as num?)?.toInt() ?? 3).clamp(
+        1,
+        5,
+      );
+      final coming = cal_model
+          .upNext(
+            cal_model.visibleEvents(
+              _cal.snapshot.value.events,
+              _cal.hidden.value,
+            ),
+            now,
+          )
+          .take(count)
+          .toList();
+      if (coming.isEmpty) return const SizedBox.shrink();
+      final corner = _cornerAlignment(widget.spec.position);
+      final color =
+          widget.nightColor ?? _widgetRgb(widget.spec.config['color']);
+      final size = MediaQuery.of(context).size;
+      final scale = _widgetScale(widget.container, widget.spec);
+      final textSize = max(min(size.width, size.height) * 0.032, 22.0) * scale;
+      final font = _widgetFont(widget.container, widget.spec);
+      final shadows = _overlayTextShadows(widget.container);
+      TextStyle style(double size, {double alpha = 1, FontWeight? weight}) =>
+          TextStyle(
+            fontFamily: font.family,
+            color: color.withValues(alpha: alpha),
+            fontSize: size,
+            fontWeight: weight ?? font.weight ?? FontWeight.w400,
+            fontVariations: clockFontVariations(
+              font.opticalSize,
+              weight ?? font.weight ?? FontWeight.w400,
+            ),
+            height: 1.2,
+            shadows: shadows,
+          );
+      final right = corner.x > 0;
+      final heading = Text(
+        l10n(context).calendarUpNext.toUpperCase(),
+        style: style(
+          textSize * .62,
+          alpha: .62,
+          weight: FontWeight.w600,
+        ).copyWith(letterSpacing: 1.2),
+      );
+      String when(cal_model.CalendarEvent e) => e.start.isAfter(now)
+          ? calendarTime(context, e.start)
+          : l10n(context).calendarHappeningNow;
+      // The times share the widest one's width, so the titles line up.
+      final timeStyle = style(textSize, alpha: .72);
+      final timeWidth = coming
+          .map(
+            (e) => (TextPainter(
+              text: TextSpan(
+                text: when(e),
+                // What the Text below draws with: the theme's
+                // family under the widget's own style.
+                style: DefaultTextStyle.of(context).style.merge(timeStyle),
+              ),
+              textDirection: Directionality.of(context),
+              textScaler: MediaQuery.textScalerOf(context),
+            )..layout()).width,
+          )
+          .reduce(max);
+      final rows = [
+        for (final e in coming)
+          Padding(
+            padding: EdgeInsets.only(top: textSize * .4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: textSize * .42,
+                  height: textSize * .42,
+                  child: CustomPaint(
+                    painter: CalendarBands([
+                      for (final id in e.calendars) _dotColor(id),
+                    ], circle: true),
+                  ),
+                ),
+                SizedBox(width: textSize * .55),
+                SizedBox(
+                  width: timeWidth + 1,
+                  child: Text(
+                    when(e),
+                    style: timeStyle,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
+                ),
+                SizedBox(width: textSize * .55),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: size.width * .32),
+                  child: Text(
+                    e.summary,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: style(textSize, weight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ];
+      return Stack(
+        fit: StackFit.expand,
+        children: [
+          IgnorePointer(
+            child: _cornerVignette(corner, widget.container, radius: 0.6),
+          ),
+          Align(
+            alignment: corner,
+            child: Padding(
+              padding: const EdgeInsets.all(28),
+              child: Transform.translate(
+                offset: _offset,
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => widget.container.commands.execute(
+                    'openCalendar',
+                    const {'view': 'schedule'},
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: right
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: [heading, ...rows],
                   ),
                 ),
               ),

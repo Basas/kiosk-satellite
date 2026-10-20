@@ -1145,7 +1145,25 @@
   .alarm-banner-text b { font-size: 15px; font-weight: 600; }
   .alarm-banner-actions { display: flex; gap: 8px; margin-left: auto; }
   .alarm-banner .btn-ghost { color: inherit; border-color: currentColor; }
+  /* Calendar (calendar.js): each calendar's initial on its color and the
+     palette swatches in the editor. */
+  .calendar-avatar { width: 36px; height: 36px; flex: none; border-radius: 50%;
+    display: grid; place-items: center; color: #ffffff; font-size: 16px;
+    font-weight: 700; margin-right: 14px; }
+  .calendar-row .camera-row-main { display: flex; align-items: center; }
+  .calendar-swatches { display: flex; flex-wrap: wrap; gap: 2px; }
+  .calendar-swatch { width: 38px; height: 38px; padding: 3px; border: 2px solid transparent;
+    border-radius: 50%; background: transparent; display: grid; place-items: center; }
+  .calendar-swatch::before { content: ''; width: 100%; height: 100%; border-radius: 50%;
+    background: var(--swatch); box-shadow: inset 0 0 0 1px var(--divider); }
+  .calendar-swatch.on { border-color: var(--swatch, var(--outline)); }
+  .calendar-swatch.custom { color: var(--muted); }
+  .calendar-swatch.custom::before { display: none; }
+  .calendar-swatch.custom svg { width: 22px; height: 22px; }
+  .calendar-swatch.custom.on { color: #ffffff; border-color: var(--outline); }
   @media (max-width: 640px) {
+    .calendar-row .calendar-action { display: none; }
+    .calendar-editor .modal-foot .btn-text { min-width: 0; padding: 0 12px; }
     .alarm-row .alarm-action { display: none; }
     /* Delete, Cancel and Save share a phone's footer: the two text
        buttons give up the 96 floor to fit. */

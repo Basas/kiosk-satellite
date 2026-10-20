@@ -2256,4 +2256,28 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreensaverClockAmPmTitle",
     "description": "settingScreensaverClockAmPmDescription",
   },
+  "calendar.default_view": {
+    "title": "settingCalendarDefaultViewTitle",
+    "description": "settingCalendarDefaultViewDescription",
+  },
+  "calendar.week_start": {
+    "title": "settingCalendarWeekStartTitle",
+    "description": "settingCalendarWeekStartDescription",
+  },
+  "calendar.weather_entity": {
+    "title": "settingCalendarWeatherEntityTitle",
+    "description": "settingCalendarWeatherEntityDescription",
+  },
+  "calendar.menu": {
+    "title": "settingCalendarMenuTitle",
+    "description": "settingCalendarMenuDescription",
+  },
+  "calendar.idle_close_minutes": {
+    "title": "settingCalendarIdleCloseMinutesTitle",
+    "description": "settingCalendarIdleCloseMinutesDescription",
+  },
+  "kiosk.allow_calendar": {
+    "title": "settingKioskAllowCalendarTitle",
+    "description": "settingKioskAllowCalendarDescription",
+  },
 };

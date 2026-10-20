@@ -89,6 +89,7 @@ const screensaverWidgetTypes = [
   'battery',
   'entity',
   'alarm',
+  'calendar',
 ];
 
 String describeScreensaverWidgetType(String type) => switch (type) {
@@ -97,6 +98,7 @@ String describeScreensaverWidgetType(String type) => switch (type) {
   'battery' => 'Battery',
   'entity' => 'Entity',
   'alarm' => 'Next alarm',
+  'calendar' => 'Up next',
   _ => type,
 };
 
@@ -140,6 +142,14 @@ Map<String, Object?> screensaverWidgetDefaults(String type) => switch (type) {
     'scale': screensaverWidgetScaleDefault,
     'font': screensaverWidgetFontDefault,
     'font_weight': screensaverWidgetFontDefault,
+  },
+  // The family calendar's next events today, up to [count].
+  'calendar' => {
+    'color': '250,250,250',
+    'scale': screensaverWidgetScaleDefault,
+    'font': screensaverWidgetFontDefault,
+    'font_weight': screensaverWidgetFontDefault,
+    'count': 3,
   },
   'entity' => {
     'entity': '',

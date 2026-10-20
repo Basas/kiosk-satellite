@@ -1118,6 +1118,18 @@ const kioskAllowAlarms = SettingDef<bool>(
   dependsOn: 'kiosk.allow_drawer',
 );
 
+const kioskAllowCalendar = SettingDef<bool>(
+  key: 'kiosk.allow_calendar',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Calendar',
+  description: 'Open the family calendar from the kiosk menu.',
+  category: 'Kiosk',
+  section: 'Allowed Actions',
+  subpage: 'Allowed Actions',
+  dependsOn: 'kiosk.allow_drawer',
+);
+
 const kioskAllowMusic = SettingDef<bool>(
   key: 'kiosk.allow_music',
   type: SettingType.boolean,
@@ -10616,6 +10628,137 @@ String? validateAlarmsList(Object? value) {
   }
 }
 
+// ── Calendar ───────────────────────────────────────────────────────────
+// Home Assistant's calendars on the kiosk, read only. The calendars and
+// their colors are hand-edited on both surfaces (the Calendars card in
+// Settings > Calendar, the Calendar page on the remote); the rest renders
+// from these definitions.
+
+/// The calendars shown, a JSON array of
+/// `{entity, name, color: "r,g,b", person, on}` in the order the chips and
+/// the Day view's lanes take. A household shares its calendars, so they
+/// travel with the Calendar fleet category.
+const calendarCalendars = SettingDef<String>(
+  key: 'calendar.calendars',
+  type: SettingType.string,
+  defaultValue: '[]',
+  title: 'Calendars',
+  description: 'The Home Assistant calendars this kiosk shows.',
+  category: 'Calendar',
+  hidden: true,
+  validator: validateCalendarList,
+);
+
+/// The calendars hidden with their chips on this kiosk, a JSON array of
+/// entity ids. The kitchen can hide the work calendars the hall shows.
+const calendarHidden = SettingDef<String>(
+  key: 'calendar.hidden',
+  type: SettingType.string,
+  defaultValue: '[]',
+  title: 'Hidden calendars',
+  description: 'The calendars hidden with their chips on this kiosk.',
+  category: 'Calendar',
+  hidden: true,
+  perDevice: true,
+);
+
+const calendarDefaultView = SettingDef<String>(
+  key: 'calendar.default_view',
+  type: SettingType.select,
+  defaultValue: 'week',
+  title: 'Default view',
+  description: 'The view Calendar opens on.',
+  category: 'Calendar',
+  section: 'Display',
+  options: ['day', 'week', 'month', 'schedule'],
+  optionLabels: {
+    'day': 'Day',
+    'week': 'Week',
+    'month': 'Month',
+    'schedule': 'Schedule',
+  },
+);
+
+/// The first day of the week and month views. The language default is the
+/// one the device's language uses.
+const calendarWeekStart = SettingDef<String>(
+  key: 'calendar.week_start',
+  type: SettingType.select,
+  defaultValue: 'locale',
+  title: 'Week starts on',
+  description: 'Follows the device language unless set.',
+  category: 'Calendar',
+  section: 'Display',
+  options: ['locale', 'sunday', 'monday', 'saturday'],
+  optionLabels: {
+    'locale': 'Language default',
+    'sunday': 'Sunday',
+    'monday': 'Monday',
+    'saturday': 'Saturday',
+  },
+);
+
+/// The weather entity whose daily forecast goes on each day's header.
+/// Picked from the list, never typed.
+const calendarWeatherEntity = SettingDef<String>(
+  key: 'calendar.weather_entity',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Weather',
+  description: 'Adds the forecast to each day.',
+  category: 'Calendar',
+  section: 'Display',
+);
+
+/// The Calendar entry in the kiosk menu. The restricted menu also needs
+/// Calendar under Kiosk Mode's Allowed Actions.
+const calendarMenu = SettingDef<bool>(
+  key: 'calendar.menu',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show in the kiosk menu',
+  description: 'Add a Calendar entry to the kiosk menu.',
+  category: 'Calendar',
+  section: 'Kiosk',
+);
+
+const calendarIdleCloseMinutes = SettingDef<String>(
+  key: 'calendar.idle_close_minutes',
+  type: SettingType.select,
+  defaultValue: '2',
+  title: 'Close when idle',
+  description: 'Returns to the dashboard after no touch for this long.',
+  category: 'Calendar',
+  section: 'Kiosk',
+  options: ['0', '1', '2', '5', '10'],
+  optionLabels: {
+    '0': 'Never',
+    '1': '1 minute',
+    '2': '2 minutes',
+    '5': '5 minutes',
+    '10': '10 minutes',
+  },
+);
+
+/// The calendars must decode, or the list is refused rather than stored:
+/// a bad write over the API would otherwise drop every calendar.
+String? validateCalendarList(Object? value) {
+  if (value is! String) return 'Calendars must be a JSON array.';
+  try {
+    final raw = jsonDecode(value);
+    if (raw is! List) return 'Calendars must be a JSON array.';
+    for (final item in raw) {
+      if (item is! Map) return 'Each calendar must be an object.';
+      if (!'${item['entity'] ?? ''}'.startsWith('calendar.')) {
+        return 'Each calendar needs a calendar entity.';
+      }
+    }
+    return null;
+  } catch (_) {
+    return 'Calendars must be a JSON array.';
+  }
+}
+
 /// The categories a fleet leader can push, in the sidebar's order: the
 /// definitions category, the name both UIs show for it and what stays per
 /// kiosk inside it (the [SettingDef.perDevice] keys it holds, in words).
@@ -10647,6 +10790,7 @@ const fleetSyncCategories = <(String, String, String)>[
   ('Gestures', 'Gestures', ''),
   ('Intercom', 'Intercom', 'the key, unless synced as a credential'),
   ('Alarms', 'Alarms', 'the alarms themselves'),
+  ('Calendar', 'Calendar', 'the calendars hidden with their chips'),
   (
     'Device',
     'Device',
@@ -11857,6 +12001,7 @@ const List<SettingDef<Object>> allSettings = [
   kioskAllowCamera,
   kioskAllowIntercom,
   kioskAllowAlarms,
+  kioskAllowCalendar,
   kioskAllowMusic,
   kioskAllowSendspinPlayer,
   kioskAllowScreensaver,
@@ -12453,4 +12598,11 @@ const List<SettingDef<Object>> allSettings = [
   alarmsTtsEngine,
   alarmsTtsLanguage,
   alarmsTtsVoice,
+  calendarCalendars,
+  calendarHidden,
+  calendarDefaultView,
+  calendarWeekStart,
+  calendarWeatherEntity,
+  calendarMenu,
+  calendarIdleCloseMinutes,
 ];

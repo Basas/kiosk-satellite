@@ -435,6 +435,25 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "top_right": "screensaverMediaTopRight",
     "bottom_left": "screensaverMediaBottomLeft",
     "bottom_right": "screensaverMediaBottomRight"
+  },
+  "calendar.default_view": {
+    "day": "calendarViewDay",
+    "week": "calendarViewWeek",
+    "month": "calendarViewMonth",
+    "schedule": "calendarViewSchedule"
+  },
+  "calendar.week_start": {
+    "locale": "calendarWeekStartLocale",
+    "sunday": "calendarWeekStartSunday",
+    "monday": "calendarWeekStartMonday",
+    "saturday": "calendarWeekStartSaturday"
+  },
+  "calendar.idle_close_minutes": {
+    "0": "calendarIdleNever",
+    "1": "calendarIdle1Minute",
+    "2": "calendarIdle2Minutes",
+    "5": "alarmsOption5Minutes",
+    "10": "alarmsOption10Minutes"
   }
 };
 const settingPlaceholderMessageIds = <String, String>{

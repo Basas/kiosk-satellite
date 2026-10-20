@@ -1,4 +1,5 @@
 import 'alarms_overlay.dart' show AlarmsManageCard;
+import 'calendar_settings.dart';
 import '../l10n/fleet_messages.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -270,8 +271,6 @@ const _categories = <(String, String, Object, String)>[
     Icons.cast_outlined,
     'Play images, videos and audio remotely',
   ),
-  ('Intercom', 'Intercom', Icons.speaker_phone_outlined, 'Talk between kiosks'),
-  ('Alarms', 'Alarms', Icons.alarm, 'Set alarms, tone, snooze, sunrise'),
   (
     'Camera',
     'Camera',
@@ -283,6 +282,14 @@ const _categories = <(String, String, Object, String)>[
     'Camera Streams',
     Icons.videocam_outlined,
     'Go2RTC and Home Assistant cameras',
+  ),
+  ('Intercom', 'Intercom', Icons.speaker_phone_outlined, 'Talk between kiosks'),
+  ('Alarms', 'Alarms', Icons.alarm, 'Set alarms, tone, snooze, sunrise'),
+  (
+    'Calendar',
+    'Calendar',
+    Icons.calendar_month_outlined,
+    'Family calendars from Home Assistant',
   ),
   (
     'Kiosk',
@@ -339,6 +346,7 @@ const _railGroups = <String, String>{
   'Home Assistant': 'Home Assistant',
   'Screen & Audio': 'Display',
   'Sendspin': 'Media & Cameras',
+  'Intercom': 'Household',
   'Kiosk': 'Kiosk',
   'Device': 'System',
 };
@@ -525,6 +533,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         pluginTextFor: (text) => pluginText(context, text),
         intercomTextFor: (text) => intercomText(context, text),
         alarmsTextFor: (text) => settingsPageText(context, 'Alarms', text),
+        calendarTextFor: (text) => settingsPageText(context, 'Calendar', text),
         mediaTextFor: (text) => mediaText(context, text),
         cameraStreamsTextFor: (text) => cameraStreamsText(context, text),
         cameraTextFor: (text) => cameraText(context, text),
@@ -2397,7 +2406,21 @@ class _CategoryContentState extends State<_CategoryContent> {
               after: _rowExtras(container),
             ),
           )
-        else if (widget.category == 'Alarms') ...[
+        else if (widget.category == 'Calendar') ...[
+          // Open calendar, then the calendars themselves (hand-built, the
+          // Alarms list's twin), then Display and Kiosk from the
+          // definitions. Mirrored on the remote's Calendar page.
+          CalendarOpenCard(container: container),
+          SectionHeading(l10n(context).calendarCalendarsSection),
+          CalendarSourcesCard(container: container),
+          ..._sectionedCards(
+            container,
+            _inlineDefsFor('Calendar'),
+            () => setState(() {}),
+            replace: _rowReplacements(container),
+            after: _rowExtras(container),
+          ),
+        ] else if (widget.category == 'Alarms') ...[
           // Show in the kiosk menu on its own untitled card, then the list
           // itself (the full screen overlay, opened from here), then the
           // defaults, then Voice Alarms. Mirrored on the remote's Alarms
@@ -3090,6 +3113,13 @@ class _CategoryContentState extends State<_CategoryContent> {
           voiceDef: announcementsTtsVoice,
         ),
     },
+    // The forecast's weather entity is picked, never typed. Mirrored on
+    // the remote (rows.js).
+    if (widget.category == 'Calendar')
+      calendarWeatherEntity.key: SearchLandingTarget(
+        id: calendarWeatherEntity.key,
+        child: CalendarWeatherRow(container: container),
+      ),
     if (widget.category == 'Alarms') ...{
       alarmsTtsEngine.key: AnnouncementTtsEngineRow(
         container: container,
@@ -5605,6 +5635,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
     'battery' => Icons.battery_full,
     'entity' => Icons.sensors,
     'alarm' => Icons.alarm,
+    'calendar' => Icons.calendar_month_outlined,
     _ => Icons.widgets_outlined,
   };
 
@@ -5623,7 +5654,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
       context,
       'Hidden in the Camera Streams screensaver mode.',
     ),
-    'entity' || 'alarm' => screensaverText(
+    'entity' || 'alarm' || 'calendar' => screensaverText(
       context,
       'Hidden in the Camera Streams screensaver mode.',
     ),
@@ -5952,6 +5983,26 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                       toggle(
                         screensaverText(context, 'Visibility'),
                         'visibility',
+                      ),
+                    ],
+                    if (type == 'calendar') ...[
+                      colorRow(),
+                      scaleRow(),
+                      fontRow(),
+                      fontWeightRow(),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(l10n(context).calendarWidgetEvents),
+                        trailing: DropdownButton<int>(
+                          value: ((config['count'] as num?)?.toInt() ?? 3)
+                              .clamp(1, 5),
+                          items: [
+                            for (var n = 1; n <= 5; n++)
+                              DropdownMenuItem(value: n, child: Text('$n')),
+                          ],
+                          onChanged: (n) =>
+                              setDialogState(() => config['count'] = n ?? 3),
+                        ),
                       ),
                     ],
                     if (type == 'battery') ...[

@@ -662,6 +662,312 @@ abstract class UiStrings {
   /// **'No launchable apps found.'**
   String get launcherEmpty;
 
+  /// Name of the calendar feature: the kiosk menu entry and the calendar's eyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTitle;
+
+  /// View switcher segment and Default view choice: one day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get calendarViewDay;
+
+  /// View switcher segment and Default view choice: one week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get calendarViewWeek;
+
+  /// View switcher segment and Default view choice: one month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get calendarViewMonth;
+
+  /// View switcher segment and Default view choice: a list of the coming days.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get calendarViewSchedule;
+
+  /// Button that jumps back to today, and the label over today's events.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get calendarToday;
+
+  /// Label over tomorrow's events in the Schedule view.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get calendarTomorrow;
+
+  /// Tooltip of the arrow that goes back one day, week or month.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get calendarPrevious;
+
+  /// Tooltip of the arrow that goes ahead one day, week or month.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get calendarNext;
+
+  /// An event without a time, and the Day view's row for those events.
+  ///
+  /// In en, this message translates to:
+  /// **'All day'**
+  String get calendarAllDay;
+
+  /// A month day with more events than fit. {count} is how many are left out.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String calendarMore(String count);
+
+  /// Heading of the next event today, in the Schedule view and the screensaver widget.
+  ///
+  /// In en, this message translates to:
+  /// **'Up next'**
+  String get calendarUpNext;
+
+  /// How soon the next event starts. {duration} reads like 50 min or 2 h 10 min.
+  ///
+  /// In en, this message translates to:
+  /// **'in {duration}'**
+  String calendarStartsIn(String duration);
+
+  /// The next event has already started.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get calendarHappeningNow;
+
+  /// Heading of the rest of today's events in the Schedule view.
+  ///
+  /// In en, this message translates to:
+  /// **'Later today'**
+  String get calendarLaterToday;
+
+  /// Today has no more events.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing else today'**
+  String get calendarNothingElseToday;
+
+  /// A day or a span without events.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned'**
+  String get calendarNothingPlanned;
+
+  /// A week without events in the Week view.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned this week'**
+  String get calendarNothingThisWeek;
+
+  /// Shown when no calendar is added.
+  ///
+  /// In en, this message translates to:
+  /// **'No calendars yet'**
+  String get calendarEmptyTitle;
+
+  /// Under No calendars yet in the calendar itself.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the Home Assistant calendars to show in Settings > Calendar.'**
+  String get calendarEmptyHint;
+
+  /// Banner while the calendar cannot reach Home Assistant. {time} is when the events were last updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant is not reachable. Showing the events from {time}.'**
+  String calendarOffline(String time);
+
+  /// An event's start and end time.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} to {end}'**
+  String calendarTimeRange(String start, String end);
+
+  /// Two calendars sharing an event, or the last two of several.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} and {second}'**
+  String calendarPeopleTwo(String first, String second);
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get calendarRepeatsDaily;
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every week'**
+  String get calendarRepeatsWeekly;
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every month'**
+  String get calendarRepeatsMonthly;
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every year'**
+  String get calendarRepeatsYearly;
+
+  /// A repeating event whose rule has no simple name.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeats'**
+  String get calendarRepeats;
+
+  /// Closes an event's details.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get calendarDone;
+
+  /// Heading of the list of calendars the kiosk shows.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendars'**
+  String get calendarCalendarsSection;
+
+  /// Button that picks a Home Assistant calendar to show.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a calendar'**
+  String get calendarAdd;
+
+  /// Toast when the picked calendar was added before.
+  ///
+  /// In en, this message translates to:
+  /// **'That calendar is already on the list.'**
+  String get calendarAlreadyAdded;
+
+  /// Row that shows the calendar on this kiosk.
+  ///
+  /// In en, this message translates to:
+  /// **'Open calendar'**
+  String get calendarOpen;
+
+  /// Under Open calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the calendar on this kiosk.'**
+  String get calendarOpenHint;
+
+  /// Field for the name on the calendar's chip.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get calendarEditName;
+
+  /// Heading of the calendar's color choices.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get calendarEditColor;
+
+  /// Field for the Home Assistant person the calendar belongs to.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get calendarEditPerson;
+
+  /// Under Person.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows their picture on the calendar chips.'**
+  String get calendarEditPersonHint;
+
+  /// No person picked.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get calendarEditPersonNone;
+
+  /// Title of the calendar picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a calendar'**
+  String get calendarPickCalendar;
+
+  /// Title of the person picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a person'**
+  String get calendarPickPerson;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Teal'**
+  String get calendarColorTeal;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Rust'**
+  String get calendarColorRust;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get calendarColorBlue;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Plum'**
+  String get calendarColorPlum;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Ochre'**
+  String get calendarColorOchre;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Sage'**
+  String get calendarColorSage;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Rose'**
+  String get calendarColorRose;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Slate'**
+  String get calendarColorSlate;
+
+  /// Picks any other color.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get calendarColorCustom;
+
+  /// How many coming events the Up next widget lists.
+  ///
+  /// In en, this message translates to:
+  /// **'Events shown'**
+  String get calendarWidgetEvents;
+
   /// Page title.
   ///
   /// In en, this message translates to:
@@ -3074,6 +3380,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Open Android Settings'**
   String get gestureAndroidSettings;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the calendar'**
+  String get gestureOpenCalendar;
 
   /// Label or guidance in this section.
   ///
@@ -7533,6 +7845,138 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'The grants Return automatically leans on.'**
   String get launcherPermissionsSearch;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Default view'**
+  String get settingCalendarDefaultViewTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The view Calendar opens on.'**
+  String get settingCalendarDefaultViewDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Week starts on'**
+  String get settingCalendarWeekStartTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Follows the device language unless set.'**
+  String get settingCalendarWeekStartDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather'**
+  String get settingCalendarWeatherEntityTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Adds the forecast to each day.'**
+  String get settingCalendarWeatherEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show in the kiosk menu'**
+  String get settingCalendarMenuTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Calendar entry to the kiosk menu.'**
+  String get settingCalendarMenuDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Close when idle'**
+  String get settingCalendarIdleCloseMinutesTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Returns to the dashboard after no touch for this long.'**
+  String get settingCalendarIdleCloseMinutesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get settingKioskAllowCalendarTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the family calendar from the kiosk menu.'**
+  String get settingKioskAllowCalendarDescription;
+
+  /// Week starts on: the device language's first day.
+  ///
+  /// In en, this message translates to:
+  /// **'Language default'**
+  String get calendarWeekStartLocale;
+
+  /// Week starts on Sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get calendarWeekStartSunday;
+
+  /// Week starts on Monday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get calendarWeekStartMonday;
+
+  /// Week starts on Saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get calendarWeekStartSaturday;
+
+  /// Close when idle: the calendar stays open.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get calendarIdleNever;
+
+  /// Close when idle after one minute.
+  ///
+  /// In en, this message translates to:
+  /// **'1 minute'**
+  String get calendarIdle1Minute;
+
+  /// Close when idle after two minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'2 minutes'**
+  String get calendarIdle2Minutes;
+
+  /// Settings page name.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get settingsMenuCalendar;
+
+  /// Under Calendar in the settings menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Family calendars from Home Assistant'**
+  String get settingsMenuCalendarSummary;
+
+  /// What stays per kiosk when the Calendar category syncs.
+  ///
+  /// In en, this message translates to:
+  /// **'the calendars hidden with their chips'**
+  String get fleetTheCalendarsHiddenWithTheirChips;
 
   /// Setting label.
   ///
@@ -16288,6 +16732,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Media & Cameras'**
   String get settingsGroupMediaCameras;
+
+  /// Settings menu group heading over Intercom, Alarms and Calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Household'**
+  String get settingsGroupHousehold;
 
   /// Heading above a group of Settings menu entries.
   ///

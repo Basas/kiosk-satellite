@@ -327,6 +327,170 @@ class UiStringsNl extends UiStrings {
   String get launcherEmpty => 'Geen apps gevonden die kunnen worden gestart.';
 
   @override
+  String get calendarTitle => 'Agenda';
+
+  @override
+  String get calendarViewDay => 'Dag';
+
+  @override
+  String get calendarViewWeek => 'Week';
+
+  @override
+  String get calendarViewMonth => 'Maand';
+
+  @override
+  String get calendarViewSchedule => 'Overzicht';
+
+  @override
+  String get calendarToday => 'Vandaag';
+
+  @override
+  String get calendarTomorrow => 'Morgen';
+
+  @override
+  String get calendarPrevious => 'Vorige';
+
+  @override
+  String get calendarNext => 'Volgende';
+
+  @override
+  String get calendarAllDay => 'Hele dag';
+
+  @override
+  String calendarMore(String count) {
+    return '+$count meer';
+  }
+
+  @override
+  String get calendarUpNext => 'Hierna';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return 'over $duration';
+  }
+
+  @override
+  String get calendarHappeningNow => 'Nu';
+
+  @override
+  String get calendarLaterToday => 'Later vandaag';
+
+  @override
+  String get calendarNothingElseToday => 'Verder niets vandaag';
+
+  @override
+  String get calendarNothingPlanned => 'Niets gepland';
+
+  @override
+  String get calendarNothingThisWeek => 'Niets gepland deze week';
+
+  @override
+  String get calendarEmptyTitle => 'Nog geen agenda\'s';
+
+  @override
+  String get calendarEmptyHint =>
+      'Voeg in Instellingen > Agenda de Home Assistant-agenda\'s toe die je wilt tonen.';
+
+  @override
+  String calendarOffline(String time) {
+    return 'Home Assistant is niet bereikbaar. Dit zijn de afspraken van $time.';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return '$start tot $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first en $second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => 'Elke dag';
+
+  @override
+  String get calendarRepeatsWeekly => 'Elke week';
+
+  @override
+  String get calendarRepeatsMonthly => 'Elke maand';
+
+  @override
+  String get calendarRepeatsYearly => 'Elk jaar';
+
+  @override
+  String get calendarRepeats => 'Herhaalt';
+
+  @override
+  String get calendarDone => 'Klaar';
+
+  @override
+  String get calendarCalendarsSection => 'Agenda\'s';
+
+  @override
+  String get calendarAdd => 'Agenda toevoegen';
+
+  @override
+  String get calendarAlreadyAdded => 'Die agenda staat al in de lijst.';
+
+  @override
+  String get calendarOpen => 'Agenda openen';
+
+  @override
+  String get calendarOpenHint => 'Toon de agenda op deze kiosk.';
+
+  @override
+  String get calendarEditName => 'Naam';
+
+  @override
+  String get calendarEditColor => 'Kleur';
+
+  @override
+  String get calendarEditPerson => 'Persoon';
+
+  @override
+  String get calendarEditPersonHint => 'Toont hun foto op de agendalabels.';
+
+  @override
+  String get calendarEditPersonNone => 'Geen';
+
+  @override
+  String get calendarPickCalendar => 'Kies een agenda';
+
+  @override
+  String get calendarPickPerson => 'Kies een persoon';
+
+  @override
+  String get calendarColorTeal => 'Petrol';
+
+  @override
+  String get calendarColorRust => 'Roest';
+
+  @override
+  String get calendarColorBlue => 'Blauw';
+
+  @override
+  String get calendarColorPlum => 'Pruim';
+
+  @override
+  String get calendarColorOchre => 'Oker';
+
+  @override
+  String get calendarColorSage => 'Salie';
+
+  @override
+  String get calendarColorRose => 'Roze';
+
+  @override
+  String get calendarColorSlate => 'Leisteen';
+
+  @override
+  String get calendarColorCustom => 'Aangepast';
+
+  @override
+  String get calendarWidgetEvents => 'Getoonde afspraken';
+
+  @override
   String get cameraViewerTitle => 'Cameraweergave';
 
   @override
@@ -1715,6 +1879,9 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get gestureAndroidSettings => 'Android-instellingen openen';
+
+  @override
+  String get gestureOpenCalendar => 'Agenda openen';
 
   @override
   String get gestureService => 'Een service aanroepen';
@@ -4349,6 +4516,80 @@ class UiStringsNl extends UiStrings {
   @override
   String get launcherPermissionsSearch =>
       'De toestemmingen die nodig zijn om automatisch terug te keren.';
+
+  @override
+  String get settingCalendarDefaultViewTitle => 'Standaardweergave';
+
+  @override
+  String get settingCalendarDefaultViewDescription =>
+      'De weergave waarmee de agenda opent.';
+
+  @override
+  String get settingCalendarWeekStartTitle => 'Week begint op';
+
+  @override
+  String get settingCalendarWeekStartDescription =>
+      'Volgt de taal van het apparaat, tenzij ingesteld.';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => 'Weer';
+
+  @override
+  String get settingCalendarWeatherEntityDescription =>
+      'Voegt de weersverwachting aan elke dag toe.';
+
+  @override
+  String get settingCalendarMenuTitle => 'Toon in het kioskmenu';
+
+  @override
+  String get settingCalendarMenuDescription =>
+      'Voeg de optie Agenda toe aan het kioskmenu.';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle => 'Sluiten bij inactiviteit';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription =>
+      'Keert na zo lang zonder aanraking terug naar het dashboard.';
+
+  @override
+  String get settingKioskAllowCalendarTitle => 'Agenda';
+
+  @override
+  String get settingKioskAllowCalendarDescription =>
+      'Open de gezinsagenda vanuit het kioskmenu.';
+
+  @override
+  String get calendarWeekStartLocale => 'Volgens de taal';
+
+  @override
+  String get calendarWeekStartSunday => 'Zondag';
+
+  @override
+  String get calendarWeekStartMonday => 'Maandag';
+
+  @override
+  String get calendarWeekStartSaturday => 'Zaterdag';
+
+  @override
+  String get calendarIdleNever => 'Nooit';
+
+  @override
+  String get calendarIdle1Minute => '1 minuut';
+
+  @override
+  String get calendarIdle2Minutes => '2 minuten';
+
+  @override
+  String get settingsMenuCalendar => 'Agenda';
+
+  @override
+  String get settingsMenuCalendarSummary =>
+      'Gezinsagenda\'s uit Home Assistant';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips =>
+      'de agenda\'s die met hun labels zijn verborgen';
 
   @override
   String get settingCameraEnabledTitle => 'Camera inschakelen';
@@ -9475,6 +9716,9 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get settingsGroupMediaCameras => 'Media en camera\'s';
+
+  @override
+  String get settingsGroupHousehold => 'Huishouden';
 
   @override
   String get settingsGroupKiosk => 'Kiosk';

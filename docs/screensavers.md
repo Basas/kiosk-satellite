@@ -226,6 +226,16 @@ Shows the next [alarm](alarms.md) set on the kiosk when it rings within 24 hours
 | Corner | First free corner | Displays in the first available corner. |
 | Color | White | Applies to the icon and the time. |
 
+### Up next
+
+Shows what is still to come today on the [calendar](calendar.md), over any mode except Camera Streams: a dot in each event's calendar color, the start time and the title. Calendars hidden with their chips are left out. The corner stays empty once nothing else is on today. A tap on the widget opens the calendar on the Schedule view.
+
+| Setting | Default | Notes |
+| --- | --- | --- |
+| Corner | First free corner | Displays in the first available corner. |
+| Color | White | Applies to the times and titles. |
+| Events shown | 3 | How many coming events it lists, 1 to 5. |
+
 ### Entity
 
 Displays a single Home Assistant entity in a display corner over any mode except Camera Streams. Styled similarly to the widget family, the layout features the entity icon and value on a single line with the entity name centered underneath. Ideal for displaying specific metrics, such as a room temperature sensor over an Immich photo slideshow.

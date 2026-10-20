@@ -41,6 +41,7 @@ import 'managers/fleet/fleet_manager.dart';
 import 'managers/fleet/fleet_sync_manager.dart';
 import 'managers/intercom/intercom_manager.dart';
 import 'managers/alarms/alarm_manager.dart';
+import 'managers/calendar/calendar_manager.dart';
 import 'managers/analytics/analytics_manager.dart';
 import 'managers/analytics/usage_counters.dart';
 import 'managers/broadcasts/event_broadcast_manager.dart';
@@ -187,6 +188,7 @@ class AppContainer {
         unawaited(UsageCounters.bump(settings, name));
     intercom = IntercomManager(bus, commands, log, settings);
     alarms = AlarmManager(bus, commands, log, settings);
+    calendar = CalendarManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);
     // It follows what the managers above are doing, through the bus and
     // the media players' own states.
@@ -267,6 +269,7 @@ class AppContainer {
   late final FleetSyncManager fleetSync;
   late final IntercomManager intercom;
   late final AlarmManager alarms;
+  late final CalendarManager calendar;
   late final VoiceRequestsManager voiceRequests;
   late final LedManager leds;
   late final PageStateManager pageState;
@@ -347,6 +350,8 @@ class AppContainer {
     // Its first check can ring at once, and a ring reaches for the
     // screen, the screensaver, the kiosk and the wake word's stop word.
     alarms,
+    // Nothing reaches Home Assistant until a screen watches some days.
+    calendar,
     // After intercom and alarms: it runs their commands.
     voiceRequests,
     // Before the remote admin's first request reads its hidden settings,

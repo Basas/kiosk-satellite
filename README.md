@@ -62,6 +62,8 @@
 
 &bull; **Alarms:** Set [alarms](https://kiosksatellite.com/docs/alarms/) that ring on the kiosk itself, with no Home Assistant or network needed. A sunrise can brighten the screen before the alarm rings, and a Clock or Weather Mood screensaver can show the alarm with Snooze and Stop in its own style.
 
+&bull; **Calendar:** Show your Home Assistant calendars as a family [calendar](https://kiosksatellite.com/docs/calendar/) with Day, Week, Month and Schedule views. Each person gets a color, and an event shared by several people is split between their colors.
+
 &bull; **Kiosk conveniences:** Use [hand gestures](https://kiosksatellite.com/docs/gestures/#show-fingers) to run Home Assistant actions or open a camera view by holding up fingers to the device camera. Set Kiosk Satellite as the [home launcher](https://kiosksatellite.com/docs/home-launcher/) on supported devices so the Home button returns to your dashboard. Arrange up to twelve live feeds in [camera views](https://kiosksatellite.com/docs/cameras/), with camera imports from Home Assistant or Go2RTC.
 
 Also built in: [PIN-protected kiosk mode](https://kiosksatellite.com/docs/kiosk/), [touch and clap gestures](https://kiosksatellite.com/docs/gestures/), [DLNA media playback](https://kiosksatellite.com/docs/dlna/), [RTSP streaming](https://kiosksatellite.com/docs/camera/#rtsp-streaming), [Shizuku support](https://kiosksatellite.com/docs/shizuku/) and more!

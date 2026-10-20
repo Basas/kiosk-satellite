@@ -327,6 +327,171 @@ class UiStringsUk extends UiStrings {
   String get launcherEmpty => 'Програм для запуску не знайдено.';
 
   @override
+  String get calendarTitle => 'Календар';
+
+  @override
+  String get calendarViewDay => 'День';
+
+  @override
+  String get calendarViewWeek => 'Тиждень';
+
+  @override
+  String get calendarViewMonth => 'Місяць';
+
+  @override
+  String get calendarViewSchedule => 'Розклад';
+
+  @override
+  String get calendarToday => 'Сьогодні';
+
+  @override
+  String get calendarTomorrow => 'Завтра';
+
+  @override
+  String get calendarPrevious => 'Назад';
+
+  @override
+  String get calendarNext => 'Далі';
+
+  @override
+  String get calendarAllDay => 'Увесь день';
+
+  @override
+  String calendarMore(String count) {
+    return 'Ще $count';
+  }
+
+  @override
+  String get calendarUpNext => 'Далі за планом';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return 'через $duration';
+  }
+
+  @override
+  String get calendarHappeningNow => 'Зараз';
+
+  @override
+  String get calendarLaterToday => 'Пізніше сьогодні';
+
+  @override
+  String get calendarNothingElseToday => 'Сьогодні більше нічого';
+
+  @override
+  String get calendarNothingPlanned => 'Нічого не заплановано';
+
+  @override
+  String get calendarNothingThisWeek => 'Цього тижня нічого не заплановано';
+
+  @override
+  String get calendarEmptyTitle => 'Календарів ще немає';
+
+  @override
+  String get calendarEmptyHint =>
+      'Додайте в Налаштування > Календар календарі Home Assistant, які треба показувати.';
+
+  @override
+  String calendarOffline(String time) {
+    return 'Home Assistant недоступний. Показано події станом на $time.';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return 'з $start до $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first і $second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => 'Щодня';
+
+  @override
+  String get calendarRepeatsWeekly => 'Щотижня';
+
+  @override
+  String get calendarRepeatsMonthly => 'Щомісяця';
+
+  @override
+  String get calendarRepeatsYearly => 'Щороку';
+
+  @override
+  String get calendarRepeats => 'Повторюється';
+
+  @override
+  String get calendarDone => 'Готово';
+
+  @override
+  String get calendarCalendarsSection => 'Календарі';
+
+  @override
+  String get calendarAdd => 'Додати календар';
+
+  @override
+  String get calendarAlreadyAdded => 'Цей календар уже є в списку.';
+
+  @override
+  String get calendarOpen => 'Відкрити календар';
+
+  @override
+  String get calendarOpenHint => 'Показати календар на цьому кіоску.';
+
+  @override
+  String get calendarEditName => 'Назва';
+
+  @override
+  String get calendarEditColor => 'Колір';
+
+  @override
+  String get calendarEditPerson => 'Особа';
+
+  @override
+  String get calendarEditPersonHint =>
+      'Показує її фото на позначках календаря.';
+
+  @override
+  String get calendarEditPersonNone => 'Немає';
+
+  @override
+  String get calendarPickCalendar => 'Виберіть календар';
+
+  @override
+  String get calendarPickPerson => 'Виберіть особу';
+
+  @override
+  String get calendarColorTeal => 'Бірюзовий';
+
+  @override
+  String get calendarColorRust => 'Іржавий';
+
+  @override
+  String get calendarColorBlue => 'Синій';
+
+  @override
+  String get calendarColorPlum => 'Сливовий';
+
+  @override
+  String get calendarColorOchre => 'Охра';
+
+  @override
+  String get calendarColorSage => 'Шавлієвий';
+
+  @override
+  String get calendarColorRose => 'Рожевий';
+
+  @override
+  String get calendarColorSlate => 'Сланцевий';
+
+  @override
+  String get calendarColorCustom => 'Власний';
+
+  @override
+  String get calendarWidgetEvents => 'Показано подій';
+
+  @override
   String get cameraViewerTitle => 'Перегляд камери';
 
   @override
@@ -1711,6 +1876,9 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get gestureAndroidSettings => 'Відкрити налаштування Android';
+
+  @override
+  String get gestureOpenCalendar => 'Відкрити календар';
 
   @override
   String get gestureService => 'Викликати службу';
@@ -4337,6 +4505,81 @@ class UiStringsUk extends UiStrings {
   @override
   String get launcherPermissionsSearch =>
       'Дозволи, на які спирається функція автоматичного повернення.';
+
+  @override
+  String get settingCalendarDefaultViewTitle => 'Вигляд за замовчуванням';
+
+  @override
+  String get settingCalendarDefaultViewDescription =>
+      'Вигляд, з яким відкривається календар.';
+
+  @override
+  String get settingCalendarWeekStartTitle => 'Тиждень починається з';
+
+  @override
+  String get settingCalendarWeekStartDescription =>
+      'Відповідає мові пристрою, якщо не вибрано інше.';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => 'Погода';
+
+  @override
+  String get settingCalendarWeatherEntityDescription =>
+      'Додає прогноз до кожного дня.';
+
+  @override
+  String get settingCalendarMenuTitle => 'Показувати в меню кіоска';
+
+  @override
+  String get settingCalendarMenuDescription =>
+      'Додати пункт «Календар» до меню кіоска.';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle =>
+      'Закривати під час бездіяльності';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription =>
+      'Повертатися до панелі керування після такого часу без дотиків.';
+
+  @override
+  String get settingKioskAllowCalendarTitle => 'Календар';
+
+  @override
+  String get settingKioskAllowCalendarDescription =>
+      'Відкривати сімейний календар з меню кіоска.';
+
+  @override
+  String get calendarWeekStartLocale => 'Як у мові';
+
+  @override
+  String get calendarWeekStartSunday => 'Неділя';
+
+  @override
+  String get calendarWeekStartMonday => 'Понеділок';
+
+  @override
+  String get calendarWeekStartSaturday => 'Субота';
+
+  @override
+  String get calendarIdleNever => 'Ніколи';
+
+  @override
+  String get calendarIdle1Minute => '1 хвилина';
+
+  @override
+  String get calendarIdle2Minutes => '2 хвилини';
+
+  @override
+  String get settingsMenuCalendar => 'Календар';
+
+  @override
+  String get settingsMenuCalendarSummary =>
+      'Сімейні календарі з Home Assistant';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips =>
+      'календарі, приховані своїми позначками';
 
   @override
   String get settingCameraEnabledTitle => 'Увімкнути камеру';
@@ -9467,6 +9710,9 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get settingsGroupMediaCameras => 'Медіа та камери';
+
+  @override
+  String get settingsGroupHousehold => 'Домівка';
 
   @override
   String get settingsGroupKiosk => 'Кіоск та захист';

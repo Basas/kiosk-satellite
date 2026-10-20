@@ -296,6 +296,26 @@ class KioskDrawer extends StatelessWidget {
                                     c.commands.execute('openAlarms', const {});
                                   },
                                 ),
+                              // The family calendar, the same way: the full
+                              // screen calendar, unless Show in the kiosk
+                              // menu is off, and Allowed Actions in the
+                              // restricted menu.
+                              if (c.settings.get(defs.calendarMenu) &&
+                                  (!restricted ||
+                                      c.settings.get(defs.kioskAllowCalendar)))
+                                _item(
+                                  divided: sep(),
+                                  context,
+                                  Icons.calendar_month_outlined,
+                                  l10n(context).calendarTitle,
+                                  () {
+                                    onClose();
+                                    c.commands.execute(
+                                      'openCalendar',
+                                      const {},
+                                    );
+                                  },
+                                ),
                               // Music Assistant's own web interface, over
                               // the dashboard on the same surface a tapped
                               // link gets — browsing, queueing and

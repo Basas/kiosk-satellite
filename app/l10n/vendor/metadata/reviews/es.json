@@ -21208,5 +21208,385 @@
     "source": "e3d4dd2c53b8e8e9edefffc099393a95b817899a1348894c91cbb586bccfdc70",
     "translation": "8446906ad36d12b440944c74020c089c0391c11889fbc6d52a50961be084f570",
     "author": "Xavier Larrea"
+  },
+  "calendarStartsIn": {
+    "source": "a6bbdcfb44f75d3963dd6c23c5b705d859ceebb2f2d4339eb0d82a8e26527252",
+    "translation": "56e1181907709a9f861c5ba8a04613b5d082f343deee1b72dbc9e3cd24fb082d",
+    "author": "Xavier Larrea"
+  },
+  "calendarPickCalendar": {
+    "source": "5ef86d1b40d2716d272caec7556bdd392ed122ea9adf7591454fa63769b7eb06",
+    "translation": "4b1d6d624bae7212ed9b4874b1cfb0b2ba38ff22f1310c7855c8b6424dec34cb",
+    "author": "Xavier Larrea"
+  },
+  "calendarEditPersonHint": {
+    "source": "cbc26a50f74dc7d865174e5ed0aa0767b14d4453c5a5c9d858a8528c9cc47451",
+    "translation": "5114f92359dc3f3e2d13c1249838e31c4fdcacc65b8ec622ed2a4b0605d4ea1c",
+    "author": "Xavier Larrea"
+  },
+  "calendarPickPerson": {
+    "source": "a2bb52110a29b1eeff0a7c528de66d9f6c86fe468da82090d4aa52cebd656014",
+    "translation": "4231b615160b6266ae5d8010570a0d01a0b5cfbfcf90d88b928b63bef8c6bce1",
+    "author": "Xavier Larrea"
+  },
+  "calendarEditColor": {
+    "source": "a7da9eb33ea778e9ac9fb9fc7de44e6bc5ce20888763359fa02e07e89cbeb0af",
+    "translation": "6b73191a0a4b67420e61d51c9f207c35277eaf18fbbf5beb52a320a23fe09653",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorBlue": {
+    "source": "f9eaf1d958b942f2e032f4732f19838e98c218aa4206cd7afcef5bfdebadfe91",
+    "translation": "b0bf526b23af19619a579501bd7943dd899c211fd2ef69e9f8ab0dc5b43b439a",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarIdleCloseMinutesDescription": {
+    "source": "2ce28a4d2724608abf79d3f0add9f1de78a89116d8e96d853cccaf35893e5328",
+    "translation": "76ebec4626fe26a55e2d036819e0cdb29ed0e5dc7070a93cc8aa308ebd058e2c",
+    "author": "Xavier Larrea"
+  },
+  "calendarOpen": {
+    "source": "f1a766d899190f10dce049f9524859c49fb633306ce06d20d0d8b259141c23f7",
+    "translation": "a0eafe87b4343adf8a8cbf1b0479e3608e2a3d60e005fbd876296f268eeaac4b",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarWeekStartTitle": {
+    "source": "b40fa31af82140b8aaae2fdb73e5f6edef215551ed968fca4be6867ad66ff6d8",
+    "translation": "c4ad9ed05a17ff85149cc3b8e7e0f1b5746ac63c94a9c4542db6cbd510f3ed5d",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorSlate": {
+    "source": "579523bb63b54759b63f467cf563c0d0a83e049e2fd22edda925fb8205e9bae4",
+    "translation": "27c981ac02a80940b6fcb47a6d5b9a76428469d7ed29cb63b3ab35c53a2c4010",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorCustom": {
+    "source": "0e640152a2ec885f96398f055c48ab6e20b7daa92e3200f73ba47b6f7677f53d",
+    "translation": "4290938ed5e690dd6d454b526683b5f427e619d850ee8378c1c5955f7d8844c7",
+    "author": "Xavier Larrea"
+  },
+  "calendarIdleNever": {
+    "source": "394dc79e7226526f7b2a8a5443241b6a5a78a34f38d6741c68e0d09a2489a1e8",
+    "translation": "12fcd0c7b77c94f2e67f09cb0dd69fe89b632b2d72dfb7d6a19528d907ce7b03",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarDefaultViewDescription": {
+    "source": "024b9062e9460bb74323aff4eabc584b6aa098a4dbbd64fd0d9c0619a31e0740",
+    "translation": "a18448da1e8eb7bb23f302ceb4efbc7a31e96aaf19c893ef489a9d2c8242dbc4",
+    "author": "Xavier Larrea"
+  },
+  "calendarNext": {
+    "source": "801e1de6302896aefbb0a104e44d4a203db6f56c330d8b3a8b34167683023414",
+    "translation": "49683b71c6acf522415c8ac99914ab7e704fa02b1d2defd6ac0e269bfce8ebfc",
+    "author": "Xavier Larrea"
+  },
+  "calendarOpenHint": {
+    "source": "f98e2c5ca670341d58eaeb3ebf892cf87584979f25f8c008065a3d9da6de0a6c",
+    "translation": "8c50f8d59523c7ebee3159740868428af4b736aabd864e091118939c96593b5d",
+    "author": "Xavier Larrea"
+  },
+  "calendarRepeatsMonthly": {
+    "source": "4cc0c3e83ed3ebe4f606da5e69622780bef986bda95fba68d31f3eda429729ef",
+    "translation": "3a26bc27c5ad31190ec0997fa8bc8b3aaeecb7e6ef18fe355ad7168fd81fddb0",
+    "author": "Xavier Larrea"
+  },
+  "calendarLaterToday": {
+    "source": "6f41b76f07f8fcf5250e512dbbe3df436ec23211026887855073d61c080ec4de",
+    "translation": "f8bc72423add5485b28635c36d7d150cc405e702709f9490c03d072a13d1f07e",
+    "author": "Xavier Larrea"
+  },
+  "calendarRepeatsWeekly": {
+    "source": "1e5b92ceb0e8f447c89a6060f53d507e69c3ef9eb1b4b01b0595d95a548a1bf8",
+    "translation": "d41ce73a33b5355193011f37f863ae226cc7220502f1f804b39f2573982d85dd",
+    "author": "Xavier Larrea"
+  },
+  "calendarIdle2Minutes": {
+    "source": "2e805165726f71251b2a3fc2efd4d5b467b6bdb29d1d608b4e1f01c8846ef105",
+    "translation": "b2d2064a4d5d5837001b1fd84b40f7bfa6217b472e240690630bb8c004cbc92c",
+    "author": "Xavier Larrea"
+  },
+  "calendarRepeatsYearly": {
+    "source": "d8920da8d9133d56857aebf0ffb05fdebd9e2bfe00f7edf14d84eac5591db522",
+    "translation": "88daf9f10165bd7bddd204ec690642f7ef80d3d4b9883be236f2ee9450a43138",
+    "author": "Xavier Larrea"
+  },
+  "calendarPeopleTwo": {
+    "source": "6d2138a41454c7b8cae6aaf360d7637abb0706deb0cbcbb05810603f3a4c049a",
+    "translation": "e1dfc38874eda5d59a391a34423e67b53cc0ccdab73ebf26f362ca93418a3be3",
+    "author": "Xavier Larrea"
+  },
+  "calendarDone": {
+    "source": "02a9b0f923f2c180e2640138c0023eafb3ad7f75e5dda4528ac86da449da0197",
+    "translation": "b5fa51d564a9d8809f67c15dd6aef17cb1ebffbaa416b42978e079134adf568e",
+    "author": "Xavier Larrea"
+  },
+  "calendarPrevious": {
+    "source": "56f544142ec9d397e8aaa08940294c18f06aafc777fb0d251f823b117ac7a7dd",
+    "translation": "e4ce7c09d51e3b8831d3386a7df68f29647d112969b9b31b67c2b56709ba7dc3",
+    "author": "Xavier Larrea"
+  },
+  "calendarTimeRange": {
+    "source": "22fa3fd3fe842fb9cff41a9133eb66817e0d681a664951d21a3406f10b3602a4",
+    "translation": "8fe2b2bcea514a9aac7a94b0924661e5f3e00cb9490e88084736722db3ac97c7",
+    "author": "Xavier Larrea"
+  },
+  "calendarNothingPlanned": {
+    "source": "16bf4881c759a60f543321f2f1c7abcdf1cccc331f69461f1213b42d690746a4",
+    "translation": "698638f8a3d903646dcdc15a54f9c49043a5522d67aef4a6ac5e6ad0f18321af",
+    "author": "Xavier Larrea"
+  },
+  "calendarRepeats": {
+    "source": "a96a381160f4c401c4d09bd9cbf399bfc75f8f1bf9df705c650d3c0b2c8edc53",
+    "translation": "f92a686ec69d27ddcd129f4a582ba4132bc12953aae31c87ad225b7f6af2a09e",
+    "author": "Xavier Larrea"
+  },
+  "calendarCalendarsSection": {
+    "source": "86ab1e4280ba00d86ce2904be4e227bb30df0314b5f36b2f2fcb138aa7a69d63",
+    "translation": "e4f18278731286ea6c4ee61495dda9f79bcfe428e0bbf79fa19aef18f59e8cb2",
+    "author": "Xavier Larrea"
+  },
+  "calendarTomorrow": {
+    "source": "229d13db44dcc0c8febb74c51968860b93580c54e64f52b5162f3a97976e0b07",
+    "translation": "63d2779423702e65a107fb8cedac8d2b55da42b31ee86424ee683030b1ac5d65",
+    "author": "Xavier Larrea"
+  },
+  "calendarViewMonth": {
+    "source": "769f0609940624419be286d43da8af26b883268f623cc2a5644ee3fe2694d9d2",
+    "translation": "024261f9bfbac9edf1432b884822b23b701cd5750ebb4f3e870a7202b2af7c0c",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarMenuTitle": {
+    "source": "01c1786ea2c7a3cddf4e2299de3402caea611c23c6f8352dd928ad1eee08fbda",
+    "translation": "29c899b0556f35c0c6dbad1923dbfcc3418509108780b8064c3e99d4cc8bc7a3",
+    "author": "Xavier Larrea"
+  },
+  "calendarTitle": {
+    "source": "d1047e934249b18f8c9cf2fc00b30ebcc6a4231449355d84b3f3939d2906f253",
+    "translation": "68de201e0ef3fd85950e35462b7342c40fe59a47e306f913f0e74da0357c6722",
+    "author": "Xavier Larrea"
+  },
+  "calendarViewSchedule": {
+    "source": "142b20d509dddc6f8668584c48d6e29ae3153bdb37d21df4862543c4a97e0d53",
+    "translation": "0fdf485f5bfd3762467100246df7a6ce45c3aa687c1645276e6e87240aa37199",
+    "author": "Xavier Larrea"
+  },
+  "calendarWeekStartLocale": {
+    "source": "40f226d99acbe8aec81323435c60361f284265ee9571be3b7ae7ec577bab6b13",
+    "translation": "e127ebbd8bda6ab839192094e368ea99d1930ee7a8e7a9c26948a76b3f93a294",
+    "author": "Xavier Larrea"
+  },
+  "fleetTheCalendarsHiddenWithTheirChips": {
+    "source": "29d6a2cd5205d5be743a4cf2e7b8f370013eeef20e4043f2db57c1267e0cf299",
+    "translation": "3a3170dee86a806481bf45ed93a047f3c911022bc02cd317eb25f1e30e57cc5e",
+    "author": "Xavier Larrea"
+  },
+  "calendarEditPerson": {
+    "source": "015ff991611b14556dc54f97770f4193dec787388a7e29dc8a79511bd9f9ed84",
+    "translation": "31bdeef94e7d9a9c9b0d65c97d049ac72fc2080d36f8bf73ad15ee3a5a23e86f",
+    "author": "Xavier Larrea"
+  },
+  "settingKioskAllowCalendarDescription": {
+    "source": "9907baa69a8abf733471b84556c249257d707e09906e0f76798cfcbc72403aa2",
+    "translation": "ad60fb1ddc94d5f5d769c36a47cc11f747ad64181ffafa9fee387673c5484253",
+    "author": "Xavier Larrea"
+  },
+  "calendarAlreadyAdded": {
+    "source": "a964df79b7f11353c3388f9df773e350e9b79dcef36ace6fa7b3c7f60a3b216a",
+    "translation": "78f69d3cf8ad39ee2844dc13c9027bf6e1c9603b59b55c1441b31593b76993e7",
+    "author": "Xavier Larrea"
+  },
+  "calendarNothingElseToday": {
+    "source": "a4953d52e20a0112df0113a912a539cd6e318759829b0b1f4a6836ac3c8caa1a",
+    "translation": "96f707d827b0e765a12a256e7623f547bff8ef662721ff5b7715eef00031be73",
+    "author": "Xavier Larrea"
+  },
+  "calendarToday": {
+    "source": "4a77695063091d38e8ca4d117cb40c333321f707f40fd06f4f2bdd84063b9249",
+    "translation": "55133d4e6eb6172a7c7763ba8f6aec4ed4d170f5999009a00d82a4ef7e85b218",
+    "author": "Xavier Larrea"
+  },
+  "calendarAllDay": {
+    "source": "7fc8e1f880fda40f27d7efdb8ffc29a9e25a82e22e3cc0b79f1228270ed02bf2",
+    "translation": "22765623c7a44b5daa62fb49463a51f92284c6857dd16b32f8377918e96ada0a",
+    "author": "Xavier Larrea"
+  },
+  "calendarWidgetEvents": {
+    "source": "daad91aa620273626d81e7549bd5971ce5534abd11a612377909785f7ca4d867",
+    "translation": "97d50cfc284b75c04ffe4865959d37d7fa454bcce004d517f831cfa01a7a3dce",
+    "author": "Xavier Larrea"
+  },
+  "calendarOpenOnKiosk": {
+    "source": "91b5ccd5b9ff7ca5616a290cf14a8fd1bc5614c2df272e08dfeef99779cf6ab9",
+    "translation": "493eecc94d237be86d0d06d083f74bedd235762d50b95cc40efcd4d283065666",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorRust": {
+    "source": "3e9dba20cc8ddaff35f758d4d243893cb988e95d010ce689f17e0e5cc530ab3a",
+    "translation": "a810190828d40a6ffc15751c9e2d7ff3b3dd62837c02db90ac00ef3657fc12f2",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorPlum": {
+    "source": "eaace943a671c08ca4263725628df785fd523cca647a0e7ce994e656852d7ba2",
+    "translation": "968bac9e3bc3d13d789acca91d123592635b65bd18db6ed0d45b0ca2d3e1b8d1",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorRose": {
+    "source": "589c99e4ec4157520018cbfd6c4208f04d5ff251357f12ef562eb246aa5cff04",
+    "translation": "75f9577a1637cf7a30d4fc7c7839d5c71b626946b0f784ee92da0f1ae4e707df",
+    "author": "Xavier Larrea"
+  },
+  "calendarEmptyTitle": {
+    "source": "236e04bdfb7b661f237da5608d16397239efa4c6291a540299c9615db39a28da",
+    "translation": "b7a11ba393b75bbaf922b89ff648b6893d5e938bb20285bc17824d3ed67802cb",
+    "author": "Xavier Larrea"
+  },
+  "calendarIdle1Minute": {
+    "source": "de0b4fa1c1f4c99ee9d53793de9d16645583956396f22ca4d08727648bbe6a58",
+    "translation": "38f7e1cc48e02af35848aeb521d45af2a26c1a21c5c7ae7c0c6e06bfde01ee17",
+    "author": "Xavier Larrea"
+  },
+  "calendarViewWeek": {
+    "source": "7244b3af78c5d9490341129e7cbb7a7ee747aef6d404ffcd0a74f6a187cc2e27",
+    "translation": "51656a29fb46a0a1d27a30b04794a8d39929bb469aa135d5bf2431b8bb2450b3",
+    "author": "Xavier Larrea"
+  },
+  "calendarViewDay": {
+    "source": "f350a8ce412f2dbadebac0a177f92cd647ba1ac18660fb6427ff84768ccf8110",
+    "translation": "ffd6f24b18b1a9e76918816354d8d55f92f1e0b06cf6f0efc51add9e1ebfb710",
+    "author": "Xavier Larrea"
+  },
+  "calendarOffline": {
+    "source": "ef47dac033e3d1ce42aa89d255ed4c799c04b954f81a933906a9d9c04119ff72",
+    "translation": "a70da83fb62ffbe1deceb1101ad8c6d96440bc0330d1c0dbe4f430b646d3d571",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarWeatherEntityDescription": {
+    "source": "0a34fc58c2905e0ea5aa0b81750dfba33dea804bcab424ffa8480d51bcda1b6c",
+    "translation": "98175b91d3290c821a9723c59d0bbf4a00b25e99f0fa51eb615acf2f0aadb626",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarWeekStartDescription": {
+    "source": "5a15a298d4805ca154dd84fc3d043ac1be50b355edb47c2785444e523ae2e538",
+    "translation": "372c44740c131843770334fbfd83d487ccec5e937841a50e4bb8c3a6938d1744",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarWeatherEntityTitle": {
+    "source": "8d7a627b4c16adf2d8fcab3abd6107775349f4d0ced0106184ae439ebbf84250",
+    "translation": "112f861342a869c793d8c1524246927e55550975cc2739c922b001a7d7c87369",
+    "author": "Xavier Larrea"
+  },
+  "calendarEmptyHint": {
+    "source": "fbb789607e48971ff3f88500df96228266f985b91da24ae2cff1764eb443973b",
+    "translation": "e9e18743149479ba1a7a8964dd72216b03f4a615c7d65225cc35054d3f36adb2",
+    "author": "Xavier Larrea"
+  },
+  "calendarWeekStartMonday": {
+    "source": "d1b7e9149e280035c12cbc0fb9ee69d086656151ba62cf137c61c51531d069ec",
+    "translation": "d0e80862185ff7260c73d36f76356ad60494a513fc47ef55befc4abf61d0fe60",
+    "author": "Xavier Larrea"
+  },
+  "settingKioskAllowCalendarTitle": {
+    "source": "8fc2a121e1915787bedd6d82c599e553f048ffcb1f9de3c010ab32b2fada73f3",
+    "translation": "68de201e0ef3fd85950e35462b7342c40fe59a47e306f913f0e74da0357c6722",
+    "author": "Xavier Larrea"
+  },
+  "calendarWeekStartSaturday": {
+    "source": "ad8a4c78561161d28f33eabdb9d9f236ef97ffc211ef0d26daa33cbc03f27135",
+    "translation": "f7a8575b1a8fe0094d86318e44c81618152725d554d72d8aa2046ede1b4e98cc",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarDefaultViewTitle": {
+    "source": "60199525b2cad5670eb8cbce576823a37c5e570a18853cc6a33981e301ad0ef2",
+    "translation": "135e8468a1e824299227eade95fe01536e749d7c190a860b2abb22112fa91690",
+    "author": "Xavier Larrea"
+  },
+  "settingsMenuCalendarSummary": {
+    "source": "848b24e28dbfc5955613727bf02cf1f79bcac848764bf62ed5ccafc8dfdbe2d8",
+    "translation": "73809186d73b6ad563286e211809d9a4ed7f6f4e322bd6eccadcf7bb2ead4235",
+    "author": "Xavier Larrea"
+  },
+  "calendarRepeatsDaily": {
+    "source": "f6a2a9f71ed743ae59f69f0bb9f26556245d787160b84d5f72951098815bbd05",
+    "translation": "3da90a781891047caa9dc07629e484fdbbb62630f4793adf3d83f87b80f3aedb",
+    "author": "Xavier Larrea"
+  },
+  "calendarAdd": {
+    "source": "94ac0d26491c28055a413b61faa8ac753fe7daa38168c95307009ddd99d4d6fa",
+    "translation": "989a8595d9cd3a7f292407a964af5314e43ad24a9dcfb714888f94e85f9a1e4c",
+    "author": "Xavier Larrea"
+  },
+  "calendarEditPersonNone": {
+    "source": "1107696e3ce191175d3d5f35b05a10d6798fd25a39987b86931cae3214c9b2a7",
+    "translation": "265a0222634a7a2e8a9be6368b8ea68adfe434d3930454d408a07ae693c1c4aa",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorSage": {
+    "source": "4645027e576132a124c50178bd5ff5d2b05c62aaaff2fcd0dc39a863a6cf785d",
+    "translation": "af9630c6bd3a0ba36771172c807877e7fdc8e5b5a790396961d6fbddc4e14955",
+    "author": "Xavier Larrea"
+  },
+  "settingsMenuCalendar": {
+    "source": "1fda2dd54c8060d46f2c0144c457f43ab779987c14f4f8345fb0ff82fbc3d2e0",
+    "translation": "68de201e0ef3fd85950e35462b7342c40fe59a47e306f913f0e74da0357c6722",
+    "author": "Xavier Larrea"
+  },
+  "calendarMore": {
+    "source": "8a42ed1e8eb4533a02303bf58d99ab79b6f5a7717aea60f442e4fec0de55d0ec",
+    "translation": "7dd6ba8fca9d9949ed61bb70aae797e9bbe22d74beaa3d9dd35caa4474965fae",
+    "author": "Xavier Larrea"
+  },
+  "calendarUpNext": {
+    "source": "1ed14d86d810177e783e6b8c9a2221caed4aecb31d0cac74be11eb08fb996651",
+    "translation": "031c4fc5d36eee0d442c09c89e0fea608429d9a5b9cc18d2808333faa97588f4",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorTeal": {
+    "source": "099a13652f498271b0dc691b971e886dc3dd87fef39ee394018ce81aad291a40",
+    "translation": "f3b2c21c51dfe563ce98cd94a0cac75bb85d6e817a6f09521bd9533d53cd8604",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarMenuDescription": {
+    "source": "699e5749b3dc5fb90ee61a31e127c79bdc94b0cbac0c4fd15137bf23d8c36c0a",
+    "translation": "0183798d74a1d55ca9eef86acc8a56aa3cb8d07cbcabca19b654fff1aef26e5d",
+    "author": "Xavier Larrea"
+  },
+  "settingCalendarIdleCloseMinutesTitle": {
+    "source": "6a1515f709a3160f2466674bf7741f5b4dd5798c0233e63bf2d4f456f8294ae3",
+    "translation": "2a4b58eab1784dfbe92534986d8f8419344271c8f02371f8fc336f7448e4362f",
+    "author": "Xavier Larrea"
+  },
+  "calendarWeekStartSunday": {
+    "source": "0621944d1caa54d4c5c30380e7fb10d7ebf9427738533e52d9a6fd52b1683c62",
+    "translation": "424e93aa51340639238f61ecea841ec7ff2d32d81a080c7e5e5e5d4fde956fb7",
+    "author": "Xavier Larrea"
+  },
+  "calendarEditName": {
+    "source": "889f904b3e0dce4b74e99f98ecbfdfe7b8abed5b7eed4b2777d9e8ddafe26c68",
+    "translation": "562bb15757a8b593d6fdc812b0767c0e198bf7d8e19157933110de09c9db9012",
+    "author": "Xavier Larrea"
+  },
+  "calendarHappeningNow": {
+    "source": "38fe57610c53065f090ba1fb4eba28b78e043fa1689dad9e80a5bc64a669b736",
+    "translation": "00cd944998c0012d4be5abc276a6d8befe2127c05c24e8a4b8c48fa6f9edca0f",
+    "author": "Xavier Larrea"
+  },
+  "calendarColorOchre": {
+    "source": "4df56dc64b815bd9bf0501ea09368e3d26ec6f143b9506b26102bdcb44b42262",
+    "translation": "29f16b83670279d490d3505d14bd5b17adf7b95d46fd4cf12f4214d86589cd1b",
+    "author": "Xavier Larrea"
+  },
+  "gestureOpenCalendar": {
+    "source": "8061766d7caef56490214d2476a0a213254b92533f41504884d23f97b9ca8d34",
+    "translation": "a0eafe87b4343adf8a8cbf1b0479e3608e2a3d60e005fbd876296f268eeaac4b",
+    "author": "Xavier Larrea"
+  },
+  "settingsGroupHousehold": {
+    "source": "531ab1f22a5e39530ebcac2501e0ea37a481c1646eeaaedcea33e49ebf66ebf6",
+    "translation": "a2015f512647b091a6a74037676cda9f36b6ece5f0016076322ed956c7da7562",
+    "author": "Xavier Larrea"
+  },
+  "calendarNothingThisWeek": {
+    "source": "960f2ff9ea424c0bdd7b70a0881917ac8dcc11328d0478665e4833ef2b3cae74",
+    "translation": "55960762f00aca983bf6ec20bac2a2343b23c865f7f61bf5b9b4a6d7a7ff5514",
+    "author": "Xavier Larrea"
   }
 }

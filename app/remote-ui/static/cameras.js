@@ -127,6 +127,8 @@ export const CAMERA_ICONS = {
   // The alarm clock struck through, and with a Z: the alarm actions.
   alarmOff: '<circle cx="12" cy="13" r="8"/><path d="M5 3 2 6M19 3l3 3M4 5l16 16"/>',
   snooze: '<circle cx="12" cy="13" r="8"/><path d="M5 3 2 6M19 3l3 3M9.5 10h5l-5 6h5"/>',
+  // A page of a calendar: Open the calendar.
+  calendar: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>',
   // The voice actions: a microphone, struck through for the mute.
   mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
   micOff: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M3 3l18 18"/>',

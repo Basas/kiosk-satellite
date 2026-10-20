@@ -321,6 +321,169 @@ class UiStringsZh extends UiStrings {
   String get launcherEmpty => '未找到可启动的应用。';
 
   @override
+  String get calendarTitle => '日历';
+
+  @override
+  String get calendarViewDay => '日';
+
+  @override
+  String get calendarViewWeek => '周';
+
+  @override
+  String get calendarViewMonth => '月';
+
+  @override
+  String get calendarViewSchedule => '日程';
+
+  @override
+  String get calendarToday => '今天';
+
+  @override
+  String get calendarTomorrow => '明天';
+
+  @override
+  String get calendarPrevious => '上一页';
+
+  @override
+  String get calendarNext => '下一页';
+
+  @override
+  String get calendarAllDay => '全天';
+
+  @override
+  String calendarMore(String count) {
+    return '还有 $count 项';
+  }
+
+  @override
+  String get calendarUpNext => '接下来';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return '$duration后';
+  }
+
+  @override
+  String get calendarHappeningNow => '现在';
+
+  @override
+  String get calendarLaterToday => '今天稍后';
+
+  @override
+  String get calendarNothingElseToday => '今天没有更多安排';
+
+  @override
+  String get calendarNothingPlanned => '暂无安排';
+
+  @override
+  String get calendarNothingThisWeek => '本周暂无安排';
+
+  @override
+  String get calendarEmptyTitle => '还没有日历';
+
+  @override
+  String get calendarEmptyHint => '在“设置 > 日历”中添加要显示的 Home Assistant 日历。';
+
+  @override
+  String calendarOffline(String time) {
+    return '无法连接 Home Assistant。显示的是 $time 的日程。';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return '$start 至 $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first和$second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => '每天';
+
+  @override
+  String get calendarRepeatsWeekly => '每周';
+
+  @override
+  String get calendarRepeatsMonthly => '每月';
+
+  @override
+  String get calendarRepeatsYearly => '每年';
+
+  @override
+  String get calendarRepeats => '重复';
+
+  @override
+  String get calendarDone => '完成';
+
+  @override
+  String get calendarCalendarsSection => '日历';
+
+  @override
+  String get calendarAdd => '添加日历';
+
+  @override
+  String get calendarAlreadyAdded => '该日历已在列表中。';
+
+  @override
+  String get calendarOpen => '打开日历';
+
+  @override
+  String get calendarOpenHint => '在此 Kiosk 上显示日历。';
+
+  @override
+  String get calendarEditName => '名称';
+
+  @override
+  String get calendarEditColor => '颜色';
+
+  @override
+  String get calendarEditPerson => '人员';
+
+  @override
+  String get calendarEditPersonHint => '在日历标签上显示其照片。';
+
+  @override
+  String get calendarEditPersonNone => '无';
+
+  @override
+  String get calendarPickCalendar => '选择日历';
+
+  @override
+  String get calendarPickPerson => '选择人员';
+
+  @override
+  String get calendarColorTeal => '青色';
+
+  @override
+  String get calendarColorRust => '铁锈红';
+
+  @override
+  String get calendarColorBlue => '蓝色';
+
+  @override
+  String get calendarColorPlum => '梅紫';
+
+  @override
+  String get calendarColorOchre => '赭色';
+
+  @override
+  String get calendarColorSage => '灰绿';
+
+  @override
+  String get calendarColorRose => '玫瑰色';
+
+  @override
+  String get calendarColorSlate => '石板灰';
+
+  @override
+  String get calendarColorCustom => '自定义';
+
+  @override
+  String get calendarWidgetEvents => '显示的日程数';
+
+  @override
   String get cameraViewerTitle => '摄像头画面';
 
   @override
@@ -1657,6 +1820,9 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get gestureAndroidSettings => '打开 Android 设置';
+
+  @override
+  String get gestureOpenCalendar => '打开日历';
 
   @override
   String get gestureService => '调用服务';
@@ -4148,6 +4314,72 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get launcherPermissionsSearch => '“自动返回”所依赖的权限。';
+
+  @override
+  String get settingCalendarDefaultViewTitle => '默认视图';
+
+  @override
+  String get settingCalendarDefaultViewDescription => '打开日历时显示的视图。';
+
+  @override
+  String get settingCalendarWeekStartTitle => '每周开始于';
+
+  @override
+  String get settingCalendarWeekStartDescription => '跟随设备语言，除非另行设置。';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => '天气';
+
+  @override
+  String get settingCalendarWeatherEntityDescription => '为每天添加天气预报。';
+
+  @override
+  String get settingCalendarMenuTitle => '在 Kiosk 菜单中显示';
+
+  @override
+  String get settingCalendarMenuDescription => '在 Kiosk 菜单中添加“日历”入口。';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle => '闲置时关闭';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription => '在这段时间内无触摸后返回仪表盘。';
+
+  @override
+  String get settingKioskAllowCalendarTitle => '日历';
+
+  @override
+  String get settingKioskAllowCalendarDescription => '从 Kiosk 菜单打开家庭日历。';
+
+  @override
+  String get calendarWeekStartLocale => '跟随语言';
+
+  @override
+  String get calendarWeekStartSunday => '星期日';
+
+  @override
+  String get calendarWeekStartMonday => '星期一';
+
+  @override
+  String get calendarWeekStartSaturday => '星期六';
+
+  @override
+  String get calendarIdleNever => '从不';
+
+  @override
+  String get calendarIdle1Minute => '1 分钟';
+
+  @override
+  String get calendarIdle2Minutes => '2 分钟';
+
+  @override
+  String get settingsMenuCalendar => '日历';
+
+  @override
+  String get settingsMenuCalendarSummary => '来自 Home Assistant 的家庭日历';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips => '用标签隐藏的日历';
 
   @override
   String get settingCameraEnabledTitle => '启用摄像头';
@@ -8926,6 +9158,9 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get settingsGroupMediaCameras => '媒体与摄像头';
+
+  @override
+  String get settingsGroupHousehold => '家庭';
 
   @override
   String get settingsGroupKiosk => 'Kiosk';
@@ -13883,6 +14118,169 @@ class UiStringsZhCn extends UiStringsZh {
   String get launcherEmpty => '未找到可启动的应用。';
 
   @override
+  String get calendarTitle => '日历';
+
+  @override
+  String get calendarViewDay => '日';
+
+  @override
+  String get calendarViewWeek => '周';
+
+  @override
+  String get calendarViewMonth => '月';
+
+  @override
+  String get calendarViewSchedule => '日程';
+
+  @override
+  String get calendarToday => '今天';
+
+  @override
+  String get calendarTomorrow => '明天';
+
+  @override
+  String get calendarPrevious => '上一页';
+
+  @override
+  String get calendarNext => '下一页';
+
+  @override
+  String get calendarAllDay => '全天';
+
+  @override
+  String calendarMore(String count) {
+    return '还有 $count 项';
+  }
+
+  @override
+  String get calendarUpNext => '接下来';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return '$duration后';
+  }
+
+  @override
+  String get calendarHappeningNow => '现在';
+
+  @override
+  String get calendarLaterToday => '今天稍后';
+
+  @override
+  String get calendarNothingElseToday => '今天没有更多安排';
+
+  @override
+  String get calendarNothingPlanned => '暂无安排';
+
+  @override
+  String get calendarNothingThisWeek => '本周暂无安排';
+
+  @override
+  String get calendarEmptyTitle => '还没有日历';
+
+  @override
+  String get calendarEmptyHint => '在“设置 > 日历”中添加要显示的 Home Assistant 日历。';
+
+  @override
+  String calendarOffline(String time) {
+    return '无法连接 Home Assistant。显示的是 $time 的日程。';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return '$start 至 $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first和$second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => '每天';
+
+  @override
+  String get calendarRepeatsWeekly => '每周';
+
+  @override
+  String get calendarRepeatsMonthly => '每月';
+
+  @override
+  String get calendarRepeatsYearly => '每年';
+
+  @override
+  String get calendarRepeats => '重复';
+
+  @override
+  String get calendarDone => '完成';
+
+  @override
+  String get calendarCalendarsSection => '日历';
+
+  @override
+  String get calendarAdd => '添加日历';
+
+  @override
+  String get calendarAlreadyAdded => '该日历已在列表中。';
+
+  @override
+  String get calendarOpen => '打开日历';
+
+  @override
+  String get calendarOpenHint => '在此 Kiosk 上显示日历。';
+
+  @override
+  String get calendarEditName => '名称';
+
+  @override
+  String get calendarEditColor => '颜色';
+
+  @override
+  String get calendarEditPerson => '人员';
+
+  @override
+  String get calendarEditPersonHint => '在日历标签上显示其照片。';
+
+  @override
+  String get calendarEditPersonNone => '无';
+
+  @override
+  String get calendarPickCalendar => '选择日历';
+
+  @override
+  String get calendarPickPerson => '选择人员';
+
+  @override
+  String get calendarColorTeal => '青色';
+
+  @override
+  String get calendarColorRust => '铁锈红';
+
+  @override
+  String get calendarColorBlue => '蓝色';
+
+  @override
+  String get calendarColorPlum => '梅紫';
+
+  @override
+  String get calendarColorOchre => '赭色';
+
+  @override
+  String get calendarColorSage => '灰绿';
+
+  @override
+  String get calendarColorRose => '玫瑰色';
+
+  @override
+  String get calendarColorSlate => '石板灰';
+
+  @override
+  String get calendarColorCustom => '自定义';
+
+  @override
+  String get calendarWidgetEvents => '显示的日程数';
+
+  @override
   String get cameraViewerTitle => '摄像头画面';
 
   @override
@@ -15219,6 +15617,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get gestureAndroidSettings => '打开 Android 设置';
+
+  @override
+  String get gestureOpenCalendar => '打开日历';
 
   @override
   String get gestureService => '调用服务';
@@ -17710,6 +18111,72 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get launcherPermissionsSearch => '“自动返回”所依赖的权限。';
+
+  @override
+  String get settingCalendarDefaultViewTitle => '默认视图';
+
+  @override
+  String get settingCalendarDefaultViewDescription => '打开日历时显示的视图。';
+
+  @override
+  String get settingCalendarWeekStartTitle => '每周开始于';
+
+  @override
+  String get settingCalendarWeekStartDescription => '跟随设备语言，除非另行设置。';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => '天气';
+
+  @override
+  String get settingCalendarWeatherEntityDescription => '为每天添加天气预报。';
+
+  @override
+  String get settingCalendarMenuTitle => '在 Kiosk 菜单中显示';
+
+  @override
+  String get settingCalendarMenuDescription => '在 Kiosk 菜单中添加“日历”入口。';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle => '闲置时关闭';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription => '在这段时间内无触摸后返回仪表盘。';
+
+  @override
+  String get settingKioskAllowCalendarTitle => '日历';
+
+  @override
+  String get settingKioskAllowCalendarDescription => '从 Kiosk 菜单打开家庭日历。';
+
+  @override
+  String get calendarWeekStartLocale => '跟随语言';
+
+  @override
+  String get calendarWeekStartSunday => '星期日';
+
+  @override
+  String get calendarWeekStartMonday => '星期一';
+
+  @override
+  String get calendarWeekStartSaturday => '星期六';
+
+  @override
+  String get calendarIdleNever => '从不';
+
+  @override
+  String get calendarIdle1Minute => '1 分钟';
+
+  @override
+  String get calendarIdle2Minutes => '2 分钟';
+
+  @override
+  String get settingsMenuCalendar => '日历';
+
+  @override
+  String get settingsMenuCalendarSummary => '来自 Home Assistant 的家庭日历';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips => '用标签隐藏的日历';
 
   @override
   String get settingCameraEnabledTitle => '启用摄像头';
@@ -22488,6 +22955,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get settingsGroupMediaCameras => '媒体与摄像头';
+
+  @override
+  String get settingsGroupHousehold => '家庭';
 
   @override
   String get settingsGroupKiosk => 'Kiosk';

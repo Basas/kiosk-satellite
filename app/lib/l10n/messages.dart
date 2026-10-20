@@ -444,6 +444,18 @@ String settingsPageText(
   // Its groups are named after the pages of the features they light up.
   'LED Control' => navigationText(context, english),
   'Kiosk' || 'Home' || 'Lockdown' => kioskText(context, english),
+  // Its groups reuse the settings rail's group names.
+  'Calendar' => switch (english) {
+    'Display' || 'Kiosk' => navigationText(context, english),
+    // The hand-built rows search finds.
+    'Open calendar' => l10n(context).calendarOpen,
+    'Show the calendar on this kiosk.' => l10n(context).calendarOpenHint,
+    'Add a calendar' => l10n(context).calendarAdd,
+    'Add the Home Assistant calendars to show in Settings > Calendar.' => l10n(
+      context,
+    ).calendarEmptyHint,
+    _ => english,
+  },
   'Alarms' => switch (english) {
     'Defaults' => l10n(context).alarmsDefaultsSection,
     'Text to Speech' => l10n(context).alarmsTtsSection,

@@ -372,6 +372,44 @@ void main() {
     },
   );
 
+  test('the calendar reports counts and picks, never its calendars', () async {
+    await build({
+      'ks.voice.runtime': 'dashboard',
+      'ks.calendar.calendars':
+          '[{"entity":"calendar.sam_work","name":"Sam","color":"192,97,58",'
+          '"person":"person.sam"},'
+          '{"entity":"calendar.leo","name":"Leo","color":"1,2,3"},'
+          '{"entity":"calendar.old","name":"Old","color":"72,130,132",'
+          '"on":false}]',
+      'ks.calendar.hidden': '["calendar.leo"]',
+      'ks.calendar.weather_entity': 'weather.home',
+    });
+    commands.register(
+      Command(
+        name: 'calendarStatus',
+        description: 'stub',
+        handler: (_) async => const CommandResult.ok({'source': 'live'}),
+      ),
+    );
+    await UsageCounters.bump(settings, 'calendar_opens');
+    await UsageCounters.bump(settings, 'calendar_opens');
+    await pump();
+    final usage = bodyOf(sent.single)['usage'] as Map;
+    expect(usage['calendars'], 2);
+    expect(usage['calendars_off'], 1);
+    expect(usage['calendars_hidden'], 1);
+    expect(usage['calendar_people'], 1);
+    expect(usage['calendar_custom_colors'], 1);
+    expect(usage['calendar_weather'], isTrue);
+    expect(usage['calendar_default_view'], 'week');
+    expect(usage['calendar_source'], 'live');
+    expect(usage['calendar_opens'], '1-5');
+    final text = jsonEncode(usage);
+    for (final secret in ['sam_work', 'Sam', 'person.', 'weather.home']) {
+      expect(text, isNot(contains(secret)), reason: secret);
+    }
+  });
+
   test('the native satellite reports its settings as picks and counts, only '
       'while it is on', () async {
     await build({

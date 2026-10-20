@@ -13,6 +13,7 @@ import '../../core/events.dart';
 import '../../core/manager.dart';
 import '../alarms/alarm_model.dart';
 import '../browser/url_filter.dart';
+import '../calendar/calendar_model.dart';
 import '../home_assistant/custom_pages.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
@@ -521,6 +522,17 @@ class AnalyticsManager extends Manager {
     // How often each one answered since the last snapshot, and how often
     // arbitration settled a wake other kiosks heard too.
     final arbitration = nativeOn && s.get(defs.voiceWakeArbitration);
+    final calendars = decodeCalendars(s.get(defs.calendarCalendars));
+    final calendarHidden = decodeHidden(s.get(defs.calendarHidden));
+    final calendarStatus = calendars.isEmpty
+        ? null
+        : await commands.execute('calendarStatus', const {});
+    final calendarSource =
+        calendarStatus != null &&
+            calendarStatus.ok &&
+            calendarStatus.data is Map
+        ? (calendarStatus.data as Map)['source']
+        : null;
     final counts = UsageCounters.read(s);
     final pages = parseCustomPages(s.get(defs.haCustomPages));
     final rules = parseUrlFilter(s.get(defs.browserUrlFilter));
@@ -532,6 +544,7 @@ class AnalyticsManager extends Manager {
           k: counts[k] ?? 0,
       if (rules.isNotEmpty)
         'url_filter_blocked': counts['url_filter_blocked'] ?? 0,
+      if (calendars.isNotEmpty) 'calendar_opens': counts['calendar_opens'] ?? 0,
       if (nativeOn)
         for (final k in [
           'vs_turns_assist',
@@ -701,6 +714,30 @@ class AnalyticsManager extends Manager {
       'alarms_snooze_minutes': s.get(defs.alarmsSnoozeMinutes),
       'alarms_silence_after_minutes': s.get(defs.alarmsSilenceAfterMinutes),
       'alarms_sunrise_minutes': s.get(defs.alarmsSunriseMinutes),
+      // Calendar: counts and picks only, never the calendars, their names
+      // or the people.
+      'calendars': calendars.where((c) => c.on).length,
+      if (calendars.isNotEmpty) ...{
+        'calendars_off': calendars.where((c) => !c.on).length,
+        'calendars_hidden': calendars
+            .where((c) => c.on && calendarHidden.contains(c.entity))
+            .length,
+        'calendar_people': calendars.where((c) => c.person.isNotEmpty).length,
+        'calendar_custom_colors': calendars
+            .where((c) => !calendarPalette.any((p) => p.rgb == c.color))
+            .length,
+        'calendar_weather': s.get(defs.calendarWeatherEntity).trim().isNotEmpty,
+        'calendar_default_view': s.get(defs.calendarDefaultView),
+        'calendar_week_start': s.get(defs.calendarWeekStart),
+        'calendar_menu': s.get(defs.calendarMenu),
+        'calendar_idle_close_minutes': s.get(defs.calendarIdleCloseMinutes),
+        'calendar_source': calendarSource is String
+            ? calendarSource
+            : 'unknown',
+        'calendar_opens': UsageCounters.bucket(
+          _reportedCounts['calendar_opens'] ?? 0,
+        ),
+      },
       'esphome': s.get(defs.esphomeEnabled),
       'bluetooth_proxy': s.get(defs.btproxyEnabled),
       'gps_sensor': s.get(defs.locationEnabled),

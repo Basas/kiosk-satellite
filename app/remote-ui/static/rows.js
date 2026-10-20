@@ -421,8 +421,8 @@ export function settingRow(s) {
     row.appendChild(field.el);
     return field;
   };
-  // Weather Mood's weather entity: weather only.
-  if (s.key === 'screensaver.weather_entity') {
+  // Weather Mood's and the calendar's weather entity: weather only.
+  if (s.key === 'screensaver.weather_entity' || s.key === 'calendar.weather_entity') {
     entityRow(entitySpec({ domains: ['weather'] }), { allowClear: true });
     return row;
   }
@@ -1018,7 +1018,7 @@ export function settingRow(s) {
       ['bottom_left', screensaverText('Bottom left')], ['bottom_right', screensaverText('Bottom right')]];
     const TYPES = [['clock', screensaverText('Small clock')], ['weather', screensaverText('Weather')],
       ['battery', screensaverText('Battery')], ['entity', screensaverText('Entity')],
-      ['alarm', t('alarmsNextWidget')]];
+      ['alarm', t('alarmsNextWidget')], ['calendar', t('calendarUpNext')]];
     const DEFAULTS = {
       clock: { color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default', h24: false, ampm: true, date: false },
@@ -1033,6 +1033,8 @@ export function settingRow(s) {
         font_weight: 'default' },
       alarm: { color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default' },
+      calendar: { color: '250,250,250', scale: 0, font: 'default',
+        font_weight: 'default', count: 3 },
     };
     // The typeface and weight pickers, the clock screensaver's vocabulary
     // (kept with definitions.dart) behind a Default that follows the
@@ -1191,6 +1193,28 @@ export function settingRow(s) {
             screensaverText('Stay hidden until the charge drops to 20 percent.'));
           typeBlock.append(refs.color.wrap, refs.scale.wrap, refs.font.wrap,
             refs.weight.wrap, refs.percent.wrap, refs.low.wrap);
+          return;
+        }
+        // Up next: how many of today's coming events it lists.
+        if (type === 'calendar') {
+          const count = document.createElement('select');
+          count.className = 'field';
+          for (let n = 1; n <= 5; n++) {
+            const opt = document.createElement('option');
+            opt.value = String(n);
+            opt.textContent = String(n);
+            opt.selected = n === (Number(config.count) || 3);
+            count.appendChild(opt);
+          }
+          refs.count = count;
+          const countField = document.createElement('label');
+          countField.className = 'form-field';
+          const countLabel = document.createElement('span');
+          countLabel.className = 'desc';
+          countLabel.textContent = t('calendarWidgetEvents');
+          countField.append(countLabel, count);
+          typeBlock.append(refs.color.wrap, refs.scale.wrap, refs.font.wrap,
+            refs.weight.wrap, countField);
           return;
         }
         // The next alarm: nothing of its own, the look every widget has.
@@ -1353,6 +1377,9 @@ export function settingRow(s) {
               low: refs.low.input.checked };
           } else if (type === 'alarm') {
             entryConfig = { color, scale, font, font_weight };
+          } else if (type === 'calendar') {
+            entryConfig = { color, scale, font, font_weight,
+              count: Number(refs.count?.value) || 3 };
           } else if (type === 'entity') {
             if (!config.entity) return { ok: false, error: screensaverText('Pick an entity.') };
             entryConfig = { entity: config.entity,
@@ -1397,7 +1424,7 @@ export function settingRow(s) {
         }, false, 'delete'),
       ],
       {
-        icon: ['weather', 'battery', 'entity', 'alarm'].includes(e.type)
+        icon: ['weather', 'battery', 'entity', 'alarm', 'calendar'].includes(e.type)
           ? e.type : 'clock',
         onClick: () => editWidget(e),
       },

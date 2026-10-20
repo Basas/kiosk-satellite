@@ -1215,6 +1215,642 @@
       ]
     }
   },
+  "calendarTitle": "Agenda",
+  "@calendarTitle": {
+    "context": "Calendar",
+    "description": "Name of the calendar feature: the kiosk menu entry and the calendar's eyebrow.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarViewDay": "Dag",
+  "@calendarViewDay": {
+    "context": "Calendar views",
+    "description": "View switcher segment and Default view choice: one day.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Calendar > Default view"
+      ],
+      "remoteAdmin": [
+        "Calendar > Default view"
+      ]
+    }
+  },
+  "calendarViewWeek": "Week",
+  "@calendarViewWeek": {
+    "context": "Calendar views",
+    "description": "View switcher segment and Default view choice: one week.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Calendar > Default view"
+      ],
+      "remoteAdmin": [
+        "Calendar > Default view"
+      ]
+    }
+  },
+  "calendarViewMonth": "Maand",
+  "@calendarViewMonth": {
+    "context": "Calendar views",
+    "description": "View switcher segment and Default view choice: one month.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Calendar > Default view"
+      ],
+      "remoteAdmin": [
+        "Calendar > Default view"
+      ]
+    }
+  },
+  "calendarViewSchedule": "Overzicht",
+  "@calendarViewSchedule": {
+    "context": "Calendar views",
+    "description": "View switcher segment and Default view choice: a list of the coming days.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Calendar > Default view"
+      ],
+      "remoteAdmin": [
+        "Calendar > Default view"
+      ]
+    }
+  },
+  "calendarToday": "Vandaag",
+  "@calendarToday": {
+    "context": "Calendar",
+    "description": "Button that jumps back to today, and the label over today's events.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarTomorrow": "Morgen",
+  "@calendarTomorrow": {
+    "context": "Calendar",
+    "description": "Label over tomorrow's events in the Schedule view.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarPrevious": "Vorige",
+  "@calendarPrevious": {
+    "context": "Calendar",
+    "description": "Tooltip of the arrow that goes back one day, week or month.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarNext": "Volgende",
+  "@calendarNext": {
+    "context": "Calendar",
+    "description": "Tooltip of the arrow that goes ahead one day, week or month.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarAllDay": "Hele dag",
+  "@calendarAllDay": {
+    "context": "Calendar",
+    "description": "An event without a time, and the Day view's row for those events.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarMore": "+{count} meer",
+  "@calendarMore": {
+    "context": "Calendar month",
+    "description": "A month day with more events than fit. {count} is how many are left out.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    },
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "description": "How many events are left out."
+      }
+    }
+  },
+  "calendarUpNext": "Hierna",
+  "@calendarUpNext": {
+    "context": "Calendar",
+    "description": "Heading of the next event today, in the Schedule view and the screensaver widget.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Screensaver > Widgets"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets"
+      ]
+    }
+  },
+  "calendarStartsIn": "over {duration}",
+  "@calendarStartsIn": {
+    "context": "Calendar",
+    "description": "How soon the next event starts. {duration} reads like 50 min or 2 h 10 min.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    },
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "description": "A span like 50 min."
+      }
+    }
+  },
+  "calendarHappeningNow": "Nu",
+  "@calendarHappeningNow": {
+    "context": "Calendar",
+    "description": "The next event has already started.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarLaterToday": "Later vandaag",
+  "@calendarLaterToday": {
+    "context": "Calendar",
+    "description": "Heading of the rest of today's events in the Schedule view.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarNothingElseToday": "Verder niets vandaag",
+  "@calendarNothingElseToday": {
+    "context": "Calendar",
+    "description": "Today has no more events.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarNothingPlanned": "Niets gepland",
+  "@calendarNothingPlanned": {
+    "context": "Calendar",
+    "description": "A day or a span without events.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarNothingThisWeek": "Niets gepland deze week",
+  "@calendarNothingThisWeek": {
+    "context": "Calendar",
+    "description": "A week without events in the Week view.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarEmptyTitle": "Nog geen agenda's",
+  "@calendarEmptyTitle": {
+    "context": "Calendar",
+    "description": "Shown when no calendar is added.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar",
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarEmptyHint": "Voeg in Instellingen > Agenda de Home Assistant-agenda's toe die je wilt tonen.",
+  "@calendarEmptyHint": {
+    "context": "Calendar",
+    "description": "Under No calendars yet in the calendar itself.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarOffline": "Home Assistant is niet bereikbaar. Dit zijn de afspraken van {time}.",
+  "@calendarOffline": {
+    "context": "Calendar",
+    "description": "Banner while the calendar cannot reach Home Assistant. {time} is when the events were last updated.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    },
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "A time like 10:42 AM."
+      }
+    }
+  },
+  "calendarTimeRange": "{start} tot {end}",
+  "@calendarTimeRange": {
+    "context": "Calendar",
+    "description": "An event's start and end time.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    },
+    "placeholders": {
+      "start": {
+        "type": "String",
+        "description": "A start time like 4:00 PM."
+      },
+      "end": {
+        "type": "String",
+        "description": "An end time like 5:30 PM."
+      }
+    }
+  },
+  "calendarPeopleTwo": "{first} en {second}",
+  "@calendarPeopleTwo": {
+    "context": "Calendar",
+    "description": "Two calendars sharing an event, or the last two of several.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    },
+    "placeholders": {
+      "first": {
+        "type": "String",
+        "description": "A calendar name."
+      },
+      "second": {
+        "type": "String",
+        "description": "A calendar name."
+      }
+    }
+  },
+  "calendarRepeatsDaily": "Elke dag",
+  "@calendarRepeatsDaily": {
+    "context": "Calendar event",
+    "description": "How a repeating event repeats.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarRepeatsWeekly": "Elke week",
+  "@calendarRepeatsWeekly": {
+    "context": "Calendar event",
+    "description": "How a repeating event repeats.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarRepeatsMonthly": "Elke maand",
+  "@calendarRepeatsMonthly": {
+    "context": "Calendar event",
+    "description": "How a repeating event repeats.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarRepeatsYearly": "Elk jaar",
+  "@calendarRepeatsYearly": {
+    "context": "Calendar event",
+    "description": "How a repeating event repeats.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarRepeats": "Herhaalt",
+  "@calendarRepeats": {
+    "context": "Calendar event",
+    "description": "A repeating event whose rule has no simple name.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarDone": "Klaar",
+  "@calendarDone": {
+    "context": "Calendar event",
+    "description": "Closes an event's details.",
+    "x-locations": {
+      "device": [
+        "Kiosk menu > Calendar"
+      ]
+    }
+  },
+  "calendarCalendarsSection": "Agenda's",
+  "@calendarCalendarsSection": {
+    "context": "Settings > Calendar",
+    "description": "Heading of the list of calendars the kiosk shows.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarAdd": "Agenda toevoegen",
+  "@calendarAdd": {
+    "context": "Settings > Calendar",
+    "description": "Button that picks a Home Assistant calendar to show.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarAlreadyAdded": "Die agenda staat al in de lijst.",
+  "@calendarAlreadyAdded": {
+    "context": "Settings > Calendar",
+    "description": "Toast when the picked calendar was added before.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarOpen": "Agenda openen",
+  "@calendarOpen": {
+    "context": "Settings > Calendar",
+    "description": "Row that shows the calendar on this kiosk.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ]
+    }
+  },
+  "calendarOpenHint": "Toon de agenda op deze kiosk.",
+  "@calendarOpenHint": {
+    "context": "Settings > Calendar",
+    "description": "Under Open calendar.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ]
+    }
+  },
+  "calendarEditName": "Naam",
+  "@calendarEditName": {
+    "context": "Settings > Calendar > a calendar",
+    "description": "Field for the name on the calendar's chip.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarEditColor": "Kleur",
+  "@calendarEditColor": {
+    "context": "Settings > Calendar > a calendar",
+    "description": "Heading of the calendar's color choices.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarEditPerson": "Persoon",
+  "@calendarEditPerson": {
+    "context": "Settings > Calendar > a calendar",
+    "description": "Field for the Home Assistant person the calendar belongs to.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarEditPersonHint": "Toont hun foto op de agendalabels.",
+  "@calendarEditPersonHint": {
+    "context": "Settings > Calendar > a calendar",
+    "description": "Under Person.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarEditPersonNone": "Geen",
+  "@calendarEditPersonNone": {
+    "context": "Settings > Calendar > a calendar",
+    "description": "No person picked.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarPickCalendar": "Kies een agenda",
+  "@calendarPickCalendar": {
+    "context": "Settings > Calendar",
+    "description": "Title of the calendar picker.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarPickPerson": "Kies een persoon",
+  "@calendarPickPerson": {
+    "context": "Settings > Calendar > a calendar",
+    "description": "Title of the person picker.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorTeal": "Petrol",
+  "@calendarColorTeal": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorRust": "Roest",
+  "@calendarColorRust": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorBlue": "Blauw",
+  "@calendarColorBlue": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorPlum": "Pruim",
+  "@calendarColorPlum": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorOchre": "Oker",
+  "@calendarColorOchre": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorSage": "Salie",
+  "@calendarColorSage": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorRose": "Roze",
+  "@calendarColorRose": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorSlate": "Leisteen",
+  "@calendarColorSlate": {
+    "context": "Calendar colors",
+    "description": "A calendar color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarColorCustom": "Aangepast",
+  "@calendarColorCustom": {
+    "context": "Calendar colors",
+    "description": "Picks any other color.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarWidgetEvents": "Getoonde afspraken",
+  "@calendarWidgetEvents": {
+    "context": "Screensaver > Widgets > Up next",
+    "description": "How many coming events the Up next widget lists.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Up next"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Up next"
+      ]
+    }
+  },
   "cameraViewerTitle": "Cameraweergave",
   "@cameraViewerTitle": {
     "context": "Live camera view and camera screensaver",
@@ -6612,6 +7248,19 @@
   },
   "gestureAndroidSettings": "Android-instellingen openen",
   "@gestureAndroidSettings": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
+  "gestureOpenCalendar": "Agenda openen",
+  "@gestureOpenCalendar": {
     "context": "Settings > Gestures > Add gesture > Choose an action",
     "description": "Label or guidance in this section.",
     "x-locations": {
@@ -16299,6 +16948,292 @@
       ],
       "remoteAdmin": [
         "Settings search > App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "settingCalendarDefaultViewTitle": "Standaardweergave",
+  "@settingCalendarDefaultViewTitle": {
+    "context": "Settings > Calendar > Display",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Default view"
+      ],
+      "remoteAdmin": [
+        "Calendar > Default view"
+      ]
+    }
+  },
+  "settingCalendarDefaultViewDescription": "De weergave waarmee de agenda opent.",
+  "@settingCalendarDefaultViewDescription": {
+    "context": "Settings > Calendar > Display",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Default view"
+      ],
+      "remoteAdmin": [
+        "Calendar > Default view"
+      ]
+    }
+  },
+  "settingCalendarWeekStartTitle": "Week begint op",
+  "@settingCalendarWeekStartTitle": {
+    "context": "Settings > Calendar > Display",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Week starts on"
+      ],
+      "remoteAdmin": [
+        "Calendar > Week starts on"
+      ]
+    }
+  },
+  "settingCalendarWeekStartDescription": "Volgt de taal van het apparaat, tenzij ingesteld.",
+  "@settingCalendarWeekStartDescription": {
+    "context": "Settings > Calendar > Display",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Week starts on"
+      ],
+      "remoteAdmin": [
+        "Calendar > Week starts on"
+      ]
+    }
+  },
+  "settingCalendarWeatherEntityTitle": "Weer",
+  "@settingCalendarWeatherEntityTitle": {
+    "context": "Settings > Calendar > Display",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Weather"
+      ],
+      "remoteAdmin": [
+        "Calendar > Weather"
+      ]
+    }
+  },
+  "settingCalendarWeatherEntityDescription": "Voegt de weersverwachting aan elke dag toe.",
+  "@settingCalendarWeatherEntityDescription": {
+    "context": "Settings > Calendar > Display",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Weather"
+      ],
+      "remoteAdmin": [
+        "Calendar > Weather"
+      ]
+    }
+  },
+  "settingCalendarMenuTitle": "Toon in het kioskmenu",
+  "@settingCalendarMenuTitle": {
+    "context": "Settings > Calendar > Kiosk",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Show in the kiosk menu"
+      ],
+      "remoteAdmin": [
+        "Calendar > Show in the kiosk menu"
+      ]
+    }
+  },
+  "settingCalendarMenuDescription": "Voeg de optie Agenda toe aan het kioskmenu.",
+  "@settingCalendarMenuDescription": {
+    "context": "Settings > Calendar > Kiosk",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Show in the kiosk menu"
+      ],
+      "remoteAdmin": [
+        "Calendar > Show in the kiosk menu"
+      ]
+    }
+  },
+  "settingCalendarIdleCloseMinutesTitle": "Sluiten bij inactiviteit",
+  "@settingCalendarIdleCloseMinutesTitle": {
+    "context": "Settings > Calendar > Kiosk",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Close when idle"
+      ],
+      "remoteAdmin": [
+        "Calendar > Close when idle"
+      ]
+    }
+  },
+  "settingCalendarIdleCloseMinutesDescription": "Keert na zo lang zonder aanraking terug naar het dashboard.",
+  "@settingCalendarIdleCloseMinutesDescription": {
+    "context": "Settings > Calendar > Kiosk",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar > Close when idle"
+      ],
+      "remoteAdmin": [
+        "Calendar > Close when idle"
+      ]
+    }
+  },
+  "settingKioskAllowCalendarTitle": "Agenda",
+  "@settingKioskAllowCalendarTitle": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Calendar"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Calendar"
+      ]
+    }
+  },
+  "settingKioskAllowCalendarDescription": "Open de gezinsagenda vanuit het kioskmenu.",
+  "@settingKioskAllowCalendarDescription": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Calendar"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Calendar"
+      ]
+    }
+  },
+  "calendarWeekStartLocale": "Volgens de taal",
+  "@calendarWeekStartLocale": {
+    "context": "Settings > Calendar",
+    "description": "Week starts on: the device language's first day.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarWeekStartSunday": "Zondag",
+  "@calendarWeekStartSunday": {
+    "context": "Settings > Calendar",
+    "description": "Week starts on Sunday.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarWeekStartMonday": "Maandag",
+  "@calendarWeekStartMonday": {
+    "context": "Settings > Calendar",
+    "description": "Week starts on Monday.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarWeekStartSaturday": "Zaterdag",
+  "@calendarWeekStartSaturday": {
+    "context": "Settings > Calendar",
+    "description": "Week starts on Saturday.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarIdleNever": "Nooit",
+  "@calendarIdleNever": {
+    "context": "Settings > Calendar",
+    "description": "Close when idle: the calendar stays open.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarIdle1Minute": "1 minuut",
+  "@calendarIdle1Minute": {
+    "context": "Settings > Calendar",
+    "description": "Close when idle after one minute.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "calendarIdle2Minutes": "2 minuten",
+  "@calendarIdle2Minutes": {
+    "context": "Settings > Calendar",
+    "description": "Close when idle after two minutes.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "settingsMenuCalendar": "Agenda",
+  "@settingsMenuCalendar": {
+    "context": "Settings menu",
+    "description": "Settings page name.",
+    "x-locations": {
+      "device": [
+        "Settings > Calendar"
+      ],
+      "remoteAdmin": [
+        "Calendar"
+      ]
+    }
+  },
+  "settingsMenuCalendarSummary": "Gezinsagenda's uit Home Assistant",
+  "@settingsMenuCalendarSummary": {
+    "context": "Settings menu",
+    "description": "Under Calendar in the settings menu.",
+    "x-locations": {
+      "device": [
+        "Settings"
+      ],
+      "remoteAdmin": [
+        "Sidebar"
+      ]
+    }
+  },
+  "fleetTheCalendarsHiddenWithTheirChips": "de agenda's die met hun labels zijn verborgen",
+  "@fleetTheCalendarsHiddenWithTheirChips": {
+    "context": "Fleet Management > Sync",
+    "description": "What stays per kiosk when the Calendar category syncs.",
+    "x-locations": {
+      "device": [
+        "Settings > Fleet Management"
+      ],
+      "remoteAdmin": [
+        "Fleet Management"
       ]
     }
   },
@@ -35513,6 +36448,19 @@
   "@settingsGroupMediaCameras": {
     "context": "Settings:Menu",
     "description": "Heading above a group of Settings menu entries.",
+    "x-locations": {
+      "device": [
+        "Settings > menu"
+      ],
+      "remoteAdmin": [
+        "Sidebar menu"
+      ]
+    }
+  },
+  "settingsGroupHousehold": "Huishouden",
+  "@settingsGroupHousehold": {
+    "context": "Settings:Menu",
+    "description": "Settings menu group heading over Intercom, Alarms and Calendar.",
     "x-locations": {
       "device": [
         "Settings > menu"
