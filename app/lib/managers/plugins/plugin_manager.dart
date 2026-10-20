@@ -15,6 +15,7 @@ import 'fleet_plugin_host.dart';
 import 'plugin_directory.dart';
 import 'plugin_repository.dart';
 import '../home_assistant/plugin_ha_socket.dart';
+import '../sendspin/plugin_ma_socket.dart';
 import 'plugin_camera.dart';
 import 'plugin_host_api.dart';
 
@@ -272,6 +273,10 @@ class PluginManager extends Manager implements FleetPluginHost {
   /// Set by the app container before [init].
   HaPluginSocket? haSocket;
 
+  /// The Music Assistant connection plugins with the `ma` capability
+  /// share. Set by the app container before [init].
+  MaPluginSocket? maSocket;
+
   /// The voice turn plugins follow. Set by the app container before [init].
   PluginVoiceFeed? voice;
 
@@ -368,6 +373,7 @@ class PluginManager extends Manager implements FleetPluginHost {
       bus,
       (event) => channel.invokeMethod<void>('hostEvent', event),
       ha: haSocket,
+      ma: maSocket,
       voice: voice,
     );
     channel.setMethodCallHandler((call) async {
@@ -418,6 +424,12 @@ class PluginManager extends Manager implements FleetPluginHost {
           return _hostReads.haSubscribe(call.arguments as Map);
         case 'haUnsubscribe':
           _hostReads.haUnsubscribe(call.arguments as Map);
+        case 'maCall':
+          return _hostReads.maCall(call.arguments as Map);
+        case 'maSubscribe':
+          return _hostReads.maSubscribe(call.arguments as Map);
+        case 'maUnsubscribe':
+          _hostReads.maUnsubscribe(call.arguments as Map);
         case 'entities':
           final data = call.arguments as Map;
           if (_runtimeSessions[data['id']] == data['session'] &&
@@ -1499,6 +1511,7 @@ class PluginManager extends Manager implements FleetPluginHost {
     await _attachSub?.cancel();
     await _hostReads.dispose();
     haSocket?.dispose();
+    maSocket?.dispose();
     repository.close();
     channel.setMethodCallHandler(null);
     try {

@@ -27,6 +27,7 @@ import 'managers/gestures/hardware_buttons.dart';
 import 'managers/glance/glance_manager.dart';
 import 'managers/home_assistant/home_assistant_manager.dart';
 import 'managers/home_assistant/plugin_ha_socket.dart';
+import 'managers/sendspin/plugin_ma_socket.dart';
 import 'managers/js_api/js_api_manager.dart';
 import 'managers/js_api/page_ha_socket.dart';
 import 'managers/js_api/page_state_manager.dart';
@@ -386,6 +387,11 @@ class AppContainer {
       token: () => settings.get(haToken),
       log: log,
     );
+    plugins.maSocket = MaPluginSocket(
+      baseUrl: () => settings.get(sendspinMaUrl),
+      token: () => settings.get(sendspinMaToken),
+      log: log,
+    );
     // Switched off: the sockets open now close, and the page's reconnects
     // hear no.
     bus.on<SettingChanged>().listen((e) {
@@ -394,6 +400,9 @@ class AppContainer {
       }
       if (e.key == haUrl.key || e.key == haToken.key) {
         plugins.haSocket?.restart();
+      }
+      if (e.key == sendspinMaUrl.key || e.key == sendspinMaToken.key) {
+        plugins.maSocket?.restart();
       }
     });
     for (final manager in _ordered.skip(2)) {

@@ -62,6 +62,14 @@ class SendspinManager extends Manager {
   bool _playing = false;
   Map<String, Object?> _status = const {};
 
+  /// What Music Assistant knows this device as: the id of the player that
+  /// stands for it there and the server's identity. Resolved after the
+  /// player connects.
+  Map<String, Object?> _maIdentity = const {};
+  String _maIdentityKey = '';
+  int _maIdentityRun = 0;
+  String _playerSent = '';
+
   /// Whether this device's own Sendspin player is playing, whichever player
   /// the Now Playing surfaces follow. The status lights read it.
   final localPlaying = ValueNotifier<bool>(false);
@@ -939,6 +947,7 @@ class SendspinManager extends Manager {
         case 'stateChanged':
           _status = {..._status, ...map};
           _remoteMediaChanged();
+          _playerChanged();
           log.info(
             name,
             'state: connected=${map['connected']} '
@@ -1114,6 +1123,13 @@ class SendspinManager extends Manager {
       // The source sensor names the player, and a rename or the player
       // surface going away moves it without a snapshot.
       _publishMediaSummary();
+      if (e.key == defs.sendspinEnabled.key ||
+          e.key == defs.sendspinClientId.key ||
+          e.key == defs.sendspinLocalPlayerName.key ||
+          e.key == defs.sendspinMaUrl.key ||
+          e.key == defs.sendspinMaToken.key) {
+        _playerChanged();
+      }
       if (e.key == defs.sendspinDuckPercent.key) _syncDucking();
       // The card-surface flag rides the settings that decide it.
       if (e.key == defs.sendspinPlayer.key ||
@@ -1280,6 +1296,17 @@ class SendspinManager extends Manager {
           await queueArtworkCache.clear();
           return CommandResult.ok(await queueArtworkCache.stats());
         },
+      ),
+    );
+
+    commands.register(
+      Command(
+        name: 'sendspinPlayer',
+        description:
+            'The local Sendspin player: whether it is on and connected, its '
+            'client id and name and the Music Assistant player and server '
+            'it maps to.',
+        handler: (_) async => CommandResult.ok(playerIdentity),
       ),
     );
 
@@ -2312,6 +2339,90 @@ class SendspinManager extends Manager {
     token: _settings.get(defs.sendspinMaToken),
   );
 
+  /// The local player as plugins see it, through `getSendspinPlayer` and
+  /// the `sendspin.player` event. The Music Assistant fields are empty
+  /// until the player connects and the server names it.
+  Map<String, Object?> get playerIdentity {
+    final ma = _maConfigured ? _maIdentity : const <String, Object?>{};
+    final connected = _running && _status['connected'] == true;
+    return {
+      'enabled': _settings.get(defs.sendspinEnabled),
+      'running': _running,
+      'connected': connected,
+      'clientId': _settings.get(defs.sendspinClientId),
+      'playerName': _settings.get(defs.sendspinLocalPlayerName),
+      'serverName': connected ? '${_status['serverName'] ?? ''}' : '',
+      'maConfigured': _maConfigured,
+      'maPlayerId': '${ma['playerId'] ?? ''}',
+      'maServerId': '${ma['serverId'] ?? ''}',
+      'maServerName': '${ma['serverName'] ?? ''}',
+      'maServerVersion': '${ma['serverVersion'] ?? ''}',
+    };
+  }
+
+  /// Tell plugins when [playerIdentity] changed.
+  void _playerChanged() {
+    _syncMaIdentity();
+    final player = playerIdentity;
+    final signature = jsonEncode(player);
+    if (signature == _playerSent) return;
+    _playerSent = signature;
+    bus.publish(SendspinPlayerChanged(player));
+  }
+
+  /// Ask Music Assistant which player stands for this device, once per
+  /// connection to a server with a given address, token and client id.
+  void _syncMaIdentity() {
+    final clientId = _settings.get(defs.sendspinClientId).trim();
+    final connected = _running && _status['connected'] == true;
+    final key = connected && _maConfigured && clientId.isNotEmpty
+        ? '${_settings.get(defs.sendspinMaUrl)}|'
+              '${_settings.get(defs.sendspinMaToken)}|$clientId|'
+              '${_status['serverName'] ?? ''}'
+        : '';
+    if (key == _maIdentityKey) return;
+    _maIdentityKey = key;
+    final run = ++_maIdentityRun;
+    if (!_maConfigured) _maIdentity = const {};
+    if (key.isNotEmpty) unawaited(_resolveMaIdentity(run, clientId));
+  }
+
+  /// Music Assistant may list a player a moment after it connects, so a
+  /// miss is asked again twice.
+  Future<void> _resolveMaIdentity(int run, String clientId) async {
+    for (final wait in const [0, 3, 10]) {
+      if (wait > 0) await Future<void>.delayed(Duration(seconds: wait));
+      if (run != _maIdentityRun) return;
+      final res = await _api().call('players/all');
+      final players = res.result;
+      var playerId = res.ok && players is List
+          ? MusicAssistantApi.ownPlayerId(
+              {
+                for (final p in players)
+                  if (p is Map) '${p['player_id'] ?? ''}': p,
+              },
+              clientId,
+              ownName: _settings.get(defs.sendspinLocalPlayerName),
+            )
+          : '';
+      // The queue Music Assistant answers for the client id is the queue
+      // of the player that stands for this device, and shares its id.
+      if (playerId.isEmpty && res.ok) playerId = await _ownQueueId();
+      if (run != _maIdentityRun) return;
+      final info = res.serverInfo;
+      _maIdentity = res.ok
+          ? {
+              'playerId': playerId,
+              'serverId': '${info['server_id'] ?? ''}',
+              'serverName': '${info['name'] ?? ''}',
+              'serverVersion': '${info['server_version'] ?? ''}',
+            }
+          : const {};
+      _playerChanged();
+      if (playerId.isNotEmpty) return;
+    }
+  }
+
   /// The id of the queue Music Assistant answers for this device's client
   /// id, which is the id of the player that stands for it there; empty
   /// when there is none to ask or no answer.
@@ -2867,6 +2978,7 @@ class SendspinManager extends Manager {
       });
       _running = true;
       log.info(name, 'player started as "$playerName"');
+      _playerChanged();
       _syncWatcher();
       _remoteMediaChanged();
     } catch (e) {
@@ -2896,6 +3008,7 @@ class SendspinManager extends Manager {
       );
     }
     _status = const {};
+    _playerChanged();
     _idleGrace?.cancel();
     _idleGrace = null;
     _uiPlaying = false;

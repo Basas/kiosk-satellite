@@ -1053,6 +1053,15 @@ class SendspinNowPlayingChanged extends AppEvent {
   final bool playing;
 }
 
+/// The local Sendspin player's identity or connection changed: whether
+/// it is on and connected, its Sendspin client id and name and the Music
+/// Assistant player and server it maps to. Plugins hear it as
+/// `sendspin.player`.
+class SendspinPlayerChanged extends AppEvent {
+  const SendspinPlayerChanged(this.player);
+  final Map<String, Object?> player;
+}
+
 /// An AirPlay session started, changed or ended: the snapshot the
 /// receiver pushes (the sender's name, whether it plays, the track, its
 /// progress and cover), or null once no sender is connected. The Now
