@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.32 - 2026-10-20
 
 ### Added
 - **Plugins can control Music Assistant (#1053).** A plugin that declares the new `ma` capability runs Music Assistant commands for players, queues, the library and metadata and follows Music Assistant events. It goes through the kiosk's own connection and the token in **Settings > Media Player > Music Assistant**, so the plugin needs no token of its own and never sees the kiosk's. Sign-in, users, tokens and server configuration stay off limits. All plugins share one connection, which opens on first use and closes after a minute without use. See [Music Assistant](https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/music-assistant.md) in the plugin docs.
