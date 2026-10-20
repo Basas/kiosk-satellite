@@ -15,6 +15,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ### Fixed
 - **`ks://camera` opens the default camera view.** The link without a view refused with "view not found" instead of showing the default view, as documented.
+- **Plugin screensavers show up in the remote admin right away (#1059).** Enabling, disabling or removing a plugin now updates **Screensaver mode** in an open remote admin page. Before, a new plugin screensaver was missing from the list until the page was reloaded.
 
 ## v2026.10.32 - 2026-10-20
 

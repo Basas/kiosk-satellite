@@ -16,6 +16,7 @@ import 'plugin_directory.dart';
 import 'plugin_repository.dart';
 import '../home_assistant/plugin_ha_socket.dart';
 import '../sendspin/plugin_ma_socket.dart';
+import '../settings/definitions.dart' as defs;
 import 'plugin_camera.dart';
 import 'plugin_host_api.dart';
 
@@ -353,6 +354,20 @@ class PluginManager extends Manager implements FleetPluginHost {
 
     installed.addListener(publishSettings);
     enabled.addListener(publishSettings);
+    // Screensaver mode lists each plugin screensaver by title and plugin
+    // name, so the remote admin rebuilds its dropdown when either changes.
+    // A slideshow's new photos leave the list alone.
+    var screensaverList = jsonEncode(screensaverOptions);
+    void publishScreensaverOptions() {
+      final next = jsonEncode(screensaverOptions);
+      if (!_disposed && next != screensaverList) {
+        screensaverList = next;
+        bus.publish(SettingOptionsChanged(defs.screensaverMode.key));
+      }
+    }
+
+    screensavers.addListener(publishScreensaverOptions);
+    installed.addListener(publishScreensaverOptions);
     // The Overview's plugin tiles, apart from the readings and charts a
     // plugin page follows: those move often, the tiles rarely.
     void publishTiles() {
