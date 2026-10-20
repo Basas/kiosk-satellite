@@ -2055,6 +2055,7 @@ const screensaverMode = SettingDef<String>(
     'clock',
     'weather_mood',
     'celestial',
+    'calendar',
     'media',
     'local',
     'gallery',
@@ -2070,6 +2071,7 @@ const screensaverMode = SettingDef<String>(
     'clock': 'Clock',
     'weather_mood': 'Weather Mood',
     'celestial': 'Celestial',
+    'calendar': 'Calendar',
     'media': 'Home Assistant Media',
     'local': 'Local Media',
     'gallery': 'Photo Gallery',
@@ -2095,6 +2097,28 @@ const screensaverDashboardView = SettingDef<String>(
   section: 'Home Assistant Dashboard screensaver',
   dependsOn: 'screensaver.mode',
   dependsOnValue: 'dashboard',
+);
+
+// The Calendar mode opens on this view, on today. Its own setting, not
+// the calendar's Default view, so the kiosk menu can open on one view and
+// the screensaver show another.
+const screensaverCalendarView = SettingDef<String>(
+  key: 'screensaver.calendar_view',
+  type: SettingType.select,
+  defaultValue: 'week',
+  title: 'Calendar view',
+  description: 'The calendar view the screensaver opens on.',
+  category: 'Screensaver',
+  section: 'Calendar screensaver',
+  dependsOn: 'screensaver.mode',
+  dependsOnValue: 'calendar',
+  options: ['day', 'week', 'month', 'schedule'],
+  optionLabels: {
+    'day': 'Day',
+    'week': 'Week',
+    'month': 'Month',
+    'schedule': 'Schedule',
+  },
 );
 
 // Weather Mood follows the selected weather entity and sun.sun.
@@ -12741,6 +12765,7 @@ const List<SettingDef<Object>> allSettings = [
   screensaverCameraView,
   screensaverCameraViewName,
   screensaverDashboardView,
+  screensaverCalendarView,
   // The Widgets group: corner overlays riding over the mode panels above,
   // so it sits between them and the other overlay group, At a Glance.
   screensaverWidgets,

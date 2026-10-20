@@ -11237,6 +11237,16 @@ class UiStringsEs extends UiStrings {
   String get screensaverModeUrl => 'URL de imagen';
 
   @override
+  String get screensaverCalendarSection => 'Protector de pantalla: Calendario';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Vista del calendario';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'La vista del calendario con la que se abre el protector de pantalla.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => 'Escala de la fila';
 
   @override

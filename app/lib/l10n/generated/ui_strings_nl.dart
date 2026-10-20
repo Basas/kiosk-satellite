@@ -11158,6 +11158,16 @@ class UiStringsNl extends UiStrings {
   String get screensaverModeUrl => 'Afbeeldings-URL';
 
   @override
+  String get screensaverCalendarSection => 'Agenda als schermbeveiliging';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Agendaweergave';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'De agendaweergave waarmee de schermbeveiliging opent.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => 'Rij schalen';
 
   @override

@@ -11112,6 +11112,16 @@ class UiStringsRu extends UiStrings {
   String get screensaverModeUrl => 'URL изображения';
 
   @override
+  String get screensaverCalendarSection => 'Заставка «Календарь»';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Вид календаря';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'Вид календаря, с которым открывается заставка.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => 'Масштаб ряда';
 
   @override

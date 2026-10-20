@@ -11150,6 +11150,16 @@ class UiStringsUk extends UiStrings {
   String get screensaverModeUrl => 'URL-адреса зображення';
 
   @override
+  String get screensaverCalendarSection => 'Заставка календаря';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Вигляд календаря';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'Вигляд календаря, з яким відкривається заставка.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => 'Масштаб рядка';
 
   @override

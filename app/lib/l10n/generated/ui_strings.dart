@@ -19217,6 +19217,24 @@ abstract class UiStrings {
   /// **'Image URL'**
   String get screensaverModeUrl;
 
+  /// Heading of the group for the Calendar screensaver mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar screensaver'**
+  String get screensaverCalendarSection;
+
+  /// Setting label: which calendar view (Day, Week, Month or Schedule) the screensaver opens on.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar view'**
+  String get settingScreensaverCalendarViewTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The calendar view the screensaver opens on.'**
+  String get settingScreensaverCalendarViewDescription;
+
   /// Setting label.
   ///
   /// In en, this message translates to:

@@ -56,5 +56,8 @@
   "settingScreensaverDashboardViewTitle": "Dashboard-Ansicht",
   "settingScreensaverDashboardViewDescription": "Die Home-Assistant-Dashboard-Ansicht, die der Bildschirmschoner zeigt.",
   "screensaverDashboardSection": "Bildschirmschoner: Home-Assistant-Dashboard",
-  "screensaverModeUrl": "Bild-URL"
+  "screensaverModeUrl": "Bild-URL",
+  "screensaverCalendarSection": "Bildschirmschoner: Kalender",
+  "settingScreensaverCalendarViewTitle": "Kalenderansicht",
+  "settingScreensaverCalendarViewDescription": "Die Kalenderansicht, mit der der Bildschirmschoner öffnet."
 }

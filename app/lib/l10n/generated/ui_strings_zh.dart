@@ -10492,6 +10492,15 @@ class UiStringsZh extends UiStrings {
   String get screensaverModeUrl => '图片地址';
 
   @override
+  String get screensaverCalendarSection => '日历屏保';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => '日历视图';
+
+  @override
+  String get settingScreensaverCalendarViewDescription => '屏保打开时显示的日历视图。';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => '行缩放';
 
   @override
@@ -24716,6 +24725,15 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverModeUrl => '图片地址';
+
+  @override
+  String get screensaverCalendarSection => '日历屏保';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => '日历视图';
+
+  @override
+  String get settingScreensaverCalendarViewDescription => '屏保打开时显示的日历视图。';
 
   @override
   String get settingScreensaverGlanceScaleTitle => '行缩放';

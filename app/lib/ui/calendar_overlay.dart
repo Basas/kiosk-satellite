@@ -31,7 +31,7 @@ class CalendarOverlay extends StatelessWidget {
     valueListenable: container.calendar.visible,
     builder: (context, visible, _) {
       if (!visible) return const SizedBox.shrink();
-      return Positioned.fill(child: _CalendarScreen(container: container));
+      return Positioned.fill(child: CalendarScreen(container: container));
     },
   );
 }
@@ -341,16 +341,27 @@ class CalendarAvatarStack extends StatelessWidget {
   }
 }
 
-class _CalendarScreen extends StatefulWidget {
-  const _CalendarScreen({required this.container});
+/// The calendar itself: the overlay's content, and the Calendar
+/// screensaver mode's.
+class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({
+    super.key,
+    required this.container,
+    this.screensaver = false,
+  });
 
   final AppContainer container;
 
+  /// Shown as the screensaver: it opens on the screensaver's Calendar
+  /// view and today, never closes for idle and its X ends the screensaver.
+  /// Touches stay with the calendar.
+  final bool screensaver;
+
   @override
-  State<_CalendarScreen> createState() => _CalendarScreenState();
+  State<CalendarScreen> createState() => _CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<_CalendarScreen> {
+class _CalendarScreenState extends State<CalendarScreen> {
   AppContainer get c => widget.container;
   CalendarManager get cal => c.calendar;
 
@@ -366,15 +377,25 @@ class _CalendarScreenState extends State<_CalendarScreen> {
     _armIdle();
     _armMidnight();
     cal.calendars.addListener(_watch);
-    cal.reopened.addListener(_reopen);
+    if (widget.screensaver) {
+      cal.screensaverShown.value = true;
+    } else {
+      cal.reopened.addListener(_reopen);
+    }
   }
 
   /// Start on the view and day [CalendarManager.open] asked for, or the
   /// default view on today.
   void _take() {
-    final opening = cal.opening;
-    cal.opening = (view: null, date: null);
-    final fallback = c.settings.get(defs.calendarDefaultView);
+    // The screensaver leaves an opening to the overlay it was meant for,
+    // and opens on its own view.
+    final opening = widget.screensaver ? (view: null, date: null) : cal.opening;
+    if (!widget.screensaver) cal.opening = (view: null, date: null);
+    final fallback = c.settings.get(
+      widget.screensaver
+          ? defs.screensaverCalendarView
+          : defs.calendarDefaultView,
+    );
     _view = opening.view ?? (_views.contains(fallback) ? fallback : 'week');
     _anchor = opening.date ?? dateOnly(DateTime.now());
     cal.shownView.value = _view;
@@ -397,7 +418,11 @@ class _CalendarScreenState extends State<_CalendarScreen> {
     _idle?.cancel();
     _midnight?.cancel();
     cal.calendars.removeListener(_watch);
-    cal.reopened.removeListener(_reopen);
+    if (widget.screensaver) {
+      cal.screensaverShown.value = false;
+    } else {
+      cal.reopened.removeListener(_reopen);
+    }
     cal.unwatch(this);
     cal.shownView.value = null;
     super.dispose();
@@ -415,6 +440,8 @@ class _CalendarScreenState extends State<_CalendarScreen> {
 
   void _armIdle() {
     _idle?.cancel();
+    // As the screensaver it is what idle leads to, so it stays.
+    if (widget.screensaver) return;
     final minutes =
         int.tryParse(c.settings.get(defs.calendarIdleCloseMinutes)) ?? 0;
     if (minutes <= 0) return;
@@ -486,7 +513,13 @@ class _CalendarScreenState extends State<_CalendarScreen> {
     _watch();
   }
 
-  void _close() => cal.visible.value = false;
+  void _close() {
+    if (widget.screensaver) {
+      unawaited(c.commands.execute('stopScreensaver', const {}));
+    } else {
+      cal.visible.value = false;
+    }
+  }
 
   void _show(CalendarEvent event) => showCalendarEvent(context, c, event);
 
@@ -519,6 +552,9 @@ class _CalendarScreenState extends State<_CalendarScreen> {
     final s = l10n(context);
     return Listener(
       onPointerDown: (_) {
+        // As the screensaver every finger here belongs to the calendar:
+        // the kiosk's own report of the touch must not dismiss it.
+        if (widget.screensaver) c.screensaver.markControlTouch();
         _armIdle();
         // A touch means the ring has been seen.
         cal.highlight.value = null;

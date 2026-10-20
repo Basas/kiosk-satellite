@@ -104,6 +104,12 @@ Positions come from orbital elements and are accurate to a few arcminutes, about
 
 Constellation names follow the interface language in Spanish, German, French, Russian and Chinese and use the Latin names in the other languages. Star names are the official IAU names.
 
+### Calendar
+
+Shows the [calendar](calendar.md) as the screensaver, on today, with the calendars, colors and hidden chips set up for it. Selecting the mode reveals the **Calendar screensaver** group with one row, **Calendar view**, which picks Day, Week (the default), Month or Schedule. It is separate from the calendar's own **Default view**, so the kiosk menu can open the calendar on one view while the screensaver shows another.
+
+The calendar stays usable while it is the screensaver: tap an event, switch views, move between days and hide calendars with their chips as usual. A tap does not dismiss it. Use the X button in the top corner instead. The calendar's **Close when idle** does not apply, and widgets and the At a Glance row stay off it. Motion, face, proximity and person detection, the wake word, the brightness settings, the schedule and **Turn screen off after** work as in the other modes. Like the open calendar, the screensaver keeps the calendars live from Home Assistant while it shows.
+
 ### Dim
 
 Reduces the display backlight to the configured **Dim level** while keeping the live Home Assistant dashboard visible underneath. Because the dashboard remains visible, the **Pause dashboard during screensaver** optimization cannot be applied in this mode. As a result, the browser process continues to consume CPU, GPU, and battery power.
@@ -237,7 +243,7 @@ Widgets hold corner priority over the photo metadata overlay of Immich Media, Ho
 
 ### Small Clock
 
-Displays a corner clock over any screensaver mode except Clock and WebRTC Camera:
+Displays a corner clock over any screensaver mode except Clock, Calendar and Camera Streams:
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -251,7 +257,7 @@ Renders over a soft vignette for legibility and supports pixel shift adjustments
 
 ### Weather
 
-Displays real-time weather data pulled from a Home Assistant `weather` entity over any mode except Camera Streams. The widget layout displays top-to-bottom: location name, current temperature with units (e.g., "28°C"), condition text with a matching icon, humidity, wind speed, and visibility. Units are provided directly by the Home Assistant entity, and icons render in a monochrome style matching the widget color.
+Displays real-time weather data pulled from a Home Assistant `weather` entity over any mode except Calendar and Camera Streams. The widget layout displays top-to-bottom: location name, current temperature with units (e.g., "28°C"), condition text with a matching icon, humidity, wind speed, and visibility. Units are provided directly by the Home Assistant entity, and icons render in a monochrome style matching the widget color.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -267,7 +273,7 @@ Data updates automatically via a live Home Assistant subscription while the scre
 
 ### Battery
 
-Displays the device's physical battery status in a display corner over any mode except Camera Streams. Renders an adaptive battery icon, a lightning bolt indicator during external charging, and the current charge percentage.
+Displays the device's physical battery status in a display corner over any mode except Calendar and Camera Streams. Renders an adaptive battery icon, a lightning bolt indicator during external charging, and the current charge percentage.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -280,7 +286,7 @@ Reads hardware battery state directly from Android rather than a Home Assistant 
 
 ### Next alarm
 
-Shows the next [alarm](alarms.md) set on the kiosk when it rings within 24 hours, and the snooze while one runs, over any mode except Camera Streams. The corner stays empty the rest of the time. A tap on the widget opens the alarm list.
+Shows the next [alarm](alarms.md) set on the kiosk when it rings within 24 hours, and the snooze while one runs, over any mode except Calendar and Camera Streams. The corner stays empty the rest of the time. A tap on the widget opens the alarm list.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -289,7 +295,7 @@ Shows the next [alarm](alarms.md) set on the kiosk when it rings within 24 hours
 
 ### Up next
 
-Shows what is still to come today on the [calendar](calendar.md), over any mode except Camera Streams: a dot in each event's calendar color, the start time and the title. Calendars hidden with their chips are left out. The corner stays empty once nothing else is on today. A tap on the widget opens the calendar on the Schedule view.
+Shows what is still to come today on the [calendar](calendar.md), over any mode except Calendar and Camera Streams: a dot in each event's calendar color, the start time and the title. Calendars hidden with their chips are left out. The corner stays empty once nothing else is on today. A tap on the widget opens the calendar on the Schedule view.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -299,7 +305,7 @@ Shows what is still to come today on the [calendar](calendar.md), over any mode 
 
 ### Entity
 
-Displays a single Home Assistant entity in a display corner over any mode except Camera Streams. Styled similarly to the widget family, the layout features the entity icon and value on a single line with the entity name centered underneath. Ideal for displaying specific metrics, such as a room temperature sensor over an Immich photo slideshow.
+Displays a single Home Assistant entity in a display corner over any mode except Calendar and Camera Streams. Styled similarly to the widget family, the layout features the entity icon and value on a single line with the entity name centered underneath. Ideal for displaying specific metrics, such as a room temperature sensor over an Immich photo slideshow.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -447,7 +453,7 @@ What a detection does once the display has turned off is decided by **Wake to sc
 
 The standard method for launching the screensaver is the idle timeout clock. Manual launch options include selecting **Start Screensaver** in the kiosk menu, triggering a mapped [gesture](gestures.md), toggling the ESPHome **Screensaver active** switch, or sending the `startScreensaver` command via the [remote API](remote-api.md) or [JavaScript API](js-api.md).
 
-Touch interactions instantly dismiss the screensaver and reset the idle clock. There are two exceptions. A tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). The [Celestial](#celestial) screensaver takes a double tap, since a drag there looks around the sky. Additional dismissal triggers include:
+Touch interactions instantly dismiss the screensaver and reset the idle clock. There are three exceptions. A tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). The [Celestial](#celestial) screensaver takes a double tap, since a drag there looks around the sky. The [Calendar](#calendar) screensaver stays until its X button is pressed. Additional dismissal triggers include:
 
 * **Wake Word**: Dismisses the screensaver immediately and pauses the idle clock for the entire voice turn so the display remains active during conversation.
 * **Camera Motion**: Triggers wake when Dismiss on motion is active.
@@ -470,7 +476,7 @@ When using the Voice Satellite integration on the dashboard, the **Turn off the 
 
 ## At a Glance
 
-The **At a glance** feature displays a live status row containing up to four Home Assistant entity states across all screensaver modes except the Camera Streams grid. Data updates over an independent Home Assistant subscription while the screensaver is active. Full setup details are available in the [At a Glance](at-a-glance.md) guide.
+The **At a glance** feature displays a live status row containing up to four Home Assistant entity states across all screensaver modes except Calendar and the Camera Streams grid. Data updates over an independent Home Assistant subscription while the screensaver is active. Full setup details are available in the [At a Glance](at-a-glance.md) guide.
 
 ## Home Assistant
 

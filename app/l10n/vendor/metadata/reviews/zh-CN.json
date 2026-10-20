@@ -26691,5 +26691,23 @@
     "translation": "a9c18112cac372b4648d5eb2e2ee52c43167daf8d038085d0cfa838bf74bc02b",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingScreensaverCalendarViewTitle": {
+    "source": "c155de99b95a48a0a905f8f9028a17767067f01e09c54ba90ca24c91819ed6c6",
+    "translation": "3b7ed3f31fbfff0caf667192833af26b96d3cac06ae61ac61753fabe7d577e39",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverCalendarViewDescription": {
+    "source": "63939ef303116083562187f5d286832d5a2992e094ec1ab3fceb72368674310a",
+    "translation": "ebfe2de922ba833108c9a0be541794402b542bc374fced7d136b8cc16680eccf",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverCalendarSection": {
+    "source": "631b5fb0b89703f1dd5d0f9b67076a019b722c7a34e67a6169136b399869848d",
+    "translation": "fa714cbe7f3d55d776f3a813c8cc495345c797f587de57437c8b8c0fe3362dd6",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

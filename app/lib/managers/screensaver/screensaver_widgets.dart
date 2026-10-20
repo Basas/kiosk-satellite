@@ -228,10 +228,12 @@ double screensaverWidgetScaleFactor(Map<String, Object?> config) {
 }
 
 /// Whether [type] renders over the [mode] screensaver. Everything stays
-/// off the camera grid, where an overlay sits in the way of a live feed;
+/// off the calendar, whose top bar and views fill the screen, and off the
+/// camera grid, where an overlay sits in the way of a live feed;
 /// the clock widget also stays off the Clock mode, which is one already —
 /// the weather widget is exactly what a clock face wants next to it.
 bool screensaverWidgetAllowedOnMode(String type, String mode) => switch (type) {
+  _ when mode == 'calendar' => false,
   'clock' => mode != 'clock' && mode != 'camera',
   _ => mode != 'camera',
 };

@@ -56,5 +56,8 @@
   "settingScreensaverDashboardViewTitle": "仪表盘页面",
   "settingScreensaverDashboardViewDescription": "选择屏保显示的 Home Assistant 仪表盘页面。",
   "screensaverDashboardSection": "Home Assistant 仪表盘屏保",
-  "screensaverModeUrl": "图片地址"
+  "screensaverModeUrl": "图片地址",
+  "screensaverCalendarSection": "日历屏保",
+  "settingScreensaverCalendarViewTitle": "日历视图",
+  "settingScreensaverCalendarViewDescription": "屏保打开时显示的日历视图。"
 }

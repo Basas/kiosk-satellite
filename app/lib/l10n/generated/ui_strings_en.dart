@@ -11023,6 +11023,16 @@ class UiStringsEn extends UiStrings {
   String get screensaverModeUrl => 'Image URL';
 
   @override
+  String get screensaverCalendarSection => 'Calendar screensaver';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Calendar view';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'The calendar view the screensaver opens on.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => 'Row scaling';
 
   @override

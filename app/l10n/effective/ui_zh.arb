@@ -41552,6 +41552,45 @@
       ]
     }
   },
+  "screensaverCalendarSection": "日历屏保",
+  "@screensaverCalendarSection": {
+    "context": "Settings:Screensaver:Calendar screensaver",
+    "description": "Heading of the group for the Calendar screensaver mode.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Calendar screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Calendar screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCalendarViewTitle": "日历视图",
+  "@settingScreensaverCalendarViewTitle": {
+    "context": "Settings:Screensaver:Calendar screensaver",
+    "description": "Setting label: which calendar view (Day, Week, Month or Schedule) the screensaver opens on.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Calendar screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Calendar screensaver"
+      ]
+    }
+  },
+  "settingScreensaverCalendarViewDescription": "屏保打开时显示的日历视图。",
+  "@settingScreensaverCalendarViewDescription": {
+    "context": "Settings:Screensaver:Calendar screensaver",
+    "description": "Setting description.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Calendar screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Calendar screensaver"
+      ]
+    }
+  },
   "settingScreensaverGlanceScaleTitle": "行缩放",
   "@settingScreensaverGlanceScaleTitle": {
     "context": "Settings > Screensaver > At a Glance > Appearance",

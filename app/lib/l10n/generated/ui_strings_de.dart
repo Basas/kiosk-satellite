@@ -11275,6 +11275,16 @@ class UiStringsDe extends UiStrings {
   String get screensaverModeUrl => 'Bild-URL';
 
   @override
+  String get screensaverCalendarSection => 'Bildschirmschoner: Kalender';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Kalenderansicht';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'Die Kalenderansicht, mit der der Bildschirmschoner öffnet.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle => 'Skalierung der Leiste';
 
   @override

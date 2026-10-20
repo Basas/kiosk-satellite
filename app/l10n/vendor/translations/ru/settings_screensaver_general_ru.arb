@@ -56,5 +56,8 @@
   "settingScreensaverDashboardViewTitle": "Вид панели",
   "settingScreensaverDashboardViewDescription": "Вид панели Home Assistant, который показывает заставка.",
   "screensaverDashboardSection": "Заставка «Панель Home Assistant»",
-  "screensaverModeUrl": "URL изображения"
+  "screensaverModeUrl": "URL изображения",
+  "screensaverCalendarSection": "Заставка «Календарь»",
+  "settingScreensaverCalendarViewTitle": "Вид календаря",
+  "settingScreensaverCalendarViewDescription": "Вид календаря, с которым открывается заставка."
 }

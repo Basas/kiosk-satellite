@@ -83,6 +83,12 @@ void main() {
   });
 
   group('screensaverWidgetAllowedOnMode', () {
+    test('nothing rides the calendar, which fills the screen', () {
+      for (final type in ['clock', 'weather', 'battery', 'calendar']) {
+        expect(screensaverWidgetAllowedOnMode(type, 'calendar'), isFalse);
+      }
+    });
+
     test('the clock stays off Clock and the camera grid', () {
       expect(screensaverWidgetAllowedOnMode('clock', 'clock'), isFalse);
       expect(screensaverWidgetAllowedOnMode('clock', 'camera'), isFalse);

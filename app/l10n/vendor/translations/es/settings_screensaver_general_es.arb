@@ -56,5 +56,8 @@
   "settingScreensaverDashboardViewTitle": "Vista del panel de control",
   "settingScreensaverDashboardViewDescription": "La vista del panel de control de Home Assistant que muestra el protector de pantalla.",
   "screensaverDashboardSection": "Protector de pantalla: Panel de control de Home Assistant",
-  "screensaverModeUrl": "URL de imagen"
+  "screensaverModeUrl": "URL de imagen",
+  "screensaverCalendarSection": "Protector de pantalla: Calendario",
+  "settingScreensaverCalendarViewTitle": "Vista del calendario",
+  "settingScreensaverCalendarViewDescription": "La vista del calendario con la que se abre el protector de pantalla."
 }

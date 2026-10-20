@@ -11232,6 +11232,16 @@ class UiStringsFr extends UiStrings {
   String get screensaverModeUrl => 'URL d\'image';
 
   @override
+  String get screensaverCalendarSection => 'Économiseur d\'écran calendrier';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Vue du calendrier';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'La vue du calendrier à l\'ouverture de l\'économiseur d\'écran.';
+
+  @override
   String get settingScreensaverGlanceScaleTitle =>
       'Mise à l\'échelle de la ligne';
 

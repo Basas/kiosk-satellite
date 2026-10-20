@@ -18,7 +18,7 @@ import 'package:video_player/video_player.dart';
 import 'alarms_overlay.dart' show alarmTimeText;
 import '../managers/alarms/alarm_manager.dart';
 import 'alarm_ring_overlay.dart';
-import 'calendar_overlay.dart' show CalendarBands, calendarTime;
+import 'calendar_overlay.dart' show CalendarBands, CalendarScreen, calendarTime;
 import '../managers/calendar/calendar_manager.dart';
 import '../managers/calendar/calendar_model.dart' as cal_model;
 import '../app_container.dart';
@@ -270,6 +270,12 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                       child: WeatherMoodScreensaver(container: container),
                     ),
                   ),
+                  // Not wrapped in _Dismissable: the calendar keeps its
+                  // touches, and its X ends the screensaver.
+                  'calendar' => CalendarScreen(
+                    container: container,
+                    screensaver: true,
+                  ),
                   // Not wrapped in _Dismissable: a drag looks around the
                   // sky, and the view closes itself on a double tap.
                   'celestial' => UiScaleExempt(
@@ -370,8 +376,8 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                 // The At a Glance row rides over the photo and web modes
                 // too, pinned to the bottom the way the Clock screensaver
                 // pins it. Black and Clock place their own row (centred,
-                // under the clock), and the camera grid stays clear, the
-                // same line the corner widgets draw. IgnorePointer keeps
+                // under the clock), and the calendar and the camera grid
+                // stay clear, the same line the corner widgets draw. IgnorePointer keeps
                 // taps falling through to the mode underneath: dismissal
                 // for the native modes, the page for the web ones.
                 if (!blackBare &&
@@ -379,6 +385,7 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                     view != 'black' &&
                     view != 'clock' &&
                     view != 'weather_mood' &&
+                    view != 'calendar' &&
                     view != 'camera')
                   _StepAside(
                     container: container,

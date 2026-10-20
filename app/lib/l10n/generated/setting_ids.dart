@@ -304,6 +304,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreensaverDashboardViewTitle",
     "description": "settingScreensaverDashboardViewDescription",
   },
+  "screensaver.calendar_view": {
+    "title": "settingScreensaverCalendarViewTitle",
+    "description": "settingScreensaverCalendarViewDescription",
+  },
   "screensaver.black_hide_extras": {
     "title": "settingScreensaverBlackHideExtrasTitle",
     "description": "settingScreensaverBlackHideExtrasDescription",

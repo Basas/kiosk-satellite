@@ -2,7 +2,7 @@
 
 Kiosk Satellite shows your Home Assistant calendars as a family calendar on the kiosk. Each calendar gets a color and an optional person, and an event that is on more than one calendar is drawn once with its background split on a diagonal between their colors. The calendar is read only on the touch screen. Add and change events in Home Assistant, in the calendar apps it syncs with or [by voice](#managing-the-calendar-by-voice).
 
-Open it from **Calendar** in the kiosk menu, from **Open calendar** under **Settings, Calendar**, from the **Up next** screensaver widget, from an **Open the calendar** [gesture](gestures.md), from a dashboard button pointed at `ks://calendar` (see [Dashboard Links](dashboard-links.md)), from Home Assistant with the ESPHome **Calendar view** select (see [ESPHome](esphome.md)) or [by voice](#managing-the-calendar-by-voice).
+Open it from **Calendar** in the kiosk menu, from **Open calendar** under **Settings, Calendar**, from the **Up next** screensaver widget, from an **Open the calendar** [gesture](gestures.md), from a dashboard button pointed at `ks://calendar` (see [Dashboard Links](dashboard-links.md)), from Home Assistant with the ESPHome **Calendar view** select (see [ESPHome](esphome.md)) or [by voice](#managing-the-calendar-by-voice). Pick **Calendar** under **Screensaver mode** to make it the [screensaver](screensavers.md#calendar) too.
 
 ## Adding calendars
 
@@ -51,7 +51,7 @@ Pick a weather entity under **Weather** to add the daily forecast to each day in
 | Week starts on | Language default | Sunday, Monday or Saturday, or the first day the device language uses. |
 | Weather | None | The weather entity for the daily forecast. |
 | Show in the kiosk menu | On | Adds Calendar to the kiosk menu. The restricted menu also needs **Calendar** under **Kiosk Mode, Allowed Actions**. |
-| Close when idle | 2 minutes | Returns to the dashboard after no touch for this long. Never keeps it open. The screensaver also closes it when it starts. |
+| Close when idle | 2 minutes | Returns to the dashboard after no touch for this long. Never keeps it open. The screensaver also closes it when it starts. It does not apply to the Calendar screensaver. |
 
 ## How it reads Home Assistant
 

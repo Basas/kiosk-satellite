@@ -125,6 +125,9 @@ class CalendarManager extends Manager implements CalendarStore {
   /// The full screen calendar is up.
   final visible = ValueNotifier<bool>(false);
 
+  /// The Calendar screensaver mode is on screen.
+  final screensaverShown = ValueNotifier<bool>(false);
+
   /// The event a voice request added, found or changed, until it fades.
   final highlight = ValueNotifier<CalendarHighlight?>(null);
   Timer? _highlightEnd;
@@ -247,6 +250,7 @@ class CalendarManager extends Manager implements CalendarStore {
     await _unsubscribeAll();
     await _socket.close();
     visible.dispose();
+    screensaverShown.dispose();
     highlight.dispose();
     reopened.dispose();
     shownView.dispose();
@@ -777,7 +781,8 @@ class CalendarManager extends Manager implements CalendarStore {
   Map<String, Object?> status() {
     final s = snapshot.value;
     return {
-      'visible': visible.value,
+      'visible': visible.value || screensaverShown.value,
+      'screensaver': screensaverShown.value,
       'view': shownView.value,
       'calendars': [for (final c in calendars.value) c.toJson()],
       'hidden': hidden.value.toList(),
@@ -846,9 +851,12 @@ class CalendarManager extends Manager implements CalendarStore {
       ..register(
         Command(
           name: 'hideCalendar',
-          description: 'Close the calendar.',
+          description: 'Close the calendar, the Calendar screensaver included.',
           handler: (_) async {
             visible.value = false;
+            if (screensaverShown.value) {
+              await commands.execute('stopScreensaver', const {});
+            }
             return const CommandResult.ok();
           },
         ),

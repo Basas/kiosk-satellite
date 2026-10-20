@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kiosk_satellite/app_container.dart';
+import 'package:kiosk_satellite/core/command_registry.dart';
 import 'package:kiosk_satellite/core/events.dart';
 import 'package:kiosk_satellite/managers/calendar/calendar_manager.dart';
 import 'package:kiosk_satellite/managers/calendar/calendar_model.dart';
+import 'package:kiosk_satellite/managers/settings/definitions.dart' as defs;
 import 'package:kiosk_satellite/ui/calendar_overlay.dart';
 import 'package:kiosk_satellite/ui/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -215,6 +217,56 @@ void main() {
     await letGo(tester, c);
     expect(views, ['week', 'month', null]);
   });
+
+  testWidgets(
+    'as the screensaver it keeps the overlay opening, never idles out and '
+    'its X ends the screensaver',
+    (tester) async {
+      final c = await container();
+      var stops = 0;
+      c.commands.register(
+        Command(
+          name: 'stopScreensaver',
+          description: 'stub',
+          handler: (_) async {
+            stops++;
+            return const CommandResult.ok();
+          },
+        ),
+      );
+      await c.settings.set(defs.calendarIdleCloseMinutes, '1');
+      // Its own view, not the calendar's Default view.
+      await c.settings.set(defs.calendarDefaultView, 'month');
+      await c.settings.set(defs.screensaverCalendarView, 'day');
+      c.calendar.opening = (view: 'schedule', date: null);
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: CalendarScreen(container: c, screensaver: true)),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(c.calendar.screensaverShown.value, isTrue);
+      expect(c.calendar.shownView.value, 'day');
+      // The opening waits for the overlay it was meant for.
+      expect(c.calendar.opening.view, 'schedule');
+      await tester.pump(const Duration(minutes: 2));
+      expect(find.byType(CalendarScreen), findsOneWidget);
+      expect(stops, 0);
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pump();
+      expect(stops, 1);
+      // ESPHome's Closed and the remote close it the same way.
+      await c.commands.execute('hideCalendar', const {});
+      expect(stops, 2);
+      expect(c.calendar.status()['visible'], isTrue);
+      await tester.pumpWidget(const SizedBox());
+      expect(c.calendar.screensaverShown.value, isFalse);
+      await tester.pump(const Duration(seconds: 61));
+    },
+  );
 
   testWidgets('Settings > Calendar lists the calendars over the definitions', (
     tester,
