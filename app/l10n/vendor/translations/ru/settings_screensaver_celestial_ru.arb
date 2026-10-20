@@ -74,6 +74,8 @@
   "screensaverCelestialSkyGroup": "Небо",
   "screensaverCelestialLabelsGroup": "Подписи",
   "screensaverCelestialControlsGroup": "Элементы управления",
+  "screensaverCelestialLocationGrantMissing": "Без этого GPS-приёмник не читается, и у неба не будет местоположения.",
+  "screensaverCelestialLocationGrantReady": "Небо может следовать за GPS-приёмником.",
   "screensaverCelestialCoordinatesInvalid": "Введите широту и долготу, например 40.71, -74.01",
   "screensaverCelestialNoLocation": "Выберите местоположение в «Настройки > Заставка > Звёздное небо».",
   "screensaverCelestialDoubleTapHint": "Коснитесь дважды, чтобы закрыть",

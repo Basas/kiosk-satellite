@@ -10523,6 +10523,14 @@ class UiStringsEs extends UiStrings {
   String get screensaverCelestialControlsGroup => 'Controles';
 
   @override
+  String get screensaverCelestialLocationGrantMissing =>
+      'Sin este permiso no se puede leer el receptor GPS y el cielo no tiene ubicación.';
+
+  @override
+  String get screensaverCelestialLocationGrantReady =>
+      'El cielo puede seguir al receptor GPS.';
+
+  @override
   String get screensaverCelestialCoordinatesInvalid =>
       'Introduce una latitud y una longitud, como 40.71, -74.01';
 

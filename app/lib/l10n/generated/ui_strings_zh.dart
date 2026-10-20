@@ -9840,6 +9840,13 @@ class UiStringsZh extends UiStrings {
   String get screensaverCelestialControlsGroup => '控件';
 
   @override
+  String get screensaverCelestialLocationGrantMissing =>
+      '没有此权限，无法读取 GPS 接收器，星空也就没有位置。';
+
+  @override
+  String get screensaverCelestialLocationGrantReady => '星空可以跟随 GPS 接收器。';
+
+  @override
   String get screensaverCelestialCoordinatesInvalid =>
       '请输入纬度和经度，例如 40.71, -74.01';
 
@@ -24054,6 +24061,13 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverCelestialControlsGroup => '控件';
+
+  @override
+  String get screensaverCelestialLocationGrantMissing =>
+      '没有此权限，无法读取 GPS 接收器，星空也就没有位置。';
+
+  @override
+  String get screensaverCelestialLocationGrantReady => '星空可以跟随 GPS 接收器。';
 
   @override
   String get screensaverCelestialCoordinatesInvalid =>

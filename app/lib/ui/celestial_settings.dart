@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../app_container.dart';
+import '../core/lifecycle.dart';
 import '../core/events.dart';
 import '../l10n/messages.dart';
 import '../managers/screensaver/celestial_location.dart';
@@ -79,16 +80,18 @@ class CelestialLocationStatusRow extends StatefulWidget {
       _CelestialLocationStatusRowState();
 }
 
-class _CelestialLocationStatusRowState
-    extends State<CelestialLocationStatusRow> {
+class _CelestialLocationStatusRowState extends State<CelestialLocationStatusRow>
+    with WidgetsBindingObserver {
   CelestialLocationStatus? _status;
   StreamSubscription<SettingChanged>? _settings;
   StreamSubscription<LocationChanged>? _fixes;
   int _ask = 0;
+  final _returned = ReturnWatch();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final c = widget.container;
     _settings = c.bus.on<SettingChanged>().listen((event) {
       if (event.key == defs.screensaverCelestialEntity.key ||
@@ -120,7 +123,15 @@ class _CelestialLocationStatusRowState
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Back from the location dialog or the system settings, which report
+    // nothing: ask again.
+    if (_returned.returned(state)) _refresh();
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _settings?.cancel();
     _fixes?.cancel();
     super.dispose();

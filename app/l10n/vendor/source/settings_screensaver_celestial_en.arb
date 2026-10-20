@@ -962,6 +962,32 @@
       ]
     }
   },
+  "screensaverCelestialLocationGrantMissing": "Without this the GPS receiver cannot be read and the sky has no location.",
+  "@screensaverCelestialLocationGrantMissing": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location permission row under Required system permissions, shown while the GPS source has no location grant.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationGrantReady": "The sky can follow the GPS receiver.",
+  "@screensaverCelestialLocationGrantReady": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location permission row under Required system permissions, shown once the location grant is given.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
   "screensaverCelestialCoordinatesInvalid": "Enter a latitude and longitude, like 40.71, -74.01",
   "@screensaverCelestialCoordinatesInvalid": {
     "context": "Settings:Screensaver:Celestial screensaver",

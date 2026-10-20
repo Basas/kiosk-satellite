@@ -565,6 +565,8 @@ const screensaverTextMessageIds = <String, String>{
   "Sky": "screensaverCelestialSkyGroup",
   "Labels": "screensaverCelestialLabelsGroup",
   "Controls": "screensaverCelestialControlsGroup",
+  "Without this the GPS receiver cannot be read and the sky has no location.": "screensaverCelestialLocationGrantMissing",
+  "The sky can follow the GPS receiver.": "screensaverCelestialLocationGrantReady",
   "Enter a latitude and longitude, like 40.71, -74.01": "screensaverCelestialCoordinatesInvalid",
   "Choose a location in Settings > Screensaver > Celestial.": "screensaverCelestialNoLocation",
   "Double tap to close": "screensaverCelestialDoubleTapHint",

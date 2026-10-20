@@ -39171,6 +39171,32 @@
       ]
     }
   },
+  "screensaverCelestialLocationGrantMissing": "Без этого GPS-приёмник не читается, и у неба не будет местоположения.",
+  "@screensaverCelestialLocationGrantMissing": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location permission row under Required system permissions, shown while the GPS source has no location grant.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationGrantReady": "Небо может следовать за GPS-приёмником.",
+  "@screensaverCelestialLocationGrantReady": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location permission row under Required system permissions, shown once the location grant is given.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
   "screensaverCelestialCoordinatesInvalid": "Введите широту и долготу, например 40.71, -74.01",
   "@screensaverCelestialCoordinatesInvalid": {
     "context": "Settings:Screensaver:Celestial screensaver",

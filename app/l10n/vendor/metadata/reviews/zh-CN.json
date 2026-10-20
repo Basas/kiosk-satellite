@@ -26673,5 +26673,17 @@
     "translation": "f8cac7ee246768acf4f0e64ad4bdf1563521b20fbb7e0583b410cfd414652b6d",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "screensaverCelestialLocationGrantMissing": {
+    "source": "017a81851b66de3188bc10041bc5d1cad546f5c7b34cc350c5d96235a1e31f50",
+    "translation": "c5dd6792d5d574e8233d4fd56ffd1005ffd9564ae66bf031b8946ab0bafece83",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverCelestialLocationGrantReady": {
+    "source": "20be4b0b640ad99e552bc13c969b24e30cd02f9cc2c1ea8364d077e441f46a45",
+    "translation": "5f7864682353b72f825dd4f4b4abf0a7912fbadd0c789b9b54a48c40a0d65b9f",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

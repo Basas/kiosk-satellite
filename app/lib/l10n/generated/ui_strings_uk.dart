@@ -10441,6 +10441,14 @@ class UiStringsUk extends UiStrings {
   String get screensaverCelestialControlsGroup => 'Елементи керування';
 
   @override
+  String get screensaverCelestialLocationGrantMissing =>
+      'Без цього неможливо зчитати GPS-приймач, і небо не матиме розташування.';
+
+  @override
+  String get screensaverCelestialLocationGrantReady =>
+      'Небо може стежити за GPS-приймачем.';
+
+  @override
   String get screensaverCelestialCoordinatesInvalid =>
       'Введіть широту й довготу, наприклад 40.71, -74.01';
 

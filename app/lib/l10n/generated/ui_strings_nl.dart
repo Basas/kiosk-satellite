@@ -10447,6 +10447,14 @@ class UiStringsNl extends UiStrings {
   String get screensaverCelestialControlsGroup => 'Bediening';
 
   @override
+  String get screensaverCelestialLocationGrantMissing =>
+      'Zonder dit kan de GPS-ontvanger niet worden gelezen en heeft de hemel geen locatie.';
+
+  @override
+  String get screensaverCelestialLocationGrantReady =>
+      'De hemel kan de GPS-ontvanger volgen.';
+
+  @override
   String get screensaverCelestialCoordinatesInvalid =>
       'Voer een breedte- en lengtegraad in, zoals 40.71, -74.01';
 

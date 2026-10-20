@@ -10562,6 +10562,14 @@ class UiStringsDe extends UiStrings {
   String get screensaverCelestialControlsGroup => 'Steuerelemente';
 
   @override
+  String get screensaverCelestialLocationGrantMissing =>
+      'Ohne diese Berechtigung kann der GPS-Empfänger nicht ausgelesen werden und der Himmel hat keinen Standort.';
+
+  @override
+  String get screensaverCelestialLocationGrantReady =>
+      'Der Himmel kann dem GPS-Empfänger folgen.';
+
+  @override
   String get screensaverCelestialCoordinatesInvalid =>
       'Gib Breiten- und Längengrad ein, etwa 40.71, -74.01';
 

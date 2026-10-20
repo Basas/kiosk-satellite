@@ -74,6 +74,8 @@
   "screensaverCelestialSkyGroup": "天空",
   "screensaverCelestialLabelsGroup": "标注",
   "screensaverCelestialControlsGroup": "控件",
+  "screensaverCelestialLocationGrantMissing": "没有此权限，无法读取 GPS 接收器，星空也就没有位置。",
+  "screensaverCelestialLocationGrantReady": "星空可以跟随 GPS 接收器。",
   "screensaverCelestialCoordinatesInvalid": "请输入纬度和经度，例如 40.71, -74.01",
   "screensaverCelestialNoLocation": "请在“设置 > 屏保 > 星空”中选择位置。",
   "screensaverCelestialDoubleTapHint": "双击关闭",

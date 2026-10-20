@@ -39171,6 +39171,32 @@
       ]
     }
   },
+  "screensaverCelestialLocationGrantMissing": "Zonder dit kan de GPS-ontvanger niet worden gelezen en heeft de hemel geen locatie.",
+  "@screensaverCelestialLocationGrantMissing": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location permission row under Required system permissions, shown while the GPS source has no location grant.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
+  "screensaverCelestialLocationGrantReady": "De hemel kan de GPS-ontvanger volgen.",
+  "@screensaverCelestialLocationGrantReady": {
+    "context": "Settings:Screensaver:Celestial screensaver",
+    "description": "Location permission row under Required system permissions, shown once the location grant is given.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver"
+      ]
+    }
+  },
   "screensaverCelestialCoordinatesInvalid": "Voer een breedte- en lengtegraad in, zoals 40.71, -74.01",
   "@screensaverCelestialCoordinatesInvalid": {
     "context": "Settings:Screensaver:Celestial screensaver",

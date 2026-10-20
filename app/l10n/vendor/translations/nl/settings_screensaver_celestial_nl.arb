@@ -74,6 +74,8 @@
   "screensaverCelestialSkyGroup": "Hemel",
   "screensaverCelestialLabelsGroup": "Labels",
   "screensaverCelestialControlsGroup": "Bediening",
+  "screensaverCelestialLocationGrantMissing": "Zonder dit kan de GPS-ontvanger niet worden gelezen en heeft de hemel geen locatie.",
+  "screensaverCelestialLocationGrantReady": "De hemel kan de GPS-ontvanger volgen.",
   "screensaverCelestialCoordinatesInvalid": "Voer een breedte- en lengtegraad in, zoals 40.71, -74.01",
   "screensaverCelestialNoLocation": "Kies een locatie via Instellingen > Schermbeveiliging > Sterrenhemel.",
   "screensaverCelestialDoubleTapHint": "Tik twee keer om te sluiten",

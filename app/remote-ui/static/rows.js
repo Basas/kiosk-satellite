@@ -37,7 +37,7 @@ import {
   openWakeSourcesPicker,
   wakeSourcesText,
 } from './pickers.js';
-import { loadSettings, refreshRealMacNote, syncSubpages, updateCelestialLocationRow, updateClockNightAdminRows, updatePersonSensorRows, updateRtspRows } from './settings.js';
+import { loadSettings, refreshRealMacNote, syncSubpages, updateCelestialLocationRow, updateCelestialPermissionRows, updateClockNightAdminRows, updatePersonSensorRows, updateRtspRows } from './settings.js';
 import { dashboardField } from './dashboard_picker.js';
 import { updatePlayerRow } from './panels.js';
 import {
@@ -336,9 +336,13 @@ export function settingRow(s) {
     // adaptive brightness switch (issue #343). After the gated sync, so
     // the curve rows the switch reveals are in place first.
     if (s.key === 'screen.adaptive_brightness') updateAdaptiveBrightnessRows();
-    // The Celestial location status follows its source and entity.
+    // The Celestial location status follows its source and entity, and
+    // the GPS source brings its Location grant.
     if (s.key === 'screensaver.celestial_location' || s.key === 'screensaver.celestial_entity') {
       updateCelestialLocationRow();
+    }
+    if (s.key === 'screensaver.celestial_location' || s.key === 'screensaver.mode') {
+      updateCelestialPermissionRows();
     }
     // The Ambient light row follows the reading's source (issue #911).
     if (s.key === 'screen.adaptive_use_entity' || s.key === 'screen.adaptive_light_entity') {

@@ -17975,6 +17975,18 @@ abstract class UiStrings {
   /// **'Controls'**
   String get screensaverCelestialControlsGroup;
 
+  /// Location permission row under Required system permissions, shown while the GPS source has no location grant.
+  ///
+  /// In en, this message translates to:
+  /// **'Without this the GPS receiver cannot be read and the sky has no location.'**
+  String get screensaverCelestialLocationGrantMissing;
+
+  /// Location permission row under Required system permissions, shown once the location grant is given.
+  ///
+  /// In en, this message translates to:
+  /// **'The sky can follow the GPS receiver.'**
+  String get screensaverCelestialLocationGrantReady;
+
   /// Error under the coordinates field.
   ///
   /// In en, this message translates to:

@@ -3296,6 +3296,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.screensaverCelestialLabelsGroup,
       'screensaverCelestialControlsGroup' =>
         strings.screensaverCelestialControlsGroup,
+      'screensaverCelestialLocationGrantMissing' =>
+        strings.screensaverCelestialLocationGrantMissing,
+      'screensaverCelestialLocationGrantReady' =>
+        strings.screensaverCelestialLocationGrantReady,
       'screensaverCelestialCoordinatesInvalid' =>
         strings.screensaverCelestialCoordinatesInvalid,
       'screensaverCelestialNoLocation' =>

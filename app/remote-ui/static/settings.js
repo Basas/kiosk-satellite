@@ -1190,6 +1190,7 @@ async function renderSettings({ cached = false } = {}) {
 
   updatePersonSensorRows();
   updateClockNightAdminRows();
+  updateCelestialPermissionRows();
   updateRtspRows();
   updateCelestialLocationRow();
 
@@ -2847,6 +2848,83 @@ export function updateCelestialLocationRow() {
     });
 }
 
+/* The Celestial screensaver's Required system permissions group while the
+   GPS is the location source, mirroring the device's: the Location grant
+   with the system location switch, right after the group holding the
+   Location select. Grant on device runs the dialog on the tablet, and the
+   Current location row asks again once it is granted. */
+export function updateCelestialPermissionRows() {
+  const panel = document.getElementById('tab-screensaver')
+    ?.querySelector('.subpage[data-subpage="Celestial screensaver"]');
+  if (!panel) return;
+  for (const stale of panel.querySelectorAll('.celestial-permission')) stale.remove();
+  const byKey = Object.fromEntries((state.settings || []).map((s) => [s.key, s]));
+  const source = byKey['screensaver.celestial_location'];
+  if (!source || source.value !== 'gps' || !depSatisfied(source, byKey)) return;
+  const card = panel.querySelector('[data-key="screensaver.celestial_location"]')?.closest('.card');
+  if (!card) return;
+  const h = document.createElement('h2');
+  h.className = 'card-title celestial-permission';
+  h.textContent = screensaverText('Required system permissions');
+  const permCard = document.createElement('div');
+  permCard.className = 'card celestial-permission';
+  const permRow = document.createElement('div');
+  permRow.className = 'row';
+  const info = document.createElement('div');
+  info.className = 'info';
+  info.innerHTML = '<div class="name"></div><div class="desc"></div>';
+  info.querySelector('.name').textContent = esphomeText('Location');
+  info.querySelector('.desc').textContent = screensaverText('Checking...');
+  permRow.appendChild(info);
+  const stateEl = document.createElement('span');
+  stateEl.style.whiteSpace = 'nowrap';
+  permRow.appendChild(stateEl);
+  permCard.appendChild(permRow);
+  card.insertAdjacentElement('afterend', h);
+  h.insertAdjacentElement('afterend', permCard);
+  const readPerm = () => cmd('getSystemPermissions')
+    .then((r) => r.data || null).catch(() => null);
+  const paint = (p) => {
+    const ok = p === null ? null
+      : p.location === true && p.locationServicesOn === true;
+    info.querySelector('.desc').textContent = ok === null
+      ? screensaverText('Status unavailable.')
+      : ok ? screensaverText('The sky can follow the GPS receiver.')
+      : p.location !== true
+        ? screensaverText('Without this the GPS receiver cannot be read and the sky has no location.')
+        : esphomeText('Location is off in the device settings, so the receiver delivers nothing.');
+    stateEl.textContent = ok === null ? '' : ok ? screensaverText('Granted') : screensaverText('Missing');
+    stateEl.style.color = ok ? 'var(--ok)' : 'var(--error)';
+    permRow.querySelector('button')?.remove();
+    if (ok !== false) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn-ghost';
+    btn.textContent = screensaverText('Grant on device');
+    btn.style.cssText = 'flex-shrink:0;';
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        // The device runs the whole flow: the dialog, then the location
+        // settings screen when the system switch is off.
+        await api('/api/commands/requestOsPermissions', { method: 'POST',
+          body: JSON.stringify({ which: ['location'] }) });
+      } catch (_) {}
+      for (let i = 0; i < 30 && permCard.isConnected; i++) {
+        await new Promise((r) => setTimeout(r, 2500));
+        const now = await readPerm();
+        if (now && now.location === true && now.locationServicesOn === true) {
+          paint(now);
+          updateCelestialLocationRow();
+          return;
+        }
+      }
+      btn.disabled = false;
+    });
+    permRow.appendChild(btn);
+  };
+  readPerm().then((p) => { if (permCard.isConnected) paint(p); });
+}
+
 /* The Clock screensaver's Required system permissions group while Turn
    screen off at night really powers the panel off, mirroring the device's
    _NightScreenOffAdminTile: the Device admin grant, with Grant on device
@@ -2916,6 +2994,10 @@ export function updateClockNightAdminRows() {
 
 document.addEventListener('ks-settings', (e) => {
   if ((e.detail || []).some((key) => CLOCK_NIGHT_ADMIN_KEYS.includes(key))) updateClockNightAdminRows();
+  if ((e.detail || []).some((key) => key === 'screensaver.celestial_location'
+      || key === 'screensaver.mode')) {
+    updateCelestialPermissionRows();
+  }
 });
 
 export function updatePersonSensorRows() {

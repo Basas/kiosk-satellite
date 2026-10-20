@@ -50,6 +50,39 @@ void main() {
     expect(find.text('Coordinates'), findsNothing);
   });
 
+  testWidgets('the GPS lists the Location grant under the Location group', (
+    tester,
+  ) async {
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      const MethodChannel('kiosk_satellite/location'),
+      (call) async => null,
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        const MethodChannel('kiosk_satellite/location'),
+        null,
+      ),
+    );
+    final c = await open(tester, 'gps');
+    final heading = find.text('Required system permissions');
+    expect(heading, findsOneWidget);
+    // Right after the group holding the Location select, before Sky.
+    expect(
+      tester.getTopLeft(heading).dy,
+      greaterThan(tester.getTopLeft(find.text('Point at the sky')).dy),
+    );
+    expect(
+      tester.getTopLeft(heading).dy,
+      lessThan(tester.getTopLeft(find.text('Sky')).dy),
+    );
+    // Another source has nothing to grant.
+    await c.settings.set(screensaverCelestialLocation, 'ha_home');
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 120));
+    }
+    expect(heading, findsNothing);
+  });
+
   testWidgets('an entity source shows the picker and its status', (
     tester,
   ) async {

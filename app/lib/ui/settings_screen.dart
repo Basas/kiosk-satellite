@@ -3674,6 +3674,40 @@ class _CategoryContentState extends State<_CategoryContent> {
       ];
     }
 
+    if (widget.category == 'Screensaver' &&
+        subpage == 'Celestial screensaver' &&
+        container.settings.visible(screensaverCelestialLocation) &&
+        container.settings.get(screensaverCelestialLocation) == 'gps') {
+      // The GPS source reads the receiver, so the location grant follows
+      // the group holding the Location select rather than waiting at the
+      // end of the long page. Mirrored on the remote (settings.js,
+      // updateCelestialPermissionRows).
+      final defs = [
+        for (final def in _defsFor(widget.category))
+          if (def.subpage == subpage) def,
+      ];
+      final first = defs.first.section;
+      return [
+        ...sectioned([
+          for (final def in defs)
+            if (def.section == first) def,
+        ]),
+        SectionHeading(screensaverText(context, 'Required system permissions')),
+        SearchLandingTarget(
+          id: 'x:celestial_location_permissions',
+          child: SettingsCard(
+            children: [
+              _LocationPermissionsTile(container: container, celestial: true),
+            ],
+          ),
+        ),
+        ...sectioned([
+          for (final def in defs)
+            if (def.section != first) def,
+        ]),
+      ];
+    }
+
     if (widget.category == 'Screensaver' && subpage == 'Person Detection') {
       // The device's own person sensor (discussion #353, today the Meta
       // Portal's): the two switches with the live Occupancy row, then the
@@ -9790,7 +9824,11 @@ class _DevicePermissionsTileState extends State<_DevicePermissionsTile>
         // the position, and only while switched on (issue #363).
         _row(
           granted: perms?.location,
-          needed: settings.get(btproxyEnabled) || settings.get(locationEnabled),
+          needed:
+              settings.get(btproxyEnabled) ||
+              settings.get(locationEnabled) ||
+              (settings.get(screensaverMode) == 'celestial' &&
+                  settings.get(screensaverCelestialLocation) == 'gps'),
           missingIcon: Icons.location_off_outlined,
           title: devicePermissionDescriptions['location']!.title,
           held: devicePermissionDescriptions['location']!.description,
@@ -10083,11 +10121,18 @@ class _RealMacStatusRowState extends State<_RealMacStatusRow> {
 /// which is what the receiver needs before it reads anything. Grant runs
 /// the dialog, then the OS location settings screen when the switch is
 /// what is off, and nudges the location manager so a stream refused for
-/// the missing grant comes up at once.
+/// the missing grant comes up at once. The Celestial screensaver's GPS
+/// source shows the same row with its own lines.
 class _LocationPermissionsTile extends StatefulWidget {
-  const _LocationPermissionsTile({required this.container});
+  const _LocationPermissionsTile({
+    required this.container,
+    this.celestial = false,
+  });
 
   final AppContainer container;
+
+  /// Worded for the Celestial sky instead of the location sensors.
+  final bool celestial;
 
   @override
   State<_LocationPermissionsTile> createState() =>
@@ -10154,17 +10199,25 @@ class _LocationPermissionsTileState extends State<_LocationPermissionsTile>
       title: Text(esphomeText(context, 'Location')),
       subtitle: Text(
         perms == null || !perms.location
-            ? esphomeText(
-                context,
-                'Without this the GPS receiver cannot be read and the '
-                'location sensors stay unknown.',
-              )
+            ? widget.celestial
+                  ? screensaverText(
+                      context,
+                      'Without this the GPS receiver cannot be read and the '
+                      'sky has no location.',
+                    )
+                  : esphomeText(
+                      context,
+                      'Without this the GPS receiver cannot be read and the '
+                      'location sensors stay unknown.',
+                    )
             : !perms.locationServicesOn
             ? esphomeText(
                 context,
                 'Location is off in the device settings, so the receiver '
                 'delivers nothing.',
               )
+            : widget.celestial
+            ? screensaverText(context, 'The sky can follow the GPS receiver.')
             : esphomeText(
                 context,
                 'The location sensors can read the GPS receiver.',
