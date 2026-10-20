@@ -5426,6 +5426,9 @@ class UiStringsRu extends UiStrings {
   String get cameraStreamsEditView => 'Изменение вида';
 
   @override
+  String get cameraStreamsViewId => 'ID вида';
+
+  @override
   String get cameraStreamsShowNames => 'Показывать названия камер';
 
   @override

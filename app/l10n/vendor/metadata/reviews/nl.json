@@ -26714,5 +26714,11 @@
     "translation": "ff034f47339f5c6afb576a1024a202c3f5707a95e8c5c971f006c2bd3a136afa",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "cameraStreamsViewId": {
+    "source": "ec0e409fdf26d72381676c84435f7ec715fb08e44e2f5f4db4bbf933397ebe9f",
+    "translation": "e6cab9057c121efcbbd4aeb37bd348ebb470c5279d17db601eeb9c9b01289bc3",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

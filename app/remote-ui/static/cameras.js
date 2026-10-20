@@ -3,7 +3,7 @@ import { watchUpdates } from './live.js';
 import { api, cmd, state } from './core.js';
 import { applyManagedBanners } from './fleetsync.js';
 import { settingRow } from './rows.js';
-import { messageBox, localizedMessageBox, modalShell } from './widgets.js';
+import { copyBox, messageBox, localizedMessageBox, modalShell } from './widgets.js';
 import { cachedList, choiceBox, entitySpec, pickEntityValue, pickField, pickItem } from './entity_picker.js';
 
 export function cameraField(label, value = '', type = 'text') {
@@ -796,8 +796,21 @@ export async function editCameraView(config, view) {
     available.style.display = hasAvailable ? '' : 'none';
   };
   render();
-  body.append(name.wrap, showNames.wrap, gridField, preview,
-    chosenLabel, chosen, availableLabel, available);
+  // What ks://camera/<id> links and automations take. Unlike the name, it
+  // survives a rename.
+  let idField = null;
+  if (view) {
+    idField = document.createElement('div');
+    idField.className = 'form-field';
+    const idLabel = document.createElement('span');
+    idLabel.className = 'desc';
+    idLabel.textContent = cameraStreamsText('View ID');
+    const idBox = copyBox(view.id).el;
+    idBox.style.width = '100%';
+    idField.append(idLabel, idBox);
+  }
+  body.append(...[name.wrap, idField, showNames.wrap, gridField, preview,
+    chosenLabel, chosen, availableLabel, available].filter(Boolean));
   return cameraEditor({
     formatError: cameraStreamsError,
     title: view ? cameraStreamsText('Edit view') : cameraStreamsText('Create camera view'),

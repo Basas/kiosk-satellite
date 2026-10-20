@@ -5391,6 +5391,9 @@ class UiStringsEn extends UiStrings {
   String get cameraStreamsEditView => 'Edit view';
 
   @override
+  String get cameraStreamsViewId => 'View ID';
+
+  @override
   String get cameraStreamsShowNames => 'Show camera names';
 
   @override

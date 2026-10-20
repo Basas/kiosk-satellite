@@ -5457,6 +5457,9 @@ class UiStringsNl extends UiStrings {
   String get cameraStreamsEditView => 'Weergave bewerken';
 
   @override
+  String get cameraStreamsViewId => 'Weergave-ID';
+
+  @override
   String get cameraStreamsShowNames => 'Cameranamen tonen';
 
   @override

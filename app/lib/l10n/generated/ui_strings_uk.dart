@@ -5437,6 +5437,9 @@ class UiStringsUk extends UiStrings {
   String get cameraStreamsEditView => 'Редагувати вигляд';
 
   @override
+  String get cameraStreamsViewId => 'ID вигляду';
+
+  @override
   String get cameraStreamsShowNames => 'Показувати назви камер';
 
   @override

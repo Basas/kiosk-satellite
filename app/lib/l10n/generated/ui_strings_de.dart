@@ -5523,6 +5523,9 @@ class UiStringsDe extends UiStrings {
   String get cameraStreamsEditView => 'Ansicht bearbeiten';
 
   @override
+  String get cameraStreamsViewId => 'Ansichts-ID';
+
+  @override
   String get cameraStreamsShowNames => 'Kameranamen anzeigen';
 
   @override

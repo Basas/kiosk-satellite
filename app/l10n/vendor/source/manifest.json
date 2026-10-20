@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "a568290b9259c9491737dc0fdd9cffe5a350d000",
+  "revision": "1ab5c93e48a4404260ff0ff5617618ca6ce984c5",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -84,7 +84,7 @@
     "settings_camera_streams_playback_en.arb": "e97207dbcc80942f39836b6e2a2d9f57e1dd93f1a5d59d8ddacfd3c7f26b239c",
     "settings_camera_streams_servers_en.arb": "3c059d5b863b09c01bf2a6598e41c5ed2b67c2058679663b13a71106cc365f62",
     "settings_camera_streams_sources_en.arb": "b85c8cba27a7fd63065b77ff64f20067a9d12d49b0e65354857c60b879935444",
-    "settings_camera_streams_views_en.arb": "8d9a3fdccbc96d765aee7f253b1c8a00b444c0872704f258de0b1539e516686a",
+    "settings_camera_streams_views_en.arb": "746f18287ad876da17886b6412d4bf0dfed6d4c098ec98152750aac6dd3115a9",
     "settings_device_analytics_en.arb": "5292b4b76300c1778474159f823c126c5a2c432be9aa4b7b31510e964c47e745",
     "settings_device_configuration_en.arb": "794a1a47defafd2faf983ffca852f6a368936cd48a8c83291af54d5fab593e8f",
     "settings_device_en.arb": "c984561fea75d41c67780433af0e50eec1606c856f0c12c34fbe4cc35aa8af39",

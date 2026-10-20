@@ -9,6 +9,13 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **Point at the sky.** On a device with a compass, the Celestial sky can turn with the device, so a tablet held up to the sky names what is in front of it. The GPS source also follows the device as it moves. While it runs, motion, face, person and proximity detection do not close the screensaver. A note asks for a figure eight while the compass is uncalibrated. It is off by default.
 - **Celestial controls.** A touch brings up a dim status bar along the bottom of the Celestial sky for five seconds, with the position, the azimuth, altitude and field of view of the center of the screen, the Moon phase, the sky's time, a timelapse at 60×, 600× or 3600× with a **Now** button to return, and a Point at the sky button. Widgets and the At a Glance row step aside while it is up. Each control has its own switch under **Controls**, and **Controls size** scales the bar from 50 to 200 percent.
 
+### Changed
+- **Camera view links by name (#1058).** `ks://camera/<name>` now opens a camera view by its name, so a link no longer needs an ID that was shown nowhere in the app. The name ignores case, and a dash or underscore can stand in for a space, so `ks://camera/front-door` opens Front Door. The ESPHome camera view buttons and the `showCameraView` command accept a name too.
+- **View ID in the camera view editor (#1058).** **Edit view** in **Settings > Camera Streams** now shows the view's ID in a box that copies it, on the device and in the remote admin. A link by ID keeps working if the view is renamed.
+
+### Fixed
+- **`ks://camera` opens the default camera view.** The link without a view refused with "view not found" instead of showing the default view, as documented.
+
 ## v2026.10.32 - 2026-10-20
 
 ### Added

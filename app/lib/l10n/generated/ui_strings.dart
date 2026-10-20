@@ -9451,6 +9451,12 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'View ID'**
+  String get cameraStreamsViewId;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Show camera names'**
   String get cameraStreamsShowNames;
 

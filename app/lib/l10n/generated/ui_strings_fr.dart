@@ -5477,6 +5477,9 @@ class UiStringsFr extends UiStrings {
   String get cameraStreamsEditView => 'Modifier la vue';
 
   @override
+  String get cameraStreamsViewId => 'ID de la vue';
+
+  @override
   String get cameraStreamsShowNames => 'Afficher les noms des caméras';
 
   @override

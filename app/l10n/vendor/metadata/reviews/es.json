@@ -22223,5 +22223,10 @@
     "source": "65d4e4b409515d4048f8ac7d06853bb6ea0708a957f22ff83f44df76db5c3285",
     "translation": "5c41a2b942b130a79db3a6279eecb6ea3816a41187685798e2560450cc41f1f1",
     "author": "Xavier Larrea"
+  },
+  "cameraStreamsViewId": {
+    "source": "ec0e409fdf26d72381676c84435f7ec715fb08e44e2f5f4db4bbf933397ebe9f",
+    "translation": "3da22eacb258259cba3f47bce33f95eee36c9a08a4f88959b0443d5a01cae371",
+    "author": "Xavier Larrea"
   }
 }

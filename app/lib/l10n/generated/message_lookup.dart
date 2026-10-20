@@ -1522,6 +1522,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'cameraStreamsShowFailed' => strings.cameraStreamsShowFailed,
       'cameraStreamsShowFailedRemote' => strings.cameraStreamsShowFailedRemote,
       'cameraStreamsEditView' => strings.cameraStreamsEditView,
+      'cameraStreamsViewId' => strings.cameraStreamsViewId,
       'cameraStreamsShowNames' => strings.cameraStreamsShowNames,
       'cameraStreamsShowNamesHelp' => strings.cameraStreamsShowNamesHelp,
       'cameraStreamsGrid' => strings.cameraStreamsGrid,

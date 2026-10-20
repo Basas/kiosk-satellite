@@ -5198,6 +5198,9 @@ class UiStringsZh extends UiStrings {
   String get cameraStreamsEditView => '编辑画面';
 
   @override
+  String get cameraStreamsViewId => '画面 ID';
+
+  @override
   String get cameraStreamsShowNames => '显示摄像头名称';
 
   @override
@@ -19398,6 +19401,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get cameraStreamsEditView => '编辑画面';
+
+  @override
+  String get cameraStreamsViewId => '画面 ID';
 
   @override
   String get cameraStreamsShowNames => '显示摄像头名称';
