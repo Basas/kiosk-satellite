@@ -9,6 +9,7 @@ import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
 import '../settings/definitions.dart' as defs;
+import '../sendspin/session_player.dart';
 import '../settings/settings_manager.dart';
 import '../wake_word/background_listening.dart';
 import 'package:kiosk_satellite/core/lifecycle.dart';
@@ -55,7 +56,9 @@ List<LauncherApp> decodeLauncherApps(String json) {
 /// (TouchWatchOverlay, issue #317) that reports every touch in the other
 /// app; each one restarts the clock, so the return only ever interrupts
 /// an app nobody is using. Where the watch cannot be put up the clock
-/// runs plain, which is what it always did.
+/// runs plain, which is what it always did. Media playing in any other
+/// app holds the return too (issue #1055): the clock waits for it to stop
+/// and then runs its full time again.
 class AppLauncherManager extends Manager with WidgetsBindingObserver {
   AppLauncherManager(super.bus, super.commands, super.log, this._settings);
 
@@ -80,6 +83,11 @@ class AppLauncherManager extends Manager with WidgetsBindingObserver {
   /// background trip minutes later (the drawer, a permission screen).
   DateTime? _launchedAt;
   static const _armWindow = Duration(seconds: 15);
+
+  /// Whether the clock ran out with media playing and now waits for it to
+  /// stop, at which point the full idle time starts over.
+  bool _heldByMedia = false;
+  static const _mediaPoll = Duration(seconds: 5);
 
   /// Whether the native touch watch is up for the current arm; false also
   /// while nothing is armed. Read by the tests and the logs.
@@ -264,6 +272,9 @@ class AppLauncherManager extends Manager with WidgetsBindingObserver {
       log.info(name, 'auto-return armed: ${seconds}s idle');
       _startClock(seconds);
       unawaited(_watchTouches(true));
+      if (_settings.get(defs.launcherAutoReturnMedia)) {
+        unawaited(_checkMediaAccess());
+      }
     } else if (returned) {
       _disarm();
       _launchedAt = null;
@@ -274,22 +285,66 @@ class AppLauncherManager extends Manager with WidgetsBindingObserver {
   /// touch the watch reports, so the return only fires after [seconds]
   /// with nobody touching the other app.
   void _startClock(int seconds) {
+    _heldByMedia = false;
+    _schedule(Duration(seconds: seconds), seconds);
+  }
+
+  void _schedule(Duration after, int seconds) {
     _returnTimer?.cancel();
-    _returnTimer = Timer(Duration(seconds: seconds), () async {
-      _returnTimer = null;
-      unawaited(_watchTouches(false));
-      // The state may have moved since the timer was set; only pull the
-      // kiosk forward if it is genuinely still behind the other app.
-      if (Lifecycle.onScreen) return;
-      log.info(name, 'auto-return: bringing the kiosk back');
-      final result = await commands.execute('bringToFront', const {});
-      if (result.data == false) {
-        log.warn(name, 'auto-return needs the draw-over-apps grant');
+    late final Timer timer;
+    timer = Timer(after, () => _ranOut(timer, seconds));
+    _returnTimer = timer;
+  }
+
+  /// The clock ran out, or a media hold looks again. Playing media keeps
+  /// the kiosk away and is asked about again shortly; media that stopped
+  /// starts the full idle time over.
+  Future<void> _ranOut(Timer timer, int seconds) async {
+    final playing =
+        _settings.get(defs.launcherAutoReturnMedia) &&
+        await SessionPlayer.anyPlaying();
+    // A touch, a return or a disarm while the answer was on its way owns
+    // the clock now.
+    if (!identical(_returnTimer, timer)) return;
+    if (playing) {
+      if (!_heldByMedia) {
+        log.info(name, 'auto-return: media is playing, waiting for it to stop');
       }
-    });
+      _heldByMedia = true;
+      _schedule(_mediaPoll, seconds);
+      return;
+    }
+    if (_heldByMedia) {
+      log.info(name, 'auto-return: media stopped, ${seconds}s again');
+      _startClock(seconds);
+      return;
+    }
+    _returnTimer = null;
+    unawaited(_watchTouches(false));
+    // The state may have moved since the timer was set; only pull the
+    // kiosk forward if it is genuinely still behind the other app.
+    if (Lifecycle.onScreen) return;
+    log.info(name, 'auto-return: bringing the kiosk back');
+    final result = await commands.execute('bringToFront', const {});
+    if (result.data == false) {
+      log.warn(name, 'auto-return needs the draw-over-apps grant');
+    }
+  }
+
+  /// Said once per arm, like the touch watch's warning: without the grant
+  /// no media reads as playing, so the clock runs on touches alone.
+  Future<void> _checkMediaAccess() async {
+    if (await SessionPlayer.hasAccess()) return;
+    if (_returnTimer == null) return;
+    log.warn(
+      name,
+      'auto-return: media playing in the other app cannot be seen '
+      '(Notification access missing), returning on touches alone',
+    );
   }
 
   void _disarm() {
+    _heldByMedia = false;
     if (_returnTimer == null && !watchingTouches) return;
     _returnTimer?.cancel();
     _returnTimer = null;

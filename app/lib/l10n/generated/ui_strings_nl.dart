@@ -4504,6 +4504,13 @@ class UiStringsNl extends UiStrings {
       'Tijd zonder aanraking in de andere app voordat de kiosk terugkeert.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle => 'Wachten tijdens afspelen';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Niet terugkeren zolang er video of muziek speelt.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite kan zichzelf weer naar de voorgrond brengen en aanrakingen in de andere app detecteren.';
 
@@ -4522,6 +4529,18 @@ class UiStringsNl extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       'Android kan Kiosk Satellite achter de andere app pauzeren. Een gepauzeerde timer kan de kiosk niet terugbrengen. Het toestemmingsvenster verschijnt op de tablet.';
+
+  @override
+  String get launcherNotificationAccessHeld =>
+      'De kiosk keert niet terug zolang een andere app video of muziek afspeelt.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Zonder dit weet de kiosk niet wanneer er video of muziek speelt en keert hij toch terug.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Zonder dit weet de kiosk niet wanneer er video of muziek speelt en keert hij toch terug. Het toestemmingsscherm verschijnt op de tablet.';
 
   @override
   String get launcherPermissionsSearch =>

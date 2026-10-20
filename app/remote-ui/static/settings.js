@@ -740,6 +740,13 @@ async function renderSettings({ cached = false } = {}) {
       { method: 'POST', body: '{}' }).then((r) => r.json())
       .then((res) => res.data ? res.data.batteryUnrestricted === true : null)
       .catch(() => null);
+    const pollNotifications = () => api('/api/commands/getSystemPermissions',
+      { method: 'POST', body: '{}' }).then((r) => r.json())
+      .then((res) => res.data ? res.data.notificationAccess === true : null)
+      .catch(() => null);
+    const grantNotifications = () => api('/api/commands/requestOsPermissions',
+      { method: 'POST',
+        body: JSON.stringify({ which: ['notificationAccess'] }) });
     const grantBattery = () => api('/api/commands/requestOsPermissions',
       { method: 'POST',
         body: JSON.stringify({ which: ['batteryOptimizations'] }) });
@@ -823,6 +830,13 @@ async function renderSettings({ cached = false } = {}) {
     // the toggles in place rather than through a re-render, the same as
     // the device page.
     {
+      // Wait while media plays reads other apps' media sessions (issue
+      // #1055), which Android shows to no one without Notification access.
+      const mediaRow = permRow('Notification access',
+        'The kiosk stays away while video or music plays in another app.',
+        'Without this the kiosk cannot tell when video or music is playing '
+          + 'and comes back anyway. The grant screen appears on the tablet.',
+        'Grant on device', grantNotifications, pollNotifications);
       const launcherGroup = group('tab-launcher', [
         permRow('Display over other apps',
           'Kiosk Satellite can bring itself back in the foreground and '
@@ -838,6 +852,7 @@ async function renderSettings({ cached = false } = {}) {
             + 'clock never brings the kiosk back. The grant dialog appears '
             + 'on the tablet.',
           'Grant on device', grantBattery, pollBattery),
+        mediaRow,
       ]);
       const tab = document.getElementById('tab-launcher');
       const on = (key) => {
@@ -848,12 +863,14 @@ async function renderSettings({ cached = false } = {}) {
       const sync = () => {
         const show = on('launcher.enabled') && on('launcher.auto_return');
         launcherGroup.forEach((el) => el.classList.toggle('hidden', !show));
+        mediaRow.classList.toggle('hidden', !on('launcher.auto_return_media'));
       };
       // Delegated: the auto-return row comes and goes with the master
       // switch (dependsOn), so a listener on the row itself would be lost.
       tab.addEventListener('change', (e) => {
         const key = e.target.closest?.('[data-key]')?.dataset.key;
-        if (key === 'launcher.enabled' || key === 'launcher.auto_return') {
+        if (key === 'launcher.enabled' || key === 'launcher.auto_return'
+          || key === 'launcher.auto_return_media') {
           setTimeout(sync, 50);
         }
       });

@@ -1211,11 +1211,21 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingLauncherAutoReturnSecondsTitle,
       'settingLauncherAutoReturnSecondsDescription' =>
         strings.settingLauncherAutoReturnSecondsDescription,
+      'settingLauncherAutoReturnMediaTitle' =>
+        strings.settingLauncherAutoReturnMediaTitle,
+      'settingLauncherAutoReturnMediaDescription' =>
+        strings.settingLauncherAutoReturnMediaDescription,
       'launcherOverlayHeld' => strings.launcherOverlayHeld,
       'launcherOverlayMissing' => strings.launcherOverlayMissing,
       'launcherOverlayRemote' => strings.launcherOverlayRemote,
       'launcherBatteryMissing' => strings.launcherBatteryMissing,
       'launcherBatteryRemote' => strings.launcherBatteryRemote,
+      'launcherNotificationAccessHeld' =>
+        strings.launcherNotificationAccessHeld,
+      'launcherNotificationAccessMissing' =>
+        strings.launcherNotificationAccessMissing,
+      'launcherNotificationAccessRemote' =>
+        strings.launcherNotificationAccessRemote,
       'launcherPermissionsSearch' => strings.launcherPermissionsSearch,
       'settingCalendarDefaultViewTitle' =>
         strings.settingCalendarDefaultViewTitle,

@@ -21603,5 +21603,30 @@
     "source": "ec85ee3e00999a98ea3f426a7b1c36431793b032235dbc172d5788bfb23dc2dc",
     "translation": "d33e52249d7ea6bd1c49e62729b7fe3056850753f25206bbc4b0d8f800be2c38",
     "author": "Xavier Larrea"
+  },
+  "settingLauncherAutoReturnMediaDescription": {
+    "source": "9dda17b351b2f740ac36971df272dedc7fcc46ec3b0957cafa4dac00697682b1",
+    "translation": "ddc45d8f4134e7a11caaa75f130edd7f9f18bded75461609807f0a9ba2456e94",
+    "author": "Xavier Larrea"
+  },
+  "launcherNotificationAccessHeld": {
+    "source": "b6de23269efae5e529933fc15fd128d851b7b8f595345470a928f10964323e40",
+    "translation": "9c7cc30dbf5c55bbbef72f9a97383301b2e1f637edcd03b48d4b8706e5654d4b",
+    "author": "Xavier Larrea"
+  },
+  "launcherNotificationAccessMissing": {
+    "source": "4fa923bd613275824ab79ee9d6b7b3d6efc0981cfd623e435a8e0bf8cb040c81",
+    "translation": "2601da2e23b9a0dc19e8241d1545f612c1beb8a2c51056ad0e75399f9c8397f5",
+    "author": "Xavier Larrea"
+  },
+  "settingLauncherAutoReturnMediaTitle": {
+    "source": "93c9b1b019fe9939065b2d253e9b74ea56df4ae7032a853139d873bd8ddaf380",
+    "translation": "62c0833703c81513ac04e384e08a1f7c322f369f9242018de826b80b7956b0e9",
+    "author": "Xavier Larrea"
+  },
+  "launcherNotificationAccessRemote": {
+    "source": "4d06aa2aaac6d96be5a64d4bd19bded067b9299e98870192033616c6ede99fd4",
+    "translation": "91f16e667a986fb42c1de486cd0a557c8db07a40e7220b8c110e9f4d73d5f043",
+    "author": "Xavier Larrea"
   }
 }

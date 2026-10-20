@@ -4522,6 +4522,14 @@ class UiStringsEs extends UiStrings {
       'Tiempo sin tocar la otra aplicación antes de volver al kiosko.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle =>
+      'Esperar mientras se reproduce contenido';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'No vuelve mientras se reproduce video o música.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite puede volver al primer plano y detectar toques en la otra aplicación.';
 
@@ -4540,6 +4548,18 @@ class UiStringsEs extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       'Android puede pausar la aplicación mientras la otra está abierta. Si el temporizador se pausa, el kiosko no vuelve. El diálogo para conceder el permiso aparece en la tablet.';
+
+  @override
+  String get launcherNotificationAccessHeld =>
+      'El kiosko no vuelve mientras otra aplicación reproduce video o música.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Sin esto el kiosko no puede saber cuándo se reproduce video o música y vuelve de todos modos.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Sin esto el kiosko no puede saber cuándo se reproduce video o música y vuelve de todos modos. La pantalla para conceder el permiso aparece en la tablet.';
 
   @override
   String get launcherPermissionsSearch =>

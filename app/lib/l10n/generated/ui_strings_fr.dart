@@ -4519,6 +4519,14 @@ class UiStringsFr extends UiStrings {
       'Durée sans interaction dans l\'autre application avant que le kiosque revienne.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle =>
+      'Attendre pendant la lecture';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Ne pas revenir tant qu\'une vidéo ou de la musique est en lecture.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite peut se remettre lui-même au premier plan et détecter les appuis dans l\'autre application.';
 
@@ -4537,6 +4545,18 @@ class UiStringsFr extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       'Android peut mettre l\'application en pause derrière l\'autre, et une minuterie en pause ne ramène jamais le kiosque. La boîte de dialogue d\'autorisation apparaît sur la tablette.';
+
+  @override
+  String get launcherNotificationAccessHeld =>
+      'Le kiosque ne revient pas tant qu\'une autre application lit une vidéo ou de la musique.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Sans cela, le kiosque ne peut pas savoir si une vidéo ou de la musique est en lecture et revient quand même.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Sans cela, le kiosque ne peut pas savoir si une vidéo ou de la musique est en lecture et revient quand même. L\'écran d\'autorisation apparaît sur la tablette.';
 
   @override
   String get launcherPermissionsSearch =>

@@ -16912,6 +16912,32 @@
       ]
     }
   },
+  "settingLauncherAutoReturnMediaTitle": "Warten, während Medien laufen",
+  "@settingLauncherAutoReturnMediaTitle": {
+    "context": "Settings > App Launcher",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Wait while media plays"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Wait while media plays"
+      ]
+    }
+  },
+  "settingLauncherAutoReturnMediaDescription": "Nicht zurückkehren, solange Video oder Musik läuft.",
+  "@settingLauncherAutoReturnMediaDescription": {
+    "context": "Settings > App Launcher",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Wait while media plays"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Wait while media plays"
+      ]
+    }
+  },
   "launcherOverlayHeld": "Kiosk Satellite kann wieder in den Vordergrund wechseln und Berührungen in der anderen App erkennen.",
   "@launcherOverlayHeld": {
     "context": "Settings > App Launcher > Required system permissions",
@@ -16966,6 +16992,45 @@
   },
   "launcherBatteryRemote": "Android kann die Anwendung pausieren, während die andere App geöffnet ist. Wenn der Timer pausiert wird, kehrt der Kiosk nicht zurück. Der Dialog zum Erteilen der Berechtigung wird auf dem Tablet angezeigt.",
   "@launcherBatteryRemote": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessHeld": "Der Kiosk kehrt nicht zurück, solange eine andere App Video oder Musik abspielt.",
+  "@launcherNotificationAccessHeld": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessMissing": "Ohne diese Berechtigung erkennt der Kiosk nicht, ob Video oder Musik läuft, und kehrt trotzdem zurück.",
+  "@launcherNotificationAccessMissing": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessRemote": "Ohne diese Berechtigung erkennt der Kiosk nicht, ob Video oder Musik läuft, und kehrt trotzdem zurück. Der Bildschirm zum Erteilen der Berechtigung wird auf dem Tablet angezeigt.",
+  "@launcherNotificationAccessRemote": {
     "context": "Settings > App Launcher > Required system permissions",
     "description": "Label or guidance in this section.",
     "x-locations": {

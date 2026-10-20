@@ -1362,6 +1362,20 @@ const launcherAutoReturnSeconds = SettingDef<num>(
   dependsOn: 'launcher.auto_return',
 );
 
+// Issue #1055: a video or song in another app is someone using it even
+// without a touch, so the idle clock holds while any app's media session
+// plays and starts over once it stops. Reading other apps' sessions needs
+// the Notification access grant; without it nothing reads as playing.
+const launcherAutoReturnMedia = SettingDef<bool>(
+  key: 'launcher.auto_return_media',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Wait while media plays',
+  description: 'Do not come back while video or music is playing.',
+  category: 'Launcher',
+  dependsOn: 'launcher.auto_return',
+);
+
 // ── Home Launcher ──────────────────────────────────────────────────────
 // The HOME role (issue #219): the kiosk registers as the device's home
 // app and replaces the OEM launcher outright. The system starts it at
@@ -12020,6 +12034,7 @@ const List<SettingDef<Object>> allSettings = [
   launcherApps,
   launcherAutoReturn,
   launcherAutoReturnSeconds,
+  launcherAutoReturnMedia,
   // The Screen & Audio page: screen first, then the volume mixer, then the
   // hand-built device pickers, then capture tuning. Both UIs render this
   // category in this order.

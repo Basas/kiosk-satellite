@@ -7828,6 +7828,18 @@ abstract class UiStrings {
   /// **'Time without a touch in the other app before the kiosk comes back.'**
   String get settingLauncherAutoReturnSecondsDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait while media plays'**
+  String get settingLauncherAutoReturnMediaTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not come back while video or music is playing.'**
+  String get settingLauncherAutoReturnMediaDescription;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -7857,6 +7869,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Android may pause the app behind the other one, and a paused clock never brings the kiosk back. The grant dialog appears on the tablet.'**
   String get launcherBatteryRemote;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The kiosk stays away while video or music plays in another app.'**
+  String get launcherNotificationAccessHeld;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Without this the kiosk cannot tell when video or music is playing and comes back anyway.'**
+  String get launcherNotificationAccessMissing;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.'**
+  String get launcherNotificationAccessRemote;
 
   /// Description in settings search results.
   ///

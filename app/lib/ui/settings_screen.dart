@@ -4748,7 +4748,7 @@ class _LauncherPermissionsTileState extends State<_LauncherPermissionsTile>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Both grants are given on OS screens that report nothing back.
+    // The grants are given on OS screens that report nothing back.
     if (_returned.returned(state)) _refresh();
   }
 
@@ -4825,6 +4825,29 @@ class _LauncherPermissionsTileState extends State<_LauncherPermissionsTile>
           ),
           onGrant: BackgroundListening.requestBatteryUnrestricted,
         ),
+        // Wait while media plays reads other apps' media sessions
+        // (issue #1055), which Android shows to no one without this.
+        if (widget.container.settings.get(launcherAutoReturnMedia))
+          _row(
+            granted: _perms?.notificationAccess,
+            missingIcon: Icons.notifications_off_outlined,
+            title: launcherText(context, 'Notification access'),
+            held: launcherText(
+              context,
+              'The kiosk stays away while video or music plays in another '
+              'app.',
+            ),
+            missing: launcherText(
+              context,
+              'Without this the kiosk cannot tell when video or music is '
+              'playing and comes back anyway.',
+            ),
+            onGrant: () async {
+              await widget.container.commands.execute('requestOsPermissions', {
+                'which': ['notificationAccess'],
+              });
+            },
+          ),
       ]),
     );
   }

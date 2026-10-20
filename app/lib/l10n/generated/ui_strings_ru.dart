@@ -4484,6 +4484,14 @@ class UiStringsRu extends UiStrings {
       'Время без касаний в другом приложении до возврата в киоск.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle =>
+      'Ждать во время воспроизведения';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Не возвращаться, пока играет видео или музыка.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite может вернуться на передний план и замечать касания в другом приложении.';
 
@@ -4502,6 +4510,18 @@ class UiStringsRu extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       'Android может приостановить приложение за другим, а приостановленный таймер никогда не вернёт киоск. Диалог выдачи разрешения появится на планшете.';
+
+  @override
+  String get launcherNotificationAccessHeld =>
+      'Киоск не возвращается, пока другое приложение воспроизводит видео или музыку.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Без этого киоск не знает, когда играет видео или музыка, и всё равно возвращается.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Без этого киоск не знает, когда играет видео или музыка, и всё равно возвращается. Экран выдачи разрешения появится на планшете.';
 
   @override
   String get launcherPermissionsSearch =>

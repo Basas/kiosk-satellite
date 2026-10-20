@@ -4552,6 +4552,14 @@ class UiStringsDe extends UiStrings {
       'Zeit ohne Interaktion mit der anderen App, bevor zum Kiosk zurückgekehrt wird.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle =>
+      'Warten, während Medien laufen';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Nicht zurückkehren, solange Video oder Musik läuft.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite kann wieder in den Vordergrund wechseln und Berührungen in der anderen App erkennen.';
 
@@ -4570,6 +4578,18 @@ class UiStringsDe extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       'Android kann die Anwendung pausieren, während die andere App geöffnet ist. Wenn der Timer pausiert wird, kehrt der Kiosk nicht zurück. Der Dialog zum Erteilen der Berechtigung wird auf dem Tablet angezeigt.';
+
+  @override
+  String get launcherNotificationAccessHeld =>
+      'Der Kiosk kehrt nicht zurück, solange eine andere App Video oder Musik abspielt.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Ohne diese Berechtigung erkennt der Kiosk nicht, ob Video oder Musik läuft, und kehrt trotzdem zurück.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Ohne diese Berechtigung erkennt der Kiosk nicht, ob Video oder Musik läuft, und kehrt trotzdem zurück. Der Bildschirm zum Erteilen der Berechtigung wird auf dem Tablet angezeigt.';
 
   @override
   String get launcherPermissionsSearch =>

@@ -153,10 +153,14 @@ void main() {
 
   group('auto-return (issue #317)', () {
     const channel = MethodChannel('kiosk_satellite/background');
+    // Nothing plays: the clock runs on touches alone.
+    const sessions = MethodChannel('kiosk_satellite/media_sessions');
     late List<Map<String, Object?>> watchCalls;
 
     setUp(() {
       watchCalls = [];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(sessions, (call) async => false);
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(channel, (call) async {
             if (call.method == 'watchTouches') {
@@ -169,7 +173,8 @@ void main() {
 
     tearDown(() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(channel, null);
+        ..setMockMethodCallHandler(channel, null)
+        ..setMockMethodCallHandler(sessions, null);
     });
 
     Future<void> armed() async {
@@ -295,6 +300,137 @@ void main() {
         async.elapse(const Duration(seconds: 31));
         async.flushMicrotasks();
         expect(executed, ['bringToFront']);
+      });
+    });
+  });
+
+  group('auto-return waits for media (issue #1055)', () {
+    const background = MethodChannel('kiosk_satellite/background');
+    const sessions = MethodChannel('kiosk_satellite/media_sessions');
+    late bool playing;
+    late int asked;
+
+    setUp(() {
+      playing = false;
+      asked = 0;
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(background, (call) async {
+        return call.method == 'watchTouches' ? true : null;
+      });
+      messenger.setMockMethodCallHandler(sessions, (call) async {
+        if (call.method == 'hasAccess') return true;
+        if (call.method == 'anyPlaying') {
+          asked++;
+          return playing;
+        }
+        return null;
+      });
+    });
+
+    tearDown(() {
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(background, null);
+      messenger.setMockMethodCallHandler(sessions, null);
+    });
+
+    Future<void> armed({bool wait = true}) async {
+      await build({
+        'ks.launcher.enabled': true,
+        'ks.launcher.apps': twoApps,
+        'ks.launcher.auto_return': true,
+        'ks.launcher.auto_return_seconds': 30,
+        'ks.launcher.auto_return_media': wait,
+      });
+      final binding = TestWidgetsFlutterBinding.instance;
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      addTearDown(
+        () => binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed),
+      );
+    }
+
+    void launch(FakeAsync async) {
+      bus.publish(const AppLaunched(package: 'com.a'));
+      async.flushMicrotasks();
+      launcher.didChangeAppLifecycleState(AppLifecycleState.paused);
+      async.flushMicrotasks();
+    }
+
+    test('holds the return while media plays', () async {
+      await armed();
+      fakeAsync((async) {
+        playing = true;
+        launch(async);
+        async.elapse(const Duration(seconds: 31));
+        async.flushMicrotasks();
+        expect(executed, isEmpty);
+        async.elapse(const Duration(minutes: 10));
+        async.flushMicrotasks();
+        expect(executed, isEmpty);
+        expect(launcher.watchingTouches, isTrue);
+      });
+    });
+
+    test('runs the full idle time again once media stops', () async {
+      await armed();
+      fakeAsync((async) {
+        playing = true;
+        launch(async);
+        async.elapse(const Duration(seconds: 120));
+        async.flushMicrotasks();
+        playing = false;
+        // The next look sees it stopped and starts the clock over.
+        async.elapse(const Duration(seconds: 5));
+        async.flushMicrotasks();
+        async.elapse(const Duration(seconds: 28));
+        async.flushMicrotasks();
+        expect(executed, isEmpty);
+        async.elapse(const Duration(seconds: 3));
+        async.flushMicrotasks();
+        expect(executed, ['bringToFront']);
+      });
+    });
+
+    test('returns on time when nothing plays', () async {
+      await armed();
+      fakeAsync((async) {
+        launch(async);
+        async.elapse(const Duration(seconds: 31));
+        async.flushMicrotasks();
+        expect(executed, ['bringToFront']);
+        expect(asked, 1);
+      });
+    });
+
+    test('ignores media with the switch off', () async {
+      await armed(wait: false);
+      fakeAsync((async) {
+        playing = true;
+        launch(async);
+        async.elapse(const Duration(seconds: 31));
+        async.flushMicrotasks();
+        expect(executed, ['bringToFront']);
+        expect(asked, 0);
+      });
+    });
+
+    test('coming back while held disarms the hold', () async {
+      await armed();
+      fakeAsync((async) {
+        playing = true;
+        launch(async);
+        async.elapse(const Duration(seconds: 60));
+        async.flushMicrotasks();
+        launcher.didChangeAppLifecycleState(AppLifecycleState.resumed);
+        async.flushMicrotasks();
+        final before = asked;
+        playing = false;
+        async.elapse(const Duration(minutes: 5));
+        async.flushMicrotasks();
+        expect(executed, isEmpty);
+        expect(asked, before);
+        expect(launcher.watchingTouches, isFalse);
       });
     });
   });

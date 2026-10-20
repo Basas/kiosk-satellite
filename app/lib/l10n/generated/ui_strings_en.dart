@@ -4455,6 +4455,13 @@ class UiStringsEn extends UiStrings {
       'Time without a touch in the other app before the kiosk comes back.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle => 'Wait while media plays';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Do not come back while video or music is playing.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite can bring itself back in the foreground and notice touches in the other app.';
 
@@ -4473,6 +4480,18 @@ class UiStringsEn extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       'Android may pause the app behind the other one, and a paused clock never brings the kiosk back. The grant dialog appears on the tablet.';
+
+  @override
+  String get launcherNotificationAccessHeld =>
+      'The kiosk stays away while video or music plays in another app.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Without this the kiosk cannot tell when video or music is playing and comes back anyway.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.';
 
   @override
   String get launcherPermissionsSearch =>

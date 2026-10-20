@@ -16912,6 +16912,32 @@
       ]
     }
   },
+  "settingLauncherAutoReturnMediaTitle": "Wait while media plays",
+  "@settingLauncherAutoReturnMediaTitle": {
+    "context": "Settings > App Launcher",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Wait while media plays"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Wait while media plays"
+      ]
+    }
+  },
+  "settingLauncherAutoReturnMediaDescription": "Do not come back while video or music is playing.",
+  "@settingLauncherAutoReturnMediaDescription": {
+    "context": "Settings > App Launcher",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Wait while media plays"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Wait while media plays"
+      ]
+    }
+  },
   "launcherOverlayHeld": "Kiosk Satellite can bring itself back in the foreground and notice touches in the other app.",
   "@launcherOverlayHeld": {
     "context": "Settings > App Launcher > Required system permissions",
@@ -16966,6 +16992,45 @@
   },
   "launcherBatteryRemote": "Android may pause the app behind the other one, and a paused clock never brings the kiosk back. The grant dialog appears on the tablet.",
   "@launcherBatteryRemote": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessHeld": "The kiosk stays away while video or music plays in another app.",
+  "@launcherNotificationAccessHeld": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessMissing": "Without this the kiosk cannot tell when video or music is playing and comes back anyway.",
+  "@launcherNotificationAccessMissing": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessRemote": "Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.",
+  "@launcherNotificationAccessRemote": {
     "context": "Settings > App Launcher > Required system permissions",
     "description": "Label or guidance in this section.",
     "x-locations": {

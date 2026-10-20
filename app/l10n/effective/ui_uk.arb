@@ -16912,6 +16912,32 @@
       ]
     }
   },
+  "settingLauncherAutoReturnMediaTitle": "Чекати під час відтворення",
+  "@settingLauncherAutoReturnMediaTitle": {
+    "context": "Settings > App Launcher",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Wait while media plays"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Wait while media plays"
+      ]
+    }
+  },
+  "settingLauncherAutoReturnMediaDescription": "Не повертатися, поки відтворюється відео або музика.",
+  "@settingLauncherAutoReturnMediaDescription": {
+    "context": "Settings > App Launcher",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Wait while media plays"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Wait while media plays"
+      ]
+    }
+  },
   "launcherOverlayHeld": "Kiosk Satellite може повертатися на передній план і помічати дотики в іншому застосунку.",
   "@launcherOverlayHeld": {
     "context": "Settings > App Launcher > Required system permissions",
@@ -16966,6 +16992,45 @@
   },
   "launcherBatteryRemote": "Android може призупинити застосунок у фоні, і призупинений таймер ніколи не поверне кіоск. Діалог дозволу зʼявиться на планшеті.",
   "@launcherBatteryRemote": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessHeld": "Кіоск не повертається, поки інший застосунок відтворює відео або музику.",
+  "@launcherNotificationAccessHeld": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessMissing": "Без цього кіоск не знає, коли відтворюється відео або музика, і все одно повертається.",
+  "@launcherNotificationAccessMissing": {
+    "context": "Settings > App Launcher > Required system permissions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Required system permissions"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Required system permissions"
+      ]
+    }
+  },
+  "launcherNotificationAccessRemote": "Без цього кіоск не знає, коли відтворюється відео або музика, і все одно повертається. Екран дозволу зʼявиться на планшеті.",
+  "@launcherNotificationAccessRemote": {
     "context": "Settings > App Launcher > Required system permissions",
     "description": "Label or guidance in this section.",
     "x-locations": {

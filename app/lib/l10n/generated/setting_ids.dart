@@ -1356,6 +1356,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingLauncherAutoReturnSecondsTitle",
     "description": "settingLauncherAutoReturnSecondsDescription",
   },
+  "launcher.auto_return_media": {
+    "title": "settingLauncherAutoReturnMediaTitle",
+    "description": "settingLauncherAutoReturnMediaDescription",
+  },
   "gestures.clap_strictness": {
     "title": "settingClapStrictnessTitle",
     "description": "settingClapDetectionDescription",

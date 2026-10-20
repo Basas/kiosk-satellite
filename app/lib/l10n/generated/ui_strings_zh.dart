@@ -4305,6 +4305,12 @@ class UiStringsZh extends UiStrings {
       '在其他应用中连续多久没有触屏操作后，自动返回 Kiosk。';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle => '媒体播放时等待';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription => '正在播放视频或音乐时不自动返回。';
+
+  @override
   String get launcherOverlayHeld => 'Kiosk Satellite 可以自动返回前台，并检测其他应用中的触屏操作。';
 
   @override
@@ -4321,6 +4327,17 @@ class UiStringsZh extends UiStrings {
   @override
   String get launcherBatteryRemote =>
       '系统可能暂停后台的 Kiosk Satellite，导致自动返回计时停止，无法自动回到 Kiosk 界面。请在平板上显示的授权对话框中完成授权。';
+
+  @override
+  String get launcherNotificationAccessHeld => '其他应用正在播放视频或音乐时，不会返回 Kiosk。';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      '未授权时无法判断是否正在播放视频或音乐，到时间仍会返回 Kiosk。';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      '未授权时无法判断是否正在播放视频或音乐，到时间仍会返回 Kiosk。请在平板上显示的授权界面中完成授权。';
 
   @override
   String get launcherPermissionsSearch => '“自动返回”所依赖的权限。';
@@ -18112,6 +18129,12 @@ class UiStringsZhCn extends UiStringsZh {
       '在其他应用中连续多久没有触屏操作后，自动返回 Kiosk。';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle => '媒体播放时等待';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription => '正在播放视频或音乐时不自动返回。';
+
+  @override
   String get launcherOverlayHeld => 'Kiosk Satellite 可以自动返回前台，并检测其他应用中的触屏操作。';
 
   @override
@@ -18128,6 +18151,17 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get launcherBatteryRemote =>
       '系统可能暂停后台的 Kiosk Satellite，导致自动返回计时停止，无法自动回到 Kiosk 界面。请在平板上显示的授权对话框中完成授权。';
+
+  @override
+  String get launcherNotificationAccessHeld => '其他应用正在播放视频或音乐时，不会返回 Kiosk。';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      '未授权时无法判断是否正在播放视频或音乐，到时间仍会返回 Kiosk。';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      '未授权时无法判断是否正在播放视频或音乐，到时间仍会返回 Kiosk。请在平板上显示的授权界面中完成授权。';
 
   @override
   String get launcherPermissionsSearch => '“自动返回”所依赖的权限。';
