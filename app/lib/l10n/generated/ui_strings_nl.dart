@@ -10299,6 +10299,13 @@ class UiStringsNl extends UiStrings {
       'Markeer noord, oost, zuid en west op de horizon.';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle => 'Labelgrootte';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Schaal de labels aan de hemel van 50 tot 200 procent.';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => 'Positie';
 
   @override
@@ -10354,6 +10361,14 @@ class UiStringsNl extends UiStrings {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       'Toon de fase van de maan en hoeveel ervan verlicht is.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Grootte van de bediening';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Schaal de bediening van 50 tot 200 procent.';
 
   @override
   String get screensaverModeCelestial => 'Sterrenhemel';

@@ -2380,4 +2380,12 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreensaverCelestialControlFovTitle",
     "description": "settingScreensaverCelestialControlFovDescription",
   },
+  "screensaver.celestial_label_scale": {
+    "title": "settingScreensaverCelestialLabelScaleTitle",
+    "description": "settingScreensaverCelestialLabelScaleDescription",
+  },
+  "screensaver.celestial_control_scale": {
+    "title": "settingScreensaverCelestialControlScaleTitle",
+    "description": "settingScreensaverCelestialControlScaleDescription",
+  },
 };

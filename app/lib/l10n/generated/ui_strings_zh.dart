@@ -9701,6 +9701,13 @@ class UiStringsZh extends UiStrings {
   String get settingScreensaverCelestialCompassDescription => '在地平线上标出北、东、南、西。';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle => '标签大小';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      '将天空中的标签缩放到 50% 至 200%。';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => '位置';
 
   @override
@@ -9755,6 +9762,13 @@ class UiStringsZh extends UiStrings {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       '显示月相以及月面被照亮的比例。';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle => '控件大小';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      '将控件缩放到 50% 至 200%。';
 
   @override
   String get screensaverModeCelestial => '星空';
@@ -23889,6 +23903,13 @@ class UiStringsZhCn extends UiStringsZh {
   String get settingScreensaverCelestialCompassDescription => '在地平线上标出北、东、南、西。';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle => '标签大小';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      '将天空中的标签缩放到 50% 至 200%。';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => '位置';
 
   @override
@@ -23943,6 +23964,13 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       '显示月相以及月面被照亮的比例。';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle => '控件大小';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      '将控件缩放到 50% 至 200%。';
 
   @override
   String get screensaverModeCelestial => '星空';

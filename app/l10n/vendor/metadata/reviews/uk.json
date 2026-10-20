@@ -26729,5 +26729,29 @@
     "translation": "d8ffdc9aeea41d7b1a2b2589ec82e8f65ca1914b12a5c9d81b71c862913e56ca",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingScreensaverCelestialControlScaleDescription": {
+    "source": "592701a940ea62026301132003c71bb92a4eb3a966d328473e7834c224c3ecfb",
+    "translation": "7ba462c8e61fca3faed924fe39144bf9abd77345a8567e0a5b3692da4f90e3cd",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverCelestialLabelScaleTitle": {
+    "source": "33c1ed1fd6b8e7ad8384a07880609ac30f32d0282f934b0eeeb1b5f6b2e4244c",
+    "translation": "b2963c52876cc3746da99fab0a7edb6cd47453f204da0736a4c38666897fe1b5",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverCelestialLabelScaleDescription": {
+    "source": "7663d3b634e0b644ff9112f723ece07af9023fe0c017ea22d5dbcde070bdfd41",
+    "translation": "8e8a9f62a49005403d38f1aad5402c7d13d560fda0e798264aaef627ab73ed9f",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverCelestialControlScaleTitle": {
+    "source": "65d4e4b409515d4048f8ac7d06853bb6ea0708a957f22ff83f44df76db5c3285",
+    "translation": "77fb6c9e8d0444409918c86925b73c7d03ac602d5800a0c32e9c683cb5d7fd7e",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

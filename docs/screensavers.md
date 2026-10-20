@@ -96,7 +96,9 @@ Any touch also brings up a quiet status bar along the bottom of the screen, dim 
 | Constellation names | on | Names the constellations. More appear as you zoom in, and names fade out toward the edges of the screen like the lines. |
 | Star and planet names | on | Names the Sun, the Moon, the planets, the brightest stars and the galaxies. More stars get names as you zoom in. |
 | Compass points | on | Marks north, east, south and west on the horizon. |
+| Label size | 100% | Scales the labels on the sky from 50 to 200 percent. |
 | Controls | all on | The controls a touch brings up: **Position**, **Azimuth**, **Altitude**, **Field of view**, **Time**, **Timelapse**, **Point at the sky switch** and **Moon phase**. |
+| Controls size | 100% | Scales the controls from 50 to 200 percent. |
 
 Positions come from orbital elements and are accurate to a few arcminutes, about a pixel at the closest zoom. Each star is drawn from its apparent magnitude, so brightness and size follow what you would see. Stars dim and redden near the horizon the way the air dims them, and moonlight, twilight and light pollution wash out the fainter ones. The sky follows the clock in real time, unless a timelapse runs.
 

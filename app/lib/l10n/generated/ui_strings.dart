@@ -17720,6 +17720,18 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Label size'**
+  String get settingScreensaverCelestialLabelScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the labels on the sky from 50 to 200 percent.'**
+  String get settingScreensaverCelestialLabelScaleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Position'**
   String get settingScreensaverCelestialControlCoordinatesTitle;
 
@@ -17812,6 +17824,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Show the phase of the Moon and how much of it is lit.'**
   String get settingScreensaverCelestialControlMoonPhaseDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls size'**
+  String get settingScreensaverCelestialControlScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the controls from 50 to 200 percent.'**
+  String get settingScreensaverCelestialControlScaleDescription;
 
   /// Screensaver mode choice.
   ///

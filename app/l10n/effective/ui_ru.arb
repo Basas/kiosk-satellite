@@ -38612,6 +38612,32 @@
       ]
     }
   },
+  "settingScreensaverCelestialLabelScaleTitle": "Размер подписей",
+  "@settingScreensaverCelestialLabelScaleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLabelScaleDescription": "Масштабирует подписи на небе от 50 до 200 процентов.",
+  "@settingScreensaverCelestialLabelScaleDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
   "settingScreensaverCelestialControlCoordinatesTitle": "Положение",
   "@settingScreensaverCelestialControlCoordinatesTitle": {
     "context": "Settings:Screensaver:Celestial screensaver:Controls",
@@ -38809,6 +38835,32 @@
   },
   "settingScreensaverCelestialControlMoonPhaseDescription": "Показывает фазу Луны и долю освещённого диска.",
   "@settingScreensaverCelestialControlMoonPhaseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlScaleTitle": "Размер элементов управления",
+  "@settingScreensaverCelestialControlScaleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlScaleDescription": "Масштабирует элементы управления от 50 до 200 процентов.",
+  "@settingScreensaverCelestialControlScaleDescription": {
     "context": "Settings:Screensaver:Celestial screensaver:Controls",
     "description": "Help below the setting.",
     "x-locations": {

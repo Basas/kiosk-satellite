@@ -120,6 +120,7 @@ class CelestialOptions {
     this.compass = true,
     this.terrain = 'hills',
     this.lightPollution = 0,
+    this.labelScale = 1,
   });
 
   final bool lines,
@@ -137,10 +138,14 @@ class CelestialOptions {
   /// City glow from 0 (a dark site) to 1 (a city center).
   final double lightPollution;
 
+  /// The size of the labels on the sky, 1 for the default.
+  final double labelScale;
+
   @override
   bool operator ==(Object other) =>
       other is CelestialOptions &&
       other.lightPollution == lightPollution &&
+      other.labelScale == labelScale &&
       other.lines == lines &&
       other.constellationNames == constellationNames &&
       other.objectNames == objectNames &&
@@ -167,6 +172,7 @@ class CelestialOptions {
     compass,
     terrain,
     lightPollution,
+    labelScale,
   );
 }
 
@@ -1387,7 +1393,8 @@ class _Scene {
     _placed.clear();
     _trimTexts();
     final taken = <Rect>[];
-    final textScale = (size.shortestSide / 700).clamp(0.8, 1.4).toDouble();
+    final textScale =
+        (size.shortestSide / 700).clamp(0.8, 1.4) * options.labelScale;
     final cell = size.shortestSide / 4.5;
     final perCell = view.fov > 80
         ? 1

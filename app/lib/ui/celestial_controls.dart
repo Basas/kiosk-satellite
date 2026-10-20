@@ -155,9 +155,9 @@ class _CelestialControlsState extends State<CelestialControls> {
     final c = widget.container, s = c.settings;
     final clock = widget.clock;
     String t(String english) => screensaverText(context, english);
-    final scale = (MediaQuery.sizeOf(context).shortestSide / 700)
-        .clamp(.8, 1.15)
-        .toDouble();
+    final scale =
+        (MediaQuery.sizeOf(context).shortestSide / 700).clamp(.8, 1.15) *
+        (s.get(defs.screensaverCelestialControlScale) / 100).clamp(.5, 2);
     final view = widget.view.value;
     final facing = view.frame?.forward;
     final azimuth = facing?.azimuth ?? view.azimuth;
@@ -214,6 +214,20 @@ class _CelestialControlsState extends State<CelestialControls> {
           value: _timeText(context, time),
           bright: clock.shifted,
         ),
+      // Now comes before the buttons that stay, so it never moves them
+      // from under the finger as it appears.
+      if (clock.shifted &&
+          (s.get(defs.screensaverCelestialControlTime) ||
+              s.get(defs.screensaverCelestialControlTimelapse)))
+        _Button(
+          scale: scale,
+          text: t('Now'),
+          onTap: () {
+            clock.reset();
+            widget.onClock();
+            setState(() {});
+          },
+        ),
       if (s.get(defs.screensaverCelestialControlTimelapse))
         _Button(
           scale: scale,
@@ -225,18 +239,6 @@ class _CelestialControlsState extends State<CelestialControls> {
           ),
           onTap: () {
             clock.nextRate();
-            widget.onClock();
-            setState(() {});
-          },
-        ),
-      if (clock.shifted &&
-          (s.get(defs.screensaverCelestialControlTime) ||
-              s.get(defs.screensaverCelestialControlTimelapse)))
-        _Button(
-          scale: scale,
-          text: t('Now'),
-          onTap: () {
-            clock.reset();
             widget.onClock();
             setState(() {});
           },

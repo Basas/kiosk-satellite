@@ -10263,6 +10263,13 @@ class UiStringsRu extends UiStrings {
       'Отмечать север, восток, юг и запад на горизонте.';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle => 'Размер подписей';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Масштабирует подписи на небе от 50 до 200 процентов.';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => 'Положение';
 
   @override
@@ -10319,6 +10326,14 @@ class UiStringsRu extends UiStrings {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       'Показывает фазу Луны и долю освещённого диска.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Размер элементов управления';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Масштабирует элементы управления от 50 до 200 процентов.';
 
   @override
   String get screensaverModeCelestial => 'Звёздное небо';

@@ -10292,6 +10292,13 @@ class UiStringsUk extends UiStrings {
       'Позначати північ, схід, південь і захід на горизонті.';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle => 'Розмір підписів';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Масштабує підписи на небі від 50 до 200 відсотків.';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => 'Положення';
 
   @override
@@ -10348,6 +10355,14 @@ class UiStringsUk extends UiStrings {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       'Показує фазу Місяця й частку його освітленого диска.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Розмір елементів керування';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Масштабує елементи керування від 50 до 200 відсотків.';
 
   @override
   String get screensaverModeCelestial => 'Зоряне небо';

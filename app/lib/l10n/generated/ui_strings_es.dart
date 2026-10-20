@@ -10373,6 +10373,14 @@ class UiStringsEs extends UiStrings {
       'Marca el norte, el este, el sur y el oeste en el horizonte.';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle =>
+      'Tamaño de las etiquetas';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Ajusta el tamaño de las etiquetas del cielo del 50 al 200 por ciento.';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => 'Posición';
 
   @override
@@ -10428,6 +10436,14 @@ class UiStringsEs extends UiStrings {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       'Muestra la fase de la Luna y cuánto de ella está iluminado.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Tamaño de los controles';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Ajusta el tamaño de los controles del 50 al 200 por ciento.';
 
   @override
   String get screensaverModeCelestial => 'Celeste';

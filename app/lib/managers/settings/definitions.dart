@@ -2812,6 +2812,23 @@ const screensaverCelestialCompass = SettingDef<bool>(
   dependsOnValue: 'celestial',
 );
 
+const screensaverCelestialLabelScale = SettingDef<num>(
+  key: 'screensaver.celestial_label_scale',
+  type: SettingType.number,
+  defaultValue: 100,
+  title: 'Label size',
+  description: 'Scale the labels on the sky from 50 to 200 percent.',
+  category: 'Screensaver',
+  section: 'Labels',
+  subpage: 'Celestial screensaver',
+  dependsOn: 'screensaver.mode',
+  dependsOnValue: 'celestial',
+  min: 50,
+  max: 200,
+  step: 5,
+  unit: '%',
+);
+
 // The readouts and buttons a touch brings up along the bottom of the sky,
 // each with its own switch.
 
@@ -2918,6 +2935,23 @@ const screensaverCelestialControlMoonPhase = SettingDef<bool>(
   subpage: 'Celestial screensaver',
   dependsOn: 'screensaver.mode',
   dependsOnValue: 'celestial',
+);
+
+const screensaverCelestialControlScale = SettingDef<num>(
+  key: 'screensaver.celestial_control_scale',
+  type: SettingType.number,
+  defaultValue: 100,
+  title: 'Controls size',
+  description: 'Scale the controls from 50 to 200 percent.',
+  category: 'Screensaver',
+  section: 'Controls',
+  subpage: 'Celestial screensaver',
+  dependsOn: 'screensaver.mode',
+  dependsOnValue: 'celestial',
+  min: 50,
+  max: 200,
+  step: 5,
+  unit: '%',
 );
 
 /// Where the Celestial view was left: "azimuth,altitude,fov" in degrees.
@@ -12535,6 +12569,7 @@ const List<SettingDef<Object>> allSettings = [
   screensaverCelestialConstellationNames,
   screensaverCelestialNames,
   screensaverCelestialCompass,
+  screensaverCelestialLabelScale,
   screensaverCelestialControlCoordinates,
   screensaverCelestialControlAzimuth,
   screensaverCelestialControlAltitude,
@@ -12543,6 +12578,7 @@ const List<SettingDef<Object>> allSettings = [
   screensaverCelestialControlTimelapse,
   screensaverCelestialControlPointAtSky,
   screensaverCelestialControlMoonPhase,
+  screensaverCelestialControlScale,
   screensaverCelestialView,
   // One titled panel per mode, in the dropdown's order; only the panel of
   // the selected mode is visible (each setting depends on the mode).

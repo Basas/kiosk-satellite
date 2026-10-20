@@ -479,6 +479,9 @@ class _CelestialScreensaverState extends State<CelestialScreensaver>
       lightPollution: (s.get(defs.screensaverCelestialLightPollution) / 100)
           .clamp(0, 1)
           .toDouble(),
+      labelScale: (s.get(defs.screensaverCelestialLabelScale) / 100)
+          .clamp(.5, 2)
+          .toDouble(),
     );
   }
 
@@ -636,12 +639,18 @@ class _CelestialScreensaverState extends State<CelestialScreensaver>
                         child: Text(
                           screensaverText(context, 'Double tap to close'),
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Rubik',
-                            fontSize: 13,
+                            fontSize:
+                                13 *
+                                (c.settings.get(
+                                          defs.screensaverCelestialControlScale,
+                                        ) /
+                                        100)
+                                    .clamp(.5, 2),
                             letterSpacing: .3,
-                            color: Color(0x99D5DCE6),
-                            shadows: [Shadow(blurRadius: 6)],
+                            color: const Color(0x99D5DCE6),
+                            shadows: const [Shadow(blurRadius: 6)],
                           ),
                         ),
                       ),

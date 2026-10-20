@@ -38612,6 +38612,32 @@
       ]
     }
   },
+  "settingScreensaverCelestialLabelScaleTitle": "Taille des étiquettes",
+  "@settingScreensaverCelestialLabelScaleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLabelScaleDescription": "Ajuste la taille des étiquettes du ciel de 50 à 200 pour cent.",
+  "@settingScreensaverCelestialLabelScaleDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
   "settingScreensaverCelestialControlCoordinatesTitle": "Position",
   "@settingScreensaverCelestialControlCoordinatesTitle": {
     "context": "Settings:Screensaver:Celestial screensaver:Controls",
@@ -38809,6 +38835,32 @@
   },
   "settingScreensaverCelestialControlMoonPhaseDescription": "Affiche la phase de la Lune et sa part éclairée.",
   "@settingScreensaverCelestialControlMoonPhaseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlScaleTitle": "Taille des commandes",
+  "@settingScreensaverCelestialControlScaleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlScaleDescription": "Ajuste la taille des commandes de 50 à 200 pour cent.",
+  "@settingScreensaverCelestialControlScaleDescription": {
     "context": "Settings:Screensaver:Celestial screensaver:Controls",
     "description": "Help below the setting.",
     "x-locations": {

@@ -224,6 +224,20 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
   });
 
+  testWidgets('the controls size scales the bar', (tester) async {
+    final c = await pumpSky(tester);
+    await tester.tap(find.byType(CelestialRenderer));
+    await tester.pump(const Duration(milliseconds: 400));
+    double size() =>
+        tester.widget<Text>(find.text('40.71° N  74.01° W')).style!.fontSize!;
+    final normal = size();
+    await c.settings.set(defs.screensaverCelestialControlScale, 200);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(size(), closeTo(normal * 2, 0.01));
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 6));
+  });
+
   testWidgets('with every control off a touch brings nothing up', (
     tester,
   ) async {

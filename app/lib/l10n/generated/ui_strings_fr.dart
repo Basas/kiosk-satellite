@@ -10369,6 +10369,14 @@ class UiStringsFr extends UiStrings {
       'Indiquer le nord, l’est, le sud et l’ouest sur l’horizon.';
 
   @override
+  String get settingScreensaverCelestialLabelScaleTitle =>
+      'Taille des étiquettes';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Ajuste la taille des étiquettes du ciel de 50 à 200 pour cent.';
+
+  @override
   String get settingScreensaverCelestialControlCoordinatesTitle => 'Position';
 
   @override
@@ -10425,6 +10433,14 @@ class UiStringsFr extends UiStrings {
   @override
   String get settingScreensaverCelestialControlMoonPhaseDescription =>
       'Affiche la phase de la Lune et sa part éclairée.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Taille des commandes';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Ajuste la taille des commandes de 50 à 200 pour cent.';
 
   @override
   String get screensaverModeCelestial => 'Céleste';

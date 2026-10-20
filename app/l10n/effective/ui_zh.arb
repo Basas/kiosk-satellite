@@ -38612,6 +38612,32 @@
       ]
     }
   },
+  "settingScreensaverCelestialLabelScaleTitle": "标签大小",
+  "@settingScreensaverCelestialLabelScaleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
+  "settingScreensaverCelestialLabelScaleDescription": "将天空中的标签缩放到 50% 至 200%。",
+  "@settingScreensaverCelestialLabelScaleDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Labels",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Labels"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Labels"
+      ]
+    }
+  },
   "settingScreensaverCelestialControlCoordinatesTitle": "位置",
   "@settingScreensaverCelestialControlCoordinatesTitle": {
     "context": "Settings:Screensaver:Celestial screensaver:Controls",
@@ -38809,6 +38835,32 @@
   },
   "settingScreensaverCelestialControlMoonPhaseDescription": "显示月相以及月面被照亮的比例。",
   "@settingScreensaverCelestialControlMoonPhaseDescription": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlScaleTitle": "控件大小",
+  "@settingScreensaverCelestialControlScaleTitle": {
+    "context": "Settings:Screensaver:Celestial screensaver:Controls",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Celestial screensaver > Controls"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Celestial screensaver > Controls"
+      ]
+    }
+  },
+  "settingScreensaverCelestialControlScaleDescription": "将控件缩放到 50% 至 200%。",
+  "@settingScreensaverCelestialControlScaleDescription": {
     "context": "Settings:Screensaver:Celestial screensaver:Controls",
     "description": "Help below the setting.",
     "x-locations": {

@@ -3216,6 +3216,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreensaverCelestialCompassTitle,
       'settingScreensaverCelestialCompassDescription' =>
         strings.settingScreensaverCelestialCompassDescription,
+      'settingScreensaverCelestialLabelScaleTitle' =>
+        strings.settingScreensaverCelestialLabelScaleTitle,
+      'settingScreensaverCelestialLabelScaleDescription' =>
+        strings.settingScreensaverCelestialLabelScaleDescription,
       'settingScreensaverCelestialControlCoordinatesTitle' =>
         strings.settingScreensaverCelestialControlCoordinatesTitle,
       'settingScreensaverCelestialControlCoordinatesDescription' =>
@@ -3248,6 +3252,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreensaverCelestialControlMoonPhaseTitle,
       'settingScreensaverCelestialControlMoonPhaseDescription' =>
         strings.settingScreensaverCelestialControlMoonPhaseDescription,
+      'settingScreensaverCelestialControlScaleTitle' =>
+        strings.settingScreensaverCelestialControlScaleTitle,
+      'settingScreensaverCelestialControlScaleDescription' =>
+        strings.settingScreensaverCelestialControlScaleDescription,
       'screensaverModeCelestial' => strings.screensaverModeCelestial,
       'screensaverCelestialTerrainHills' =>
         strings.screensaverCelestialTerrainHills,
