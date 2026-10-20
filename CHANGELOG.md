@@ -16,6 +16,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 - **View ID in the camera view editor (#1058).** **Edit view** in **Settings > Camera Streams** now shows the view's ID in a box that copies it, on the device and in the remote admin. A link by ID keeps working if the view is renamed.
 
 ### Fixed
+- **Location grants that Android stopped asking for.** After two refusals, Android never shows the location dialog again, so **Grant** on the GPS Sensor and Bluetooth Proxy pages did nothing. It now opens the app's page in the Android settings, where location can be allowed. On Android 12 and later, the GPS Sensor's Location row also says when only approximate location is allowed, since the GPS receiver needs precise location, and **Grant** asks to change it to precise.
 - **`ks://camera` opens the default camera view.** The link without a view refused with "view not found" instead of showing the default view, as documented.
 - **Plugin screensavers show up in the remote admin right away (#1059).** Enabling, disabling or removing a plugin now updates **Screensaver mode** in an open remote admin page. Before, a new plugin screensaver was missing from the list until the page was reloaded.
 

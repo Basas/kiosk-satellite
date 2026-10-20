@@ -7341,6 +7341,10 @@ class UiStringsEn extends UiStrings {
       'Location is off in the device settings, so the receiver delivers nothing.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Only approximate location is allowed, and the GPS receiver needs precise location.';
+
+  @override
   String get esphomeLocationGranted =>
       'The location sensors can read the GPS receiver.';
 

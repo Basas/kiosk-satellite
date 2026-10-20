@@ -7389,6 +7389,10 @@ class UiStringsRu extends UiStrings {
       'Местоположение выключено в настройках устройства, поэтому приёмник ничего не выдаёт.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Разрешено только приблизительное местоположение, а GPS-приёмнику нужно точное.';
+
+  @override
   String get esphomeLocationGranted =>
       'Датчики местоположения могут читать GPS-приёмник.';
 

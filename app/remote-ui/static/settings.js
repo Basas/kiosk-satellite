@@ -1152,6 +1152,8 @@ async function renderSettings({ cached = false } = {}) {
         info.querySelector('.desc').textContent = ok === null
           ? esphomeText('Status unavailable.')
           : ok ? esphomeText('The location sensors can read the GPS receiver.')
+          : p.location !== true && p.locationApproximate === true
+            ? esphomeText('Only approximate location is allowed, and the GPS receiver needs precise location.')
           : p.location !== true
             ? esphomeText('Without this the GPS receiver cannot be read and the location sensors stay unknown.')
             : esphomeText('Location is off in the device settings, so the receiver delivers nothing.');
@@ -2890,6 +2892,8 @@ export function updateCelestialPermissionRows() {
     info.querySelector('.desc').textContent = ok === null
       ? screensaverText('Status unavailable.')
       : ok ? screensaverText('The sky can follow the GPS receiver.')
+      : p.location !== true && p.locationApproximate === true
+        ? esphomeText('Only approximate location is allowed, and the GPS receiver needs precise location.')
       : p.location !== true
         ? screensaverText('Without this the GPS receiver cannot be read and the sky has no location.')
         : esphomeText('Location is off in the device settings, so the receiver delivers nothing.');

@@ -7472,6 +7472,10 @@ class UiStringsEs extends UiStrings {
       'La ubicación está desactivada en los ajustes del dispositivo, por lo que el receptor no proporciona datos.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Solo se permite la ubicación aproximada y el receptor GPS necesita la ubicación precisa.';
+
+  @override
   String get esphomeLocationGranted =>
       'Los sensores de ubicación pueden leer el receptor GPS.';
 

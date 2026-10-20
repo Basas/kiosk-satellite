@@ -33,6 +33,10 @@ import io.flutter.plugin.common.MethodChannel
  * `timeoutMs`. It answers with an `error` of `absent` or `denied` instead
  * of a fix when it cannot ask.
  *
+ * `grants` says which of the two location grants the app holds. Android
+ * 12 and later let a person allow approximate location only, which the
+ * permission rows explain, since the receiver cannot be read with it.
+ *
  * All of them need the fine location permission: without it the stream fails at
  * once with `denied` and the Dart side says so under the switch. A
  * receiver switched off in the device settings takes the request and
@@ -62,9 +66,10 @@ class LocationSensor(private val context: Context, messenger: BinaryMessenger) {
             )
         }
 
-    private fun granted(): Boolean =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED
+    private fun granted(): Boolean = holds(Manifest.permission.ACCESS_FINE_LOCATION)
+
+    private fun holds(permission: String): Boolean =
+        ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
 
     private fun encode(l: Location): Map<String, Any?> = mapOf(
         "latitude" to l.latitude,
@@ -89,6 +94,12 @@ class LocationSensor(private val context: Context, messenger: BinaryMessenger) {
             when (call.method) {
                 "support" -> result.success(support())
                 "last" -> result.success(last())
+                "grants" -> result.success(
+                    mapOf(
+                        "precise" to granted(),
+                        "approximate" to holds(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    ),
+                )
                 "current" -> current(
                     ((call.argument<Number>("timeoutMs"))?.toLong() ?: 30_000L),
                     result,

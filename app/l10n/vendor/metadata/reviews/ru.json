@@ -27165,5 +27165,11 @@
     "translation": "b4424044c7e73839c91e726ccd351d41c6ec986a163873930eeefb4b48e4f8bd",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "esphomeLocationApproximate": {
+    "source": "6f40c6b32180705f0293d668408b0733ea933b30cef665ce508c47248d1f17d5",
+    "translation": "80a62dccdea2288dbf46d8ea075b36b6cabeb6c2ba49ce604bd9c237c7683076",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

@@ -83,6 +83,55 @@ void main() {
     expect(heading, findsNothing);
   });
 
+  testWidgets('approximate location reads missing and says why', (
+    tester,
+  ) async {
+    final messenger = tester.binding.defaultBinaryMessenger;
+    const permissions = MethodChannel(
+      'flutter.baseflow.com/permissions/methods',
+    );
+    const location = MethodChannel('kiosk_satellite/location');
+    const background = MethodChannel('kiosk_satellite/background');
+    messenger.setMockMethodCallHandler(background, (call) async => false);
+    // Android 12 and later: approximate allowed, precise refused.
+    messenger.setMockMethodCallHandler(
+      permissions,
+      (call) async => switch (call.method) {
+        'checkPermissionStatus' => 0,
+        'checkServiceStatus' => 1,
+        _ => null,
+      },
+    );
+    messenger.setMockMethodCallHandler(
+      location,
+      (call) async => call.method == 'grants'
+          ? {'precise': false, 'approximate': true}
+          : null,
+    );
+    addTearDown(() {
+      messenger.setMockMethodCallHandler(permissions, null);
+      messenger.setMockMethodCallHandler(location, null);
+      messenger.setMockMethodCallHandler(background, null);
+    });
+    await open(tester, 'gps');
+    // The permission read goes through platform plugins that settle on
+    // real time.
+    for (var i = 0; i < 10; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)),
+      );
+      await tester.pump();
+    }
+    expect(
+      find.text(
+        'Only approximate location is allowed, and the GPS receiver needs '
+        'precise location.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Grant'), findsOneWidget);
+  });
+
   testWidgets('an entity source shows the picker and its status', (
     tester,
   ) async {

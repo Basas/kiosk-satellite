@@ -55,7 +55,7 @@ Celestial shows the sky above the kiosk as it is right now: the stars down to th
 
 Celestial needs to know where the kiosk is. Pick where that comes from under **Location**:
 
-* **GPS** reads the device's GPS receiver, whether or not **Report location** is on in ESPHome. Most tablets have no receiver. It needs the **Location** permission, shown under **Required system permissions** right below the Location group, on the device and in the remote admin.
+* **GPS** reads the device's GPS receiver, whether or not **Report location** is on in ESPHome. Most tablets have no receiver. It needs the **Location** permission with precise location, shown under **Required system permissions** right below the Location group, on the device and in the remote admin. On Android 12 and later, approximate location is not enough, and **Grant** asks to change it to precise. Once Android stops asking, **Grant** opens the app's page in the Android settings.
 * **Home Assistant home** (the default) uses the home zone set in Home Assistant.
 * **Home Assistant entity** uses a person, device tracker or zone you pick.
 * **Manual** takes a latitude and longitude you type, like `40.71, -74.01`.

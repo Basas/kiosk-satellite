@@ -7424,6 +7424,10 @@ class UiStringsNl extends UiStrings {
       'Locatie is uitgeschakeld in de apparaatinstellingen, waardoor de ontvanger geen gegevens levert.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Alleen de geschatte locatie is toegestaan en de GPS-ontvanger heeft de precieze locatie nodig.';
+
+  @override
   String get esphomeLocationGranted =>
       'De locatiesensoren kunnen de GPS-ontvanger lezen.';
 

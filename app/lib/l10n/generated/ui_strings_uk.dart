@@ -7405,6 +7405,10 @@ class UiStringsUk extends UiStrings {
       'Геолокацію вимкнено в налаштуваннях пристрою, тому приймач не передає даних.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Дозволено лише приблизне місцезнаходження, а GPS-приймачу потрібне точне.';
+
+  @override
   String get esphomeLocationGranted =>
       'Датчики місцезнаходження можуть зчитувати дані GPS-приймача.';
 

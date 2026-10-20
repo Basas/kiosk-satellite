@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "4afb2965ff88853b8ecd13a8aa38bc33996e1837",
+  "revision": "9d9500b654d002782deefdbe79c58091979f0546",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -105,7 +105,7 @@
     "settings_esphome_bluetooth_status_en.arb": "966547e9b9382d1ffc17e74142b9de4ebb99cf66ef85f79bcdd2aa328c6a199f",
     "settings_esphome_gps_en.arb": "0f6a8ee5ad6497c93e107988b39eb90b88e985ecd6a3d2a2173cd98d73a8743d",
     "settings_esphome_notifications_en.arb": "6be8d759f1f1583db99ff5c95159ad87120285a7fb6dc02f73c2f2094e00d1b0",
-    "settings_esphome_permissions_en.arb": "1a19be1dcdff6f5cd9f1353fc3fa33fdbc37241b378926995b421b1230b08cb5",
+    "settings_esphome_permissions_en.arb": "adb008fc20660e0050c63293d26f6ad5aa997b9e1c8de3261d5664c7ec069658",
     "settings_esphome_setup_en.arb": "c4c7a944ea206ffc62f04ecfb5936b9d17eaf0a85abee2222cdd2ae74cf5bb90",
     "settings_footer_en.arb": "2b6279c9f3a304b5ad3fe7aec3e8dcd07ada7704de51489dc2f6866d147950a4",
     "settings_gestures_en.arb": "30a3d7c7867d80faeed298d2e11e46bbd99182f4d58d8e585faadbec551939f0",

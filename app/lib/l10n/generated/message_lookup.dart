@@ -2107,6 +2107,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'esphomeBluetoothSearch' => strings.esphomeBluetoothSearch,
       'esphomeLocationMissing' => strings.esphomeLocationMissing,
       'esphomeLocationServicesOff' => strings.esphomeLocationServicesOff,
+      'esphomeLocationApproximate' => strings.esphomeLocationApproximate,
       'esphomeLocationGranted' => strings.esphomeLocationGranted,
       'esphomeBluetoothGranted' => strings.esphomeBluetoothGranted,
       'esphomeBluetoothMissing' => strings.esphomeBluetoothMissing,

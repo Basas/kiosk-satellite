@@ -7513,6 +7513,10 @@ class UiStringsDe extends UiStrings {
       'Der Standortdienst ist in den Geräteeinstellungen deaktiviert, sodass der Empfänger keine Daten liefert.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Nur der ungefähre Standort ist erlaubt, der GPS-Empfänger braucht aber den genauen Standort.';
+
+  @override
   String get esphomeLocationGranted =>
       'Die Standortsensoren können den GPS-Empfänger auslesen.';
 

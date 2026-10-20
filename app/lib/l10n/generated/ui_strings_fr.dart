@@ -7463,6 +7463,10 @@ class UiStringsFr extends UiStrings {
       'La localisation est désactivée dans les paramètres de l\'appareil, le récepteur ne fournit donc rien.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Seule la localisation approximative est autorisée, alors que le récepteur GPS a besoin de la localisation précise.';
+
+  @override
   String get esphomeLocationGranted =>
       'Les capteurs de localisation peuvent lire le récepteur GPS.';
 

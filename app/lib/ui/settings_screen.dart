@@ -10198,7 +10198,13 @@ class _LocationPermissionsTileState extends State<_LocationPermissionsTile>
       ),
       title: Text(esphomeText(context, 'Location')),
       subtitle: Text(
-        perms == null || !perms.location
+        perms != null && !perms.location && perms.locationApproximate
+            ? esphomeText(
+                context,
+                'Only approximate location is allowed, and the GPS receiver '
+                'needs precise location.',
+              )
+            : perms == null || !perms.location
             ? widget.celestial
                   ? screensaverText(
                       context,

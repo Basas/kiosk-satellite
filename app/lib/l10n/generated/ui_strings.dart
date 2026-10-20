@@ -12797,6 +12797,12 @@ abstract class UiStrings {
   /// **'Location is off in the device settings, so the receiver delivers nothing.'**
   String get esphomeLocationServicesOff;
 
+  /// Location permission row when only approximate location is allowed (Android 12 and later). The GPS receiver needs precise location.
+  ///
+  /// In en, this message translates to:
+  /// **'Only approximate location is allowed, and the GPS receiver needs precise location.'**
+  String get esphomeLocationApproximate;
+
   /// Interface label or status message.
   ///
   /// In en, this message translates to:

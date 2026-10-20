@@ -7025,6 +7025,9 @@ class UiStringsZh extends UiStrings {
   String get esphomeLocationServicesOff => '设备设置中的位置功能已关闭，接收器无法提供数据。';
 
   @override
+  String get esphomeLocationApproximate => '仅允许使用大致位置，而 GPS 接收器需要精确位置。';
+
+  @override
   String get esphomeLocationGranted => '位置传感器可读取 GPS 接收器。';
 
   @override
@@ -21246,6 +21249,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get esphomeLocationServicesOff => '设备设置中的位置功能已关闭，接收器无法提供数据。';
+
+  @override
+  String get esphomeLocationApproximate => '仅允许使用大致位置，而 GPS 接收器需要精确位置。';
 
   @override
   String get esphomeLocationGranted => '位置传感器可读取 GPS 接收器。';
