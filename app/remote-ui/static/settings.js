@@ -1189,6 +1189,7 @@ async function renderSettings({ cached = false } = {}) {
   }
 
   updatePersonSensorRows();
+  updateClockNightAdminRows();
   updateRtspRows();
   updateCelestialLocationRow();
 
@@ -2845,6 +2846,77 @@ export function updateCelestialLocationRow() {
           : screensaverText(st.message || 'Status unavailable.');
     });
 }
+
+/* The Clock screensaver's Required system permissions group while Turn
+   screen off at night really powers the panel off, mirroring the device's
+   _NightScreenOffAdminTile: the Device admin grant, with Grant on device
+   while it is missing. Idempotent: the Night mode switches' save path and
+   their live updates re-run it. */
+const CLOCK_NIGHT_ADMIN_KEYS = ['screensaver.clock_night', 'screensaver.clock_night_turn_off_minutes',
+  'screensaver.clock_night_turn_off_black'];
+export function updateClockNightAdminRows() {
+  const panel = document.getElementById('tab-screensaver')
+    ?.querySelector('.subpage[data-subpage="Clock screensaver"]');
+  if (!panel) return;
+  for (const stale of panel.querySelectorAll('.clock-night-admin')) stale.remove();
+  const byKey = Object.fromEntries((state.settings || []).map((s) => [s.key, s]));
+  const slider = byKey['screensaver.clock_night_turn_off_minutes'];
+  if (!slider || !(Number(slider.value) > 0) || !depSatisfied(slider, byKey)
+      || byKey['screensaver.clock_night_turn_off_black']?.value === true) return;
+  const h = document.createElement('h2');
+  h.className = 'card-title clock-night-admin';
+  h.textContent = screensaverText('Required system permissions');
+  const permCard = document.createElement('div');
+  permCard.className = 'card clock-night-admin';
+  const permRow = document.createElement('div');
+  permRow.className = 'row';
+  const info = document.createElement('div');
+  info.className = 'info';
+  info.innerHTML = '<div class="name"></div><div class="desc"></div>';
+  info.querySelector('.name').textContent = screensaverText('Device admin');
+  info.querySelector('.desc').textContent = screensaverText('Checking...');
+  permRow.appendChild(info);
+  const stateEl = document.createElement('span');
+  stateEl.style.whiteSpace = 'nowrap';
+  permRow.appendChild(stateEl);
+  permCard.appendChild(permRow);
+  panel.append(h, permCard);
+  const readGranted = () => cmd('getSystemPermissions')
+    .then((r) => (r.data ? !!r.data.deviceAdmin : null)).catch(() => null);
+  const paint = (granted) => {
+    info.querySelector('.desc').textContent = granted === null
+      ? screensaverText('Status unavailable.')
+      : granted ? deviceText('Allows the app to turn the screen off.')
+      : screensaverText('Not granted, so the screen cannot turn off.');
+    stateEl.textContent = granted === null ? '' : granted ? screensaverText('Granted') : screensaverText('Missing');
+    stateEl.style.color = granted ? 'var(--ok)' : 'var(--error)';
+    permRow.querySelector('button')?.remove();
+    if (granted !== false) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn-ghost';
+    btn.textContent = screensaverText('Grant on device');
+    btn.style.cssText = 'flex-shrink:0;';
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        await api('/api/commands/requestOsPermissions', { method: 'POST',
+          body: JSON.stringify({ which: ['deviceAdmin'] }) });
+      } catch (_) {}
+      // Android's grant screen is on the tablet: watch for the answer.
+      for (let i = 0; i < 30 && permCard.isConnected; i++) {
+        await new Promise((r) => setTimeout(r, 2000));
+        if (await readGranted()) { paint(true); return; }
+      }
+      btn.disabled = false;
+    });
+    permRow.appendChild(btn);
+  };
+  readGranted().then((granted) => { if (permCard.isConnected) paint(granted); });
+}
+
+document.addEventListener('ks-settings', (e) => {
+  if ((e.detail || []).some((key) => CLOCK_NIGHT_ADMIN_KEYS.includes(key))) updateClockNightAdminRows();
+});
 
 export function updatePersonSensorRows() {
   PERSON_SENSOR_PAGES.forEach(personSensorPage);

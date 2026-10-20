@@ -62,19 +62,22 @@ const gestureTextMessageIds = <String, String>{
   "Hardware": "deviceHardwarePage",
   "WebView": "deviceWebViewPage",
   "Clap detection": "settingClapStrictnessTitle",
-  "Strict needs louder, evenly spaced claps. Large room gives claps time to fade in an echoey room.": "settingClapDetectionDescription",
+  "Strict needs louder, evenly spaced claps. Large room gives claps time to fade in an echoey room.":
+      "settingClapDetectionDescription",
   "Standard": "gestureStrictnessStandard",
   "Strict": "gestureStrictnessStrict",
   "Large room": "gestureStrictnessLargeRoom",
   "Gestures are off": "gestureOff",
   "Disable Gestures is on in Kiosk Mode settings.": "gestureOffHelp",
   "No gestures configured": "gestureEmpty",
-  "A gesture triggers its action without any visible control.": "gestureEmptyHelp",
+  "A gesture triggers its action without any visible control.":
+      "gestureEmptyHelp",
   "Delete gesture": "gestureDeleteTooltip",
   "Delete gesture?": "gestureDeleteTitle",
   "Add gesture": "gestureAdd",
   "Pick a gesture and the action it triggers.": "gestureAddHelp",
-  "Gestures are observed, not blocked: the taps also reach the dashboard, so corners and multi-finger shapes keep them from firing anything there.": "gestureTouchHelp",
+  "Gestures are observed, not blocked: the taps also reach the dashboard, so corners and multi-finger shapes keep them from firing anything there.":
+      "gestureTouchHelp",
   "Clapper": "gestureClapper",
   "Could not read the settings.": "gestureReadFailed",
   "Edit gesture": "gestureEdit",
@@ -88,7 +91,8 @@ const gestureTextMessageIds = <String, String>{
   "Show fingers": "gestureShowFingers",
   "Plugin trigger": "gesturePluginTrigger",
   "Trigger": "gesturePluginTriggerField",
-  "Enable a plugin with triggers in Plugin Manager first.": "gesturePluginTriggerHelp",
+  "Enable a plugin with triggers in Plugin Manager first.":
+      "gesturePluginTriggerHelp",
   "Corner": "gestureCorner",
   "Top-left corner": "gestureCornerTl",
   "Top-right corner": "gestureCornerTr",
@@ -106,12 +110,14 @@ const gestureTextMessageIds = <String, String>{
   "Open hand (5)": "gestureOpenHand5",
   "Single tap": "gestureSingleTap",
   "Double tap": "gestureDoubleTap",
-  "Requires the camera enabled and a well lit environment.": "gestureCameraHelp",
+  "Requires the camera enabled and a well lit environment.":
+      "gestureCameraHelp",
   "Not available on this device.": "gestureUnavailable",
   "2 claps": "gestureClaps2",
   "3 claps": "gestureClaps3",
   "4 claps": "gestureClaps4",
-  "Claps are heard through the microphone, with or without wake word detection.": "gestureClapHelp",
+  "Claps are heard through the microphone, with or without wake word detection.":
+      "gestureClapHelp",
   "Tap the corners in order (2 to 8 steps).": "gestureSequenceHelp",
   "Remove last step": "gestureRemoveStep",
   "Undo": "gestureUndo",
@@ -186,8 +192,10 @@ const gestureTextMessageIds = <String, String>{
   "Hand Gesture Tester": "gestureTester",
   "Open tester": "gestureOpenTester",
   "Turn on the camera in Camera settings first.": "gestureCameraFirst",
-  "Watch which fingers the camera reads, to learn how to hold your hand.": "gestureTesterHelp",
-  "Hold your hand up at shoulder height, palm to the camera, fingers spread. Curl a finger all the way down to drop it from the count. Tuck the thumb across the palm to show four: the thumb only counts on an open hand.": "gestureHandHelp",
+  "Watch which fingers the camera reads, to learn how to hold your hand.":
+      "gestureTesterHelp",
+  "Hold your hand up at shoulder height, palm to the camera, fingers spread. Curl a finger all the way down to drop it from the count. Tuck the thumb across the palm to show four: the thumb only counts on an open hand.":
+      "gestureHandHelp",
   "Gestures do not fire while the tester is open.": "gestureTesterPaused",
   "Show a hand to the camera.": "gestureShowHand",
   "No gesture uses this count.": "gestureNoCount",
@@ -206,6 +214,7 @@ const gestureTextMessageIds = <String, String>{
   "Press": "gesturePress",
   "Double press": "gestureDoublePress",
   "Hold": "gestureHoldPress",
-  "A button press no gesture claims keeps its own job: Action answers, stops or dismisses what is ringing and otherwise starts a voice command, Microphone mutes Voice Satellite and the volume buttons change the volume.": "gestureButtonDefaults",
-  "Open the calendar": "gestureOpenCalendar"
+  "A button press no gesture claims keeps its own job: Action answers, stops or dismisses what is ringing and otherwise starts a voice command, Microphone mutes Voice Satellite and the volume buttons change the volume.":
+      "gestureButtonDefaults",
+  "Open the calendar": "gestureOpenCalendar",
 };

@@ -4,7 +4,8 @@ const voiceTextMessageIds = <String, String>{
   "Validate the connection under Home Assistant Setup first.": "voiceValidate",
   "Checking for Voice Satellite…": "voiceChecking",
   "Voice Satellite is not installed in Home Assistant": "voiceMissing",
-  "Voice Satellite turns this kiosk into a full hands-free voice assistant for Home Assistant: wake word detection, conversations, timers and announcements, right on the dashboard.\n\nIt is available in the default HACS repository. Install it on your Home Assistant instance, then come back here.": "voiceInstallHelp",
+  "Voice Satellite turns this kiosk into a full hands-free voice assistant for Home Assistant: wake word detection, conversations, timers and announcements, right on the dashboard.\n\nIt is available in the default HACS repository. Install it on your Home Assistant instance, then come back here.":
+      "voiceInstallHelp",
   "Learn more about ": "voiceLearnMore",
   "Voice Satellite on Github": "voiceGithub",
   "Open HACS repository": "voiceHacs",
@@ -12,8 +13,10 @@ const voiceTextMessageIds = <String, String>{
   "Engine": "voiceEngine",
   "Start or Stop the Voice Satellite engine.": "voiceEngineHelp",
   "Assigned satellite": "voiceAssigned",
-  "The assist_satellite entity this kiosk identifies as in Home Assistant. Changing it reloads the dashboard.": "voiceAssignedHelp",
-  "The assist_satellite entity this kiosk identifies as in Home Assistant.": "voiceAssignedSearch",
+  "The assist_satellite entity this kiosk identifies as in Home Assistant. Changing it reloads the dashboard.":
+      "voiceAssignedHelp",
+  "The assist_satellite entity this kiosk identifies as in Home Assistant.":
+      "voiceAssignedSearch",
   "None assigned": "voiceNoneAssigned",
   "Auto start": "voiceAutoStart",
   "Auto start Voice Satellite on dashboard load.": "voiceAutoStartHelp",
@@ -25,7 +28,8 @@ const voiceTextMessageIds = <String, String>{
   "Finished speaking detection": "voiceVad",
   "How long a pause ends a voice command.": "voiceVadHelp",
   "Disable muted microphone warning": "voiceMutedWarning",
-  "Hide the muted microphone warning at startup and whenever the satellite microphone is muted.": "voiceMutedWarningHelp",
+  "Hide the muted microphone warning at startup and whenever the satellite microphone is muted.":
+      "voiceMutedWarningHelp",
   "Debug logging": "voiceDebug",
   "Show Voice Satellite debug info in the browser console.": "voiceDebugHelp",
   "Voice Satellite version": "voiceVersion",
@@ -34,15 +38,21 @@ const voiceTextMessageIds = <String, String>{
   "Relaxed": "voiceVadRelaxed",
   "Aggressive": "voiceVadAggressive",
   "Wake word detection can hear you.": "voiceMicHeld",
-  "Blocked. Android will not ask again, so allow it in the app settings.": "voiceMicBlocked",
+  "Blocked. Android will not ask again, so allow it in the app settings.":
+      "voiceMicBlocked",
   "Without this nothing is listening for the wake word.": "voiceMicMissing",
   "Kiosk Satellite can come forward when it hears you.": "voiceForegroundHeld",
-  "Without this the wake word is heard and nothing happens.": "voiceForegroundMissing",
-  "The ongoing notification that enables background listening.": "voiceNotificationHeld",
-  "Needed for background listening to work reliably.": "voiceNotificationMissing",
+  "Without this the wake word is heard and nothing happens.":
+      "voiceForegroundMissing",
+  "The ongoing notification that enables background listening.":
+      "voiceNotificationHeld",
+  "Needed for background listening to work reliably.":
+      "voiceNotificationMissing",
   "Android will leave the listener running.": "voiceBatteryHeld",
-  "Without this the listener is stopped after a few hours.": "voiceBatteryMissing",
-  "Grant these on the device itself: swipe in from the left edge → Settings → Voice Satellite → Required system permissions.": "voicePermissionDirections",
+  "Without this the listener is stopped after a few hours.":
+      "voiceBatteryMissing",
+  "Grant these on the device itself: swipe in from the left edge → Settings → Voice Satellite → Required system permissions.":
+      "voicePermissionDirections",
   "General": "voiceGeneral",
   "Running": "deviceRunning",
   "Stopped": "deviceStopped",
@@ -59,7 +69,8 @@ const voiceTextMessageIds = <String, String>{
   "Grant": "commonGrant",
   "App settings": "deviceAppSettings",
   "Keep listening in the background": "settingWakeWordBackgroundTitle",
-  "Keep hearing the wake word while another app is in front, and return on a detection. Needs a permanent notification and display over other apps.": "settingWakeWordBackgroundDescription",
+  "Keep hearing the wake word while another app is in front, and return on a detection. Needs a permanent notification and display over other apps.":
+      "settingWakeWordBackgroundDescription",
   "Wake Word": "voiceWakePage",
   "Engine, wake words, sensitivity, cached models": "voiceWakeHint",
   "Wake word": "voiceWakeLabel",
@@ -72,12 +83,14 @@ const voiceTextMessageIds = <String, String>{
   "Wake word sensitivity": "voiceSensitivity",
   "How easily the wake word triggers.": "voiceSensitivityHelp",
   "Wake word noise gate": "voiceNoiseGate",
-  "Skip local wake word inference while the room is quiet, saving CPU.": "voiceNoiseGateHelp",
+  "Skip local wake word inference while the room is quiet, saving CPU.":
+      "voiceNoiseGateHelp",
   "Stop word interruption": "voiceStopInterruption",
   "Say the stop word to interrupt responses.": "voiceStopInterruptionHelp",
   "Assign a satellite to control these settings.": "voiceAssignFirst",
   "Cached models": "voiceCachedModels",
-  "Re-download from Home Assistant. Use after re-publishing a model.": "voiceCachedModelsHelp",
+  "Re-download from Home Assistant. Use after re-publishing a model.":
+      "voiceCachedModelsHelp",
   "Clear cache": "voiceClearCache",
   "Clearing…": "voiceClearing",
   "Clear": "commonClear",
@@ -94,16 +107,21 @@ const voiceTextMessageIds = <String, String>{
   "Light": "deviceThemeLight",
   "Dark": "deviceThemeDark",
   "Reactive activity bar": "voiceReactive",
-  "The activity bar reacts to audio. NOT RECOMMENDED for low-power devices like the Echo Show.": "voiceReactiveHelp",
+  "The activity bar reacts to audio. NOT RECOMMENDED for low-power devices like the Echo Show.":
+      "voiceReactiveHelp",
   "Reactive bar update rate": "voiceRate",
-  "How often the activity bar redraws. Higher is smoother and uses more CPU.": "voiceRateHelp",
+  "How often the activity bar redraws. Higher is smoother and uses more CPU.":
+      "voiceRateHelp",
   "Text scale": "settingSendspinFullscreenTextScaleTitle",
   "The size of the overlay text.": "voiceScaleHelp",
-  "Update the Voice Satellite integration in Home Assistant to control these settings from the kiosk.": "voiceUpdateIntegration",
-  "Available while the kiosk is showing your Home Assistant dashboard.": "voiceDashboardRequired",
+  "Update the Voice Satellite integration in Home Assistant to control these settings from the kiosk.":
+      "voiceUpdateIntegration",
+  "Available while the kiosk is showing your Home Assistant dashboard.":
+      "voiceDashboardRequired",
   "Wake Word Tester": "voiceTester",
   "Open tester": "gestureOpenTester",
-  "Watch what the engine hears and scores in real time, to see why the wake word is or is not triggering.": "voiceTesterHelp",
+  "Watch what the engine hears and scores in real time, to see why the wake word is or is not triggering.":
+      "voiceTesterHelp",
   "A live look at what the engine hears and scores.": "voiceTesterSearch",
   "Waiting for Voice Satellite": "voiceTesterWaiting",
   "Stop word": "deviceStopWord",
@@ -127,18 +145,22 @@ const voiceTextMessageIds = <String, String>{
   "conf": "voiceLogConfidence",
   "Close": "commonClose",
   "Prefer fp32 vsWakeWord models": "voiceWakeWordPreferFp32Title",
-  "Uses fp32 models instead of smaller int8 versions. Adds 10-30% more CPU usage while listening to avoid about 2% confidence drift.": "voiceWakeWordPreferFp32Description",
+  "Uses fp32 models instead of smaller int8 versions. Adds 10-30% more CPU usage while listening to avoid about 2% confidence drift.":
+      "voiceWakeWordPreferFp32Description",
   "Resume timeout (seconds)": "voiceWakeWordResumeTimeoutSecondsTitle",
-  "Self-heal: resume listening if the page never calls setWakeWordActive(true) after a handoff. Waits while a voice turn is still streaming audio, so a long turn is never cut short.": "voiceWakeWordResumeTimeoutSecondsDescription",
+  "Self-heal: resume listening if the page never calls setWakeWordActive(true) after a handoff. Waits while a voice turn is still streaming audio, so a long turn is never cut short.":
+      "voiceWakeWordResumeTimeoutSecondsDescription",
   "Slightly sensitive": "voiceSlightlySensitive",
   "Moderately sensitive": "voiceModeratelySensitive",
   "On Device": "voiceOnDevice",
-  "Microphone and the other grants wake word detection needs.": "voicePermissionsSearch",
+  "Microphone and the other grants wake word detection needs.":
+      "voicePermissionsSearch",
   "Chimes": "voiceChimesPage",
   "Wake, done, error, timer and announcement sounds": "voiceChimesHint",
   "Preview on kiosk": "voiceChimesPreview",
   "Could not play the sound.": "voiceChimesPreviewFailed",
-  "Choose sounds for this kiosk. Upload custom files here. Sounds stored in Home Assistant are not used for local chimes.": "voiceChimesHelp",
+  "Choose sounds for this kiosk. Upload custom files here. Sounds stored in Home Assistant are not used for local chimes.":
+      "voiceChimesHelp",
   "Wake sound": "voiceChimeWakeTitle",
   "Plays when Voice Satellite starts listening.": "voiceChimeWakeDescription",
   "Done sound": "voiceChimeDoneTitle",
@@ -146,13 +168,16 @@ const voiceTextMessageIds = <String, String>{
   "Error sound": "voiceChimeErrorTitle",
   "Plays when a voice interaction fails.": "voiceChimeErrorDescription",
   "Timer sound": "voiceChimeTimerTitle",
-  "Repeats when a timer finishes until you dismiss it.": "voiceChimeTimerDescription",
+  "Repeats when a timer finishes until you dismiss it.":
+      "voiceChimeTimerDescription",
   "Announcement sound": "voiceChimeAnnounceTitle",
-  "Plays before a Voice Satellite announcement unless it supplies its own sound.": "voiceChimeAnnounceDescription",
+  "Plays before a Voice Satellite announcement unless it supplies its own sound.":
+      "voiceChimeAnnounceDescription",
   "Wake word diagnostics": "voiceDiagnosticsPage",
   "Recent activations and near misses with audio clips": "voiceDiagnosticsHint",
   "Enable wake word diagnostics": "voiceDiagnosticsTitle",
-  "Records the last 10 wake word activations and near misses with their scores and a 3 second audio clip of each. Turning this off deletes them.": "voiceDiagnosticsDescription",
+  "Records the last 10 wake word activations and near misses with their scores and a 3 second audio clip of each. Turning this off deletes them.":
+      "voiceDiagnosticsDescription",
   "No wake word activations recorded yet.": "voiceDiagnosticsEmpty",
   "Peak level": "voiceDiagnosticsPeakLevel",
   "Average level": "voiceDiagnosticsAverageLevel",
@@ -190,16 +215,22 @@ const voiceTextMessageIds = <String, String>{
   "Not listening": "voiceWordNotListening",
   "Added": "voiceWordAdded",
   "Reload needed": "voiceWordReloadNeeded",
-  "Home Assistant has not loaded the Assistant and Wake word selects. Reload this kiosk's ESPHome entry under Settings, Devices & services. Restarting Home Assistant also works.": "voiceHaSelectsReloadHint",
-  "Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.": "voiceHaAddAgainHint",
-  "Turn on the ESPHome server so Home Assistant can add this kiosk as a satellite.": "voiceHaEsphomeOff",
+  "Home Assistant has not loaded the Assistant and Wake word selects. Reload this kiosk's ESPHome entry under Settings, Devices & services. Restarting Home Assistant also works.":
+      "voiceHaSelectsReloadHint",
+  "Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.":
+      "voiceHaAddAgainHint",
+  "Turn on the ESPHome server so Home Assistant can add this kiosk as a satellite.":
+      "voiceHaEsphomeOff",
   "Turn on": "voiceTurnOn",
   "Run from the dashboard again": "voiceRollbackTitle",
-  "Go back to the Voice Satellite integration. Nothing set here is lost.": "voiceRollbackDescription",
+  "Go back to the Voice Satellite integration. Nothing set here is lost.":
+      "voiceRollbackDescription",
   "Run from the dashboard again?": "voiceRollbackConfirm",
-  "The dashboard runs Voice Satellite again through the integration, with the settings it had before. What you set here stays for next time.": "voiceRollbackBody",
+  "The dashboard runs Voice Satellite again through the integration, with the settings it had before. What you set here stays for next time.":
+      "voiceRollbackBody",
   "Switch back": "voiceRollbackSwitch",
-  "Voice Satellite is currently installed as an integration in Home Assistant. Migrate to a native experience inside Kiosk Satellite.": "voiceMigrateNotice",
+  "Voice Satellite is currently installed as an integration in Home Assistant. Migrate to a native experience inside Kiosk Satellite.":
+      "voiceMigrateNotice",
   "Migrate": "voiceMigrate",
   "Assistant 1": "voiceAssistant1",
   "Answers wake word 1.": "voiceAssistant1Help",
@@ -213,11 +244,14 @@ const voiceTextMessageIds = <String, String>{
   "A second wake word, answered by Assistant 2.": "voiceWake2HelpNative",
   "Custom Models": "voiceCustomModels",
   "No custom models yet.": "voiceCustomNone",
-  "The fleet leader manages the custom models on this kiosk.": "voiceCustomManaged",
+  "The fleet leader manages the custom models on this kiosk.":
+      "voiceCustomManaged",
   "Add models": "voiceCustomAdd",
-  "Pick the files of one or more models. They show up in Wake word 1 and 2 above.": "voiceCustomAddHelp",
+  "Pick the files of one or more models. They show up in Wake word 1 and 2 above.":
+      "voiceCustomAddHelp",
   "How to add custom models": "voiceCustomDocs",
-  "The files each engine needs and where the models come from.": "voiceCustomDocsHelp",
+  "The files each engine needs and where the models come from.":
+      "voiceCustomDocsHelp",
   "The models were not added.": "voiceCustomNotAdded",
   "Some files were not added.": "voiceCustomSomeNotAdded",
   "Models added.": "voiceCustomAdded",
@@ -230,42 +264,57 @@ const voiceTextMessageIds = <String, String>{
   "How much of the dashboard shows through.": "voiceBackgroundHelp",
   "Preview": "voicePreview",
   "Show the overlay on this screen for five seconds.": "voicePreviewHelp",
-  "Show the overlay on the kiosk screen for five seconds.": "voicePreviewRemoteHelp",
+  "Show the overlay on the kiosk screen for five seconds.":
+      "voicePreviewRemoteHelp",
   "Migrate Voice Satellite": "voiceMigrationTitle",
-  "Pick the Voice Satellite integration's satellite this kiosk takes over. Its settings come over to this kiosk.": "voiceMigrationPick",
-  "The Voice Satellite integration has no satellites.": "voiceMigrationNoSatellites",
-  "This kiosk becomes the voice satellite itself. The Voice Satellite integration is not needed after this.": "voiceMigrationIntro",
+  "Pick the Voice Satellite integration's satellite this kiosk takes over. Its settings come over to this kiosk.":
+      "voiceMigrationPick",
+  "The Voice Satellite integration has no satellites.":
+      "voiceMigrationNoSatellites",
+  "This kiosk becomes the voice satellite itself. The Voice Satellite integration is not needed after this.":
+      "voiceMigrationIntro",
   "Check again": "voiceMigrationCheckAgain",
   "Not connected. Check Home Assistant Setup.": "voiceCheckHaBad",
   "This kiosk in Home Assistant": "voiceCheckEsphome",
   "Added through ESPHome.": "voiceCheckEsphomeOk",
-  "Not added yet. Home Assistant lists this kiosk as discovered under Settings, Devices & services. Add it there, then come back.": "voiceCheckEsphomeBad",
-  "The ESPHome server is off. Turn it on, then add this kiosk in Home Assistant.": "voiceCheckEsphomeOff",
+  "Not added yet. Home Assistant lists this kiosk as discovered under Settings, Devices & services. Add it there, then come back.":
+      "voiceCheckEsphomeBad",
+  "The ESPHome server is off. Turn it on, then add this kiosk in Home Assistant.":
+      "voiceCheckEsphomeOff",
   "Administrator token": "voiceCheckAdmin",
   "Tool use and results will show.": "voiceCheckAdminOk",
-  "The token is a regular user's. Voice Satellite works, tool use and results will not show.": "voiceCheckAdminBad",
-  "Could not check the token. Tool use and results need an administrator's.": "voiceCheckAdminUnknown",
+  "The token is a regular user's. Voice Satellite works, tool use and results will not show.":
+      "voiceCheckAdminBad",
+  "Could not check the token. Tool use and results need an administrator's.":
+      "voiceCheckAdminUnknown",
   "Allowed.": "voiceCheckMicOk",
-  "Not allowed. Grant it under Required system permissions.": "voiceCheckMicBad",
+  "Not allowed. Grant it under Required system permissions.":
+      "voiceCheckMicBad",
   "Turn on ESPHome": "voiceTurnOnEsphome",
   "Settings to bring over": "voiceMigrationPlan",
   "Voice": "voiceGroupVoice",
-  "Not carried over: custom CSS, the browser microphone processing and the conversation memory length. Custom microWakeWord models work from config/custom_wake_words in Home Assistant.": "voiceMigrationNotCarried",
+  "Not carried over: custom CSS, the browser microphone processing and the conversation memory length. Custom microWakeWord models work from config/custom_wake_words in Home Assistant.":
+      "voiceMigrationNotCarried",
   "Automations and scripts": "voiceMigrationAutomations",
-  "Nothing in Home Assistant points at the old satellite.": "voiceMigrationNoAutomations",
+  "Nothing in Home Assistant points at the old satellite.":
+      "voiceMigrationNoAutomations",
   "Automation": "voiceKindAutomation",
   "Script": "voiceKindScript",
   "Ready to switch": "voiceMigrationReady",
   "This kiosk listens, answers and draws the overlay.": "voiceMigrationReady1",
-  "Its Assistant and wake words are set once Home Assistant adds this kiosk.": "voiceMigrationReadyOnboarding",
-  "The dashboard stops running Voice Satellite on this kiosk.": "voiceMigrationReady2",
+  "Its Assistant and wake words are set once Home Assistant adds this kiosk.":
+      "voiceMigrationReadyOnboarding",
+  "The dashboard stops running Voice Satellite on this kiosk.":
+      "voiceMigrationReady2",
   "The old satellite stays in Home Assistant, unused.": "voiceMigrationReady3",
   "Switch now": "voiceMigrationSwitch",
   "Switching…": "voiceMigrationSwitching",
   "Voice Satellite runs here now": "voiceMigrationDone",
   "Could not switch": "voiceCouldNotSwitch",
-  "Finish the setup, then add this kiosk in Home Assistant. Once no other device uses the Voice Satellite integration, uninstall it from HACS.": "voiceMigrationDoneOnboarding",
-  "Say the wake word to try it. Once no other device uses the Voice Satellite integration, uninstall it from HACS.": "voiceMigrationDoneHelp",
+  "Finish the setup, then add this kiosk in Home Assistant. Once no other device uses the Voice Satellite integration, uninstall it from HACS.":
+      "voiceMigrationDoneOnboarding",
+  "Say the wake word to try it. Once no other device uses the Voice Satellite integration, uninstall it from HACS.":
+      "voiceMigrationDoneHelp",
   "Voice Satellite runs from the dashboard again.": "voiceMigrationRolledBack",
   "Done": "voiceDone",
   "Try again": "voiceTryAgain",
@@ -282,16 +331,21 @@ const voiceTextMessageIds = <String, String>{
   "Assist pipeline": "voiceNoticeAssistPipeline",
   "The microphone is not available.": "voiceNoticeMicUnavailable",
   "Home Assistant is not connected to this kiosk.": "voiceNoticeNotConnected",
-  "Lost connection to Home Assistant. Reconnecting automatically.": "voiceNoticeConnectionLost",
+  "Lost connection to Home Assistant. Reconnecting automatically.":
+      "voiceNoticeConnectionLost",
   "Audio could not be played on the device.": "voiceNoticePlayback",
-  "No response from Home Assistant after you finished speaking. The pipeline may be stuck.": "voiceNoticeWatchdog",
+  "No response from Home Assistant after you finished speaking. The pipeline may be stuck.":
+      "voiceNoticeWatchdog",
   "Home Assistant could not start the assistant.": "voiceNoticeRefused",
   "An unexpected pipeline error occurred.": "voiceNoticeUnexpected",
-  "Microphone access is blocked. Allow it for Kiosk Satellite in the Android settings.": "voiceNoticeMicBlocked",
-  "Microphone access was declined, so the wake word cannot be heard.": "voiceNoticeMicDeclined",
+  "Microphone access is blocked. Allow it for Kiosk Satellite in the Android settings.":
+      "voiceNoticeMicBlocked",
+  "Microphone access was declined, so the wake word cannot be heard.":
+      "voiceNoticeMicDeclined",
   "The microphone stopped working.": "voiceNoticeMicLost",
   "The wake word models could not be loaded.": "voiceNoticeModels",
-  "The wake word detector kept crashing on this device, so it was stopped.": "voiceNoticeCrashed",
+  "The wake word detector kept crashing on this device, so it was stopped.":
+      "voiceNoticeCrashed",
   "Cancel": "commonCancel",
   "Back": "commonBack",
   "Next": "commonNext",
@@ -305,17 +359,19 @@ const voiceTextMessageIds = <String, String>{
   "A migration is already running.": "voiceMigrationBusy",
   "Realtime": "voiceRealtime",
   "Home Assistant tools": "voiceRealtimeToolsSection",
-  "Add the MCP Server integration in Home Assistant to control your home.": "voiceRealtimeMcpMissing",
+  "Add the MCP Server integration in Home Assistant to control your home.":
+      "voiceRealtimeMcpMissing",
   "Validate connection": "haValidateConnection",
   "Validate": "haValidate",
   "Checking…": "haChecking",
   "Connected": "haConnected",
   "Listening…": "voiceListeningEllipsis",
-  "OpenAI, xAI Grok, Gemini, tools, talk over answers": "voiceRealtimeProvidersHint",
+  "OpenAI, xAI Grok, Gemini, tools, talk over answers":
+      "voiceRealtimeProvidersHint",
   "Providers": "voiceRealtimeProviders",
   "Configure": "voiceRealtimeConfigure",
   "Save & Validate": "voiceRealtimeSaveValidate",
   "Not configured": "voiceRealtimeNotConfigured",
   "Not validated": "voiceRealtimeNotValidated",
-  "Connection validated": "voiceRealtimeValidated"
+  "Connection validated": "voiceRealtimeValidated",
 };

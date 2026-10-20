@@ -37,7 +37,7 @@ import {
   openWakeSourcesPicker,
   wakeSourcesText,
 } from './pickers.js';
-import { loadSettings, refreshRealMacNote, syncSubpages, updateCelestialLocationRow, updatePersonSensorRows, updateRtspRows } from './settings.js';
+import { loadSettings, refreshRealMacNote, syncSubpages, updateCelestialLocationRow, updateClockNightAdminRows, updatePersonSensorRows, updateRtspRows } from './settings.js';
 import { dashboardField } from './dashboard_picker.js';
 import { updatePlayerRow } from './panels.js';
 import {
@@ -327,6 +327,10 @@ export function settingRow(s) {
     if (s.key === 'motion.use_entity') updateMotionCameraRows();
     // The person sensor pages' status rows answer for their own switches.
     if (s.key === 'screensaver.dismiss_on_person' || s.key === 'person.sensor') updatePersonSensorRows();
+    // Turn screen off at night's grant group answers for the Night mode
+    // settings above it.
+    if (['screensaver.clock_night', 'screensaver.clock_night_turn_off_minutes',
+      'screensaver.clock_night_turn_off_black'].includes(s.key)) updateClockNightAdminRows();
     if (s.key === 'camera.rtsp.enabled' || s.key === 'camera.rtsp.protocol') updateRtspRows();
     // The hints under the brightness sliders come and go with the
     // adaptive brightness switch (issue #343). After the gated sync, so
@@ -1734,6 +1738,20 @@ export function settingRow(s) {
           buttons: [{id:'commonCancel', value:'Cancel'}, {id:'screensaverScreenOffProceed', value:'Proceed'}],
         });
         if (pick === 'Cancel') {
+          slider.set(0);
+          return;
+        }
+      }
+      // Night mode's own, with the light sensor added: the room brightening
+      // is what turns the screen back on.
+      if (s.key === 'screensaver.clock_night_turn_off_minutes' &&
+          Number(s.value || 0) === 0 && next > 0 &&
+          !state.settings.some(o => o.key === 'screensaver.clock_night_turn_off_black' && o.value === true)) {
+        const pick = await localizedMessageBox({
+          titleId: 'screensaverWarningTitle', messageId: 'screensaverNightTurnOffWarning',
+          buttons: [{id:'commonCancel', value:'Cancel'}, {id:'screensaverScreenOffProceed', value:'Proceed'}],
+        });
+        if (pick !== 'Proceed') {
           slider.set(0);
           return;
         }

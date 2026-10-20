@@ -3656,6 +3656,24 @@ class _CategoryContentState extends State<_CategoryContent> {
       ];
     }
 
+    if (widget.category == 'Screensaver' &&
+        subpage == 'Clock screensaver' &&
+        _nightPowersOff(container)) {
+      // Turn screen off at night powers the panel down through the Device
+      // admin grant, so the page closes with it while that is the way.
+      // Mirrored on the remote (settings.js, updateClockNightAdminRows).
+      return [
+        ...sectioned([
+          for (final def in _defsFor(widget.category))
+            if (def.subpage == subpage) def,
+        ]),
+        SectionHeading(screensaverText(context, 'Required system permissions')),
+        SettingsCard(
+          children: [_NightScreenOffAdminTile(container: container)],
+        ),
+      ];
+    }
+
     if (widget.category == 'Screensaver' && subpage == 'Person Detection') {
       // The device's own person sensor (discussion #353, today the Meta
       // Portal's): the two switches with the live Occupancy row, then the
@@ -5002,25 +5020,27 @@ class _OverlayGrantRowState extends State<_OverlayGrantRow> {
 /// schedule entry's own (mirrored in the remote UI): what a dark panel does
 /// to Wi-Fi, the camera and the app itself is the manufacturer's call, not
 /// the app's (issue #184 and kin), and the Black screensaver avoids the
-/// whole regime. True when the person chose to go ahead.
-Future<bool> confirmScreenOff(BuildContext context) async {
+/// whole regime. True when the person chose to go ahead. Night mode's Turn
+/// screen off at night passes [message], its own version of the risk.
+Future<bool> confirmScreenOff(BuildContext context, {String? message}) async {
   final go = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(screensaverText(context, 'WARNING: Please Read!')),
       content: Text(
-        screensaverText(
-          context,
-          'Once the display truly powers off, the tablet\'s own '
-          'power management takes over, and many Android models '
-          'misbehave in that state: Wi-Fi naps or drops, the '
-          'Home Assistant entities go unavailable, the camera '
-          'can be revoked, and some models kill background apps '
-          'outright. What happens depends on the manufacturer.\n\n'
-          'The reliable alternative is the Black screensaver '
-          'with this setting left at 0: the panel looks just as '
-          'dark, and the app keeps full control.',
-        ),
+        message ??
+            screensaverText(
+              context,
+              'Once the display truly powers off, the tablet\'s own '
+              'power management takes over, and many Android models '
+              'misbehave in that state: Wi-Fi naps or drops, the '
+              'Home Assistant entities go unavailable, the camera '
+              'can be revoked, and some models kill background apps '
+              'outright. What happens depends on the manufacturer.\n\n'
+              'The reliable alternative is the Black screensaver '
+              'with this setting left at 0: the panel looks just as '
+              'dark, and the app keeps full control.',
+            ),
       ),
       actions: [
         TextButton(
@@ -5035,6 +5055,112 @@ Future<bool> confirmScreenOff(BuildContext context) async {
     ),
   );
   return go == true;
+}
+
+const _nightTurnOffWarning =
+    'When the display really powers off, the tablet\'s own power management '
+    'takes over. Many Android models misbehave in that state: Wi-Fi naps or '
+    'drops, Home Assistant entities go unavailable, the camera can be revoked '
+    'and some models kill background apps. Some light sensors also stop '
+    'reporting with the display off, so the screen may not turn back on by '
+    'itself when the room brightens. What happens depends on the '
+    'manufacturer.\n\n'
+    'The reliable alternative is Use a black screen instead. The panel looks '
+    'just as dark and the app keeps full control.';
+
+/// Whether Turn screen off at night is set to really power the panel off,
+/// the one way it needs the Device admin grant.
+bool _nightPowersOff(AppContainer container) {
+  final settings = container.settings;
+  return settings.visible(screensaverClockNightTurnOffMinutes) &&
+      settings.get(screensaverClockNightTurnOffMinutes) > 0 &&
+      !settings.get(screensaverClockNightTurnOffBlack);
+}
+
+/// The Clock screensaver's Required system permissions group while Turn
+/// screen off at night powers the panel off: the Device admin grant, in the
+/// standard permission row shape. Mirrored in the remote UI.
+class _NightScreenOffAdminTile extends StatefulWidget {
+  const _NightScreenOffAdminTile({required this.container});
+
+  final AppContainer container;
+
+  @override
+  State<_NightScreenOffAdminTile> createState() =>
+      _NightScreenOffAdminTileState();
+}
+
+class _NightScreenOffAdminTileState extends State<_NightScreenOffAdminTile>
+    with WidgetsBindingObserver {
+  bool? _granted;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _refresh();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  final _returned = ReturnWatch();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // The grant is given on Android's own screen, which reports nothing on
+    // the way back; returning here is the moment to look again.
+    if (_returned.returned(state)) _refresh();
+  }
+
+  Future<void> _refresh() async {
+    bool? granted;
+    try {
+      granted = await BackgroundListening.isScreenOffAvailable();
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() => _granted = granted);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final granted = _granted;
+    return SettingsRow(
+      leading: Icon(
+        granted == true
+            ? Icons.check_circle_outline
+            : Icons.admin_panel_settings_outlined,
+        color: granted == true ? null : theme.colorScheme.error,
+      ),
+      title: Text(screensaverText(context, 'Device admin')),
+      subtitle: Text(
+        granted == true
+            ? deviceText(context, 'Allows the app to turn the screen off.')
+            : screensaverText(
+                context,
+                'Not granted, so the screen cannot turn off.',
+              ),
+      ),
+      trailing: granted != false
+          ? null
+          : TextButton(
+              onPressed: () async {
+                await widget.container.commands.execute(
+                  'requestOsPermissions',
+                  {
+                    'which': ['deviceAdmin'],
+                  },
+                );
+                await _refresh();
+              },
+              child: Text(screensaverText(context, 'Enable')),
+            ),
+    );
+  }
 }
 
 /// The device-admin grant, surfaced right under "Turn screen off after"
@@ -10651,6 +10777,23 @@ class _SliderTileState extends State<_SliderTile> {
                   parsed > 0 &&
                   !widget.container.settings.get(screensaverScreenOffBlack)) {
                 final go = await confirmScreenOff(context);
+                if (!go) {
+                  // The slider snaps back to the stored 0.
+                  if (mounted) setState(() {});
+                  return;
+                }
+              } else if (def.key == screensaverClockNightTurnOffMinutes.key &&
+                  // Night mode's own, with the light sensor added: the room
+                  // brightening is what turns the screen back on.
+                  (widget.container.settings.get(def) as num) == 0 &&
+                  parsed > 0 &&
+                  !widget.container.settings.get(
+                    screensaverClockNightTurnOffBlack,
+                  )) {
+                final go = await confirmScreenOff(
+                  context,
+                  message: screensaverText(context, _nightTurnOffWarning),
+                );
                 if (!go) {
                   // The slider snaps back to the stored 0.
                   if (mounted) setState(() {});

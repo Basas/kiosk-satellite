@@ -10688,6 +10688,18 @@ class UiStringsEn extends UiStrings {
       'Add AM or PM after the time.';
 
   @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle =>
+      'Turn screen off at night after';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      'Turns the screen off once Night mode has lasted the set time and back on when the room brightens. Set to 0 to keep the screen on. Requires Device Administrator permission.';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      'When the display really powers off, the tablet\'s own power management takes over. Many Android models misbehave in that state: Wi-Fi naps or drops, Home Assistant entities go unavailable, the camera can be revoked and some models kill background apps. Some light sensors also stop reporting with the display off, so the screen may not turn back on by itself when the room brightens. What happens depends on the manufacturer.\n\nThe reliable alternative is Use a black screen instead. The panel looks just as dark and the app keeps full control.';
+
+  @override
   String get screensaverOverlayEntity => 'Entity';
 
   @override

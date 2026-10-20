@@ -10894,6 +10894,18 @@ class UiStringsEs extends UiStrings {
       'Añade AM o PM después de la hora.';
 
   @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle =>
+      'Apagar la pantalla de noche después de';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      'Apaga la pantalla cuando el modo nocturno lleva activo el tiempo indicado y la vuelve a encender cuando la habitación se ilumina. Con 0, la pantalla permanece encendida. Requiere permiso de administrador del dispositivo.';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      'Cuando la pantalla se apaga por completo, la administración de energía de la tableta toma el control. Muchos modelos de Android presentan problemas en ese estado: el Wi-Fi se suspende o se desconecta, las entidades de Home Assistant dejan de estar disponibles, se puede perder el acceso a la cámara y algunos modelos cierran las aplicaciones en segundo plano. Algunos sensores de luz también dejan de informar con la pantalla apagada, así que es posible que la pantalla no se vuelva a encender sola cuando la habitación se ilumine. El comportamiento depende del fabricante.\n\nLa alternativa fiable es Usar una pantalla negra en su lugar. La pantalla se ve igual de oscura y la aplicación mantiene el control.';
+
+  @override
   String get screensaverOverlayEntity => 'Entidad';
 
   @override

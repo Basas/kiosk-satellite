@@ -40280,6 +40280,45 @@
       ]
     }
   },
+  "settingScreensaverClockNightTurnOffMinutesTitle": "Scherm 's nachts uitschakelen na",
+  "@settingScreensaverClockNightTurnOffMinutesTitle": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverClockNightTurnOffMinutesDescription": "Schakelt het scherm uit zodra de nachtmodus de ingestelde tijd actief is en weer in zodra het lichter wordt in de kamer. Stel 0 in om het scherm aan te laten. Hiervoor is toestemming voor apparaatbeheer vereist.",
+  "@settingScreensaverClockNightTurnOffMinutesDescription": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverNightTurnOffWarning": "Zodra het scherm echt wordt uitgeschakeld, neemt het energiebeheer van de tablet het over. Veel Android-modellen gedragen zich dan onvoorspelbaar: wifi kan in de slaapstand gaan of wegvallen, Home Assistant-entiteiten kunnen onbeschikbaar worden, de cameratoegang kan worden ingetrokken en sommige modellen sluiten achtergrondapps af. Sommige lichtsensoren geven ook geen metingen meer door als het scherm uit is, waardoor het scherm misschien niet vanzelf weer aangaat als het lichter wordt in de kamer. Dit verschilt per fabrikant.\n\nEen betrouwbare optie is Een zwart scherm gebruiken. Het scherm ziet er dan net zo donker uit, terwijl de app de volledige controle behoudt.",
+  "@screensaverNightTurnOffWarning": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Warning before Night mode is allowed to power the screen off.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "screensaverOverlayEntity": "Entiteit",
   "@screensaverOverlayEntity": {
     "context": "Settings > Screensaver > Widgets > Entity widget or At a Glance > Entities",

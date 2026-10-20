@@ -3499,6 +3499,45 @@ const screensaverClockNightCardColor = SettingDef<String>(
   alsoDependsOnValue: 'flip',
 );
 
+// Turn screen off at night (issue #1060): even the darkest night colors
+// leave a bedroom panel glowing, so Night mode can take the screen off
+// altogether, by the same two means as Turn screen off after. The room
+// brightening past Night mode's threshold brings the clock back.
+const screensaverClockNightTurnOffMinutes = SettingDef<num>(
+  key: 'screensaver.clock_night_turn_off_minutes',
+  type: SettingType.number,
+  defaultValue: 0,
+  min: 0,
+  max: 60,
+  step: 1,
+  unit: ' min',
+  title: 'Turn screen off at night after',
+  description:
+      'Turns the screen off once Night mode has lasted the set time and back '
+      'on when the room brightens. Set to 0 to keep the screen on. Requires '
+      'Device Administrator permission.',
+  category: 'Screensaver',
+  section: 'Night mode',
+  subpage: 'Clock screensaver',
+  dependsOn: 'screensaver.clock_night',
+);
+
+const screensaverClockNightTurnOffBlack = SettingDef<bool>(
+  key: 'screensaver.clock_night_turn_off_black',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Use a black screen instead',
+  description:
+      'Show a plain black screen at zero brightness instead of powering off '
+      'the display. Hides widgets and Now Playing. No Device Administrator '
+      'permission is needed.',
+  category: 'Screensaver',
+  section: 'Night mode',
+  subpage: 'Clock screensaver',
+  dependsOn: 'screensaver.clock_night_turn_off_minutes',
+  dependsOnValue: {'gt': 0},
+);
+
 /// A ringing alarm shows on the Clock screensaver in its own style (the
 /// date line becomes the label, Snooze and Stop come in under the face)
 /// instead of on the alarm's own full screen view.
@@ -12612,6 +12651,8 @@ const List<SettingDef<Object>> allSettings = [
   screensaverClockNightHideBackground,
   screensaverClockNightHideWidgets,
   screensaverClockNightCardColor,
+  screensaverClockNightTurnOffMinutes,
+  screensaverClockNightTurnOffBlack,
   screensaverMediaId,
   screensaverMediaIsFolder,
   screensaverMediaInterval,

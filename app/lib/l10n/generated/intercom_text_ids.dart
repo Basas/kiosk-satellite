@@ -46,22 +46,28 @@ const intercomTextMessageIds = <String, String>{
   "Enter a port between 1024 and 65535, or leave it empty": "dlnaPortInvalid",
   "Intercom": "settingsMenuIntercom",
   "Enable intercom": "settingIntercomEnabledTitle",
-  "Call the other kiosks on this network and take their calls.": "settingIntercomEnabledDescription",
+  "Call the other kiosks on this network and take their calls.":
+      "settingIntercomEnabledDescription",
   "Intercom key": "settingIntercomKeyTitle",
-  "Kiosks with the same key can call each other. Fleet Management can sync it.": "settingIntercomKeyDescription",
+  "Kiosks with the same key can call each other. Fleet Management can sync it.":
+      "settingIntercomKeyDescription",
   "Made when the intercom is enabled": "settingIntercomKeyPlaceholder",
   "Show in the kiosk menu": "settingIntercomMenuTitle",
   "Add an Intercom entry to the kiosk menu.": "settingIntercomMenuDescription",
   "Answer mode": "settingIntercomAnswerModeTitle",
-  "Ring asks on the screen. Answer automatically opens the call after a chime.": "settingIntercomAnswerModeDescription",
+  "Ring asks on the screen. Answer automatically opens the call after a chime.":
+      "settingIntercomAnswerModeDescription",
   "Ring for": "settingIntercomRingSecondsTitle",
-  "How long a call rings before it counts as missed.": "settingIntercomRingSecondsDescription",
+  "How long a call rings before it counts as missed.":
+      "settingIntercomRingSecondsDescription",
   "Ring sound": "settingIntercomRingSoundTitle",
   "Plays at the notification volume.": "settingIntercomRingSoundDescription",
   "Accept announcements": "settingIntercomAcceptAnnouncementsTitle",
-  "Play Announce to all from the other kiosks.": "settingIntercomAcceptAnnouncementsDescription",
+  "Play Announce to all from the other kiosks.":
+      "settingIntercomAcceptAnnouncementsDescription",
   "Talk mode": "settingIntercomTalkModeTitle",
-  "Push to talk sends while the button is held. Hands free keeps the microphone open for the whole call.": "settingIntercomTalkModeDescription",
+  "Push to talk sends while the button is held. Hands free keeps the microphone open for the whole call.":
+      "settingIntercomTalkModeDescription",
   "Ring": "intercomOptionAnswerRing",
   "Answer automatically": "intercomOptionAnswerAuto",
   "Do not disturb": "intercomOptionAnswerDnd",
@@ -72,20 +78,26 @@ const intercomTextMessageIds = <String, String>{
   "Push to talk": "intercomOptionTalkPtt",
   "Hands free": "intercomOptionTalkHandsfree",
   "The intercom needs the remote admin": "intercomNeedsAdmin",
-  "Kiosks find and reach each other through it. Turn on Remote management and Find other kiosks under Device, then come back.": "intercomAdminHelp",
+  "Kiosks find and reach each other through it. Turn on Remote management and Find other kiosks under Device, then come back.":
+      "intercomAdminHelp",
   "Change key": "intercomChangeKey",
-  "Paste the key from another kiosk, or make a new one.": "intercomChangeKeyHelp",
+  "Paste the key from another kiosk, or make a new one.":
+      "intercomChangeKeyHelp",
   "Change": "intercomChange",
-  "Kiosks with this key can call each other. A new key cuts this kiosk off from the others until they get it too.": "intercomKeyWarning",
+  "Kiosks with this key can call each other. A new key cuts this kiosk off from the others until they get it too.":
+      "intercomKeyWarning",
   "Regenerate": "intercomRegenerate",
   "Key changed": "intercomKeyChanged",
   "Not set": "intercomNotSet",
   "Kiosks": "intercomKiosks",
-  "Discovered kiosks and saved fleet members. A kiosk is ready when it is reachable with intercom on, the same key and matching encryption settings.": "intercomRosterHelp",
+  "Discovered kiosks and saved fleet members. A kiosk is ready when it is reachable with intercom on, the same key and matching encryption settings.":
+      "intercomRosterHelp",
   "No other kiosks found": "intercomNoOther",
-  "Kiosks with Remote management and Find other kiosks on show up here.": "intercomRosterDeviceHelp",
+  "Kiosks with Remote management and Find other kiosks on show up here.":
+      "intercomRosterDeviceHelp",
   "No kiosks found": "intercomNoneHeard",
-  "Kiosks appear through network discovery or saved fleet membership. Remote management and Find other kiosks must be on.": "intercomRosterRemoteHelp",
+  "Kiosks appear through network discovery or saved fleet membership. Remote management and Find other kiosks must be on.":
+      "intercomRosterRemoteHelp",
   "Ready": "intercomReady",
   "Intercom off": "intercomOff",
   "Different key": "intercomDifferentKey",
@@ -146,7 +158,8 @@ const intercomTextMessageIds = <String, String>{
   "no call": "intercomNoCall",
   "intercom is off": "intercomDisabled",
   "needs the remote admin": "intercomNeedsRemote",
-  "the intercom needs the remote admin and Find other kiosks": "intercomNeedsDiscovery",
+  "the intercom needs the remote admin and Find other kiosks":
+      "intercomNeedsDiscovery",
   "already in a call": "intercomAlreadyCalling",
   "no kiosk is ready": "intercomNoReadyError",
   "a key is at least 16 characters": "intercomKeyLength",
@@ -156,12 +169,15 @@ const intercomTextMessageIds = <String, String>{
   "Built-in ring": "intercomBuiltinRing",
   "Built-in chime": "intercomBuiltinChime",
   "Add a sound": "intercomAddSound",
-  "Copy a sound file from this device into the sounds folder.": "intercomCopySoundHelp",
-  "Upload a sound file from this computer into the sounds folder.": "intercomUploadSoundHelp",
+  "Copy a sound file from this device into the sounds folder.":
+      "intercomCopySoundHelp",
+  "Upload a sound file from this computer into the sounds folder.":
+      "intercomUploadSoundHelp",
   "Upload": "intercomUpload",
   "Uploading…": "intercomUploading",
   "Not a supported sound": "intercomUnsupportedSound",
-  "Not a supported sound: pick an MP3, OGG, WAV, FLAC, M4A or AAC file.": "intercomChooseSound",
+  "Not a supported sound: pick an MP3, OGG, WAV, FLAC, M4A or AAC file.":
+      "intercomChooseSound",
   "Could not copy the file": "intercomCopyFailed",
   "Missed call": "intercomMissedcall",
   "Listening": "intercomListening",
@@ -171,5 +187,6 @@ const intercomTextMessageIds = <String, String>{
   "Pick an MP3, OGG, WAV, FLAC, M4A or AAC file.": "intercomSoundFormats",
   "Known kiosks and whether each can take a call.": "searchIntercomKiosks",
   "Encryption mismatch": "intercomEncryptionMismatch",
-  "Encryption mismatch. Enable Encrypt communications on all kiosks in the call.": "intercomEncryptionMismatchHelp"
+  "Encryption mismatch. Enable Encrypt communications on all kiosks in the call.":
+      "intercomEncryptionMismatchHelp",
 };

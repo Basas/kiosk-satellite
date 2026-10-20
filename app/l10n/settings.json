@@ -2386,5 +2386,13 @@
   "screensaver.celestial_control_scale": {
     "title": "settingScreensaverCelestialControlScaleTitle",
     "description": "settingScreensaverCelestialControlScaleDescription"
+  },
+  "screensaver.clock_night_turn_off_minutes": {
+    "title": "settingScreensaverClockNightTurnOffMinutesTitle",
+    "description": "settingScreensaverClockNightTurnOffMinutesDescription"
+  },
+  "screensaver.clock_night_turn_off_black": {
+    "title": "settingScreensaverScreenOffBlackTitle",
+    "description": "settingScreensaverScreenOffBlackDescription"
   }
 }

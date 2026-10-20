@@ -13,7 +13,8 @@ const supportTextMessageIds = <String, String>{
   "Errors & crashes": "logsErrors",
   "Warnings": "logsWarnings",
   "Info & debug": "logsInfo",
-  "No matching lines. Enable more types above to see the full log.": "logsNoMatches",
+  "No matching lines. Enable more types above to see the full log.":
+      "logsNoMatches",
   "logcat unavailable": "logsUnavailable",
   "unknown": "logsUnknown",
   "Web Console": "logsWebConsole",
@@ -21,7 +22,8 @@ const supportTextMessageIds = <String, String>{
   "No console output yet": "logsNoOutput",
   "Kiosk Satellite console log": "logsShareSubject",
   "Run JavaScript in the page": "logsInput",
-  "Run JavaScript in the page (Enter to run, Up/Down for history)": "logsInputHistory",
+  "Run JavaScript in the page (Enter to run, Up/Down for history)":
+      "logsInputHistory",
   "Run": "logsRun",
   "evaluation failed": "logsEvaluationFailed",
   "device unreachable": "logsDeviceUnreachable",
@@ -34,19 +36,22 @@ const supportTextMessageIds = <String, String>{
   "Website": "aboutWebsite",
   "Source code": "aboutSourceCode",
   "License": "aboutLicense",
-  "Kiosk Satellite is free for personal, non-commercial use. It is licensed under CC BY-NC-ND 4.0: you may use and share it, but commercial use of the app and redistribution of modified app builds are not permitted. Independent plugins have additional permission under PLUGIN-EXCEPTION.md.": "aboutLicenseSummary",
+  "Kiosk Satellite is free for personal, non-commercial use. It is licensed under CC BY-NC-ND 4.0: you may use and share it, but commercial use of the app and redistribution of modified app builds are not permitted. Independent plugins have additional permission under PLUGIN-EXCEPTION.md.":
+      "aboutLicenseSummary",
   "Check for updates now": "aboutCheckNow",
   "Checking…": "aboutChecking",
   "Update check failed. Can the device reach GitHub?": "aboutCheckFailed",
   "You are on the latest version.": "drawerUpdateCurrentHelp",
   "Update available": "drawerUpdateAvailable",
   "\"Display over other apps\" permission missing": "aboutOverlayMissing",
-  "Without it the app cannot reopen itself after updating. The grant screen appears on the tablet.": "aboutOverlayHelp",
+  "Without it the app cannot reopen itself after updating. The grant screen appears on the tablet.":
+      "aboutOverlayHelp",
   "Up to date": "drawerUpdateCurrent",
   "Already up to date": "aboutAlreadyCurrent",
   "No release notes.": "drawerNoReleaseNotes",
   "Update": "drawerUpdate",
-  "The download runs on the tablet; the installation must be confirmed on the tablet screen.": "aboutInstallHelp",
+  "The download runs on the tablet; the installation must be confirmed on the tablet screen.":
+      "aboutInstallHelp",
   "Localization Credits": "aboutLocalizationCredits",
-  "Contributors by language": "aboutLocalizationCreditsHint"
+  "Contributors by language": "aboutLocalizationCreditsHint",
 };

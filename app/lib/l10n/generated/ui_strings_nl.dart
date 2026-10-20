@@ -10817,6 +10817,18 @@ class UiStringsNl extends UiStrings {
       'Toon AM of PM na de tijd.';
 
   @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle =>
+      'Scherm \'s nachts uitschakelen na';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      'Schakelt het scherm uit zodra de nachtmodus de ingestelde tijd actief is en weer in zodra het lichter wordt in de kamer. Stel 0 in om het scherm aan te laten. Hiervoor is toestemming voor apparaatbeheer vereist.';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      'Zodra het scherm echt wordt uitgeschakeld, neemt het energiebeheer van de tablet het over. Veel Android-modellen gedragen zich dan onvoorspelbaar: wifi kan in de slaapstand gaan of wegvallen, Home Assistant-entiteiten kunnen onbeschikbaar worden, de cameratoegang kan worden ingetrokken en sommige modellen sluiten achtergrondapps af. Sommige lichtsensoren geven ook geen metingen meer door als het scherm uit is, waardoor het scherm misschien niet vanzelf weer aangaat als het lichter wordt in de kamer. Dit verschilt per fabrikant.\n\nEen betrouwbare optie is Een zwart scherm gebruiken. Het scherm ziet er dan net zo donker uit, terwijl de app de volledige controle behoudt.';
+
+  @override
   String get screensaverOverlayEntity => 'Entiteit';
 
   @override

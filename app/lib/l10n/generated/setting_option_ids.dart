@@ -3,42 +3,42 @@ const settingOptionMessageIds = <String, Map<String, String>>{
   "ui.theme": {
     "dark": "deviceThemeDark",
     "light": "deviceThemeLight",
-    "system": "deviceThemeSystem"
+    "system": "deviceThemeSystem",
   },
   "update.source": {
     "github": "deviceUpdateGithub",
-    "custom": "deviceUpdateCustom"
+    "custom": "deviceUpdateCustom",
   },
   "ha.haptics_strength": {
     "light": "haVibrationLight",
     "medium": "haVibrationMedium",
-    "strong": "haVibrationStrong"
+    "strong": "haVibrationStrong",
   },
   "ha.theme": {
     "auto": "haThemeAuto",
     "light": "deviceThemeLight",
-    "dark": "deviceThemeDark"
+    "dark": "deviceThemeDark",
   },
   "browser.cutout_mode": {
     "always": "screenAudioCutoutAlways",
     "short_edges": "screenAudioCutoutShort",
     "default": "screenAudioCutoutDefault",
-    "never": "screenAudioCutoutNever"
+    "never": "screenAudioCutoutNever",
   },
   "screen.orientation": {
     "auto": "screenAudioAutomatic",
     "landscape": "screenAudioLandscape",
     "reverse_landscape": "screenAudioReverseLandscape",
     "portrait": "screenAudioPortrait",
-    "reverse_portrait": "screenAudioReversePortrait"
+    "reverse_portrait": "screenAudioReversePortrait",
   },
   "audio.mic_capture_mode": {
     "mic": "screenAudioCaptureRawMicrophone",
-    "voice_communication": "screenAudioCaptureVoiceCommunication"
+    "voice_communication": "screenAudioCaptureVoiceCommunication",
   },
   "audio.mic_capture_format": {
     "auto": "screenAudioAutomaticDefault",
-    "hardware": "screenAudioStereo"
+    "hardware": "screenAudioStereo",
   },
   "screensaver.mode": {
     "dim": "screensaverModeDim",
@@ -53,12 +53,12 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "camera": "screensaverModeCamera",
     "weather_mood": "screensaverWeatherMood",
     "dashboard": "screensaverModeDashboard",
-    "celestial": "screensaverModeCelestial"
+    "celestial": "screensaverModeCelestial",
   },
   "screensaver.clock_style": {
     "digital": "screensaverStyleDigital",
     "flip": "screensaverStyleFlip",
-    "roller": "screensaverStyleRoller"
+    "roller": "screensaverStyleRoller",
   },
   "screensaver.clock_font_weight": {
     "default": "screensaverFontDefault",
@@ -66,7 +66,7 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "regular": "screensaverFontRegular",
     "medium": "screensaverFontMedium",
     "bold": "screensaverFontBold",
-    "black": "screensaverFontBlack"
+    "black": "screensaverFontBlack",
   },
   "screensaver.media_transition": {
     "none": "screensaverMediaTransitionNone",
@@ -74,12 +74,12 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "slide": "screensaverMediaTransitionSlide",
     "zoom": "screensaverMediaTransitionZoom",
     "kenburns": "screensaverMediaTransitionKenBurns",
-    "random": "screensaverMediaTransitionRandom"
+    "random": "screensaverMediaTransitionRandom",
   },
   "screensaver.media_fill": {
     "off": "screensaverMediaFillOff",
     "smart": "screensaverMediaFillSmart",
-    "always": "screensaverMediaFillAlways"
+    "always": "screensaverMediaFillAlways",
   },
   "screensaver.gallery_transition": {
     "none": "screensaverMediaTransitionNone",
@@ -87,12 +87,12 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "slide": "screensaverMediaTransitionSlide",
     "zoom": "screensaverMediaTransitionZoom",
     "kenburns": "screensaverMediaTransitionKenBurns",
-    "random": "screensaverMediaTransitionRandom"
+    "random": "screensaverMediaTransitionRandom",
   },
   "screensaver.gallery_fill": {
     "off": "screensaverMediaFillOff",
     "smart": "screensaverMediaFillSmart",
-    "always": "screensaverMediaFillAlways"
+    "always": "screensaverMediaFillAlways",
   },
   "screensaver.local_transition": {
     "none": "screensaverMediaTransitionNone",
@@ -100,12 +100,12 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "slide": "screensaverMediaTransitionSlide",
     "zoom": "screensaverMediaTransitionZoom",
     "kenburns": "screensaverMediaTransitionKenBurns",
-    "random": "screensaverMediaTransitionRandom"
+    "random": "screensaverMediaTransitionRandom",
   },
   "screensaver.local_fill": {
     "off": "screensaverMediaFillOff",
     "smart": "screensaverMediaFillSmart",
-    "always": "screensaverMediaFillAlways"
+    "always": "screensaverMediaFillAlways",
   },
   "screensaver.immich_transition": {
     "none": "screensaverMediaTransitionNone",
@@ -113,18 +113,18 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "slide": "screensaverMediaTransitionSlide",
     "zoom": "screensaverMediaTransitionZoom",
     "kenburns": "screensaverMediaTransitionKenBurns",
-    "random": "screensaverMediaTransitionRandom"
+    "random": "screensaverMediaTransitionRandom",
   },
   "screensaver.immich_fill": {
     "off": "screensaverMediaFillOff",
     "smart": "screensaverMediaFillSmart",
-    "always": "screensaverMediaFillAlways"
+    "always": "screensaverMediaFillAlways",
   },
   "screensaver.immich_metadata_position": {
     "top_left": "screensaverMediaTopLeft",
     "top_right": "screensaverMediaTopRight",
     "bottom_left": "screensaverMediaBottomLeft",
-    "bottom_right": "screensaverMediaBottomRight"
+    "bottom_right": "screensaverMediaBottomRight",
   },
   "screensaver.immich_taken_within": {
     "": "screensaverMediaAnyTime",
@@ -135,7 +135,7 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "1825": "screensaverMediaPast5Years",
     "3650": "screensaverMediaPast10Years",
     "since": "screensaverMediaSince",
-    "range": "screensaverMediaTimeframe"
+    "range": "screensaverMediaTimeframe",
   },
   "screensaver.widget_font_weight": {
     "default": "screensaverFontDefault",
@@ -143,7 +143,7 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "regular": "screensaverFontRegular",
     "medium": "screensaverFontMedium",
     "bold": "screensaverFontBold",
-    "black": "screensaverFontBlack"
+    "black": "screensaverFontBlack",
   },
   "screensaver.glance_font_weight": {
     "default": "screensaverFontDefault",
@@ -151,7 +151,7 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "regular": "screensaverFontRegular",
     "medium": "screensaverFontMedium",
     "bold": "screensaverFontBold",
-    "black": "screensaverFontBlack"
+    "black": "screensaverFontBlack",
   },
   "screensaver.widget_font": {
     "system": "screensaverOverlayFontSystem",
@@ -159,7 +159,7 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "condensed": "screensaverOverlayFontCondensed",
     "monospace": "screensaverOverlayFontMonospace",
     "casual": "screensaverOverlayFontCasual",
-    "cursive": "screensaverOverlayFontCursive"
+    "cursive": "screensaverOverlayFontCursive",
   },
   "screensaver.glance_font": {
     "system": "screensaverOverlayFontSystem",
@@ -167,65 +167,60 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "condensed": "screensaverOverlayFontCondensed",
     "monospace": "screensaverOverlayFontMonospace",
     "casual": "screensaverOverlayFontCasual",
-    "cursive": "screensaverOverlayFontCursive"
+    "cursive": "screensaverOverlayFontCursive",
   },
   "face.preview_position": {
     "top_left": "screensaverMediaTopLeft",
     "top_right": "screensaverMediaTopRight",
     "bottom_left": "screensaverMediaBottomLeft",
-    "bottom_right": "screensaverMediaBottomRight"
+    "bottom_right": "screensaverMediaBottomRight",
   },
-  "camera.device": {
-    "front": "cameraFront",
-    "back": "cameraBack"
-  },
-  "sendspin.player_source": {
-    "": "mediaThisDevice"
-  },
+  "camera.device": {"front": "cameraFront", "back": "cameraBack"},
+  "sendspin.player_source": {"": "mediaThisDevice"},
   "sendspin.volume_keys": {
     "off": "mediaOff",
     "now_playing": "mediaKeysNowPlaying",
-    "playing": "mediaKeysPlaying"
+    "playing": "mediaKeysPlaying",
   },
   "sendspin.codec": {
     "flac": "mediaFlac",
     "opus": "mediaOpus",
-    "pcm": "mediaPcm"
+    "pcm": "mediaPcm",
   },
   "sendspin.player_size": {
     "compact": "mediaCompact",
-    "large": "mediaLargeControls"
+    "large": "mediaLargeControls",
   },
   "sendspin.fullscreen_layout": {
     "vertical": "mediaLayoutVertical",
     "horizontal": "mediaLayoutHorizontal",
-    "art_only": "mediaLayoutArtOnly"
+    "art_only": "mediaLayoutArtOnly",
   },
   "sendspin.fullscreen_photo_fill": {
     "default": "mediaDefaultFill",
     "off": "mediaFillOff",
     "smart": "mediaFillSmart",
-    "always": "mediaFillAlways"
+    "always": "mediaFillAlways",
   },
   "sendspin.fullscreen_return": {
     "default": "mediaDefaultFill",
     "last": "mediaReturnLastView",
-    "custom": "mediaReturnChosenView"
+    "custom": "mediaReturnChosenView",
   },
   "intercom.answer_mode": {
     "ring": "intercomOptionAnswerRing",
     "auto": "intercomOptionAnswerAuto",
-    "dnd": "intercomOptionAnswerDnd"
+    "dnd": "intercomOptionAnswerDnd",
   },
   "intercom.ring_seconds": {
     "15": "intercomOptionAnswer15",
     "30": "intercomOptionAnswer30",
     "45": "intercomOptionAnswer45",
-    "60": "intercomOptionAnswer60"
+    "60": "intercomOptionAnswer60",
   },
   "intercom.talk_mode": {
     "ptt": "intercomOptionTalkPtt",
-    "handsfree": "intercomOptionTalkHandsfree"
+    "handsfree": "intercomOptionTalkHandsfree",
   },
   "intercom.max_call_minutes": {
     "0": "intercomOptionCallUnlimited",
@@ -237,56 +232,56 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "20": "intercomOptionCall20",
     "30": "intercomOptionCall30",
     "45": "intercomOptionCall45",
-    "60": "intercomOptionCall60"
+    "60": "intercomOptionCall60",
   },
   "intercom.hangup_key": {
     "off": "intercomOptionHangupOff",
     "volume_up": "intercomOptionHangupVolumeUp",
     "volume_down": "intercomOptionHangupVolumeDown",
     "volume_mute": "intercomOptionHangupMute",
-    "help": "intercomOptionHangupHelp"
+    "help": "intercomOptionHangupHelp",
   },
   "intercom.hangup_key_ringing": {
     "answer": "intercomOptionHangupRingingAnswer",
     "decline": "intercomOptionHangupRingingDecline",
-    "ignore": "intercomOptionHangupRingingIgnore"
+    "ignore": "intercomOptionHangupRingingIgnore",
   },
   "kiosk.exit_gesture": {
     "taps5": "kioskGestureTaps5",
     "taps7": "kioskGestureTaps7",
     "taps5hold": "kioskGestureTaps5Hold",
     "taps7hold": "kioskGestureTaps7Hold",
-    "none": "kioskGestureNone"
+    "none": "kioskGestureNone",
   },
   "gestures.clap_strictness": {
     "standard": "gestureStrictnessStandard",
     "strict": "gestureStrictnessStrict",
-    "large_room": "gestureStrictnessLargeRoom"
+    "large_room": "gestureStrictnessLargeRoom",
   },
   "lockdown.exit_gesture": {
     "taps5": "kioskGestureTaps5",
     "taps7": "kioskGestureTaps7",
     "taps5hold": "kioskGestureTaps5Hold",
     "taps7hold": "kioskGestureTaps7Hold",
-    "none": "lockdownGestureNone"
+    "none": "lockdownGestureNone",
   },
   "btproxy.scan_duty": {
     "low_latency": "esphomeOptionContinuous",
     "balanced": "esphomeOptionBalanced",
-    "low_power": "esphomeOptionLowPower"
+    "low_power": "esphomeOptionLowPower",
   },
   "btproxy.nearby_sort": {
     "last_seen": "esphomeOptionLastSeen",
     "name": "esphomeOptionName",
     "mac": "esphomeOptionMacAddress",
-    "rssi": "esphomeOptionSignalStrength"
+    "rssi": "esphomeOptionSignalStrength",
   },
   "btproxy.min_connect_rssi": {
     "": "esphomeOptionNoLimit",
     "-70": "esphomeOption70DbmSameRoom",
     "-80": "esphomeOption80Dbm",
     "-85": "esphomeOption85Dbm",
-    "-90": "esphomeOption90DbmEdgeOfRange"
+    "-90": "esphomeOption90DbmEdgeOfRange",
   },
   "screensaver.weather_preview_condition": {
     "sunny": "screensaverWeatherPreviewSunny",
@@ -302,12 +297,12 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "lightning-rainy": "screensaverWeatherPreviewLightningRainy",
     "windy": "screensaverWeatherPreviewWindy",
     "windy-variant": "screensaverWeatherPreviewWindyVariant",
-    "exceptional": "screensaverWeatherPreviewExceptional"
+    "exceptional": "screensaverWeatherPreviewExceptional",
   },
   "screensaver.weather_preview_period": {
     "day": "screensaverWeatherPreviewDay",
     "twilight": "screensaverWeatherPreviewTwilight",
-    "night": "screensaverWeatherPreviewNight"
+    "night": "screensaverWeatherPreviewNight",
   },
   "screensaver.weather_clock_font_weight": {
     "default": "screensaverFontDefault",
@@ -315,25 +310,25 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "regular": "screensaverFontRegular",
     "medium": "screensaverFontMedium",
     "bold": "screensaverFontBold",
-    "black": "screensaverFontBlack"
+    "black": "screensaverFontBlack",
   },
   "voice.tts_output_mode": {
     "announcement": "voiceOptionAnnouncement",
-    "normal_playback": "voiceOptionNormalPlayback"
+    "normal_playback": "voiceOptionNormalPlayback",
   },
   "voice.wake_word_sensitivity": {
     "slightly": "voiceOptionSlightly",
     "moderately": "voiceOptionModerately",
-    "very": "voiceOptionVery"
+    "very": "voiceOptionVery",
   },
   "voice.theme": {
     "auto": "haThemeAuto",
     "light": "deviceThemeLight",
-    "dark": "deviceThemeDark"
+    "dark": "deviceThemeDark",
   },
   "voice.skin": {
     "default": "voiceVadDefault",
-    "voice-only": "voiceSkinVoiceOnly"
+    "voice-only": "voiceSkinVoiceOnly",
   },
   "alarms.snooze_minutes": {
     "5": "alarmsOption5Minutes",
@@ -341,21 +336,21 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "15": "alarmsOption15Minutes",
     "20": "alarmsOption20Minutes",
     "25": "alarmsOption25Minutes",
-    "30": "alarmsOption30Minutes"
+    "30": "alarmsOption30Minutes",
   },
   "alarms.silence_after_minutes": {
     "5": "alarmsOption5Minutes",
     "10": "alarmsOption10Minutes",
     "15": "alarmsOption15Minutes",
     "20": "alarmsOption20Minutes",
-    "30": "alarmsOption30Minutes"
+    "30": "alarmsOption30Minutes",
   },
   "alarms.sunrise_minutes": {
     "10": "alarmsOption10Minutes",
     "15": "alarmsOption15Minutes",
     "20": "alarmsOption20Minutes",
     "25": "alarmsOption25Minutes",
-    "30": "alarmsOption30Minutes"
+    "30": "alarmsOption30Minutes",
   },
   "voice.realtime_openai_reasoning": {
     "": "voiceRealtimeReasoningDefault",
@@ -363,60 +358,48 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "low": "voiceRealtimeReasoningLow",
     "medium": "voiceRealtimeReasoningMedium",
     "high": "voiceRealtimeReasoningHigh",
-    "xhigh": "voiceRealtimeReasoningExtraHigh"
+    "xhigh": "voiceRealtimeReasoningExtraHigh",
   },
   "voice.realtime_tools": {
     "custom": "voiceRealtimeToolsCustom",
-    "none": "voiceNone"
+    "none": "voiceNone",
   },
   "voice.overlay_mode": {
     "full": "voiceOverlayFullScreen",
-    "docked": "voiceOverlayDocked"
+    "docked": "voiceOverlayDocked",
   },
-  "voice.realtime_openai_model": {
-    "": "voiceRealtimeProviderDefault"
-  },
-  "voice.realtime_openai_voice": {
-    "": "voiceRealtimeProviderDefault"
-  },
-  "voice.realtime_xai_model": {
-    "": "voiceRealtimeProviderDefault"
-  },
-  "voice.realtime_xai_voice": {
-    "": "voiceRealtimeProviderDefault"
-  },
-  "voice.realtime_gemini_model": {
-    "": "voiceRealtimeProviderDefault"
-  },
-  "voice.realtime_gemini_voice": {
-    "": "voiceRealtimeProviderDefault"
-  },
+  "voice.realtime_openai_model": {"": "voiceRealtimeProviderDefault"},
+  "voice.realtime_openai_voice": {"": "voiceRealtimeProviderDefault"},
+  "voice.realtime_xai_model": {"": "voiceRealtimeProviderDefault"},
+  "voice.realtime_xai_voice": {"": "voiceRealtimeProviderDefault"},
+  "voice.realtime_gemini_model": {"": "voiceRealtimeProviderDefault"},
+  "voice.realtime_gemini_voice": {"": "voiceRealtimeProviderDefault"},
   "voice.realtime_gemini_reasoning": {
     "": "voiceRealtimeReasoningDefault",
     "minimal": "voiceRealtimeReasoningMinimal",
     "low": "voiceRealtimeReasoningLow",
     "medium": "voiceRealtimeReasoningMedium",
-    "high": "voiceRealtimeReasoningHigh"
+    "high": "voiceRealtimeReasoningHigh",
   },
   "screensaver.media_metadata_position": {
     "top_left": "screensaverMediaTopLeft",
     "top_right": "screensaverMediaTopRight",
     "bottom_left": "screensaverMediaBottomLeft",
-    "bottom_right": "screensaverMediaBottomRight"
+    "bottom_right": "screensaverMediaBottomRight",
   },
   "screensaver.local_metadata_position": {
     "top_left": "screensaverMediaTopLeft",
     "top_right": "screensaverMediaTopRight",
     "bottom_left": "screensaverMediaBottomLeft",
-    "bottom_right": "screensaverMediaBottomRight"
+    "bottom_right": "screensaverMediaBottomRight",
   },
   "led.media.style": {
     "solid": "settingLedMediaStyleOptionSolid",
-    "breathe": "settingLedMediaStyleOptionBreathe"
+    "breathe": "settingLedMediaStyleOptionBreathe",
   },
   "led.idle.style": {
     "solid": "settingLedIdleStyleOptionSolid",
-    "breathe": "settingLedIdleStyleOptionBreathe"
+    "breathe": "settingLedIdleStyleOptionBreathe",
   },
   "screensaver.url_transition": {
     "none": "screensaverMediaTransitionNone",
@@ -424,50 +407,50 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "slide": "screensaverMediaTransitionSlide",
     "zoom": "screensaverMediaTransitionZoom",
     "kenburns": "screensaverMediaTransitionKenBurns",
-    "random": "screensaverMediaTransitionRandom"
+    "random": "screensaverMediaTransitionRandom",
   },
   "screensaver.url_fill": {
     "off": "screensaverMediaFillOff",
     "smart": "screensaverMediaFillSmart",
-    "always": "screensaverMediaFillAlways"
+    "always": "screensaverMediaFillAlways",
   },
   "screensaver.url_metadata_position": {
     "top_left": "screensaverMediaTopLeft",
     "top_right": "screensaverMediaTopRight",
     "bottom_left": "screensaverMediaBottomLeft",
-    "bottom_right": "screensaverMediaBottomRight"
+    "bottom_right": "screensaverMediaBottomRight",
   },
   "calendar.default_view": {
     "day": "calendarViewDay",
     "week": "calendarViewWeek",
     "month": "calendarViewMonth",
-    "schedule": "calendarViewSchedule"
+    "schedule": "calendarViewSchedule",
   },
   "calendar.week_start": {
     "locale": "calendarWeekStartLocale",
     "sunday": "calendarWeekStartSunday",
     "monday": "calendarWeekStartMonday",
-    "saturday": "calendarWeekStartSaturday"
+    "saturday": "calendarWeekStartSaturday",
   },
   "calendar.idle_close_minutes": {
     "0": "calendarIdleNever",
     "1": "calendarIdle1Minute",
     "2": "calendarIdle2Minutes",
     "5": "alarmsOption5Minutes",
-    "10": "alarmsOption10Minutes"
+    "10": "alarmsOption10Minutes",
   },
   "screensaver.celestial_terrain": {
     "hills": "screensaverCelestialTerrainHills",
     "mountains": "screensaverCelestialTerrainMountains",
     "plains": "screensaverCelestialTerrainPlains",
-    "none": "screensaverCelestialTerrainNone"
+    "none": "screensaverCelestialTerrainNone",
   },
   "screensaver.celestial_location": {
     "gps": "screensaverCelestialLocationGps",
     "ha_home": "screensaverCelestialLocationHaHome",
     "ha_entity": "screensaverCelestialLocationHaEntity",
-    "manual": "screensaverCelestialLocationManual"
-  }
+    "manual": "screensaverCelestialLocationManual",
+  },
 };
 const settingPlaceholderMessageIds = <String, String>{
   "device.hostname": "deviceHostnamePlaceholder",
@@ -488,5 +471,5 @@ const settingPlaceholderMessageIds = <String, String>{
   "alarms.tts_voice": "esphomeTtsDefault",
   "voice.realtime_openai_endpoint": "voiceRealtimeProviderDefault",
   "voice.realtime_xai_endpoint": "voiceRealtimeProviderDefault",
-  "voice.realtime_gemini_endpoint": "voiceRealtimeProviderDefault"
+  "voice.realtime_gemini_endpoint": "voiceRealtimeProviderDefault",
 };

@@ -49,30 +49,43 @@ const launcherTextMessageIds = <String, String>{
   "Grant on device": "deviceGrantOnDevice",
   "Unrestricted battery": "deviceBattery",
   "Enable App Launcher": "settingLauncherEnabledTitle",
-  "Open a picked set of installed apps from the kiosk.": "settingLauncherEnabledDescription",
+  "Open a picked set of installed apps from the kiosk.":
+      "settingLauncherEnabledDescription",
   "The apps the launcher offers.": "settingLauncherAppsDescription",
   "Return automatically": "settingLauncherAutoReturnTitle",
-  "Come back to the kiosk once the other app has gone untouched for a while.": "settingLauncherAutoReturnDescription",
+  "Come back to the kiosk once the other app has gone untouched for a while.":
+      "settingLauncherAutoReturnDescription",
   "Return after (seconds)": "settingLauncherAutoReturnSecondsTitle",
-  "Time without a touch in the other app before the kiosk comes back.": "settingLauncherAutoReturnSecondsDescription",
+  "Time without a touch in the other app before the kiosk comes back.":
+      "settingLauncherAutoReturnSecondsDescription",
   "Wait while media plays": "settingLauncherAutoReturnMediaTitle",
-  "Do not come back while video or music is playing.": "settingLauncherAutoReturnMediaDescription",
+  "Do not come back while video or music is playing.":
+      "settingLauncherAutoReturnMediaDescription",
   "None yet. Pick the apps the launcher offers.": "launcherNoneHelp",
   "None yet": "launcherNone",
   "Could not list the apps": "launcherListFailed",
   "listing failed": "launcherListingFailed",
   "No launchable apps found.": "launcherEmpty",
   "It may have been uninstalled.": "launcherUninstalled",
-  "Kiosk Satellite can bring itself back in the foreground and notice touches in the other app.": "launcherOverlayHeld",
-  "Without this the kiosk cannot come back on its own, and touches in the other app go unseen.": "launcherOverlayMissing",
-  "Without this the kiosk cannot come back on its own, and touches in the other app go unseen. The grant screen appears on the tablet.": "launcherOverlayRemote",
-  "Android may pause the app behind the other one, and a paused clock never brings the kiosk back.": "launcherBatteryMissing",
-  "Android may pause the app behind the other one, and a paused clock never brings the kiosk back. The grant dialog appears on the tablet.": "launcherBatteryRemote",
+  "Kiosk Satellite can bring itself back in the foreground and notice touches in the other app.":
+      "launcherOverlayHeld",
+  "Without this the kiosk cannot come back on its own, and touches in the other app go unseen.":
+      "launcherOverlayMissing",
+  "Without this the kiosk cannot come back on its own, and touches in the other app go unseen. The grant screen appears on the tablet.":
+      "launcherOverlayRemote",
+  "Android may pause the app behind the other one, and a paused clock never brings the kiosk back.":
+      "launcherBatteryMissing",
+  "Android may pause the app behind the other one, and a paused clock never brings the kiosk back. The grant dialog appears on the tablet.":
+      "launcherBatteryRemote",
   "Notification access": "deviceNotificationAccess",
-  "The kiosk stays away while video or music plays in another app.": "launcherNotificationAccessHeld",
-  "Without this the kiosk cannot tell when video or music is playing and comes back anyway.": "launcherNotificationAccessMissing",
-  "Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.": "launcherNotificationAccessRemote",
+  "The kiosk stays away while video or music plays in another app.":
+      "launcherNotificationAccessHeld",
+  "Without this the kiosk cannot tell when video or music is playing and comes back anyway.":
+      "launcherNotificationAccessMissing",
+  "Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.":
+      "launcherNotificationAccessRemote",
   "The grants Return automatically leans on.": "launcherPermissionsSearch",
-  "Allows the process to run in the background without being paused or killed.": "deviceBatteryHeld",
-  "listing apps is Android-only": "launcherErrorAndroidOnly"
+  "Allows the process to run in the background without being paused or killed.":
+      "deviceBatteryHeld",
+  "listing apps is Android-only": "launcherErrorAndroidOnly",
 };

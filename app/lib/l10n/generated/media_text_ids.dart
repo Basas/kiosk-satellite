@@ -44,37 +44,54 @@ const mediaTextMessageIds = <String, String>{
   "Loading…": "commonLoading",
   "Choose": "commonChoose",
   "Player source": "settingSendspinPlayerSourceTitle",
-  "What the floating player and Now Playing show and control: this device or a player elsewhere.": "settingSendspinPlayerSourceDescription",
+  "What the floating player and Now Playing show and control: this device or a player elsewhere.":
+      "settingSendspinPlayerSourceDescription",
   "Player": "settingSendspinPlayerTitle",
-  "The player of that source to show and control.": "settingSendspinPlayerDescription",
+  "The player of that source to show and control.":
+      "settingSendspinPlayerDescription",
   "Duck volume during voice interactions": "settingSendspinDuckPercentTitle",
-  "Music drops to this share of its volume during voice interactions and intercom calls, then comes back.": "settingSendspinDuckPercentDescription",
+  "Music drops to this share of its volume during voice interactions and intercom calls, then comes back.":
+      "settingSendspinDuckPercentDescription",
   "Volume buttons control the player": "settingSendspinVolumeKeysTitle",
-  "This device's volume buttons change the followed player's volume instead of its own. While this device plays in a group they change the group's volume. Only while the Now Playing view is on screen or whenever the player is playing.": "settingSendspinVolumeKeysGroupDescription",
+  "This device's volume buttons change the followed player's volume instead of its own. While this device plays in a group they change the group's volume. Only while the Now Playing view is on screen or whenever the player is playing.":
+      "settingSendspinVolumeKeysGroupDescription",
   "Volume button step": "settingSendspinVolumeKeyStepTitle",
-  "How far one press of a volume button moves the player.": "settingSendspinVolumeKeyStepDescription",
+  "How far one press of a volume button moves the player.":
+      "settingSendspinVolumeKeyStepDescription",
   "Enable Sendspin player": "settingSendspinEnabledTitle",
-  "Turn this device into a synchronized Sendspin player. It appears in Music Assistant under the device name, in sync with every other Sendspin speaker.": "settingSendspinEnabledDescription",
+  "Turn this device into a synchronized Sendspin player. It appears in Music Assistant under the device name, in sync with every other Sendspin speaker.":
+      "settingSendspinEnabledDescription",
   "Server": "settingSendspinServerTitle",
-  "Sendspin server address, for example 192.168.1.10:8927. Leave empty to find the server on the network automatically.": "settingSendspinServerDescription",
+  "Sendspin server address, for example 192.168.1.10:8927. Leave empty to find the server on the network automatically.":
+      "settingSendspinServerDescription",
   "Preferred audio codec": "settingSendspinCodecTitle",
-  "FLAC is lossless and ideal on WiFi or ethernet. The server makes the final choice from what this device offers.": "settingSendspinCodecDescription",
+  "FLAC is lossless and ideal on WiFi or ethernet. The server makes the final choice from what this device offers.":
+      "settingSendspinCodecDescription",
   "Audio sync offset (ms)": "settingSendspinSyncOffsetTitle",
-  "Negative plays this device earlier, for speakers that lag behind the group (Bluetooth). Tune by ear; applies live.": "settingSendspinSyncOffsetDescription",
-  "While this device plays in a group, the volume slider sets the whole group's volume. Off, only this device's. Needs the Music Assistant connection.": "settingSendspinGroupVolumeDescription",
+  "Negative plays this device earlier, for speakers that lag behind the group (Bluetooth). Tune by ear; applies live.":
+      "settingSendspinSyncOffsetDescription",
+  "While this device plays in a group, the volume slider sets the whole group's volume. Off, only this device's. Needs the Music Assistant connection.":
+      "settingSendspinGroupVolumeDescription",
   "Server address": "settingSendspinMaUrlTitle",
-  "The Music Assistant server's address, as its web interface shows it. Usually https and port 8095.": "settingSendspinMaUrlDescription",
+  "The Music Assistant server's address, as its web interface shows it. Usually https and port 8095.":
+      "settingSendspinMaUrlDescription",
   "Auth token": "settingSendspinMaTokenTitle",
-  "A long-lived token from Music Assistant (Settings, then Users). Read access is enough for lyrics; the kiosk menu shortcut opens the web interface as whoever the token belongs to.": "settingSendspinMaTokenDescription",
+  "A long-lived token from Music Assistant (Settings, then Users). Read access is enough for lyrics; the kiosk menu shortcut opens the web interface as whoever the token belongs to.":
+      "settingSendspinMaTokenDescription",
   "Show in the kiosk menu": "settingSendspinMaShortcutTitle",
-  "Add a Music Assistant entry to the kiosk menu, opening the server's web interface over the dashboard. Needs the server address above.": "settingSendspinMaShortcutDescription",
+  "Add a Music Assistant entry to the kiosk menu, opening the server's web interface over the dashboard. Needs the server address above.":
+      "settingSendspinMaShortcutDescription",
   "Open directly to Now Playing": "settingSendspinMaOpenFullscreenTitle",
-  "Open Music Assistant's full-screen player from the kiosk menu or the Open Music Assistant gesture.": "settingSendspinMaOpenFullscreenDescription",
+  "Open Music Assistant's full-screen player from the kiosk menu or the Open Music Assistant gesture.":
+      "settingSendspinMaOpenFullscreenDescription",
   "Close after inactivity": "settingSendspinMaAutoCloseTitle",
-  "Return to the dashboard when nobody has touched the Music Assistant page for this long. Zero leaves it open until it is closed.": "settingSendspinMaAutoCloseDescription",
+  "Return to the dashboard when nobody has touched the Music Assistant page for this long. Zero leaves it open until it is closed.":
+      "settingSendspinMaAutoCloseDescription",
   "Hide the close button": "settingSendspinMaHideCloseTitle",
-  "The floating close button can sit on top of Music Assistant's own controls, like the Now Playing menu. Without it, dismiss with the back button or by using the kiosk's drawer menu.": "settingSendspinMaHideCloseDescription",
-  "The floating player and Now Playing show only while the picked player has a track playing or a queue loaded. With nothing playing or queued, neither appears.": "mediaIntro",
+  "The floating close button can sit on top of Music Assistant's own controls, like the Now Playing menu. Without it, dismiss with the back button or by using the kiosk's drawer menu.":
+      "settingSendspinMaHideCloseDescription",
+  "The floating player and Now Playing show only while the picked player has a track playing or a queue loaded. With nothing playing or queued, neither appears.":
+      "mediaIntro",
   "This device": "mediaThisDevice",
   "Off": "mediaOff",
   "While Now Playing is shown": "mediaKeysNowPlaying",
@@ -88,7 +105,8 @@ const mediaTextMessageIds = <String, String>{
   "Offline": "mediaOffline",
   "Set up Music Assistant to list its players.": "mediaSetUpMa",
   "Connect Home Assistant to list its media players.": "mediaSetUpHa",
-  "No Sonos speakers known yet. Find or add one on the Sonos page.": "mediaSetUpSonos",
+  "No Sonos speakers known yet. Find or add one on the Sonos page.":
+      "mediaSetUpSonos",
   "Could not save the player.": "mediaSaveFailed",
   "Could not select player": "mediaSelectFailed",
   "Sendspin Player": "mediaSendspinPage",
@@ -102,7 +120,8 @@ const mediaTextMessageIds = <String, String>{
   "Validate": "mediaValidate",
   "Checking…": "mediaChecking",
   "Connected": "mediaConnected",
-  "Check the address and token before turning on the shortcut or lyrics.": "mediaValidateHint",
+  "Check the address and token before turning on the shortcut or lyrics.":
+      "mediaValidateHint",
   "The device did not answer.": "mediaDeviceNoAnswer",
   "Validation failed.": "mediaValidationFailed",
   "No server address set.": "mediaNoAddress",
@@ -116,92 +135,130 @@ const mediaTextMessageIds = <String, String>{
   "the server closed the connection": "mediaServerClosed",
   "Now Playing": "drawerNowPlaying",
   "Adjust the group volume": "settingSendspinSonosGroupVolumeTitle",
-  "While the followed room plays in a group, the volume slider sets the whole group's volume. Off, only that room's.": "settingSendspinSonosGroupVolumeDescription",
+  "While the followed room plays in a group, the volume slider sets the whole group's volume. Off, only that room's.":
+      "settingSendspinSonosGroupVolumeDescription",
   "Show TV and line-in": "settingSendspinSonosInputsTitle",
-  "Show activity in the media player when eARC or line-in inputs are active.": "settingSendspinSonosInputsDescription",
+  "Show activity in the media player when eARC or line-in inputs are active.":
+      "settingSendspinSonosInputsDescription",
   "Speakers on the network, add one by address": "mediaSonosHint",
   "Enable AirPlay receiver": "settingAirplayEnabledTitle",
-  "The device shows up as an AirPlay speaker in the AirPlay menu of an iPhone, iPad or Mac.": "settingAirplayEnabledDescription",
+  "The device shows up as an AirPlay speaker in the AirPlay menu of an iPhone, iPad or Mac.":
+      "settingAirplayEnabledDescription",
   "Play audio from an iPhone, iPad or Mac": "mediaAirplayHint",
   "Speaker name": "settingAirplayNameTitle",
-  "The name in the AirPlay menu. Empty uses the device name.": "settingAirplayNameDescription",
+  "The name in the AirPlay menu. Empty uses the device name.":
+      "settingAirplayNameDescription",
   "Follow the sender's volume": "settingAirplaySenderVolumeTitle",
-  "The volume control on the iPhone, iPad or Mac changes how loud this device plays. Off, only this device's volume does.": "settingAirplaySenderVolumeDescription",
-  "Negative plays this device earlier, to line the sound up with video on the sender. Applies live.": "settingAirplaySyncOffsetDescription",
+  "The volume control on the iPhone, iPad or Mac changes how loud this device plays. Off, only this device's volume does.":
+      "settingAirplaySenderVolumeDescription",
+  "Negative plays this device earlier, to line the sound up with video on the sender. Applies live.":
+      "settingAirplaySyncOffsetDescription",
   "Let another sender take over": "settingAirplayTakeoverTitle",
-  "A second iPhone, iPad or Mac can take over while one plays. Off, it has to wait until the first one disconnects.": "settingAirplayTakeoverDescription",
+  "A second iPhone, iPad or Mac can take over while one plays. Off, it has to wait until the first one disconnects.":
+      "settingAirplayTakeoverDescription",
   "Speakers": "mediaSonosSpeakers",
   "No Sonos found": "mediaSonosNoneFound",
-  "Nothing answered on this network. Add one by address.": "mediaSonosDiscoveryEmpty",
+  "Nothing answered on this network. Add one by address.":
+      "mediaSonosDiscoveryEmpty",
   "Add a Sonos by address": "mediaSonosAddTitle",
   "Looking…": "mediaSonosLooking",
   "No speakers yet": "mediaSonosEmpty",
   "Search this network or add a speaker by its address.": "mediaSonosEmptyHelp",
   "Forget": "mediaSonosForget",
   "Search the network": "mediaSonosSearchTitle",
-  "Finds Sonos speakers on this network. The speakers must be on the same VLAN as this device to be auto discovered.": "mediaSonosSearchHelp",
+  "Finds Sonos speakers on this network. The speakers must be on the same VLAN as this device to be auto discovered.":
+      "mediaSonosSearchHelp",
   "Search": "mediaSonosSearch",
   "Searching…": "mediaSonosSearching",
   "Add by address": "mediaSonosAddAddress",
-  "The speaker's address on the network. The whole household is added from it.": "mediaSonosAddressHelp",
+  "The speaker's address on the network. The whole household is added from it.":
+      "mediaSonosAddressHelp",
   "Pick a room under Player source, Sonos.": "mediaSonosPickRoom",
   "Sonos added": "mediaSonosAdded",
   "The speaker listed no rooms.": "mediaSonosNoRooms",
   "no address": "mediaSonosNoAddress",
   "Show the floating player": "settingSendspinShowPlayerTitle",
-  "While music plays, show a small now-playing window over the dashboard with artwork, track info and progress. Drag it anywhere; the position is remembered.": "settingSendspinShowPlayerDescription",
+  "While music plays, show a small now-playing window over the dashboard with artwork, track info and progress. Drag it anywhere; the position is remembered.":
+      "settingSendspinShowPlayerDescription",
   "Player size": "settingSendspinPlayerSizeTitle",
-  "Compact is a small, unobtrusive now-playing window. Large adds previous, play/pause and next buttons sized for touch, controlling the whole playback group.": "settingSendspinPlayerSizeDescription",
+  "Compact is a small, unobtrusive now-playing window. Large adds previous, play/pause and next buttons sized for touch, controlling the whole playback group.":
+      "settingSendspinPlayerSizeDescription",
   "Hide the paused player after": "settingSendspinPausedHideMinutesTitle",
-  "How long a paused player stays on screen. It applies to both the floating player and the Now Playing view.": "settingSendspinPausedHideMinutesDescription",
+  "How long a paused player stays on screen. It applies to both the floating player and the Now Playing view.":
+      "settingSendspinPausedHideMinutesDescription",
   "Keep playing when dismissed": "settingSendspinDismissKeepsPlayingTitle",
-  "Flinging the floating player away hides it without stopping the music.": "settingSendspinDismissKeepsPlayingDescription",
-  "Add an entry in the kiosk menu that shows or hides the floating player. WARNING: If nothing is playing or there is no queue for this player, it won't show up.": "settingSendspinPlayerShortcutDescription",
-  "\"Now Playing\" instead of the screensaver": "settingSendspinFullscreenTitle",
-  "While music plays, the screensaver becomes a full-screen Now Playing view with album art. With nothing playing, the regular screensaver runs.": "settingSendspinFullscreenDescription",
+  "Flinging the floating player away hides it without stopping the music.":
+      "settingSendspinDismissKeepsPlayingDescription",
+  "Add an entry in the kiosk menu that shows or hides the floating player. WARNING: If nothing is playing or there is no queue for this player, it won't show up.":
+      "settingSendspinPlayerShortcutDescription",
+  "\"Now Playing\" instead of the screensaver":
+      "settingSendspinFullscreenTitle",
+  "While music plays, the screensaver becomes a full-screen Now Playing view with album art. With nothing playing, the regular screensaver runs.":
+      "settingSendspinFullscreenDescription",
   "Show alongside screensaver": "settingSendspinFullscreenSplitTitle",
-  "Keep the screensaver visible beside Now Playing. Portrait screens stack the screensaver above the player. Small screens keep the full-screen player.": "settingSendspinFullscreenSplitDescription",
+  "Keep the screensaver visible beside Now Playing. Portrait screens stack the screensaver above the player. Small screens keep the full-screen player.":
+      "settingSendspinFullscreenSplitDescription",
   "Fill the screen": "settingSendspinFullscreenPhotoFillTitle",
-  "Override photo filling while the screensaver shares the display with Now Playing. Default uses each screensaver's own setting. Off keeps the whole photo between black bars. Smart enlarges photos shaped close to the screen, framing the rest over a blurred backdrop. Always enlarges every photo, cutting off what does not fit.": "settingSendspinFullscreenPhotoFillDescription",
-  "Override screensaver brightness": "settingSendspinFullscreenOverrideBrightnessTitle",
-  "Use normal screen brightness instead of screensaver brightness while Now Playing is shown alongside a screensaver. This also overrides scheduled screensaver brightness.": "settingSendspinFullscreenOverrideBrightnessDescription",
+  "Override photo filling while the screensaver shares the display with Now Playing. Default uses each screensaver's own setting. Off keeps the whole photo between black bars. Smart enlarges photos shaped close to the screen, framing the rest over a blurred backdrop. Always enlarges every photo, cutting off what does not fit.":
+      "settingSendspinFullscreenPhotoFillDescription",
+  "Override screensaver brightness":
+      "settingSendspinFullscreenOverrideBrightnessTitle",
+  "Use normal screen brightness instead of screensaver brightness while Now Playing is shown alongside a screensaver. This also overrides scheduled screensaver brightness.":
+      "settingSendspinFullscreenOverrideBrightnessDescription",
   "After dismissing": "settingSendspinFullscreenReturnTitle",
-  "The dashboard view to show after Now Playing is dismissed. Default follows Return to home dashboard view.": "settingSendspinFullscreenReturnDescription",
+  "The dashboard view to show after Now Playing is dismissed. Default follows Return to home dashboard view.":
+      "settingSendspinFullscreenReturnDescription",
   "Last view": "mediaReturnLastView",
   "Chosen view": "mediaReturnChosenView",
   "Dashboard view": "settingSendspinFullscreenReturnViewTitle",
-  "The view to show after Now Playing is dismissed.": "settingSendspinFullscreenReturnViewDescription",
+  "The view to show after Now Playing is dismissed.":
+      "settingSendspinFullscreenReturnViewDescription",
   "Show media controls": "settingSendspinFullscreenControlsTitle",
-  "Previous, play/pause and next buttons and a progress bar on the Now Playing view. With controls on, a close button dismisses it instead of a tap anywhere.": "settingSendspinFullscreenControlsDescription",
+  "Previous, play/pause and next buttons and a progress bar on the Now Playing view. With controls on, a close button dismisses it instead of a tap anywhere.":
+      "settingSendspinFullscreenControlsDescription",
   "Text scale": "settingSendspinFullscreenTextScaleTitle",
-  "Size of the track title, artist, album, lyrics and queue text. Applies in both layouts and alongside the screensaver. Artwork adjusts to leave room for the text.": "settingSendspinFullscreenTextScaleDescription",
+  "Size of the track title, artist, album, lyrics and queue text. Applies in both layouts and alongside the screensaver. Artwork adjusts to leave room for the text.":
+      "settingSendspinFullscreenTextScaleDescription",
   "Button scale": "settingSendspinFullscreenButtonScaleTitle",
-  "Size of the playback buttons and progress bar, independent of text size. Applies in both layouts and alongside the screensaver. Controls fit the space available in the player.": "settingSendspinFullscreenButtonScaleDescription",
+  "Size of the playback buttons and progress bar, independent of text size. Applies in both layouts and alongside the screensaver. Controls fit the space available in the player.":
+      "settingSendspinFullscreenButtonScaleDescription",
   "Layout mode": "settingSendspinFullscreenLayoutTitle",
-  "How Now Playing arranges artwork, track details and controls. Horizontal splits them into left and right halves. Album art only fills the screen with artwork and shows track details and controls for a few seconds after a tap, switching to Vertical while lyrics or the queue are open. Ignored while Now Playing is shown alongside a screensaver.": "settingSendspinFullscreenLayoutDescription",
+  "How Now Playing arranges artwork, track details and controls. Horizontal splits them into left and right halves. Album art only fills the screen with artwork and shows track details and controls for a few seconds after a tap, switching to Vertical while lyrics or the queue are open. Ignored while Now Playing is shown alongside a screensaver.":
+      "settingSendspinFullscreenLayoutDescription",
   "Vertical": "mediaLayoutVertical",
   "Horizontal": "mediaLayoutHorizontal",
   "Album art only": "mediaLayoutArtOnly",
   "Double tap to dismiss": "settingSendspinFullscreenDoubleTapTitle",
-  "A double tap anywhere on the Now Playing view dismisses it. The close button won't be shown. Ignored while Now Playing is shown alongside a screensaver.": "settingSendspinFullscreenDoubleTapDescription",
-  "Launch Now Playing when music starts playing": "settingSendspinFullscreenOnPlayTitle",
-  "Open the Now Playing view as soon as playback starts instead of waiting for the screensaver timeout.": "settingSendspinFullscreenOnPlayDescription",
+  "A double tap anywhere on the Now Playing view dismisses it. The close button won't be shown. Ignored while Now Playing is shown alongside a screensaver.":
+      "settingSendspinFullscreenDoubleTapDescription",
+  "Launch Now Playing when music starts playing":
+      "settingSendspinFullscreenOnPlayTitle",
+  "Open the Now Playing view as soon as playback starts instead of waiting for the screensaver timeout.":
+      "settingSendspinFullscreenOnPlayDescription",
   "Dismiss \"Now Playing\" on motion": "settingSendspinFullscreenMotionTitle",
-  "Let motion dismiss Now Playing like a regular screensaver. Off, only touch dismisses it, so a walk-past does not interrupt the music display. Ignored while Now Playing is shown alongside a screensaver.": "settingSendspinFullscreenMotionDescription",
-  "Add an entry in the kiosk menu that shows the Now Playing view. WARNING: If nothing is playing or there is no queue for this player, it won't show up.": "settingSendspinFullscreenShortcutDescription",
+  "Let motion dismiss Now Playing like a regular screensaver. Off, only touch dismisses it, so a walk-past does not interrupt the music display. Ignored while Now Playing is shown alongside a screensaver.":
+      "settingSendspinFullscreenMotionDescription",
+  "Add an entry in the kiosk menu that shows the Now Playing view. WARNING: If nothing is playing or there is no queue for this player, it won't show up.":
+      "settingSendspinFullscreenShortcutDescription",
   "Show speaker selection pill": "settingSendspinSpeakerPillTitle",
-  "Shows speaker selection for 5 seconds after screen interaction. Add or remove speakers from the current group.": "settingSendspinSpeakerPillDescription",
+  "Shows speaker selection for 5 seconds after screen interaction. Add or remove speakers from the current group.":
+      "settingSendspinSpeakerPillDescription",
   "All speakers": "mediaAllSpeakers",
   "Show album art in the queue": "settingSendspinQueueArtTitle",
-  "A cover on every row of the queue panel.": "settingSendspinQueueArtDescription",
+  "A cover on every row of the queue panel.":
+      "settingSendspinQueueArtDescription",
   "Enable lyrics": "settingSendspinLyricsEnabledTitle",
-  "Synchronized lyrics on the Now Playing view, for every player source.": "settingSendspinLyricsEnabledDescription",
+  "Synchronized lyrics on the Now Playing view, for every player source.":
+      "settingSendspinLyricsEnabledDescription",
   "Lyrics source": "settingSendspinLyricsSourceTitle",
-  "Where the lyrics come from. Music Assistant needs the server address and token on its page.": "settingSendspinLyricsSourceDescription",
+  "Where the lyrics come from. Music Assistant needs the server address and token on its page.":
+      "settingSendspinLyricsSourceDescription",
   "Fallback to Music Assistant": "settingSendspinLyricsFallbackTitle",
-  "If LRCLIB is unreachable, Music Assistant is asked instead. Needs the Music Assistant connection.": "settingSendspinLyricsFallbackDescription",
+  "If LRCLIB is unreachable, Music Assistant is asked instead. Needs the Music Assistant connection.":
+      "settingSendspinLyricsFallbackDescription",
   "Lyrics timing": "settingSendspinLyricsOffsetTitle",
-  "Shift the lyrics against the music. Positive shows each line earlier, negative later. Worth a nudge on tracks that read consistently off.": "settingSendspinLyricsOffsetDescription",
+  "Shift the lyrics against the music. Positive shows each line earlier, negative later. Worth a nudge on tracks that read consistently off.":
+      "settingSendspinLyricsOffsetDescription",
   "Floating Player": "mediaFloatingPage",
   "The small card over the dashboard": "mediaFloatingHint",
   "Compact": "mediaCompact",
@@ -255,11 +312,15 @@ const mediaTextMessageIds = <String, String>{
   "This device cannot decode this video.": "dlnaCannotDecode",
   "This file could not be read.": "dlnaCannotRead",
   "This media could not be played.": "dlnaCannotPlay",
-  "The Sonos speakers this device knows, a search of the network and an address field.": "searchSonosSpeakers",
+  "The Sonos speakers this device knows, a search of the network and an address field.":
+      "searchSonosSpeakers",
   "Required system permissions": "deviceRequiredPermissions",
   "Notification access": "deviceNotificationAccess",
-  "Now Playing can follow the apps playing on this device.": "deviceNotificationAccessHeld",
-  "Without this Android lists no media sessions, so Now Playing cannot follow the apps playing on this device.": "deviceNotificationAccessMissing",
-  "Without this Android lists no media sessions, so Now Playing cannot follow the apps playing on this device. The grant screen appears on the tablet.": "mediaNotificationAccessRemote",
-  "Local Media Session": "mediaLocalMediaSession"
+  "Now Playing can follow the apps playing on this device.":
+      "deviceNotificationAccessHeld",
+  "Without this Android lists no media sessions, so Now Playing cannot follow the apps playing on this device.":
+      "deviceNotificationAccessMissing",
+  "Without this Android lists no media sessions, so Now Playing cannot follow the apps playing on this device. The grant screen appears on the tablet.":
+      "mediaNotificationAccessRemote",
+  "Local Media Session": "mediaLocalMediaSession",
 };

@@ -28,14 +28,22 @@ const overviewTextMessageIds = <String, String>{
   "Up to date": "overviewCurrent",
   "muted": "overviewMuted",
   "browser": "overviewBrowser",
-  "Waiting for Voice Satellite. The engine and wake words are configured by the integration once this device opens its dashboard.": "overviewWakeWaiting",
-  "Wake word detection is off. Turn it on to inherit models from Voice Satellite.": "overviewWakeDisabled",
-  "Microphone blocked. Android will not ask again, so allow it in the app settings, then retry.": "overviewMicBlocked",
-  "Microphone declined. Wake word detection needs it; retry to be asked again.": "overviewMicDeclined",
-  "The microphone stopped working. Retry, or reload the page.": "overviewMicLost",
-  "Could not download the models from Home Assistant. Retry once it is reachable.": "overviewModelsUnavailable",
-  "The detector kept crashing on this device, so it was stopped. Voice Satellite is listening in the browser instead. Retry, or restart the app.": "overviewCrashed",
-  "The wake-word engine could not start. Retry, or reload the page.": "overviewWakeFailed",
+  "Waiting for Voice Satellite. The engine and wake words are configured by the integration once this device opens its dashboard.":
+      "overviewWakeWaiting",
+  "Wake word detection is off. Turn it on to inherit models from Voice Satellite.":
+      "overviewWakeDisabled",
+  "Microphone blocked. Android will not ask again, so allow it in the app settings, then retry.":
+      "overviewMicBlocked",
+  "Microphone declined. Wake word detection needs it; retry to be asked again.":
+      "overviewMicDeclined",
+  "The microphone stopped working. Retry, or reload the page.":
+      "overviewMicLost",
+  "Could not download the models from Home Assistant. Retry once it is reachable.":
+      "overviewModelsUnavailable",
+  "The detector kept crashing on this device, so it was stopped. Voice Satellite is listening in the browser instead. Retry, or restart the app.":
+      "overviewCrashed",
+  "The wake-word engine could not start. Retry, or reload the page.":
+      "overviewWakeFailed",
   "Listening natively": "overviewNativeListening",
   "Ready (suspended during a voice session)": "overviewSuspended",
   "Needs attention": "overviewAttention",
@@ -48,10 +56,12 @@ const overviewTextMessageIds = <String, String>{
   "this release": "overviewThisRelease",
   "Update available": "overviewUpdateAvailable",
   "Home Assistant not set up": "overviewHaSetup",
-  "Connect the kiosk to Home Assistant to load a dashboard.": "overviewHaSetupHelp",
+  "Connect the kiosk to Home Assistant to load a dashboard.":
+      "overviewHaSetupHelp",
   "Set up": "overviewSetUp",
   "Home Assistant not validated": "overviewHaNotValidated",
-  "The URL and token have not passed a connection check this run. The kiosk retries every 30 seconds.": "overviewHaNotValidatedHelp",
+  "The URL and token have not passed a connection check this run. The kiosk retries every 30 seconds.":
+      "overviewHaNotValidatedHelp",
   "Open setup": "overviewOpenSetup",
   "Wake word detection stopped": "overviewWakeStopped",
   "The engine was released.": "overviewWakeReleased",
@@ -86,8 +96,10 @@ const overviewTextMessageIds = <String, String>{
   "Exit app": "overviewExit",
   "Brightness": "overviewBrightness",
   "Master Volume": "overviewVolume",
-  "Brightness is using an app-level fallback. Grant \"Modify system settings\" so the slider controls the panel's actual brightness.": "overviewBrightnessGrant",
-  "Restart this device? Kiosk Satellite comes back when it boots.": "overviewRestartQuestion",
+  "Brightness is using an app-level fallback. Grant \"Modify system settings\" so the slider controls the panel's actual brightness.":
+      "overviewBrightnessGrant",
+  "Restart this device? Kiosk Satellite comes back when it boots.":
+      "overviewRestartQuestion",
   "Cancel": "commonCancel",
   "Restart": "overviewRestart",
   "The device did not answer.": "mediaDeviceNoAnswer",
@@ -95,10 +107,12 @@ const overviewTextMessageIds = <String, String>{
   "Camera snapshot": "overviewSnapshotTitle",
   "Close": "commonClose",
   "OK": "commonOk",
-  "Update check failed. Can the device reach GitHub?": "overviewUpdateCheckFailed",
+  "Update check failed. Can the device reach GitHub?":
+      "overviewUpdateCheckFailed",
   "You are on the latest version.": "overviewLatest",
   "Install it from Needs attention.": "overviewInstallAttention",
-  "No camera view has any cameras yet. Add cameras to a view under Cameras first.": "overviewNoViewsWithCameras",
+  "No camera view has any cameras yet. Add cameras to a view under Cameras first.":
+      "overviewNoViewsWithCameras",
   "Could not show view": "overviewShowViewFailed",
   "Go to view": "overviewGoView",
   "Screen is off": "overviewScreenOffState",
@@ -106,5 +120,5 @@ const overviewTextMessageIds = <String, String>{
   "RAM": "overviewMemory",
   "Temp": "overviewTemperature",
   "Showing custom pages": "overviewShowingCustomPages",
-  "Headless mode": "overviewHeadlessMode"
+  "Headless mode": "overviewHeadlessMode",
 };

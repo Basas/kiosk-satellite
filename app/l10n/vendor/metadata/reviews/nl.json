@@ -26720,5 +26720,23 @@
     "translation": "e6cab9057c121efcbbd4aeb37bd348ebb470c5279d17db601eeb9c9b01289bc3",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingScreensaverClockNightTurnOffMinutesDescription": {
+    "source": "beb6abb3ad8b5e41c033a148ea48ea63b3515d21991b17981509778b345a4356",
+    "translation": "ed15b0d52341878af52142cfc2ae56c6f62943c38651bf167d4fa41632dcb013",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "screensaverNightTurnOffWarning": {
+    "source": "7200bd31ecf12dc11bc3ce5463b3f9c5dd235642e28381e07f7d66f9f8434006",
+    "translation": "920539936f6977fac4ac0fb5f0b9469f3326e5acd023b8d71154b80c2404e5d6",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverClockNightTurnOffMinutesTitle": {
+    "source": "dc3f7e733c5efc784c0b1336b0b1457cdbc70c0b26818fcd1787cf41c0f64f22",
+    "translation": "779f2afd303d8697cc8d0c25b668bf8f75ebe0aca28976a26e269e8f33ceacf8",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

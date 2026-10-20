@@ -10183,6 +10183,17 @@ class UiStringsZh extends UiStrings {
   String get settingScreensaverClockAmPmDescription => '在时间后显示 AM 或 PM。';
 
   @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle => '夜间关屏时间';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      '夜间模式持续设定时间后关闭屏幕，房间变亮时重新点亮。设为 0 时不关屏。需要设备管理器权限。';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      '屏幕真正关闭后，平板的电源管理会接管。许多 Android 设备在此状态下可能出现问题：Wi-Fi 休眠或断开、Home Assistant 实体不可用、摄像头访问权限被收回，部分型号甚至会终止后台应用。部分光线传感器在屏幕关闭后也会停止上报，因此房间变亮时屏幕可能不会自动亮起。具体表现取决于设备厂商。\n\n可靠的替代方案是开启“用黑屏替代关屏”。屏幕看起来同样黑暗，应用也能继续保持完整控制。';
+
+  @override
   String get screensaverOverlayEntity => '实体';
 
   @override
@@ -24386,6 +24397,17 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get settingScreensaverClockAmPmDescription => '在时间后显示 AM 或 PM。';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle => '夜间关屏时间';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      '夜间模式持续设定时间后关闭屏幕，房间变亮时重新点亮。设为 0 时不关屏。需要设备管理器权限。';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      '屏幕真正关闭后，平板的电源管理会接管。许多 Android 设备在此状态下可能出现问题：Wi-Fi 休眠或断开、Home Assistant 实体不可用、摄像头访问权限被收回，部分型号甚至会终止后台应用。部分光线传感器在屏幕关闭后也会停止上报，因此房间变亮时屏幕可能不会自动亮起。具体表现取决于设备厂商。\n\n可靠的替代方案是开启“用黑屏替代关屏”。屏幕看起来同样黑暗，应用也能继续保持完整控制。';
 
   @override
   String get screensaverOverlayEntity => '实体';

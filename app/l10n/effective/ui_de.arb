@@ -40280,6 +40280,45 @@
       ]
     }
   },
+  "settingScreensaverClockNightTurnOffMinutesTitle": "Bildschirm nachts ausschalten nach",
+  "@settingScreensaverClockNightTurnOffMinutesTitle": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverClockNightTurnOffMinutesDescription": "Schaltet den Bildschirm aus, wenn der Nachtmodus die angegebene Zeit aktiv war, und wieder ein, sobald es im Raum heller wird. Bei 0 bleibt der Bildschirm eingeschaltet. Erfordert die Geräteadministrator-Berechtigung.",
+  "@settingScreensaverClockNightTurnOffMinutesDescription": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverNightTurnOffWarning": "Wenn der Bildschirm vollständig ausgeschaltet wird, übernimmt das Energiemanagement des Tablets die Kontrolle. Viele Android-Geräte zeigen in diesem Zustand Probleme: WLAN wird in den Ruhezustand versetzt oder getrennt, Home-Assistant-Entitäten werden nicht verfügbar, der Kamerazugriff kann verloren gehen und manche Geräte beenden Anwendungen im Hintergrund. Manche Lichtsensoren liefern bei ausgeschaltetem Bildschirm außerdem keine Werte mehr, sodass sich der Bildschirm möglicherweise nicht von selbst wieder einschaltet, wenn es im Raum heller wird. Das Verhalten hängt vom Hersteller ab.\n\nDie zuverlässige Alternative ist „Stattdessen einen schwarzen Bildschirm verwenden“. Der Bildschirm wirkt genauso dunkel, während die Anwendung die Kontrolle behält.",
+  "@screensaverNightTurnOffWarning": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Warning before Night mode is allowed to power the screen off.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "screensaverOverlayEntity": "Entität",
   "@screensaverOverlayEntity": {
     "context": "Settings > Screensaver > Widgets > Entity widget or At a Glance > Entities",

@@ -10932,6 +10932,18 @@ class UiStringsDe extends UiStrings {
       'Zeigt AM oder PM nach der Uhrzeit an.';
 
   @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle =>
+      'Bildschirm nachts ausschalten nach';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      'Schaltet den Bildschirm aus, wenn der Nachtmodus die angegebene Zeit aktiv war, und wieder ein, sobald es im Raum heller wird. Bei 0 bleibt der Bildschirm eingeschaltet. Erfordert die Geräteadministrator-Berechtigung.';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      'Wenn der Bildschirm vollständig ausgeschaltet wird, übernimmt das Energiemanagement des Tablets die Kontrolle. Viele Android-Geräte zeigen in diesem Zustand Probleme: WLAN wird in den Ruhezustand versetzt oder getrennt, Home-Assistant-Entitäten werden nicht verfügbar, der Kamerazugriff kann verloren gehen und manche Geräte beenden Anwendungen im Hintergrund. Manche Lichtsensoren liefern bei ausgeschaltetem Bildschirm außerdem keine Werte mehr, sodass sich der Bildschirm möglicherweise nicht von selbst wieder einschaltet, wenn es im Raum heller wird. Das Verhalten hängt vom Hersteller ab.\n\nDie zuverlässige Alternative ist „Stattdessen einen schwarzen Bildschirm verwenden“. Der Bildschirm wirkt genauso dunkel, während die Anwendung die Kontrolle behält.';
+
+  @override
   String get screensaverOverlayEntity => 'Entität';
 
   @override

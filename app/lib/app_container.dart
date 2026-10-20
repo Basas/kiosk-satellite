@@ -100,7 +100,14 @@ class AppContainer {
     launcher = AppLauncherManager(bus, commands, log, settings);
     homeLauncher = HomeLauncherManager(bus, commands, log, settings);
     gestures = GesturesManager(bus, commands, log, settings);
-    screensaver = ScreensaverManager(bus, commands, log, settings);
+    screensaver = ScreensaverManager(
+      bus,
+      commands,
+      log,
+      settings,
+      // The reading the Clock screensaver's Night mode decides by.
+      lightReading: () => device.hasLightSensor ? device.lightLux : null,
+    );
     immich = ImmichManager(bus, commands, log, settings);
     // Before motion: its init runs the legacy motion-camera migration the
     // motion manager's gate reads.

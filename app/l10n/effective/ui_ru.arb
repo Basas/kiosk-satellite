@@ -40280,6 +40280,45 @@
       ]
     }
   },
+  "settingScreensaverClockNightTurnOffMinutesTitle": "Выключать экран ночью через",
+  "@settingScreensaverClockNightTurnOffMinutesTitle": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverClockNightTurnOffMinutesDescription": "Выключает экран, когда ночной режим длится заданное время, и снова включает, когда в комнате становится светлее. 0: не выключать экран. Требуется разрешение администратора устройства.",
+  "@settingScreensaverClockNightTurnOffMinutesDescription": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverNightTurnOffWarning": "Когда дисплей действительно выключится, управление возьмёт собственное энергосбережение планшета. Многие модели Android ведут себя в этом состоянии плохо: Wi-Fi засыпает или отключается, сущности Home Assistant становятся недоступными, камера может быть отозвана, а некоторые модели убивают фоновые приложения. Некоторые датчики освещённости также перестают передавать данные при выключенном дисплее, поэтому экран может не включиться сам, когда в комнате станет светлее. Поведение зависит от производителя.\n\nНадёжная альтернатива: параметр «Использовать чёрный экран вместо этого». Панель выглядит столь же тёмной, а приложение сохраняет полный контроль.",
+  "@screensaverNightTurnOffWarning": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Warning before Night mode is allowed to power the screen off.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "screensaverOverlayEntity": "Сущность",
   "@screensaverOverlayEntity": {
     "context": "Settings > Screensaver > Widgets > Entity widget or At a Glance > Entities",

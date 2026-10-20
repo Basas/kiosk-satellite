@@ -145,8 +145,14 @@ Changes apply live while the clock is running, and writing an empty value clears
 | Hide background photo | Disabled by default. Hides the photo while Night mode is active so the clock uses the Night background color. Works with every clock face and restores the photo when the room brightens. Changes apply immediately. |
 | Hide widgets and At a Glance | Disabled by default. Hides the corner widgets and the At a Glance row while Night mode is active, leaving only the clock. Both come back when the room brightens. Changes apply immediately. |
 | Night card color | Flip Clock face only. Sets the card color in the dark (near-black by default). |
+| Turn screen off at night after | Configurable from 0 to 60 minutes (0 by default, which keeps the screen on). Turns the screen off once Night mode has lasted the set time and back on when the room brightens. A warning comes up when it is first moved off 0, because some devices misbehave with the display off. Needs the Device Administrator permission, shown under **Required system permissions** at the end of the page. |
+| Use a black screen instead | Disabled by default. Shows a black screen at zero brightness instead of powering off the display. No Device Administrator permission is needed. |
 
 **Let alarms take over** (on by default) makes a ringing [alarm](alarms.md) show on the Clock screensaver in its own style: the date line becomes the alarm's label and Snooze and Stop come in under the clock in the clock's colors, Night mode included. Turn it off to ring on the alarm's own screen instead.
+
+**Turn screen off at night after** only applies while the Clock screensaver is showing, including when a schedule picks it. A voice conversation, a ringing alarm, the Now Playing view or another app keeps the screen on and the countdown starts over afterwards. Every wake that leaves the screensaver up also starts the countdown over. The screen comes back on once the light rises past **Light level** by a quarter, or when the slider is set to 0 or Night mode is turned off. A screen turned off by hand or by **Turn screen off after** stays off.
+
+Some light sensors stop reporting while the display is off. On those devices the screen cannot come back on by itself in the morning, so use **Use a black screen instead**. If the Device Administrator permission is missing, the screen stays on and no permission prompt appears at night.
 
 ### Home Assistant Media
 

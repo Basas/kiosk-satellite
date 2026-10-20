@@ -40280,6 +40280,45 @@
       ]
     }
   },
+  "settingScreensaverClockNightTurnOffMinutesTitle": "Вимикати екран уночі через",
+  "@settingScreensaverClockNightTurnOffMinutesTitle": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverClockNightTurnOffMinutesDescription": "Вимикає екран, коли нічний режим триває зазначений час, і знову вмикає, коли в кімнаті стає світліше. Встановіть 0, щоб екран не вимикався. Вимагає дозволу адміністратора пристрою.",
+  "@settingScreensaverClockNightTurnOffMinutesDescription": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverNightTurnOffWarning": "Коли дисплей повністю вимикається, керування переходить до системи енергозбереження планшета. Багато моделей Android у такому стані працюють нестабільно: Wi-Fi може засинати або відключатися, сутності Home Assistant стають недоступними, доступ до камери може скасовуватися, а деякі пристрої закривають фонові програми. Деякі датчики освітлення також перестають передавати дані, коли дисплей вимкнено, тому екран може не ввімкнутися сам, коли в кімнаті стане світліше. Поведінка залежить від виробника.\n\nНадійною альтернативою є «Використовувати чорний екран замість вимкнення». Екран виглядає так само темно, а застосунок зберігає повний контроль.",
+  "@screensaverNightTurnOffWarning": {
+    "context": "Settings:Screensaver:Clock screensaver:Night mode",
+    "description": "Warning before Night mode is allowed to power the screen off.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "screensaverOverlayEntity": "Сутність",
   "@screensaverOverlayEntity": {
     "context": "Settings > Screensaver > Widgets > Entity widget or At a Glance > Entities",

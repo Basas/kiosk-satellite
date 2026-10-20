@@ -68,5 +68,5 @@ const navigationMessageIds = <String, String>{
   "Effects": "settingsLedEffects",
   "Calendar": "settingsMenuCalendar",
   "Family calendars from Home Assistant": "settingsMenuCalendarSummary",
-  "Household": "settingsGroupHousehold"
+  "Household": "settingsGroupHousehold",
 };
