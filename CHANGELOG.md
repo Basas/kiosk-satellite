@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Fixed
+- **Disabled plugins no longer offer their voice skin.** The Voice Satellite **Skin** picker listed the skin of a disabled plugin, and picking it showed the default skin instead. It now lists plugin skins only while the plugin is enabled, on the device and in the remote admin.
+
 ## v2026.10.33 - 2026-10-20
 
 ### Added

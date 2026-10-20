@@ -162,10 +162,13 @@ class PluginManager extends Manager implements FleetPluginHost {
           '${entry.value['title']} (${installed.value.where((p) => p['id'] == entry.value['pluginId']).firstOrNull?['name'] ?? entry.value['pluginId']})',
   };
 
-  /// Installed plugins that offer a voice skin, by the Skin setting's value.
+  /// Enabled plugins that offer a voice skin, by the Skin setting's value.
+  /// A disabled plugin cannot draw its skin, so it is not offered.
   Map<String, String> get voiceSkinOptions => {
     for (final plugin in installed.value)
-      if ((plugin['capabilities'] as List? ?? const []).contains('voice.skin'))
+      if (enabled.value &&
+          plugin['enabled'] == true &&
+          (plugin['capabilities'] as List? ?? const []).contains('voice.skin'))
         'plugin:${plugin['id']}': '${plugin['name'] ?? plugin['id']}',
   };
 
