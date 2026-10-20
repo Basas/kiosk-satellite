@@ -117,6 +117,8 @@ class PluginHostApi {
     'showLinkPage',
     'hideOverlayPage',
     'showMusicAssistant',
+    'openCalendar',
+    'hideCalendar',
     'loadUrl',
     'loadDashboard',
     'loadStartUrl',
@@ -225,6 +227,20 @@ class PluginHostApi {
             const ['http', 'https'].contains(uri.scheme) &&
             uri.host.isNotEmpty &&
             uri.userInfo.isEmpty;
+      case 'openCalendar':
+        final date = params['date'];
+        return keys({'view', 'date'}) &&
+            (!params.containsKey('view') ||
+                const [
+                  'day',
+                  'week',
+                  'month',
+                  'schedule',
+                ].contains(params['view'])) &&
+            (date == null ||
+                (date is String &&
+                    RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(date) &&
+                    DateTime.tryParse(date) != null));
       case 'loadDashboard':
         return keys({'dashboard'}) && path('dashboard');
       case 'haNavigate':

@@ -125,6 +125,7 @@ void main() {
         'showOverlayPage': {'url': 'https://example.com'},
         'showLinkPage': {'url': 'http://example.com'},
         'loadUrl': {'url': 'https://example.com'},
+        'openCalendar': {'view': 'week', 'date': '2026-10-22'},
         'loadDashboard': {'dashboard': 'lovelace'},
         'haNavigate': {'path': 'lovelace/home'},
       };
@@ -198,6 +199,13 @@ void main() {
           {},
           {'muted': 'true'},
           {'muted': true, 'extra': true},
+        ],
+        'openCalendar': [
+          {'view': 'year'},
+          {'view': true},
+          {'date': 'tomorrow'},
+          {'date': '2026-10-22T09:00'},
+          {'view': 'day', 'highlight': 'x'},
         ],
         'haNavigate': [
           {'path': '../config'},
