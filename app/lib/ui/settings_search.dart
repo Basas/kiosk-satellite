@@ -175,6 +175,14 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
     anchorId: "x:calendar_add",
   ),
   SettingsSearchEntry(
+    category: "Calendar",
+    title: "Manage the calendar using Voice Satellite",
+    description:
+        "Needs the Kiosk Satellite calendar blueprint and an LLM conversation "
+        "agent in Home Assistant.",
+    anchorId: "x:calendar_voice",
+  ),
+  SettingsSearchEntry(
     category: "Alarms",
     title: "Manage alarms using Voice Satellite",
     description:

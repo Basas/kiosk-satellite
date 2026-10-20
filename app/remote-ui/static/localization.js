@@ -143,6 +143,9 @@ function browserPageText(english) {
 const CALENDAR_PAGE_TEXT = {
   'Add a calendar': 'calendarAdd',
   'Add the Home Assistant calendars to show in Settings > Calendar.': 'calendarEmptyHint',
+  'Voice Calendar': 'calendarVoiceSection',
+  'Manage the calendar using Voice Satellite': 'calendarVoiceManage',
+  'Needs the Kiosk Satellite calendar blueprint and an LLM conversation agent in Home Assistant.': 'calendarVoiceHint',
 };
 
 function calendarPageText(english) {

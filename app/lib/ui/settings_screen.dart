@@ -212,6 +212,8 @@ const _analyticsIntro =
 const _analyticsDocsUrl = 'https://kiosksatellite.com/docs/analytics/';
 const _voiceAlarmsDocsUrl =
     'https://kiosksatellite.com/docs/alarms/#setting-alarms-by-voice';
+const _voiceCalendarDocsUrl =
+    'https://kiosksatellite.com/docs/calendar/#managing-the-calendar-by-voice';
 
 // The Updates page closes with a link to the custom repository guide: the
 // folder layout, the releases file and the APK names live in the docs, not
@@ -2409,7 +2411,8 @@ class _CategoryContentState extends State<_CategoryContent> {
         else if (widget.category == 'Calendar') ...[
           // Open calendar, then the calendars themselves (hand-built, the
           // Alarms list's twin), then Display and Kiosk from the
-          // definitions. Mirrored on the remote's Calendar page.
+          // definitions, then Voice Calendar. Mirrored on the remote's
+          // Calendar page.
           CalendarOpenCard(container: container),
           SectionHeading(l10n(context).calendarCalendarsSection),
           CalendarSourcesCard(container: container),
@@ -2419,6 +2422,28 @@ class _CategoryContentState extends State<_CategoryContent> {
             () => setState(() {}),
             replace: _rowReplacements(container),
             after: _rowExtras(container),
+          ),
+          // The calendar by voice lives in Home Assistant (the blueprint),
+          // so this group only points at the guide, as Voice Alarms does.
+          SectionHeading(l10n(context).calendarVoiceSection),
+          SettingsCard(
+            children: [
+              SearchLandingTarget(
+                id: 'x:calendar_voice',
+                child: SettingsRow(
+                  leading: const Icon(Icons.record_voice_over_outlined),
+                  title: Text(l10n(context).calendarVoiceManage),
+                  subtitle: Text(l10n(context).calendarVoiceHint),
+                  trailing: const Icon(Icons.open_in_new),
+                  onTap: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    container.commands.execute('showLinkPage', {
+                      'url': _voiceCalendarDocsUrl,
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
         ] else if (widget.category == 'Alarms') ...[
           // Show in the kiosk menu on its own untitled card, then the list

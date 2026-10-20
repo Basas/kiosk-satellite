@@ -55,6 +55,8 @@ export const SEARCH_EXTRAS = [
   { tab: 'device', title: 'TLS', sub: 'TLS', desc: 'Connection encryption and certificates' },
   { tab: 'calendar', title: 'Add a calendar',
     desc: 'Add the Home Assistant calendars to show in Settings > Calendar.', anchor: 'x:calendar_add' },
+  { tab: 'calendar', title: 'Manage the calendar using Voice Satellite',
+    desc: 'Needs the Kiosk Satellite calendar blueprint and an LLM conversation agent in Home Assistant.', anchor: 'x:calendar_voice' },
   { tab: 'alarms', title: 'Manage alarms using Voice Satellite',
     desc: 'Needs the Kiosk Satellite alarms blueprint and an LLM conversation agent in Home Assistant.', anchor: 'x:alarms_voice' },
   { tab: 'device', title: 'Learn how we process your data',

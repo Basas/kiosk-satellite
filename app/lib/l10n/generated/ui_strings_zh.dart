@@ -484,6 +484,16 @@ class UiStringsZh extends UiStrings {
   String get calendarWidgetEvents => '显示的日程数';
 
   @override
+  String get calendarVoiceSection => '语音日历';
+
+  @override
+  String get calendarVoiceManage => '通过 Voice Satellite 管理日历';
+
+  @override
+  String get calendarVoiceHint =>
+      '需要在 Home Assistant 中配置 Kiosk Satellite 日历蓝图（脚本模板）和大语言模型（LLM）对话代理。';
+
+  @override
   String get cameraViewerTitle => '摄像头画面';
 
   @override
@@ -14279,6 +14289,16 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get calendarWidgetEvents => '显示的日程数';
+
+  @override
+  String get calendarVoiceSection => '语音日历';
+
+  @override
+  String get calendarVoiceManage => '通过 Voice Satellite 管理日历';
+
+  @override
+  String get calendarVoiceHint =>
+      '需要在 Home Assistant 中配置 Kiosk Satellite 日历蓝图（脚本模板）和大语言模型（LLM）对话代理。';
 
   @override
   String get cameraViewerTitle => '摄像头画面';

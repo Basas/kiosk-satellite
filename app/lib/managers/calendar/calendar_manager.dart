@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
@@ -11,6 +12,7 @@ import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
 import '../voice/ha_socket.dart';
 import 'calendar_model.dart';
+import 'calendar_requests.dart';
 
 /// How the events reach the kiosk right now.
 enum CalendarLink {
@@ -76,6 +78,9 @@ class DayForecast {
 /// What the overlay opens on: a view and a day, or the defaults.
 typedef CalendarOpening = ({String? view, DateTime? date});
 
+/// The event a voice request was about, ringed on screen for a moment.
+typedef CalendarHighlight = ({String summary, DateTime start});
+
 /// The family calendar: Home Assistant's calendar entities, read only.
 ///
 /// The calendars and their colors live in `calendar.calendars`. The
@@ -84,7 +89,7 @@ typedef CalendarOpening = ({String? view, DateTime? date});
 /// open, the Up next widget while the screensaver shows it. Each enabled
 /// calendar gets its own `calendar/event/subscribe` over one socket, and
 /// [mergeEvents] folds an event on several calendars into one.
-class CalendarManager extends Manager {
+class CalendarManager extends Manager implements CalendarStore {
   CalendarManager(
     super.bus,
     super.commands,
@@ -119,6 +124,16 @@ class CalendarManager extends Manager {
 
   /// The full screen calendar is up.
   final visible = ValueNotifier<bool>(false);
+
+  /// The event a voice request added, found or changed, until it fades.
+  final highlight = ValueNotifier<CalendarHighlight?>(null);
+  Timer? _highlightEnd;
+
+  /// Voice Satellite's answer is on screen, likely over the ringed event.
+  bool _assistShown = false;
+
+  /// Requests from the Kiosk Satellite calendar script.
+  late final requests = CalendarRequests(_settings, this, clock: _clock);
 
   /// Set by [open] just before [visible] goes true: the view and day the
   /// overlay starts on.
@@ -164,6 +179,7 @@ class CalendarManager extends Manager {
   String get name => 'calendar';
 
   /// The calendars that are on, in order.
+  @override
   List<CalendarSource> get enabled => [
     for (final c in calendars.value)
       if (c.on) c,
@@ -205,6 +221,12 @@ class CalendarManager extends Manager {
         }),
       )
       ..add(
+        bus.on<AssistOverlayVisibility>().listen((e) {
+          _assistShown = e.visible;
+          if (!e.visible && highlight.value != null) _fadeHighlight();
+        }),
+      )
+      ..add(
         // An abandoned calendar gives way to the screensaver, as the app
         // launcher and the alarm list do.
         bus.on<ScreensaverStateChanged>().listen((e) {
@@ -218,12 +240,14 @@ class CalendarManager extends Manager {
     _check?.cancel();
     _poll?.cancel();
     _close?.cancel();
+    _highlightEnd?.cancel();
     for (final sub in _subs) {
       await sub.cancel();
     }
     await _unsubscribeAll();
     await _socket.close();
     visible.dispose();
+    highlight.dispose();
     reopened.dispose();
     shownView.dispose();
     calendars.dispose();
@@ -273,15 +297,151 @@ class CalendarManager extends Manager {
   Future<void> saveCalendars(List<CalendarSource> list) =>
       _settings.set(defs.calendarCalendars, encodeCalendars(list));
 
-  Future<void> open({String? view, DateTime? date}) async {
+  Future<void> open({
+    String? view,
+    DateTime? date,
+    CalendarHighlight? highlight,
+  }) async {
     unawaited(UsageCounters.bump(_settings, 'calendar_opens'));
     await commands.execute('screenOn', const {});
     await commands.execute('bringToFront', const {});
     await commands.execute('stopScreensaver', const {});
     opening = (view: view, date: date);
+    this.highlight.value = highlight;
+    if (highlight != null) _fadeHighlight();
     // Already up: the open calendar moves to where it was asked to.
     if (visible.value) reopened.value++;
     visible.value = true;
+  }
+
+  /// The ring stays while Voice Satellite's answer covers the calendar,
+  /// then a little longer, so it is seen. Two minutes at the most.
+  void _fadeHighlight() {
+    _highlightEnd?.cancel();
+    _highlightEnd = Timer(
+      _assistShown ? const Duration(minutes: 2) : const Duration(seconds: 12),
+      () => highlight.value = null,
+    );
+  }
+
+  @override
+  Future<void> show({
+    required String view,
+    required DateTime date,
+    CalendarHighlight? highlight,
+  }) => open(view: view, date: date, highlight: highlight);
+
+  // ── Voice requests ────────────────────────────────────────────────────
+
+  /// Every enabled calendar's own events from [from] up to [to], read once
+  /// from Home Assistant's REST API. Unlike `calendar.get_events` it keeps
+  /// each event's uid and recurrence id, which a change or a cancel needs.
+  /// A calendar that cannot be read is left out, and when none can be the
+  /// read fails.
+  @override
+  Future<Map<String, List<CalendarEvent>>> readEvents(
+    DateTime from,
+    DateTime to,
+  ) async {
+    final base = _settings
+        .get(defs.haUrl)
+        .trim()
+        .replaceFirst(RegExp(r'/+$'), '');
+    final token = _settings.get(defs.haToken);
+    if (base.isEmpty || token.isEmpty) {
+      throw StateError('Home Assistant is not set up on this kiosk');
+    }
+    final out = <String, List<CalendarEvent>>{};
+    Object? failure;
+    await Future.wait([
+      for (final c in enabled)
+        () async {
+          try {
+            final response = await http
+                .get(
+                  Uri.parse('$base/api/calendars/${c.entity}').replace(
+                    queryParameters: {
+                      'start': from.toUtc().toIso8601String(),
+                      'end': to.toUtc().toIso8601String(),
+                    },
+                  ),
+                  headers: {'Authorization': 'Bearer $token'},
+                )
+                .timeout(const Duration(seconds: 15));
+            if (response.statusCode != 200) {
+              throw StateError('HTTP ${response.statusCode}');
+            }
+            final body = jsonDecode(response.body);
+            out[c.entity] = [
+              if (body is List)
+                for (final item in body) ?parseHaEvent(item, c.entity),
+            ];
+          } catch (e) {
+            failure = e;
+            log.warn('calendar', 'reading ${c.entity} failed: $e');
+          }
+        }(),
+    ]);
+    if (out.isEmpty && failure != null) {
+      throw StateError('the calendars could not be read: $failure');
+    }
+    return out;
+  }
+
+  @override
+  Future<void> createEvent(String entity, CalendarDraft draft) => _write({
+    'type': 'calendar/event/create',
+    'entity_id': entity,
+    'event': draft.toHa(),
+  });
+
+  /// One event or one occurrence of a repeating one. A repeating event's
+  /// other days stay as they are.
+  @override
+  Future<void> updateEvent(
+    String entity,
+    CalendarEvent event,
+    CalendarDraft draft,
+  ) => _write({
+    'type': 'calendar/event/update',
+    'entity_id': entity,
+    'uid': event.uid,
+    'recurrence_id': ?event.recurrenceId,
+    'event': draft.toHa(),
+  });
+
+  /// [scope] is `this` (the one day), `following` (that day and the ones
+  /// after it) or `all` (the whole series). An event that does not repeat
+  /// goes whatever the scope.
+  @override
+  Future<void> deleteEvent(String entity, CalendarEvent event, String scope) =>
+      _write({
+        'type': 'calendar/event/delete',
+        'entity_id': entity,
+        'uid': event.uid,
+        if (event.recurrenceId != null && scope != 'all') ...{
+          'recurrence_id': event.recurrenceId,
+          if (scope == 'following') 'recurrence_range': 'THISANDFUTURE',
+        },
+      });
+
+  Future<void> _write(Map<String, Object?> message) async {
+    try {
+      await _socket.request(message, timeout: const Duration(seconds: 20));
+    } finally {
+      if (_windows.isEmpty) {
+        // Nothing on screen holds the socket open: close it as a screen
+        // letting go would.
+        _close?.cancel();
+        _close = Timer(closeAfter, () {
+          _close = null;
+          if (_windows.isEmpty) unawaited(_socket.close());
+        });
+      } else if (_polled) {
+        // A live link hears the change by itself. A polled one asks now.
+        unawaited(_fetch(_generation));
+      }
+    }
   }
 
   // ── Home Assistant ────────────────────────────────────────────────────
@@ -663,6 +823,24 @@ class CalendarManager extends Manager {
             );
             return const CommandResult.ok();
           },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'calendarVoiceRequest',
+          description:
+              'What the Kiosk Satellite calendar script asks for, answered '
+              'in the shape the script hands back to the LLM.',
+          params: const {
+            'action': 'add, find, change, cancel or show',
+            'title': 'The event\'s title, or words to find it by',
+            'start': 'yyyy-MM-dd, or yyyy-MM-dd HH:mm',
+            'end': 'yyyy-MM-dd, or yyyy-MM-dd HH:mm',
+            'people': 'Calendar or person names',
+          },
+          // The voice requests manager logs each one with its outcome.
+          quiet: true,
+          handler: (p) async => CommandResult.ok(await requests.handle(p)),
         ),
       )
       ..register(

@@ -454,6 +454,13 @@ String settingsPageText(
     'Add the Home Assistant calendars to show in Settings > Calendar.' => l10n(
       context,
     ).calendarEmptyHint,
+    'Voice Calendar' => l10n(context).calendarVoiceSection,
+    'Manage the calendar using Voice Satellite' => l10n(
+      context,
+    ).calendarVoiceManage,
+    'Needs the Kiosk Satellite calendar blueprint and an LLM conversation '
+        'agent in Home Assistant.' =>
+      l10n(context).calendarVoiceHint,
     _ => english,
   },
   'Alarms' => switch (english) {

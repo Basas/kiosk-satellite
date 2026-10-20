@@ -50,5 +50,8 @@
   "calendarColorRose": "Roze",
   "calendarColorSlate": "Leisteen",
   "calendarColorCustom": "Aangepast",
-  "calendarWidgetEvents": "Getoonde afspraken"
+  "calendarWidgetEvents": "Getoonde afspraken",
+  "calendarVoiceSection": "Agenda via spraak",
+  "calendarVoiceManage": "Agenda beheren met Voice Satellite",
+  "calendarVoiceHint": "Vereist de agendablauwdruk van Kiosk Satellite en een LLM-gespreksagent in Home Assistant."
 }

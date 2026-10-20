@@ -25887,5 +25887,23 @@
     "translation": "dde723f18925add137d68f70b04bd2390bc19aece4a5bb5c971bc91c5c997f66",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "calendarVoiceSection": {
+    "source": "ec85ee3e00999a98ea3f426a7b1c36431793b032235dbc172d5788bfb23dc2dc",
+    "translation": "b667245bc123c43436aabda34eb7e8220d9d6a2399018aa9787ce5a247ad96f1",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "calendarVoiceManage": {
+    "source": "a2aba5b821b1f5f79d19cf091ab96af4285661ab602db3604504baeab80f051c",
+    "translation": "795a345661a8c1c0c292219a412bf3aa89c4a98dc57417d46f1129ef34d5c14c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "calendarVoiceHint": {
+    "source": "e5b0c11654247297919b25c3280a943dc079ea39ce3cdc89de019d699e1210f7",
+    "translation": "a75af7c0c1f9e0e3382bcda19596e50060be59e2cd15ef4f411ed105c21e90f8",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

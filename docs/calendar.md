@@ -1,8 +1,8 @@
 # Calendar
 
-Kiosk Satellite shows your Home Assistant calendars as a family calendar on the kiosk. Each calendar gets a color and an optional person, and an event that is on more than one calendar is drawn once with its background split on a diagonal between their colors. The calendar is read only on the kiosk. Add and change events in Home Assistant or in the calendar apps it syncs with.
+Kiosk Satellite shows your Home Assistant calendars as a family calendar on the kiosk. Each calendar gets a color and an optional person, and an event that is on more than one calendar is drawn once with its background split on a diagonal between their colors. The calendar is read only on the touch screen. Add and change events in Home Assistant, in the calendar apps it syncs with or [by voice](#managing-the-calendar-by-voice).
 
-Open it from **Calendar** in the kiosk menu, from **Open calendar** under **Settings, Calendar**, from the **Up next** screensaver widget, from an **Open the calendar** [gesture](gestures.md), from a dashboard button pointed at `ks://calendar` (see [Dashboard Links](dashboard-links.md)) or from Home Assistant with the ESPHome **Calendar view** select (see [ESPHome](esphome.md)).
+Open it from **Calendar** in the kiosk menu, from **Open calendar** under **Settings, Calendar**, from the **Up next** screensaver widget, from an **Open the calendar** [gesture](gestures.md), from a dashboard button pointed at `ks://calendar` (see [Dashboard Links](dashboard-links.md)), from Home Assistant with the ESPHome **Calendar view** select (see [ESPHome](esphome.md)) or [by voice](#managing-the-calendar-by-voice).
 
 ## Adding calendars
 
@@ -60,6 +60,47 @@ The kiosk reads the calendars only while something on screen needs them: the cal
 On Home Assistant 2026.5 and later each calendar is a live subscription, so a change in Home Assistant shows on the kiosk within seconds. Older versions are asked for the events every five minutes and when the view moves. Recurring events come from Home Assistant already expanded.
 
 If Home Assistant is not reachable, the calendar keeps the events it has and says when they were last updated.
+
+## Managing the calendar by voice
+
+Home Assistant can only list events by voice, for today or the coming week, and has no way to add, move or cancel them. Kiosk Satellite ships a blueprint for an LLM conversation agent (Qwen, Gemma, Gemini, Claude, OpenAI or any other agent that can control Home Assistant) that does all of it on the calendars added to the kiosk. The agent understands the request in any language it speaks.
+
+The built-in **Home Assistant** conversation agent does not work for this. It only matches sentences against Home Assistant's own intents and cannot fill in the script's title, times or people. An LLM agent with **Prefer handling commands locally** turned on works fine.
+
+1. Import the blueprint:
+
+    [![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fjxlarrea%2Fkiosk-satellite%2Fblob%2Fmain%2Fblueprints%2Fscript%2Fkiosk_satellite_calendar.yaml)
+
+2. Create a script from it. Turn off **Show on the kiosk** if the calendar should stay closed while you ask.
+3. Expose the script to Assist under **Settings, Voice assistants, Expose**.
+
+Then ask the kiosk:
+
+| Ask | What happens |
+| --- | --- |
+| "Add soccer practice for Leo on Thursday at 4" | A new event on Leo's calendar, an hour long unless you say when it ends. |
+| "Add dinner with Sam and Maya on Friday at 7" | The event goes on both calendars and shows once, split between their colors. |
+| "Add a camping trip for everyone from Friday to Sunday" | An all-day event of three days on every calendar. |
+| "What's on tomorrow?" or "What does Leo have next week?" | The agent reads out the events, with whose they are. |
+| "When is the dentist?" | It looks up to six months ahead. |
+| "Move the dentist to 3" or "Move the dentist to Friday" | A new time keeps the day, a new day keeps the time, and the length stays the same. |
+| "Rename Friday's dinner to pizza night" | A new title. A new place works the same way. |
+| "Cancel Leo's soccer practice on Thursday" | That day only. Say "every time" to cancel the whole series, or "from Thursday on" to end it there. |
+| "Show me next week" | The calendar opens on that week. |
+
+[Realtime conversations](voice-satellite.md#realtime-conversations) manage the calendar the same way: with **Tools** on **Home Assistant**, the model sees the exposed script and calls it while the conversation runs.
+
+The kiosk you are talking to opens the calendar on the day the request is about, and an event it added, found or changed has a ring around it for a few seconds. Any touch clears the ring.
+
+The kiosk finds the people by the names of its calendars, their entities and their people, so "Leo" finds a calendar named Leo or one linked to `person.leo`. Everyone, all or family (with no calendar called that) means every calendar. An event added for no one in particular goes on the first calendar in the list. If the agent names someone with no calendar, it asks which one to use.
+
+When more than one event matches a change or a cancel, or the event repeats and you did not say which day, the agent asks which one. An event on several calendars changes or goes on all of them. Only calendars whose integration can take new events, change them or delete them can be changed by voice, such as Local Calendar, Google Calendar and CalDAV. A holiday calendar is read only. The agent says so when a calendar cannot do what you asked.
+
+A request typed into Home Assistant's own chat reaches no kiosk until it names one, as in "add the dentist on the kitchen kiosk", which matches the kiosk's device name or ESPHome name. A kiosk named that way changes the calendar but does not open it.
+
+The kiosk listens for the script over its own Home Assistant connection, so the long-lived token under **Settings, Home Assistant** has to belong to an administrator, the same as [voice alarms](alarms.md#setting-alarms-by-voice) and [calls by voice](intercom.md#calling-by-voice). With any other token the kiosk does not listen for the script and the agent says that no kiosk answered.
+
+**Manage the calendar using Voice Satellite** under **Settings, Calendar, Voice Calendar** and on the remote admin's **Calendar** page opens this guide.
 
 ## Fleet
 

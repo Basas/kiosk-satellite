@@ -490,6 +490,16 @@ class UiStringsEn extends UiStrings {
   String get calendarWidgetEvents => 'Events shown';
 
   @override
+  String get calendarVoiceSection => 'Voice Calendar';
+
+  @override
+  String get calendarVoiceManage => 'Manage the calendar using Voice Satellite';
+
+  @override
+  String get calendarVoiceHint =>
+      'Needs the Kiosk Satellite calendar blueprint and an LLM conversation agent in Home Assistant.';
+
+  @override
   String get cameraViewerTitle => 'Camera view';
 
   @override

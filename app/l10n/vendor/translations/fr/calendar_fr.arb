@@ -50,5 +50,8 @@
   "calendarColorRose": "Rose",
   "calendarColorSlate": "Ardoise",
   "calendarColorCustom": "Personnalisée",
-  "calendarWidgetEvents": "Événements affichés"
+  "calendarWidgetEvents": "Événements affichés",
+  "calendarVoiceSection": "Calendrier vocal",
+  "calendarVoiceManage": "Gérer le calendrier avec Voice Satellite",
+  "calendarVoiceHint": "Nécessite le blueprint de calendrier de Kiosk Satellite et un agent de conversation LLM dans Home Assistant."
 }

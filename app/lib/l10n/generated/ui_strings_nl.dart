@@ -491,6 +491,16 @@ class UiStringsNl extends UiStrings {
   String get calendarWidgetEvents => 'Getoonde afspraken';
 
   @override
+  String get calendarVoiceSection => 'Agenda via spraak';
+
+  @override
+  String get calendarVoiceManage => 'Agenda beheren met Voice Satellite';
+
+  @override
+  String get calendarVoiceHint =>
+      'Vereist de agendablauwdruk van Kiosk Satellite en een LLM-gespreksagent in Home Assistant.';
+
+  @override
   String get cameraViewerTitle => 'Cameraweergave';
 
   @override

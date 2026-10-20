@@ -494,6 +494,17 @@ class UiStringsRu extends UiStrings {
   String get calendarWidgetEvents => 'Показано событий';
 
   @override
+  String get calendarVoiceSection => 'Голосовой календарь';
+
+  @override
+  String get calendarVoiceManage =>
+      'Управление календарём через Voice Satellite';
+
+  @override
+  String get calendarVoiceHint =>
+      'Требуются Blueprint календаря Kiosk Satellite и диалоговый LLM-агент в Home Assistant.';
+
+  @override
   String get cameraViewerTitle => 'Вид камер';
 
   @override

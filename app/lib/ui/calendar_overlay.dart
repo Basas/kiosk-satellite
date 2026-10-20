@@ -518,7 +518,11 @@ class _CalendarScreenState extends State<_CalendarScreen> {
     final layout = calendarLayout(MediaQuery.sizeOf(context));
     final s = l10n(context);
     return Listener(
-      onPointerDown: (_) => _armIdle(),
+      onPointerDown: (_) {
+        _armIdle();
+        // A touch means the ring has been seen.
+        cal.highlight.value = null;
+      },
       child: GestureDetector(
         // The ground only shields the dashboard underneath.
         behavior: HitTestBehavior.opaque,
@@ -534,6 +538,7 @@ class _CalendarScreenState extends State<_CalendarScreen> {
                 cal.snapshot,
                 cal.forecast,
                 cal.pictures,
+                cal.highlight,
               ]),
               builder: (context, _) {
                 final narrow = layout == CalendarLayout.narrow;
@@ -655,6 +660,7 @@ class _CalendarScreenState extends State<_CalendarScreen> {
       onEvent: _show,
       onDay: _openDay,
       onSelect: _select,
+      highlight: c.calendar.highlight.value,
     );
     if (narrow) {
       return switch (_view) {
@@ -685,7 +691,26 @@ class _ViewArgs {
     required this.onEvent,
     required this.onDay,
     required this.onSelect,
+    this.highlight,
   });
+
+  /// The event a voice request was about, ringed until it fades.
+  final CalendarHighlight? highlight;
+
+  /// The ringed event's start when it is a timed one on [day], for the
+  /// Day timeline to scroll to.
+  DateTime? focusOn(DateTime day) {
+    final at = highlight?.start;
+    if (at == null || dateOnly(at) != day) return null;
+    return at == day ? null : at;
+  }
+
+  bool lit(CalendarEvent e) {
+    final h = highlight;
+    return h != null &&
+        e.start == h.start &&
+        e.summary.toLowerCase() == h.summary.toLowerCase();
+  }
 
   final AppContainer container;
   final CalendarPaint paint;
@@ -1308,6 +1333,7 @@ class _Tile extends StatelessWidget {
     required this.child,
     required this.onTap,
     this.height,
+    this.lit = false,
   });
 
   final List<Color> colors;
@@ -1317,8 +1343,34 @@ class _Tile extends StatelessWidget {
   final VoidCallback onTap;
   final double? height;
 
+  /// The event a voice request was about: a ring fades in around it.
+  final bool lit;
+
   @override
-  Widget build(BuildContext context) => CustomPaint(
+  Widget build(BuildContext context) {
+    final tile = _tile();
+    if (!lit) return tile;
+    final ring = Theme.of(context).colorScheme.onSurface;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 450),
+      curve: Curves.easeOut,
+      builder: (context, t, child) => DecoratedBox(
+        position: DecorationPosition.foreground,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          border: Border.all(
+            color: ring.withValues(alpha: .85 * t),
+            width: 2.5,
+          ),
+        ),
+        child: child,
+      ),
+      child: tile,
+    );
+  }
+
+  Widget _tile() => CustomPaint(
     painter: CalendarBands(colors, radius: radius),
     child: Material(
       type: MaterialType.transparency,
@@ -1561,6 +1613,7 @@ class _WeekTile extends StatelessWidget {
               colors: colors,
               radius: 9,
               padding: const EdgeInsets.fromLTRB(8, 5, 6, 5),
+              lit: args.lit(event),
               onTap: () => args.onEvent(event),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1587,6 +1640,7 @@ class _WeekTile extends StatelessWidget {
             radius: 9,
             height: 28,
             padding: const EdgeInsets.symmetric(horizontal: 8),
+            lit: args.lit(event),
             onTap: () => args.onEvent(event),
             child: Row(
               children: [
@@ -1627,6 +1681,7 @@ class _WeekTile extends StatelessWidget {
               : timed
               ? const EdgeInsets.fromLTRB(11, 9, 11, 10)
               : const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+          lit: args.lit(event),
           onTap: () => args.onEvent(event),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1817,6 +1872,7 @@ class _DayLanes extends StatelessWidget {
                             radius: 9,
                             height: short ? 24 : 28,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
+                            lit: args.lit(e),
                             onTap: () => args.onEvent(e),
                             child: Align(
                               alignment: Alignment.centerLeft,
@@ -1838,9 +1894,11 @@ class _DayLanes extends StatelessWidget {
         SizedBox(height: short ? 6 : 8),
         Expanded(
           child: _Timeline(
-            key: ValueKey(day),
+            // A new ring scrolls to its event, so it gets a fresh state.
+            key: ValueKey((day, args.focusOn(day))),
             day: day,
             today: day == args.today,
+            focus: args.focusOn(day),
             hourHeight: short ? 34 : 46,
             labelWidth: labelWidth,
             events: timed,
@@ -1870,6 +1928,7 @@ class _Timeline extends StatefulWidget {
     required this.today,
     required this.hourHeight,
     required this.labelWidth,
+    this.focus,
     required this.events,
     required this.lanes,
     required this.gap,
@@ -1880,6 +1939,9 @@ class _Timeline extends StatefulWidget {
   final bool today;
   final double hourHeight;
   final double labelWidth;
+
+  /// Scroll here first: the event a voice request was about.
+  final DateTime? focus;
   final List<CalendarEvent> events;
   final List<List<CalendarEvent>> lanes;
   final double gap;
@@ -1898,7 +1960,10 @@ class _TimelineState extends State<_Timeline> {
     super.initState();
     final now = DateTime.now();
     double hour;
-    if (widget.today) {
+    final focus = widget.focus;
+    if (focus != null) {
+      hour = focus.hour + focus.minute / 60 - 1.5;
+    } else if (widget.today) {
       hour = now.hour + now.minute / 60 - 1.5;
     } else if (widget.events.isNotEmpty) {
       final first = widget.events.map((e) => _hourOf(e.start)).reduce(math.min);
@@ -2052,6 +2117,7 @@ class _TimelineTile extends StatelessWidget {
       padding: tall
           ? const EdgeInsets.fromLTRB(10, 6, 10, 4)
           : const EdgeInsets.symmetric(horizontal: 9),
+      lit: args.lit(event),
       onTap: () => args.onEvent(event),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2402,8 +2468,8 @@ class _TodayPanel extends StatelessWidget {
         border: args.paint.raisedBorder,
         borderRadius: BorderRadius.circular(short ? 18 : 24),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: _PanelBody(
+        scrolls: short,
         children: [
           Text(
             s.calendarToday.toUpperCase(),
@@ -2443,6 +2509,7 @@ class _TodayPanel extends StatelessWidget {
                       radius: 9,
                       height: short ? 26 : 30,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
+                      lit: args.lit(e),
                       onTap: () => args.onEvent(e),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -2466,6 +2533,7 @@ class _TodayPanel extends StatelessWidget {
               colors: args.paint.softs(next.calendars),
               radius: short ? 14 : 18,
               padding: EdgeInsets.all(short ? 14 : 18),
+              lit: args.lit(next),
               onTap: () => args.onEvent(next),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2592,6 +2660,35 @@ class _TodayPanel extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// The Today panel's contents: a column, or on a short panel, which has no
+/// Later today list to give way, one that scrolls under the edge fade
+/// when the date, the all-day events and Up next are taller than it.
+class _PanelBody extends StatelessWidget {
+  const _PanelBody({required this.scrolls, required this.children});
+
+  final bool scrolls;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!scrolls) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      );
+    }
+    return EdgeFade(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: children,
+        ),
       ),
     );
   }
@@ -2792,6 +2889,7 @@ class _AgendaRow extends StatelessWidget {
             horizontal: short ? 14 : 16,
             vertical: short ? 10 : 12,
           ),
+          lit: args.lit(event),
           onTap: () => args.onEvent(event),
           child: Row(
             children: [
@@ -3022,6 +3120,7 @@ class _PhoneDay extends StatelessWidget {
                       radius: 9,
                       height: 28,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
+                      lit: args.lit(e),
                       onTap: () => args.onEvent(e),
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -3039,9 +3138,11 @@ class _PhoneDay extends StatelessWidget {
           ),
         Expanded(
           child: _Timeline(
-            key: ValueKey(day),
+            // A new ring scrolls to its event, so it gets a fresh state.
+            key: ValueKey((day, args.focusOn(day))),
             day: day,
             today: day == args.today,
+            focus: args.focusOn(day),
             hourHeight: 42,
             labelWidth: 52,
             events: timed,

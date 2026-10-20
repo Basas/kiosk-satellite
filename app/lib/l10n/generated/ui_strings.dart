@@ -968,6 +968,24 @@ abstract class UiStrings {
   /// **'Events shown'**
   String get calendarWidgetEvents;
 
+  /// Heading of the group about managing the calendar by voice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Calendar'**
+  String get calendarVoiceSection;
+
+  /// Row that opens the guide to adding and changing calendar events by voice. Keep Voice Satellite unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage the calendar using Voice Satellite'**
+  String get calendarVoiceManage;
+
+  /// Description under that row. Keep Kiosk Satellite and Home Assistant unchanged. A blueprint is a Home Assistant template for a script.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs the Kiosk Satellite calendar blueprint and an LLM conversation agent in Home Assistant.'**
+  String get calendarVoiceHint;
+
   /// Page title.
   ///
   /// In en, this message translates to:

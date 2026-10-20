@@ -50,5 +50,8 @@
   "calendarColorRose": "玫瑰色",
   "calendarColorSlate": "石板灰",
   "calendarColorCustom": "自定义",
-  "calendarWidgetEvents": "显示的日程数"
+  "calendarWidgetEvents": "显示的日程数",
+  "calendarVoiceSection": "语音日历",
+  "calendarVoiceManage": "通过 Voice Satellite 管理日历",
+  "calendarVoiceHint": "需要在 Home Assistant 中配置 Kiosk Satellite 日历蓝图（脚本模板）和大语言模型（LLM）对话代理。"
 }

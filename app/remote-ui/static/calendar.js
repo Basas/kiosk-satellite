@@ -1,4 +1,4 @@
-import { t } from './localization.js';
+import { deviceText, t } from './localization.js';
 import { api, state } from './core.js';
 import { cameraAction, cameraListRow } from './cameras.js';
 import { cachedList, entitySpec, loadEntityList, pickEntity, pickField, pickItem } from './entity_picker.js';
@@ -264,6 +264,37 @@ export function renderCalendarPage() {
   add.appendChild(button(t('calendarAdd'), 'btn-ghost', addCalendar));
   card.appendChild(add);
   putTop(tab, [heading, card]);
+  tab.append(...voiceCards());
+}
+
+// The calendar by voice lives in Home Assistant (the blueprint), so this
+// group only points at the guide. Last on the page, as on the device and
+// as Voice Alarms on the Alarms page.
+const VOICE_DOCS_URL = 'https://kiosksatellite.com/docs/calendar/#managing-the-calendar-by-voice';
+
+function voiceCards() {
+  const heading = document.createElement('h2');
+  heading.className = 'card-title calendar-built';
+  heading.textContent = t('calendarVoiceSection');
+  const card = document.createElement('div');
+  card.className = 'card calendar-built';
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.dataset.searchId = 'x:calendar_voice';
+  const info = document.createElement('div');
+  info.className = 'info';
+  info.innerHTML = '<div class="name"></div><div class="desc"></div>';
+  info.querySelector('.name').textContent = t('calendarVoiceManage');
+  info.querySelector('.desc').textContent = t('calendarVoiceHint');
+  const link = document.createElement('a');
+  link.className = 'btn-ghost';
+  link.textContent = deviceText('Open guide');
+  link.href = VOICE_DOCS_URL;
+  link.target = '_blank';
+  link.rel = 'noreferrer';
+  row.append(info, link);
+  card.appendChild(row);
+  return [heading, card];
 }
 
 export function calendarShown() {
