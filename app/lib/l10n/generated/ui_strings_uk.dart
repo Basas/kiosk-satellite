@@ -10461,6 +10461,9 @@ class UiStringsUk extends UiStrings {
       'Виберіть розташування в меню Налаштування > Заставка > Зоряне небо.';
 
   @override
+  String get screensaverCelestialWaitingForGps => 'Очікування GPS-позиції...';
+
+  @override
   String get screensaverCelestialDoubleTapHint =>
       'Торкніться двічі, щоб закрити';
 

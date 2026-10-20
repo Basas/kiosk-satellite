@@ -78,6 +78,7 @@
   "screensaverCelestialLocationGrantReady": "Небо может следовать за GPS-приёмником.",
   "screensaverCelestialCoordinatesInvalid": "Введите широту и долготу, например 40.71, -74.01",
   "screensaverCelestialNoLocation": "Выберите местоположение в «Настройки > Заставка > Звёздное небо».",
+  "screensaverCelestialWaitingForGps": "Ожидание GPS-позиции...",
   "screensaverCelestialDoubleTapHint": "Коснитесь дважды, чтобы закрыть",
   "screensaverCelestialCalibrate": "Двигайте устройство восьмёркой, чтобы откалибровать компас.",
   "celestialSun": "Солнце",

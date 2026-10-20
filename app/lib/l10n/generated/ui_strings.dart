@@ -18005,6 +18005,12 @@ abstract class UiStrings {
   /// **'Choose a location in Settings > Screensaver > Celestial.'**
   String get screensaverCelestialNoLocation;
 
+  /// Shown on a black screen while the GPS source looks for its first position.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a GPS fix...'**
+  String get screensaverCelestialWaitingForGps;
+
   /// Hint shown after a single tap on the sky.
   ///
   /// In en, this message translates to:

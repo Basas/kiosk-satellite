@@ -39230,6 +39230,11 @@
     "context": "Screensaver:Celestial",
     "description": "Prompt shown on a black screen when the location source has no position."
   },
+  "screensaverCelestialWaitingForGps": "Waiting for a GPS fix...",
+  "@screensaverCelestialWaitingForGps": {
+    "context": "Screensaver:Celestial",
+    "description": "Shown on a black screen while the GPS source looks for its first position."
+  },
   "screensaverCelestialDoubleTapHint": "Double tap to close",
   "@screensaverCelestialDoubleTapHint": {
     "context": "Screensaver:Celestial",

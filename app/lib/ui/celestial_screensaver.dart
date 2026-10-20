@@ -176,6 +176,14 @@ class _CelestialScreensaverState extends State<CelestialScreensaver>
 
   void _resolvePlace() {
     final ask = ++_placeAsk;
+    // The GPS can take half a minute for a first fix, or have none
+    // indoors: the sky starts where it last was and moves with the fix.
+    final last = c.celestial.lastGpsFix;
+    if (_place == null &&
+        last != null &&
+        c.settings.get(defs.screensaverCelestialLocation) == 'gps') {
+      _setPlace(last);
+    }
     unawaited(
       c.celestial.resolve().then((status) {
         if (!mounted || ask != _placeAsk) return;
@@ -282,6 +290,7 @@ class _CelestialScreensaverState extends State<CelestialScreensaver>
     final fix = c.location.live.value;
     final place = _place;
     if (fix == null || !mounted) return;
+    c.celestial.remember(fix.latitude, fix.longitude);
     if (place == null) {
       _placeAsk++;
       _placeProblem = null;
@@ -542,6 +551,20 @@ class _CelestialScreensaverState extends State<CelestialScreensaver>
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
+                  ),
+                ),
+              )
+            // A first GPS fix can take half a minute: say so rather than
+            // leave the screen black.
+            : c.settings.get(defs.screensaverCelestialLocation) == 'gps'
+            ? Center(
+                child: Text(
+                  screensaverText(context, 'Waiting for a GPS fix...'),
+                  style: const TextStyle(
+                    fontFamily: 'Rubik',
+                    fontSize: 15,
+                    letterSpacing: .3,
+                    color: Color(0x99D5DCE6),
                   ),
                 ),
               )

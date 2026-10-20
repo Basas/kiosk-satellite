@@ -78,6 +78,7 @@
   "screensaverCelestialLocationGrantReady": "星空可以跟随 GPS 接收器。",
   "screensaverCelestialCoordinatesInvalid": "请输入纬度和经度，例如 40.71, -74.01",
   "screensaverCelestialNoLocation": "请在“设置 > 屏保 > 星空”中选择位置。",
+  "screensaverCelestialWaitingForGps": "正在等待 GPS 定位...",
   "screensaverCelestialDoubleTapHint": "双击关闭",
   "screensaverCelestialCalibrate": "请将设备按“8”字形移动以校准指南针。",
   "celestialSun": "太阳",

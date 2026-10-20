@@ -60,7 +60,7 @@ Celestial needs to know where the kiosk is. Pick where that comes from under **L
 * **Home Assistant entity** uses a person, device tracker or zone you pick.
 * **Manual** takes a latitude and longitude you type, like `40.71, -74.01`.
 
-With **GPS**, the sky follows the device's live position while the screensaver runs, so a kiosk that travels keeps the right sky.
+With **GPS**, the sky follows the device's live position while the screensaver runs, so a kiosk that travels keeps the right sky. The kiosk remembers the last GPS fix, so the sky starts there while the receiver looks for a new one, indoors too. Until the very first fix, the screensaver says it is waiting for one.
 
 A **Current location** row shows the coordinates the source found, or why it has none, such as a device without a GPS receiver or an entity without a location. If the chosen source has no position, the screensaver shows a black screen that asks you to choose another.
 

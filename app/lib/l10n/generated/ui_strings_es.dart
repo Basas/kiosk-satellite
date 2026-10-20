@@ -10543,6 +10543,10 @@ class UiStringsEs extends UiStrings {
       'Elige una ubicación en Ajustes > Salvapantallas > Celeste.';
 
   @override
+  String get screensaverCelestialWaitingForGps =>
+      'Esperando una posición GPS...';
+
+  @override
   String get screensaverCelestialDoubleTapHint => 'Toca dos veces para cerrar';
 
   @override

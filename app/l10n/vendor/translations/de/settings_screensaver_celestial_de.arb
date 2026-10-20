@@ -78,6 +78,7 @@
   "screensaverCelestialLocationGrantReady": "Der Himmel kann dem GPS-Empfänger folgen.",
   "screensaverCelestialCoordinatesInvalid": "Gib Breiten- und Längengrad ein, etwa 40.71, -74.01",
   "screensaverCelestialNoLocation": "Wähle einen Standort unter Einstellungen > Bildschirmschoner > Sternenhimmel.",
+  "screensaverCelestialWaitingForGps": "Warte auf eine GPS-Position...",
   "screensaverCelestialDoubleTapHint": "Zum Schließen doppelt tippen",
   "screensaverCelestialCalibrate": "Bewege das Gerät in Form einer Acht, um den Kompass zu kalibrieren.",
   "celestialSun": "Sonne",

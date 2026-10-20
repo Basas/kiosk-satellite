@@ -78,6 +78,7 @@
   "screensaverCelestialLocationGrantReady": "De hemel kan de GPS-ontvanger volgen.",
   "screensaverCelestialCoordinatesInvalid": "Voer een breedte- en lengtegraad in, zoals 40.71, -74.01",
   "screensaverCelestialNoLocation": "Kies een locatie via Instellingen > Schermbeveiliging > Sterrenhemel.",
+  "screensaverCelestialWaitingForGps": "Wachten op een GPS-positie...",
   "screensaverCelestialDoubleTapHint": "Tik twee keer om te sluiten",
   "screensaverCelestialCalibrate": "Beweeg het apparaat in een achtvorm om het kompas te kalibreren.",
   "celestialSun": "Zon",

@@ -78,6 +78,7 @@
   "screensaverCelestialLocationGrantReady": "Le ciel peut suivre le récepteur GPS.",
   "screensaverCelestialCoordinatesInvalid": "Saisissez une latitude et une longitude, par exemple 40.71, -74.01",
   "screensaverCelestialNoLocation": "Choisissez un emplacement dans Paramètres > Économiseur d’écran > Céleste.",
+  "screensaverCelestialWaitingForGps": "En attente d’une position GPS...",
   "screensaverCelestialDoubleTapHint": "Touchez deux fois pour fermer",
   "screensaverCelestialCalibrate": "Déplacez l’appareil en dessinant un huit pour calibrer la boussole.",
   "celestialSun": "Soleil",

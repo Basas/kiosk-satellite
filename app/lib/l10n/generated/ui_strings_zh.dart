@@ -9857,6 +9857,9 @@ class UiStringsZh extends UiStrings {
   String get screensaverCelestialNoLocation => '请在“设置 > 屏保 > 星空”中选择位置。';
 
   @override
+  String get screensaverCelestialWaitingForGps => '正在等待 GPS 定位...';
+
+  @override
   String get screensaverCelestialDoubleTapHint => '双击关闭';
 
   @override
@@ -24090,6 +24093,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverCelestialNoLocation => '请在“设置 > 屏保 > 星空”中选择位置。';
+
+  @override
+  String get screensaverCelestialWaitingForGps => '正在等待 GPS 定位...';
 
   @override
   String get screensaverCelestialDoubleTapHint => '双击关闭';

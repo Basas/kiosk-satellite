@@ -10432,6 +10432,9 @@ class UiStringsRu extends UiStrings {
       'Выберите местоположение в «Настройки > Заставка > Звёздное небо».';
 
   @override
+  String get screensaverCelestialWaitingForGps => 'Ожидание GPS-позиции...';
+
+  @override
   String get screensaverCelestialDoubleTapHint =>
       'Коснитесь дважды, чтобы закрыть';
 

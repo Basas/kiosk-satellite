@@ -10340,6 +10340,9 @@ class UiStringsEn extends UiStrings {
       'Choose a location in Settings > Screensaver > Celestial.';
 
   @override
+  String get screensaverCelestialWaitingForGps => 'Waiting for a GPS fix...';
+
+  @override
   String get screensaverCelestialDoubleTapHint => 'Double tap to close';
 
   @override

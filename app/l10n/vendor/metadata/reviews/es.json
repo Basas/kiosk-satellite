@@ -22273,5 +22273,10 @@
     "source": "c155de99b95a48a0a905f8f9028a17767067f01e09c54ba90ca24c91819ed6c6",
     "translation": "c11274957b3e73601fa2dccc2c4a69089e0c78d8a43fc97cd8a26538506aecad",
     "author": "Xavier Larrea"
+  },
+  "screensaverCelestialWaitingForGps": {
+    "source": "ea44fc1d97a426895aa8a108a3db6d1a5d1c2e3a30015da56cd2ec61ccf05e36",
+    "translation": "13e289e52f1701345a94ff88fb98b080e4b79cc18e17974c8e8ffaea215df361",
+    "author": "Xavier Larrea"
   }
 }

@@ -10582,6 +10582,10 @@ class UiStringsDe extends UiStrings {
       'Wähle einen Standort unter Einstellungen > Bildschirmschoner > Sternenhimmel.';
 
   @override
+  String get screensaverCelestialWaitingForGps =>
+      'Warte auf eine GPS-Position...';
+
+  @override
   String get screensaverCelestialDoubleTapHint =>
       'Zum Schließen doppelt tippen';
 

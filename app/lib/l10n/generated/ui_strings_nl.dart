@@ -10467,6 +10467,10 @@ class UiStringsNl extends UiStrings {
       'Kies een locatie via Instellingen > Schermbeveiliging > Sterrenhemel.';
 
   @override
+  String get screensaverCelestialWaitingForGps =>
+      'Wachten op een GPS-positie...';
+
+  @override
   String get screensaverCelestialDoubleTapHint => 'Tik twee keer om te sluiten';
 
   @override

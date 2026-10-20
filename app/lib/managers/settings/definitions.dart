@@ -2991,6 +2991,20 @@ const screensaverCelestialView = SettingDef<String>(
   perDevice: true,
 );
 
+/// The last GPS fix the Celestial sky was placed at, "latitude, longitude",
+/// for when the receiver has none yet. Where a kiosk is never travels with
+/// Fleet.
+const screensaverCelestialLastGps = SettingDef<String>(
+  key: 'screensaver.celestial_last_gps',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Celestial last GPS position',
+  description: 'The last GPS fix the Celestial screensaver placed the sky at.',
+  category: 'Screensaver',
+  hidden: true,
+  perDevice: true,
+);
+
 // ── Black (mode: black) ──
 
 // The Black panel's one control (issue #151): people schedule Black
@@ -12643,6 +12657,7 @@ const List<SettingDef<Object>> allSettings = [
   screensaverCelestialControlMoonPhase,
   screensaverCelestialControlScale,
   screensaverCelestialView,
+  screensaverCelestialLastGps,
   // One titled panel per mode, in the dropdown's order; only the panel of
   // the selected mode is visible (each setting depends on the mode).
   screensaverDimLevel,

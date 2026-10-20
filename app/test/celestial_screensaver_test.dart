@@ -350,6 +350,46 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
   });
 
+  group('a GPS without a fix yet', () {
+    Future<AppContainer> pumpGps(WidgetTester tester, String last) async {
+      SharedPreferences.setMockInitialValues({
+        'ks.screensaver.mode': 'celestial',
+        'ks.screensaver.celestial_location': 'gps',
+        'ks.screensaver.celestial_last_gps': last,
+      });
+      final c = AppContainer();
+      await c.settings.init();
+      await tester.pumpWidget(
+        MaterialApp(
+          supportedLocales: appSupportedLocales,
+          localizationsDelegates: appLocalizationsDelegates,
+          home: CelestialScreensaver(container: c),
+        ),
+      );
+      await tester.pump();
+      return c;
+    }
+
+    testWidgets('starts the sky at the last fix right away', (tester) async {
+      await pumpGps(tester, '-2.12, -79.87');
+      final sky = tester.widget<CelestialRenderer>(
+        find.byType(CelestialRenderer),
+      );
+      expect(sky.latitude, -2.12);
+      expect(sky.longitude, -79.87);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(seconds: 6));
+    });
+
+    testWidgets('says it is waiting before the first fix ever', (tester) async {
+      await pumpGps(tester, '');
+      expect(find.text('Waiting for a GPS fix...'), findsOneWidget);
+      expect(find.byType(CelestialRenderer), findsNothing);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(seconds: 6));
+    });
+  });
+
   group('location sources', () {
     Future<AppContainer> container(Map<String, Object> prefs) async {
       SharedPreferences.setMockInitialValues({
@@ -397,6 +437,25 @@ void main() {
           'Home Assistant is not connected.',
         );
       }
+    });
+
+    test('the GPS falls back to its last fix and keeps new ones', () async {
+      final c = await container({
+        'ks.screensaver.celestial_last_gps': '10.5, 20.25',
+      });
+      final status = await c.celestial.resolve('gps');
+      expect(status.available, isTrue);
+      expect(status.latitude, 10.5);
+      expect(status.longitude, 20.25);
+      // A fix barely away is not written, one that moved is.
+      c.celestial.remember(10.5001, 20.2501);
+      expect(c.settings.get(defs.screensaverCelestialLastGps), '10.5, 20.25');
+      c.celestial.remember(11, 21);
+      await pumpEventQueue();
+      expect(
+        c.settings.get(defs.screensaverCelestialLastGps),
+        '11.00000, 21.00000',
+      );
     });
 
     test('the GPS without a receiver bridge has no fix yet', () async {

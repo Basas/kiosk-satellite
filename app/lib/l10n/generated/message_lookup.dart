@@ -3305,6 +3305,8 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.screensaverCelestialCoordinatesInvalid,
       'screensaverCelestialNoLocation' =>
         strings.screensaverCelestialNoLocation,
+      'screensaverCelestialWaitingForGps' =>
+        strings.screensaverCelestialWaitingForGps,
       'screensaverCelestialDoubleTapHint' =>
         strings.screensaverCelestialDoubleTapHint,
       'screensaverCelestialCalibrate' => strings.screensaverCelestialCalibrate,

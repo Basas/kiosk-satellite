@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../core/command_registry.dart';
 import '../../core/manager.dart';
 import '../home_assistant/home_assistant_manager.dart';
@@ -36,6 +38,10 @@ class CelestialLocationStatus {
 /// latitude and longitude, or typed coordinates. The screensaver and both
 /// settings pages ask the same question here, so the status row shows
 /// exactly what the sky uses.
+///
+/// Every GPS fix is kept, so a receiver with nothing to give right now
+/// (indoors, or a cold start that Android forgot the last position of)
+/// still places the sky where it last was instead of leaving it waiting.
 class CelestialLocator extends Manager {
   CelestialLocator(
     super.bus,
@@ -71,6 +77,29 @@ class CelestialLocator extends Manager {
     );
   }
 
+  /// The last GPS position the sky was placed at, or null before the
+  /// first fix.
+  ({double latitude, double longitude})? get lastGpsFix =>
+      defs.parseCoordinates(_settings.get(defs.screensaverCelestialLastGps));
+
+  /// Keeps a GPS fix for the next time the receiver has none. Only a move
+  /// of about a hundred meters is written, so a fix every few seconds
+  /// does not write the setting every few seconds.
+  void remember(double latitude, double longitude) {
+    final last = lastGpsFix;
+    if (last != null &&
+        (last.latitude - latitude).abs() < 1e-3 &&
+        (last.longitude - longitude).abs() < 1e-3) {
+      return;
+    }
+    unawaited(
+      _settings.set(
+        defs.screensaverCelestialLastGps,
+        '${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)}',
+      ),
+    );
+  }
+
   /// The position from [source], the Location setting by default.
   Future<CelestialLocationStatus> resolve([String? requested]) async {
     final String source =
@@ -79,10 +108,19 @@ class CelestialLocator extends Manager {
       case 'gps':
         final (:fix, :error) = await _location.currentFix();
         if (fix != null) {
+          remember(fix.latitude, fix.longitude);
           return CelestialLocationStatus(
             source,
             latitude: fix.latitude,
             longitude: fix.longitude,
+          );
+        }
+        final last = lastGpsFix;
+        if (error != 'absent' && error != 'denied' && last != null) {
+          return CelestialLocationStatus(
+            source,
+            latitude: last.latitude,
+            longitude: last.longitude,
           );
         }
         return CelestialLocationStatus(

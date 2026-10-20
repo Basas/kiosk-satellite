@@ -10540,6 +10540,10 @@ class UiStringsFr extends UiStrings {
       'Choisissez un emplacement dans Paramètres > Économiseur d’écran > Céleste.';
 
   @override
+  String get screensaverCelestialWaitingForGps =>
+      'En attente d’une position GPS...';
+
+  @override
   String get screensaverCelestialDoubleTapHint =>
       'Touchez deux fois pour fermer';
 
