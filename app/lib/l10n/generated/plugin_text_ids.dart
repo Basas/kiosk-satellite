@@ -3,46 +3,36 @@ const pluginTextMessageIds = <String, String>{
   "Plugin Manager": "settingsMenuPlugins",
   "Plugin": "pluginPlugin",
   "Enable Plugins": "pluginEnablePlugins",
-  "Plugins add additional community developed features to Kiosk Satellite.":
-      "pluginPluginsAddAdditionalCommunityDevelopedFeaturesToKioskSatellite",
+  "Plugins add additional community developed features to Kiosk Satellite.": "pluginPluginsAddAdditionalCommunityDevelopedFeaturesToKioskSatellite",
   "Installed plugins": "pluginInstalledPlugins",
-  "No plugins installed. Add a repository to get started.":
-      "pluginNoPluginsInstalledAddARepositoryToGetStarted",
+  "No plugins installed. Add a repository to get started.": "pluginNoPluginsInstalledAddARepositoryToGetStarted",
   "Developer Tools": "pluginDeveloperTools",
   "Create a plugin": "pluginCreateAPlugin",
-  "Learn how to create plugins with the Hello World template and documentation.":
-      "pluginLearnHowToCreatePluginsWithTheHelloWorld",
+  "Learn how to create plugins with the Hello World template and documentation.": "pluginLearnHowToCreatePluginsWithTheHelloWorld",
   "This plugin is no longer installed.": "pluginThisPluginIsNoLongerInstalled",
   "Enable Plugins to run this plugin.": "pluginEnablePluginsToRunThisPlugin",
-  "Enable this plugin from its entry row to run it.":
-      "pluginEnableThisPluginFromItsEntryRowToRun",
-  "This removes the plugin and its settings.":
-      "pluginThisRemovesThePluginAndItsSettings",
+  "Enable this plugin from its entry row to run it.": "pluginEnableThisPluginFromItsEntryRowToRun",
+  "This removes the plugin and its settings.": "pluginThisRemovesThePluginAndItsSettings",
   "Uninstall": "pluginUninstall",
   "No updates available.": "pluginNoUpdatesAvailable",
-  "This plugin was installed from ZIP and has no repository README.":
-      "pluginThisPluginWasInstalledFromZipAndHasNo",
+  "This plugin was installed from ZIP and has no repository README.": "pluginThisPluginWasInstalledFromZipAndHasNo",
   "Image unavailable": "pluginImageUnavailable",
   "Could not open this link.": "pluginCouldNotOpenThisLink",
   "Add plugin": "pluginAddPlugin",
   "Install from a GitHub repository": "pluginInstallFromAGithubRepository",
   "Repository URL": "settingUpdateSourceUrlTitle",
-  "Make sure you trust the plugin's author and its code before installing it.":
-      "pluginMakeSureYouTrustThePluginSAuthorAnd",
+  "Make sure you trust the plugin's author and its code before installing it.": "pluginMakeSureYouTrustThePluginSAuthorAnd",
   "Preview": "pluginPreview",
   "Installed version": "pluginInstalledVersion",
   "Version": "deviceVersion",
   "Author": "pluginAuthor",
   "License": "pluginLicense",
-  "Plugins run code inside Kiosk Satellite and can access app data and granted Android permissions. A faulty or malicious plugin can expose private information or stop the app from working. Only install plugins from authors you trust.":
-      "pluginPluginsRunCodeInsideKioskSatelliteAndCanAccess",
-  "New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.":
-      "pluginNewPluginsStartDisabledUpdatesPreserveTheEnabledState",
+  "Plugins run code inside Kiosk Satellite and can access app data and granted Android permissions. A faulty or malicious plugin can expose private information or stop the app from working. Only install plugins from authors you trust.": "pluginPluginsRunCodeInsideKioskSatelliteAndCanAccess",
+  "New plugins start disabled. Updates preserve the enabled state and automatically restart running plugins.": "pluginNewPluginsStartDisabledUpdatesPreserveTheEnabledState",
   "Trust and update": "pluginTrustAndUpdate",
   "Trust and install": "pluginTrustAndInstall",
   "Install from ZIP": "pluginInstallFromZip",
-  "For developers only: test a local build":
-      "pluginForDevelopersOnlyTestALocalBuild",
+  "For developers only: test a local build": "pluginForDevelopersOnlyTestALocalBuild",
   "Plugin ZIP": "pluginPluginZip",
   "Plugin ZIP must be at most 4 MB": "pluginPluginZipMustBeAtMost4Mb",
   "Could not read the selected ZIP": "pluginCouldNotReadTheSelectedZip",
@@ -50,34 +40,25 @@ const pluginTextMessageIds = <String, String>{
   "Gestures": "settingsMenuGestures",
   "Home Assistant": "settingsGroupHomeAssistant",
   "Kiosk drawer": "pluginKioskDrawer",
-  "To assign a gesture, open Gestures and choose Run a plugin action.":
-      "pluginToAssignAGestureOpenGesturesAndChooseRun",
+  "To assign a gesture, open Gestures and choose Run a plugin action.": "pluginToAssignAGestureOpenGesturesAndChooseRun",
   "Show in kiosk drawer": "pluginShowInKioskDrawer",
-  "Also available while locked if the kiosk drawer is allowed.":
-      "pluginAlsoAvailableWhileLockedIfTheKioskDrawerIs",
+  "Also available while locked if the kiosk drawer is allowed.": "pluginAlsoAvailableWhileLockedIfTheKioskDrawerIs",
   "Expose to Home Assistant": "pluginExposeToHomeAssistant",
-  "Adds a button to the kiosk ESPHome device. Requires ESPHome and native entities.":
-      "pluginAddsAButtonToTheKioskEsphomeDeviceRequires",
+  "Adds a button to the kiosk ESPHome device. Requires ESPHome and native entities.": "pluginAddsAButtonToTheKioskEsphomeDeviceRequires",
   "Settings": "commonSettings",
   "Shizuku access": "deviceShizukuAccess",
   "Checking availability": "deviceShizukuCheck",
   "Connected with root access": "deviceShizukuRoot",
   "Connected with shell access": "deviceShizukuShell",
-  "Tap to grant access. Approve the request on this kiosk.":
-      "deviceShizukuGrant",
+  "Tap to grant access. Approve the request on this kiosk.": "deviceShizukuGrant",
   "Allow Kiosk Satellite in the Shizuku app.": "deviceShizukuDenied",
-  "Shizuku 13 or later is required. Tap for setup instructions.":
-      "pluginShizuku13OrLaterIsRequiredTapForSetup",
-  "Start Shizuku on this device. Tap for setup instructions.":
-      "pluginStartShizukuOnThisDeviceTapForSetupInstructions",
-  "Shizuku grants Kiosk Satellite shell or root access. Installed plugins run inside KS, so only grant access if you trust them.":
-      "pluginShizukuGrantsKioskSatelliteShellOrRootAccessInstalled",
+  "Shizuku 13 or later is required. Tap for setup instructions.": "pluginShizuku13OrLaterIsRequiredTapForSetup",
+  "Start Shizuku on this device. Tap for setup instructions.": "pluginStartShizukuOnThisDeviceTapForSetupInstructions",
+  "Shizuku grants Kiosk Satellite shell or root access. Installed plugins run inside KS, so only grant access if you trust them.": "pluginShizukuGrantsKioskSatelliteShellOrRootAccessInstalled",
   "Set up": "pluginSetUp",
   "Grant access": "pluginGrantAccess",
-  "Approve the permission request on the kiosk.":
-      "pluginApproveThePermissionRequestOnTheKiosk",
-  "Grant access and approve the request on this kiosk.":
-      "deviceShizukuGrantRemote",
+  "Approve the permission request on the kiosk.": "pluginApproveThePermissionRequestOnTheKiosk",
+  "Grant access and approve the request on this kiosk.": "deviceShizukuGrantRemote",
   "Shizuku 13 or later is required.": "deviceShizukuUnsupported",
   "Start Shizuku on this device.": "deviceShizukuStart",
   "Charts": "pluginCharts",
@@ -86,8 +67,7 @@ const pluginTextMessageIds = <String, String>{
   "Latest": "pluginLatest",
   "Selected": "pluginSelected",
   "No data yet": "pluginNoDataYet",
-  "Tap or drag to inspect samples. Double-tap to follow the latest.":
-      "pluginTapOrDragToInspectSamplesDoubleTapTo",
+  "Tap or drag to inspect samples. Double-tap to follow the latest.": "pluginTapOrDragToInspectSamplesDoubleTapTo",
   "No data": "pluginNoData",
   "On": "pluginOn",
   "Off": "mediaOff",
@@ -100,39 +80,27 @@ const pluginTextMessageIds = <String, String>{
   "Close": "commonClose",
   "Open": "intercomOpen",
   "Loading…": "commonLoading",
-  "Use arrow keys to inspect samples and End for the latest.":
-      "pluginChartKeyboardHelp",
-  "The repository release belongs to a different plugin.":
-      "pluginErrorRepositoryMismatch",
-  "Enter a public https://github.com/owner/repository URL":
-      "pluginErrorRepositoryUrl",
-  "Use the repository URL without a file or branch path":
-      "pluginErrorRepositoryPath",
-  "Plugin download redirected outside GitHub":
-      "pluginErrorDownloadOutsideGithub",
+  "Use arrow keys to inspect samples and End for the latest.": "pluginChartKeyboardHelp",
+  "The repository release belongs to a different plugin.": "pluginErrorRepositoryMismatch",
+  "Enter a public https://github.com/owner/repository URL": "pluginErrorRepositoryUrl",
+  "Use the repository URL without a file or branch path": "pluginErrorRepositoryPath",
+  "Plugin download redirected outside GitHub": "pluginErrorDownloadOutsideGithub",
   "Invalid GitHub redirect": "pluginErrorInvalidRedirect",
-  "Public repository, stable release, kiosk-satellite-plugin.json, README.md or release asset was not found.":
-      "pluginErrorRepositoryNotFound",
-  "GitHub denied the request or its request limit was reached. Try again later.":
-      "pluginErrorGithubLimited",
+  "Public repository, stable release, kiosk-satellite-plugin.json, README.md or release asset was not found.": "pluginErrorRepositoryNotFound",
+  "GitHub denied the request or its request limit was reached. Try again later.": "pluginErrorGithubLimited",
   "Repository file exceeds the size limit": "pluginErrorRepositorySize",
   "Too many GitHub redirects": "pluginErrorTooManyRedirects",
-  "GitHub did not return a published stable release":
-      "pluginErrorStableRelease",
+  "GitHub did not return a published stable release": "pluginErrorStableRelease",
   "Invalid release tag": "pluginErrorReleaseTag",
   "Invalid kiosk-satellite-plugin.json manifest": "pluginErrorManifestFile",
   "Invalid plugin ID or version": "pluginErrorIdVersion",
   "Invalid release checksum or package filename": "pluginErrorChecksumFilename",
-  "The release checksum must match GitHub asset SHA-256 digest":
-      "pluginErrorGithubDigest",
+  "The release checksum must match GitHub asset SHA-256 digest": "pluginErrorGithubDigest",
   "Confirm that you trust the plugin author": "pluginErrorTrustAuthor",
-  "This preview expired. Preview the repository again before installing.":
-      "pluginErrorPreviewExpired",
-  "Package SHA-256 does not match the reviewed release":
-      "pluginErrorReviewedChecksum",
+  "This preview expired. Preview the repository again before installing.": "pluginErrorPreviewExpired",
+  "Package SHA-256 does not match the reviewed release": "pluginErrorReviewedChecksum",
   "Plugin is not installed": "pluginErrorNotInstalled",
-  "This plugin was installed from ZIP. Use Install from ZIP to update it.":
-      "pluginErrorUpdateZip",
+  "This plugin was installed from ZIP. Use Install from ZIP to update it.": "pluginErrorUpdateZip",
   "Plugins are available on Android.": "pluginErrorAndroidOnly",
   "Invalid plugin ID": "pluginErrorInvalidId",
   "Invalid version": "pluginErrorInvalidVersion",
@@ -169,16 +137,14 @@ const pluginTextMessageIds = <String, String>{
   "Asset directories cannot be symbolic links": "pluginErrorAssetSymlinks",
   "Installed assets failed their integrity check": "pluginErrorAssetsIntegrity",
   "Installed asset failed its integrity check": "pluginErrorAssetIntegrity",
-  "Package manifest does not match the reviewed release manifest":
-      "pluginErrorManifestMismatch",
+  "Package manifest does not match the reviewed release manifest": "pluginErrorManifestMismatch",
   "Staging directory already exists": "pluginErrorStagingExists",
   "Cannot create plugin directory": "pluginErrorCreateDirectory",
   "At most 512 package files are supported": "pluginErrorFileCount",
   "Cannot protect plugin file": "pluginErrorProtectFile",
   "Expanded plugin exceeds 4 MB": "pluginErrorExpandedSize",
   "Manifest exceeds 32 KB": "pluginErrorManifestSize",
-  "Package needs kiosk-satellite-plugin.json, plugin.jar and LICENSE":
-      "pluginErrorRequiredFiles",
+  "Package needs kiosk-satellite-plugin.json, plugin.jar and LICENSE": "pluginErrorRequiredFiles",
   "Native libraries require native capability": "pluginErrorNativeCapability",
   "Invalid native ELF library": "pluginErrorNativeElf",
   "Native library ABI does not match its directory": "pluginErrorNativeAbi",
@@ -187,40 +153,29 @@ const pluginTextMessageIds = <String, String>{
   "Expanded DEX exceeds 4 MB": "pluginErrorDexSize",
   "Empty DEX file": "pluginErrorDexEmpty",
   "plugin.jar has no classes.dex": "pluginErrorDexMissing",
-  "Plugin has no native library for this device ABI":
-      "pluginErrorNativeLibrary",
-  "Plugin callback timed out. Restart Kiosk if the plugin left work running.":
-      "pluginErrorCallbackTimeout",
+  "Plugin has no native library for this device ABI": "pluginErrorNativeLibrary",
+  "Plugin callback timed out. Restart Kiosk if the plugin left work running.": "pluginErrorCallbackTimeout",
   "Enable the plugin first": "pluginErrorEnableFirst",
   "Cannot save plugin state": "pluginErrorSaveState",
   "Invalid installed package hash": "pluginErrorPackageHash",
   "Package SHA-256 does not match": "pluginErrorChecksum",
-  "This plugin ID belongs to another repository. Uninstall it before changing sources.":
-      "pluginErrorDifferentRepository",
-  "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it.":
-      "pluginErrorRestartReplace",
+  "This plugin ID belongs to another repository. Uninstall it before changing sources.": "pluginErrorDifferentRepository",
+  "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it.": "pluginErrorRestartReplace",
   "This package is already installed": "pluginErrorAlreadyInstalled",
-  "Previously loaded package failed its integrity check. Restart Kiosk Satellite before reinstalling it.":
-      "pluginErrorLoadedIntegrity",
+  "Previously loaded package failed its integrity check. Restart Kiosk Satellite before reinstalling it.": "pluginErrorLoadedIntegrity",
   "Cannot remove unused package": "pluginErrorRemovePackage",
   "Cannot install plugin package": "pluginErrorInstallPackage",
-  "Update canceled because the plugin did not stop cleanly. Restart Kiosk Satellite before trying again.":
-      "pluginErrorUpdateCanceled",
+  "Update canceled because the plugin did not stop cleanly. Restart Kiosk Satellite before trying again.": "pluginErrorUpdateCanceled",
   "The previous version was retained.": "pluginErrorVersionRetained",
-  "The previous version was retained but is disabled. Restart Kiosk Satellite before enabling it.":
-      "pluginErrorRetainedDisabled",
+  "The previous version was retained but is disabled. Restart Kiosk Satellite before enabling it.": "pluginErrorRetainedDisabled",
   "The previous version is running again.": "pluginErrorVersionRunning",
   "Enable Plugins first": "pluginErrorEnablePlugins",
-  "This plugin did not stop cleanly. Restart Kiosk Satellite before enabling it.":
-      "pluginErrorRestartEnable",
-  "Installed plugin failed its integrity check. Reinstall it.":
-      "pluginErrorInstalledIntegrity",
+  "This plugin did not stop cleanly. Restart Kiosk Satellite before enabling it.": "pluginErrorRestartEnable",
+  "Installed plugin failed its integrity check. Reinstall it.": "pluginErrorInstalledIntegrity",
   "Android version is too old": "pluginErrorAndroidOld",
   "This plugin needs a screen": "pluginErrorNeedsScreen",
-  "Installed native libraries failed their integrity check":
-      "pluginErrorNativeIntegrity",
-  "Installed native library failed its integrity check":
-      "pluginErrorNativeFileIntegrity",
+  "Installed native libraries failed their integrity check": "pluginErrorNativeIntegrity",
+  "Installed native library failed its integrity check": "pluginErrorNativeFileIntegrity",
   "Show password": "pluginShowPassword",
   "Hide password": "pluginHidePassword",
   "Untitled": "pluginUntitled",
@@ -244,8 +199,7 @@ const pluginTextMessageIds = <String, String>{
   "Refresh": "commonRefresh",
   "Search": "mediaSonosSearch",
   "The plugin did not answer in time.": "pluginThePluginDidNotAnswerInTime",
-  "No choices yet. Refresh to look for them.":
-      "pluginNoChoicesYetRefreshToLookForThem",
+  "No choices yet. Refresh to look for them.": "pluginNoChoicesYetRefreshToLookForThem",
   "This choice is no longer listed.": "pluginThisChoiceIsNoLongerListed",
   "Browse plugins": "pluginBrowsePlugins",
   "Find plugins made by the community": "pluginFindPluginsMadeByTheCommunity",
@@ -256,18 +210,13 @@ const pluginTextMessageIds = <String, String>{
   "Downloads": "pluginDownloads",
   "Active installs": "pluginActiveInstalls",
   "No plugins match your search.": "pluginNoPluginsMatchYourSearch",
-  "Community Plugins has no plugins yet.":
-      "pluginCommunityPluginsHasNoPluginsYet",
+  "Community Plugins has no plugins yet.": "pluginCommunityPluginsHasNoPluginsYet",
   "Submit your plugin": "pluginSubmitYourPlugin",
-  "List your plugin in Community Plugins.":
-      "pluginListYourPluginInCommunityPlugins",
-  "Could not reach Community Plugins. Check the internet connection.":
-      "pluginCouldNotReachCommunityPlugins",
-  "Could not load Community Plugins. Try again later.":
-      "pluginCouldNotLoadCommunityPlugins",
+  "List your plugin in Community Plugins.": "pluginListYourPluginInCommunityPlugins",
+  "Could not reach Community Plugins. Check the internet connection.": "pluginCouldNotReachCommunityPlugins",
+  "Could not load Community Plugins. Try again later.": "pluginCouldNotLoadCommunityPlugins",
   "Turn on": "pluginTurnOn",
-  "Turn on Enable Plugins to install this plugin.":
-      "pluginTurnOnEnablePluginsToInstall",
+  "Turn on Enable Plugins to install this plugin.": "pluginTurnOnEnablePluginsToInstall",
   "Install": "commonInstall",
   "Previous page": "pluginPreviousPage",
   "Next page": "pluginNextPage",
@@ -279,5 +228,5 @@ const pluginTextMessageIds = <String, String>{
   "Most downloads": "pluginSortMostDownloads",
   "Plugins per page": "pluginPluginsPerPage",
   "Listed in Community Plugins": "pluginListedChip",
-  "Not listed in Community Plugins": "pluginNotListedChip",
+  "Not listed in Community Plugins": "pluginNotListedChip"
 };

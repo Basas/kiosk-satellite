@@ -44,26 +44,19 @@ const cameraStreamsTextMessageIds = <String, String>{
   "Loading…": "commonLoading",
   "Choose": "commonChoose",
   "Allow H.265 streams": "settingCameraAllowH265Title",
-  "Play H.265 camera streams as they are. A device that cannot decode H.265 shows a blank image instead.":
-      "settingCameraAllowH265Description",
+  "Play H.265 camera streams as they are. A device that cannot decode H.265 shows a blank image instead.": "settingCameraAllowH265Description",
   "Prefer MSE over WebRTC": "settingCameraPreferMseTitle",
-  "Stream Go2RTC cameras over MSE first. For devices that cannot play WebRTC; adds a second or two of delay.":
-      "settingCameraPreferMseDescription",
+  "Stream Go2RTC cameras over MSE first. For devices that cannot play WebRTC; adds a second or two of delay.": "settingCameraPreferMseDescription",
   "Prefer HLS over WebRTC": "settingCameraPreferHlsTitle",
-  "Stream Home Assistant cameras over HLS first. For devices that cannot play WebRTC; adds a few seconds of delay.":
-      "settingCameraPreferHlsDescription",
+  "Stream Home Assistant cameras over HLS first. For devices that cannot play WebRTC; adds a few seconds of delay.": "settingCameraPreferHlsDescription",
   "Play sound for a single camera": "settingCameraSingleAudioTitle",
-  "Play the camera's sound when only one camera is on screen. Grids with several cameras stay silent.":
-      "settingCameraSingleAudioDescription",
+  "Play the camera's sound when only one camera is on screen. Grids with several cameras stay silent.": "settingCameraSingleAudioDescription",
   "Pinch to zoom a single camera": "settingCameraPinchZoomTitle",
-  "Zoom into the picture with two fingers when only one camera is on screen. Drag to move around, double-tap to reset.":
-      "settingCameraPinchZoomDescription",
+  "Zoom into the picture with two fingers when only one camera is on screen. Drag to move around, double-tap to reset.": "settingCameraPinchZoomDescription",
   "Auto-dismiss after": "settingCameraAutoDismissSecondsTitle",
-  "Close an opened camera view on its own; 0 keeps it up. The camera screensaver is unaffected.":
-      "settingCameraAutoDismissSecondsDescription",
+  "Close an opened camera view on its own; 0 keeps it up. The camera screensaver is unaffected.": "settingCameraAutoDismissSecondsDescription",
   "Import cameras from Home Assistant": "cameraStreamsImportHa",
-  "Add every camera of the connected Home Assistant, playing over WebRTC, HLS or MJPEG. Importing again merges new cameras.":
-      "cameraStreamsImportHaHelp",
+  "Add every camera of the connected Home Assistant, playing over WebRTC, HLS or MJPEG. Importing again merges new cameras.": "cameraStreamsImportHaHelp",
   "Import failed": "cameraStreamsImportFailed",
   "Import complete": "cameraStreamsImportComplete",
   "Go2RTC servers": "cameraStreamsServers",
@@ -79,16 +72,13 @@ const cameraStreamsTextMessageIds = <String, String>{
   "Password (optional)": "cameraStreamsPassword",
   "Allow invalid TLS certificate": "cameraStreamsInvalidCertificate",
   "Could not save the server": "cameraStreamsSaveServerFailed",
-  "Its cameras will be removed from every view.":
-      "cameraStreamsDeleteServerHelp",
+  "Its cameras will be removed from every view.": "cameraStreamsDeleteServerHelp",
   "Cameras": "cameraStreamsCameras",
   "No cameras configured": "cameraStreamsNoCameras",
-  "Import cameras from Home Assistant or Go2RTC, or add one manually.":
-      "cameraStreamsNoCamerasHelp",
+  "Import cameras from Home Assistant or Go2RTC, or add one manually.": "cameraStreamsNoCamerasHelp",
   "Delete camera": "cameraStreamsDeleteCamera",
   "Add camera manually": "cameraStreamsAddManually",
-  "Use a Go2RTC stream name, a WHEP URL or a Home Assistant camera entity.":
-      "cameraStreamsAddManuallyHelp",
+  "Use a Go2RTC stream name, a WHEP URL or a Home Assistant camera entity.": "cameraStreamsAddManuallyHelp",
   "Unknown camera": "cameraStreamsUnknownCamera",
   "Unknown server": "cameraStreamsUnknownServer",
   " (missing)": "cameraStreamsMissing",
@@ -134,15 +124,13 @@ const cameraStreamsTextMessageIds = <String, String>{
   "Stop": "cameraStreamsStop",
   "Playback": "cameraStreamsPlayback",
   "Off": "cameraStreamsOff",
-  "Grids with several cameras are video-only. For low-power devices, use lower resolution Go2RTC streams in views and optionally set a separate fullscreen stream.":
-      "cameraStreamsGridHelp",
+  "Grids with several cameras are video-only. For low-power devices, use lower resolution Go2RTC streams in views and optionally set a separate fullscreen stream.": "cameraStreamsGridHelp",
   "name required": "cameraStreamsNameRequired",
   "valid HTTP or HTTPS baseUrl required": "cameraStreamsBaseUrlRequired",
   "server not found": "cameraStreamsServerNotFound",
   "Go2RTC returned an invalid stream list": "cameraStreamsInvalidStreamList",
   "kind must be go2rtc, whep or ha": "cameraStreamsKindRequired",
-  "preferredProtocol must be auto, webrtc, hls or mjpeg":
-      "cameraStreamsProtocolRequired",
+  "preferredProtocol must be auto, webrtc, hls or mjpeg": "cameraStreamsProtocolRequired",
   "valid serverId required": "cameraStreamsServerRequired",
   "streamName required": "cameraStreamsStreamRequired",
   "a camera.* entityId is required": "cameraStreamsEntityRequired",
@@ -156,9 +144,7 @@ const cameraStreamsTextMessageIds = <String, String>{
   "grid must be between 1 and 12": "cameraStreamsGridRange",
   "grid is smaller than the camera count": "cameraStreamsGridTooSmall",
   "view not found": "cameraStreamsViewNotFound",
-  "the default view cannot be deleted; empty it instead":
-      "cameraStreamsDefaultViewDelete",
+  "the default view cannot be deleted; empty it instead": "cameraStreamsDefaultViewDelete",
   "view has no cameras": "cameraStreamsViewEmpty",
-  "Home Assistant is not configured or unreachable":
-      "cameraStreamsHaUnavailable",
+  "Home Assistant is not configured or unreachable": "cameraStreamsHaUnavailable"
 };

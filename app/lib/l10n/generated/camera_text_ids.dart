@@ -44,100 +44,72 @@ const cameraTextMessageIds = <String, String>{
   "Loading…": "commonLoading",
   "Choose": "commonChoose",
   "Enable camera": "settingCameraEnabledTitle",
-  "Camera use adds CPU load and heat, which can shorten the battery and device lifespan.":
-      "settingCameraEnabledDescription",
+  "Camera use adds CPU load and heat, which can shorten the battery and device lifespan.": "settingCameraEnabledDescription",
   "Camera": "settingCameraDeviceTitle",
   "Which camera to use.": "settingCameraDeviceDescription",
   "Snapshot resolution": "settingCameraSnapshotResolutionTitle",
-  "Higher looks sharper but costs more CPU and bandwidth.":
-      "settingCameraSnapshotResolutionDescription",
-  "Disable snapshots on detection":
-      "settingCameraDisableDetectionSnapshotsTitle",
-  "Prevent automatic snapshots triggered by detection. Motion, face, presence and gesture detection keep working. Manual requests and Continuous snapshots can still capture images.":
-      "settingCameraDisableDetectionSnapshotsDescription",
+  "Higher looks sharper but costs more CPU and bandwidth.": "settingCameraSnapshotResolutionDescription",
+  "Disable snapshots on detection": "settingCameraDisableDetectionSnapshotsTitle",
+  "Prevent automatic snapshots triggered by detection. Motion, face, presence and gesture detection keep working. Manual requests and Continuous snapshots can still capture images.": "settingCameraDisableDetectionSnapshotsDescription",
   "Continuous snapshots": "settingCameraSnapshotsTitle",
-  "Publish a fresh camera snapshot to Home Assistant at a fixed interval.":
-      "settingCameraSnapshotsDescription",
+  "Publish a fresh camera snapshot to Home Assistant at a fixed interval.": "settingCameraSnapshotsDescription",
   "Snapshot interval": "settingCameraSnapshotIntervalTitle",
   "Seconds between snapshots.": "settingCameraSnapshotIntervalDescription",
   "Motion sensor": "settingMotionSensorTitle",
-  "Expose motion as a Home Assistant sensor. WARNING: Keeps the camera running permanently, even with the screen off.":
-      "settingMotionSensorDescription",
+  "Expose motion as a Home Assistant sensor. WARNING: Keeps the camera running permanently, even with the screen off.": "settingMotionSensorDescription",
   "Clear after": "settingMotionSensorOffDelayTitle",
-  "Seconds without motion before the sensor reads clear.":
-      "settingMotionSensorOffDelayDescription",
+  "Seconds without motion before the sensor reads clear.": "settingMotionSensorOffDelayDescription",
   "Motion frame rate": "settingMotionFpsTitle",
-  "Frames per second the camera checks for motion. Lower is lighter on the CPU; 2 is plenty to notice someone approaching.":
-      "settingMotionFpsDescription",
+  "Frames per second the camera checks for motion. Lower is lighter on the CPU; 2 is plenty to notice someone approaching.": "settingMotionFpsDescription",
   "Startup delay": "settingMotionStartDelayTitle",
-  "Ignore motion for this long after the camera starts, for devices whose camera physically moves as it opens.":
-      "settingMotionStartDelayDescription",
+  "Ignore motion for this long after the camera starts, for devices whose camera physically moves as it opens.": "settingMotionStartDelayDescription",
   "Motion sensitivity": "settingMotionSensitivityTitle",
-  "Higher trips on smaller movements. 1 needs a large change across the frame; 100 reacts to the slightest motion.":
-      "settingMotionSensitivityDescription",
+  "Higher trips on smaller movements. 1 needs a large change across the frame; 100 reacts to the slightest motion.": "settingMotionSensitivityDescription",
   "Enable camera streaming": "settingCameraRtspEnabledTitle",
-  "Share H.264 video with RTSP or ONVIF clients. Video encoding runs only while a viewer is connected. Hardware encoding is preferred with software fallback when needed. Uses the camera selected in Camera settings.":
-      "settingCameraRtspEnabledDescription",
+  "Share H.264 video with RTSP or ONVIF clients. Video encoding runs only while a viewer is connected. Hardware encoding is preferred with software fallback when needed. Uses the camera selected in Camera settings.": "settingCameraRtspEnabledDescription",
   "Streaming protocol": "settingCameraStreamingProtocolTitle",
-  "ONVIF lets compatible clients discover the camera and connect to its stream.":
-      "settingCameraStreamingProtocolDescription",
+  "ONVIF lets compatible clients discover the camera and connect to its stream.": "settingCameraStreamingProtocolDescription",
   "Port": "settingCameraRtspPortTitle",
   "RTSP server port.": "settingCameraRtspPortDescription",
   "ONVIF server port.": "settingCameraOnvifPortDescription",
   "Resolution": "settingCameraRtspResolutionTitle",
-  "Supported streaming sizes for the selected camera and encoder. Video follows the device orientation.":
-      "settingCameraRtspResolutionDescription",
+  "Supported streaming sizes for the selected camera and encoder. Video follows the device orientation.": "settingCameraRtspResolutionDescription",
   "Motion analysis while streaming": "settingCameraRtspAnalysisTitle",
-  "Keep motion detection, face detection and hand gestures available while viewers are connected. Turning this off can allow higher resolutions. Snapshots then use video frames at the streaming resolution.":
-      "settingCameraRtspAnalysisDescription",
+  "Keep motion detection, face detection and hand gestures available while viewers are connected. Turning this off can allow higher resolutions. Snapshots then use video frames at the streaming resolution.": "settingCameraRtspAnalysisDescription",
   "Frame rate": "settingCameraRtspFpsTitle",
-  "Target video frames per second. Motion keeps its separate analysis rate. Actual delivery depends on the camera.":
-      "settingCameraRtspFpsDescription",
+  "Target video frames per second. Motion keeps its separate analysis rate. Actual delivery depends on the camera.": "settingCameraRtspFpsDescription",
   "Bitrate": "settingCameraRtspBitrateTitle",
-  "Target video bitrate. Higher improves detail and uses more network bandwidth.":
-      "settingCameraRtspBitrateDescription",
+  "Target video bitrate. Higher improves detail and uses more network bandwidth.": "settingCameraRtspBitrateDescription",
   "Include microphone audio": "settingCameraRtspAudioTitle",
-  "Include microphone audio in the camera stream. Shares your microphone settings. WARNING: Increased CPU usage.":
-      "settingCameraRtspAudioDescription",
+  "Include microphone audio in the camera stream. Shares your microphone settings. WARNING: Increased CPU usage.": "settingCameraRtspAudioDescription",
   "Require authentication": "settingCameraRtspAuthTitle",
-  "Require a username and password to view the stream. Authentication does not enable encryption.":
-      "settingCameraRtspAuthDescription",
+  "Require a username and password to view the stream. Authentication does not enable encryption.": "settingCameraRtspAuthDescription",
   "Username": "settingCameraRtspUsernameTitle",
   "Username for streaming clients.": "settingCameraRtspUsernameDescription",
   "Password": "settingCameraRtspPasswordTitle",
-  "Set a password to start the authenticated stream.":
-      "settingCameraRtspPasswordDescription",
+  "Set a password to start the authenticated stream.": "settingCameraRtspPasswordDescription",
   "Front": "cameraFront",
   "External": "cameraExternal",
   "The only camera this device has.": "cameraOnlyCamera",
   "Motion Sensor": "cameraMotionPage",
-  "Home Assistant motion sensor and shared detection settings":
-      "cameraMotionHint",
+  "Home Assistant motion sensor and shared detection settings": "cameraMotionHint",
   "Enable person sensor": "settingPersonSensorTitle",
-  "Expose the device's person sensor to Home Assistant as an occupancy sensor. Needs the Log access grant below.":
-      "settingPersonSensorDescription",
+  "Expose the device's person sensor to Home Assistant as an occupancy sensor. Needs the Log access grant below.": "settingPersonSensorDescription",
   "Person Sensor": "cameraPersonPage",
-  "Home Assistant occupancy sensor from the device's person sensor":
-      "cameraPersonHint",
+  "Home Assistant occupancy sensor from the device's person sensor": "cameraPersonHint",
   "Required system permissions": "screensaverDetectionPermissions",
-  "The Log access grant the device's person sensor needs.":
-      "searchPersonPermission",
+  "The Log access grant the device's person sensor needs.": "searchPersonPermission",
   "RTSP & ONVIF Streaming": "cameraStreamingPage",
   "Share the device camera via RTSP or ONVIF": "cameraStreamingHint",
   "Enter a whole port number from 1024 to 65535.": "cameraPortError",
-  "Use 1 to 64 characters without spaces, quotes, colons or backslashes.":
-      "cameraUsernameError",
+  "Use 1 to 64 characters without spaces, quotes, colons or backslashes.": "cameraUsernameError",
   "No supported sizes available": "cameraNoSizes",
-  "No supported sizes available. Check the camera connection.":
-      "cameraNoSizesHelp",
+  "No supported sizes available. Check the camera connection.": "cameraNoSizesHelp",
   "Resolution support": "cameraResolutionSupport",
   "Checking camera and H.264 encoder support...": "cameraCheckingSizes",
-  "Only sizes supported by the camera and H.264 encoder at the current streaming settings are listed.":
-      "cameraSupportedSizes",
-  "Motion detection, face detection and hand gestures pause while viewers are connected. Snapshots use video frames at the streaming resolution.":
-      "cameraAnalysisOff",
-  "Other camera sizes are unavailable in the current capture setup.":
-      "cameraCaptureRejected",
+  "Only sizes supported by the camera and H.264 encoder at the current streaming settings are listed.": "cameraSupportedSizes",
+  "Motion detection, face detection and hand gestures pause while viewers are connected. Snapshots use video frames at the streaming resolution.": "cameraAnalysisOff",
+  "Other camera sizes are unavailable in the current capture setup.": "cameraCaptureRejected",
   "Stream Status": "cameraStatusHeading",
   "Connected Clients": "cameraClientsHeading",
   "Unavailable": "cameraUnavailable",
@@ -158,18 +130,15 @@ const cameraTextMessageIds = <String, String>{
   "Waiting for a network address": "cameraWaitingAddress",
   "Client information unavailable.": "cameraClientsUnavailable",
   "No connected clients.": "cameraNoClients",
-  "Set a streaming username and password to enable authentication.":
-      "cameraCredentialsMissing",
+  "Set a streaming username and password to enable authentication.": "cameraCredentialsMissing",
   "Waiting for the RTSP port to be released.": "cameraPortWaiting",
   "Could not start the RTSP listener.": "cameraListenerFailed",
   "No camera detected": "cameraNoCamera",
   "This device does not report any usable camera.": "cameraNoCameraHelp",
   "Camera permission missing": "cameraCameraPermission",
-  "Without it the camera cannot be used. The grant dialog appears on the tablet screen.":
-      "cameraCameraPermissionHelp",
+  "Without it the camera cannot be used. The grant dialog appears on the tablet screen.": "cameraCameraPermissionHelp",
   "Grant on device": "cameraGrantOnDevice",
-  "Blocked. Android will not ask again, so allow it in the app settings.":
-      "cameraCameraBlocked",
+  "Blocked. Android will not ask again, so allow it in the app settings.": "cameraCameraBlocked",
   "Without this the camera cannot be used.": "cameraCameraNeeded",
   "App settings": "cameraAppSettings",
   "Latest snapshot": "cameraLatest",
@@ -183,17 +152,14 @@ const cameraTextMessageIds = <String, String>{
   "Detection snapshots are disabled.": "cameraDetectionDisabled",
   "The camera returned no image.": "cameraNoImage",
   "The camera did not answer in time.": "cameraTimedOut",
-  "The camera is unavailable while the app is in the background.":
-      "cameraBackground",
+  "The camera is unavailable while the app is in the background.": "cameraBackground",
   "just now": "cameraJustNow",
   "1 minute ago": "cameraMinuteAgo",
   "1 hour ago": "cameraHourAgo",
   "1 day ago": "cameraDayAgo",
   "Overlays": "cameraOverlaysHeading",
   "Show date and time": "settingCameraRtspDateTimeTitle",
-  "Show the device date and time in the upper-left corner of the video using its date format and 12/24-hour setting.":
-      "settingCameraRtspDateTimeDescription",
+  "Show the device date and time in the upper-left corner of the video using its date format and 12/24-hour setting.": "settingCameraRtspDateTimeDescription",
   "Black background": "settingCameraRtspDateTimeBackgroundTitle",
-  "Add a black background behind the date and time for visibility.":
-      "settingCameraRtspDateTimeBackgroundDescription",
+  "Add a black background behind the date and time for visibility.": "settingCameraRtspDateTimeBackgroundDescription"
 };

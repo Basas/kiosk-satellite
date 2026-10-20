@@ -450,8 +450,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "screensaver.screen_off_wake_to_screensaver": {
     "title": "settingScreensaverScreenOffWakeToScreensaverTitle",
-    "description":
-        "settingScreensaverScreenOffWakeToScreensaverDescriptionSources",
+    "description": "settingScreensaverScreenOffWakeToScreensaverDescriptionSources",
   },
   "screensaver.schedule_enabled": {
     "title": "settingScreensaverScheduleEnabledTitle",
@@ -783,8 +782,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "screensaver.dismiss_on_proximity_screen_off_only": {
     "title": "settingScreensaverDismissOnProximityScreenOffOnlyTitle",
-    "description":
-        "settingScreensaverDismissOnProximityScreenOffOnlyDescription",
+    "description": "settingScreensaverDismissOnProximityScreenOffOnlyDescription",
   },
   "screensaver.postpone_on_proximity": {
     "title": "settingScreensaverPostponeOnProximityTitle",
@@ -1372,8 +1370,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "fleet.auto_update": {
     "title": "fleetKeepFollowersOnThisVersion",
-    "description":
-        "fleetAutomaticallyUpdateAllFollowersToTheKioskSatelliteVersion",
+    "description": "fleetAutomaticallyUpdateAllFollowersToTheKioskSatelliteVersion",
   },
   "lockdown.enabled": {
     "title": "settingLockdownEnabledTitle",
@@ -1779,7 +1776,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingVoiceWakeArbitrationOffsetTitle",
     "description": "settingVoiceWakeArbitrationOffsetDescription",
   },
-  "voice.skin": {"title": "voiceSkin", "description": "voiceSkinHelp"},
+  "voice.skin": {
+    "title": "voiceSkin",
+    "description": "voiceSkinHelp",
+  },
   "voice.theme": {
     "title": "settingVoiceThemeTitle",
     "description": "settingVoiceThemeDescription",
