@@ -14375,6 +14375,16 @@ class UiStringsRu extends UiStrings {
   }
 
   @override
+  String get settingVoiceAmazonLocaleTitle => 'Язык слова пробуждения';
+
+  @override
+  String get settingVoiceAmazonLocaleDescription =>
+      'Язык моделей слов пробуждения Amazon. В списках слов пробуждения доступны слова пробуждения этого языка.';
+
+  @override
+  String get voiceOptionAppLanguage => 'Язык Kiosk Satellite';
+
+  @override
   String get settingDisableCacheTitle => 'Отключить кэш';
 
   @override

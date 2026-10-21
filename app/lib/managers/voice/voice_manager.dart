@@ -435,14 +435,26 @@ class VoiceManager extends Manager {
               e.key == defs.voiceEnabled.key ||
               e.key == defs.voiceMute.key ||
               e.key == defs.voiceWakeWordEngine.key ||
+              e.key == defs.voiceAmazonLocale.key ||
               e.key == defs.voiceWakeWords.key ||
               e.key == defs.voiceWakeWordSensitivity.key ||
               e.key == defs.voiceNoiseGate.key ||
               e.key == defs.voiceStopWord.key) {
             unawaited(_sync());
           }
-          // Another engine offers other wake words.
-          if (e.key == defs.voiceWakeWordEngine.key) _refreshSelects();
+          // Another engine offers other wake words, and Amazon's engine
+          // other ones in another language. The app's language only counts
+          // while it picks that language.
+          if (e.key == defs.voiceWakeWordEngine.key ||
+              e.key == defs.voiceAmazonLocale.key) {
+            _refreshSelects();
+          }
+          if (e.key == defs.uiLanguage.key &&
+              _engine == WakeWordEngineType.pryon &&
+              _settings.get(defs.voiceAmazonLocale).isEmpty) {
+            unawaited(_sync());
+            _refreshSelects();
+          }
           if (e.key == defs.voiceRuntime.key ||
               e.key == defs.voiceEnabled.key) {
             _watchSelects();
@@ -836,6 +848,7 @@ class VoiceManager extends Manager {
                 engine,
                 external: _external,
                 custom: _custom.models,
+                pryonLocale: _pryonLocale,
               ))
                 {'id': w.id, 'phrase': w.phrase},
             ]);
@@ -1006,6 +1019,7 @@ class VoiceManager extends Manager {
       _engine,
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     ))
       '${w.id}=${w.phrase}',
   ].join('|');
@@ -1214,6 +1228,7 @@ class VoiceManager extends Manager {
       engine,
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     )) {
       if (w.id == model['id']) return w.phrase;
     }
@@ -1867,6 +1882,13 @@ class VoiceManager extends Manager {
     } catch (_) {}
     return const ['ok_nabu'];
   }
+
+  /// The locale Amazon's engine listens with: the Wake word language
+  /// setting, else the app's language (PryonCatalog.resolveLocale).
+  String get _pryonLocale => PryonCatalog.resolveLocale(
+    _settings.get(defs.voiceAmazonLocale),
+    _settings.get(defs.uiLanguage),
+  );
 
   WakeWordEngineType get _engine {
     final engine = voiceEngines[_settings.get(defs.voiceWakeWordEngine)];
@@ -2565,6 +2587,7 @@ class VoiceManager extends Manager {
       stopWord: _settings.get(defs.voiceStopWord),
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     );
     _ownsWakeWord = true;
     await _wakeWord.configure(config, source: 'native satellite');
@@ -2863,6 +2886,7 @@ class VoiceManager extends Manager {
       _engine,
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     );
     _offeredSent = _offeredSignature();
     final listened = listenedWakeWords(_activeIds(), offered);

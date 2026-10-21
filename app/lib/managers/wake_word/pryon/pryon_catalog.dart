@@ -6,6 +6,9 @@
 /// first lists every model it has and the keywords each one spots. This
 /// reads that list once at boot, so the wake word selects offer exactly what
 /// the service has, and leaves the engine out on every other device.
+///
+/// Amazon's models are per locale. The service names the locales that listen
+/// with each one, and the Wake word language setting picks among them.
 library;
 
 import 'dart:async';
@@ -25,6 +28,7 @@ class PryonWord {
     required this.keyword,
     this.stop = false,
     this.acceptThreshold,
+    this.locales = const [],
   });
 
   /// The keyword in lower case, the id the wake word selects use: 'alexa'.
@@ -42,6 +46,9 @@ class PryonWord {
   /// it, or null when the service did not say.
   final double? acceptThreshold;
 
+  /// The locales that listen with its model, as the service lists them.
+  final List<String> locales;
+
   /// Where the engine finds it, in place of a manifest URL.
   String get url => 'pryon:$model/$keyword';
 
@@ -52,10 +59,12 @@ class PryonWord {
       other.model == model &&
       other.keyword == keyword &&
       other.stop == stop &&
-      other.acceptThreshold == acceptThreshold;
+      other.acceptThreshold == acceptThreshold &&
+      other.locales.join(',') == locales.join(',');
 
   @override
-  int get hashCode => Object.hash(id, model, keyword, stop, acceptThreshold);
+  int get hashCode =>
+      Object.hash(id, model, keyword, stop, acceptThreshold, locales.join(','));
 }
 
 abstract final class PryonCatalog {
@@ -72,20 +81,84 @@ abstract final class PryonCatalog {
     return null;
   }
 
-  static List<PryonWord> get wakeWords => [
-    for (final w in _words)
-      if (!w.stop) w,
-  ];
+  /// Every locale a model listens with, in the service's order (en-US
+  /// first).
+  static List<String> get locales => {
+    for (final w in _words) ...w.locales,
+  }.toList();
 
-  static PryonWord? get stopWord {
+  /// The wake words [locale] listens with. A keyword two of its models spot
+  /// is offered once, from the first.
+  static List<PryonWord> wakeWordsFor(String locale) {
+    final byId = <String, PryonWord>{};
     for (final w in _words) {
-      if (w.stop) return w;
+      if (!w.stop && w.locales.contains(locale)) byId.putIfAbsent(w.id, () => w);
+    }
+    return byId.values.toList();
+  }
+
+  /// The stop word of [model], which only that model spots.
+  static PryonWord? stopWordFor(String model) {
+    for (final w in _words) {
+      if (w.stop && w.model == model) return w;
     }
     return null;
   }
 
   /// The service answered with at least one wake word.
-  static bool get available => wakeWords.isNotEmpty;
+  static bool get available => _words.any((w) => !w.stop);
+
+  // The locale an app language falls back to when it has several.
+  static const _languageDefaults = {
+    'en': 'en-US',
+    'es': 'es-US',
+    'fr': 'fr-FR',
+    'de': 'de-DE',
+    'it': 'it-IT',
+    'pt': 'pt-BR',
+    'ja': 'ja-JP',
+    'nl': 'nl-NL',
+    'ar': 'ar-SA',
+    'hi': 'hi-IN',
+  };
+
+  /// The locale to listen with: [setting] when the service has it, else the
+  /// one matching [appLanguage] (`es`, `zh-CN`), else en-US, else the first.
+  static String resolveLocale(String setting, String appLanguage) {
+    final all = locales;
+    if (all.isEmpty) return '';
+    if (all.contains(setting)) return setting;
+    final language = appLanguage.split(RegExp('[-_]')).first;
+    final preferred = _languageDefaults[language];
+    if (preferred != null && all.contains(preferred)) return preferred;
+    for (final l in all) {
+      if (l.startsWith('$language-')) return l;
+    }
+    return all.contains('en-US') ? 'en-US' : all.first;
+  }
+
+  static const _localeNames = {
+    'en-US': 'English (United States)',
+    'en-CA': 'English (Canada)',
+    'en-GB': 'English (United Kingdom)',
+    'en-AU': 'English (Australia)',
+    'en-IN': 'English (India)',
+    'hi-IN': 'हिन्दी (भारत)',
+    'es-US': 'Español (Estados Unidos)',
+    'es-MX': 'Español (México)',
+    'es-ES': 'Español (España)',
+    'fr-FR': 'Français (France)',
+    'fr-CA': 'Français (Canada)',
+    'de-DE': 'Deutsch (Deutschland)',
+    'it-IT': 'Italiano (Italia)',
+    'pt-BR': 'Português (Brasil)',
+    'ja-JP': '日本語 (日本)',
+    'nl-NL': 'Nederlands (Nederland)',
+    'ar-SA': 'العربية (السعودية)',
+  };
+
+  /// A locale by its own name, as the app's language picker names languages.
+  static String localeLabel(String locale) => _localeNames[locale] ?? locale;
 
   /// Read the service's list on the image, then hide the engine wherever
   /// there is nothing to listen with. Before the settings render: both
@@ -96,7 +169,8 @@ abstract final class PryonCatalog {
         _words = parseHello(await _hello());
         log.info(
           'pryon',
-          'Amazon wake words: ${[for (final w in _words) w.id].join(', ')}',
+          'Amazon wake word models for ${locales.length} locales: '
+              '${{for (final w in _words) w.model}.length} models',
         );
       } catch (e) {
         _words = const [];
@@ -105,6 +179,7 @@ abstract final class PryonCatalog {
     }
     if (!available) {
       defs.deviceHiddenOptions[defs.voiceWakeWordEngine.key] = {'pryon'};
+      defs.deviceHiddenKeys.add(defs.voiceAmazonLocale.key);
     }
   }
 
@@ -126,30 +201,32 @@ abstract final class PryonCatalog {
     }
   }
 
-  /// The words in the service's first line, wake words before stop words.
-  /// A keyword two models spot is offered once, from the first.
+  /// The words in the service's first line, model by model in its order:
+  /// each model's wake words, then its stop word.
   static List<PryonWord> parseHello(String line) {
     final hello = jsonDecode(line);
     if (hello is! Map || hello['event'] != 'hello') {
       throw const FormatException('not a hello');
     }
-    final wake = <String, PryonWord>{};
-    final stop = <String, PryonWord>{};
+    final words = <PryonWord>[];
     for (final m in hello['models'] as List? ?? const []) {
       if (m is! Map) continue;
       final model = '${m['model'] ?? ''}';
       if (model.isEmpty) continue;
       final accept = m['accept_thresholds'];
-      for (final (list, isStop, into) in [
-        (m['wake_words'], false, wake),
-        (m['stop_words'], true, stop),
+      final locales = [
+        for (final l in m['locales'] as List? ?? const [])
+          if ('$l'.isNotEmpty) '$l',
+      ];
+      for (final (list, isStop) in [
+        (m['wake_words'], false),
+        (m['stop_words'], true),
       ]) {
         for (final k in list as List? ?? const []) {
           final keyword = '$k';
           if (keyword.isEmpty) continue;
-          into.putIfAbsent(
-            keyword.toLowerCase(),
-            () => PryonWord(
+          words.add(
+            PryonWord(
               id: keyword.toLowerCase(),
               model: model,
               keyword: keyword,
@@ -157,12 +234,13 @@ abstract final class PryonCatalog {
               acceptThreshold: accept is Map && accept[keyword] is num
                   ? (accept[keyword] as num).toDouble()
                   : null,
+              locales: locales,
             ),
           );
         }
       }
     }
-    return [...wake.values, ...stop.values];
+    return words;
   }
 
   /// Tests only.

@@ -4888,6 +4888,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'voiceModelNotOnnx' => strings.voiceModelNotOnnx,
       'voiceModelNotOww' => strings.voiceModelNotOww,
       'voiceModelOwwWindow' => strings.voiceModelOwwWindow,
+      'settingVoiceAmazonLocaleTitle' => strings.settingVoiceAmazonLocaleTitle,
+      'settingVoiceAmazonLocaleDescription' =>
+        strings.settingVoiceAmazonLocaleDescription,
+      'voiceOptionAppLanguage' => strings.voiceOptionAppLanguage,
       'settingDisableCacheTitle' => strings.settingDisableCacheTitle,
       'settingDisableCacheDescription' =>
         strings.settingDisableCacheDescription,

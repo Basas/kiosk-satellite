@@ -2404,4 +2404,8 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreensaverScreenOffBlackTitle",
     "description": "settingScreensaverScreenOffBlackDescription",
   },
+  "voice.amazon_locale": {
+    "title": "settingVoiceAmazonLocaleTitle",
+    "description": "settingVoiceAmazonLocaleDescription",
+  },
 };

@@ -27231,5 +27231,23 @@
     "translation": "e664f6cd51aef9deb4dcc17336ee9f5381709665eb45288642f22fa462a963ee",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "voiceOptionAppLanguage": {
+    "source": "d7d98491ec4cc8e362f2ed1fb0871a2a6abf6f1cea40e75e93755a42e3d12e9c",
+    "translation": "a46248660e32f6d26532be753e848a754f222f64d9da3ea025b28c200600a5c8",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingVoiceAmazonLocaleDescription": {
+    "source": "9020d85fb6053061fb8c7cc250ad7f4310cf54334c0da69d8f659aca1495661f",
+    "translation": "c5d7c166ccad276130d29fe9cbf49b48c53cb3e78e3859daa97f122e3e34a0ad",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingVoiceAmazonLocaleTitle": {
+    "source": "0cfe2a269b9d7217d28a783cafee23030e900754a3fbcb00bf0c8c58127f8a32",
+    "translation": "0f3ffa5b8ab504ed9049818639777e6d1c4e407ab37d209d204f0d0b1539d727",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

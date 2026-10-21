@@ -473,5 +473,8 @@
     "ha_home": "screensaverCelestialLocationHaHome",
     "ha_entity": "screensaverCelestialLocationHaEntity",
     "manual": "screensaverCelestialLocationManual"
+  },
+  "voice.amazon_locale": {
+    "": "voiceOptionAppLanguage"
   }
 }

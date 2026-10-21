@@ -51860,6 +51860,45 @@
       }
     }
   },
+  "settingVoiceAmazonLocaleTitle": "Langue du mot de réveil",
+  "@settingVoiceAmazonLocaleTitle": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
+  "settingVoiceAmazonLocaleDescription": "La langue des modèles de mots de réveil d'Amazon. Les sélecteurs de mot de réveil proposent les mots de réveil de cette langue.",
+  "@settingVoiceAmazonLocaleDescription": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
+  "voiceOptionAppLanguage": "Langue de Kiosk Satellite",
+  "@voiceOptionAppLanguage": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
   "settingDisableCacheTitle": "Désactiver le cache",
   "@settingDisableCacheTitle": {
     "context": "Settings > Web Browsing > Disable cache",

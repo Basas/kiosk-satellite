@@ -14437,6 +14437,16 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get settingVoiceAmazonLocaleTitle => 'Мова слова активації';
+
+  @override
+  String get settingVoiceAmazonLocaleDescription =>
+      'Мова моделей слів активації Amazon. У списках слів активації доступні слова активації цієї мови.';
+
+  @override
+  String get voiceOptionAppLanguage => 'Мова Kiosk Satellite';
+
+  @override
   String get settingDisableCacheTitle => 'Вимкнути кеш';
 
   @override

@@ -166,11 +166,13 @@ List<OfferedWakeWord> offeredWakeWords(
   WakeWordEngineType engine, {
   List<ExternalWakeWord> external = const [],
   List<CustomWakeWord> custom = const [],
+  String pryonLocale = '',
 }) {
-  // Amazon's engine listens only with the models the Echo Dot image has.
+  // Amazon's engine listens only with the models the Echo Dot image has for
+  // [pryonLocale] (PryonCatalog.resolveLocale).
   if (engine == WakeWordEngineType.pryon) {
     return [
-      for (final w in PryonCatalog.wakeWords)
+      for (final w in PryonCatalog.wakeWordsFor(pryonLocale))
         OfferedWakeWord(w.id, wakeWordPhraseFor(w.id), w.url),
     ];
   }
@@ -288,8 +290,14 @@ WakeWordConfig buildWakeConfig({
   required bool stopWord,
   List<ExternalWakeWord> external = const [],
   List<CustomWakeWord> custom = const [],
+  String pryonLocale = '',
 }) {
-  final offered = offeredWakeWords(engine, external: external, custom: custom);
+  final offered = offeredWakeWords(
+    engine,
+    external: external,
+    custom: custom,
+    pryonLocale: pryonLocale,
+  );
   final models = listenedWakeWords(activeIds, offered);
   final oww = engine == WakeWordEngineType.openWakeWord;
   final pryon = engine == WakeWordEngineType.pryon;
@@ -304,7 +312,13 @@ WakeWordConfig buildWakeConfig({
             ? pryonThresholdOffsetFor(sensitivity, stop: stop)
             : 0.0,
       );
-  final pryonStop = PryonCatalog.stopWord;
+  // Amazon's stop word is part of each model: the one of the first wake
+  // word's model, so listening needs no other model.
+  final pryonStop = pryon && models.isNotEmpty
+      ? PryonCatalog.stopWordFor(
+          PryonCatalog.byUrl(models.first.manifestUrl)?.model ?? '',
+        )
+      : null;
   final OfferedWakeWord? stopModel = pryon
       ? pryonStop == null
             ? null

@@ -6,16 +6,25 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kiosk_satellite/core/logging.dart';
 import 'package:kiosk_satellite/core/permissions.dart';
+import 'package:kiosk_satellite/managers/settings/definitions.dart' as defs;
 import 'package:kiosk_satellite/managers/voice/wake_catalog.dart';
 import 'package:kiosk_satellite/managers/wake_word/engine.dart';
 import 'package:kiosk_satellite/managers/wake_word/pryon/pryon_catalog.dart';
 import 'package:kiosk_satellite/managers/wake_word/pryon/pryon_engine.dart';
 
-/// What biscuit-pryond says first on the Echo Dot image.
+/// What biscuit-pryond says first on the Echo Dot image, shortened to three
+/// of its models: en-US first, as the service orders them.
 const _hello =
-    '{"event":"hello","version":1,"models":[{"model":"ALEXA",'
+    '{"event":"hello","version":1,"models":['
+    '{"model":"alexa-en-US","locales":["en-US"],'
     '"wake_words":["ALEXA"],"stop_words":["STOP"],'
-    '"accept_thresholds":{"ALEXA":0.923,"STOP":0.18}}]}';
+    '"accept_thresholds":{"ALEXA":0.923,"STOP":0.18}},'
+    '{"model":"echo-en-US","locales":["en-US","en-CA"],'
+    '"wake_words":["ECHO","HEY_DISNEY"],"stop_words":["STOP"],'
+    '"accept_thresholds":{"ECHO":0.769,"HEY_DISNEY":0.25,"STOP":0.18}},'
+    '{"model":"echo-de-DE","locales":["de-DE"],'
+    '"wake_words":["ECHO"],"stop_words":["STOP"],'
+    '"accept_thresholds":{"ECHO":0.751,"STOP":0.18}}]}';
 
 /// Amazon's wake word engine on the Echo Dot image: the catalog the
 /// service's hello fills, the config the settings resolve to, and the engine
@@ -24,37 +33,66 @@ void main() {
   tearDown(() => PryonCatalog.debugWords = const []);
 
   group('PryonCatalog', () {
-    test("reads the service's wake words, stop word and thresholds", () {
+    test("reads every model's words, thresholds and locales", () {
       final words = PryonCatalog.parseHello(_hello);
-      expect(words, const [
-        PryonWord(
-          id: 'alexa',
-          model: 'ALEXA',
-          keyword: 'ALEXA',
-          acceptThreshold: 0.923,
-        ),
-        PryonWord(
-          id: 'stop',
-          model: 'ALEXA',
-          keyword: 'STOP',
-          stop: true,
-          acceptThreshold: 0.18,
-        ),
+      expect(words.first, const PryonWord(
+        id: 'alexa',
+        model: 'alexa-en-US',
+        keyword: 'ALEXA',
+        acceptThreshold: 0.923,
+        locales: ['en-US'],
+      ));
+      expect(words.first.url, 'pryon:alexa-en-US/ALEXA');
+      expect([for (final w in words) w.url], [
+        'pryon:alexa-en-US/ALEXA',
+        'pryon:alexa-en-US/STOP',
+        'pryon:echo-en-US/ECHO',
+        'pryon:echo-en-US/HEY_DISNEY',
+        'pryon:echo-en-US/STOP',
+        'pryon:echo-de-DE/ECHO',
+        'pryon:echo-de-DE/STOP',
       ]);
-      expect(words.first.url, 'pryon:ALEXA/ALEXA');
     });
 
-    test('offers a keyword two models spot once', () {
-      final words = PryonCatalog.parseHello(
-        '{"event":"hello","models":['
-        '{"model":"ALEXA","wake_words":["ALEXA"],"stop_words":["STOP"]},'
-        '{"model":"ECHO","wake_words":["ECHO"],"stop_words":["STOP"]}]}',
-      );
-      expect([for (final w in words) w.url], [
-        'pryon:ALEXA/ALEXA',
-        'pryon:ECHO/ECHO',
-        'pryon:ALEXA/STOP',
+    test('lists the locales in the service order', () {
+      PryonCatalog.debugWords = PryonCatalog.parseHello(_hello);
+      expect(PryonCatalog.locales, ['en-US', 'en-CA', 'de-DE']);
+      expect(PryonCatalog.localeLabel('de-DE'), 'Deutsch (Deutschland)');
+      expect(PryonCatalog.localeLabel('xx-YY'), 'xx-YY');
+    });
+
+    test("offers each locale its own models' wake words", () {
+      PryonCatalog.debugWords = PryonCatalog.parseHello(_hello);
+      expect([for (final w in PryonCatalog.wakeWordsFor('en-US')) w.url], [
+        'pryon:alexa-en-US/ALEXA',
+        'pryon:echo-en-US/ECHO',
+        'pryon:echo-en-US/HEY_DISNEY',
       ]);
+      expect([for (final w in PryonCatalog.wakeWordsFor('de-DE')) w.url], [
+        'pryon:echo-de-DE/ECHO',
+      ]);
+      expect(PryonCatalog.stopWordFor('echo-de-DE')?.url, 'pryon:echo-de-DE/STOP');
+    });
+
+    test("follows the setting, else the app's language", () {
+      PryonCatalog.debugWords = PryonCatalog.parseHello(_hello);
+      expect(PryonCatalog.resolveLocale('en-CA', 'de'), 'en-CA');
+      expect(PryonCatalog.resolveLocale('', 'de'), 'de-DE');
+      expect(PryonCatalog.resolveLocale('', 'en'), 'en-US');
+      // A language the service has no model for, or a locale it lost.
+      expect(PryonCatalog.resolveLocale('', 'ru'), 'en-US');
+      expect(PryonCatalog.resolveLocale('fr-FR', 'zh-CN'), 'en-US');
+    });
+
+    test('hides the engine and its language without the image', () async {
+      // A tablet, or an Echo Dot on another ROM: no ro.biscuit.pryon.
+      await PryonCatalog.init(Logger());
+      addTearDown(() {
+        defs.deviceHiddenOptions.remove(defs.voiceWakeWordEngine.key);
+        defs.deviceHiddenKeys.remove(defs.voiceAmazonLocale.key);
+      });
+      expect(defs.deviceHiddenOptions[defs.voiceWakeWordEngine.key], {'pryon'});
+      expect(defs.deviceHiddenKeys, contains(defs.voiceAmazonLocale.key));
     });
 
     test('refuses anything but a hello', () {
@@ -71,24 +109,45 @@ void main() {
       expect(PryonCatalog.available, isFalse);
     });
 
-    test("offers the service's wake words and its stop word", () {
+    test("offers the locale's wake words and its model's stop word", () {
       PryonCatalog.debugWords = PryonCatalog.parseHello(_hello);
-      final offered = offeredWakeWords(WakeWordEngineType.pryon);
+      final offered = offeredWakeWords(
+        WakeWordEngineType.pryon,
+        pryonLocale: 'en-US',
+      );
       expect([for (final w in offered) (w.id, w.phrase)], [
         ('alexa', 'Alexa'),
+        ('echo', 'Echo'),
+        ('hey_disney', 'Hey Disney'),
       ]);
       final config = buildWakeConfig(
         engine: WakeWordEngineType.pryon,
-        activeIds: const ['ok_nabu'],
+        activeIds: const ['echo', 'ok_nabu'],
         sensitivity: 'very',
         noiseGate: false,
         stopWord: true,
+        pryonLocale: 'en-US',
       );
-      // An id the engine does not offer falls back to its first.
-      expect(config.models.single.manifestUrl, 'pryon:ALEXA/ALEXA');
+      // An id the locale does not offer is dropped.
+      expect(config.models.single.manifestUrl, 'pryon:echo-en-US/ECHO');
       expect(config.models.single.thresholdOffset, -0.06);
-      expect(config.stopModel?.manifestUrl, 'pryon:ALEXA/STOP');
+      // The stop word of Echo's own model: no second model just for it.
+      expect(config.stopModel?.manifestUrl, 'pryon:echo-en-US/STOP');
       expect(config.stopModel?.thresholdOffset, -0.03);
+    });
+
+    test("falls back to the locale's first wake word", () {
+      PryonCatalog.debugWords = PryonCatalog.parseHello(_hello);
+      final config = buildWakeConfig(
+        engine: WakeWordEngineType.pryon,
+        activeIds: const ['alexa'],
+        sensitivity: 'moderately',
+        noiseGate: false,
+        stopWord: true,
+        pryonLocale: 'de-DE',
+      );
+      expect(config.models.single.manifestUrl, 'pryon:echo-de-DE/ECHO');
+      expect(config.stopModel?.manifestUrl, 'pryon:echo-de-DE/STOP');
     });
 
     test('sensitivity moves the threshold a little', () {
@@ -142,6 +201,7 @@ void main() {
         sensitivity: sensitivity,
         noiseGate: false,
         stopWord: true,
+        pryonLocale: 'en-US',
       ),
       onDetection: (model) async => detections.add(model),
       onStopDetection: () async => stops++,
@@ -165,7 +225,7 @@ void main() {
       int end = 1280,
     }) => {
       'event': 'detection',
-      'model': 'ALEXA',
+      'model': 'alexa-en-US',
       'keyword': keyword,
       'stop': keyword == 'STOP',
       'accepted': accepted,
@@ -178,7 +238,7 @@ void main() {
     test('streams the mic and fires on an accept', () async {
       await start('moderately');
       expect(engine.running, isTrue);
-      expect(service.started, 'ALEXA');
+      expect(service.started, 'alexa-en-US');
 
       mic.add(chunk(1));
       mic.add(chunk(2));
@@ -279,7 +339,7 @@ void main() {
       service = await _FakeService.start(PryonCatalog.socketPath);
       await starting;
       expect(engine.running, isTrue);
-      expect(service.started, 'ALEXA');
+      expect(service.started, 'alexa-en-US');
     });
 
     test('reports a service that will not listen', () async {
@@ -291,6 +351,7 @@ void main() {
           sensitivity: 'moderately',
           noiseGate: false,
           stopWord: false,
+          pryonLocale: 'en-US',
         ),
         onDetection: (_) async {},
       );

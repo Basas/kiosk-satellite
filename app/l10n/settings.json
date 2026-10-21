@@ -2402,5 +2402,9 @@
   "screensaver.clock_night_turn_off_black": {
     "title": "settingScreensaverScreenOffBlackTitle",
     "description": "settingScreensaverScreenOffBlackDescription"
+  },
+  "voice.amazon_locale": {
+    "title": "settingVoiceAmazonLocaleTitle",
+    "description": "settingVoiceAmazonLocaleDescription"
   }
 }

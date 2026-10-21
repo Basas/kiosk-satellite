@@ -51860,6 +51860,45 @@
       }
     }
   },
+  "settingVoiceAmazonLocaleTitle": "Taal van het wekwoord",
+  "@settingVoiceAmazonLocaleTitle": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
+  "settingVoiceAmazonLocaleDescription": "De taal van de wekwoordmodellen van Amazon. De wekwoordkeuzes bieden de wekwoorden van die taal aan.",
+  "@settingVoiceAmazonLocaleDescription": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
+  "voiceOptionAppLanguage": "Taal van Kiosk Satellite",
+  "@voiceOptionAppLanguage": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
   "settingDisableCacheTitle": "Cache uitschakelen",
   "@settingDisableCacheTitle": {
     "context": "Settings > Web Browsing > Disable cache",

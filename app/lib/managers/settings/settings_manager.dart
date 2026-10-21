@@ -9,6 +9,7 @@ import '../../core/headless.dart';
 import '../../core/tls_identity.dart';
 import '../../core/manager.dart';
 import '../device_camera/camera_resolutions.dart';
+import '../wake_word/pryon/pryon_catalog.dart';
 import 'definitions.dart';
 
 export 'definitions.dart';
@@ -122,6 +123,8 @@ class SettingsManager extends Manager {
   List<String> optionsFor(SettingDef<Object> def) =>
       def.key == cameraRtspResolution.key
       ? _cameraStreamResolutions ?? const []
+      : def.key == voiceAmazonLocale.key
+      ? ['', ...PryonCatalog.locales]
       : _realtimeOptions(def) ??
             [
               for (final option in def.options ?? const <String>[])
@@ -139,6 +142,8 @@ class SettingsManager extends Manager {
   String? optionLabel(SettingDef<Object> def, String value) =>
       def.key == cameraRtspResolution.key
       ? cameraResolutionLabel(value)
+      : def.key == voiceAmazonLocale.key && value.isNotEmpty
+      ? PryonCatalog.localeLabel(value)
       // Model ids read as they are; voices are names.
       : _realtimeLists[def.key] != null && value.isNotEmpty
       ? (_realtimeLists[def.key]!.$2
@@ -818,6 +823,9 @@ class SettingsManager extends Manager {
                 !pluginScreensavers().containsKey(get(def)))
               get(def) as String: 'Unavailable plugin screensaver',
             if (def.key == voiceSkin.key) ...pluginVoiceSkins(),
+            if (def.key == voiceAmazonLocale.key)
+              for (final locale in PryonCatalog.locales)
+                locale: PryonCatalog.localeLabel(locale),
             if (def.key == voiceSkin.key &&
                 isPluginVoiceSkin(get(def)) &&
                 !pluginVoiceSkins().containsKey(get(def)))

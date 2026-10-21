@@ -474,6 +474,9 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "ha_home": "screensaverCelestialLocationHaHome",
     "ha_entity": "screensaverCelestialLocationHaEntity",
     "manual": "screensaverCelestialLocationManual"
+  },
+  "voice.amazon_locale": {
+    "": "voiceOptionAppLanguage"
   }
 };
 const settingPlaceholderMessageIds = <String, String>{

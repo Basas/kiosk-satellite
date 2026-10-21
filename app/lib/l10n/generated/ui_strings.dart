@@ -24857,6 +24857,24 @@ abstract class UiStrings {
   /// **'The model does not load: {error}'**
   String voiceModelNoLoad(String error);
 
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Wake word language'**
+  String get settingVoiceAmazonLocaleTitle;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The language of Amazon\'s wake word models. The wake word selects offer the wake words it has.'**
+  String get settingVoiceAmazonLocaleDescription;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosk Satellite\'s language'**
+  String get voiceOptionAppLanguage;
+
   /// Setting label.
   ///
   /// In en, this message translates to:

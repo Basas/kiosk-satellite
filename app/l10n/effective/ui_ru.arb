@@ -51860,6 +51860,45 @@
       }
     }
   },
+  "settingVoiceAmazonLocaleTitle": "Язык слова пробуждения",
+  "@settingVoiceAmazonLocaleTitle": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
+  "settingVoiceAmazonLocaleDescription": "Язык моделей слов пробуждения Amazon. В списках слов пробуждения доступны слова пробуждения этого языка.",
+  "@settingVoiceAmazonLocaleDescription": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
+  "voiceOptionAppLanguage": "Язык Kiosk Satellite",
+  "@voiceOptionAppLanguage": {
+    "context": "Settings > Voice Satellite > Wake Word",
+    "description": "Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.",
+    "x-locations": {
+      "device": [
+        "Settings > Voice Satellite > Wake Word"
+      ],
+      "remoteAdmin": [
+        "Voice Satellite > Wake Word"
+      ]
+    }
+  },
   "settingDisableCacheTitle": "Отключить кэш",
   "@settingDisableCacheTitle": {
     "context": "Settings > Web Browsing > Disable cache",

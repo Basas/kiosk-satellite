@@ -352,6 +352,23 @@ async function flushSettingsUpdates() {
       updatePlayerRow();
       continue;
     }
+    // The wake word engine reveals Amazon's Wake word language in its own
+    // card, in place like the text to speech pickers, and the language
+    // only changes what the wake word selects offer: neither rebuilds the
+    // page.
+    if (!shapeChanged && ['voice.wake_word_engine', 'voice.amazon_locale'].includes(setting.key)) {
+      const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
+      if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
+          && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        // A revealed language goes back by schema order, in front of
+        // Sensitivity, past the wake word selects it decides: it belongs
+        // right under the engine (vs_native.js).
+        const engineRow = document.querySelector('[data-key="voice.wake_word_engine"]');
+        const localeRow = document.querySelector('[data-key="voice.amazon_locale"]');
+        if (engineRow && localeRow && engineRow.nextElementSibling !== localeRow) engineRow.after(localeRow);
+        continue;
+      }
+    }
     // Voice Satellite's selects repaint themselves on the ks-settings event
     // below (vs_native.js): Home Assistant's mirrored selects and the
     // realtime choice have no row of their own to update.

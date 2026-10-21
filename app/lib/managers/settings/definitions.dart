@@ -6653,6 +6653,25 @@ const voiceWakeWordEngine = SettingDef<String>(
   dependsOn: 'voice.enabled',
 );
 
+/// The locale of Amazon's wake word models, under the Amazon engine. Empty
+/// follows the app's language. The options are the locales the Echo Dot
+/// image's service lists (PryonCatalog), so SettingsManager fills them in.
+const voiceAmazonLocale = SettingDef<String>(
+  key: 'voice.amazon_locale',
+  type: SettingType.select,
+  defaultValue: '',
+  title: 'Wake word language',
+  description:
+      "The language of Amazon's wake word models. The wake word selects "
+      'offer the wake words it has.',
+  category: 'Voice Satellite',
+  subpage: 'Wake Word',
+  options: [''],
+  optionLabels: {'': "Kiosk Satellite's language"},
+  dependsOn: 'voice.wake_word_engine',
+  dependsOnValue: 'pryon',
+);
+
 /// The active wake words as a JSON list of model ids, slot 1 first. Home
 /// Assistant owns the choice through its Wake word selects on the kiosk's
 /// device; the kiosk keeps the last set it was told for when Home
@@ -12892,6 +12911,7 @@ const List<SettingDef<Object>> allSettings = [
   voiceTtsOutput,
   voiceTtsOutputMode,
   voiceWakeWordEngine,
+  voiceAmazonLocale,
   voiceWakeWords,
   voiceHaPipeline,
   voiceHaPipeline2,

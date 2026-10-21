@@ -4003,6 +4003,15 @@ class _CategoryContentState extends State<_CategoryContent> {
                     def: voiceWakeWordEngine,
                     onChanged: changed,
                   ),
+                  // Amazon's engine: which language its models listen in,
+                  // which the wake word selects below follow.
+                  if (container.settings.visible(voiceAmazonLocale) &&
+                      !deviceHiddenKeys.contains(voiceAmazonLocale.key))
+                    SettingTile(
+                      container: container,
+                      def: voiceAmazonLocale,
+                      onChanged: changed,
+                    ),
                   VoiceHaSelects(container: container, rows: voiceWakeWordRows),
                   for (final def in native.skip(1))
                     SettingTile(

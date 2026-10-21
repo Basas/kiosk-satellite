@@ -14453,6 +14453,16 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get settingVoiceAmazonLocaleTitle => 'Taal van het wekwoord';
+
+  @override
+  String get settingVoiceAmazonLocaleDescription =>
+      'De taal van de wekwoordmodellen van Amazon. De wekwoordkeuzes bieden de wekwoorden van die taal aan.';
+
+  @override
+  String get voiceOptionAppLanguage => 'Taal van Kiosk Satellite';
+
+  @override
   String get settingDisableCacheTitle => 'Cache uitschakelen';
 
   @override
