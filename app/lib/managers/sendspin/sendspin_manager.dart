@@ -5,7 +5,7 @@ import 'dart:math' show Random, max;
 import 'dart:typed_data' show BytesBuilder;
 
 import 'package:flutter/foundation.dart'
-    show Uint8List, ValueNotifier, mapEquals, visibleForTesting;
+    show Uint8List, ValueNotifier, mapEquals, setEquals, visibleForTesting;
 import 'package:flutter/services.dart';
 
 import '../../core/certificate_log.dart';
@@ -130,6 +130,92 @@ class SendspinManager extends Manager {
   String _watcherKey = '';
   String _watchSig = '';
   Map<String, Object?>? _localQueueSnapshot;
+
+  /// The Sendspin controller commands kept off the local player's
+  /// controls, the engine's included (see [withheldCommands]).
+  Set<String> _withheld = const {};
+
+  /// Each Sendspin controller command and what the watcher's snapshot
+  /// calls the ability it needs.
+  static const _commandAbility = {
+    'play': 'play',
+    'pause': 'pause',
+    'stop': 'stop',
+    'next': 'next',
+    'previous': 'previous',
+    'seek': 'seek',
+    'seek_relative': 'seek',
+    'repeat_off': 'repeat',
+    'repeat_one': 'repeat',
+    'repeat_all': 'repeat',
+    'shuffle': 'shuffle',
+    'unshuffle': 'shuffle',
+  };
+
+  /// The abilities Music Assistant's Sendspin controller applies to the
+  /// queue alone.
+  static const _queueAbilities = {'seek', 'repeat', 'shuffle'};
+
+  /// The Sendspin controller commands to keep off the local player's
+  /// controls. Music Assistant advertises the same full set to every
+  /// Sendspin controller whatever plays, so a source with no controls,
+  /// like its AirPlay Receiver, showed buttons that only raised errors.
+  /// The watcher's [snapshot] says what the source can do. Seek, repeat
+  /// and shuffle act on a queue there, so they also go while the source
+  /// plays without one ([queue] false). No snapshot withholds nothing and
+  /// the server's list stands.
+  @visibleForTesting
+  static Set<String> withheldCommands(
+    Map<String, Object?>? snapshot, {
+    required bool queue,
+  }) {
+    final allowed = snapshot?['supportedCommands'];
+    if (allowed is! List) return const {};
+    return {
+      for (final e in _commandAbility.entries)
+        if (!allowed.contains(e.value) ||
+            (!queue && _queueAbilities.contains(e.value)))
+          e.key,
+    };
+  }
+
+  /// [commands] without the withheld ones.
+  List<Object?> _offered(Object? commands) => [
+    if (commands is List)
+      for (final c in commands)
+        if (!_withheld.contains(c)) c,
+  ];
+
+  /// Work the withheld commands out again and tell the engine, which
+  /// keeps them off the media session and refuses them.
+  void _syncWithheld() {
+    final watcher = _watcher;
+    final next = _remote == null && watcher != null
+        ? withheldCommands(_localQueueSnapshot, queue: watcher.hasQueue)
+        : const <String>{};
+    if (setEquals(next, _withheld)) return;
+    _withheld = next;
+    unawaited(_pushWithheld(next.toList()));
+    // The card's list was cut by the last set. The engine's own list
+    // brings back what this one gives back.
+    final shown = nowPlaying.value;
+    if (_remote == null && shown != null) {
+      _setNowPlaying({
+        ...shown,
+        'supportedCommands': ?_status['supportedCommands'],
+      });
+    }
+  }
+
+  Future<void> _pushWithheld(List<String> commands) async {
+    try {
+      await _channel.invokeMethod<bool>('withholdCommands', {
+        'commands': commands,
+      });
+    } catch (e) {
+      log.warn(name, 'withholding commands failed: $e');
+    }
+  }
 
   /// When the local player last sent a seek or a previous, epoch ms: the
   /// re-base stands down for a moment after it.
@@ -777,6 +863,8 @@ class SendspinManager extends Manager {
         'mediaUri': matches ? queue['mediaUri'] : null,
         'chapters': matches ? queue['chapters'] : null,
         'audioQuality': matches ? queue['audioQuality'] : null,
+        if (value['supportedCommands'] != null)
+          'supportedCommands': _offered(value['supportedCommands']),
         // The group this device plays in, whatever the track.
         'groupVolume': queue?['groupVolume'],
         'groupMuted': queue?['groupMuted'],
@@ -1324,6 +1412,9 @@ class SendspinManager extends Manager {
             live = ((await _channel.invokeMethod<Map>('getStatus')) ?? const {})
                 .cast<String, Object?>();
           } catch (_) {}
+          final localCommands = _remote == null
+              ? live['supportedCommands'] ?? _status['supportedCommands']
+              : null;
           return CommandResult.ok({
             'enabled': _settings.get(defs.sendspinEnabled),
             'running': _running,
@@ -1336,6 +1427,8 @@ class SendspinManager extends Manager {
               'remotePlayer': _settings.get(defs.sendspinPlayerName),
             ..._status,
             ...live,
+            if (localCommands != null)
+              'supportedCommands': _offered(localCommands),
             // A followed player's track over the local client's, which
             // sits idle while another player is controlled: the shown
             // surfaces play from the snapshot, so the status says what
@@ -2471,6 +2564,7 @@ class SendspinManager extends Manager {
     _watcher = null;
     _watchSig = '';
     _localQueueSnapshot = null;
+    _syncWithheld();
     if (old != null) unawaited(old.stop());
     _syncQueuePoll();
     if (!want) return;
@@ -2490,6 +2584,7 @@ class SendspinManager extends Manager {
   void _onWatchSnapshot(Map<String, Object?>? snapshot) {
     if (_watcher == null) return;
     _localQueueSnapshot = snapshot;
+    _syncWithheld();
     if (_remote == null && nowPlaying.value != null) {
       _setNowPlaying(nowPlaying.value);
     }

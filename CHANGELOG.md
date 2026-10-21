@@ -5,6 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Fixed
+- **Player controls match what Music Assistant can do with the source.** Music Assistant offers every control to a Sendspin player, whatever plays on it. While its AirPlay Receiver played, the kiosk showed pause, previous and next, and every press failed in Music Assistant. With Music Assistant set up under **Settings > Media Player**, the kiosk now reads what the playing source supports and shows only those controls, on the player, in the Now Playing view and in the Android media session. Seek, repeat and shuffle only work on a Music Assistant queue, so they also hide while a source such as Spotify Connect plays. A followed Music Assistant player that wraps a Sendspin client gets the same controls as the player it belongs to.
 - **Disabled plugins no longer offer their voice skin.** The Voice Satellite **Skin** picker listed the skin of a disabled plugin, and picking it showed the default skin instead. It now lists plugin skins only while the plugin is enabled, on the device and in the remote admin.
 
 ## v2026.10.33 - 2026-10-20
