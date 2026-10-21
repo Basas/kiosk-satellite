@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Fixed
+- **Icons with numbers in their names.** Material Design Icons whose names hold a number, such as `mdi:battery-10`, `mdi:cpu-64-bit` and `mdi:numeric-1-box`, drew nothing when Home Assistant or a plugin asked for them, such as a battery entity's icon in At a Glance or an Entity widget, because the bundled icon set spelled them without the hyphen before the number. All 276 of them now draw under the names Home Assistant uses, and icons picked under the old spelling keep working.
+
 ## v2026.10.34 - 2026-10-21
 
 ### Added
