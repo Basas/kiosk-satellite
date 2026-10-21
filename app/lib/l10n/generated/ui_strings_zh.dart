@@ -10117,6 +10117,30 @@ class UiStringsZh extends UiStrings {
   String get settingScreensaverRollerBgColorDescription => '数字后方的颜色。';
 
   @override
+  String get settingScreensaverHandNumbersTitle => '数字';
+
+  @override
+  String get settingScreensaverHandNumbersDescription => '表盘上以数字显示哪些小时。';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => '显示秒针';
+
+  @override
+  String get settingScreensaverHandSecondsDescription => '在表盘上绘制秒针。';
+
+  @override
+  String get settingScreensaverHandColorTitle => '时钟颜色';
+
+  @override
+  String get settingScreensaverHandColorDescription => '指针、数字和刻度的颜色。';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => '背景颜色';
+
+  @override
+  String get settingScreensaverHandBgColorDescription => '时钟后方的颜色。';
+
+  @override
   String get settingScreensaverClockNightTitle => '夜间模式';
 
   @override
@@ -10175,6 +10199,15 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get screensaverStyleRoller => '滚动时钟';
+
+  @override
+  String get screensaverStyleHand => '指针时钟';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12、3、6 和 9';
+
+  @override
+  String get screensaverHandNumbersAll => '所有小时';
 
   @override
   String get screensaverFontDefault => '默认';
@@ -24401,6 +24434,30 @@ class UiStringsZhCn extends UiStringsZh {
   String get settingScreensaverRollerBgColorDescription => '数字后方的颜色。';
 
   @override
+  String get settingScreensaverHandNumbersTitle => '数字';
+
+  @override
+  String get settingScreensaverHandNumbersDescription => '表盘上以数字显示哪些小时。';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => '显示秒针';
+
+  @override
+  String get settingScreensaverHandSecondsDescription => '在表盘上绘制秒针。';
+
+  @override
+  String get settingScreensaverHandColorTitle => '时钟颜色';
+
+  @override
+  String get settingScreensaverHandColorDescription => '指针、数字和刻度的颜色。';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => '背景颜色';
+
+  @override
+  String get settingScreensaverHandBgColorDescription => '时钟后方的颜色。';
+
+  @override
   String get settingScreensaverClockNightTitle => '夜间模式';
 
   @override
@@ -24459,6 +24516,15 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverStyleRoller => '滚动时钟';
+
+  @override
+  String get screensaverStyleHand => '指针时钟';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12、3、6 和 9';
+
+  @override
+  String get screensaverHandNumbersAll => '所有小时';
 
   @override
   String get screensaverFontDefault => '默认';

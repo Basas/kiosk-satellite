@@ -388,6 +388,22 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreensaverRollerBgColorTitle",
     "description": "settingScreensaverRollerBgColorDescription",
   },
+  "screensaver.hand_numbers": {
+    "title": "settingScreensaverHandNumbersTitle",
+    "description": "settingScreensaverHandNumbersDescription",
+  },
+  "screensaver.hand_seconds": {
+    "title": "settingScreensaverHandSecondsTitle",
+    "description": "settingScreensaverHandSecondsDescription",
+  },
+  "screensaver.hand_color": {
+    "title": "settingScreensaverHandColorTitle",
+    "description": "settingScreensaverHandColorDescription",
+  },
+  "screensaver.hand_bg_color": {
+    "title": "settingScreensaverHandBgColorTitle",
+    "description": "settingScreensaverHandBgColorDescription",
+  },
   "screensaver.clock_night": {
     "title": "settingScreensaverClockNightTitle",
     "description": "settingScreensaverClockNightDescription",

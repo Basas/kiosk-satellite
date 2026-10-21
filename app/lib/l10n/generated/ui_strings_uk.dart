@@ -10739,6 +10739,35 @@ class UiStringsUk extends UiStrings {
       'Колір фону позаду цифр.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Цифри';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Які години циферблат показує цифрами.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle =>
+      'Показувати секундну стрілку';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Малювати секундну стрілку на циферблаті.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Колір годинника';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'Колір стрілок, цифр і позначок.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Колір фону';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'Колір фону за годинником.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Нічний режим';
 
   @override
@@ -10805,6 +10834,15 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get screensaverStyleRoller => 'Барабанний годинник';
+
+  @override
+  String get screensaverStyleHand => 'Стрілковий годинник';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 і 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Усі години';
 
   @override
   String get screensaverFontDefault => 'За замовчуванням';

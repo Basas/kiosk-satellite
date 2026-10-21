@@ -10859,6 +10859,34 @@ class UiStringsDe extends UiStrings {
       'Farbe hinter den Ziffern.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Zahlen';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Welche Stunden das Zifferblatt als Zahlen zeigt.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => 'Sekundenzeiger anzeigen';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Zeichnet einen Sekundenzeiger auf das Zifferblatt.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Uhrfarbe';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'Farbe der Zeiger, Zahlen und Striche.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Hintergrundfarbe';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'Farbe hinter der Uhr.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Nachtmodus';
 
   @override
@@ -10925,6 +10953,15 @@ class UiStringsDe extends UiStrings {
 
   @override
   String get screensaverStyleRoller => 'Rollenuhr';
+
+  @override
+  String get screensaverStyleHand => 'Zeigeruhr';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 und 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Alle Stunden';
 
   @override
   String get screensaverFontDefault => 'Standard';

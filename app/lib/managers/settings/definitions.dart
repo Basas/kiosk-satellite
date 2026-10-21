@@ -3079,9 +3079,10 @@ const screensaverBlackHideExtras = SettingDef<bool>(
 
 // The face the clock draws (issue #56). Digital is the original text clock;
 // Flip is the split-flap card clock; Roller is the oversized cropped digits
-// that roll upward as time advances (as on the Lenovo Smart Clock 2). The
-// digital-only rows (seconds, date, color) key their visibility off this,
-// and each of the other faces brings its own color pair.
+// that roll upward as time advances (as on the Lenovo Smart Clock 2); Hand
+// is a classic dial with hands, ticks and numbers. The digital-only rows
+// (seconds, date, color) key their visibility off this, and each of the
+// other faces brings its own color pair.
 const screensaverClockStyle = SettingDef<String>(
   key: 'screensaver.clock_style',
   type: SettingType.select,
@@ -3091,11 +3092,12 @@ const screensaverClockStyle = SettingDef<String>(
   category: 'Screensaver',
   section: 'Clock screensaver',
   subpage: 'Clock screensaver',
-  options: ['digital', 'flip', 'roller'],
+  options: ['digital', 'flip', 'roller', 'hand'],
   optionLabels: {
     'digital': 'Digital Clock',
     'flip': 'Flip Clock',
     'roller': 'Roller Clock',
+    'hand': 'Hand Clock',
   },
   dependsOn: 'screensaver.mode',
   dependsOnValue: 'clock',
@@ -3216,6 +3218,8 @@ const screensaverClockFontWeight = SettingDef<String>(
   dependsOnValue: 'clock',
 );
 
+// Every face but the hand clock, whose dial only goes around once in 12
+// hours.
 const screensaverClock24h = SettingDef<bool>(
   key: 'screensaver.clock_24h',
   type: SettingType.boolean,
@@ -3225,8 +3229,8 @@ const screensaverClock24h = SettingDef<bool>(
   category: 'Screensaver',
   section: 'Clock screensaver',
   subpage: 'Clock screensaver',
-  dependsOn: 'screensaver.mode',
-  dependsOnValue: 'clock',
+  dependsOn: 'screensaver.clock_style',
+  dependsOnValue: ['digital', 'flip', 'roller'],
 );
 
 // A 12-hour clock without the period (issue #1038): the room already
@@ -3471,6 +3475,63 @@ const screensaverRollerBgColor = SettingDef<String>(
   subpage: 'Clock screensaver',
   dependsOn: 'screensaver.clock_style',
   dependsOnValue: 'roller',
+);
+
+// The hand clock's own rows: which hours the dial numbers, the seconds
+// hand (on by default, unlike the digital face's seconds: a sweeping hand
+// is what makes a dial read as a clock) and its color pair.
+const screensaverHandNumbers = SettingDef<String>(
+  key: 'screensaver.hand_numbers',
+  type: SettingType.select,
+  defaultValue: 'quarters',
+  title: 'Numbers',
+  description: 'Which hours the dial shows as numbers.',
+  category: 'Screensaver',
+  section: 'Clock screensaver',
+  subpage: 'Clock screensaver',
+  options: ['quarters', 'all'],
+  optionLabels: {'quarters': '12, 3, 6 and 9', 'all': 'All hours'},
+  dependsOn: 'screensaver.clock_style',
+  dependsOnValue: 'hand',
+);
+
+const screensaverHandSeconds = SettingDef<bool>(
+  key: 'screensaver.hand_seconds',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show seconds hand',
+  description: 'Draw a seconds hand on the dial.',
+  category: 'Screensaver',
+  section: 'Clock screensaver',
+  subpage: 'Clock screensaver',
+  dependsOn: 'screensaver.clock_style',
+  dependsOnValue: 'hand',
+);
+
+const screensaverHandColor = SettingDef<String>(
+  key: 'screensaver.hand_color',
+  type: SettingType.string,
+  defaultValue: '250,250,250',
+  title: 'Clock color',
+  description: 'The color of the hands, numbers and ticks.',
+  category: 'Screensaver',
+  section: 'Clock screensaver',
+  subpage: 'Clock screensaver',
+  dependsOn: 'screensaver.clock_style',
+  dependsOnValue: 'hand',
+);
+
+const screensaverHandBgColor = SettingDef<String>(
+  key: 'screensaver.hand_bg_color',
+  type: SettingType.string,
+  defaultValue: '0,0,0',
+  title: 'Background color',
+  description: 'The color behind the clock.',
+  category: 'Screensaver',
+  section: 'Clock screensaver',
+  subpage: 'Clock screensaver',
+  dependsOn: 'screensaver.clock_style',
+  dependsOnValue: 'hand',
 );
 
 // ── Night mode (issue #391) ──
@@ -12759,6 +12820,10 @@ const List<SettingDef<Object>> allSettings = [
   screensaverFlipBackdropColor,
   screensaverRollerDigitColor,
   screensaverRollerBgColor,
+  screensaverHandNumbers,
+  screensaverHandSeconds,
+  screensaverHandColor,
+  screensaverHandBgColor,
   screensaverClockAlarmTakeover,
   screensaverClockNight,
   screensaverClockNightLux,

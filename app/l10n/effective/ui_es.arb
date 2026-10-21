@@ -39998,6 +39998,110 @@
       ]
     }
   },
+  "settingScreensaverHandNumbersTitle": "Números",
+  "@settingScreensaverHandNumbersTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandNumbersDescription": "Qué horas muestra la esfera como números.",
+  "@settingScreensaverHandNumbersDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandSecondsTitle": "Mostrar segundero",
+  "@settingScreensaverHandSecondsTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandSecondsDescription": "Dibuja un segundero en la esfera.",
+  "@settingScreensaverHandSecondsDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandColorTitle": "Color del reloj",
+  "@settingScreensaverHandColorTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandColorDescription": "Color de las agujas, los números y las marcas.",
+  "@settingScreensaverHandColorDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandBgColorTitle": "Color de fondo",
+  "@settingScreensaverHandBgColorTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandBgColorDescription": "Color detrás del reloj.",
+  "@settingScreensaverHandBgColorDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "settingScreensaverClockNightTitle": "Modo nocturno",
   "@settingScreensaverClockNightTitle": {
     "context": "Settings:Screensaver:Clock screensaver",
@@ -40234,6 +40338,45 @@
   },
   "screensaverStyleRoller": "Reloj de rodillos",
   "@screensaverStyleRoller": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverStyleHand": "Reloj de agujas",
+  "@screensaverStyleHand": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverHandNumbersQuarters": "12, 3, 6 y 9",
+  "@screensaverHandNumbersQuarters": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverHandNumbersAll": "Todas las horas",
+  "@screensaverHandNumbersAll": {
     "context": "Settings:Screensaver:Clock screensaver",
     "description": "Label, status or guidance in this section.",
     "x-locations": {

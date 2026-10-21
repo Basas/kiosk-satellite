@@ -10820,6 +10820,34 @@ class UiStringsFr extends UiStrings {
       'La couleur derrière les chiffres.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Chiffres';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Les heures que le cadran affiche en chiffres.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => 'Afficher la trotteuse';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Dessiner une trotteuse sur le cadran.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Couleur de l\'horloge';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'La couleur des aiguilles, des chiffres et des graduations.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Couleur d\'arrière-plan';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'La couleur derrière l\'horloge.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Mode nuit';
 
   @override
@@ -10886,6 +10914,15 @@ class UiStringsFr extends UiStrings {
 
   @override
   String get screensaverStyleRoller => 'Horloge à rouleaux';
+
+  @override
+  String get screensaverStyleHand => 'Horloge à aiguilles';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 et 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Toutes les heures';
 
   @override
   String get screensaverFontDefault => 'Par défaut';

@@ -10745,6 +10745,34 @@ class UiStringsNl extends UiStrings {
       'De kleur achter de cijfers.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Cijfers';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Welke uren de wijzerplaat als cijfer toont.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => 'Secondewijzer tonen';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Teken een secondewijzer op de wijzerplaat.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Klokkleur';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'De kleur van de wijzers, cijfers en streepjes.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Achtergrondkleur';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'De kleur achter de klok.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Nachtmodus';
 
   @override
@@ -10810,6 +10838,15 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get screensaverStyleRoller => 'Rolklok';
+
+  @override
+  String get screensaverStyleHand => 'Wijzerklok';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 en 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Alle uren';
 
   @override
   String get screensaverFontDefault => 'Standaard';

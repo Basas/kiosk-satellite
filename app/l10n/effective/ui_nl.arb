@@ -39998,6 +39998,110 @@
       ]
     }
   },
+  "settingScreensaverHandNumbersTitle": "Cijfers",
+  "@settingScreensaverHandNumbersTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandNumbersDescription": "Welke uren de wijzerplaat als cijfer toont.",
+  "@settingScreensaverHandNumbersDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandSecondsTitle": "Secondewijzer tonen",
+  "@settingScreensaverHandSecondsTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandSecondsDescription": "Teken een secondewijzer op de wijzerplaat.",
+  "@settingScreensaverHandSecondsDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandColorTitle": "Klokkleur",
+  "@settingScreensaverHandColorTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandColorDescription": "De kleur van de wijzers, cijfers en streepjes.",
+  "@settingScreensaverHandColorDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandBgColorTitle": "Achtergrondkleur",
+  "@settingScreensaverHandBgColorTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandBgColorDescription": "De kleur achter de klok.",
+  "@settingScreensaverHandBgColorDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "settingScreensaverClockNightTitle": "Nachtmodus",
   "@settingScreensaverClockNightTitle": {
     "context": "Settings:Screensaver:Clock screensaver",
@@ -40234,6 +40338,45 @@
   },
   "screensaverStyleRoller": "Rolklok",
   "@screensaverStyleRoller": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverStyleHand": "Wijzerklok",
+  "@screensaverStyleHand": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverHandNumbersQuarters": "12, 3, 6 en 9",
+  "@screensaverHandNumbersQuarters": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverHandNumbersAll": "Alle uren",
+  "@screensaverHandNumbersAll": {
     "context": "Settings:Screensaver:Clock screensaver",
     "description": "Label, status or guidance in this section.",
     "x-locations": {

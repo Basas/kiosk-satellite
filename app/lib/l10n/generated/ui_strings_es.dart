@@ -10821,6 +10821,34 @@ class UiStringsEs extends UiStrings {
       'Color detrás de los dígitos.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Números';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Qué horas muestra la esfera como números.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => 'Mostrar segundero';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Dibuja un segundero en la esfera.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Color del reloj';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'Color de las agujas, los números y las marcas.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Color de fondo';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'Color detrás del reloj.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Modo nocturno';
 
   @override
@@ -10887,6 +10915,15 @@ class UiStringsEs extends UiStrings {
 
   @override
   String get screensaverStyleRoller => 'Reloj de rodillos';
+
+  @override
+  String get screensaverStyleHand => 'Reloj de agujas';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 y 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Todas las horas';
 
   @override
   String get screensaverFontDefault => 'Predeterminado';

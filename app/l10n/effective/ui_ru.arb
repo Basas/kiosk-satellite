@@ -39998,6 +39998,110 @@
       ]
     }
   },
+  "settingScreensaverHandNumbersTitle": "Цифры",
+  "@settingScreensaverHandNumbersTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandNumbersDescription": "Какие часы циферблат показывает цифрами.",
+  "@settingScreensaverHandNumbersDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandSecondsTitle": "Показывать секундную стрелку",
+  "@settingScreensaverHandSecondsTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandSecondsDescription": "Рисовать секундную стрелку на циферблате.",
+  "@settingScreensaverHandSecondsDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandColorTitle": "Цвет часов",
+  "@settingScreensaverHandColorTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandColorDescription": "Цвет стрелок, цифр и делений.",
+  "@settingScreensaverHandColorDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandBgColorTitle": "Цвет фона",
+  "@settingScreensaverHandBgColorTitle": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "settingScreensaverHandBgColorDescription": "Цвет позади часов.",
+  "@settingScreensaverHandBgColorDescription": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
   "settingScreensaverClockNightTitle": "Ночной режим",
   "@settingScreensaverClockNightTitle": {
     "context": "Settings:Screensaver:Clock screensaver",
@@ -40234,6 +40338,45 @@
   },
   "screensaverStyleRoller": "Часы с прокруткой",
   "@screensaverStyleRoller": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverStyleHand": "Стрелочные часы",
+  "@screensaverStyleHand": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverHandNumbersQuarters": "12, 3, 6 и 9",
+  "@screensaverHandNumbersQuarters": {
+    "context": "Settings:Screensaver:Clock screensaver",
+    "description": "Label, status or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Clock screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Clock screensaver"
+      ]
+    }
+  },
+  "screensaverHandNumbersAll": "Все часы",
+  "@screensaverHandNumbersAll": {
     "context": "Settings:Screensaver:Clock screensaver",
     "description": "Label, status or guidance in this section.",
     "x-locations": {
