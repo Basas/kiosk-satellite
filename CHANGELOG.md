@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.34 - 2026-10-21
 
 ### Added
 - **Amazon's wake word engine on the Echo Dot.** On the Kiosk Satellite Edition image for the Echo Dot (2nd Gen), **Wake word engine** under **Voice Satellite > Wake Word** offers **Amazon**, the engine the Dot shipped with, which the image runs on the Dot itself. A **Wake word language** select then appears under it, set to Kiosk Satellite's language by default, and the wake word selects in Home Assistant offer the wake words the image has in that language: Alexa, Echo, Computer, Amazon or Ziggy, in 17 locales. A plain "stop" stops a ringing timer or a reply, like the other engines' stop words, and **Sensitivity** applies. On any other device the option does not show, and a kiosk that receives it from a fleet leader listens with vsWakeWord.
