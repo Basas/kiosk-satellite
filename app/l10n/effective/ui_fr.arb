@@ -37845,6 +37845,32 @@
       ]
     }
   },
+  "settingScreenFullScreenTitle": "Plein écran",
+  "@settingScreenFullScreenTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenFullScreenDescription": "Masquer la barre d'état et la barre de navigation. Désactivez cette option pour les garder visibles, ainsi que la barre des tâches sur les tablettes. Le mode kiosque les masque toujours.",
+  "@settingScreenFullScreenDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
   "settingKeepScreenOnTitle": "Garder l'écran allumé",
   "@settingKeepScreenOnTitle": {
     "context": "Settings:Screen & Audio:Screen",

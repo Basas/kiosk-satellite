@@ -216,6 +216,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreenOrientationTitle",
     "description": "settingScreenOrientationDescription",
   },
+  "screen.full_screen": {
+    "title": "settingScreenFullScreenTitle",
+    "description": "settingScreenFullScreenDescription",
+  },
   "screen.keep_on": {
     "title": "settingKeepScreenOnTitle",
     "description": "settingKeepScreenOnDescription",

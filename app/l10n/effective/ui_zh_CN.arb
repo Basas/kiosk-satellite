@@ -37845,6 +37845,32 @@
       ]
     }
   },
+  "settingScreenFullScreenTitle": "全屏",
+  "@settingScreenFullScreenTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenFullScreenDescription": "隐藏状态栏和导航栏。关闭后它们会保持可见，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它们。",
+  "@settingScreenFullScreenDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
   "settingKeepScreenOnTitle": "保持屏幕开启",
   "@settingKeepScreenOnTitle": {
     "context": "Settings:Screen & Audio:Screen",

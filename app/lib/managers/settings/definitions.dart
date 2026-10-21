@@ -658,6 +658,24 @@ const screenOrientation = SettingDef<String>(
   },
 );
 
+/// Whether the status and navigation bars stay hidden (issue #1076). Off,
+/// the bars stay up and the app sits between them, which keeps a tablet's
+/// taskbar one tap away. Kiosk mode and lockdown hide the bars whatever
+/// this says (see hidesSystemBars). Applied live through the kiosk_lock
+/// channel, and read natively from SharedPreferences at Activity creation
+/// so the window is right from the first frame.
+const screenFullScreen = SettingDef<bool>(
+  key: 'screen.full_screen',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Full screen',
+  description:
+      'Hide the status and navigation bars. Turn off to keep them visible, '
+      'along with the taskbar on tablets. Kiosk mode always hides them.',
+  category: 'Screen & Audio',
+  section: 'Screen',
+);
+
 const pinchToZoom = SettingDef<bool>(
   key: 'browser.pinch_to_zoom',
   type: SettingType.boolean,
@@ -12608,6 +12626,7 @@ const List<SettingDef<Object>> allSettings = [
   defaultBrightness,
   browserCutoutMode,
   screenOrientation,
+  screenFullScreen,
   // After the whole Screen group: the remote places a page's entry row
   // where its first definition sits, and the device puts the entry card
   // under the Screen card.

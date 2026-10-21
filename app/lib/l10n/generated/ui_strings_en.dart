@@ -9967,6 +9967,13 @@ class UiStringsEn extends UiStrings {
       'Force the screen into one orientation. Use this on a device without a rotation sensor, or one mounted a way the sensor gets wrong.';
 
   @override
+  String get settingScreenFullScreenTitle => 'Full screen';
+
+  @override
+  String get settingScreenFullScreenDescription =>
+      'Hide the status and navigation bars. Turn off to keep them visible, along with the taskbar on tablets. Kiosk mode always hides them.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Keep screen on';
 
   @override

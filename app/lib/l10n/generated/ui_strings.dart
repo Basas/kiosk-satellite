@@ -17360,6 +17360,18 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Full screen'**
+  String get settingScreenFullScreenTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide the status and navigation bars. Turn off to keep them visible, along with the taskbar on tablets. Kiosk mode always hides them.'**
+  String get settingScreenFullScreenDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Keep screen on'**
   String get settingKeepScreenOnTitle;
 

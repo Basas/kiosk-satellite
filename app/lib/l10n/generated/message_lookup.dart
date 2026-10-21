@@ -3115,6 +3115,9 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'settingScreenOrientationTitle' => strings.settingScreenOrientationTitle,
       'settingScreenOrientationDescription' =>
         strings.settingScreenOrientationDescription,
+      'settingScreenFullScreenTitle' => strings.settingScreenFullScreenTitle,
+      'settingScreenFullScreenDescription' =>
+        strings.settingScreenFullScreenDescription,
       'settingKeepScreenOnTitle' => strings.settingKeepScreenOnTitle,
       'settingKeepScreenOnDescription' =>
         strings.settingKeepScreenOnDescription,

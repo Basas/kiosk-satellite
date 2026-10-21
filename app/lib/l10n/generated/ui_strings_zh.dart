@@ -9505,6 +9505,13 @@ class UiStringsZh extends UiStrings {
       '强制屏幕使用指定方向。适用于没有旋转传感器，或安装方向导致传感器判断错误的设备。';
 
   @override
+  String get settingScreenFullScreenTitle => '全屏';
+
+  @override
+  String get settingScreenFullScreenDescription =>
+      '隐藏状态栏和导航栏。关闭后它们会保持可见，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它们。';
+
+  @override
   String get settingKeepScreenOnTitle => '保持屏幕开启';
 
   @override
@@ -23780,6 +23787,13 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingScreenOrientationDescription =>
       '强制屏幕使用指定方向。适用于没有旋转传感器，或安装方向导致传感器判断错误的设备。';
+
+  @override
+  String get settingScreenFullScreenTitle => '全屏';
+
+  @override
+  String get settingScreenFullScreenDescription =>
+      '隐藏状态栏和导航栏。关闭后它们会保持可见，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它们。';
 
   @override
   String get settingKeepScreenOnTitle => '保持屏幕开启';

@@ -10202,6 +10202,13 @@ class UiStringsDe extends UiStrings {
       'Erzwingt eine bestimmte Bildschirmausrichtung. Nützlich auf Geräten ohne Rotationssensor oder bei Installationen, bei denen der Sensor die Ausrichtung nicht korrekt erkennt.';
 
   @override
+  String get settingScreenFullScreenTitle => 'Vollbild';
+
+  @override
+  String get settingScreenFullScreenDescription =>
+      'Blendet die Statusleiste und die Navigationsleiste aus. Deaktivieren, damit sie sichtbar bleiben, auf Tablets auch die Taskleiste. Der Kioskmodus blendet sie immer aus.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Bildschirm eingeschaltet lassen';
 
   @override

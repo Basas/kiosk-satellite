@@ -37845,6 +37845,32 @@
       ]
     }
   },
+  "settingScreenFullScreenTitle": "Полноэкранный режим",
+  "@settingScreenFullScreenTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenFullScreenDescription": "Скрывать строку состояния и панель навигации. Выключите, чтобы они оставались видны вместе с панелью задач на планшетах. Режим киоска всегда их скрывает.",
+  "@settingScreenFullScreenDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
   "settingKeepScreenOnTitle": "Не выключать экран",
   "@settingKeepScreenOnTitle": {
     "context": "Settings:Screen & Audio:Screen",

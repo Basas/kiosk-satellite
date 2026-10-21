@@ -10053,6 +10053,13 @@ class UiStringsRu extends UiStrings {
       'Принудительно держать экран в одной ориентации. Для устройства без датчика поворота или смонтированного так, что датчик ошибается.';
 
   @override
+  String get settingScreenFullScreenTitle => 'Полноэкранный режим';
+
+  @override
+  String get settingScreenFullScreenDescription =>
+      'Скрывать строку состояния и панель навигации. Выключите, чтобы они оставались видны вместе с панелью задач на планшетах. Режим киоска всегда их скрывает.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Не выключать экран';
 
   @override
