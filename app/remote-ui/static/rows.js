@@ -1,6 +1,6 @@
 import { confirmRemoteProtocol } from './tls.js';
 import { brightnessCurveRow } from './brightness_curve.js';
-import { esphomeText, launcherText, messageLanguage, voiceText } from './localization.js';
+import { esphomeText, kioskText, launcherText, messageLanguage, voiceText } from './localization.js';
 import { intercomError, mediaText, cameraText, cameraError, deviceText, haText, screensaverText, screensaverError, t } from './localization.js';
 import { watchUpdates } from './live.js';
 import {
@@ -600,9 +600,9 @@ export function settingRow(s) {
     return row;
   }
 
-  // The launcher whitelist, mirroring the device's checkbox picker. The
-  // summary renders from the labels cached in the setting; the picker asks
-  // the device for the live app list.
+  // The launcher whitelist, mirroring the device's picker. The summary
+  // renders from the labels cached in the setting; the picker asks the
+  // device for the live app list.
   if (s.key === 'launcher.apps') {
     let chosen = [];
     try { chosen = JSON.parse(s.value || '[]') || []; } catch (_) {}
@@ -632,6 +632,68 @@ export function settingRow(s) {
     controls.append(val, btn);
     row.appendChild(controls);
     return row;
+  }
+
+  // The launcher's apps a locked kiosk offers (issue #1067), mirroring the
+  // device's rows: a switch per launcher app, in the launcher's order.
+  if (s.key === 'kiosk.allowed_apps') {
+    const value = (key) => (state.settings || []).find((o) => o.key === key)?.value;
+    let apps = [];
+    try {
+      if (value('launcher.enabled') === true) apps = JSON.parse(value('launcher.apps') || '[]') || [];
+    } catch (_) {}
+    apps = apps.filter((a) => a && typeof a.package === 'string' && a.package);
+    if (!apps.length) {
+      info.querySelector('.desc').textContent = kioskText('Add apps in Settings > App Launcher first.');
+      return row;
+    }
+    const allowed = () => {
+      try {
+        const list = JSON.parse(value(s.key) ?? s.value ?? '[]');
+        return new Set(Array.isArray(list) ? list : []);
+      } catch (_) { return new Set(); }
+    };
+    const fragment = document.createDocumentFragment();
+    for (const app of apps) {
+      const appRow = document.createElement('div'); appRow.className = 'row';
+      const appInfo = document.createElement('div'); appInfo.className = 'info';
+      appInfo.innerHTML = `<div class="name"></div><div class="desc"></div>`;
+      appInfo.querySelector('.name').textContent = app.label || app.package;
+      appInfo.querySelector('.desc').textContent = app.package;
+      const lbl = document.createElement('label'); lbl.className = 'switch';
+      const cb = document.createElement('input'); cb.type = 'checkbox';
+      const paint = () => { cb.checked = allowed().has(app.package); };
+      paint();
+      cb.addEventListener('change', async () => {
+        const next = allowed();
+        if (cb.checked) next.add(app.package); else next.delete(app.package);
+        const picked = JSON.stringify(apps.map((a) => a.package).filter((p) => next.has(p)));
+        try {
+          const res = await api('/api/settings', { method: 'PATCH', body: JSON.stringify({ [s.key]: picked }) });
+          const out = await res.json().catch(() => null);
+          if (!res.ok || out?.ok !== true || out.rejected?.includes(s.key)) {
+            throw new Error(out?.errors?.[s.key] || out?.error
+              || 'Could not save this setting. Try again.');
+          }
+        } catch (error) {
+          paint();
+          showRowError(appRow, error?.message || 'Could not save this setting. Try again.', null);
+          return;
+        }
+        clearRowError(appRow);
+        const cached = (state.settings || []).find((o) => o.key === s.key);
+        if (cached) cached.value = picked;
+        paint();
+      });
+      const sl = document.createElement('span'); sl.className = 'slider';
+      lbl.append(cb, sl);
+      appRow.append(appInfo, lbl);
+      // Every app's row repaints when the list changes elsewhere.
+      appRow.dataset.key = s.key;
+      appRow.updateSetting = () => { paint(); return true; };
+      fragment.appendChild(appRow);
+    }
+    return fragment;
   }
 
   if (s.key === 'esphome.excluded_entities') {

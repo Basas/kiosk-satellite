@@ -327,6 +327,9 @@ class UiStringsUk extends UiStrings {
   String get launcherEmpty => 'Програм для запуску не знайдено.';
 
   @override
+  String get launcherSearchApps => 'Пошук застосунків';
+
+  @override
   String get calendarTitle => 'Календар';
 
   @override
@@ -8509,6 +8512,17 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get kioskAllowedHelp => 'Які швидкі дії пропонує меню кіоска';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Дозволені застосунки';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'Застосунки лаунчера, доступні, коли режим кіоска увімкнено.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Спочатку додайте застосунки в Налаштування > Лаунчер застосунків.';
 
   @override
   String get settingKioskEnabledTitle => 'Увімкнути режим кіоска';

@@ -662,6 +662,12 @@ abstract class UiStrings {
   /// **'No launchable apps found.'**
   String get launcherEmpty;
 
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Search apps'**
+  String get launcherSearchApps;
+
   /// Name of the calendar feature: the kiosk menu entry and the calendar's eyebrow.
   ///
   /// In en, this message translates to:
@@ -14674,6 +14680,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Which quick actions the kiosk menu offers'**
   String get kioskAllowedHelp;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed Apps'**
+  String get settingKioskAllowedAppsTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The launcher apps offered while kiosk mode is on.'**
+  String get settingKioskAllowedAppsDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Add apps in Settings > App Launcher first.'**
+  String get kioskAllowedAppsEmpty;
 
   /// Setting label.
   ///

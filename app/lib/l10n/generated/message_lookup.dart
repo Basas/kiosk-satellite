@@ -79,6 +79,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'launcherListFailed' => strings.launcherListFailed,
       'launcherListingFailed' => strings.launcherListingFailed,
       'launcherEmpty' => strings.launcherEmpty,
+      'launcherSearchApps' => strings.launcherSearchApps,
       'calendarTitle' => strings.calendarTitle,
       'calendarViewDay' => strings.calendarViewDay,
       'calendarViewWeek' => strings.calendarViewWeek,
@@ -2487,6 +2488,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingKioskAllowAppsDescription,
       'kioskAllowedActions' => strings.kioskAllowedActions,
       'kioskAllowedHelp' => strings.kioskAllowedHelp,
+      'settingKioskAllowedAppsTitle' => strings.settingKioskAllowedAppsTitle,
+      'settingKioskAllowedAppsDescription' =>
+        strings.settingKioskAllowedAppsDescription,
+      'kioskAllowedAppsEmpty' => strings.kioskAllowedAppsEmpty,
       'settingKioskEnabledTitle' => strings.settingKioskEnabledTitle,
       'settingKioskEnabledDescription' =>
         strings.settingKioskEnabledDescription,

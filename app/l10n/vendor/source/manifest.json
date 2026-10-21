@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "8143cc7c12d2c398fc60cc7cede54cd8f38c57eb",
+  "revision": "e29e7252b8763e56c25bbbf636c300ef03b8d550",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -12,7 +12,7 @@
     "android_service_en.arb": "ad23388106fe8d11bf83f3c1b35d4cc6033f9af2009eb030bb46ac12e2ea7939",
     "app_launcher_errors_en.arb": "3f8855859bed85bd36afea30451c358c92cd43773b0532cca7d142134cd04d25",
     "app_launcher_overlay_en.arb": "9598d5f3383b23bed8c34a54795da71f211533160a84417010def4dd54f9a173",
-    "app_launcher_picker_en.arb": "94a472a1db6ae5f8e0db8825c45e5272c8660bce68a347fa2c92454ec6a2672e",
+    "app_launcher_picker_en.arb": "b4d2e5968625cce3c96e15035139871ccad8ba401497f5831c42ed77b2332e25",
     "calendar_en.arb": "84b83ddafe7f71f2d09465f49fc8ab39c78e60caac55e7e42cd94b059fac8f48",
     "camera_view_status_en.arb": "5c2fdaeb44fc707fa15cfb92a186ff2616e4ea255cd5ea3ff3dac37c532fedbe",
     "common_en.arb": "efa410cd7a1c83fc3e7c9642a7f6fb9b0a3d246d3eadea6811a16c28e0f6f444",
@@ -123,7 +123,7 @@
     "settings_intercom_general_en.arb": "4724e41f91236bc05669438cdd8489e165f2f2c67e541f83a7e6f02c7372b439",
     "settings_intercom_kiosks_en.arb": "135b6b4da593ab57a523e70d84494c604d036d6da47d869407d3c03a20ba072e",
     "settings_intercom_talk_en.arb": "837b2a00849853470ef0741e19fa2d552a7d8902148ad09e86f4b00167b566cb",
-    "settings_kiosk_allowed_actions_en.arb": "b8e75e7a59104299e40f0ce16c09465a2af55c8773b069f9f065be2c44c5d405",
+    "settings_kiosk_allowed_actions_en.arb": "648e40b2da1439d3effea030fc28da1341f47ed89f7d32fc410684f7751b469e",
     "settings_kiosk_general_en.arb": "a45e0a0510b43f5a2f6f0deb5a508ddd31e2fb9ce5a69a1af9f2e4f1a4fe11a3",
     "settings_kiosk_permissions_en.arb": "686c9c49e03d50ec06070dbbf9717bccf2916fc68464d2ac12c4de3cd7f2e337",
     "settings_leds_en.arb": "ba45feb28eb45ea9ef9b299e6c53da2ad9458231218351e87a98c4a9d368f512",

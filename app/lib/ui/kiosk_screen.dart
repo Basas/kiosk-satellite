@@ -338,7 +338,7 @@ class _KioskScreenState extends State<KioskScreen>
             (c.settings.get(defs.sendspinFullscreen) &&
                 c.settings.get(defs.sendspinFullscreenShortcut)));
     final hasApps =
-        c.settings.get(defs.launcherEnabled) && c.launcher.apps.isNotEmpty;
+        c.settings.get(defs.launcherEnabled) && c.launcher.kioskApps.isNotEmpty;
     final hasHold = c.settings.get(defs.haHoldMenu);
     return c.plugins.drawerActions.isNotEmpty ||
         c.settings.get(defs.kioskAllowDashboard) ||

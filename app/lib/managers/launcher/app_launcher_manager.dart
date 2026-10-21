@@ -44,6 +44,20 @@ List<LauncherApp> decodeLauncherApps(String json) {
   }
 }
 
+/// Decode kiosk.allowed_apps, the packages a locked kiosk offers.
+Set<String> decodeKioskAllowedApps(String json) {
+  try {
+    final raw = jsonDecode(json);
+    if (raw is! List) return const {};
+    return {
+      for (final item in raw)
+        if (item is String && item.trim().isNotEmpty) item.trim(),
+    };
+  } catch (_) {
+    return const {};
+  }
+}
+
 /// The minimal app launcher (issue #114): a whitelisted set of installed
 /// apps the kiosk can open, and the clock that brings the kiosk back.
 ///
@@ -99,6 +113,34 @@ class AppLauncherManager extends Manager with WidgetsBindingObserver {
   /// The configured whitelist, decoded fresh so setting changes apply live.
   List<LauncherApp> get apps =>
       decodeLauncherApps(_settings.get(defs.launcherApps));
+
+  /// The whitelist's apps a locked kiosk offers (issue #1067), in the
+  /// whitelist's order.
+  List<LauncherApp> get kioskApps {
+    final allowed = decodeKioskAllowedApps(
+      _settings.get(defs.kioskAllowedApps),
+    );
+    return [
+      for (final app in apps)
+        if (allowed.contains(app.package)) app,
+    ];
+  }
+
+  /// Whether the open launcher came from the full menu, past the exit
+  /// gesture and PIN. Every other opener gets the locked kiosk's apps.
+  bool _unlocked = false;
+
+  /// What the launcher shows now: the kiosk's apps while kiosk mode is on,
+  /// unless it was opened from the full menu.
+  List<LauncherApp> get shown =>
+      _settings.get(defs.kioskEnabled) && !_unlocked ? kioskApps : apps;
+
+  /// Opens the launcher. [unlocked] is the full menu's open, which shows
+  /// every app even while kiosk mode is on.
+  void open({bool unlocked = false}) {
+    _unlocked = unlocked;
+    visible.value = true;
+  }
 
   @override
   Future<void> init() async {
@@ -177,12 +219,19 @@ class AppLauncherManager extends Manager with WidgetsBindingObserver {
           if (apps.isEmpty) {
             return const CommandResult.fail('no launcher apps configured');
           }
+          // Whoever stands at a locked kiosk gets its apps only, whatever
+          // opened the launcher.
+          if (_settings.get(defs.kioskEnabled) && kioskApps.isEmpty) {
+            return const CommandResult.fail(
+              'no launcher apps are allowed in kiosk mode',
+            );
+          }
           // Same choreography as a camera view: an ESPHome open must land on a
           // lit, frontmost kiosk, not behind a dark panel or screensaver.
           await commands.execute('screenOn', const {});
           await commands.execute('bringToFront', const {});
           await commands.execute('stopScreensaver', const {});
-          visible.value = true;
+          open();
           return const CommandResult.ok();
         },
       ),

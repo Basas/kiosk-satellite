@@ -330,6 +330,9 @@ class UiStringsDe extends UiStrings {
   String get launcherEmpty => 'Es wurden keine startbaren Apps gefunden.';
 
   @override
+  String get launcherSearchApps => 'Apps suchen';
+
+  @override
   String get calendarTitle => 'Kalender';
 
   @override
@@ -8624,6 +8627,17 @@ class UiStringsDe extends UiStrings {
   @override
   String get kioskAllowedHelp =>
       'Welche Schnellaktionen das Kiosk-Menü anbietet';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Erlaubte Apps';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'Die Launcher-Apps, die bei aktiviertem Kioskmodus angeboten werden.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Füge zuerst unter Einstellungen > App-Launcher Apps hinzu.';
 
   @override
   String get settingKioskEnabledTitle => 'Kioskmodus aktivieren';

@@ -26792,5 +26792,29 @@
     "translation": "0411f689ff256e647bffabf43c89e9eb11dd0a6eef1e4be0677e9e3921ad3188",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "launcherSearchApps": {
+    "source": "b30cf499ead3139990168c718d53d8908d17076be423fca8b264907453ee8bfc",
+    "translation": "cdaa96a6a4f55e36fae6de0a5fe41555db2c8ebd28859902a4a7a7240daa3ed8",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "kioskAllowedAppsEmpty": {
+    "source": "beb1d804c74f9631442d87f25d9273cc37102886394c3f23392c341969d804a3",
+    "translation": "59a67ac1a5935d38ebe78fb5a8eb5af5af3e1c017714bd4f2bf66b7e7256e04c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingKioskAllowedAppsDescription": {
+    "source": "e0186e2a9ae8bc308f52b1541e0eaf557460931282c494cb5f7cd05bf8e589c6",
+    "translation": "f0c2280a5f9cec26b1c3db914312ce28419795f4216e0c982238782092e1c5f5",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingKioskAllowedAppsTitle": {
+    "source": "29f431b8c1f6d7415c525bdd8f3e46ab92b13903b6ba76e84d490ecedcdb8175",
+    "translation": "84a8f868bacca273e0a5c270a8222eda36ba5c4868657383ce21be379aec645d",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

@@ -23,7 +23,8 @@ import '../core/logging.dart';
 import '../managers/btproxy/ble_identity.dart' show rssiTier, sortNearbyJson;
 import '../managers/camera/models.dart'
     show decodeCameraViewIds, encodeCameraViewIds;
-import '../managers/launcher/app_launcher_manager.dart' show decodeLauncherApps;
+import '../managers/launcher/app_launcher_manager.dart'
+    show LauncherApp, decodeKioskAllowedApps, decodeLauncherApps;
 import '../managers/screensaver/immich_manager.dart'
     show ImmichNamed, decodeImmichNamed;
 import '../managers/notifications/notification_sounds.dart';
@@ -171,6 +172,7 @@ List<Widget> _sectionedCards(
         final heading = current;
         out.add(
           (def.category == 'ESPHome' ||
+                  def.category == 'Kiosk' ||
                   def.category == 'Device' ||
                   def.category == 'Home Assistant' ||
                   def.category == 'Screen & Audio' ||
@@ -11352,6 +11354,54 @@ class SettingTile extends StatelessWidget {
             onTap: () => _pickLauncherApps(context),
           );
         }
+        // The launcher's apps a locked kiosk offers (issue #1067): a switch
+        // per launcher app, in the launcher's order. Mirrored on the remote
+        // (rows.js).
+        if (def.key == kioskAllowedApps.key) {
+          final apps = c.settings.get(launcherEnabled)
+              ? decodeLauncherApps(c.settings.get(launcherApps))
+              : const <LauncherApp>[];
+          if (apps.isEmpty) {
+            return ListTile(
+              title: Text(def.localizedTitle(context)),
+              subtitle: Text(
+                kioskText(
+                  context,
+                  'Add apps in Settings > App Launcher first.',
+                ),
+              ),
+              enabled: false,
+            );
+          }
+          final allowed = decodeKioskAllowedApps(value as String);
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final app in apps)
+                SwitchListTile(
+                  title: Text(app.label),
+                  subtitle: Text(
+                    app.package,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  value: allowed.contains(app.package),
+                  onChanged: (on) async {
+                    final next = {...allowed};
+                    on ? next.add(app.package) : next.remove(app.package);
+                    await c.settings.setFromJson(
+                      def.key,
+                      jsonEncode([
+                        for (final a in apps)
+                          if (next.contains(a.package)) a.package,
+                      ]),
+                    );
+                    onChanged();
+                  },
+                ),
+            ],
+          );
+        }
         // The Immich albums and the people and tag filters: names ticked
         // off the server's lists, never typed as JSON (issue #345).
         final immichNamed = _immichNamedRows[def.key];
@@ -11492,10 +11542,12 @@ class SettingTile extends StatelessWidget {
     onChanged();
   }
 
+  /// The launcher's apps through the shared picker, in the order they are
+  /// picked and arranged there (issue #1067).
   Future<void> _pickLauncherApps(BuildContext context) async {
     final result = await c.commands.execute('installedApps', const {});
     if (!context.mounted) return;
-    if (!result.ok) {
+    if (!result.ok || result.data is! List) {
       showToast(
         context,
         title: launcherText(context, 'Could not list the apps'),
@@ -11506,67 +11558,26 @@ class SettingTile extends StatelessWidget {
       );
       return;
     }
-    final apps = (result.data as List).cast<Map>();
-    final selected = {
-      for (final app in decodeLauncherApps(c.settings.get(launcherApps)))
-        app.package,
-    };
-    final saved = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: Text(launcherText(context, 'Apps')),
-          content: SizedBox(
-            width: 420,
-            child: apps.isEmpty
-                ? Text(launcherText(context, 'No launchable apps found.'))
-                : EdgeFade(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        for (final app in apps)
-                          CheckboxListTile(
-                            value: selected.contains('${app['package']}'),
-                            title: Text('${app['label']}'),
-                            subtitle: Text(
-                              '${app['package']}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            onChanged: (on) => setState(() {
-                              if (on == true) {
-                                selected.add('${app['package']}');
-                              } else {
-                                selected.remove('${app['package']}');
-                              }
-                            }),
-                          ),
-                      ],
-                    ),
-                  ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(launcherText(context, 'Cancel')),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(launcherText(context, 'Save')),
-            ),
-          ],
-        ),
-      ),
+    final spec = appSpec(context, (result.data as List).cast<Map>());
+    final ids = await showItemMultiPicker(
+      context,
+      title: launcherText(context, 'Apps'),
+      spec: spec,
+      selected: [
+        for (final app in decodeLauncherApps(c.settings.get(launcherApps)))
+          app.package,
+      ],
     );
-    if (saved != true) return;
+    final list = PickCatalog.of(spec.key).value;
+    if (ids == null || list == null) return;
     // Rebuilt from the device's list, so labels refresh and uninstalled
     // leftovers drop out on every save.
     await c.settings.setFromJson(
       launcherApps.key,
       jsonEncode([
-        for (final app in apps)
-          if (selected.contains('${app['package']}'))
-            {'package': '${app['package']}', 'label': '${app['label']}'},
+        for (final id in ids)
+          if (list.find(id) case final app?)
+            {'package': app.id, 'label': app.name},
       ]),
     );
     onChanged();

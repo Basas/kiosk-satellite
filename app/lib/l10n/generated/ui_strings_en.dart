@@ -325,6 +325,9 @@ class UiStringsEn extends UiStrings {
   String get launcherEmpty => 'No launchable apps found.';
 
   @override
+  String get launcherSearchApps => 'Search apps';
+
+  @override
   String get calendarTitle => 'Calendar';
 
   @override
@@ -8425,6 +8428,17 @@ class UiStringsEn extends UiStrings {
 
   @override
   String get kioskAllowedHelp => 'Which quick actions the kiosk menu offers';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Allowed Apps';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'The launcher apps offered while kiosk mode is on.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Add apps in Settings > App Launcher first.';
 
   @override
   String get settingKioskEnabledTitle => 'Enable kiosk mode';

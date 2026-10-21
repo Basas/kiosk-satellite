@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -447,6 +448,25 @@ class SettingsManager extends Manager {
     // one design now, so the rows are gone and stored values with them.
     await _prefs.remove('${_prefix}launcher.layout');
     await _prefs.remove('${_prefix}launcher.show_icons');
+    // The locked kiosk offered every launcher app before it had its own
+    // list (issue #1067). Seeded once with all of them, so the quick menu
+    // keeps what it offered and later additions wait to be allowed.
+    if (_prefs.get(_prefix + kioskAllowedApps.key) == null) {
+      var packages = const <Object?>[];
+      try {
+        final apps = jsonDecode(get(launcherApps));
+        if (apps is List) {
+          packages = [
+            for (final app in apps)
+              if (app is Map && app['package'] is String) app['package'],
+          ];
+        }
+      } catch (_) {}
+      await _prefs.setString(
+        _prefix + kioskAllowedApps.key,
+        jsonEncode(packages),
+      );
+    }
     // The Sonos page's own lyrics switch: the Lyrics page's Enable lyrics
     // covers every source now.
     await _prefs.remove('${_prefix}sendspin.sonos_lyrics');

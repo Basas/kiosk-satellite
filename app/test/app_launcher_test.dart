@@ -7,6 +7,7 @@ import 'package:kiosk_satellite/core/event_bus.dart';
 import 'package:kiosk_satellite/core/events.dart';
 import 'package:kiosk_satellite/core/logging.dart';
 import 'package:kiosk_satellite/managers/launcher/app_launcher_manager.dart';
+import 'package:kiosk_satellite/managers/settings/definitions.dart' as defs;
 import 'package:kiosk_satellite/managers/settings/settings_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -141,6 +142,71 @@ void main() {
       bus.publish(const ScreensaverStateChanged(active: true));
       await pumpEventQueue();
       expect(launcher.visible.value, isFalse);
+    });
+  });
+
+  group('the locked kiosk\'s apps (issue #1067)', () {
+    test('an upgrade allows every launcher app', () async {
+      await build({'ks.launcher.enabled': true, 'ks.launcher.apps': twoApps});
+      expect(settings.get(defs.kioskAllowedApps), '["com.a","com.b"]');
+      expect(launcher.kioskApps.map((a) => a.package), ['com.a', 'com.b']);
+    });
+
+    test('a new install allows none until picked', () async {
+      await build({});
+      expect(settings.get(defs.kioskAllowedApps), '[]');
+      await settings.setFromJson('launcher.apps', twoApps);
+      expect(launcher.kioskApps, isEmpty);
+    });
+
+    test('keep the launcher\'s order and drop packages it lacks', () async {
+      await build({
+        'ks.launcher.apps': twoApps,
+        'ks.kiosk.allowed_apps': '["com.gone","com.b","com.a"]',
+      });
+      expect(launcher.kioskApps.map((a) => a.package), ['com.a', 'com.b']);
+    });
+
+    test(
+      'show while kiosk mode is on, unless the full menu opened it',
+      () async {
+        await build({
+          'ks.launcher.enabled': true,
+          'ks.launcher.apps': twoApps,
+          'ks.kiosk.allowed_apps': '["com.b"]',
+        });
+        expect(launcher.shown, hasLength(2));
+        await settings.setFromJson('kiosk.enabled', true);
+        launcher.open();
+        expect(launcher.shown.map((a) => a.package), ['com.b']);
+        launcher.open(unlocked: true);
+        expect(launcher.shown, hasLength(2));
+        await launcher.commands.execute('showAppLauncher', const {});
+        expect(launcher.shown.map((a) => a.package), ['com.b']);
+      },
+    );
+
+    test('showAppLauncher refuses a locked kiosk with none allowed', () async {
+      await build({
+        'ks.launcher.enabled': true,
+        'ks.launcher.apps': twoApps,
+        'ks.kiosk.allowed_apps': '[]',
+        'ks.kiosk.enabled': true,
+      });
+      final result = await launcher.commands.execute(
+        'showAppLauncher',
+        const {},
+      );
+      expect(result.ok, isFalse);
+      expect(result.error, contains('kiosk mode'));
+      expect(launcher.visible.value, isFalse);
+      expect(executed, isEmpty);
+    });
+
+    test('decodeKioskAllowedApps tolerates garbage', () {
+      expect(decodeKioskAllowedApps('["com.a", 3, ""]'), {'com.a'});
+      expect(decodeKioskAllowedApps('not json'), isEmpty);
+      expect(decodeKioskAllowedApps('{"a":1}'), isEmpty);
     });
   });
 

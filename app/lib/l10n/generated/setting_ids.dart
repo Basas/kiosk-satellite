@@ -1336,6 +1336,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingKioskAllowAppsTitle",
     "description": "settingKioskAllowAppsDescription",
   },
+  "kiosk.allowed_apps": {
+    "title": "settingKioskAllowedAppsTitle",
+    "description": "settingKioskAllowedAppsDescription",
+  },
   "home.enabled": {
     "title": "settingHomeLauncherEnabledTitle",
     "description": "settingHomeLauncherEnabledDescription",

@@ -23,6 +23,12 @@ Navigate to **Settings**, then **Kiosk Mode**. This same configuration page is a
 | Disable Gestures | Keeps all custom mappings from the [Gestures page](gestures.md) dormant for as long as Kiosk Mode is on. |
 | Allow menu with quick actions | Opts a restricted version of the menu back in: only the harmless actions you explicitly select below this switch will be visible. Everything else remains hidden behind the exit gesture and PIN. |
 
+### Allowed Apps
+
+When **Apps** is on under **Allowed Actions**, an **Allowed Apps** group lists the apps picked under **Settings > App Launcher**. While Kiosk Mode is on, the App Launcher shows only the apps switched on here, whether it opens from the quick actions menu, a gesture, Home Assistant or the remote API. The full list stays behind the exit gesture and PIN. Apps added to the App Launcher later stay off until you switch them on.
+
+To change the order of the tiles, open **Settings > App Launcher > Apps** and drag the picked apps or use the arrows next to them. The Allowed Apps follow the same order.
+
 ### Staying in Front
 
 The **Disable home button** feature relies on Android screen pinning. On a device that is not fully managed by an MDM, Android will present an "App is pinned" consent dialog the very first time it activates. Simply answer **Got it** once, and all future pins will occur silently. On certain devices, this dialog aggressively returns on every single boot. Configuring the [Home Launcher](home-launcher.md) permanently solves this annoyance, because when the kiosk acts as the true home screen, the pin is bypassed entirely and the home button naturally lands on the kiosk. 

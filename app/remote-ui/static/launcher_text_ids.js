@@ -74,5 +74,6 @@ export const launcherTextMessageIds = {
   "Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.": "launcherNotificationAccessRemote",
   "The grants Return automatically leans on.": "launcherPermissionsSearch",
   "Allows the process to run in the background without being paused or killed.": "deviceBatteryHeld",
-  "listing apps is Android-only": "launcherErrorAndroidOnly"
+  "listing apps is Android-only": "launcherErrorAndroidOnly",
+  "Search apps": "launcherSearchApps"
 };

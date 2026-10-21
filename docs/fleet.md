@@ -83,7 +83,7 @@ Settings that scale the UI, control screen brightness, or manage volume often de
 | `screensaver.local_folder` Local media folder | Local Media screensaver |
 | `screensaver.clock_background` Clock background photo | Clock screensaver |
 | `notifications.chime_file` Notification sound | Notifications |
-| `launcher.apps` Apps | App Launcher |
+| `launcher.apps` Apps, which carries `kiosk.allowed_apps` Allowed Apps | App Launcher |
 | `motion.sensitivity`, `motion.fps` | Camera |
 | `face.sensitivity` | Face Detection |
 | `camera.snapshot_resolution` | Camera |

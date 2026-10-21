@@ -1217,6 +1217,24 @@ const kioskAllowApps = SettingDef<bool>(
   dependsOn: 'kiosk.allow_drawer',
 );
 
+// The launcher's apps a locked kiosk still offers (issue #1067): a JSON
+// list of packages, a subset of launcher.apps in no order of its own. The
+// launcher opened while kiosk mode is on shows only these, and the full
+// list waits behind the exit gesture and PIN. Hand-built switch rows on
+// the device and in the remote admin write it. An upgrade seeds it with
+// every launcher app, so an existing quick menu keeps what it offered.
+const kioskAllowedApps = SettingDef<String>(
+  key: 'kiosk.allowed_apps',
+  type: SettingType.string,
+  defaultValue: '[]',
+  title: 'Allowed Apps',
+  description: 'The launcher apps offered while kiosk mode is on.',
+  category: 'Kiosk',
+  section: 'Allowed Apps',
+  subpage: 'Allowed Actions',
+  dependsOn: 'kiosk.allow_apps',
+);
+
 // ── Lockdown Mode (discussion #143) ────────────────────────────────────
 // The house-is-empty switch: one toggle that makes the tablet untouchable
 // and unhearable without dismantling the owner's kiosk configuration.
@@ -11747,6 +11765,9 @@ const fleetFollowsKey = {
   'screen.adaptive_point3_position': 'screen.adaptive_min_brightness',
   'screen.adaptive_point3_level': 'screen.adaptive_min_brightness',
   'screen.adaptive_inverted': 'screen.adaptive_min_brightness',
+  // The kiosk's apps are picked out of the launcher's, which name this
+  // device's own packages.
+  'kiosk.allowed_apps': 'launcher.apps',
 };
 
 /// What a new follower gets unless the leader says otherwise.
@@ -12533,6 +12554,7 @@ const List<SettingDef<Object>> allSettings = [
   kioskAllowLockdown,
   kioskAllowTheme,
   kioskAllowApps,
+  kioskAllowedApps,
   lockdownEnabled,
   lockdownMenu,
   lockdownBlackout,

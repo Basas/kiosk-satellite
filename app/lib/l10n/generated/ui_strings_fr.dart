@@ -330,6 +330,9 @@ class UiStringsFr extends UiStrings {
       'Aucune application pouvant être lancée n\'a été trouvée.';
 
   @override
+  String get launcherSearchApps => 'Rechercher des applications';
+
+  @override
   String get calendarTitle => 'Calendrier';
 
   @override
@@ -8568,6 +8571,17 @@ class UiStringsFr extends UiStrings {
   @override
   String get kioskAllowedHelp =>
       'Quelles actions rapides le menu du kiosque propose';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Applications autorisées';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'Les applications du lanceur proposées lorsque le mode kiosque est activé.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Ajoutez d\'abord des applications dans Paramètres > Lanceur d\'applications.';
 
   @override
   String get settingKioskEnabledTitle => 'Activer le mode kiosque';

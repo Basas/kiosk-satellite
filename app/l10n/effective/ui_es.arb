@@ -1215,6 +1215,19 @@
       ]
     }
   },
+  "launcherSearchApps": "Buscar aplicaciones",
+  "@launcherSearchApps": {
+    "context": "Settings > App Launcher > Apps",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Apps"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Apps"
+      ]
+    }
+  },
   "calendarTitle": "Calendario",
   "@calendarTitle": {
     "context": "Calendar",
@@ -32009,6 +32022,45 @@
       ],
       "remoteAdmin": [
         "Kiosk Mode > Allowed Actions"
+      ]
+    }
+  },
+  "settingKioskAllowedAppsTitle": "Aplicaciones permitidas",
+  "@settingKioskAllowedAppsTitle": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Allowed Apps"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Allowed Apps"
+      ]
+    }
+  },
+  "settingKioskAllowedAppsDescription": "Las aplicaciones del lanzador que se ofrecen mientras el modo kiosko está activado.",
+  "@settingKioskAllowedAppsDescription": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Allowed Apps"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Allowed Apps"
+      ]
+    }
+  },
+  "kioskAllowedAppsEmpty": "Primero añade aplicaciones en Ajustes > Lanzador de aplicaciones.",
+  "@kioskAllowedAppsEmpty": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Allowed Apps"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Allowed Apps"
       ]
     }
   },

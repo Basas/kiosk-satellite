@@ -1215,6 +1215,19 @@
       ]
     }
   },
+  "launcherSearchApps": "搜索应用",
+  "@launcherSearchApps": {
+    "context": "Settings > App Launcher > Apps",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > App Launcher > Apps"
+      ],
+      "remoteAdmin": [
+        "App Launcher > Apps"
+      ]
+    }
+  },
   "calendarTitle": "日历",
   "@calendarTitle": {
     "context": "Calendar",
@@ -32009,6 +32022,45 @@
       ],
       "remoteAdmin": [
         "Kiosk Mode > Allowed Actions"
+      ]
+    }
+  },
+  "settingKioskAllowedAppsTitle": "允许的应用",
+  "@settingKioskAllowedAppsTitle": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Allowed Apps"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Allowed Apps"
+      ]
+    }
+  },
+  "settingKioskAllowedAppsDescription": "Kiosk 模式开启时提供的启动器应用。",
+  "@settingKioskAllowedAppsDescription": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Help below this setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Allowed Apps"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Allowed Apps"
+      ]
+    }
+  },
+  "kioskAllowedAppsEmpty": "请先在“设置 > 应用启动器”中添加应用。",
+  "@kioskAllowedAppsEmpty": {
+    "context": "Settings > Kiosk Mode > Allowed Actions",
+    "description": "Label or guidance in this section.",
+    "x-locations": {
+      "device": [
+        "Settings > Kiosk Mode > Allowed Actions > Allowed Apps"
+      ],
+      "remoteAdmin": [
+        "Kiosk Mode > Allowed Actions > Allowed Apps"
       ]
     }
   },

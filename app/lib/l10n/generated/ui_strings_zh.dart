@@ -321,6 +321,9 @@ class UiStringsZh extends UiStrings {
   String get launcherEmpty => '未找到可启动的应用。';
 
   @override
+  String get launcherSearchApps => '搜索应用';
+
+  @override
   String get calendarTitle => '日历';
 
   @override
@@ -8046,6 +8049,15 @@ class UiStringsZh extends UiStrings {
 
   @override
   String get kioskAllowedHelp => 'Kiosk 菜单提供哪些快捷操作';
+
+  @override
+  String get settingKioskAllowedAppsTitle => '允许的应用';
+
+  @override
+  String get settingKioskAllowedAppsDescription => 'Kiosk 模式开启时提供的启动器应用。';
+
+  @override
+  String get kioskAllowedAppsEmpty => '请先在“设置 > 应用启动器”中添加应用。';
 
   @override
   String get settingKioskEnabledTitle => '启用 Kiosk 模式';
@@ -14566,6 +14578,9 @@ class UiStringsZhCn extends UiStringsZh {
   String get launcherEmpty => '未找到可启动的应用。';
 
   @override
+  String get launcherSearchApps => '搜索应用';
+
+  @override
   String get calendarTitle => '日历';
 
   @override
@@ -22291,6 +22306,15 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get kioskAllowedHelp => 'Kiosk 菜单提供哪些快捷操作';
+
+  @override
+  String get settingKioskAllowedAppsTitle => '允许的应用';
+
+  @override
+  String get settingKioskAllowedAppsDescription => 'Kiosk 模式开启时提供的启动器应用。';
+
+  @override
+  String get kioskAllowedAppsEmpty => '请先在“设置 > 应用启动器”中添加应用。';
 
   @override
   String get settingKioskEnabledTitle => '启用 Kiosk 模式';

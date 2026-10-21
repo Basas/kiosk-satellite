@@ -330,6 +330,9 @@ class UiStringsEs extends UiStrings {
       'No se encontraron aplicaciones que se puedan abrir.';
 
   @override
+  String get launcherSearchApps => 'Buscar aplicaciones';
+
+  @override
   String get calendarTitle => 'Calendario';
 
   @override
@@ -8584,6 +8587,17 @@ class UiStringsEs extends UiStrings {
   @override
   String get kioskAllowedHelp =>
       'Qué acciones rápidas ofrece el menú del kiosko';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Aplicaciones permitidas';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'Las aplicaciones del lanzador que se ofrecen mientras el modo kiosko está activado.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Primero añade aplicaciones en Ajustes > Lanzador de aplicaciones.';
 
   @override
   String get settingKioskEnabledTitle => 'Activar modo kiosko';

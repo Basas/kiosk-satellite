@@ -327,6 +327,9 @@ class UiStringsNl extends UiStrings {
   String get launcherEmpty => 'Geen apps gevonden die kunnen worden gestart.';
 
   @override
+  String get launcherSearchApps => 'Apps zoeken';
+
+  @override
   String get calendarTitle => 'Agenda';
 
   @override
@@ -8523,6 +8526,17 @@ class UiStringsNl extends UiStrings {
   @override
   String get kioskAllowedHelp =>
       'De snelle acties die in het kioskmenu beschikbaar zijn';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Toegestane apps';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'De apps van de appstarter die beschikbaar zijn terwijl de kioskmodus aan staat.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Voeg eerst apps toe in Instellingen > Appstarter.';
 
   @override
   String get settingKioskEnabledTitle => 'Kioskmodus inschakelen';
