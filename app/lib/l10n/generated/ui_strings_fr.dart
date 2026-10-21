@@ -734,6 +734,9 @@ class UiStringsFr extends UiStrings {
   String get dashboardPickerBuildsOwn => 'Génère ses propres vues';
 
   @override
+  String get dashboardPickerIngressPage => 'Page Ingress';
+
+  @override
   String get dashboardPickerWholeHelp =>
       'Ce tableau de bord génère ses propres vues, le kiosque l\'ouvre donc en entier.';
 

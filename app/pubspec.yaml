@@ -73,6 +73,7 @@ dev_dependencies:
   fake_async: ^1.3.1
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
+  video_player_platform_interface: ^6.9.0
 
 # Launcher icons for both platforms, generated from the master art in
 # ../assets/icons (run: dart run flutter_launcher_icons). Only the legacy

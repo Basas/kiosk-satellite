@@ -26850,5 +26850,11 @@
     "translation": "07f40f5a071e52fcf0ac6fb39e028e48a3f74e1536411a2028fb94c3e31600a2",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "dashboardPickerIngressPage": {
+    "source": "201de14a9cea12207ac3ada751870a8de61fbfc5ef458c28447dcaffcb147dc2",
+    "translation": "5833b5ad7b1b5390d9ae1e7d852e89f1dc5531fdca4018c972b7adfcd82d934f",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

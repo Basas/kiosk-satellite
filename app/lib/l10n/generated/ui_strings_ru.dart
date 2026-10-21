@@ -733,6 +733,9 @@ class UiStringsRu extends UiStrings {
   String get dashboardPickerBuildsOwn => 'Создаёт виды сама';
 
   @override
+  String get dashboardPickerIngressPage => 'Страница Ingress';
+
+  @override
   String get dashboardPickerWholeHelp =>
       'Эта панель создаёт виды сама, поэтому киоск открывает её целиком.';
 

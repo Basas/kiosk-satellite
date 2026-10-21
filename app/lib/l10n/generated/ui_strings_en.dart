@@ -728,6 +728,9 @@ class UiStringsEn extends UiStrings {
   String get dashboardPickerBuildsOwn => 'Builds its own views';
 
   @override
+  String get dashboardPickerIngressPage => 'Ingress page';
+
+  @override
   String get dashboardPickerWholeHelp =>
       'This dashboard builds its own views, so the kiosk opens it whole.';
 

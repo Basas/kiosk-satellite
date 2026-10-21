@@ -189,6 +189,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'dashboardPickerSubview' => strings.dashboardPickerSubview,
       'dashboardPickerWhole' => strings.dashboardPickerWhole,
       'dashboardPickerBuildsOwn' => strings.dashboardPickerBuildsOwn,
+      'dashboardPickerIngressPage' => strings.dashboardPickerIngressPage,
       'dashboardPickerWholeHelp' => strings.dashboardPickerWholeHelp,
       'dashboardPickerOneView' => strings.dashboardPickerOneView,
       'dashboardPickerOffline' => strings.dashboardPickerOffline,

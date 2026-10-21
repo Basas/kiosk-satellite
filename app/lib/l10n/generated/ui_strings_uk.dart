@@ -730,6 +730,9 @@ class UiStringsUk extends UiStrings {
   String get dashboardPickerBuildsOwn => 'Створює власні види';
 
   @override
+  String get dashboardPickerIngressPage => 'Сторінка Ingress';
+
+  @override
   String get dashboardPickerWholeHelp =>
       'Ця панель створює власні види, тому кіоск відкриває її повністю.';
 

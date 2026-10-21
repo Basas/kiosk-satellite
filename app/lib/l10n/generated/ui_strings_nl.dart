@@ -729,6 +729,9 @@ class UiStringsNl extends UiStrings {
   String get dashboardPickerBuildsOwn => 'Maakt eigen weergaven';
 
   @override
+  String get dashboardPickerIngressPage => 'Ingress-pagina';
+
+  @override
   String get dashboardPickerWholeHelp =>
       'Dit dashboard maakt zijn eigen weergaven, dus de kiosk opent het in zijn geheel.';
 

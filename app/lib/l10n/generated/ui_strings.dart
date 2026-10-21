@@ -1400,6 +1400,12 @@ abstract class UiStrings {
   /// **'Builds its own views'**
   String get dashboardPickerBuildsOwn;
 
+  /// Second line of an app from the Home Assistant sidebar, such as Music Assistant, whose web page Home Assistant shows through ingress.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingress page'**
+  String get dashboardPickerIngressPage;
+
   /// Note under the Whole dashboard choice.
   ///
   /// In en, this message translates to:
