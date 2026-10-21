@@ -618,7 +618,11 @@ class _ItemPickerState extends State<ItemPicker> {
     }
     return [
       for (final g in order) ...[
-        if (widget.spec.headings && (order.length > 1 || g.isNotEmpty))
+        // Rows outside every group go without a heading when the source
+        // has no name for them.
+        if (widget.spec.headings &&
+            (order.length > 1 || g.isNotEmpty) &&
+            (g.isNotEmpty || widget.spec.noGroup.isNotEmpty))
           _Entry.heading(
             g.isEmpty ? widget.spec.noGroup : g,
             groups[g]!.length,

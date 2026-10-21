@@ -50,7 +50,7 @@ class PluginManifest(val json: JSONObject) {
         require(json.getInt("schemaVersion") == 1) { "Unsupported manifest schema" }
         require(apiVersion == 1) { "This plugin needs a different SDK version" }
         require(minAndroidSdk >= 24) { "Minimum Android SDK must be at least 24" }
-        require(capabilities.all { it in setOf("overlay", "native", "entities", "host.read", "host.control", "shizuku", "screensaver", "noise", "ha", "voice.skin", "voice.text", "camera", "barcode", "ma") }) { "Unsupported plugin capability" }
+        require(capabilities.all { it in setOf("overlay", "native", "entities", "host.read", "host.control", "shizuku", "screensaver", "noise", "ha", "voice.skin", "voice.text", "camera", "barcode", "ma", "screensaver.mode") }) { "Unsupported plugin capability" }
         // The room's noise level and the conversation's words are host reads, opted into on their own.
         require("noise" !in capabilities || "host.read" in capabilities) { "Unsupported plugin capability" }
         require("voice.text" !in capabilities || "host.read" in capabilities) { "Unsupported plugin capability" }
@@ -82,9 +82,11 @@ class PluginManifest(val json: JSONObject) {
             val title = text(group, "title", 80)
             require(title in settingGroups && groupNames.add(title)) { "Display groups must name unique settings groups" }
             if (group.has("readingsTitle")) text(group, "readingsTitle", 80)
+            // "*" claims what no other group names, and "sensor.*" every reading of one type, for keys only
+            // known at runtime.
             for ((kind, used, pattern, maximum) in listOf(
-                GroupReferences("readings", readingKeys, "(sensor|text_sensor|binary_sensor|select|switch)\\.[a-z][a-z0-9_]{0,39}", 32),
-                GroupReferences("charts", chartKeys, "[a-z][a-z0-9_]{0,39}", 4)
+                GroupReferences("readings", readingKeys, "\\*|(sensor|text_sensor|binary_sensor|select|switch)\\.([a-z][a-z0-9_]{0,39}|\\*)", 32),
+                GroupReferences("charts", chartKeys, "\\*|[a-z][a-z0-9_]{0,39}", 4)
             )) {
                 if (!group.has(kind)) continue
                 val references = group.getJSONArray(kind)
@@ -151,15 +153,30 @@ class PluginManifest(val json: JSONObject) {
         }
     }
 
-    /** Keys of the string settings whose choices the plugin publishes. */
-    val choiceKeys: Set<String> = (0 until settings.length()).map { settings.getJSONObject(it) }
-        .filter { it.has("choices") }.map { it.getString("key") }.toSet()
+    /**
+     * The string settings and list row fields whose choices the plugin publishes. A row field
+     * goes by the dotted path of keys from its top-level list, such as `panels.tiles.sensor`.
+     */
+    val choiceKeys: Set<String> = choicePaths(settings, "")
+
+    private fun choicePaths(fields: JSONArray, prefix: String): Set<String> = (0 until fields.length()).flatMap { i ->
+        val field = fields.getJSONObject(i)
+        val path = prefix + field.getString("key")
+        when {
+            field.has("choices") -> listOf(path)
+            field.getString("type") == "list" -> choicePaths(field.getJSONArray("fields"), "$path.")
+            else -> emptyList()
+        }
+    }.toSet()
 
     fun hasButton(id: String) = button(id) != null
 
     /** Whether a button or a top-level setting shows with the saved [config]. */
     fun buttonVisible(id: String, config: JSONObject) = button(id)?.let { visible(it, config, topLevel) } == true
     fun settingVisible(key: String, config: JSONObject) = topLevel[key]?.let { visible(it, config, topLevel) } == true
+
+    /** Whether the choices at [path] can be refreshed: the setting, or the list holding the row field, shows. */
+    fun choicesVisible(path: String, config: JSONObject) = path in choiceKeys && settingVisible(path.substringBefore('.'), config)
 
     /**
      * The saved settings with [values] written over them. Keys left out keep
@@ -201,8 +218,11 @@ class PluginManifest(val json: JSONObject) {
                 require(depth > 0 && field.get("required") is Boolean && type in TEXT_TYPES) { "Invalid list setting" }
             }
             if (field.has("visibleWhen")) validateCondition(field.get("visibleWhen"), earlier)
-            // The plugin lists the choices at runtime. Older apps show a text field instead.
-            if (field.has("choices")) require(depth == 0 && type == "string" && field.get("choices") == "plugin") { "Invalid choices setting" }
+            // The plugin lists the choices at runtime, for a setting or a list row field alike.
+            // Older apps show a setting's as a text field and reject a row field's.
+            if (field.has("choices")) require(type == "string" && field.get("choices") == "plugin") { "Invalid choices setting" }
+            // A number shows as a slider, or as a typed field for a wide range or an exact value.
+            if (field.has("input")) require(type == "number" && field.get("input") in setOf("slider", "field")) { "Invalid input" }
             if (type == "list") validateList(field, depth)
             // Row fields may leave out their default. The type supplies one.
             normalize(field, if (depth == 0) field.get("default") else defaultOf(field), enforce = false)
@@ -378,8 +398,11 @@ class PluginManifest(val json: JSONObject) {
                 val max = setting.getDouble("max")
                 val step = setting.optDouble("step", 1.0)
                 val number = (value as Number).toDouble()
+                // A slider has at most 10000 stops and ends on one. A typed field has no such limit.
+                val steps = (max - min) / step
+                val slider = setting.optString("input", "slider") == "slider"
                 require(min.isFinite() && max.isFinite() && min < max && step.isFinite() && step > 0 &&
-                    (max - min) / step in 1.0..10000.0 && kotlin.math.abs((max - min) / step - kotlin.math.round((max - min) / step)) < 0.00001 && number.isFinite() && number in min..max) { "Numeric setting is outside its range" }
+                    (!slider || (steps in 1.0..10000.0 && kotlin.math.abs(steps - kotlin.math.round(steps)) < 0.00001)) && number.isFinite() && number in min..max) { "Numeric setting is outside its range" }
                 require(kotlin.math.abs((number - min) / step - kotlin.math.round((number - min) / step)) < 0.00001) { "Numeric setting does not match its step" }
             }
             "select" -> {

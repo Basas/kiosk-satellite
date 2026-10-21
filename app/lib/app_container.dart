@@ -185,6 +185,11 @@ class AppContainer {
         level: voice.level,
         settings: settings,
       )
+      ..screensaverModes = PluginScreensaverModes(
+        read: () => screensaver.modeState,
+        hold: screensaver.setModeOverride,
+        release: screensaver.clearModeOverride,
+      )
       ..camera = PluginCamera(
         motion: motion,
         commands: commands,
@@ -204,7 +209,8 @@ class AppContainer {
     plugins.onActivity = (name) =>
         unawaited(UsageCounters.bump(settings, name));
     intercom = IntercomManager(bus, commands, log, settings);
-    alarms = AlarmManager(bus, commands, log, settings);
+    alarms = AlarmManager(bus, commands, log, settings)
+      ..screensaverModeOverride = () => screensaver.modeOverride.value;
     calendar = CalendarManager(bus, commands, log, settings);
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);
     // It follows what the managers above are doing, through the bus and

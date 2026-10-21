@@ -7,7 +7,10 @@ import { messageBox, modalShell, showToast } from './widgets.js';
    plugin_setup.dart. The host owns each run: Start asks the plugin to work,
    the plugin reports progress or an outcome, and this page paints what the
    host says. Questions a plugin asks during a run started here open as a
-   dialog. A row carries its run target in data-setup-target. */
+   dialog. A row carries its run target in data-setup-target and its plugin
+   in data-setup-plugin, so rows in a list row editor follow along too.
+   Choice lists can be large, so the page asks only for those whose
+   revision changed. */
 
 const REFRESH = 'M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6';
 const states = new Map();
@@ -55,6 +58,7 @@ export function setupButtonRow(plugin, button, settled) {
   const row = element('div', undefined, 'row plugin-setup-row');
   row.dataset.searchId = `plugin:${plugin.id}:button:${button.id}`;
   row.dataset.setupTarget = target;
+  row.dataset.setupPlugin = plugin.id;
   const text = info(button.title, button.description || '');
   text.append(element('div', undefined, 'desc plugin-setup-status'));
   const press = element('button', button.label, 'btn-ghost plugin-setup-start'); press.type = 'button';
@@ -76,7 +80,9 @@ export function setupButtonRow(plugin, button, settled) {
 }
 
 // The picked choice by its label and Refresh beside it, which spins and
-// cancels while the plugin looks.
+// cancels while the plugin looks. [setting] needs only a key and a title,
+// and a list row field passes its dotted path as the key, such as
+// panels.tiles.sensor.
 export function choiceControl(plugin, setting, value, settled, onPick) {
   const spec = choiceSpec(plugin.id, setting.key);
   let picked = value;
@@ -100,12 +106,15 @@ export function choiceControl(plugin, setting, value, settled, onPick) {
   const status = element('div', undefined, 'desc plugin-setup-status');
   const missing = element('div', pluginText('This choice is no longer listed.'), 'desc dp-missing'); missing.hidden = true;
   field.el.addEventListener('dp-painted', (event) => { missing.hidden = !event.detail.missing; });
+  // The field painted once before the listener, with the list it already had.
+  field.repaint();
   return {
     control,
     // Placed under the row's name and description.
     lines: [missing, status],
     attach(row) {
       row.dataset.setupTarget = target;
+      row.dataset.setupPlugin = plugin.id;
       refresh.onclick = async () => {
         if (row.dataset.running === 'true') await cancel(plugin, target);
         else await start(plugin, 'choices', setting.key, settled);
@@ -116,18 +125,39 @@ export function choiceControl(plugin, setting, value, settled, onPick) {
   };
 }
 
-function choiceSpec(id, key) {
+// A choice shows its label, with its detail below and its value on the
+// right, the way an entity shows its state, and its category as a chip. A
+// plain choice with only a label shows its ID below instead. Groups head
+// their choices in the order they first appear, once any choice has one.
+const rich = (choice) => ['group', 'value', 'category', 'icon'].some((field) => choice[field]);
+
+export function choiceSpec(id, key) {
+  const choices = () => states.get(id)?.choices?.[key];
   return {
     key: `pluginChoices:${id}:${key}`,
     loader: async () => {
-      const choices = states.get(id)?.choices?.[key];
-      if (!choices) return null;
-      return { items: choices.map((choice) => ({ id: choice.id, name: choice.label, sub: choice.label === choice.id ? '' : choice.id,
-        subMono: true, group: '', available: true })), notes: {} };
+      const list = choices();
+      if (!list) return null;
+      return { items: list.map((choice) => ({ id: choice.id, name: choice.label,
+        sub: choice.detail || (choice.label === choice.id || rich(choice) ? '' : choice.id),
+        subMono: !choice.detail, state: choice.value || null, chip: choice.category || null,
+        group: choice.group || '', iconPath: choice.iconPath || null,
+        available: true })), notes: {} };
     },
     searchHint: pluginText('Search'),
-    noGroup: '', chips: false, headings: false, byGroupName: false, keep: null,
+    noGroup: '', chips: true, byGroupName: false, keep: null,
+    get headings() { return !!choices()?.some((choice) => choice.group); },
   };
+}
+
+// The label of the choice [value] at [key], once the plugin lists it.
+export function choiceLabel(id, key, value) {
+  return states.get(id)?.choices?.[key]?.find((choice) => choice.id === value)?.label ?? null;
+}
+
+// Reads a plugin's choices for a page that only shows their labels.
+export function watchPluginSetup(id) {
+  if (!states.has(id)) refreshPluginSetup(id);
 }
 
 function paint(row, id, running) {
@@ -160,26 +190,36 @@ function paint(row, id, running) {
   status.classList.toggle('error', run?.state === 'error');
 }
 
-// Reads one plugin's runs and choices and paints its open page.
+// Reads one plugin's runs and choices and paints its open page. The lists
+// already held stay unless their revision changed.
 export async function refreshPluginSetup(id) {
-  const result = await cmd('getPluginSetup', { id }, { timeoutMs: 5000 }).catch(() => null);
+  const held = states.get(id);
+  const result = await cmd('getPluginSetup', held ? { id, choiceRevisions: held.choiceRevisions || {} } : { id },
+    { timeoutMs: 5000 }).catch(() => null);
   if (!result?.ok) return;
-  states.set(id, result.data || { runs: {}, choices: {} });
+  const data = result.data || {};
+  const revisions = data.choiceRevisions || {};
+  const sent = data.choices || {};
+  const choices = {};
+  const kept = {};
+  for (const [key, revision] of Object.entries(revisions)) {
+    const list = key in sent ? sent[key] : states.get(id)?.choices?.[key];
+    if (list) { choices[key] = list; kept[key] = revision; }
+  }
+  states.set(id, { runs: data.runs || {}, choiceRevisions: kept, choices });
   applyPluginSetup(id);
 }
 
 export function applyPluginSetup(id) {
   const page = pageOf(id);
   const state = states.get(id) || { runs: {}, choices: {} };
-  if (page) {
-    const running = page.dataset.pluginRunning === 'true';
-    for (const row of page.querySelectorAll('[data-setup-target]')) paint(row, id, running);
-  }
-  for (const [key, choices] of Object.entries(state.choices || {})) {
+  const running = page?.dataset.pluginRunning === 'true';
+  for (const row of document.querySelectorAll(`[data-setup-plugin="${id}"]`)) paint(row, id, running);
+  for (const key of Object.keys(state.choices || {})) {
     const listKey = `${id}:${key}`;
-    const json = JSON.stringify(choices);
-    if (choiceLists.get(listKey) === json) continue;
-    choiceLists.set(listKey, json);
+    const revision = String(state.choiceRevisions?.[key]);
+    if (choiceLists.get(listKey) === revision) continue;
+    choiceLists.set(listKey, revision);
     loadList(choiceSpec(id, key));
   }
   for (const run of Object.values(state.runs || {})) {

@@ -93,6 +93,9 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     // Each installed package as it arrived, by its hash, so a fleet leader
     // can hand its followers the exact bytes it runs.
     private val packages = File(context.filesDir, "plugin-packages").apply { mkdirs() }
+    // What KS keeps for each plugin by its ID, such as the choices it last
+    // listed. It survives updates and goes with the plugin.
+    private val pluginData = File(context.filesDir, "plugin-data")
     private var records = JSONObject(prefs.getString("installed", "{}") ?: "{}")
     @Volatile private var pluginsEnabled = prefs.getBoolean("pluginsEnabled", records.length() > 0)
     private var startupGeneration = 0
@@ -129,12 +132,12 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             if (entityPending.compareAndSet(false, true)) main.postDelayed(entityUpdate, 250)
         }
         fun closeEntities() { entities.close(); main.removeCallbacks(entityUpdate) }
-        val screensavers = PluginScreensavers(packageDir)
-        fun screensaverSnapshot(): List<Map<String, String>> = screensavers.snapshot().map { item ->
+        val screensavers = PluginScreensavers<OverlayFactory>(packageDir)
+        fun screensaverSnapshot(): List<Map<String, Any>> = screensavers.snapshot().map { item ->
             if (item.containsKey("entry")) item + mapOf(
                 "assetDirectory" to File(packageDir, "assets").canonicalPath,
                 "assetOrigin" to "https://ks-plugin-$token.invalid"
-            ) else item
+            ) else if (item.containsKey("view")) item + ("session" to token) else item
         }
         private val screensaverPending = AtomicBoolean(false)
         private val screensaverUpdate = Runnable {
@@ -168,11 +171,13 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         val overlays = PluginOverlays<OverlayFactory>()
         fun notifyOverlays() = emit("overlays", mapOf("id" to id, "session" to token, "overlays" to overlays.snapshot()), alive)
         val triggers = PluginTriggers(manifest::hasTrigger)
-        val setup = PluginSetup(manifest)
+        val setup = PluginSetup(manifest, File(pluginData, "$id/choices"))
         private val setupPending = AtomicBoolean(false)
+        // Choice lists can be large, so each one goes to the app once per revision.
+        private val choicesSent = mutableMapOf<String, Long>()
         private val setupUpdate = Runnable {
             setupPending.set(false)
-            if (alive.get()) emit("setup", mapOf("id" to id, "session" to token, "setup" to setup.snapshot()), alive)
+            if (alive.get()) emit("setup", mapOf("id" to id, "session" to token, "setup" to setup.snapshot(choicesSent)), alive)
         }
         fun notifySetup() {
             if (setupPending.compareAndSet(false, true)) main.postDelayed(setupUpdate, 100)
@@ -289,7 +294,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 }
             }
             override fun executeCommand(command: String, arguments: Map<String, Any>, callback: PluginHost.CommandCallback) {
-                check(alive.get() && manifest.capabilities.any { it == "host.read" || it == "host.control" }) { "Host capability is required" }
+                check(alive.get() && manifest.capabilities.any { it == "host.read" || it == "host.control" || it == "screensaver.mode" }) { "Host capability is required" }
                 require(command.length in 1..80 && arguments.size <= 2 && arguments.all { it.key.length <= 32 && (it.value is Boolean || (it.value is String && (it.value as String).length <= 2048)) }) { "Invalid host request" }
                 commandBudget.acquire()
                 val copied = HashMap(arguments)
@@ -457,6 +462,11 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 screensavers.remove(key)
                 notifyScreensavers()
             }
+            override fun publishScreensaverView(key: String, title: String, factory: OverlayFactory) {
+                check(alive.get() && "screensaver" in manifest.capabilities) { "Screensaver capability is required" }
+                screensavers.publishView(key, title, factory)
+                notifyScreensavers()
+            }
             override fun publishSeries(key: String, chart: Map<String, Any>) {
                 charts.publish(key, chart)
                 notifyCharts()
@@ -561,6 +571,11 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             override fun setSettingChoices(key: String, ids: Array<String>, labels: Array<String>?) {
                 check(alive.get()) { "Plugin session has ended" }
                 setup.setChoices(key, ids, labels)
+                notifySetup()
+            }
+            override fun setSettingChoices(key: String, choices: List<Map<String, Any?>?>?) {
+                check(alive.get()) { "Plugin session has ended" }
+                setup.setChoices(key, requireNotNull(choices) { "Missing choices" })
                 notifySetup()
             }
             private fun publishEntity(type: String, key: String, name: String, metadata: Map<String, Any>, state: Any?) {
@@ -732,8 +747,10 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
     /** Registered on the engine by KioskApplication. */
     internal val overlayViews = PluginOverlayViews(
         context.assets,
-        lookup = { id, token, key, generation ->
-            sessions[id]?.takeIf { it.alive.get() && it.token == token }?.overlays?.get(key, generation)?.factory
+        lookup = { id, token, key, generation, screensaver ->
+            sessions[id]?.takeIf { it.alive.get() && it.token == token }?.let { session ->
+                if (screensaver) session.screensavers.view(key, generation) else session.overlays.get(key, generation)?.factory
+            }
         },
         failed = { id, token, error ->
             worker.execute {
@@ -938,6 +955,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             ?.forEach { it.deleteRecursively() }
         packages.listFiles()?.filter { it.name.removeSuffix(".zip") !in installedHashes }
             ?.forEach { it.delete() }
+        pluginData.listFiles()?.filter { !records.has(it.name) }?.forEach { it.deleteRecursively() }
         // Existing installations keep running. New installations start with plugins off.
         if (!prefs.contains("pluginsEnabled")) {
             check(prefs.edit().putBoolean("pluginsEnabled", pluginsEnabled).commit())
@@ -1152,6 +1170,8 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             session = current
             sessions[id] = current
             emit("hostSession", mapOf("id" to id, "session" to current.token, "capabilities" to manifest.capabilities.toList()), current.alive)
+            // The choices kept from the last session show until the plugin lists new ones.
+            if (current.setup.hasChoices()) current.notifySetup()
             loadedIds.add(id)
             loadedHashes.add(record.getString("hash"))
             if ("shizuku" in manifest.capabilities) shizuku.state()
@@ -1223,6 +1243,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         save()
         File(packages, "${dir.name}.zip").delete()
         if (dir.name !in loadedHashes) dir.deleteRecursively()
+        File(pluginData, id).deleteRecursively()
     }
 
     private fun keepPackage(hash: String, bytes: ByteArray) {
@@ -1355,7 +1376,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 Triple("button:$key", "settings.button", "id")
             }
             "choices" -> {
-                require(key in manifest.choiceKeys && manifest.settingVisible(key, config)) { "Unknown or hidden choices setting" }
+                require(manifest.choicesVisible(key, config)) { "Unknown or hidden choices setting" }
                 Triple("choices:$key", "settings.choices", "key")
             }
             else -> throw IllegalArgumentException("Unknown setup target")

@@ -284,6 +284,10 @@ class PluginManager extends Manager implements FleetPluginHost {
   /// The voice turn plugins follow. Set by the app container before [init].
   PluginVoiceFeed? voice;
 
+  /// The screensaver mode plugins with the screensaver.mode capability
+  /// read and hold. Set by the app container before [init].
+  PluginScreensaverModes? screensaverModes;
+
   /// The device camera for the camera and barcode capabilities. Set by the
   /// app container before [init].
   PluginCamera? camera;
@@ -393,6 +397,7 @@ class PluginManager extends Manager implements FleetPluginHost {
       ha: haSocket,
       ma: maSocket,
       voice: voice,
+      screensaverModes: screensaverModes,
     );
     channel.setMethodCallHandler((call) async {
       if (_disposed) return null;
@@ -410,6 +415,9 @@ class PluginManager extends Manager implements FleetPluginHost {
           _hostReads.open(call.arguments as Map);
         case 'hostSessionClosed':
           final data = call.arguments as Map;
+          // First, so a screensaver mode the plugin held lets go before its
+          // renderers do, instead of showing black in between.
+          _hostReads.close(call.arguments as Map);
           if (_runtimeSessions[data['id']] == data['session']) {
             _runtimeSessions.remove(data['id']);
             _setScreensavers(data['id'] as String, const []);
@@ -420,7 +428,6 @@ class PluginManager extends Manager implements FleetPluginHost {
             _setContentInsets(data['id'] as String, null);
             _setSetup(data['id'] as String, null);
           }
-          _hostReads.close(call.arguments as Map);
         case 'cameraOpen':
           return camera == null
               ? 'camera_failed'
@@ -807,9 +814,13 @@ class PluginManager extends Manager implements FleetPluginHost {
     );
     register(
       'getPluginSetup',
-      'Read the settings button runs and listed choices of a running plugin.',
-      (p) async => setup.value[p['id']] ?? const {'runs': {}, 'choices': {}},
-      const {'id': 'Plugin ID'},
+      'Read the settings button runs and listed choices of a running plugin. choiceRevisions changes with each new list, so a caller that passes the revisions it holds gets only the lists that changed.',
+      (p) async => _remoteSetup(p['id'] as String? ?? '', p['choiceRevisions']),
+      const {
+        'id': 'Plugin ID',
+        'choiceRevisions':
+            'Optional. The revision of each choices list held, by key. Only lists with another revision come back',
+      },
     );
     register(
       'runPluginSetup',
@@ -1158,12 +1169,80 @@ class PluginManager extends Manager implements FleetPluginHost {
     }
   }
 
+  /// Takes the host's setup update. Choice lists can be large, so the host
+  /// sends each one only when its revision changes, and the lists already
+  /// held stay for the keys it still names.
   void _setSetup(String id, Map? value) {
-    final next = value == null ? null : jsonDecode(jsonEncode(value)) as Map;
-    if (jsonEncode(setup.value[id]) == jsonEncode(next)) return;
-    setup.value = {...setup.value}
-      ..remove(id)
-      ..addAll(next == null ? {} : {id: next.cast<String, Object?>()});
+    final previous = setup.value[id];
+    if (value == null) {
+      if (previous != null) setup.value = {...setup.value}..remove(id);
+      return;
+    }
+    final sent = value['choices'] as Map? ?? const {};
+    final revisions = value['choiceRevisions'] as Map?;
+    final held = previous?['choices'] as Map? ?? const {};
+    final runs = jsonDecode(jsonEncode(value['runs'] ?? const {}));
+    final next = <String, Object?>{
+      'runs': runs,
+      'choiceRevisions': {...?revisions},
+      'choices': {
+        for (final key in revisions?.keys ?? sent.keys)
+          if (sent.containsKey(key))
+            '$key': jsonDecode(jsonEncode(sent[key]))
+          else if (held.containsKey(key))
+            '$key': held[key],
+      },
+    };
+    if (sent.isEmpty &&
+        previous != null &&
+        jsonEncode(previous['runs']) == jsonEncode(runs) &&
+        jsonEncode(previous['choiceRevisions']) ==
+            jsonEncode(next['choiceRevisions'])) {
+      return;
+    }
+    setup.value = {...setup.value, id: next};
+  }
+
+  /// A plugin's setup for the remote API. Given the revisions a caller
+  /// [held], only the lists that changed since come along. Choice icons
+  /// travel as path data, the way the remote pickers draw them.
+  Future<Map<String, Object?>> _remoteSetup(String id, Object? held) async {
+    final state = setup.value[id];
+    final revisions = state?['choiceRevisions'] as Map? ?? const {};
+    final choices = state?['choices'] as Map? ?? const {};
+    final sent = held is Map
+        ? {
+            for (final entry in choices.entries)
+              if (!revisions.containsKey(entry.key) ||
+                  '${held[entry.key]}' != '${revisions[entry.key]}')
+                entry.key: entry.value,
+          }
+        : choices;
+    final icons = {
+      for (final list in sent.values.whereType<List>())
+        for (final choice in list.whereType<Map>())
+          if (choice['icon'] is String) choice['icon'] as String,
+    };
+    final paths = icons.isEmpty
+        ? const <String, String>{}
+        : await MdiIcons.paths(icons);
+    return {
+      'runs': state?['runs'] ?? const {},
+      'choiceRevisions': revisions,
+      'choices': paths.isEmpty
+          ? sent
+          : {
+              for (final entry in sent.entries)
+                entry.key: [
+                  for (final choice in (entry.value as List).whereType<Map>())
+                    if (paths[MdiIcons.normalize('${choice['icon'] ?? ''}')]
+                        case final path?)
+                      {...choice, 'iconPath': path}
+                    else
+                      choice,
+                ],
+            },
+    };
   }
 
   void _setScreensavers(String id, List value) {

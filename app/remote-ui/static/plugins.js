@@ -8,7 +8,7 @@ import { updatePluginCharts } from './plugin-charts.js';
 import { updatePluginReadings } from './plugin-readings.js';
 import { currentPath, showTab, subpageEntry } from './tabs.js';
 import { dashboardField } from './dashboard_picker.js';
-import { cameraViewSpec, fieldVisible, iconField, listSetting } from './plugin_lists.js';
+import { cameraViewSpec, fieldVisible, iconField, listSetting, numberControl } from './plugin_lists.js';
 import { choiceControl, refreshPluginSetup, setupButtonRow } from './plugin_setup.js';
 import { hintRow, introRow, messageBox, modalShell, showToast, swatch } from './widgets.js';
 import { SUBPAGE_ICONS, subpageIcon } from './icons.js';
@@ -807,7 +807,7 @@ function render(root, state) {
       const panel = ensureGroup(group);
       if (setting.type === 'list') {
         const alone = shown.filter((entry) => (entry.group || 'Settings') === group).length === 1;
-        const block = listSetting({ setting, rows: values[setting.key] ?? setting.default ?? [], showTitle: !alone,
+        const block = listSetting({ setting, rows: values[setting.key] ?? setting.default ?? [], showTitle: !alone, plugin,
           onChange: (rows) => saveSetting(setting.key, rows, block) });
         block.dataset.searchId = `plugin:${plugin.id}:setting:${setting.key}`;
         panel.append(block);
@@ -821,6 +821,17 @@ function render(root, state) {
         input.type = 'checkbox'; input.checked = values[setting.key] ?? setting.default;
         input.onchange = () => saveSetting(setting.key, input.checked, input);
         const toggle = element('label', undefined, 'switch'); toggle.append(input, element('span', undefined, 'slider')); settingRow.append(toggle);
+      } else if (setting.type === 'number' && setting.input === 'field') {
+        // A typed number saves once it is done, like a text setting, and
+        // only a value the setting takes. The reason shows under the name.
+        const saved = values[setting.key] ?? setting.default;
+        const number = numberControl(setting, String(saved), () => {});
+        number.input.onchange = () => {
+          if (!number.check() && Number(number.input.value) !== saved) saveSetting(setting.key, Number(number.input.value), number.input);
+        };
+        number.input.onkeydown = (event) => { if (event.key === 'Enter') number.input.blur(); };
+        settingRow.firstElementChild.append(number.error);
+        settingRow.append(number.control);
       } else if (setting.type === 'number') {
         input.type = 'range'; input.min = setting.min; input.max = setting.max; input.step = setting.step || 1;
         input.value = values[setting.key] ?? setting.default;
@@ -980,6 +991,16 @@ function updatePluginShizuku(container, state) {
   button.textContent = status === 'permission_required' ? pluginText('Grant access') : pluginText('Set up');
 }
 
+// The group whose [kind] claims [key], or null when none does. A group
+// naming the key wins over one claiming its whole type with "sensor.*",
+// which wins over one claiming the rest with "*".
+function outputGroup(layouts, kind, key) {
+  const claimedBy = (reference) => layouts.find((entry) => (entry[kind] || []).includes(reference))?.title;
+  const dot = key.indexOf('.');
+  return claimedBy(key) ?? (kind === 'readings' && dot > 0 ? claimedBy(`${key.slice(0, dot)}.*`) : undefined)
+    ?? claimedBy('*') ?? null;
+}
+
 function updateGroupedPluginOutput(page, kind, items) {
   const layouts = page.pluginGroups || [];
   items = Array.isArray(items) ? items : [];
@@ -987,9 +1008,7 @@ function updateGroupedPluginOutput(page, kind, items) {
   for (const target of page.querySelectorAll(`.plugin-${kind}`)) {
     const group = target.dataset.pluginGroup;
     const layout = layouts.find((entry) => entry.title === group);
-    const selected = items.filter((item) => group
-      ? (layout?.[kind] || []).includes(key(item))
-      : !layouts.some((entry) => (entry[kind] || []).includes(key(item))));
+    const selected = items.filter((item) => (outputGroup(layouts, kind, key(item)) ?? '') === (group || ''));
     if (kind === 'charts') updatePluginCharts(target, selected, group ? '' : pluginText('Charts'));
     else updatePluginReadings(target, selected, layout?.readingsTitle || pluginText('Readings'));
   }
@@ -1012,8 +1031,9 @@ watchUpdates(['plugins'], async () => {
       const result = await cmd(command, { id }, { timeoutMs: 5000 });
       if (target?.isConnected && currentPath === `plugins/${id}` && result.ok) update(target, result.data);
     });
-    // Settings buttons and plugin choices follow their runs.
-    if (page.querySelector('[data-setup-target]')) outputs.push(refreshPluginSetup(id));
+    // Settings buttons and plugin choices follow their runs, and list rows
+    // follow the choices they show by label.
+    if (page.querySelector('[data-setup-target], [data-plugin-choices]')) outputs.push(refreshPluginSetup(id));
     await Promise.allSettled(outputs);
   } catch (_) { /* Reconnect reads the latest plugin output. */ }
   finally { runtimeLoading = false; }
