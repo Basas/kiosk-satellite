@@ -27,8 +27,10 @@ class CameraOnvifService(
     private val networkInfo: (String) -> NetworkInfo? = ::networkInfoFor,
     deviceName: String = "Kiosk Satellite",
     private val tls: Boolean = false,
+    private var h264Profile: String = "Baseline",
+    private val onH264Profile: (String) -> Unit = {},
 ) {
-    data class Response(val status: String, val body: String)
+    data class Response(val status: String, val body: String, val operation: String = "", val fault: String? = null)
     data class NetworkInfo(val name: String, val enabled: Boolean, val hardwareAddress: String?, val mtu: Int?)
     private val name = deviceName.trim().ifEmpty { "Kiosk Satellite" }
     private val scopes = scopes(name)
@@ -39,6 +41,14 @@ class CameraOnvifService(
         this.height = height
         this.fps = fps
         this.bitrate = bitrate
+    }
+
+    /** Encoders pick their own profile, so report the one in the stream's SPS. */
+    @Synchronized fun updateParameterSet(sps: ByteArray) {
+        val profile = h264ProfileOf(sps) ?: return
+        if (profile == h264Profile) return
+        h264Profile = profile
+        onH264Profile(profile)
     }
 
     @Synchronized fun respond(path: String, bytes: ByteArray, host: String, port: Int): Response {
@@ -58,6 +68,10 @@ class CameraOnvifService(
             return fault("ter:ActionNotSupported", "Unsupported service")
         }
         val name = operation.localName
+        return answer(name, namespace, envelope, operation, host, port).copy(operation = name)
+    }
+
+    private fun answer(name: String, namespace: String, envelope: Element, operation: Element, host: String, port: Int): Response {
         // ONVIF clients obtain UTC before constructing their UsernameToken.
         if (name != "GetSystemDateAndTime" && !authenticated(envelope)) {
             return fault("ter:NotAuthorized", "Authentication required", "400 Bad Request")
@@ -196,7 +210,7 @@ class CameraOnvifService(
         "<tt:Encoding>H264</tt:Encoding><tt:Resolution><tt:Width>$width</tt:Width><tt:Height>$height</tt:Height></tt:Resolution>" +
         "<tt:Quality>5</tt:Quality><tt:RateControl><tt:FrameRateLimit>$fps</tt:FrameRateLimit>" +
         "<tt:EncodingInterval>1</tt:EncodingInterval><tt:BitrateLimit>${bitrate / 1000}</tt:BitrateLimit></tt:RateControl>" +
-        "<tt:H264><tt:GovLength>$fps</tt:GovLength><tt:H264Profile>Baseline</tt:H264Profile></tt:H264>" +
+        "<tt:H264><tt:GovLength>$fps</tt:GovLength><tt:H264Profile>$h264Profile</tt:H264Profile></tt:H264>" +
         multicast() + "<tt:SessionTimeout>PT60S</tt:SessionTimeout></$tag>"
 
     private fun audioSource(tag: String) = "<$tag token=\"audio_source\"><tt:Name>Microphone</tt:Name><tt:UseCount>1</tt:UseCount>" +
@@ -236,7 +250,8 @@ class CameraOnvifService(
     private fun fault(code: String, reason: String, status: String = "500 Internal Server Error", subcode: String? = null) =
         Response(status, envelope("<s:Fault><s:Code><s:Value>s:Sender</s:Value><s:Subcode><s:Value>$code</s:Value>" +
             (if (subcode != null) "<s:Subcode><s:Value>$subcode</s:Value></s:Subcode>" else "") +
-            "</s:Subcode></s:Code><s:Reason><s:Text xml:lang=\"en\">$reason</s:Text></s:Reason></s:Fault>"))
+            "</s:Subcode></s:Code><s:Reason><s:Text xml:lang=\"en\">$reason</s:Text></s:Reason></s:Fault>"),
+            fault = "${subcode ?: code}: $reason")
 
     companion object {
         const val SOAP = "http://www.w3.org/2003/05/soap-envelope"
@@ -262,6 +277,18 @@ class CameraOnvifService(
             if (bytes == null || bytes.size != 6 || bytes[0].toInt() and 1 != 0) return null
             val mac = bytes.joinToString(":") { "%02X".format(it.toInt() and 255) }
             return mac.takeUnless { it == "00:00:00:00:00:00" || it == "02:00:00:00:00:00" }
+        }
+
+        /** ONVIF only names Baseline, Main, Extended and High, so every High variant reports as High. */
+        fun h264ProfileOf(sps: ByteArray): String? {
+            if (sps.size < 2 || sps[0].toInt() and 31 != 7) return null
+            return when (sps[1].toInt() and 255) {
+                66 -> "Baseline"
+                77 -> "Main"
+                88 -> "Extended"
+                100, 110, 122, 244 -> "High"
+                else -> null
+            }
         }
 
         fun xml(text: String): String = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
