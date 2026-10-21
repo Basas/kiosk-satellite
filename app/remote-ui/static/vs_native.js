@@ -4,7 +4,7 @@ import { api, cmd, state } from './core.js';
 import { pickRow, playerSpec } from './entity_picker.js';
 import { readOnlyRow } from './device.js';
 import { SUBPAGE_ICONS } from './icons.js';
-import { banner, messageBox, modalShell, showToast } from './widgets.js';
+import { banner, messageBox, modalShell, selectLoading, showToast } from './widgets.js';
 import { vsSelectRow } from './vs.js';
 import { watchUpdates } from './live.js';
 import { toggleRow } from './audio.js';
@@ -269,6 +269,15 @@ async function haSelectRows(container, rows) {
   for (const [key, title, desc] of rows) {
     const entity = data[key];
     const options = Array.isArray(entity?.options) ? entity.options.map(String) : [];
+    // Another engine's wake words, which Home Assistant learns as it
+    // reconnects to the kiosk.
+    if (entity && data.wakeWordsPending === true && (key === 'wake_word' || key === 'wake_word_2')) {
+      const row = vsSelectRow(voiceText(title), voiceText(desc),
+        options.map((o) => ({ value: o, label: label(key, o) })), null, () => {});
+      selectLoading(row.querySelector('select'));
+      container.appendChild(row);
+      continue;
+    }
     if (!entity || entity.available !== true || !options.length) {
       container.appendChild(voiceRow(title, desc,
         voiceText(data.selectsMissing === true ? 'Reload needed' : 'Not available')));

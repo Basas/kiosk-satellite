@@ -228,11 +228,25 @@ class VoiceManager extends Manager {
   String _offeredSent = '';
   Timer? _selectsTimer;
 
+  /// When the kiosk's wake words last changed (another engine or language,
+  /// a custom model). Until Home Assistant's Wake word selects offer them,
+  /// or [_wakeWordsWait] passes, the settings pages show the selects
+  /// loading: Home Assistant only learns them as it reconnects.
+  DateTime? _wakeWordsChangedAt;
+  Timer? _wakeWordsTimer;
+  static const _wakeWordsWait = Duration(seconds: 30);
+
   /// The subscription following Home Assistant's selects into their
   /// settings, the entities it follows and the connection it rides.
   Future<void> Function()? _unwatchSelects;
   String _watchedSelects = '';
   int _watchedOn = -1;
+
+  /// The selects as that subscription last saw them, {state, attributes}
+  /// by entity id: the settings pages read them from here instead of a
+  /// request to Home Assistant per select, which on a slow kiosk took
+  /// seconds while an engine switch kept it busy.
+  final _selectStates = <String, Map<String, Object?>>{};
   Future<void>? _watching;
   Timer? _watchTimer;
 
@@ -1029,6 +1043,14 @@ class VoiceManager extends Manager {
   /// sets up. When the list changed (a custom model, another engine), the
   /// entry is reloaded so the selects offer what the kiosk has now.
   void _refreshSelects() {
+    _wakeWordsChangedAt = DateTime.now();
+    bus.publish(const RemoteStatusChanged('voice-selects'));
+    // Past the wait the pages show what Home Assistant has, whatever it is.
+    _wakeWordsTimer?.cancel();
+    _wakeWordsTimer = Timer(
+      _wakeWordsWait,
+      () => bus.publish(const RemoteStatusChanged('voice-selects')),
+    );
     _selectsTimer?.cancel();
     _selectsTimer = Timer(const Duration(seconds: 2), () {
       final satellite = homeAssistant.value.satelliteEntity;
@@ -1061,6 +1083,7 @@ class VoiceManager extends Manager {
     final unwatch = _unwatchSelects;
     _unwatchSelects = null;
     _watchedSelects = '';
+    _selectStates.clear();
     if (unwatch != null) await unwatch();
     if (!want) return;
     final keyOf = {for (final e in entities.entries) e.value: e.key};
@@ -1083,23 +1106,52 @@ class VoiceManager extends Manager {
         {'type': 'subscribe_entities', 'entity_ids': keyOf.keys.toList()},
         (event) {
           optionsChanged = false;
-          // subscribe_entities: "a" carries whole states, "c" the changes.
+          // subscribe_entities: "a" carries whole states, "c" the changes
+          // ("+" set, "-" attributes dropped), "r" the entities removed.
           final added = event['a'];
           if (added is Map) {
             added.forEach((entity, raw) {
               if (raw is! Map) return;
+              final attributes = raw['a'];
+              _selectStates['$entity'] = {
+                'state': raw['s'],
+                'attributes': {
+                  if (attributes is Map) ...attributes.cast<String, Object?>(),
+                },
+              };
               _mirrorSelect(keyOf['$entity'], raw['s']);
-              noteOptions(entity, raw['a']);
+              noteOptions(entity, attributes);
             });
           }
           final changed = event['c'];
           if (changed is Map) {
             changed.forEach((entity, raw) {
-              final plus = raw is Map ? raw['+'] : null;
+              if (raw is! Map) return;
+              final plus = raw['+'];
+              final minus = raw['-'];
+              final cached = _selectStates['$entity'];
+              final attributes = cached?['attributes'];
+              if (plus is Map && cached != null) {
+                if (plus.containsKey('s')) cached['state'] = plus['s'];
+                final more = plus['a'];
+                if (more is Map && attributes is Map) {
+                  more.forEach((k, v) => attributes['$k'] = v);
+                }
+              }
+              final gone = minus is Map ? minus['a'] : null;
+              if (gone is List && attributes is Map) {
+                gone.forEach(attributes.remove);
+              }
               if (plus is! Map) return;
               _mirrorSelect(keyOf['$entity'], plus['s']);
               noteOptions(entity, plus['a']);
             });
+          }
+          final removed = event['r'];
+          if (removed is List) {
+            for (final entity in removed) {
+              _selectStates.remove('$entity');
+            }
           }
           if (optionsChanged) {
             bus.publish(const RemoteStatusChanged('voice-selects'));
@@ -1778,7 +1830,7 @@ class VoiceManager extends Manager {
     if (homeAssistant.value.entities.isEmpty) await refreshHomeAssistant();
     final out = <String, Object?>{};
     for (final entry in homeAssistant.value.entities.entries) {
-      final state = await _migration.stateOf(entry.value);
+      final state = await _selectState(entry.value);
       final attributes = state?['attributes'];
       out[entry.key] = {
         'entity_id': entry.value,
@@ -1791,6 +1843,9 @@ class VoiceManager extends Manager {
       };
     }
     out['selectsMissing'] = homeAssistant.value.selectsMissing;
+    final wakeWord = out['wake_word'];
+    out['wakeWordsPending'] =
+        wakeWord is Map && _wakeWordsPending(wakeWord['options']);
     // Every validated realtime provider, more choices for each Assistant,
     // and the one each wake word is on (its option, or null for Assist).
     out['realtime'] = {
@@ -1808,12 +1863,48 @@ class VoiceManager extends Manager {
     return out;
   }
 
+  /// One of Home Assistant's selects, {state, attributes}: as the live
+  /// subscription last saw it, else asked of Home Assistant.
+  Future<Map<String, Object?>?> _selectState(String entity) async {
+    final live =
+        _unwatchSelects != null &&
+        _ha.connected &&
+        _ha.connections == _watchedOn;
+    final cached = live ? _selectStates[entity] : null;
+    return cached ?? await _migration.stateOf(entity);
+  }
+
+  /// Home Assistant's Wake word select still offers other wake words than
+  /// the kiosk has, shortly after they changed. Its options are None and
+  /// the phrases the kiosk offered.
+  bool _wakeWordsPending(Object? options) {
+    final since = _wakeWordsChangedAt;
+    if (since == null || DateTime.now().difference(since) > _wakeWordsWait) {
+      return false;
+    }
+    final offered = {
+      for (final w in offeredWakeWords(
+        _engine,
+        external: _external,
+        custom: _custom.models,
+        pryonLocale: _pryonLocale,
+      ))
+        w.phrase,
+    };
+    final listed = {
+      if (options is List)
+        for (final o in options)
+          if (o != 'no_wake_word') '$o',
+    };
+    return !setEquals(offered, listed);
+  }
+
   /// Sets one of Home Assistant's selects on the kiosk ([key] as in
   /// [VoiceHaState.entities]); false when it has no such option.
   Future<bool> selectOption(String key, String option) async {
     final entity = homeAssistant.value.entities[key];
     if (entity == null) return false;
-    final state = await _migration.stateOf(entity);
+    final state = await _selectState(entity);
     final attributes = state?['attributes'];
     final options = attributes is Map ? attributes['options'] : null;
     if (options is List && !options.contains(option)) return false;
@@ -3716,6 +3807,7 @@ class VoiceManager extends Manager {
     _speaker.dispose();
     _custom.dispose();
     _selectsTimer?.cancel();
+    _wakeWordsTimer?.cancel();
     for (final sub in _subs) {
       await sub.cancel();
     }
