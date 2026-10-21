@@ -104,7 +104,29 @@ thresholds = {
     ],
     'values': {'hot': 85, 'alerts': []},
 }
-installed = [copy.deepcopy(plugin), sensors, monitor, thresholds]
+# A switch that reveals color rows, one in a group of its own with a
+# button and a summary the plugin writes itself on every save.
+clock = {
+    'id': 'clock', 'name': 'Clock', 'version': '1.0.0', 'description': 'Custom colors',
+    'capabilities': [], 'enabled': True, 'running': True, 'commands': [], 'groups': [{'title': 'Look'}],
+    'settings': [
+        {'key': 'label', 'title': 'Label', 'type': 'string', 'default': '', 'group': 'Look'},
+        {'key': 'custom', 'title': 'Custom colors', 'type': 'boolean', 'default': False, 'group': 'Look'},
+        {'key': 'face', 'title': 'Face color', 'type': 'color', 'default': '#112233', 'group': 'Look',
+         'visibleWhen': {'key': 'custom', 'equals': True}},
+        {'key': 'hands', 'title': 'Hands color', 'type': 'color', 'default': '#445566', 'group': 'Look',
+         'visibleWhen': {'key': 'custom', 'equals': True}},
+        {'key': 'size', 'title': 'Size', 'type': 'number', 'min': 1, 'max': 10, 'default': 5, 'group': 'Look'},
+        {'key': 'summary', 'title': 'Summary', 'type': 'string', 'default': '', 'group': 'Look'},
+        {'key': 'accent', 'title': 'Accent color', 'type': 'color', 'default': '#778899', 'group': 'Accents',
+         'visibleWhen': {'key': 'custom', 'equals': True}},
+    ],
+    'buttons': [{'id': 'preview', 'title': 'Preview colors', 'label': 'Preview', 'group': 'Accents',
+                 'visibleWhen': {'key': 'custom', 'equals': True}}],
+    'values': {'label': 'Kitchen', 'custom': False, 'size': 5, 'summary': 'Plain'},
+    'status': 'Plain colors',
+}
+installed = [copy.deepcopy(plugin), sensors, monitor, thresholds, clock]
 setup = {'runs': {}, 'choices': {}, 'choiceRevisions': {}}
 setup_runs = []
 icons = {'mdi:home': 'M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z', 'mdi:garage': 'M19,20H17V11H7V20H5V9L12,5L19,9V20Z',
@@ -122,6 +144,9 @@ def api(route):
         target = next(p for p in installed if p['id'] == params['id'])
         target['values'] = {**(target['values'] if params.get('patch') else {}), **copy.deepcopy(params['values'])}
         saved.append(copy.deepcopy(params['values']))
+        if target['id'] == 'clock':
+            target['values']['summary'] = 'Custom' if target['values'].get('custom') else 'Plain'
+            target['status'] = f"{target['values']['summary']} colors"
         result = installed
     elif name == 'searchIcons':
         if 'names' in params:
@@ -374,6 +399,71 @@ try:
         assert saved[-1] == {'alerts': [{'name': 'Frame rate', 'watch': True, 'above': 60}]}, saved[-1]
         expect(root.locator('.plugin-list-row .desc')).to_have_text('60 fps')
         page.screenshot(path='/tmp/kiosk-plugin-list-numbers.png', full_page=True)
+
+        # A switch that reveals rows updates the page in place: the other
+        # rows keep their nodes, the scroll stays and the values the plugin
+        # saved itself show.
+        page.set_viewport_size({'width': 1280, 'height': 420})
+        page.evaluate("(async () => (await import('/static/tabs.js')).showTab('plugins/clock', {refresh: false}))()")
+        expect(page.locator('#pageTitle')).to_contain_text('Clock')
+        root = page.locator('#tab-plugins > .subpage[data-subpage="clock"]')
+        summary = root.get_by_role('textbox', name='Summary')
+        expect(summary).to_have_value('Plain')
+        expect(root.get_by_text('Face color', exact=True)).to_have_count(0)
+        expect(root.get_by_text('Accents', exact=True)).to_have_count(0)
+        tag = '''(tag) => {
+          const page = [...document.querySelectorAll('#tab-plugins > .subpage')].find((el) => el.dataset.subpage === 'clock');
+          const rows = [page, ...['label', 'size'].map((key) => page.querySelector(`[data-setting-key="${key}"]`))];
+          if (tag) rows.forEach((row) => { row.kept = true; });
+          return rows.every((row) => row && row.kept === true);
+        }'''
+        assert page.evaluate(tag, True)
+        root.locator('.row:has-text("Custom colors") .switch').scroll_into_view_if_needed()
+        page.evaluate('document.scrollingElement.scrollTop = document.scrollingElement.scrollTop + 60')
+        scroll = page.evaluate('document.scrollingElement.scrollTop')
+        assert scroll > 0, scroll
+        root.locator('.row:has-text("Custom colors") .switch').click()
+        expect(root.get_by_text('Face color', exact=True)).to_be_visible()
+        expect(summary).to_have_value('Custom')
+        expect(root.locator('.plugin-runtime-status')).to_have_text('Custom colors')
+        assert saved[-1] == {'custom': True}, saved[-1]
+        assert page.evaluate(tag, False), 'Saving a setting drew its page again'
+        assert page.evaluate('document.scrollingElement.scrollTop') == scroll
+        order = root.locator('.card:has([data-setting-key="label"]) > [data-setting-key]').evaluate_all('(rows) => rows.map((row) => row.dataset.settingKey)')
+        assert order == ['label', 'custom', 'face', 'hands', 'size', 'summary'], order
+        # The group a revealed row brings shows after the declared ones,
+        # with its button closing it.
+        titles = root.locator('.card-title').all_text_contents()
+        assert titles == ['Look', 'Accents'], titles
+        accents = root.locator('.card:has([data-setting-key="accent"]) > .row')
+        expect(accents).to_have_count(2)
+        expect(accents.last).to_contain_text('Preview colors')
+        page.screenshot(path='/tmp/kiosk-plugin-in-place.png', full_page=True)
+
+        # Turning it off takes the rows and their group out again.
+        root.locator('.row:has-text("Custom colors") .switch').click()
+        expect(root.get_by_text('Face color', exact=True)).to_have_count(0)
+        expect(root.get_by_text('Accents', exact=True)).to_have_count(0)
+        expect(root.get_by_text('Preview colors', exact=True)).to_have_count(0)
+        expect(summary).to_have_value('Plain')
+        assert page.evaluate(tag, False), 'Saving a setting drew its page again'
+        assert page.evaluate('document.scrollingElement.scrollTop') == scroll
+
+        # A value the plugin saves on its own shows in place too. A field
+        # being typed in keeps its text.
+        root.get_by_role('textbox', name='Label').fill('Typing')
+        clock['values']['summary'] = 'Built'
+        clock['values']['size'] = 7
+        page.evaluate("async () => (await import('/static/live.js')).receiveUpdate('plugin-settings')")
+        expect(summary).to_have_value('Built')
+        expect(root.locator('.row:has-text("Size") input[type=range]')).to_have_value('7')
+        expect(root.get_by_role('textbox', name='Label')).to_have_value('Typing')
+        expect(root.get_by_role('textbox', name='Label')).to_be_focused()
+        assert page.evaluate(tag, False) is False, 'The changed rows kept their old nodes'
+        assert page.evaluate('''() => {
+          const page = [...document.querySelectorAll('#tab-plugins > .subpage')].find((el) => el.dataset.subpage === 'clock');
+          return page.kept === true && page.querySelector('[data-setting-key="label"]').kept === true;
+        }''')
         assert not errors, errors
         browser.close()
 finally:
