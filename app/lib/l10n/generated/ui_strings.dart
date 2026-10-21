@@ -21941,6 +21941,18 @@ abstract class UiStrings {
   /// **'The icon beside the value.'**
   String get screensaverOverlayShowIconHelp;
 
+  /// Label or guidance in this editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible states'**
+  String get screensaverOverlayVisibleStates;
+
+  /// Label or guidance in this editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.'**
+  String get screensaverOverlayVisibleStatesHelp;
+
   /// Generic font family option. Font brand names stay unchanged.
   ///
   /// In en, this message translates to:

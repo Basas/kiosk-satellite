@@ -388,6 +388,8 @@ const screensaverTextMessageIds = <String, String>{
   "The name under the value.": "screensaverOverlayShowNameHelp",
   "Show icon": "screensaverOverlayShowIcon",
   "The icon beside the value.": "screensaverOverlayShowIconHelp",
+  "Visible states": "screensaverOverlayVisibleStates",
+  "Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.": "screensaverOverlayVisibleStatesHelp",
   "No widgets yet": "screensaverOverlayWidgetsEmpty",
   "Remove widget": "screensaverOverlayRemove",
   "Add widget": "screensaverOverlayAdd",

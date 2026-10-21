@@ -12751,6 +12751,13 @@ class UiStringsNl extends UiStrings {
   String get screensaverOverlayShowIconHelp => 'Het pictogram naast de waarde.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'Zichtbare statussen';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Toon de widget alleen als de waarde een van deze is, gescheiden door komma\'s. Laat leeg om hem altijd te tonen.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Systeemlettertype';
 
   @override

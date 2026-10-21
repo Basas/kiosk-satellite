@@ -12858,6 +12858,13 @@ class UiStringsEs extends UiStrings {
       'Muestra el icono junto al valor.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'Estados visibles';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Muestra el widget solo cuando su valor es uno de estos, separados por comas. Déjalo vacío para mostrarlo siempre.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Sistema';
 
   @override

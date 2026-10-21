@@ -47624,6 +47624,32 @@
       ]
     }
   },
+  "screensaverOverlayVisibleStates": "Видимі стани",
+  "@screensaverOverlayVisibleStates": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
+  "screensaverOverlayVisibleStatesHelp": "Показувати віджет лише тоді, коли його значення збігається з одним із цих, розділених комами. Залиште порожнім, щоб показувати завжди.",
+  "@screensaverOverlayVisibleStatesHelp": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
   "screensaverOverlayFontSystem": "Системний",
   "@screensaverOverlayFontSystem": {
     "context": "Settings > Screensaver > Widgets > Add widget or select a widget",

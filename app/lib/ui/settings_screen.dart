@@ -5911,6 +5911,10 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
     // The weather location override, or the entity widget's custom name;
     // a controller so edits survive the dialog's rebuilds.
     final labelCtrl = TextEditingController(text: '${config['label'] ?? ''}');
+    // The entity widget's visible states (issue #1066).
+    final statesCtrl = TextEditingController(
+      text: '${config['show_states'] ?? ''}',
+    );
 
     final route = DialogRoute<bool>(
       context: context,
@@ -6123,6 +6127,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                           // from its own defaults.
                           config = {...screensaverWidgetDefaults(type)};
                           labelCtrl.text = '${config['label'] ?? ''}';
+                          statesCtrl.text = '';
                         }),
                       ),
                     ),
@@ -6315,6 +6320,22 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                                 },
                         ),
                       ),
+                      // Compared with the displayed value above, so the
+                      // list follows whatever that shows.
+                      LabeledField(
+                        label: screensaverText(context, 'Visible states'),
+                        child: TextField(
+                          controller: statesCtrl,
+                          decoration: InputDecoration(
+                            helperText: screensaverText(
+                              context,
+                              'Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.',
+                            ),
+                            helperMaxLines: 3,
+                          ),
+                          onChanged: (v) => config['show_states'] = v.trim(),
+                        ),
+                      ),
                       colorRow(),
                       scaleRow(),
                       fontRow(),
@@ -6359,6 +6380,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
     final submitted = await Navigator.of(context).push(route);
     await route.completed;
     labelCtrl.dispose();
+    statesCtrl.dispose();
     if (submitted != true) return;
     await _save([
       // The corner dropdown only offers free corners, but drop any claimant

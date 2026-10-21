@@ -11964,6 +11964,13 @@ class UiStringsZh extends UiStrings {
   String get screensaverOverlayShowIconHelp => '数值旁边的图标。';
 
   @override
+  String get screensaverOverlayVisibleStates => '可见状态';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      '仅当数值为其中之一时显示此小组件，以逗号分隔。留空则始终显示。';
+
+  @override
   String get screensaverOverlayFontSystem => '系统';
 
   @override
@@ -26200,6 +26207,13 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get screensaverOverlayShowIconHelp => '数值旁边的图标。';
+
+  @override
+  String get screensaverOverlayVisibleStates => '可见状态';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      '仅当数值为其中之一时显示此小组件，以逗号分隔。留空则始终显示。';
 
   @override
   String get screensaverOverlayFontSystem => '系统';

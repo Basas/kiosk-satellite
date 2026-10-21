@@ -12853,6 +12853,13 @@ class UiStringsFr extends UiStrings {
   String get screensaverOverlayShowIconHelp => 'L\'icône à côté de la valeur.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'États visibles';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Afficher le widget uniquement lorsque sa valeur fait partie de celles-ci, séparées par des virgules. Laisser vide pour toujours l\'afficher.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Système';
 
   @override

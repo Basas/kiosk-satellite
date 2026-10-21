@@ -1046,7 +1046,7 @@ export function settingRow(s) {
         forecast: true, humidity: true, wind: true, visibility: true },
       battery: { color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default', percent: true, low: false },
-      entity: { entity: '', name: '', label: '', attribute: '',
+      entity: { entity: '', name: '', label: '', attribute: '', show_states: '',
         show_name: true, show_icon: true, color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default' },
       alarm: { color: '250,250,250', scale: 0, font: 'default',
@@ -1278,6 +1278,25 @@ export function settingRow(s) {
           // the entity's attributes, from the value step.
           refs.attribute = { wrap: formField(screensaverText('Displayed value'), valueBox.el),
             select: { get value() { return config.attribute || ''; } } };
+          // Compared with the displayed value, so the list follows
+          // whatever that shows (issue #1066).
+          refs.states = (() => {
+            const wrap = document.createElement('label');
+            wrap.className = 'form-field';
+            const title = document.createElement('span');
+            title.className = 'desc';
+            title.textContent = screensaverText('Visible states');
+            const input = document.createElement('input');
+            input.className = 'field';
+            input.type = 'text';
+            input.value = config.show_states || '';
+            input.style.maxWidth = 'none';
+            const hint = document.createElement('span');
+            hint.className = 'desc';
+            hint.textContent = screensaverText('Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.');
+            wrap.append(title, hint, input);
+            return { wrap, input };
+          })();
           refs.label = (() => {
             const wrap = document.createElement('label');
             wrap.className = 'form-field';
@@ -1299,7 +1318,7 @@ export function settingRow(s) {
           refs.showIcon = cameraToggle(screensaverText('Show icon'),
             config.show_icon !== false, screensaverText('The icon beside the value.'));
           typeBlock.append(refs.entity.wrap, refs.label.wrap,
-            refs.attribute.wrap, refs.color.wrap, refs.scale.wrap,
+            refs.attribute.wrap, refs.states.wrap, refs.color.wrap, refs.scale.wrap,
             refs.font.wrap, refs.weight.wrap, refs.showName.wrap, refs.showIcon.wrap);
           return;
         }
@@ -1404,6 +1423,7 @@ export function settingRow(s) {
               name: config.name || config.entity,
               label: refs.label.input.value.trim(),
               attribute: refs.attribute.select.value,
+              show_states: refs.states.input.value.trim(),
               show_name: refs.showName.input.checked,
               show_icon: refs.showIcon.input.checked, color, scale, font,
               font_weight };

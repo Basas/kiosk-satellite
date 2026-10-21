@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "52ee39ca683794d375334a8ba7738239dcf537e7",
+  "revision": "8143cc7c12d2c398fc60cc7cede54cd8f38c57eb",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -173,7 +173,7 @@
     "settings_screensaver_schedule_en.arb": "2c777f1f62e3c57d6821cc687110f0ce7ef1e69c867536413aaff37a0c3df7cf",
     "settings_screensaver_weather_mood_en.arb": "65c1d224c407d414eb99e90d6bf71bd5dbdb7938f7bc760a80b56c3ca27fdcd9",
     "settings_screensaver_website_en.arb": "9852330f7c384c850507318a5bcab08a8d38221d2fd696a1fbc74e2f047c64b8",
-    "settings_screensaver_widget_editor_en.arb": "abf00ad63a462bdecb3d1bc67e18c669804171b716ca69b536dbc30570d581f1",
+    "settings_screensaver_widget_editor_en.arb": "fe11884f8f4e5fbe141dfc26502601ff0095849a3ebb03a85dea00c493f576b2",
     "settings_screensaver_widget_weather_en.arb": "ac20c8de7257587df218c40d5c4fe920b61f1cdc74405ff5c8dff89fc8328ac6",
     "settings_screensaver_widgets_en.arb": "59206df222f4f667a15dce7a4a9837c3fcb51596a5131c7549fb4c73f0654366",
     "settings_search_en.arb": "d8ea2b418814f507a28a47cfda97d656d3fdf00962a2817f7f390450a49b5a67",

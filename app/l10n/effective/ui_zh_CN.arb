@@ -47624,6 +47624,32 @@
       ]
     }
   },
+  "screensaverOverlayVisibleStates": "可见状态",
+  "@screensaverOverlayVisibleStates": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
+  "screensaverOverlayVisibleStatesHelp": "仅当数值为其中之一时显示此小组件，以逗号分隔。留空则始终显示。",
+  "@screensaverOverlayVisibleStatesHelp": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
   "screensaverOverlayFontSystem": "系统",
   "@screensaverOverlayFontSystem": {
     "context": "Settings > Screensaver > Widgets > Add widget or select a widget",

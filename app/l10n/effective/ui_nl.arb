@@ -47624,6 +47624,32 @@
       ]
     }
   },
+  "screensaverOverlayVisibleStates": "Zichtbare statussen",
+  "@screensaverOverlayVisibleStates": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
+  "screensaverOverlayVisibleStatesHelp": "Toon de widget alleen als de waarde een van deze is, gescheiden door komma's. Laat leeg om hem altijd te tonen.",
+  "@screensaverOverlayVisibleStatesHelp": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
   "screensaverOverlayFontSystem": "Systeemlettertype",
   "@screensaverOverlayFontSystem": {
     "context": "Settings > Screensaver > Widgets > Add widget or select a widget",

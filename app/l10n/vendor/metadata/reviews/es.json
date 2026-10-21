@@ -22278,5 +22278,15 @@
     "source": "ea44fc1d97a426895aa8a108a3db6d1a5d1c2e3a30015da56cd2ec61ccf05e36",
     "translation": "13e289e52f1701345a94ff88fb98b080e4b79cc18e17974c8e8ffaea215df361",
     "author": "Xavier Larrea"
+  },
+  "screensaverOverlayVisibleStatesHelp": {
+    "source": "5a677f231903d8fb30855de32ea30380e7f412a79f98869f2dcb63b42505fa1e",
+    "translation": "5e1b6f9cbfdc092120034273c88314d81398fdb40aad3ae035dd17b141d52566",
+    "author": "Xavier Larrea"
+  },
+  "screensaverOverlayVisibleStates": {
+    "source": "3ef37a6dbe2fb305f8d3d67f13533f71429c2b48eda53a39088f7813bedc9de6",
+    "translation": "281e60e0792acea8d4fe1820871086dc5de09960be675b1dbea8f8dc71bde1f4",
+    "author": "Xavier Larrea"
   }
 }

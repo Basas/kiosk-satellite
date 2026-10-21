@@ -12887,6 +12887,13 @@ class UiStringsDe extends UiStrings {
       'Zeigt das Symbol neben dem Wert an.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'Sichtbare Zustände';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Zeigt das Widget nur an, wenn sein Wert einem dieser Werte entspricht, durch Kommas getrennt. Leer lassen, um es immer anzuzeigen.';
+
+  @override
   String get screensaverOverlayFontSystem => 'System';
 
   @override

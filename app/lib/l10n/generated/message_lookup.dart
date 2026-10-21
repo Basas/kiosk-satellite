@@ -4310,6 +4310,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'screensaverOverlayShowIcon' => strings.screensaverOverlayShowIcon,
       'screensaverOverlayShowIconHelp' =>
         strings.screensaverOverlayShowIconHelp,
+      'screensaverOverlayVisibleStates' =>
+        strings.screensaverOverlayVisibleStates,
+      'screensaverOverlayVisibleStatesHelp' =>
+        strings.screensaverOverlayVisibleStatesHelp,
       'screensaverOverlayFontSystem' => strings.screensaverOverlayFontSystem,
       'screensaverOverlayFontSerif' => strings.screensaverOverlayFontSerif,
       'screensaverOverlayFontCondensed' =>

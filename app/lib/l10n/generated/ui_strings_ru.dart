@@ -12693,6 +12693,13 @@ class UiStringsRu extends UiStrings {
   String get screensaverOverlayShowIconHelp => 'Значок рядом со значением.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'Видимые состояния';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Показывать виджет, только когда его значение совпадает с одним из этих, через запятую. Оставьте пустым, чтобы показывать всегда.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Системный';
 
   @override

@@ -12742,6 +12742,13 @@ class UiStringsUk extends UiStrings {
   String get screensaverOverlayShowIconHelp => 'Піктограма поруч зі значенням.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'Видимі стани';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Показувати віджет лише тоді, коли його значення збігається з одним із цих, розділених комами. Залиште порожнім, щоб показувати завжди.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Системний';
 
   @override

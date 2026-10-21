@@ -41,6 +41,8 @@
 ///      (its friendly name, cached for the editors), label (a name chosen
 ///      by hand; the Home Assistant name when empty), attribute (the
 ///      attribute shown instead of the state; the state when empty),
+///      show_states (a comma separated list of values; when set, the
+///      widget only shows while its value matches one, issue #1066),
 ///      show_name (the name line under the value), show_icon (the icon
 ///      beside the value, issue #912) and color ("r,g,b" icon and text
 ///      color). A blank value hides the whole widget, vignette
@@ -156,6 +158,7 @@ Map<String, Object?> screensaverWidgetDefaults(String type) => switch (type) {
     'name': '',
     'label': '',
     'attribute': '',
+    'show_states': '',
     'show_name': true,
     'show_icon': true,
     'color': '250,250,250',

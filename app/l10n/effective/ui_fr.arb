@@ -47624,6 +47624,32 @@
       ]
     }
   },
+  "screensaverOverlayVisibleStates": "États visibles",
+  "@screensaverOverlayVisibleStates": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
+  "screensaverOverlayVisibleStatesHelp": "Afficher le widget uniquement lorsque sa valeur fait partie de celles-ci, séparées par des virgules. Laisser vide pour toujours l'afficher.",
+  "@screensaverOverlayVisibleStatesHelp": {
+    "context": "Settings > Screensaver > Widgets > Add widget or select a widget",
+    "description": "Label or guidance in this editor.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Widgets > Add widget or select a widget"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Widgets > Add widget or select a widget"
+      ]
+    }
+  },
   "screensaverOverlayFontSystem": "Système",
   "@screensaverOverlayFontSystem": {
     "context": "Settings > Screensaver > Widgets > Add widget or select a widget",

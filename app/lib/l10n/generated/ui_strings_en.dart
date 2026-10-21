@@ -12606,6 +12606,13 @@ class UiStringsEn extends UiStrings {
   String get screensaverOverlayShowIconHelp => 'The icon beside the value.';
 
   @override
+  String get screensaverOverlayVisibleStates => 'Visible states';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.';
+
+  @override
   String get screensaverOverlayFontSystem => 'System';
 
   @override

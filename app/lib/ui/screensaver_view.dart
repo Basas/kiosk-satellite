@@ -2512,6 +2512,10 @@ class _EntityWidgetOverlayState extends State<EntityWidgetOverlay> {
     if (_entity.state == null || glanceValueBlank(_entity)) {
       return const SizedBox.shrink();
     }
+    final text = glanceStateText(_entity, strings: l10n(context));
+    if (!entityWidgetStateVisible(widget.spec.config, _entity, text)) {
+      return const SizedBox.shrink();
+    }
     final corner = _cornerAlignment(widget.spec.position);
     final color = widget.nightColor ?? _widgetRgb(widget.spec.config['color']);
     final size = MediaQuery.of(context).size;
@@ -2528,7 +2532,7 @@ class _EntityWidgetOverlayState extends State<EntityWidgetOverlay> {
       color: color,
     );
     final value = Text(
-      glanceStateText(_entity, strings: l10n(context)),
+      text,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
@@ -2627,6 +2631,25 @@ GlanceEntity entityWidgetEntity(Map<String, Object?> config) {
     customName: label.isEmpty ? null : label,
     attribute: attribute.isEmpty ? null : attribute,
   );
+}
+
+/// Whether the entity widget shows for this reading (issue #1066). An empty
+/// Visible states list always shows. Otherwise one entry has to match the
+/// displayed [text] ("Open") or the raw value behind it ("on"), ignoring
+/// case, so either way of writing it works.
+bool entityWidgetStateVisible(
+  Map<String, Object?> config,
+  GlanceEntity entity,
+  String text,
+) {
+  final states = {
+    for (final s in '${config['show_states'] ?? ''}'.split(','))
+      if (s.trim().isNotEmpty) s.trim().toLowerCase(),
+  };
+  if (states.isEmpty) return true;
+  final raw = entity.attribute == null ? entity.state : entity.attributeValue;
+  return states.contains(text.trim().toLowerCase()) ||
+      (raw != null && states.contains(raw.trim().toLowerCase()));
 }
 
 /// A Home Assistant weather entity with a prominent temperature, a labeled

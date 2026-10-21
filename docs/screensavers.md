@@ -312,6 +312,7 @@ Displays a single Home Assistant entity in a display corner over any mode except
 | Entity | None | Selected by entity name or ID via the picker. The widget remains hidden until assigned. |
 | Name | Empty | Custom label displayed under the value. If left empty, the default Home Assistant entity name displays. |
 | Displayed value | State | Selects whether to display the primary entity state or a specific attribute value. |
+| Visible states | Empty | A comma separated list of values. The widget only shows when its value matches one of them, such as `Open` or `on`. The list matches the displayed value or the raw Home Assistant value and ignores case. Leave it empty to always show the widget. |
 | Corner | First free corner | Displays in the first available corner. |
 | Color | White | Applies to icon, value, and label text. |
 | Show name | On | Disabling this hides the bottom label, displaying only the icon and value. |
