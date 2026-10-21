@@ -5,6 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Added
+- **Amazon's wake word engine on the Echo Dot.** On the Kiosk Satellite Edition image for the Echo Dot (2nd Gen), **Wake word engine** under **Voice Satellite > Wake Word** offers **Amazon**, the engine and Alexa model the Dot shipped with, which the image runs on the Dot itself. The wake word selects in Home Assistant then offer the wake words the image has, today "Alexa". A plain "stop" stops a ringing timer or a reply, like the other engines' stop words, and **Sensitivity** applies. On any other device the option does not show, and a kiosk that receives it from a fleet leader listens with vsWakeWord.
 - **Show an Entity widget only in certain states (#1066).** The screensaver Entity widget has a new **Visible states** field under **Displayed value**, on the device and in the remote admin. Enter a comma separated list of values and the widget only shows while its value matches one of them, such as `Open` for a garage door or `on` for a washer that finished. Each value matches the displayed text or the raw Home Assistant value and ignores case. Leave it empty to always show the widget. See [Entity](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/screensavers.md#entity).
 
 ### Fixed

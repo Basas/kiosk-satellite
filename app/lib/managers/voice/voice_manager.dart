@@ -15,6 +15,7 @@ import '../analytics/usage_counters.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
 import '../wake_word/engine.dart';
+import '../wake_word/pryon/pryon_catalog.dart';
 import '../wake_word/wake_word_manager.dart';
 import 'assist_view.dart';
 import 'chat_log.dart';
@@ -824,7 +825,9 @@ class VoiceManager extends Manager {
           description:
               'The wake words an engine offers on this kiosk, id and phrase: '
               'its bundled models and the custom ones added here',
-          params: const {'engine': 'vswakeword, microwakeword or openwakeword'},
+          params: const {
+            'engine': 'vswakeword, microwakeword, openwakeword or pryon',
+          },
           quiet: true,
           handler: (p) async {
             final engine = voiceEngines['${p['engine'] ?? ''}'] ?? _engine;
@@ -1865,9 +1868,16 @@ class VoiceManager extends Manager {
     return const ['ok_nabu'];
   }
 
-  WakeWordEngineType get _engine =>
-      voiceEngines[_settings.get(defs.voiceWakeWordEngine)] ??
-      WakeWordEngineType.vsWakeWord;
+  WakeWordEngineType get _engine {
+    final engine = voiceEngines[_settings.get(defs.voiceWakeWordEngine)];
+    // Amazon's engine set on a device without the Echo Dot image's service,
+    // such as a fleet follower: listen with the default instead of nothing.
+    if (engine == null ||
+        (engine == WakeWordEngineType.pryon && !PryonCatalog.available)) {
+      return WakeWordEngineType.vsWakeWord;
+    }
+    return engine;
+  }
 
   /// The wake word slot (1 or 2) of the model [id], 1 when it is not one
   /// of the configured ones.

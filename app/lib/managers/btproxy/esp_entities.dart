@@ -1018,7 +1018,7 @@ class EspEntitySurface {
             'name': e.value.$1,
             'icon': e.value.$2,
             'options': [
-              for (final option in e.value.$3.options ?? const <String>[])
+              for (final option in _settings.optionsFor(e.value.$3))
                 e.value.$3.optionLabels?[option] ?? option,
             ],
             'category': 1,
@@ -2074,7 +2074,7 @@ class EspEntitySurface {
       // automations outside HA can use the raw vocabulary.
       final text = '$value';
       String? stored;
-      for (final option in def.options ?? const <String>[]) {
+      for (final option in _settings.optionsFor(def)) {
         if (option == text || def.optionLabels?[option] == text) {
           stored = option;
           break;

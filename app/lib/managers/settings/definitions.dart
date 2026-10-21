@@ -6623,11 +6623,14 @@ const voiceWakeWordEngine = SettingDef<String>(
   description: 'Which engine listens. All models ship with the app.',
   category: 'Voice Satellite',
   subpage: 'Wake Word',
-  options: ['vswakeword', 'microwakeword', 'openwakeword'],
+  // pryon is Amazon's engine, only on the Echo Dot image (PryonCatalog
+  // hides it everywhere else).
+  options: ['vswakeword', 'microwakeword', 'openwakeword', 'pryon'],
   optionLabels: {
     'vswakeword': 'vsWakeWord',
     'microwakeword': 'microWakeWord',
     'openwakeword': 'openWakeWord',
+    'pryon': 'Amazon',
   },
   dependsOn: 'voice.enabled',
 );
