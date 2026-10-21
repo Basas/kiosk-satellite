@@ -41581,6 +41581,32 @@
       ]
     }
   },
+  "settingScreensaverDashboardDoubleTapTitle": "Tocar dos veces para cerrar",
+  "@settingScreensaverDashboardDoubleTapTitle": {
+    "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Dashboard screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Dashboard screensaver"
+      ]
+    }
+  },
+  "settingScreensaverDashboardDoubleTapDescription": "Un solo toque permite interactuar con el panel de control en lugar de cerrar el protector de pantalla.",
+  "@settingScreensaverDashboardDoubleTapDescription": {
+    "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Dashboard screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Dashboard screensaver"
+      ]
+    }
+  },
   "screensaverDashboardSection": "Protector de pantalla: Panel de control de Home Assistant",
   "@screensaverDashboardSection": {
     "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",

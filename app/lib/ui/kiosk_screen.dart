@@ -362,10 +362,28 @@ class _KioskScreenState extends State<KioskScreen>
 
   /// Pull-to-refresh as the user experiences it: the Web Browsing toggle,
   /// minus the kiosk protection that switches the gesture off while the
-  /// device is locked.
+  /// device is locked, and minus the screensaver. With Double tap to
+  /// dismiss, the Home Assistant Dashboard screensaver lets touches
+  /// through to the page (discussion #1069), and a pull there must not
+  /// reload it.
   bool get _ptrEnabled =>
       c.settings.get(defs.pullToRefresh) &&
-      !(c.kiosk.locked && c.settings.get(defs.kioskDisablePullRefresh));
+      !(c.kiosk.locked && c.settings.get(defs.kioskDisablePullRefresh)) &&
+      !c.screensaver.isActive;
+
+  /// The dashboard carousel as the page runs it: the setting, off while
+  /// the screensaver is up for the same reason as [_ptrEnabled]. A swipe
+  /// must not take the screensaver's view away.
+  bool get _carouselEnabled =>
+      c.settings.get(defs.haDashboardCarousel) && !c.screensaver.isActive;
+
+  /// Push the current effective carousel state onto the live page. The
+  /// sync call makes the script act on it now: build the preview strip, or
+  /// tear a disabled one down instead of leaving it mounted.
+  Future<void> _syncCarousel() => c.browser.runJs(
+    'window.__ksCarouselEnabled = $_carouselEnabled;'
+    'if (window.__ksCarouselSync) window.__ksCarouselSync();',
+  );
 
   /// Push the current effective pull-to-refresh state onto the live WebView:
   /// the native wrapper and the JS probe both hold their own copy.
@@ -502,14 +520,9 @@ class _KioskScreenState extends State<KioskScreen>
       return;
     }
     // The carousel's document-start seed is frozen at WebView creation;
-    // flip the live flag so the toggle applies without a reload. The sync
-    // call makes the script act on it now: build the preview strip, or
-    // tear a disabled one down instead of leaving it mounted.
+    // flip the live flag so the toggle applies without a reload.
     if (e.key == defs.haDashboardCarousel.key) {
-      await c.browser.runJs(
-        'window.__ksCarouselEnabled = ${e.value == true};'
-        'if (window.__ksCarouselSync) window.__ksCarouselSync();',
-      );
+      await _syncCarousel();
       return;
     }
     // Same live-flag contract; read only on the touch path, so there is
@@ -815,9 +828,12 @@ class _KioskScreenState extends State<KioskScreen>
       _syncNavCapture();
     });
     // The screensaver takes the keys the moment it shows (any of them
-    // dismisses it) and hands them back when it goes.
+    // dismisses it) and hands them back when it goes. The page's swipe and
+    // pull gestures stand down with it.
     _saverSub = c.bus.on<ScreensaverStateChanged>().listen((_) {
       _syncNavCapture();
+      unawaited(_syncPullToRefresh());
+      unawaited(_syncCarousel());
     });
     _backSub = c.bus.on<KioskBackPressed>().listen((_) {
       if (!mounted || _settingsOpen) return;
@@ -1096,8 +1112,7 @@ class _KioskScreenState extends State<KioskScreen>
     // needs no reload.
     UserScript(
       source:
-          'window.__ksCarouselEnabled = '
-          '${c.settings.get(defs.haDashboardCarousel)};'
+          'window.__ksCarouselEnabled = $_carouselEnabled;'
           'window.__ksCarouselOverCards = '
           '${c.settings.get(defs.haCarouselOverCards)};',
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
@@ -2144,8 +2159,7 @@ class _KioskScreenState extends State<KioskScreen>
       // loaded later.
       c.browser.runJs('window.__ksPtrEnabled = $_ptrEnabled;');
       c.browser.runJs(
-        'window.__ksCarouselEnabled = '
-        '${c.settings.get(defs.haDashboardCarousel)};'
+        'window.__ksCarouselEnabled = $_carouselEnabled;'
         'window.__ksCarouselOverCards = '
         '${c.settings.get(defs.haCarouselOverCards)};',
       );

@@ -455,14 +455,18 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     );
   }
 
-  /// Whether dismissal currently takes two taps: only the website
-  /// screensaver offers the option (its page is the only thing a single
-  /// tap could talk to), and never while the Sendspin now-playing view
-  /// has taken the slot over — that view is ours, not a page.
+  /// Whether dismissal currently takes two taps: the website and Home
+  /// Assistant Dashboard screensavers offer the option (their pages are
+  /// the only things a single tap could talk to, discussion #1069), and
+  /// never while the Sendspin now-playing view has taken the slot over.
+  /// That view is ours, not a page.
   bool get _doubleTapToDismiss =>
-      (activeView.value == 'website' &&
-          !_nowPlayingTakeover &&
-          _settings.get(defs.screensaverWebsiteDoubleTap)) ||
+      (!_nowPlayingTakeover &&
+          switch (activeView.value) {
+            'website' => _settings.get(defs.screensaverWebsiteDoubleTap),
+            'dashboard' => _settings.get(defs.screensaverDashboardDoubleTap),
+            _ => false,
+          }) ||
       (_nowPlayingHoldsTouch &&
           !nowPlayingShared &&
           _settings.get(defs.sendspinFullscreenDoubleTap));

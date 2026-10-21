@@ -41581,6 +41581,32 @@
       ]
     }
   },
+  "settingScreensaverDashboardDoubleTapTitle": "Double appui pour fermer",
+  "@settingScreensaverDashboardDoubleTapTitle": {
+    "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Dashboard screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Dashboard screensaver"
+      ]
+    }
+  },
+  "settingScreensaverDashboardDoubleTapDescription": "Les appuis simples interagissent avec le tableau de bord au lieu de fermer l'économiseur d'écran.",
+  "@settingScreensaverDashboardDoubleTapDescription": {
+    "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Dashboard screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Dashboard screensaver"
+      ]
+    }
+  },
   "screensaverDashboardSection": "Économiseur d'écran tableau de bord Home Assistant",
   "@screensaverDashboardSection": {
     "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",

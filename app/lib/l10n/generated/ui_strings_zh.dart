@@ -10501,6 +10501,13 @@ class UiStringsZh extends UiStrings {
       '选择屏保显示的 Home Assistant 仪表盘页面。';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle => '双击关闭';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      '单击与仪表盘交互，而非关闭屏保。';
+
+  @override
   String get screensaverDashboardSection => 'Home Assistant 仪表盘屏保';
 
   @override
@@ -24766,6 +24773,13 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingScreensaverDashboardViewDescription =>
       '选择屏保显示的 Home Assistant 仪表盘页面。';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapTitle => '双击关闭';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      '单击与仪表盘交互，而非关闭屏保。';
 
   @override
   String get screensaverDashboardSection => 'Home Assistant 仪表盘屏保';

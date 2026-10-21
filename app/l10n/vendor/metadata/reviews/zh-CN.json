@@ -26769,5 +26769,17 @@
     "translation": "f3cffa01efb6b260947640a70e3b9be5ae937be9224ce31c43c71df7328dac5c",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "settingScreensaverDashboardDoubleTapTitle": {
+    "source": "ba6c6bc546100b43903f3f5c5948431c244cf36561c2a5a784b8b713c8166cbf",
+    "translation": "ad0ef2783b41102e950aaafd8099441bd7181d7eda205ad588db504f11cfff6c",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingScreensaverDashboardDoubleTapDescription": {
+    "source": "934f72172afdbb9e287b56c3d5332400131acef14bae419bd7562cd643f0ecf4",
+    "translation": "bab2894c0f8a4f58a9ea93edd0dec108b20f3a2cbcac08e7db80e6d62dac1f39",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

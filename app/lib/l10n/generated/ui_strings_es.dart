@@ -11248,6 +11248,14 @@ class UiStringsEs extends UiStrings {
       'La vista del panel de control de Home Assistant que muestra el protector de pantalla.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Tocar dos veces para cerrar';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Un solo toque permite interactuar con el panel de control en lugar de cerrar el protector de pantalla.';
+
+  @override
   String get screensaverDashboardSection =>
       'Protector de pantalla: Panel de control de Home Assistant';
 

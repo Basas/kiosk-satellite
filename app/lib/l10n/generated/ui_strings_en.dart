@@ -11033,6 +11033,14 @@ class UiStringsEn extends UiStrings {
       'The Home Assistant dashboard view the screensaver shows.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Double tap to dismiss';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Single taps interact with the dashboard instead of dismissing.';
+
+  @override
   String get screensaverDashboardSection =>
       'Home Assistant Dashboard screensaver';
 

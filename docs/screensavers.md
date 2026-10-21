@@ -212,7 +212,7 @@ Shows a Home Assistant dashboard view as the screensaver. Selecting the mode rev
 
 The view opens in the dashboard's own web view with the same in-page navigation view rotation uses, so Home Assistant does not reload and the Voice Satellite integration keeps running. When the screensaver ends, the dashboard goes back to the view it was on before. With **Return to home dashboard view** on it goes to the home view instead. If something in Home Assistant navigated the dashboard while the screensaver was up, it stays where that navigation left it.
 
-A tap anywhere dismisses the screensaver without pressing the card under the finger. Motion, face, proximity and person detection, the brightness settings, the schedule, widgets and the At a Glance row work as in the other modes. When no view is picked the screensaver keeps whatever the dashboard shows. Like Dim, this mode keeps the dashboard rendering, so **Pause dashboard during screensaver** does not apply.
+A tap anywhere dismisses the screensaver without pressing the card under the finger. Turn on **Double tap to dismiss** to use the dashboard while the screensaver is up. Single taps then press buttons, move sliders and open popups, and a double tap dismisses the screensaver. Motion, face, proximity and person detection, the brightness settings, the schedule, widgets and the At a Glance row work as in the other modes. When no view is picked the screensaver keeps whatever the dashboard shows. Like Dim, this mode keeps the dashboard rendering, so **Pause dashboard during screensaver** does not apply.
 
 ## Slideshow Behavior
 
@@ -454,7 +454,7 @@ What a detection does once the display has turned off is decided by **Wake to sc
 
 The standard method for launching the screensaver is the idle timeout clock. Manual launch options include selecting **Start Screensaver** in the kiosk menu, triggering a mapped [gesture](gestures.md), toggling the ESPHome **Screensaver active** switch, or sending the `startScreensaver` command via the [remote API](remote-api.md) or [JavaScript API](js-api.md).
 
-Touch interactions instantly dismiss the screensaver and reset the idle clock. There are three exceptions. A tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). The [Celestial](#celestial) screensaver takes a double tap, since a drag there looks around the sky. The [Calendar](#calendar) screensaver stays until its X button is pressed. Additional dismissal triggers include:
+Touch interactions instantly dismiss the screensaver and reset the idle clock. There are four exceptions. A tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). The [Celestial](#celestial) screensaver takes a double tap, since a drag there looks around the sky. The [Website](#website) and [Home Assistant Dashboard](#home-assistant-dashboard) screensavers take a double tap when their **Double tap to dismiss** is on. The [Calendar](#calendar) screensaver stays until its X button is pressed. Additional dismissal triggers include:
 
 * **Wake Word**: Dismisses the screensaver immediately and pauses the idle clock for the entire voice turn so the display remains active during conversation.
 * **Camera Motion**: Triggers wake when Dismiss on motion is active.

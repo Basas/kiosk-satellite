@@ -2117,6 +2117,20 @@ const screensaverDashboardView = SettingDef<String>(
   dependsOnValue: 'dashboard',
 );
 
+// Single taps reach the dashboard's cards (discussion #1069). The same
+// chain as the website's toggle, run in the screensaver manager.
+const screensaverDashboardDoubleTap = SettingDef<bool>(
+  key: 'screensaver.dashboard_double_tap',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Double tap to dismiss',
+  description: 'Single taps interact with the dashboard instead of dismissing.',
+  category: 'Screensaver',
+  section: 'Home Assistant Dashboard screensaver',
+  dependsOn: 'screensaver.mode',
+  dependsOnValue: 'dashboard',
+);
+
 // The Calendar mode opens on this view, on today. Its own setting, not
 // the calendar's Default view, so the kiosk menu can open on one view and
 // the screensaver show another.
@@ -12824,6 +12838,7 @@ const List<SettingDef<Object>> allSettings = [
   screensaverCameraView,
   screensaverCameraViewName,
   screensaverDashboardView,
+  screensaverDashboardDoubleTap,
   screensaverCalendarView,
   // The Widgets group: corner overlays riding over the mode panels above,
   // so it sits between them and the other overlay group, At a Glance.

@@ -41581,6 +41581,32 @@
       ]
     }
   },
+  "settingScreensaverDashboardDoubleTapTitle": "Dubbele tik om af te sluiten",
+  "@settingScreensaverDashboardDoubleTapTitle": {
+    "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Dashboard screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Dashboard screensaver"
+      ]
+    }
+  },
+  "settingScreensaverDashboardDoubleTapDescription": "Enkele tikken werken met het dashboard en sluiten de schermbeveiliging niet af.",
+  "@settingScreensaverDashboardDoubleTapDescription": {
+    "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screensaver > Home Assistant Dashboard screensaver"
+      ],
+      "remoteAdmin": [
+        "Screensaver > Home Assistant Dashboard screensaver"
+      ]
+    }
+  },
   "screensaverDashboardSection": "Home Assistant-dashboard als schermbeveiliging",
   "@screensaverDashboardSection": {
     "context": "Settings:Screensaver:Home Assistant Dashboard screensaver",

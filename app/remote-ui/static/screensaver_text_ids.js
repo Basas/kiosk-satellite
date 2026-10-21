@@ -535,6 +535,7 @@ export const screensaverTextMessageIds = {
   "Dawn/Dusk": "screensaverWeatherPreviewTwilight",
   "Dashboard view": "settingScreensaverDashboardViewTitle",
   "The Home Assistant dashboard view the screensaver shows.": "settingScreensaverDashboardViewDescription",
+  "Single taps interact with the dashboard instead of dismissing.": "settingScreensaverDashboardDoubleTapDescription",
   "Home Assistant Dashboard": "screensaverModeDashboard",
   "Home Assistant Dashboard screensaver": "screensaverDashboardSection",
   "Calendar screensaver": "screensaverCalendarSection",

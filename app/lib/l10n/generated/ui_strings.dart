@@ -19235,6 +19235,18 @@ abstract class UiStrings {
   /// **'The Home Assistant dashboard view the screensaver shows.'**
   String get settingScreensaverDashboardViewDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to dismiss'**
+  String get settingScreensaverDashboardDoubleTapTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Single taps interact with the dashboard instead of dismissing.'**
+  String get settingScreensaverDashboardDoubleTapDescription;
+
   /// Label, status or guidance in this section.
   ///
   /// In en, this message translates to:

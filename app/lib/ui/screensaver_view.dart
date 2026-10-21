@@ -132,6 +132,8 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
       defs.sendspinFullscreenControls.key,
       defs.sendspinFullscreenSplit.key,
       defs.sendspinFullscreenPhotoFill.key,
+      // Whether the dashboard mode's clear layer takes taps.
+      defs.screensaverDashboardDoubleTap.key,
       // The edge zones (issue #453), read at build by the row below the
       // mode, so the toggle mounts or unmounts them on the spot.
       for (final def in slideEdgeTapDefs.values) def.key,
@@ -342,7 +344,15 @@ class _ScreensaverOverlayState extends State<ScreensaverOverlay> {
                   'camera' => CameraScreensaver(container: container),
                   // The Home Assistant Dashboard mode: the dashboard itself
                   // shows through a clear layer that takes the tap, so a
-                  // touch dismisses rather than pressing a card.
+                  // touch dismisses rather than pressing a card. With
+                  // Double tap to dismiss there is no layer: taps reach the
+                  // cards and the kiosk screen's raw pointer reports run
+                  // the manager's double-tap chain.
+                  'dashboard'
+                      when container.settings.get(
+                        defs.screensaverDashboardDoubleTap,
+                      ) =>
+                    const SizedBox.shrink(),
                   'dashboard' => _Dismissable(
                     container: container,
                     child: const SizedBox.expand(),

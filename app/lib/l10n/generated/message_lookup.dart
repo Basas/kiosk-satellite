@@ -3612,6 +3612,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreensaverDashboardViewTitle,
       'settingScreensaverDashboardViewDescription' =>
         strings.settingScreensaverDashboardViewDescription,
+      'settingScreensaverDashboardDoubleTapTitle' =>
+        strings.settingScreensaverDashboardDoubleTapTitle,
+      'settingScreensaverDashboardDoubleTapDescription' =>
+        strings.settingScreensaverDashboardDoubleTapDescription,
       'screensaverDashboardSection' => strings.screensaverDashboardSection,
       'screensaverModeUrl' => strings.screensaverModeUrl,
       'screensaverCalendarSection' => strings.screensaverCalendarSection,

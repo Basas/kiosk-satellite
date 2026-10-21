@@ -11169,6 +11169,14 @@ class UiStringsNl extends UiStrings {
       'De Home Assistant-dashboardweergave die de schermbeveiliging toont.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Dubbele tik om af te sluiten';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Enkele tikken werken met het dashboard en sluiten de schermbeveiliging niet af.';
+
+  @override
   String get screensaverDashboardSection =>
       'Home Assistant-dashboard als schermbeveiliging';
 

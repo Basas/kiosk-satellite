@@ -11286,6 +11286,14 @@ class UiStringsDe extends UiStrings {
       'Die Home-Assistant-Dashboard-Ansicht, die der Bildschirmschoner zeigt.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Zum Schließen doppeltippen';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Ein einfacher Tipp ermöglicht die Interaktion mit dem Dashboard, anstatt den Bildschirmschoner zu schließen.';
+
+  @override
   String get screensaverDashboardSection =>
       'Bildschirmschoner: Home-Assistant-Dashboard';
 

@@ -11123,6 +11123,14 @@ class UiStringsRu extends UiStrings {
       'Вид панели Home Assistant, который показывает заставка.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Двойное касание для закрытия';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Одиночные касания взаимодействуют с панелью вместо закрытия.';
+
+  @override
   String get screensaverDashboardSection => 'Заставка «Панель Home Assistant»';
 
   @override

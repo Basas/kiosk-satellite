@@ -11160,6 +11160,14 @@ class UiStringsUk extends UiStrings {
       'Вигляд панелі керування Home Assistant, який показує заставка.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Подвійний дотик для закриття';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Одинарні дотики взаємодіють із панеллю керування замість закриття заставки.';
+
+  @override
   String get screensaverDashboardSection =>
       'Заставка панелі керування Home Assistant';
 

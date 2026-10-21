@@ -11243,6 +11243,14 @@ class UiStringsFr extends UiStrings {
       'La vue du tableau de bord Home Assistant affichée par l\'économiseur d\'écran.';
 
   @override
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Double appui pour fermer';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Les appuis simples interagissent avec le tableau de bord au lieu de fermer l\'économiseur d\'écran.';
+
+  @override
   String get screensaverDashboardSection =>
       'Économiseur d\'écran tableau de bord Home Assistant';
 
