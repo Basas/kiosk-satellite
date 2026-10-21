@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -895,12 +896,40 @@ class PluginDetailPanel extends StatefulWidget {
 
 class _PluginDetailPanelState extends State<PluginDetailPanel> {
   bool _busy = false;
+  // Off while a full page covers this one. Dialogs and pickers opened from
+  // here leave it on, so the page still counts as open under them.
+  ValueListenable<TickerModeData>? _shown;
   @override
   void initState() {
     super.initState();
     widget.plugins.enabled.addListener(_masterChanged);
     _masterChanged();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final shown = TickerMode.getValuesNotifier(context);
+    if (shown == _shown) return;
+    _shown?.removeListener(_pageShown);
+    _shown = shown..addListener(_pageShown);
+    _pageShown();
+  }
+
+  @override
+  void didUpdateWidget(covariant PluginDetailPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.id == widget.id) return;
+    oldWidget.plugins.settingsPageViewer(oldWidget.id, this, open: false);
+    _pageShown();
+  }
+
+  /// Tells the plugin when its settings page opens and closes.
+  void _pageShown() => widget.plugins.settingsPageViewer(
+    widget.id,
+    this,
+    open: _shown!.value.enabled,
+  );
 
   void _masterChanged() {
     if (widget.plugins.enabled.value) return;
@@ -912,6 +941,8 @@ class _PluginDetailPanelState extends State<PluginDetailPanel> {
   @override
   void dispose() {
     widget.plugins.enabled.removeListener(_masterChanged);
+    _shown?.removeListener(_pageShown);
+    widget.plugins.settingsPageViewer(widget.id, this, open: false);
     super.dispose();
   }
 

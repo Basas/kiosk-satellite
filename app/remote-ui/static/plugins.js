@@ -1154,6 +1154,25 @@ watchUpdates(['plugins'], async () => {
   finally { runtimeLoading = false; }
 }, { visible: () => currentPath.startsWith('plugins/'), intervalMs: 1000 });
 
+// The plugin hears while its settings page is open in this browser, so it
+// can keep the page fresh. KS counts the page closed 5 seconds after the
+// last check in, so a tab that goes away without a word closes it too.
+const pageViewer = Math.random().toString(36).slice(2);
+let shownPluginPage = '';
+function checkInPluginPage() {
+  const [tab, id] = currentPath.split('/');
+  const shown = tab === 'plugins' && id && id !== DIRECTORY_PAGE && !document.hidden
+    && !document.querySelector('#app')?.classList.contains('hidden') ? id : '';
+  if (shownPluginPage && shownPluginPage !== shown) {
+    cmd('setPluginPageOpen', { id: shownPluginPage, viewer: pageViewer, open: false }).catch(() => {});
+  }
+  shownPluginPage = shown;
+  if (shown) cmd('setPluginPageOpen', { id: shown, viewer: pageViewer }, { timeoutMs: 5000 }).catch(() => {});
+}
+setInterval(checkInPluginPage, 2000);
+document.addEventListener('ks-route', checkInPluginPage);
+document.addEventListener('visibilitychange', checkInPluginPage);
+
 // Settings and installation changes are separate from frequent readings.
 // Values a plugin saved itself, such as after a settings button, update
 // the page in place.

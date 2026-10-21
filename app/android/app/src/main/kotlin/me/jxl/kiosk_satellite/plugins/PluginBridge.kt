@@ -199,6 +199,8 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 }
             }, SETUP_CHECK_MS)
         }
+        /** Whether the plugin last heard that its settings page is open. Used on the worker. */
+        var settingsPageOpen = false
         var status = ""
         var statusError = false
         val lights = linkedMapOf<String, Map<String, Any?>>()
@@ -819,6 +821,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                         "setupRun" -> setupRun(id(args), args)
                         "setupCancel" -> { setupCancel(id(args), args); null }
                         "setupConfirm" -> { setupConfirm(id(args), args); null }
+                        "settingsPage" -> { settingsPage(args); null }
                         "entityCommand" -> {
                             val session = sessions[id(args)] ?: throw IllegalStateException("Enable the plugin first")
                             val key = args["key"] as? String ?: throw IllegalArgumentException("Missing entity key")
@@ -1404,6 +1407,19 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
         if (!session.setup.answer(run, SystemClock.elapsedRealtime())) return
         session.notifySetup()
         deliverSetup(session, "settings.confirm", mapOf("run" to run, "accepted" to (args["accepted"] == true)))
+    }
+
+    /**
+     * The app saw the plugin's settings page open or close. The plugin hears
+     * settings.page {open} once per change, and a session that starts while
+     * the page is open hears it open.
+     */
+    private fun settingsPage(args: Map<String, Any?>) {
+        val session = (args["id"] as? String)?.let { sessions[it] } ?: return
+        val open = args["open"] == true
+        if (session.settingsPageOpen == open) return
+        session.settingsPageOpen = open
+        deliverSetup(session, "settings.page", mapOf("open" to open))
     }
 
     /** Tells the plugin about its run. A plugin that throws is stopped like any failed callback. */

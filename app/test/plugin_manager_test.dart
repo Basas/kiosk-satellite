@@ -1579,6 +1579,102 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('the plugin hears when its settings page opens and closes', (
+    tester,
+  ) async {
+    const opened = {'id': 'hello-world', 'open': true};
+    const closed = {'id': 'hello-world', 'open': false};
+    List<Object?> sent() => [
+      for (final call in calls)
+        if (call.method == 'settingsPage') call.arguments,
+    ];
+    Future<void> poll(String viewer, {bool open = true}) async {
+      final result = await commands.execute('setPluginPageOpen', {
+        'id': 'hello-world',
+        'viewer': viewer,
+        if (!open) 'open': false,
+      });
+      expect(result.ok, isTrue);
+    }
+
+    Future<void> session(String token) => native('hostSession', {
+      'id': 'hello-world',
+      'session': token,
+      'capabilities': <String>[],
+    });
+    final page = MaterialApp(
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: PluginDetailPanel(plugins: plugins, id: 'hello-world'),
+        ),
+      ),
+    );
+    calls.clear();
+    // The kiosk page is open while it shows, a dialog over it included.
+    await tester.pumpWidget(page);
+    await tester.pump();
+    expect(sent(), [opened]);
+    final context = tester.element(find.byType(PluginDetailPanel));
+    unawaited(
+      showDialog<void>(context: context, builder: (_) => const Text('Dialog')),
+    );
+    await tester.pumpAndSettle();
+    expect(sent(), [opened]);
+    Navigator.of(context, rootNavigator: true).pop();
+    await tester.pumpAndSettle();
+    // A full page over it closes it until it shows again.
+    unawaited(
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute<void>(builder: (_) => const Text('Other page'))),
+    );
+    await tester.pumpAndSettle();
+    expect(sent(), [opened, closed]);
+    Navigator.of(context).pop();
+    await tester.pumpAndSettle();
+    expect(sent(), [opened, closed, opened]);
+    await tester.pumpWidget(const SizedBox());
+    expect(sent(), [opened, closed, opened, closed]);
+    // A remote admin page stays open while it checks in and closes about
+    // 5 seconds after the last time.
+    calls.clear();
+    await poll('a');
+    await tester.pump(const Duration(seconds: 4));
+    await poll('a');
+    await tester.pump(const Duration(seconds: 4));
+    expect(sent(), [opened]);
+    await tester.pump(const Duration(seconds: 2));
+    expect(sent(), [opened, closed]);
+    // Viewers together open the page once and close it once.
+    calls.clear();
+    await tester.pumpWidget(page);
+    await tester.pump();
+    await poll('a');
+    await poll('b');
+    await tester.pumpWidget(const SizedBox());
+    await poll('a', open: false);
+    expect(sent(), [opened]);
+    await tester.pump(const Duration(seconds: 6));
+    expect(sent(), [opened, closed]);
+    // A session that starts while the page is open hears it open. One that
+    // starts while it is closed hears nothing.
+    calls.clear();
+    await poll('a');
+    await session('next');
+    expect(sent(), [opened, opened]);
+    await tester.pump(const Duration(seconds: 6));
+    await session('last');
+    expect(sent(), [opened, opened, closed]);
+    expect(
+      (await commands.execute('setPluginPageOpen', {
+        'id': 'missing',
+        'viewer': 'a',
+      })).ok,
+      isFalse,
+    );
+    expect(sent(), [opened, opened, closed]);
+  });
+
   test('native overlays are session scoped and keep their stacking', () async {
     await overlaySession('first');
     await overlays('first', [overlay('bar', 1), overlay('full', 2)]);

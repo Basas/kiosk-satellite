@@ -155,6 +155,17 @@ class PluginManager extends Manager implements FleetPluginHost {
   /// Settings page buttons and plugin choices by plugin id: each run's
   /// state and what the plugin listed. Session scoped like charts.
   final setup = ValueNotifier<Map<String, Map<String, Object?>>>({});
+
+  /// Who has each plugin's settings page open, by plugin id: kiosk pages
+  /// by their state, remote admin pages by their viewer id with the timer
+  /// that closes them once they stop checking in.
+  final _pageViewers = <String, Map<Object, Timer?>>{};
+
+  /// The plugins last told their settings page is open.
+  final _pagesOpen = <String>{};
+
+  /// How long a remote admin page counts as open after it last checked in.
+  static const remotePageTimeout = Duration(seconds: 5);
   final screensavers = ValueNotifier<Map<String, Map<String, Object?>>>({});
   Map<String, String> get screensaverOptions => {
     for (final entry in screensavers.value.entries)
@@ -413,6 +424,10 @@ class PluginManager extends Manager implements FleetPluginHost {
           _setContentInsets(data['id'] as String, null);
           _setSetup(data['id'] as String, null);
           _hostReads.open(call.arguments as Map);
+          // A new session has not heard that its settings page is open.
+          if (_pageViewers.containsKey(data['id'])) {
+            _sendSettingsPage(data['id'] as String, true);
+          }
         case 'hostSessionClosed':
           final data = call.arguments as Map;
           // First, so a screensaver mode the plugin held lets go before its
@@ -823,6 +838,28 @@ class PluginManager extends Manager implements FleetPluginHost {
       },
     );
     register(
+      'setPluginPageOpen',
+      'Tell a plugin that its settings page is open in this browser. Repeat it while the page stays open: the page counts as closed ${remotePageTimeout.inSeconds} seconds after the last call, or right away with open false.',
+      (p) async {
+        final id = p['id'] as String? ?? '';
+        if (!installed.value.any((plugin) => plugin['id'] == id)) {
+          throw StateError('Plugin is not installed');
+        }
+        settingsPageViewer(
+          id,
+          'remote:${p['viewer'] ?? ''}',
+          open: p['open'] != false,
+          timeout: remotePageTimeout,
+        );
+        return null;
+      },
+      const {
+        'id': 'Plugin ID',
+        'viewer': 'An ID for this page, the same on every call',
+        'open': 'False when the page closes. True unless set',
+      },
+    );
+    register(
       'runPluginSetup',
       'Press a settings button or ask a plugin to refresh the choices of a setting. The plugin answers through the run.',
       (p) => runSetup(
@@ -1151,6 +1188,40 @@ class PluginManager extends Manager implements FleetPluginHost {
       'origin': origin,
     });
     return '${(result as Map)['run']}';
+  }
+
+  /// Opens or closes one [viewer] of plugin [id]'s settings page. The
+  /// plugin hears settings.page when the first viewer opens it and when the
+  /// last one closes it. A [timeout] closes the viewer unless it opens again
+  /// before then.
+  void settingsPageViewer(
+    String id,
+    Object viewer, {
+    required bool open,
+    Duration? timeout,
+  }) {
+    if (_disposed) return;
+    final viewers = _pageViewers[id] ??= {};
+    viewers.remove(viewer)?.cancel();
+    if (open) {
+      viewers[viewer] = timeout == null
+          ? null
+          : Timer(timeout, () => settingsPageViewer(id, viewer, open: false));
+    }
+    if (viewers.isEmpty) _pageViewers.remove(id);
+    final next = _pageViewers.containsKey(id);
+    if (next != _pagesOpen.contains(id)) _sendSettingsPage(id, next);
+  }
+
+  /// The host passes the state on to the plugin's running session, if any,
+  /// and skips a state that session already heard.
+  void _sendSettingsPage(String id, bool open) {
+    open ? _pagesOpen.add(id) : _pagesOpen.remove(id);
+    unawaited(
+      channel
+          .invokeMethod<void>('settingsPage', {'id': id, 'open': open})
+          .catchError((_) {}),
+    );
   }
 
   Future<void> cancelSetup(String id, String run) =>
@@ -1605,6 +1676,12 @@ class PluginManager extends Manager implements FleetPluginHost {
   @override
   Future<void> dispose() async {
     _disposed = true;
+    for (final viewers in _pageViewers.values) {
+      for (final timer in viewers.values) {
+        timer?.cancel();
+      }
+    }
+    _pageViewers.clear();
     await _attachSub?.cancel();
     await _hostReads.dispose();
     haSocket?.dispose();
