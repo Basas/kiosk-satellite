@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.36 - 2026-10-22
 
 ### Added
 - **Battery temperature sensor.** Devices with a battery have a new **Battery temperature** diagnostic sensor in Home Assistant, read from Android's battery report. It needs no permission, so it works on devices that report no CPU temperature. It also shows on the **Hardware** page of the remote admin, under **Battery level**. Plugins read it as `batteryTemp` from `getStats`.
