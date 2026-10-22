@@ -1432,6 +1432,7 @@ void main() {
         'default': '',
         'choices': 'plugin',
         'group': 'Connection',
+        'emptyText': 'Press the button on the bridge, then Refresh.',
       },
     ];
     installed[0]['buttons'] = [
@@ -1549,6 +1550,20 @@ void main() {
     });
     await tester.pump();
     expect(find.text('The plugin did not answer in time.'), findsOneWidget);
+    // Before the plugin lists any, the picker says what the plugin's
+    // manifest tells it to instead of a Home Assistant connection error.
+    await tester.tap(find.byType(PickField));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: find.byType(ItemPicker),
+        matching: find.text('Press the button on the bridge, then Refresh.'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Could not reach Home Assistant'), findsNothing);
+    await tester.tap(find.text('Cancel').last);
+    await tester.pumpAndSettle();
     // The choice shows its label once the plugin lists it, and a saved one
     // the list lacks is flagged.
     await publish(const {}, {

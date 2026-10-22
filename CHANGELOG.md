@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Fixed
+- **Plugin pickers blamed Home Assistant before a plugin listed its choices.** Opening the picker of a plugin setting whose choices the plugin had not listed yet, such as a sensor picker before any computer is added, showed "Could not reach Home Assistant". It now shows the plugin's own message from the new `emptyText` manifest field, such as what to set up first, or "No choices yet. Refresh to look for them." without one.
+
 ## v2026.10.35 - 2026-10-21
 
 ### Added

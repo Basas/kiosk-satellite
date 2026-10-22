@@ -164,6 +164,13 @@ try:
         # the list lacks is flagged.
         choice_row = root.locator('[data-setup-target="choices:device"]')
         expect(choice_row).to_contain_text('No choices yet. Refresh to look for them.')
+        # Before the plugin lists any, the picker says so instead of a
+        # Home Assistant connection error.
+        choice_row.locator('.dp-field').click()
+        card = page.locator('.dash-picker-card')
+        expect(card).to_contain_text('No choices yet. Refresh to look for them.')
+        expect(card).not_to_contain_text('Could not reach Home Assistant')
+        card.get_by_role('button', name='Cancel').click()
         list_choices('device', [{'id': 'lamp-1', 'label': 'Kitchen'}, {'id': 'lamp-3', 'label': 'lamp-3'}])
         refresh_setup()
         expect(choice_row.locator('.dp-missing')).to_be_visible()

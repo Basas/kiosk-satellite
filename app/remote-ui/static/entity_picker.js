@@ -594,7 +594,7 @@ function buildPicker({ title, spec, selected = [], multiple = false, max = null,
       const list = onShow();
       fresh = !!before && (before.query !== st.query || before.chip !== st.chip);
       if (!list.length) {
-        node = stateMessage(haText('Nothing matches'));
+        node = stateMessage(!st.list.items.length && spec.emptyText ? spec.emptyText : haText('Nothing matches'));
       } else {
         node = el('div', 'dp-list edge-fade');
         let firstPick = null;

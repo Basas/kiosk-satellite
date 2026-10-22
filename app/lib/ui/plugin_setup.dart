@@ -63,11 +63,15 @@ PickSpec pluginChoiceSpec(
   BuildContext context,
   PluginManager plugins,
   String pluginId,
-  String key,
-) => PickSpec(
+  String key, {
+  String? emptyText,
+}) => PickSpec(
   key: 'pluginChoices:$pluginId:$key',
-  // The picker loads the list as it opens, so it starts on the latest.
-  loader: () async => pluginChoiceList(plugins, pluginId, key),
+  // The picker loads the list as it opens, so it starts on the latest. A
+  // plugin that has not listed any yet has an empty list, not one that
+  // failed to load, so the picker says so instead of blaming Home Assistant.
+  loader: () async =>
+      pluginChoiceList(plugins, pluginId, key) ?? const PickList([]),
   searchHint: pluginText(context, 'Search'),
   noGroup: '',
   headings:
@@ -78,6 +82,7 @@ PickSpec pluginChoiceSpec(
       )?.items.any((i) => i.group.isNotEmpty) ??
       false,
   byGroupName: false,
+  emptyText: (context) => _emptyText(context, emptyText),
 );
 
 /// Starts a run, with the toast every other plugin action shows when the
@@ -218,6 +223,13 @@ class PluginSetupButtonRow extends StatelessWidget {
   );
 }
 
+/// What a choices setting says before the plugin lists any: the plugin's own
+/// words from the manifest, else that it has none yet.
+String _emptyText(BuildContext context, String? text) =>
+    text != null && text.isNotEmpty
+    ? text
+    : pluginText(context, 'No choices yet. Refresh to look for them.');
+
 /// The pieces of a choices control: the picked choice by its label,
 /// Refresh to have the plugin look again (a spinner that cancels while it
 /// looks), whether the saved choice is no longer listed and the refresh's
@@ -232,6 +244,7 @@ class PluginSetupButtonRow extends StatelessWidget {
   required bool running,
   required bool enabled,
   required ValueChanged<String> onPick,
+  String? emptyText,
 }) {
   final list = pluginChoiceList(plugins, pluginId, path);
   final run = pluginSetupRun(plugins, pluginId, 'choices:$path');
@@ -239,9 +252,7 @@ class PluginSetupButtonRow extends StatelessWidget {
   final status =
       pluginSetupStatus(context, run) ??
       (running && (list == null || list.items.isEmpty)
-          ? Text(
-              pluginText(context, 'No choices yet. Refresh to look for them.'),
-            )
+          ? Text(_emptyText(context, emptyText))
           : null);
   final field = PickField(
     value: value,
@@ -252,7 +263,13 @@ class PluginSetupButtonRow extends StatelessWidget {
       final outcome = await showItemPicker(
         context,
         title: title,
-        spec: pluginChoiceSpec(context, plugins, pluginId, path),
+        spec: pluginChoiceSpec(
+          context,
+          plugins,
+          pluginId,
+          path,
+          emptyText: emptyText,
+        ),
         selected: value.isEmpty ? null : value,
         allowClear: true,
       );
@@ -332,6 +349,7 @@ class PluginChoiceRow extends StatelessWidget {
         running: running,
         enabled: enabled,
         onPick: onPick,
+        emptyText: setting['emptyText'] as String?,
       );
       final description = setting['description'] as String?;
       return SettingsRow(
@@ -376,6 +394,7 @@ class PluginChoiceField extends StatelessWidget {
     required this.value,
     required this.running,
     required this.onPick,
+    this.emptyText,
   });
 
   final PluginManager plugins;
@@ -385,6 +404,9 @@ class PluginChoiceField extends StatelessWidget {
   final String value;
   final bool running;
   final ValueChanged<String> onPick;
+
+  /// What the picker says before the plugin lists any choices.
+  final String? emptyText;
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
@@ -400,6 +422,7 @@ class PluginChoiceField extends StatelessWidget {
         running: running,
         enabled: true,
         onPick: onPick,
+        emptyText: emptyText,
       );
       final note = Theme.of(context).textTheme.bodySmall?.copyWith(
         fontSize: 12.5,

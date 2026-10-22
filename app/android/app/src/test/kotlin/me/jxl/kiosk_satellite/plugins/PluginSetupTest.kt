@@ -59,6 +59,11 @@ class PluginSetupTest {
         rejects { PluginManifest(panels { it.getJSONArray("fields").getJSONObject(1).put("choices", "static") }) }
         rejects { PluginManifest(panels { it.getJSONArray("fields").getJSONObject(2).put("choices", "plugin") }) }
         rejects { PluginManifest(panels { it.getJSONArray("fields").getJSONObject(2).getJSONArray("fields").getJSONObject(0).put("type", "icon") }) }
+        // A choices setting or row field may say what its picker shows before the plugin lists any.
+        PluginManifest(device { it.put("emptyText", "Add a bridge first.") })
+        PluginManifest(panels { it.getJSONArray("fields").getJSONObject(1).put("emptyText", "Add a computer first.") })
+        rejects { PluginManifest(manifest { it.getJSONArray("settings").getJSONObject(1).put("emptyText", "No choices") }) }
+        rejects { PluginManifest(device { it.put("emptyText", "x".repeat(201)) }) }
     }
 
     /** A list of panels, each with a sensor and a nested list of tiles that pick a sensor too. */

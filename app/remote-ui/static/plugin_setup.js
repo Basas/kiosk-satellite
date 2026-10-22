@@ -80,11 +80,12 @@ export function setupButtonRow(plugin, button, settled) {
 }
 
 // The picked choice by its label and Refresh beside it, which spins and
-// cancels while the plugin looks. [setting] needs only a key and a title,
+// cancels while the plugin looks. [setting] needs only a key, a title and
+// the optional emptyText the plugin's manifest gives it,
 // and a list row field passes its dotted path as the key, such as
 // panels.tiles.sensor.
 export function choiceControl(plugin, setting, value, settled, onPick) {
-  const spec = choiceSpec(plugin.id, setting.key);
+  const spec = choiceSpec(plugin.id, setting.key, setting.emptyText);
   let picked = value;
   const field = pickField({
     spec, value, placeholder: deviceText('Not set'), enabled: plugin.running === true || !!value,
@@ -115,6 +116,7 @@ export function choiceControl(plugin, setting, value, settled, onPick) {
     attach(row) {
       row.dataset.setupTarget = target;
       row.dataset.setupPlugin = plugin.id;
+      if (setting.emptyText) row.dataset.choicesEmpty = setting.emptyText;
       refresh.onclick = async () => {
         if (row.dataset.running === 'true') await cancel(plugin, target);
         else await start(plugin, 'choices', setting.key, settled);
@@ -131,13 +133,18 @@ export function choiceControl(plugin, setting, value, settled, onPick) {
 // their choices in the order they first appear, once any choice has one.
 const rich = (choice) => ['group', 'value', 'category', 'icon'].some((field) => choice[field]);
 
-export function choiceSpec(id, key) {
+// What a choices setting says before the plugin lists any: the plugin's own
+// words from the manifest, else that it has none yet.
+const emptyText = (text) => text || pluginText('No choices yet. Refresh to look for them.');
+
+export function choiceSpec(id, key, empty) {
   const choices = () => states.get(id)?.choices?.[key];
   return {
     key: `pluginChoices:${id}:${key}`,
     loader: async () => {
-      const list = choices();
-      if (!list) return null;
+      // Nothing listed yet is an empty list, not a source that failed, so
+      // the picker says so instead of blaming Home Assistant.
+      const list = choices() || [];
       return { items: list.map((choice) => ({ id: choice.id, name: choice.label,
         sub: choice.detail || (choice.label === choice.id || rich(choice) ? '' : choice.id),
         subMono: !choice.detail, state: choice.value || null, chip: choice.category || null,
@@ -146,6 +153,7 @@ export function choiceSpec(id, key) {
     },
     searchHint: pluginText('Search'),
     noGroup: '', chips: true, byGroupName: false, keep: null,
+    emptyText: emptyText(empty),
     get headings() { return !!choices()?.some((choice) => choice.group); },
   };
 }
@@ -183,7 +191,7 @@ function paint(row, id, running) {
   if (!status) return;
   let text = run?.code === 'timeout' ? pluginText('The plugin did not answer in time.') : (run?.message || '');
   if (!text && running && target.startsWith('choices:') && !state.choices?.[target.slice('choices:'.length)]?.length) {
-    text = pluginText('No choices yet. Refresh to look for them.');
+    text = emptyText(row.dataset.choicesEmpty);
   }
   status.textContent = text;
   status.hidden = !text;

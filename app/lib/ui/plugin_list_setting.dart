@@ -915,6 +915,7 @@ class _PluginRowEditorState extends State<_PluginRowEditor> {
             value: text,
             running: services.running,
             onPick: set,
+            emptyText: field['emptyText'] as String?,
           ),
         );
       case 'boolean':

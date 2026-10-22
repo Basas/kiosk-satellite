@@ -221,6 +221,11 @@ class PluginManifest(val json: JSONObject) {
             // The plugin lists the choices at runtime, for a setting or a list row field alike.
             // Older apps show a setting's as a text field and reject a row field's.
             if (field.has("choices")) require(type == "string" && field.get("choices") == "plugin") { "Invalid choices setting" }
+            // What the picker says before the plugin lists any choices, such as what to set up first.
+            if (field.has("emptyText")) {
+                require(field.has("choices")) { "Invalid choices setting" }
+                text(field, "emptyText", 200)
+            }
             // A number shows as a slider, or as a typed field for a wide range or an exact value.
             if (field.has("input")) require(type == "number" && field.get("input") in setOf("slider", "field")) { "Invalid input" }
             if (type == "list") validateList(field, depth)

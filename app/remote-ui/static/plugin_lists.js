@@ -623,7 +623,7 @@ function fieldControl(field, values, fields, { refresh, rerender, openEntry, plu
   // The same picker and Refresh as a choices setting, with the warning and
   // the refresh's progress below. A list row has nothing to save first.
   if (takesChoices(field) && plugin) {
-    const choice = choiceControl(plugin, { key: `${path}.${field.key}`, title: field.title }, value ?? '',
+    const choice = choiceControl(plugin, { key: `${path}.${field.key}`, title: field.title, emptyText: field.emptyText }, value ?? '',
       async () => {}, async (picked) => set(picked));
     const body = el('div', 'plugin-choice-field');
     body.append(choice.control, ...choice.lines);
