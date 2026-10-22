@@ -38008,8 +38008,8 @@
       ]
     }
   },
-  "settingScreenFullScreenTitle": "Vollbild",
-  "@settingScreenFullScreenTitle": {
+  "settingScreenHideStatusBarTitle": "Statusleiste ausblenden",
+  "@settingScreenHideStatusBarTitle": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Setting label.",
     "x-locations": {
@@ -38021,8 +38021,34 @@
       ]
     }
   },
-  "settingScreenFullScreenDescription": "Blendet die Statusleiste und die Navigationsleiste aus. Deaktivieren, damit sie sichtbar bleiben, auf Tablets auch die Taskleiste. Der Kioskmodus blendet sie immer aus.",
-  "@settingScreenFullScreenDescription": {
+  "settingScreenHideStatusBarDescription": "Deaktivieren, damit Uhr und Benachrichtigungssymbole oben auf dem Bildschirm bleiben. Der Kioskmodus blendet sie immer aus.",
+  "@settingScreenHideStatusBarDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarTitle": "Navigationsleiste ausblenden",
+  "@settingScreenHideNavigationBarTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarDescription": "Deaktivieren, damit die Navigationstasten auf dem Bildschirm bleiben, auf Tablets auch die Taskleiste. Der Kioskmodus blendet sie immer aus.",
+  "@settingScreenHideNavigationBarDescription": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Help below the setting.",
     "x-locations": {

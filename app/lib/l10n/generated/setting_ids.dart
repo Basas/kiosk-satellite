@@ -216,9 +216,13 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreenOrientationTitle",
     "description": "settingScreenOrientationDescription",
   },
-  "screen.full_screen": {
-    "title": "settingScreenFullScreenTitle",
-    "description": "settingScreenFullScreenDescription",
+  "screen.hide_status_bar": {
+    "title": "settingScreenHideStatusBarTitle",
+    "description": "settingScreenHideStatusBarDescription",
+  },
+  "screen.hide_navigation_bar": {
+    "title": "settingScreenHideNavigationBarTitle",
+    "description": "settingScreenHideNavigationBarDescription",
   },
   "screen.keep_on": {
     "title": "settingKeepScreenOnTitle",

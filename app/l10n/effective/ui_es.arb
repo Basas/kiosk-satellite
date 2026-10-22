@@ -38008,8 +38008,8 @@
       ]
     }
   },
-  "settingScreenFullScreenTitle": "Pantalla completa",
-  "@settingScreenFullScreenTitle": {
+  "settingScreenHideStatusBarTitle": "Ocultar barra de estado",
+  "@settingScreenHideStatusBarTitle": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Setting label.",
     "x-locations": {
@@ -38021,8 +38021,34 @@
       ]
     }
   },
-  "settingScreenFullScreenDescription": "Oculta la barra de estado y la barra de navegación. Desactívalo para mantenerlas visibles, junto con la barra de tareas en las tabletas. El modo kiosko siempre las oculta.",
-  "@settingScreenFullScreenDescription": {
+  "settingScreenHideStatusBarDescription": "Desactívalo para mantener el reloj y los iconos de notificación en la parte superior de la pantalla. El modo kiosko siempre la oculta.",
+  "@settingScreenHideStatusBarDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarTitle": "Ocultar barra de navegación",
+  "@settingScreenHideNavigationBarTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarDescription": "Desactívalo para mantener los botones de navegación en pantalla, junto con la barra de tareas en las tabletas. El modo kiosko siempre la oculta.",
+  "@settingScreenHideNavigationBarDescription": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Help below the setting.",
     "x-locations": {

@@ -38008,8 +38008,8 @@
       ]
     }
   },
-  "settingScreenFullScreenTitle": "Plein écran",
-  "@settingScreenFullScreenTitle": {
+  "settingScreenHideStatusBarTitle": "Masquer la barre d'état",
+  "@settingScreenHideStatusBarTitle": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Setting label.",
     "x-locations": {
@@ -38021,8 +38021,34 @@
       ]
     }
   },
-  "settingScreenFullScreenDescription": "Masquer la barre d'état et la barre de navigation. Désactivez cette option pour les garder visibles, ainsi que la barre des tâches sur les tablettes. Le mode kiosque les masque toujours.",
-  "@settingScreenFullScreenDescription": {
+  "settingScreenHideStatusBarDescription": "Désactivez cette option pour garder l'horloge et les icônes de notification en haut de l'écran. Le mode kiosque la masque toujours.",
+  "@settingScreenHideStatusBarDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarTitle": "Masquer la barre de navigation",
+  "@settingScreenHideNavigationBarTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarDescription": "Désactivez cette option pour garder les boutons de navigation à l'écran, ainsi que la barre des tâches sur les tablettes. Le mode kiosque la masque toujours.",
+  "@settingScreenHideNavigationBarDescription": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Help below the setting.",
     "x-locations": {

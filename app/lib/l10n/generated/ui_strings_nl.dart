@@ -10131,11 +10131,18 @@ class UiStringsNl extends UiStrings {
       'Dwing het scherm in één stand. Gebruik dit op een apparaat zonder rotatiesensor of op een apparaat dat zo is gemonteerd dat de sensor de stand verkeerd bepaalt.';
 
   @override
-  String get settingScreenFullScreenTitle => 'Volledig scherm';
+  String get settingScreenHideStatusBarTitle => 'Statusbalk verbergen';
 
   @override
-  String get settingScreenFullScreenDescription =>
-      'Verberg de statusbalk en de navigatiebalk. Schakel dit uit om ze zichtbaar te houden, samen met de taakbalk op tablets. De kioskmodus verbergt ze altijd.';
+  String get settingScreenHideStatusBarDescription =>
+      'Schakel dit uit om de klok en meldingspictogrammen boven aan het scherm te houden. De kioskmodus verbergt de statusbalk altijd.';
+
+  @override
+  String get settingScreenHideNavigationBarTitle => 'Navigatiebalk verbergen';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      'Schakel dit uit om de navigatieknoppen op het scherm te houden, samen met de taakbalk op tablets. De kioskmodus verbergt de navigatiebalk altijd.';
 
   @override
   String get settingKeepScreenOnTitle => 'Scherm ingeschakeld houden';

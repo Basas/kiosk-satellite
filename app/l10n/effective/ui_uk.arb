@@ -38008,8 +38008,8 @@
       ]
     }
   },
-  "settingScreenFullScreenTitle": "Повноекранний режим",
-  "@settingScreenFullScreenTitle": {
+  "settingScreenHideStatusBarTitle": "Приховати рядок стану",
+  "@settingScreenHideStatusBarTitle": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Setting label.",
     "x-locations": {
@@ -38021,8 +38021,34 @@
       ]
     }
   },
-  "settingScreenFullScreenDescription": "Приховати рядок стану та панель навігації. Вимкніть, щоб вони залишалися видимими разом із панеллю завдань на планшетах. Режим кіоска завжди їх приховує.",
-  "@settingScreenFullScreenDescription": {
+  "settingScreenHideStatusBarDescription": "Вимкніть, щоб годинник і значки сповіщень залишалися вгорі екрана. Режим кіоска завжди його приховує.",
+  "@settingScreenHideStatusBarDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarTitle": "Приховати панель навігації",
+  "@settingScreenHideNavigationBarTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarDescription": "Вимкніть, щоб кнопки навігації залишалися на екрані разом із панеллю завдань на планшетах. Режим кіоска завжди її приховує.",
+  "@settingScreenHideNavigationBarDescription": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Help below the setting.",
     "x-locations": {

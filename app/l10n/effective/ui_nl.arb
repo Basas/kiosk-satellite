@@ -38008,8 +38008,8 @@
       ]
     }
   },
-  "settingScreenFullScreenTitle": "Volledig scherm",
-  "@settingScreenFullScreenTitle": {
+  "settingScreenHideStatusBarTitle": "Statusbalk verbergen",
+  "@settingScreenHideStatusBarTitle": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Setting label.",
     "x-locations": {
@@ -38021,8 +38021,34 @@
       ]
     }
   },
-  "settingScreenFullScreenDescription": "Verberg de statusbalk en de navigatiebalk. Schakel dit uit om ze zichtbaar te houden, samen met de taakbalk op tablets. De kioskmodus verbergt ze altijd.",
-  "@settingScreenFullScreenDescription": {
+  "settingScreenHideStatusBarDescription": "Schakel dit uit om de klok en meldingspictogrammen boven aan het scherm te houden. De kioskmodus verbergt de statusbalk altijd.",
+  "@settingScreenHideStatusBarDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarTitle": "Navigatiebalk verbergen",
+  "@settingScreenHideNavigationBarTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenHideNavigationBarDescription": "Schakel dit uit om de navigatieknoppen op het scherm te houden, samen met de taakbalk op tablets. De kioskmodus verbergt de navigatiebalk altijd.",
+  "@settingScreenHideNavigationBarDescription": {
     "context": "Settings:Screen & Audio:Screen",
     "description": "Help below the setting.",
     "x-locations": {

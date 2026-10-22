@@ -10125,11 +10125,19 @@ class UiStringsUk extends UiStrings {
       'Примусово встановити одну орієнтацію екрана. Використовуйте на пристроях без датчика повороту або коли пристрій закріплено так, що датчик визначає положення некоректно.';
 
   @override
-  String get settingScreenFullScreenTitle => 'Повноекранний режим';
+  String get settingScreenHideStatusBarTitle => 'Приховати рядок стану';
 
   @override
-  String get settingScreenFullScreenDescription =>
-      'Приховати рядок стану та панель навігації. Вимкніть, щоб вони залишалися видимими разом із панеллю завдань на планшетах. Режим кіоска завжди їх приховує.';
+  String get settingScreenHideStatusBarDescription =>
+      'Вимкніть, щоб годинник і значки сповіщень залишалися вгорі екрана. Режим кіоска завжди його приховує.';
+
+  @override
+  String get settingScreenHideNavigationBarTitle =>
+      'Приховати панель навігації';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      'Вимкніть, щоб кнопки навігації залишалися на екрані разом із панеллю завдань на планшетах. Режим кіоска завжди її приховує.';
 
   @override
   String get settingKeepScreenOnTitle => 'Не вимикати екран';

@@ -658,20 +658,35 @@ const screenOrientation = SettingDef<String>(
   },
 );
 
-/// Whether the status and navigation bars stay hidden (issue #1076). Off,
-/// the bars stay up and the app sits between them, which keeps a tablet's
-/// taskbar one tap away. Kiosk mode and lockdown hide the bars whatever
-/// this says (see hidesSystemBars). Applied live through the kiosk_lock
+/// Whether the status bar stays hidden (issue #1102). Off, it stays up and
+/// the app sits below it. With [screenHideNavigationBar] this replaced the
+/// single Full screen switch of issue #1076 (screen.full_screen, migrated
+/// in SettingsManager). Kiosk mode and lockdown hide both bars whatever
+/// these say (see hidesStatusBar). Applied live through the kiosk_lock
 /// channel, and read natively from SharedPreferences at Activity creation
 /// so the window is right from the first frame.
-const screenFullScreen = SettingDef<bool>(
-  key: 'screen.full_screen',
+const screenHideStatusBar = SettingDef<bool>(
+  key: 'screen.hide_status_bar',
   type: SettingType.boolean,
   defaultValue: true,
-  title: 'Full screen',
+  title: 'Hide status bar',
   description:
-      'Hide the status and navigation bars. Turn off to keep them visible, '
-      'along with the taskbar on tablets. Kiosk mode always hides them.',
+      'Turn off to keep the clock and notification icons at the top of the '
+      'screen. Kiosk mode always hides it.',
+  category: 'Screen & Audio',
+  section: 'Screen',
+);
+
+/// Whether the navigation bar stays hidden. Off, it stays up and the app
+/// sits above it, which keeps a tablet's taskbar one tap away (issue #1076).
+const screenHideNavigationBar = SettingDef<bool>(
+  key: 'screen.hide_navigation_bar',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Hide navigation bar',
+  description:
+      'Turn off to keep the navigation buttons on screen, along with the '
+      'taskbar on tablets. Kiosk mode always hides it.',
   category: 'Screen & Audio',
   section: 'Screen',
 );
@@ -12741,7 +12756,8 @@ const List<SettingDef<Object>> allSettings = [
   defaultBrightness,
   browserCutoutMode,
   screenOrientation,
-  screenFullScreen,
+  screenHideStatusBar,
+  screenHideNavigationBar,
   // After the whole Screen group: the remote places a page's entry row
   // where its first definition sits, and the device puts the entry card
   // under the Screen card.

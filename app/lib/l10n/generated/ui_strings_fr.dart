@@ -10200,11 +10200,19 @@ class UiStringsFr extends UiStrings {
       'Forcer l\'écran dans une orientation. Utilisez ceci sur un appareil sans capteur de rotation, ou installé d\'une façon que le capteur interprète mal.';
 
   @override
-  String get settingScreenFullScreenTitle => 'Plein écran';
+  String get settingScreenHideStatusBarTitle => 'Masquer la barre d\'état';
 
   @override
-  String get settingScreenFullScreenDescription =>
-      'Masquer la barre d\'état et la barre de navigation. Désactivez cette option pour les garder visibles, ainsi que la barre des tâches sur les tablettes. Le mode kiosque les masque toujours.';
+  String get settingScreenHideStatusBarDescription =>
+      'Désactivez cette option pour garder l\'horloge et les icônes de notification en haut de l\'écran. Le mode kiosque la masque toujours.';
+
+  @override
+  String get settingScreenHideNavigationBarTitle =>
+      'Masquer la barre de navigation';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      'Désactivez cette option pour garder les boutons de navigation à l\'écran, ainsi que la barre des tâches sur les tablettes. Le mode kiosque la masque toujours.';
 
   @override
   String get settingKeepScreenOnTitle => 'Garder l\'écran allumé';

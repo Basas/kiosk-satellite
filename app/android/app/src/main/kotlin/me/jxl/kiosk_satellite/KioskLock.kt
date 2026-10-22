@@ -194,8 +194,11 @@ class KioskLock(private val activity: Activity, messenger: BinaryMessenger) {
                     call.argument<String>("orientation")?.let {
                         ScreenOrientation.apply(activity, it)
                     }
-                    call.argument<Boolean>("fullScreen")?.let {
-                        SystemBars.apply(activity, it)
+                    val hideStatus = call.argument<Boolean>("hideStatusBar")
+                    val hideNavigation =
+                        call.argument<Boolean>("hideNavigationBar")
+                    if (hideStatus != null && hideNavigation != null) {
+                        SystemBars.apply(activity, hideStatus, hideNavigation)
                     }
                     result.success(null)
                 }

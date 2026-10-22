@@ -15,7 +15,8 @@ import 'core/headless.dart';
 import 'core/ha_http_overrides.dart';
 import 'core/locale_dates.dart';
 import 'core/user_authorities.dart';
-import 'managers/kiosk/kiosk_manager.dart' show hidesSystemBars;
+import 'managers/kiosk/kiosk_manager.dart'
+    show hidesNavigationBar, hidesStatusBar;
 import 'managers/settings/definitions.dart' as defs;
 import 'managers/settings/settings_manager.dart';
 import 'managers/wake_word/pryon/pryon_catalog.dart';
@@ -111,8 +112,8 @@ Future<void> main() async {
   // what it fixed. Sticky draws no hint; its transient bar is dismissed
   // early by KioskLock's hide() ticker while kiosk mode holds.
   //
-  // With Full screen off (and no kiosk mode) the bars stay up instead; see
-  // applySystemBars.
+  // With Hide status bar or Hide navigation bar off (and no kiosk mode)
+  // that bar stays up instead; see applySystemBars.
   Future<void> applyImmersion() => applySystemBars(container.settings);
   // Deliberately NOT awaited: this platform call can hang forever when the
   // process is restarted by the OS mid permission flow (the engine comes up
@@ -124,7 +125,8 @@ Future<void> main() async {
   container.bus.on<SettingChanged>().listen((e) {
     if (e.key == defs.kioskEnabled.key ||
         e.key == defs.lockdownEnabled.key ||
-        e.key == defs.screenFullScreen.key) {
+        e.key == defs.screenHideStatusBar.key ||
+        e.key == defs.screenHideNavigationBar.key) {
       applyImmersion();
     }
   });
@@ -136,7 +138,10 @@ Future<void> main() async {
   });
   SystemChrome.setSystemUIChangeCallback((systemOverlaysAreVisible) async {
     if (!systemOverlaysAreVisible) return;
-    if (!hidesSystemBars(container.settings)) return;
+    if (!hidesStatusBar(container.settings) &&
+        !hidesNavigationBar(container.settings)) {
+      return;
+    }
     final locked = container.settings.get(defs.kioskEnabled);
     await Future<void>.delayed(
       locked ? const Duration(milliseconds: 400) : const Duration(seconds: 3),
@@ -150,19 +155,28 @@ Future<void> main() async {
   runApp(KioskSatelliteApp(container: container));
 }
 
-/// Hide the system bars, or show every one of them when the Full screen
-/// setting is off and neither kiosk mode nor lockdown is on (issue #1076).
-/// Manual with every overlay rather than edgeToEdge: the latter would make
-/// Flutter undo the edge-to-edge window MainActivity sets up itself. The
+/// Hide the system bars, or show the ones whose Hide status bar or Hide
+/// navigation bar setting is off while neither kiosk mode nor lockdown is on
+/// (issues #1076 and #1102). Manual with the shown overlays rather than
+/// edgeToEdge: the latter would make Flutter undo the edge-to-edge window
+/// MainActivity sets up itself. Manual drops the sticky flag for a bar it
+/// hides, so SystemBars.kt sets the swipe behavior on the window itself. The
 /// native side pads the content by the visible bars (CutoutLayout), so the
 /// dashboard sits between them.
-Future<void> applySystemBars(SettingsManager settings) =>
-    hidesSystemBars(settings)
-    ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky)
-    : SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual,
-        overlays: SystemUiOverlay.values,
-      );
+Future<void> applySystemBars(SettingsManager settings) {
+  final status = hidesStatusBar(settings);
+  final navigation = hidesNavigationBar(settings);
+  if (status && navigation) {
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+  return SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [
+      if (!status) SystemUiOverlay.top,
+      if (!navigation) SystemUiOverlay.bottom,
+    ],
+  );
+}
 
 class KioskSatelliteApp extends StatefulWidget {
   const KioskSatelliteApp({super.key, required this.container});
@@ -216,7 +230,8 @@ class _KioskSatelliteAppState extends State<KioskSatelliteApp>
           e.key == defs.uiTheme.key ||
               e.key == defs.uiScale.key ||
               e.key == defs.uiLanguage.key ||
-              e.key == defs.screenFullScreen.key ||
+              e.key == defs.screenHideStatusBar.key ||
+              e.key == defs.screenHideNavigationBar.key ||
               e.key == defs.kioskEnabled.key ||
               e.key == defs.lockdownEnabled.key
           ? setState(() {})
@@ -307,7 +322,9 @@ class _KioskSatelliteAppState extends State<KioskSatelliteApp>
   Widget build(BuildContext context) {
     final container = widget.container;
     final configured = container.settings.get(defs.startUrl).isNotEmpty;
-    final barsShown = !hidesSystemBars(container.settings);
+    final barsShown =
+        !hidesStatusBar(container.settings) ||
+        !hidesNavigationBar(container.settings);
     final uiLocale = appLocaleForLanguage(
       container.settings.get(defs.uiLanguage),
     );

@@ -9547,11 +9547,18 @@ class UiStringsZh extends UiStrings {
       '强制屏幕使用指定方向。适用于没有旋转传感器，或安装方向导致传感器判断错误的设备。';
 
   @override
-  String get settingScreenFullScreenTitle => '全屏';
+  String get settingScreenHideStatusBarTitle => '隐藏状态栏';
 
   @override
-  String get settingScreenFullScreenDescription =>
-      '隐藏状态栏和导航栏。关闭后它们会保持可见，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它们。';
+  String get settingScreenHideStatusBarDescription =>
+      '关闭后，时钟和通知图标会保留在屏幕顶部。Kiosk 模式始终会隐藏它。';
+
+  @override
+  String get settingScreenHideNavigationBarTitle => '隐藏导航栏';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      '关闭后，导航按钮会保留在屏幕上，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它。';
 
   @override
   String get settingKeepScreenOnTitle => '保持屏幕开启';
@@ -23906,11 +23913,18 @@ class UiStringsZhCn extends UiStringsZh {
       '强制屏幕使用指定方向。适用于没有旋转传感器，或安装方向导致传感器判断错误的设备。';
 
   @override
-  String get settingScreenFullScreenTitle => '全屏';
+  String get settingScreenHideStatusBarTitle => '隐藏状态栏';
 
   @override
-  String get settingScreenFullScreenDescription =>
-      '隐藏状态栏和导航栏。关闭后它们会保持可见，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它们。';
+  String get settingScreenHideStatusBarDescription =>
+      '关闭后，时钟和通知图标会保留在屏幕顶部。Kiosk 模式始终会隐藏它。';
+
+  @override
+  String get settingScreenHideNavigationBarTitle => '隐藏导航栏';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      '关闭后，导航按钮会保留在屏幕上，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它。';
 
   @override
   String get settingKeepScreenOnTitle => '保持屏幕开启';

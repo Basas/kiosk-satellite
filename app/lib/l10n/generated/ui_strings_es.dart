@@ -10206,11 +10206,19 @@ class UiStringsEs extends UiStrings {
       'Fuerza la pantalla a una orientación. Úsalo en un dispositivo sin sensor de rotación o instalado de una forma que el sensor no detecta correctamente.';
 
   @override
-  String get settingScreenFullScreenTitle => 'Pantalla completa';
+  String get settingScreenHideStatusBarTitle => 'Ocultar barra de estado';
 
   @override
-  String get settingScreenFullScreenDescription =>
-      'Oculta la barra de estado y la barra de navegación. Desactívalo para mantenerlas visibles, junto con la barra de tareas en las tabletas. El modo kiosko siempre las oculta.';
+  String get settingScreenHideStatusBarDescription =>
+      'Desactívalo para mantener el reloj y los iconos de notificación en la parte superior de la pantalla. El modo kiosko siempre la oculta.';
+
+  @override
+  String get settingScreenHideNavigationBarTitle =>
+      'Ocultar barra de navegación';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      'Desactívalo para mantener los botones de navegación en pantalla, junto con la barra de tareas en las tabletas. El modo kiosko siempre la oculta.';
 
   @override
   String get settingKeepScreenOnTitle => 'Mantener la pantalla encendida';

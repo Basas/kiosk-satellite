@@ -22468,5 +22468,25 @@
     "source": "0d0f81323f1b5dd547d2f5505b447ba7b1757829babbc6b732e42d33537318c6",
     "translation": "3e33232c694c8aa39c27ce0dd9769f1751b64e8350e0093e57adc696d0229f00",
     "author": "Xavier Larrea"
+  },
+  "settingScreenHideNavigationBarDescription": {
+    "source": "205ded64d42214617bb9f238eb6018d794dd6b357b22e1d504761a751359c2bd",
+    "translation": "90c2ad3c59b8324ddb7ce1e6c5af6355f7713487fc71ce94aa2f28b8f27daa2f",
+    "author": "Xavier Larrea"
+  },
+  "settingScreenHideNavigationBarTitle": {
+    "source": "e8f22bef7b0339f192d86c738286cbbf839761566fa9fb9e53382c3c3063200b",
+    "translation": "6d8fe6a6412d2bfeb32f98138c4102e27b25a4523f1f595bee98fd96dd5a9036",
+    "author": "Xavier Larrea"
+  },
+  "settingScreenHideStatusBarDescription": {
+    "source": "c4f5ac63e31e0926252303471c652ac92ce947587f9ef71a6fad2eafbd1376af",
+    "translation": "1f1d0c05304dfb7f9481a05cd01734918f4e1016fbd63dda47a0cfa7f7416043",
+    "author": "Xavier Larrea"
+  },
+  "settingScreenHideStatusBarTitle": {
+    "source": "ab5cfd485138a9ecff49439ed9025926ba8b63e6f246b555bbb257467201cbb2",
+    "translation": "4f2e05c93f1fbda7a5a8fb7420165dbdaaa49a0f46c6dc6ed1859f35f420a7c7",
+    "author": "Xavier Larrea"
   }
 }

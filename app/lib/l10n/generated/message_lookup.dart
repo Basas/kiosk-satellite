@@ -3133,9 +3133,14 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'settingScreenOrientationTitle' => strings.settingScreenOrientationTitle,
       'settingScreenOrientationDescription' =>
         strings.settingScreenOrientationDescription,
-      'settingScreenFullScreenTitle' => strings.settingScreenFullScreenTitle,
-      'settingScreenFullScreenDescription' =>
-        strings.settingScreenFullScreenDescription,
+      'settingScreenHideStatusBarTitle' =>
+        strings.settingScreenHideStatusBarTitle,
+      'settingScreenHideStatusBarDescription' =>
+        strings.settingScreenHideStatusBarDescription,
+      'settingScreenHideNavigationBarTitle' =>
+        strings.settingScreenHideNavigationBarTitle,
+      'settingScreenHideNavigationBarDescription' =>
+        strings.settingScreenHideNavigationBarDescription,
       'settingKeepScreenOnTitle' => strings.settingKeepScreenOnTitle,
       'settingKeepScreenOnDescription' =>
         strings.settingKeepScreenOnDescription,
