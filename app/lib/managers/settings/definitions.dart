@@ -6264,6 +6264,60 @@ const cameraRtspPassword = SettingDef<String>(
   secret: true,
 );
 
+// ── Camera: ONVIF Motion Events ─────────────────────────────────────────
+// Motion as ONVIF events (issue #1098), so an NVR such as UniFi Protect
+// can record on motion. The source is any one sensor the app already has:
+// the camera's motion sensor, the device's person sensor or a Home
+// Assistant sensor. Picking a source does not turn its sensor on; the
+// page says so under the picker instead (both UIs).
+const cameraOnvifEvents = SettingDef<bool>(
+  key: 'camera.onvif.events',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Send motion events',
+  description: 'Let ONVIF clients such as NVRs know when motion is detected.',
+  category: 'Camera',
+  section: 'Motion Events',
+  subpage: 'RTSP & ONVIF Streaming',
+  dependsOn: 'camera.rtsp.protocol',
+  dependsOnValue: 'onvif',
+);
+
+// Person is left out where the device has no person sensor
+// (deviceHiddenOptions, filled at boot by the person sensor manager).
+const cameraOnvifEventsSource = SettingDef<String>(
+  key: 'camera.onvif.events_source',
+  type: SettingType.select,
+  defaultValue: 'camera',
+  title: 'Motion source',
+  description: 'The sensor that sends motion events.',
+  category: 'Camera',
+  section: 'Motion Events',
+  subpage: 'RTSP & ONVIF Streaming',
+  dependsOn: 'camera.onvif.events',
+  options: ['camera', 'person', 'entity'],
+  optionLabels: {
+    'camera': 'Camera motion sensor',
+    'person': 'Person sensor',
+    'entity': 'Home Assistant sensor',
+  },
+);
+
+// Picked with the entity search on both UIs, never typed.
+const cameraOnvifEventsEntity = SettingDef<String>(
+  key: 'camera.onvif.events_entity',
+  type: SettingType.string,
+  defaultValue: '',
+  title: 'Motion sensor entity',
+  description:
+      'The Home Assistant occupancy, motion or presence sensor to follow.',
+  category: 'Camera',
+  section: 'Motion Events',
+  subpage: 'RTSP & ONVIF Streaming',
+  dependsOn: 'camera.onvif.events_source',
+  dependsOnValue: 'entity',
+);
+
 const cameraRtspDateTime = SettingDef<bool>(
   key: 'camera.rtsp.datetime',
   type: SettingType.boolean,
@@ -12989,6 +13043,9 @@ const List<SettingDef<Object>> allSettings = [
   cameraRtspAuth,
   cameraRtspUsername,
   cameraRtspPassword,
+  cameraOnvifEvents,
+  cameraOnvifEventsSource,
+  cameraOnvifEventsEntity,
   cameraRtspDateTime,
   cameraRtspDateTimeBackground,
   cameraRtspTls,

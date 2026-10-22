@@ -5078,6 +5078,44 @@ class UiStringsRu extends UiStrings {
       'Другие размеры камеры недоступны в текущей настройке захвата.';
 
   @override
+  String get cameraMotionEventsHeading => 'События движения';
+
+  @override
+  String get settingCameraOnvifEventsTitle => 'Отправлять события движения';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      'Сообщать клиентам ONVIF, например NVR, об обнаруженном движении.';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => 'Источник движения';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription =>
+      'Датчик, который отправляет события движения.';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => 'Датчик движения камеры';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => 'Датчик присутствия';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Датчик Home Assistant';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      'Датчик движения камеры выключен. Включите его в разделе Камера > Датчик движения.';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      'Анализ движения при стриминге выключен, поэтому камера не может обнаруживать движение, пока подключён зритель.';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff =>
+      'Датчик присутствия выключен. Включите его в разделе Камера > Датчик присутствия.';
+
+  @override
   String get cameraOverlaysHeading => 'Наложения';
 
   @override

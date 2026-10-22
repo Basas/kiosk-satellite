@@ -8833,6 +8833,72 @@ abstract class UiStrings {
   /// Section heading.
   ///
   /// In en, this message translates to:
+  /// **'Motion Events'**
+  String get cameraMotionEventsHeading;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Send motion events'**
+  String get settingCameraOnvifEventsTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Let ONVIF clients such as NVRs know when motion is detected.'**
+  String get settingCameraOnvifEventsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion source'**
+  String get settingCameraOnvifEventsSourceTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The sensor that sends motion events.'**
+  String get settingCameraOnvifEventsSourceDescription;
+
+  /// Choice in the Motion source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera motion sensor'**
+  String get cameraOnvifEventsSourceCamera;
+
+  /// Choice in the Motion source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Person sensor'**
+  String get cameraOnvifEventsSourcePerson;
+
+  /// Choice in the Motion source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant sensor'**
+  String get cameraOnvifEventsSourceEntity;
+
+  /// Warning below the Motion source picker. Camera > Motion Sensor is the settings page to open.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera motion sensor is off. Turn it on in Camera > Motion Sensor.'**
+  String get cameraOnvifEventsMotionSensorOff;
+
+  /// Warning below the Motion source picker. Motion analysis while streaming is the setting of that name on this page.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion analysis while streaming is off, so the camera cannot detect motion while a viewer is connected.'**
+  String get cameraOnvifEventsAnalysisOff;
+
+  /// Warning below the Motion source picker. Camera > Person Sensor is the settings page to open.
+  ///
+  /// In en, this message translates to:
+  /// **'The person sensor is off. Turn it on in Camera > Person Sensor.'**
+  String get cameraOnvifEventsPersonSensorOff;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
   /// **'Overlays'**
   String get cameraOverlaysHeading;
 

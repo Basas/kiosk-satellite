@@ -1408,6 +1408,22 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'cameraSupportedSizes' => strings.cameraSupportedSizes,
       'cameraAnalysisOff' => strings.cameraAnalysisOff,
       'cameraCaptureRejected' => strings.cameraCaptureRejected,
+      'cameraMotionEventsHeading' => strings.cameraMotionEventsHeading,
+      'settingCameraOnvifEventsTitle' => strings.settingCameraOnvifEventsTitle,
+      'settingCameraOnvifEventsDescription' =>
+        strings.settingCameraOnvifEventsDescription,
+      'settingCameraOnvifEventsSourceTitle' =>
+        strings.settingCameraOnvifEventsSourceTitle,
+      'settingCameraOnvifEventsSourceDescription' =>
+        strings.settingCameraOnvifEventsSourceDescription,
+      'cameraOnvifEventsSourceCamera' => strings.cameraOnvifEventsSourceCamera,
+      'cameraOnvifEventsSourcePerson' => strings.cameraOnvifEventsSourcePerson,
+      'cameraOnvifEventsSourceEntity' => strings.cameraOnvifEventsSourceEntity,
+      'cameraOnvifEventsMotionSensorOff' =>
+        strings.cameraOnvifEventsMotionSensorOff,
+      'cameraOnvifEventsAnalysisOff' => strings.cameraOnvifEventsAnalysisOff,
+      'cameraOnvifEventsPersonSensorOff' =>
+        strings.cameraOnvifEventsPersonSensorOff,
       'cameraOverlaysHeading' => strings.cameraOverlaysHeading,
       'settingCameraRtspDateTimeTitle' =>
         strings.settingCameraRtspDateTimeTitle,

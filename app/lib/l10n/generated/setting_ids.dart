@@ -932,6 +932,18 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingCameraRtspPasswordTitle",
     "description": "settingCameraRtspPasswordDescription",
   },
+  "camera.onvif.events": {
+    "title": "settingCameraOnvifEventsTitle",
+    "description": "settingCameraOnvifEventsDescription",
+  },
+  "camera.onvif.events_source": {
+    "title": "settingCameraOnvifEventsSourceTitle",
+    "description": "settingCameraOnvifEventsSourceDescription",
+  },
+  "camera.onvif.events_entity": {
+    "title": "settingMotionEntityTitle",
+    "description": "settingMotionEntityDescription",
+  },
   "camera.allow_h265": {
     "title": "settingCameraAllowH265Title",
     "description": "settingCameraAllowH265Description",

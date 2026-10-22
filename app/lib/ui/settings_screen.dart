@@ -3293,6 +3293,13 @@ class _CategoryContentState extends State<_CategoryContent> {
       screensaverBrightnessLevel.key: HintRow(
         screenAudioText(context, _adaptiveNote),
       ),
+    // Under the ONVIF motion events source (issue #1098): picking a sensor
+    // does not turn it on, so say where to. Mirrored on the remote
+    // (settings.js, updateOnvifEventsRows).
+    if (widget.category == 'Camera' && _onvifEventsNotice(container) != null)
+      cameraOnvifEventsSource.key: WarnRow(
+        cameraText(context, _onvifEventsNotice(container)!),
+      ),
     if (widget.category == 'Camera')
       cameraRtspResolution.key: HintRow(
         cameraResolutionNotice(
@@ -6661,6 +6668,21 @@ class _MotionEntityRowState extends State<_MotionEntityRow> {
     );
   }
 }
+
+/// Why the picked ONVIF motion source sends nothing, or null when it can:
+/// its sensor is off, or the camera cannot watch while it streams.
+String? _onvifEventsNotice(AppContainer c) => switch (c.settings.get(
+  cameraOnvifEventsSource,
+)) {
+  'camera' when !c.settings.get(motionSensor) =>
+    'The camera motion sensor is off. Turn it on in Camera > Motion Sensor.',
+  'camera' when !c.settings.get(cameraRtspAnalysis) =>
+    'Motion analysis while streaming is off, so the camera cannot detect '
+        'motion while a viewer is connected.',
+  'person' when !c.settings.get(personSensorEnabled) =>
+    'The person sensor is off. Turn it on in Camera > Person Sensor.',
+  _ => null,
+};
 
 /// Under the face sensitivity slider: the rest of the tuning is the
 /// motion camera's, shared with it.
@@ -11290,6 +11312,21 @@ class SettingTile extends StatelessWidget {
         // The external motion sensor (issue #973), picked the same way.
         if (def.key == motionEntity.key) {
           return _MotionEntityRow(container: c, def: def, onChanged: onChanged);
+        }
+        // The Home Assistant sensor ONVIF motion events follow (issue
+        // #1098), from the same occupancy, motion and presence sensors.
+        if (def.key == cameraOnvifEventsEntity.key) {
+          return PickRow(
+            title: def.localizedTitle(context),
+            description: def.localizedDescription(context),
+            spec: entitySpec(context, c.commands, deviceClass: 'occupancy'),
+            value: c.settings.get(cameraOnvifEventsEntity),
+            allowClear: true,
+            onPick: (id) async {
+              await c.settings.setFromJson(def.key, id ?? '');
+              onChanged();
+            },
+          );
         }
         // The speakers the Now Playing pill offers, ticked off the players
         // of the source its menu reads from, never typed as JSON.

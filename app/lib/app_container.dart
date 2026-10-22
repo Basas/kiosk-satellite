@@ -37,6 +37,7 @@ import 'managers/launcher/home_launcher_manager.dart';
 import 'managers/led/led_manager.dart';
 import 'managers/motion/motion_entity_manager.dart';
 import 'managers/motion/motion_manager.dart';
+import 'managers/motion/onvif_events_manager.dart';
 import 'managers/notifications/notification_manager.dart';
 import 'managers/fleet/fleet_manager.dart';
 import 'managers/fleet/fleet_sync_manager.dart';
@@ -133,6 +134,14 @@ class AppContainer {
     );
     analytics = AnalyticsManager(bus, commands, log, settings);
     personSensor = PersonSensorManager(bus, commands, log, settings);
+    // It watches its Home Assistant source through homeAssistant.
+    onvifEvents = OnvifEventsManager(
+      bus,
+      commands,
+      log,
+      settings,
+      homeAssistant,
+    );
     // The Portal turns its own screen on for someone it sees, and only the
     // person sensor's log tail can tell that wake from the power button.
     screensaver.systemWakeSource = personSensor.wakeSource;
@@ -272,6 +281,7 @@ class AppContainer {
   late final CelestialLocator celestial;
   late final AnalyticsManager analytics;
   late final PersonSensorManager personSensor;
+  late final OnvifEventsManager onvifEvents;
   late final HomeAssistantManager homeAssistant;
   late final AudioRoutingManager audio;
   late final EventBroadcastManager broadcasts;
@@ -338,6 +348,8 @@ class AppContainer {
     // report waits minutes anyway.
     analytics,
     personSensor,
+    // After personSensor: its init asks for the current presence.
+    onvifEvents,
     homeAssistant,
     audio,
     // After kiosk (it relays GestureDetected) and after audio: gestures may

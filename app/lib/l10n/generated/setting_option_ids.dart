@@ -482,6 +482,11 @@ const settingOptionMessageIds = <String, Map<String, String>>{
   },
   "voice.amazon_locale": {
     "": "voiceOptionAppLanguage"
+  },
+  "camera.onvif.events_source": {
+    "camera": "cameraOnvifEventsSourceCamera",
+    "person": "cameraOnvifEventsSourcePerson",
+    "entity": "cameraOnvifEventsSourceEntity"
   }
 };
 const settingPlaceholderMessageIds = <String, String>{

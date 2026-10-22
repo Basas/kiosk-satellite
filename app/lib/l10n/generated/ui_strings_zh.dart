@@ -4866,6 +4866,42 @@ class UiStringsZh extends UiStrings {
   String get cameraCaptureRejected => '当前采集配置不支持其他摄像头分辨率。';
 
   @override
+  String get cameraMotionEventsHeading => '运动事件';
+
+  @override
+  String get settingCameraOnvifEventsTitle => '发送运动事件';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      '检测到运动时通知 ONVIF 客户端（如 NVR）。';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => '运动来源';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription => '发送运动事件的传感器。';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => '摄像头运动传感器';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => '人体传感器';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Home Assistant 传感器';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      '摄像头运动传感器已关闭。请在“摄像头 > 运动传感器”中开启。';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      '“视频传输期间的运动分析”已关闭，因此有观看者连接时摄像头无法检测运动。';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff => '人体传感器已关闭。请在“摄像头 > 人体传感器”中开启。';
+
+  @override
   String get cameraOverlaysHeading => '画面叠加信息';
 
   @override
@@ -19187,6 +19223,42 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get cameraCaptureRejected => '当前采集配置不支持其他摄像头分辨率。';
+
+  @override
+  String get cameraMotionEventsHeading => '运动事件';
+
+  @override
+  String get settingCameraOnvifEventsTitle => '发送运动事件';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      '检测到运动时通知 ONVIF 客户端（如 NVR）。';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => '运动来源';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription => '发送运动事件的传感器。';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => '摄像头运动传感器';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => '人体传感器';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Home Assistant 传感器';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      '摄像头运动传感器已关闭。请在“摄像头 > 运动传感器”中开启。';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      '“视频传输期间的运动分析”已关闭，因此有观看者连接时摄像头无法检测运动。';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff => '人体传感器已关闭。请在“摄像头 > 人体传感器”中开启。';
 
   @override
   String get cameraOverlaysHeading => '画面叠加信息';

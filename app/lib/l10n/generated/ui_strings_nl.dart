@@ -5106,6 +5106,45 @@ class UiStringsNl extends UiStrings {
       'Andere cameraresoluties zijn niet beschikbaar met de huidige opnameconfiguratie.';
 
   @override
+  String get cameraMotionEventsHeading => 'Bewegingsgebeurtenissen';
+
+  @override
+  String get settingCameraOnvifEventsTitle =>
+      'Bewegingsgebeurtenissen versturen';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      'Laat ONVIF-clients zoals NVR\'s weten wanneer er beweging wordt gedetecteerd.';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => 'Bewegingsbron';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription =>
+      'De sensor die de bewegingsgebeurtenissen verstuurt.';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => 'Bewegingssensor van de camera';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => 'Persoonssensor';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Home Assistant-sensor';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      'De bewegingssensor van de camera staat uit. Schakel deze in bij Camera > Bewegingssensor.';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      'Bewegingsanalyse tijdens streaming staat uit, dus de camera kan geen beweging detecteren zolang er een kijker verbonden is.';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff =>
+      'De persoonssensor staat uit. Schakel deze in bij Camera > Persoonssensor.';
+
+  @override
   String get cameraOverlaysHeading => 'Beeldlagen';
 
   @override

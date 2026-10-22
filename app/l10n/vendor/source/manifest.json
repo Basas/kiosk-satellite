@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "37ea8b98be86ef84e979a70b26d5af6d282e40c1",
+  "revision": "47e176c5c75fd1d56f1a948ffbaee87b3e349754",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -78,7 +78,7 @@
     "settings_camera_person_en.arb": "b0299cd3595782796067d5dcbe53ef5504a53a71e1772e5bc5d10bb99df6823f",
     "settings_camera_snapshot_en.arb": "df01d8263c7598d75619263228b9259db6823d2d0f744bc1c392bdbc32b2972e",
     "settings_camera_status_en.arb": "a82c1661ece636cba1c7bfe091e73627932b2005ce1fd3401097441a88fdb6ef",
-    "settings_camera_streaming_en.arb": "9a869bfd5b5cd4ca32c21eae03d8f39889f953f1a56c3bf978765f820ea199f5",
+    "settings_camera_streaming_en.arb": "79da37186df1297eb61c9c480e8ef935b94ec11a5bc5e71ca300c1783d713119",
     "settings_camera_streams_errors_en.arb": "6d5c95e55b74e9e05a4a5510859926dfa3197b9c433d1cd623d1d681dd06b680",
     "settings_camera_streams_imports_en.arb": "cc2d60fc2fc24843121590e1a38a99f24c5f62c8cadb8328a9d4943243df8520",
     "settings_camera_streams_playback_en.arb": "e97207dbcc80942f39836b6e2a2d9f57e1dd93f1a5d59d8ddacfd3c7f26b239c",

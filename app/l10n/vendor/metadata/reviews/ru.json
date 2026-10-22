@@ -27357,5 +27357,71 @@
     "translation": "a072bff070d1e9dbeafb198407e69828d408c26f3e9c8a18c36da3a68c4ab2c6",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "cameraOnvifEventsMotionSensorOff": {
+    "source": "8613277bfb60b84b02cbe7c1b57886a65b43aefd6d870bbcfe282f134f83ab93",
+    "translation": "b1162f2f169a2026eef9017a6351c357ab3ac6983f614e8fe518b4363612678a",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "cameraOnvifEventsPersonSensorOff": {
+    "source": "2c4efa0a7ad2ffd99de1bab41088462da900470ef6a48eb816284556d78d6fc3",
+    "translation": "318ea35f0228c74a1b8963e7c842620d86cfe37931cf6bbf81d823b140a6cd9a",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "cameraOnvifEventsAnalysisOff": {
+    "source": "32cb7aab2d09a0dea5854b2432e498be0159079053b9bf9e3d6bf24283a51a2c",
+    "translation": "3483a5a5c1ab4b87703c3a1894fbd39b50e4c49a150d9b44fc7ea766637082e5",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "cameraMotionEventsHeading": {
+    "source": "d39a96d8f9d29cc58b7cfd64253ae5a765f633037216416e9aa965aa43a3aa60",
+    "translation": "37800f19891d6a4028447d97ca2cfb844b0fd2563acd7b41e84c665d7be5e9fa",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "cameraOnvifEventsSourceCamera": {
+    "source": "301ccd998846af9129973b7cc5bdc4091b6f42acb6a0cd063fe5dacecba12959",
+    "translation": "6074e67c4632d180afcf765eb8fe0a9019f5d24ef92e48e16f97989986e0d1ee",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "cameraOnvifEventsSourceEntity": {
+    "source": "2563650b5f0921f1ce4aa52427f44a83c1ffce75a50386372eee67c828abaae8",
+    "translation": "14e7bffaab60d29b00108c4ca2d8a050a566cc3c111f4f5de84cdb8bc3402442",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingCameraOnvifEventsSourceTitle": {
+    "source": "06d57f02207fe692600a84ca48b2b7c92e9ea71990df7919078239e93424637a",
+    "translation": "65e3c417b61b13cfb2d77784b4632266814ae35e1efae91e11ca204a0c748677",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "cameraOnvifEventsSourcePerson": {
+    "source": "0d0f81323f1b5dd547d2f5505b447ba7b1757829babbc6b732e42d33537318c6",
+    "translation": "83d9050ff9098f637c83a10251c1e7eaaa8663dfbf80a04f166d79b9068f3277",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingCameraOnvifEventsSourceDescription": {
+    "source": "7161e934e2bf682262a5b007f93359c858f3e084676a6392827dc52aa94d44d0",
+    "translation": "2c5c411968705ddcd7e418c72964569bc120d8e471884f0d35cc32a6a1b15eea",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingCameraOnvifEventsTitle": {
+    "source": "dc5ac837fb284e9868c7296646e1590d16877e726197c757dbcaeb51f452552a",
+    "translation": "3358314181be5e81acb5da4b5ceb0840b8725754de60b5b49983e8a259f15b6d",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
+  },
+  "settingCameraOnvifEventsDescription": {
+    "source": "66e8535764ace074f1ac0d1a7b57ac418893e5df0205a51e1bfd3a1e6c1b4c7a",
+    "translation": "d8ed04d4d6c5f9df5158fa4534350842d8fcfe53ada07b4acd76fd3aa4253d49",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

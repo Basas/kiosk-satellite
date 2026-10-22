@@ -5048,6 +5048,44 @@ class UiStringsEn extends UiStrings {
       'Other camera sizes are unavailable in the current capture setup.';
 
   @override
+  String get cameraMotionEventsHeading => 'Motion Events';
+
+  @override
+  String get settingCameraOnvifEventsTitle => 'Send motion events';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      'Let ONVIF clients such as NVRs know when motion is detected.';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => 'Motion source';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription =>
+      'The sensor that sends motion events.';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => 'Camera motion sensor';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => 'Person sensor';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Home Assistant sensor';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      'The camera motion sensor is off. Turn it on in Camera > Motion Sensor.';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      'Motion analysis while streaming is off, so the camera cannot detect motion while a viewer is connected.';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff =>
+      'The person sensor is off. Turn it on in Camera > Person Sensor.';
+
+  @override
   String get cameraOverlaysHeading => 'Overlays';
 
   @override

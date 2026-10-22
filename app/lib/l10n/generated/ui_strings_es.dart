@@ -5128,6 +5128,45 @@ class UiStringsEs extends UiStrings {
       'Otros tamaños de cámara no están disponibles con la configuración actual de captura.';
 
   @override
+  String get cameraMotionEventsHeading => 'Eventos de movimiento';
+
+  @override
+  String get settingCameraOnvifEventsTitle => 'Enviar eventos de movimiento';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      'Avisa a los clientes ONVIF, como los NVR, cuando se detecta movimiento.';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => 'Origen del movimiento';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription =>
+      'El sensor que envía los eventos de movimiento.';
+
+  @override
+  String get cameraOnvifEventsSourceCamera =>
+      'Sensor de movimiento de la cámara';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => 'Sensor de personas';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Sensor de Home Assistant';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      'El sensor de movimiento de la cámara está desactivado. Actívalo en Cámara > Sensor de movimiento.';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      'Analizar movimiento durante la transmisión está desactivado, así que la cámara no puede detectar movimiento mientras haya un espectador conectado.';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff =>
+      'El sensor de personas está desactivado. Actívalo en Cámara > Sensor de personas.';
+
+  @override
   String get cameraOverlaysHeading => 'Superposiciones';
 
   @override
