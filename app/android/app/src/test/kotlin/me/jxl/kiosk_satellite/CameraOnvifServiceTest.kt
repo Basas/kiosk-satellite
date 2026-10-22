@@ -90,6 +90,25 @@ class CameraOnvifServiceTest {
         assertEquals("ter:InvalidStreamSetup: Use RTP-Unicast with RTSP transport", udp.fault)
     }
 
+    @Test fun encoderOptionsListTheCurrentStreamSettings() {
+        val s = service()
+        s.updateParameterSet(byteArrayOf(0x67, 0x64, 0x00, 0x28))
+        for (request in listOf("<trt:GetVideoEncoderConfigurationOptions/>",
+            "<trt:GetVideoEncoderConfigurationOptions><trt:ConfigurationToken>video_encoder</trt:ConfigurationToken></trt:GetVideoEncoderConfigurationOptions>",
+            "<trt:GetVideoEncoderConfigurationOptions><trt:ProfileToken>camera</trt:ProfileToken></trt:GetVideoEncoderConfigurationOptions>")) {
+            val options = response(s, request)
+            assertEquals("200 OK", options.status)
+            assertTrue(options.body.contains("<tt:ResolutionsAvailable><tt:Width>1280</tt:Width><tt:Height>720</tt:Height></tt:ResolutionsAvailable>"))
+            assertTrue(options.body.contains("<tt:FrameRateRange><tt:Min>15</tt:Min><tt:Max>15</tt:Max></tt:FrameRateRange>"))
+            assertTrue(options.body.contains("<tt:H264ProfilesSupported>High</tt:H264ProfilesSupported>"))
+            CameraOnvifService.parse(options.body.toByteArray())
+        }
+        assertTrue(response(s, "<trt:GetVideoEncoderConfigurationOptions><trt:ConfigurationToken>other</trt:ConfigurationToken>" +
+            "</trt:GetVideoEncoderConfigurationOptions>").body.contains("ter:NoConfig"))
+        assertTrue(response(s, "<trt:GetVideoEncoderConfigurationOptions><trt:ProfileToken>other</trt:ProfileToken>" +
+            "</trt:GetVideoEncoderConfigurationOptions>").body.contains("ter:NoProfile"))
+    }
+
     @Test fun deviceServicesAndStreamUseTheSharedPort() {
         val s = service()
         val services = response(s, "<tds:GetServices><tds:IncludeCapability>true</tds:IncludeCapability></tds:GetServices>")

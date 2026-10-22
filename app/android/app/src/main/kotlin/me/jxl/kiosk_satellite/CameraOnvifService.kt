@@ -152,6 +152,13 @@ class CameraOnvifService(
                 if (operation.child(MEDIA, "ConfigurationToken")?.textContent != "video_encoder") return noConfiguration()
                 videoEncoder("trt:Configuration")
             }
+            "GetVideoEncoderConfigurationOptions" -> {
+                if (operation.child(MEDIA, "ConfigurationToken")?.textContent.let { it != null && it != "video_encoder" }) return noConfiguration()
+                if (operation.child(MEDIA, "ProfileToken")?.textContent.let { it != null && it != "camera" }) {
+                    return fault("ter:InvalidArgVal", "Unknown profile token", subcode = "ter:NoProfile")
+                }
+                videoEncoderOptions()
+            }
             "GetAudioSources" -> if (audio) "<trt:AudioSources token=\"microphone\"><tt:Channels>1</tt:Channels></trt:AudioSources>" else ""
             "GetAudioSourceConfigurations", "GetCompatibleAudioSourceConfigurations" -> if (audio) audioSource("trt:Configurations") else ""
             "GetAudioEncoderConfigurations", "GetCompatibleAudioEncoderConfigurations" -> if (audio) audioEncoder("trt:Configurations") else ""
@@ -212,6 +219,14 @@ class CameraOnvifService(
         "<tt:EncodingInterval>1</tt:EncodingInterval><tt:BitrateLimit>${bitrate / 1000}</tt:BitrateLimit></tt:RateControl>" +
         "<tt:H264><tt:GovLength>$fps</tt:GovLength><tt:H264Profile>$h264Profile</tt:H264Profile></tt:H264>" +
         multicast() + "<tt:SessionTimeout>PT60S</tt:SessionTimeout></$tag>"
+
+    // The stream is set up in Kiosk Satellite, so the only options are the current settings.
+    private fun videoEncoderOptions() = "<trt:Options><tt:QualityRange><tt:Min>5</tt:Min><tt:Max>5</tt:Max></tt:QualityRange>" +
+        "<tt:H264><tt:ResolutionsAvailable><tt:Width>$width</tt:Width><tt:Height>$height</tt:Height></tt:ResolutionsAvailable>" +
+        "<tt:GovLengthRange><tt:Min>$fps</tt:Min><tt:Max>$fps</tt:Max></tt:GovLengthRange>" +
+        "<tt:FrameRateRange><tt:Min>$fps</tt:Min><tt:Max>$fps</tt:Max></tt:FrameRateRange>" +
+        "<tt:EncodingIntervalRange><tt:Min>1</tt:Min><tt:Max>1</tt:Max></tt:EncodingIntervalRange>" +
+        "<tt:H264ProfilesSupported>$h264Profile</tt:H264ProfilesSupported></tt:H264></trt:Options>"
 
     private fun audioSource(tag: String) = "<$tag token=\"audio_source\"><tt:Name>Microphone</tt:Name><tt:UseCount>1</tt:UseCount>" +
         "<tt:SourceToken>microphone</tt:SourceToken></$tag>"
