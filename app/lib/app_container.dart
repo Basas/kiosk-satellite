@@ -133,6 +133,9 @@ class AppContainer {
     );
     analytics = AnalyticsManager(bus, commands, log, settings);
     personSensor = PersonSensorManager(bus, commands, log, settings);
+    // The Portal turns its own screen on for someone it sees, and only the
+    // person sensor's log tail can tell that wake from the power button.
+    screensaver.systemWakeSource = personSensor.wakeSource;
     // Before wakeWord: its init seeds the mic selector the engine reads at
     // start, and its SettingChanged subscription must run before wakeWord's
     // restart re-opens capture.

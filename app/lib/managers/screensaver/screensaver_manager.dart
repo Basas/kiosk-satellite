@@ -595,12 +595,15 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     // the screensaver back for these wakes the same as for a detection
     // (issue #952). Android
     // never tells an app which key or gesture woke the panel, so every
-    // wake the app did not ask for counts here.
+    // wake the app did not ask for counts here. The one exception is the
+    // Portal's presence service turning the screen on for someone it sees,
+    // which the person sensor reads out of the log and which follows
+    // Person instead (issue #1092).
     // The app's own pokes (source app) are either part of a dismiss that
     // is already running or an automation switching the panel on to show
     // the screensaver (a photo frame's morning switch-on), so those keep
     // the session and just start a fresh screen-off countdown.
-    bus.on<ScreenStateChanged>().listen((e) {
+    bus.on<ScreenStateChanged>().listen((e) async {
       final byHand =
           e.on && e.source == 'system' && !_settings.get(defs.lockdownEnabled);
       if (!_active) {
@@ -622,10 +625,19 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
       // before Night mode takes the screen off again.
       _nightDark = false;
       if (byHand && !_wakesToScreensaver('power')) {
-        notifyActivity('screen on');
-        return;
+        // The Portal's presence service turns the screen on by itself when
+        // it sees someone (issue #1092): that wake follows Person.
+        final source = await _systemWakeSource();
+        if (source == null || !_wakesToScreensaver(source)) {
+          notifyActivity('screen on');
+          return;
+        }
+        // Gone dark or ended while the source was looked up.
+        if (!_active || _panelDark) return;
+        log.info(name, 'woken by $source; screen on, screensaver stays');
+      } else if (byHand) {
+        log.info(name, 'woken by the device; screensaver stays');
       }
-      if (byHand) log.info(name, 'woken by the device; screensaver stays');
       if (_blanked) {
         unawaited(_wakeFromBlank());
       } else {
@@ -1151,6 +1163,17 @@ class ScreensaverManager extends Manager with WidgetsBindingObserver {
     }
     if (_wakeToScreensaver('motion')) return;
     notifyActivity('motion');
+  }
+
+  /// What turned the screen on, for a wake the app did not ask for, when
+  /// the device can say: 'person' for the Portal's presence service.
+  /// Composition-root wiring to the person sensor, null without one.
+  Future<String?> Function()? systemWakeSource;
+
+  Future<String?> _systemWakeSource() async {
+    final lookup = systemWakeSource;
+    if (lookup == null || !_wakesToScreensaver('person')) return null;
+    return lookup();
   }
 
   /// Whether [source] is picked under Wake to screensaver.
