@@ -8,6 +8,8 @@
   "settingScreenHideStatusBarDescription": "Desactívalo para mantener el reloj y los iconos de notificación en la parte superior de la pantalla. El modo kiosko siempre la oculta.",
   "settingScreenHideNavigationBarTitle": "Ocultar barra de navegación",
   "settingScreenHideNavigationBarDescription": "Desactívalo para mantener los botones de navegación en pantalla, junto con la barra de tareas en las tabletas. El modo kiosko siempre la oculta.",
+  "settingScreenShowOnLockScreenTitle": "Mostrar sobre la pantalla de bloqueo",
+  "settingScreenShowOnLockScreenDescription": "Muestra el panel encima de una pantalla de bloqueo con PIN, patrón o contraseña. El resto del dispositivo sigue bloqueado.",
   "settingKeepScreenOnTitle": "Mantener la pantalla encendida",
   "settingKeepScreenOnDescription": "Evita que el sistema operativo apague la pantalla.",
   "settingSetBrightnessOnLaunchTitle": "Establecer el brillo al iniciar",

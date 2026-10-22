@@ -38060,6 +38060,32 @@
       ]
     }
   },
+  "settingScreenShowOnLockScreenTitle": "在锁屏上显示",
+  "@settingScreenShowOnLockScreenTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenShowOnLockScreenDescription": "在设有 PIN 码、图案或密码的锁屏上显示仪表盘。设备的其他部分仍保持锁定。",
+  "@settingScreenShowOnLockScreenDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
   "settingKeepScreenOnTitle": "保持屏幕开启",
   "@settingKeepScreenOnTitle": {
     "context": "Settings:Screen & Audio:Screen",

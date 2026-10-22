@@ -3141,6 +3141,10 @@ String messageById(UiStrings strings, String? id, String fallback) =>
         strings.settingScreenHideNavigationBarTitle,
       'settingScreenHideNavigationBarDescription' =>
         strings.settingScreenHideNavigationBarDescription,
+      'settingScreenShowOnLockScreenTitle' =>
+        strings.settingScreenShowOnLockScreenTitle,
+      'settingScreenShowOnLockScreenDescription' =>
+        strings.settingScreenShowOnLockScreenDescription,
       'settingKeepScreenOnTitle' => strings.settingKeepScreenOnTitle,
       'settingKeepScreenOnDescription' =>
         strings.settingKeepScreenOnDescription,

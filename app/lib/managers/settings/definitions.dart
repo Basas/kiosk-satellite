@@ -691,6 +691,26 @@ const screenHideNavigationBar = SettingDef<bool>(
   section: 'Screen',
 );
 
+/// Whether the app shows over a secured lock screen (discussion #1105).
+/// Screen off is device-admin lockNow, which arms the lock screen, and a
+/// wake clears only one with no PIN, pattern or password behind it. On,
+/// MainActivity is flagged show-when-locked, so the dashboard comes back
+/// over the lock screen while Home, Recents and every other app still ask
+/// for the credential. Off by default: it opens the dashboard to anyone in
+/// front of a locked device. Applied live through the kiosk_lock channel,
+/// and read natively at Activity creation.
+const screenShowOnLockScreen = SettingDef<bool>(
+  key: 'screen.show_on_lock_screen',
+  type: SettingType.boolean,
+  defaultValue: false,
+  title: 'Show over lock screen',
+  description:
+      'Show the dashboard on top of a PIN, pattern or password lock screen. '
+      'The rest of the device stays locked.',
+  category: 'Screen & Audio',
+  section: 'Screen',
+);
+
 const pinchToZoom = SettingDef<bool>(
   key: 'browser.pinch_to_zoom',
   type: SettingType.boolean,
@@ -12758,6 +12778,7 @@ const List<SettingDef<Object>> allSettings = [
   screenOrientation,
   screenHideStatusBar,
   screenHideNavigationBar,
+  screenShowOnLockScreen,
   // After the whole Screen group: the remote places a page's entry row
   // where its first definition sits, and the device puts the entry card
   // under the Screen card.

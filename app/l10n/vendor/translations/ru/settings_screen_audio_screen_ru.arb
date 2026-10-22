@@ -8,6 +8,8 @@
   "settingScreenHideStatusBarDescription": "Выключите, чтобы часы и значки уведомлений оставались вверху экрана. Режим киоска всегда её скрывает.",
   "settingScreenHideNavigationBarTitle": "Скрывать панель навигации",
   "settingScreenHideNavigationBarDescription": "Выключите, чтобы кнопки навигации оставались на экране вместе с панелью задач на планшетах. Режим киоска всегда её скрывает.",
+  "settingScreenShowOnLockScreenTitle": "Показывать поверх экрана блокировки",
+  "settingScreenShowOnLockScreenDescription": "Показывает панель поверх экрана блокировки с PIN-кодом, графическим ключом или паролем. Остальное устройство остаётся заблокированным.",
   "settingKeepScreenOnTitle": "Не выключать экран",
   "settingKeepScreenOnDescription": "Не давать ОС выключать экран.",
   "settingSetBrightnessOnLaunchTitle": "Задавать яркость при запуске",

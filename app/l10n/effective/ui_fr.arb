@@ -38060,6 +38060,32 @@
       ]
     }
   },
+  "settingScreenShowOnLockScreenTitle": "Afficher par-dessus l'écran de verrouillage",
+  "@settingScreenShowOnLockScreenTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenShowOnLockScreenDescription": "Affiche le tableau de bord par-dessus un écran de verrouillage protégé par un code PIN, un schéma ou un mot de passe. Le reste de l'appareil reste verrouillé.",
+  "@settingScreenShowOnLockScreenDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
   "settingKeepScreenOnTitle": "Garder l'écran allumé",
   "@settingKeepScreenOnTitle": {
     "context": "Settings:Screen & Audio:Screen",

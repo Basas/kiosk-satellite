@@ -224,6 +224,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreenHideNavigationBarTitle",
     "description": "settingScreenHideNavigationBarDescription",
   },
+  "screen.show_on_lock_screen": {
+    "title": "settingScreenShowOnLockScreenTitle",
+    "description": "settingScreenShowOnLockScreenDescription",
+  },
   "screen.keep_on": {
     "title": "settingKeepScreenOnTitle",
     "description": "settingKeepScreenOnDescription",

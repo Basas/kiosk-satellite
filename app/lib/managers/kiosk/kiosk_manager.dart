@@ -769,7 +769,8 @@ class KioskManager extends Manager with WidgetsBindingObserver {
           e.key != defs.browserCutoutMode.key &&
           e.key != defs.screenOrientation.key &&
           e.key != defs.screenHideStatusBar.key &&
-          e.key != defs.screenHideNavigationBar.key) {
+          e.key != defs.screenHideNavigationBar.key &&
+          e.key != defs.screenShowOnLockScreen.key) {
         return;
       }
       // Lockdown flips on: reclaim the foreground first, so an app opened
@@ -1057,6 +1058,7 @@ class KioskManager extends Manager with WidgetsBindingObserver {
       'orientation': _settings.get(defs.screenOrientation),
       'hideStatusBar': hidesStatusBar(_settings),
       'hideNavigationBar': hidesNavigationBar(_settings),
+      'showOnLockScreen': _settings.get(defs.screenShowOnLockScreen),
     });
   }
 

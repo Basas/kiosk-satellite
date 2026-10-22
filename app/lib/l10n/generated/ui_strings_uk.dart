@@ -10140,6 +10140,14 @@ class UiStringsUk extends UiStrings {
       'Вимкніть, щоб кнопки навігації залишалися на екрані разом із панеллю завдань на планшетах. Режим кіоска завжди її приховує.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Показувати поверх екрана блокування';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Показує панель поверх екрана блокування з PIN-кодом, графічним ключем або паролем. Решта пристрою залишається заблокованою.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Не вимикати екран';
 
   @override

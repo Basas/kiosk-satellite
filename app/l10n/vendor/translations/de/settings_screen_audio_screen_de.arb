@@ -8,6 +8,8 @@
   "settingScreenHideStatusBarDescription": "Deaktivieren, damit Uhr und Benachrichtigungssymbole oben auf dem Bildschirm bleiben. Der Kioskmodus blendet sie immer aus.",
   "settingScreenHideNavigationBarTitle": "Navigationsleiste ausblenden",
   "settingScreenHideNavigationBarDescription": "Deaktivieren, damit die Navigationstasten auf dem Bildschirm bleiben, auf Tablets auch die Taskleiste. Der Kioskmodus blendet sie immer aus.",
+  "settingScreenShowOnLockScreenTitle": "Über dem Sperrbildschirm anzeigen",
+  "settingScreenShowOnLockScreenDescription": "Zeigt das Dashboard über einem Sperrbildschirm mit PIN, Muster oder Passwort an. Der Rest des Geräts bleibt gesperrt.",
   "settingKeepScreenOnTitle": "Bildschirm eingeschaltet lassen",
   "settingKeepScreenOnDescription": "Verhindert, dass das Betriebssystem den Bildschirm ausschaltet.",
   "settingSetBrightnessOnLaunchTitle": "Helligkeit beim Start festlegen",

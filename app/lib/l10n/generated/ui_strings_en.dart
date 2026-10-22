@@ -10025,6 +10025,13 @@ class UiStringsEn extends UiStrings {
       'Turn off to keep the navigation buttons on screen, along with the taskbar on tablets. Kiosk mode always hides it.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle => 'Show over lock screen';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Show the dashboard on top of a PIN, pattern or password lock screen. The rest of the device stays locked.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Keep screen on';
 
   @override

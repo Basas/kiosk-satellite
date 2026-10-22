@@ -9561,6 +9561,13 @@ class UiStringsZh extends UiStrings {
       '关闭后，导航按钮会保留在屏幕上，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它。';
 
   @override
+  String get settingScreenShowOnLockScreenTitle => '在锁屏上显示';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      '在设有 PIN 码、图案或密码的锁屏上显示仪表盘。设备的其他部分仍保持锁定。';
+
+  @override
   String get settingKeepScreenOnTitle => '保持屏幕开启';
 
   @override
@@ -23925,6 +23932,13 @@ class UiStringsZhCn extends UiStringsZh {
   @override
   String get settingScreenHideNavigationBarDescription =>
       '关闭后，导航按钮会保留在屏幕上，平板上的任务栏也会显示。Kiosk 模式始终会隐藏它。';
+
+  @override
+  String get settingScreenShowOnLockScreenTitle => '在锁屏上显示';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      '在设有 PIN 码、图案或密码的锁屏上显示仪表盘。设备的其他部分仍保持锁定。';
 
   @override
   String get settingKeepScreenOnTitle => '保持屏幕开启';

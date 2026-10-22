@@ -8,6 +8,8 @@
   "settingScreenHideStatusBarDescription": "Schakel dit uit om de klok en meldingspictogrammen boven aan het scherm te houden. De kioskmodus verbergt de statusbalk altijd.",
   "settingScreenHideNavigationBarTitle": "Navigatiebalk verbergen",
   "settingScreenHideNavigationBarDescription": "Schakel dit uit om de navigatieknoppen op het scherm te houden, samen met de taakbalk op tablets. De kioskmodus verbergt de navigatiebalk altijd.",
+  "settingScreenShowOnLockScreenTitle": "Over vergrendelscherm tonen",
+  "settingScreenShowOnLockScreenDescription": "Toont het dashboard boven een vergrendelscherm met pincode, patroon of wachtwoord. De rest van het apparaat blijft vergrendeld.",
   "settingKeepScreenOnTitle": "Scherm ingeschakeld houden",
   "settingKeepScreenOnDescription": "Voorkom dat het besturingssysteem het scherm uitzet.",
   "settingSetBrightnessOnLaunchTitle": "Helderheid instellen bij opstarten",

@@ -10145,6 +10145,14 @@ class UiStringsNl extends UiStrings {
       'Schakel dit uit om de navigatieknoppen op het scherm te houden, samen met de taakbalk op tablets. De kioskmodus verbergt de navigatiebalk altijd.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Over vergrendelscherm tonen';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Toont het dashboard boven een vergrendelscherm met pincode, patroon of wachtwoord. De rest van het apparaat blijft vergrendeld.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Scherm ingeschakeld houden';
 
   @override

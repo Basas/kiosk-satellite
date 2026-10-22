@@ -10261,6 +10261,14 @@ class UiStringsDe extends UiStrings {
       'Deaktivieren, damit die Navigationstasten auf dem Bildschirm bleiben, auf Tablets auch die Taskleiste. Der Kioskmodus blendet sie immer aus.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Über dem Sperrbildschirm anzeigen';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Zeigt das Dashboard über einem Sperrbildschirm mit PIN, Muster oder Passwort an. Der Rest des Geräts bleibt gesperrt.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Bildschirm eingeschaltet lassen';
 
   @override

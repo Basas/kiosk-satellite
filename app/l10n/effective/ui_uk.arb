@@ -38060,6 +38060,32 @@
       ]
     }
   },
+  "settingScreenShowOnLockScreenTitle": "Показувати поверх екрана блокування",
+  "@settingScreenShowOnLockScreenTitle": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Setting label.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
+  "settingScreenShowOnLockScreenDescription": "Показує панель поверх екрана блокування з PIN-кодом, графічним ключем або паролем. Решта пристрою залишається заблокованою.",
+  "@settingScreenShowOnLockScreenDescription": {
+    "context": "Settings:Screen & Audio:Screen",
+    "description": "Help below the setting.",
+    "x-locations": {
+      "device": [
+        "Settings > Screen & Audio > Screen"
+      ],
+      "remoteAdmin": [
+        "Screen & Audio > Screen"
+      ]
+    }
+  },
   "settingKeepScreenOnTitle": "Не вимикати екран",
   "@settingKeepScreenOnTitle": {
     "context": "Settings:Screen & Audio:Screen",

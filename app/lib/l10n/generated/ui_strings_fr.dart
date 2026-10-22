@@ -10215,6 +10215,14 @@ class UiStringsFr extends UiStrings {
       'Désactivez cette option pour garder les boutons de navigation à l\'écran, ainsi que la barre des tâches sur les tablettes. Le mode kiosque la masque toujours.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Afficher par-dessus l\'écran de verrouillage';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Affiche le tableau de bord par-dessus un écran de verrouillage protégé par un code PIN, un schéma ou un mot de passe. Le reste de l\'appareil reste verrouillé.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Garder l\'écran allumé';
 
   @override

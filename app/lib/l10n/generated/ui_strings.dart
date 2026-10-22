@@ -17462,6 +17462,18 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Show over lock screen'**
+  String get settingScreenShowOnLockScreenTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the dashboard on top of a PIN, pattern or password lock screen. The rest of the device stays locked.'**
+  String get settingScreenShowOnLockScreenDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Keep screen on'**
   String get settingKeepScreenOnTitle;
 

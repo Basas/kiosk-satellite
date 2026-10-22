@@ -8,6 +8,8 @@
   "settingScreenHideStatusBarDescription": "Вимкніть, щоб годинник і значки сповіщень залишалися вгорі екрана. Режим кіоска завжди його приховує.",
   "settingScreenHideNavigationBarTitle": "Приховати панель навігації",
   "settingScreenHideNavigationBarDescription": "Вимкніть, щоб кнопки навігації залишалися на екрані разом із панеллю завдань на планшетах. Режим кіоска завжди її приховує.",
+  "settingScreenShowOnLockScreenTitle": "Показувати поверх екрана блокування",
+  "settingScreenShowOnLockScreenDescription": "Показує панель поверх екрана блокування з PIN-кодом, графічним ключем або паролем. Решта пристрою залишається заблокованою.",
   "settingKeepScreenOnTitle": "Не вимикати екран",
   "settingKeepScreenOnDescription": "Заборонити операційній системі вимикати екран.",
   "settingSetBrightnessOnLaunchTitle": "Встановлювати яскравість під час запуску",

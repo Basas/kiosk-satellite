@@ -8,6 +8,8 @@ const screenAudioTextMessageIds = <String, String>{
   "Turn off to keep the clock and notification icons at the top of the screen. Kiosk mode always hides it.": "settingScreenHideStatusBarDescription",
   "Hide navigation bar": "settingScreenHideNavigationBarTitle",
   "Turn off to keep the navigation buttons on screen, along with the taskbar on tablets. Kiosk mode always hides it.": "settingScreenHideNavigationBarDescription",
+  "Show over lock screen": "settingScreenShowOnLockScreenTitle",
+  "Show the dashboard on top of a PIN, pattern or password lock screen. The rest of the device stays locked.": "settingScreenShowOnLockScreenDescription",
   "Keep screen on": "settingKeepScreenOnTitle",
   "Prevent the OS from turning the screen off.": "settingKeepScreenOnDescription",
   "Set brightness on launch": "settingSetBrightnessOnLaunchTitle",

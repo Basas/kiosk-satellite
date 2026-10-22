@@ -10111,6 +10111,14 @@ class UiStringsRu extends UiStrings {
       'Выключите, чтобы кнопки навигации оставались на экране вместе с панелью задач на планшетах. Режим киоска всегда её скрывает.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Показывать поверх экрана блокировки';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Показывает панель поверх экрана блокировки с PIN-кодом, графическим ключом или паролем. Остальное устройство остаётся заблокированным.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Не выключать экран';
 
   @override

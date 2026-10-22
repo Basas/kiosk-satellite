@@ -10221,6 +10221,14 @@ class UiStringsEs extends UiStrings {
       'Desactívalo para mantener los botones de navegación en pantalla, junto con la barra de tareas en las tabletas. El modo kiosko siempre la oculta.';
 
   @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Mostrar sobre la pantalla de bloqueo';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Muestra el panel encima de una pantalla de bloqueo con PIN, patrón o contraseña. El resto del dispositivo sigue bloqueado.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Mantener la pantalla encendida';
 
   @override
