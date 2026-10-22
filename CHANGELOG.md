@@ -2,7 +2,7 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
-## Unreleased
+## v2026.10.35 - 2026-10-21
 
 ### Added
 - **Hand Clock style.** The Clock screensaver has a new **Hand Clock** style, a dial with hour, minute and seconds hands, ticks and numbers. **Numbers** shows them at 12, 3, 6 and 9 or at every hour, and **Show seconds hand** turns the seconds hand off. Font Family, Font weight, Clock size, Clock color, Background color, Background photo and Night mode all apply. See [Clock](https://github.com/jxlarrea/kiosk-satellite/blob/main/docs/screensavers.md#clock).
