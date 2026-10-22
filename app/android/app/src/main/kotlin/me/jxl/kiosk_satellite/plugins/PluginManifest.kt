@@ -186,6 +186,27 @@ class PluginManifest(val json: JSONObject) {
         for (key in values.keys()) merged.put(key, values.get(key))
     }
 
+    /**
+     * The saved settings a new version of the plugin keeps: the settings it still declares, with list rows keeping
+     * only the fields it still declares. A setting whose type changed still fails in [config].
+     */
+    fun kept(saved: JSONObject): JSONObject = JSONObject().also { kept ->
+        for ((key, setting) in topLevel) if (saved.has(key)) kept.put(key, keptValue(setting, saved.get(key)))
+    }
+
+    private fun keptValue(setting: JSONObject, value: Any): Any {
+        if (setting.getString("type") != "list" || value !is JSONArray) return value
+        val fields = setting.getJSONArray("fields")
+        val byKey = (0 until fields.length()).associate { fields.getJSONObject(it).let { f -> f.getString("key") to f } }
+        return JSONArray().also { rows ->
+            for (i in 0 until value.length()) {
+                val row = value.get(i)
+                if (row !is JSONObject) rows.put(row)
+                else rows.put(JSONObject().also { out -> for ((key, field) in byKey) if (row.has(key)) out.put(key, keptValue(field, row.get(key))) })
+            }
+        }
+    }
+
     /** Checks each value in [values] against its own setting, leaving out rules that depend on other settings. */
     fun checkValues(values: JSONObject) {
         val fields = topLevel

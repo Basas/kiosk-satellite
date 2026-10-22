@@ -1065,14 +1065,8 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             }
             require(manifest.id !in restartRequired) { "This plugin did not stop cleanly. Restart Kiosk Satellite before replacing it." }
             val previous = records.optJSONObject(manifest.id)
-            // Keep only settings still declared by the new version. Reject changed types.
-            val previousConfig = previous?.optJSONObject("config") ?: JSONObject()
-            val overrides = JSONObject()
-            for (i in 0 until manifest.settings.length()) {
-                val key = manifest.settings.getJSONObject(i).getString("key")
-                if (previousConfig.has(key)) overrides.put(key, previousConfig.get(key))
-            }
-            val config = manifest.config(overrides)
+            // Keep only settings and list row fields still declared by the new version. Reject changed types.
+            val config = manifest.config(manifest.kept(previous?.optJSONObject("config") ?: JSONObject()))
             val target = File(root, hash)
             val reuse = target.exists() && hash in loadedHashes
             if (target.exists()) {

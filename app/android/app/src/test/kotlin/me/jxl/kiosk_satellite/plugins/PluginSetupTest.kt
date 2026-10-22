@@ -209,6 +209,24 @@ class PluginSetupTest {
         assertTrue(value.choiceKeys.isEmpty())
     }
 
+    @Test fun updatesDropSettingsAndRowFieldsTheyNoLongerDeclare() {
+        val list = """{"key":"panels","type":"list","title":"Panels","default":[],"fields":[{"key":"sensor","type":"string","title":"Sensor"},
+          {"key":"lines","type":"list","title":"Lines","fields":[{"key":"sensor","type":"string","title":"Sensor"}]}]}"""
+        val value = PluginManifest(manifest { it.getJSONArray("settings").put(JSONObject(list)) })
+        val line = JSONObject().put("sensor", "fan").put("color", "#FFFFFF")
+        val saved = JSONObject().put("host", "bridge.local").put("removed", true)
+            .put("panels", JSONArray().put(JSONObject().put("sensor", "cpu").put("chart", "gpu").put("lines", JSONArray().put(line))))
+        rejects { value.config(saved) }
+        val kept = value.config(value.kept(saved))
+        assertEquals("bridge.local", kept["host"])
+        val panel = (kept["panels"] as List<*>)[0] as Map<*, *>
+        assertEquals("cpu", panel["sensor"])
+        assertFalse(panel.containsKey("chart"))
+        assertEquals(mapOf("sensor" to "fan"), (panel["lines"] as List<*>)[0])
+        // A changed type still fails.
+        rejects { value.config(value.kept(JSONObject().put("timeout", "slow"))) }
+    }
+
     @Test fun partialUpdatesKeepEverySavedValue() {
         val value = PluginManifest(manifest())
         val saved = JSONObject(value.config(JSONObject().put("host", "bridge.local").put("token", "secret").put("timeout", 120)))
