@@ -12,6 +12,7 @@
   "deviceCpuUsage": "CPU 使用率",
   "deviceCpuTemp": "CPU 温度",
   "deviceBatteryLevel": "电池电量",
+  "deviceBatteryTemp": "电池温度",
   "deviceScreenBrightness": "屏幕亮度",
   "deviceScreenStatus": "屏幕状态",
   "deviceScreenSize": "屏幕尺寸",

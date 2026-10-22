@@ -22403,5 +22403,10 @@
     "source": "3d0b8c0878ffd155c588903a17687910e9c1ac74d41a627c6365e12545d8bb1d",
     "translation": "5f5a50cced7dcc5aa8aa092d4000d27c116fa2133a1f2f9a59b7d2482f45b10d",
     "author": "Xavier Larrea"
+  },
+  "deviceBatteryTemp": {
+    "source": "f24963472b82af3772d82296e3afd121a845081e2484b53fcf5d12d6712acedc",
+    "translation": "225b3fe4c332e1c962e7df5fbd3f97aa809c5a806c39fbafa9c7e5f1b3feabba",
+    "author": "Xavier Larrea"
   }
 }

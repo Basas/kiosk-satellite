@@ -22064,6 +22064,16 @@
       ]
     }
   },
+  "deviceBatteryTemp": "Battery temperature",
+  "@deviceBatteryTemp": {
+    "context": "Settings:Device:Hardware / Home Assistant / WebView",
+    "description": "Label or explanation on this Device settings page.",
+    "x-locations": {
+      "remoteAdmin": [
+        "Device > Hardware / Home Assistant / WebView"
+      ]
+    }
+  },
   "deviceScreenBrightness": "Screen brightness",
   "@deviceScreenBrightness": {
     "context": "Settings:Device:Hardware / Home Assistant / WebView",

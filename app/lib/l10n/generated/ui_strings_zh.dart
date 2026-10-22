@@ -5575,6 +5575,9 @@ class UiStringsZh extends UiStrings {
   String get deviceBatteryLevel => '电池电量';
 
   @override
+  String get deviceBatteryTemp => '电池温度';
+
+  @override
   String get deviceScreenBrightness => '屏幕亮度';
 
   @override
@@ -19890,6 +19893,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get deviceBatteryLevel => '电池电量';
+
+  @override
+  String get deviceBatteryTemp => '电池温度';
 
   @override
   String get deviceScreenBrightness => '屏幕亮度';

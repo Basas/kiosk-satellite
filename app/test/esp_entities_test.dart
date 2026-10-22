@@ -26,6 +26,8 @@ void main() {
   var cameraPresent = true;
   // Null for a device without a battery (issue #367).
   int? battery = 73;
+  // Null for a battery whose HAL has no temperature sensor.
+  double? batteryTemp = 31.46;
   var cameraFacings = <String>['front', 'back'];
   var bluetooth = <String, Object?>{};
   var vsState = <String, Object?>{};
@@ -48,6 +50,7 @@ void main() {
       'releaseUrl': 'https://example/r',
     };
     battery = 73;
+    batteryTemp = 31.46;
     storage = {'free': 16384 * 1024 * 1024, 'total': 32768 * 1024 * 1024};
     dashboardsUnreachable = false;
     catalogChanges = 0;
@@ -137,6 +140,7 @@ void main() {
           'charging': true,
           'cpu': 12.4,
           'temp': 41,
+          'batteryTemp': batteryTemp,
         }),
       ),
     );
@@ -1043,6 +1047,7 @@ void main() {
         'charging',
         'cpu',
         'cpu_temp',
+        'battery_temp',
         'ram_free',
         'ram_total',
         'storage_free',
@@ -1378,6 +1383,29 @@ void main() {
     },
   );
 
+  test(
+    'a battery with no temperature sensor gets no Battery temperature entity',
+    () async {
+      batteryTemp = null;
+      final catalog = await surface.build();
+      final byObject = {for (final d in catalog) '${d['objectId']}': d};
+      expect(byObject.containsKey('battery_temp'), isFalse);
+      expect(byObject.containsKey('battery'), isTrue);
+      await attach();
+      final byId = {for (final (id, value) in pushed) id: value};
+      expect(byId.containsKey('battery_temp'), isFalse);
+    },
+  );
+
+  test('Battery temperature is a one-decimal temperature diagnostic', () async {
+    final catalog = await surface.build();
+    final entity = catalog.firstWhere((d) => d['objectId'] == 'battery_temp');
+    expect(entity['deviceClass'], 'temperature');
+    expect(entity['unit'], '°C');
+    expect(entity['category'], 2);
+    expect(entity['accuracyDecimals'], 1);
+  });
+
   test('attach pushes an initial snapshot from the live sources', () async {
     await surface.build();
     await attach();
@@ -1386,6 +1414,7 @@ void main() {
     expect(byId['charging'], true);
     expect(byId['cpu'], 12);
     expect(byId['cpu_temp'], 41);
+    expect(byId['battery_temp'], 31.5);
     expect(byId['ram_free'], 512);
     expect(byId['ram_total'], 4096);
     expect(byId['storage_free'], 16384);

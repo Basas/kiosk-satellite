@@ -12,6 +12,7 @@
   "deviceCpuUsage": "Загрузка ЦП",
   "deviceCpuTemp": "Температура ЦП",
   "deviceBatteryLevel": "Уровень заряда",
+  "deviceBatteryTemp": "Температура аккумулятора",
   "deviceScreenBrightness": "Яркость экрана",
   "deviceScreenStatus": "Состояние экрана",
   "deviceScreenSize": "Размер экрана",

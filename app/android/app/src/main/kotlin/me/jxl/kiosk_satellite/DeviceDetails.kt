@@ -506,6 +506,14 @@ class DeviceDetails(
      * kernel does not expose (0 on targets before Android 9), and the
      * plugin screens only -1, so a mains-powered box read "-2147483648%".
      * Null when the platform won't say, and the caller falls back.
+     *
+     * `temp` is the battery's own temperature in °C (EXTRA_TEMPERATURE, in
+     * tenths), which needs no permission and no sysfs read, so it answers
+     * on devices whose thermal zones the sandbox cannot see. A reading of
+     * exactly zero or outside -20..90 °C is a HAL with no sensor behind it
+     * and reads null. A battery at zero volts and zero degrees is not there
+     * at all: a mains-powered LineageOS Echo Show 8 reports one present at
+     * 100% with both at zero, so it counts as absent.
      */
     private fun battery(): Map<String, Any?>? {
         val intent = try {
@@ -513,7 +521,10 @@ class DeviceDetails(
         } catch (e: Exception) {
             null
         } ?: return null
-        val present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, true)
+        val tenths = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0)
+        val volts = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0)
+        val present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, true) &&
+            !(tenths == 0 && volts <= 0)
         val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
         val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
         val percent = if (!present || level < 0 || scale <= 0) {
@@ -521,7 +532,12 @@ class DeviceDetails(
         } else {
             (level * 100 / scale).takeIf { it in 0..100 }
         }
-        return mapOf("present" to present, "level" to percent)
+        val temp = if (!present || tenths == 0 || tenths !in -200..900) {
+            null
+        } else {
+            tenths / 10.0
+        }
+        return mapOf("present" to present, "level" to percent, "temp" to temp)
     }
 
     /**

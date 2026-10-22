@@ -5883,6 +5883,9 @@ class UiStringsEs extends UiStrings {
   String get deviceBatteryLevel => 'Nivel de batería';
 
   @override
+  String get deviceBatteryTemp => 'Temperatura de la batería';
+
+  @override
   String get deviceScreenBrightness => 'Brillo de pantalla';
 
   @override

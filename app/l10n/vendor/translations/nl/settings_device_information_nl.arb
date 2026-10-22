@@ -12,6 +12,7 @@
   "deviceCpuUsage": "CPU-gebruik",
   "deviceCpuTemp": "CPU-temperatuur",
   "deviceBatteryLevel": "Batterijniveau",
+  "deviceBatteryTemp": "Batterijtemperatuur",
   "deviceScreenBrightness": "Schermhelderheid",
   "deviceScreenStatus": "Schermstatus",
   "deviceScreenSize": "Schermgrootte",

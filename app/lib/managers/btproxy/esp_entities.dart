@@ -500,6 +500,10 @@ class EspEntitySurface {
     final stats = await commands.execute('getStats', const {});
     final cpuTempPresent =
         stats.ok && stats.data is Map && (stats.data as Map)['temp'] != null;
+    final batteryTempPresent =
+        stats.ok &&
+        stats.data is Map &&
+        (stats.data as Map)['batteryTemp'] != null;
     // A device without a battery gets no Battery sensor (issue #367): the
     // one gate every consumer reads through answers null for a mains-
     // powered box, and an entity that could only ever show a sentinel is
@@ -1053,6 +1057,18 @@ class EspEntitySurface {
           unit: '°C',
           stateClass: 1,
         ),
+      // A tenth of a degree, as BatteryManager reports it.
+      if (batteryTempPresent)
+        {
+          ...diagnostic(
+            'battery_temp',
+            'Battery temperature',
+            deviceClass: 'temperature',
+            unit: '°C',
+            stateClass: 1,
+          ),
+          'accuracyDecimals': 1,
+        },
       diagnostic(
         'ram_free',
         'RAM available',
@@ -2981,6 +2997,10 @@ class EspEntitySurface {
       if (cpu != null) await _send('cpu', cpu);
       final temp = data['temp'] as num?;
       if (temp != null) await _send('cpu_temp', temp.round());
+      final batteryTemp = data['batteryTemp'] as num?;
+      if (batteryTemp != null) {
+        await _send('battery_temp', (batteryTemp * 10).round() / 10);
+      }
     }
     final details = await commands.execute('getDeviceDetails', const {});
     final ram = details.ok && details.data is Map

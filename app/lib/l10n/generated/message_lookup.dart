@@ -1640,6 +1640,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'deviceCpuUsage' => strings.deviceCpuUsage,
       'deviceCpuTemp' => strings.deviceCpuTemp,
       'deviceBatteryLevel' => strings.deviceBatteryLevel,
+      'deviceBatteryTemp' => strings.deviceBatteryTemp,
       'deviceScreenBrightness' => strings.deviceScreenBrightness,
       'deviceScreenStatus' => strings.deviceScreenStatus,
       'deviceScreenSize' => strings.deviceScreenSize,

@@ -5821,6 +5821,9 @@ class UiStringsRu extends UiStrings {
   String get deviceBatteryLevel => 'Уровень заряда';
 
   @override
+  String get deviceBatteryTemp => 'Температура аккумулятора';
+
+  @override
   String get deviceScreenBrightness => 'Яркость экрана';
 
   @override

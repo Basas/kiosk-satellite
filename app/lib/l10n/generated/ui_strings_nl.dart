@@ -5852,6 +5852,9 @@ class UiStringsNl extends UiStrings {
   String get deviceBatteryLevel => 'Batterijniveau';
 
   @override
+  String get deviceBatteryTemp => 'Batterijtemperatuur';
+
+  @override
   String get deviceScreenBrightness => 'Schermhelderheid';
 
   @override

@@ -12,6 +12,7 @@
   "deviceCpuUsage": "CPU-Auslastung",
   "deviceCpuTemp": "CPU-Temperatur",
   "deviceBatteryLevel": "Akkustand",
+  "deviceBatteryTemp": "Akkutemperatur",
   "deviceScreenBrightness": "Bildschirmhelligkeit",
   "deviceScreenStatus": "Bildschirmstatus",
   "deviceScreenSize": "Bildschirmgröße",

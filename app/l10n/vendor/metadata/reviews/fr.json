@@ -26934,5 +26934,11 @@
     "translation": "16d5fdc1c3beafb868392a9d4c53c47b357990190ba63c1bbc91d0940f172f55",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "deviceBatteryTemp": {
+    "source": "f24963472b82af3772d82296e3afd121a845081e2484b53fcf5d12d6712acedc",
+    "translation": "232b4f154b353694536391cc2f02705297d586fdd64e7181a3d1eadd23968762",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

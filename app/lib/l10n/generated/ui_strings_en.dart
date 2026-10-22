@@ -5784,6 +5784,9 @@ class UiStringsEn extends UiStrings {
   String get deviceBatteryLevel => 'Battery level';
 
   @override
+  String get deviceBatteryTemp => 'Battery temperature';
+
+  @override
   String get deviceScreenBrightness => 'Screen brightness';
 
   @override

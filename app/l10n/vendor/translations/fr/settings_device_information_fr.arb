@@ -12,6 +12,7 @@
   "deviceCpuUsage": "Utilisation du CPU",
   "deviceCpuTemp": "Température du CPU",
   "deviceBatteryLevel": "Niveau de batterie",
+  "deviceBatteryTemp": "Température de la batterie",
   "deviceScreenBrightness": "Luminosité de l'écran",
   "deviceScreenStatus": "État de l'écran",
   "deviceScreenSize": "Taille de l'écran",

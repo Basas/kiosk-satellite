@@ -5,9 +5,11 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Added
+- **Battery temperature sensor.** Devices with a battery have a new **Battery temperature** diagnostic sensor in Home Assistant, read from Android's battery report. It needs no permission, so it works on devices that report no CPU temperature. It also shows on the **Hardware** page of the remote admin, under **Battery level**.
 - **Plugins can turn a choice off.** The new `setSettingChoicesEnabled` SDK method turns a plugin's choices setting or list row field off while it cannot work, such as while the device it lists from is unreachable, and back on. Off, its picker and its Refresh button do not open on the device or in the remote admin, and the saved choice still shows.
 
 ### Fixed
+- **Devices without a battery showed one at 100%.** Some ROMs, such as LineageOS on the Echo Show 8, report a battery that is present and full but at zero volts and zero degrees. Kiosk Satellite now treats that as no battery, so these devices get no Battery sensor in Home Assistant and no battery in the remote admin or the screensaver widget.
 - **Portals woke to the dashboard with Person under Wake to screensaver.** Portal OS turns the screen on by itself when it sees someone, and Kiosk Satellite took that wake for the power button, so the screensaver flashed and the dashboard opened. It now reads what woke the screen from the system log, so a wake from the Portal's person detection keeps the screensaver with **Person** picked under **Wake to screensaver**. The power button still opens the dashboard. Picking **Person** also reads the person sensor without the **Enable person sensor** switch (#1092).
 - **Portals turned the screen back on after the power button.** Every time a Portal goes to sleep, its stock dream opens the home app. Kiosk Satellite took that for a Home press when the power button turned the screen off, so it stopped the screensaver and turned the screen back on a few seconds later. It now ignores the dream's Home and the screen stays off.
 - **Plugin updates failed after a list lost a field.** Updating a plugin whose new version removes a field from a list setting's rows failed with "Unknown plugin setting" once any rows were saved. Kiosk Satellite now drops that field from the saved rows, the way it already drops a removed setting.

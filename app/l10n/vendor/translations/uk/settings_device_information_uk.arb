@@ -12,6 +12,7 @@
   "deviceCpuUsage": "Використання процесора",
   "deviceCpuTemp": "Температура процесора",
   "deviceBatteryLevel": "Рівень заряду акумулятора",
+  "deviceBatteryTemp": "Температура акумулятора",
   "deviceScreenBrightness": "Яскравість екрана",
   "deviceScreenStatus": "Стан екрана",
   "deviceScreenSize": "Розмір екрана",

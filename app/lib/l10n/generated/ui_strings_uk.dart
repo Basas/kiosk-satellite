@@ -5833,6 +5833,9 @@ class UiStringsUk extends UiStrings {
   String get deviceBatteryLevel => 'Рівень заряду акумулятора';
 
   @override
+  String get deviceBatteryTemp => 'Температура акумулятора';
+
+  @override
   String get deviceScreenBrightness => 'Яскравість екрана';
 
   @override

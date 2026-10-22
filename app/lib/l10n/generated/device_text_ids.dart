@@ -241,6 +241,7 @@ const deviceTextMessageIds = <String, String>{
   "CPU usage": "deviceCpuUsage",
   "CPU temperature": "deviceCpuTemp",
   "Battery level": "deviceBatteryLevel",
+  "Battery temperature": "deviceBatteryTemp",
   "Screen brightness": "deviceScreenBrightness",
   "Screen status": "deviceScreenStatus",
   "Screen size": "deviceScreenSize",

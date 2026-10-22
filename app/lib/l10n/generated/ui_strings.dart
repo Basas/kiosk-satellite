@@ -10147,6 +10147,12 @@ abstract class UiStrings {
   /// Label or explanation on this Device settings page.
   ///
   /// In en, this message translates to:
+  /// **'Battery temperature'**
+  String get deviceBatteryTemp;
+
+  /// Label or explanation on this Device settings page.
+  ///
+  /// In en, this message translates to:
   /// **'Screen brightness'**
   String get deviceScreenBrightness;
 

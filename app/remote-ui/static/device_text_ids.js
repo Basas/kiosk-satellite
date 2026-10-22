@@ -241,6 +241,7 @@ export const deviceTextMessageIds = {
   "CPU usage": "deviceCpuUsage",
   "CPU temperature": "deviceCpuTemp",
   "Battery level": "deviceBatteryLevel",
+  "Battery temperature": "deviceBatteryTemp",
   "Screen brightness": "deviceScreenBrightness",
   "Screen status": "deviceScreenStatus",
   "Screen size": "deviceScreenSize",

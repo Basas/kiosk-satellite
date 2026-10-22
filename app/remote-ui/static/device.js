@@ -294,6 +294,8 @@ export async function loadDeviceInfo() {
     [deviceText('CPU temperature'), info?.temp == null ? '-' : `${Math.round(info.temp)}°C`],
     [deviceText('Battery level'), info?.battery == null ? '-'
       : `${info.battery}%${info.charging ? ` (${deviceText('plugged')})` : ''}`],
+    [deviceText('Battery temperature'), info?.batteryTemp == null ? '-'
+      : `${info.batteryTemp.toFixed(1)}°C`],
     [deviceText('Screen brightness'), info?.brightness == null ? '-'
       : `${Math.round(info.brightness * 100)}% (${Math.round(info.brightness * 255)}/255)`],
     [deviceText('Screen status'), yn(screenOn)],

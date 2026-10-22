@@ -124,9 +124,10 @@ class DeviceDetails {
   /// kernel's own word on whether the device has one, `level` the charge
   /// percent screened through [batteryPercent], so a battery-less device
   /// reads null rather than the sentinel Android answers for a property
-  /// it cannot read. Null off Android or when the platform won't say, and
-  /// the caller falls back to the plugin read.
-  static Future<({bool present, int? level})?> battery() async {
+  /// it cannot read. `temp` is the battery's temperature in °C, null when
+  /// the HAL has no sensor behind it. Null off Android or when the platform
+  /// won't say, and the caller falls back to the plugin read.
+  static Future<({bool present, int? level, double? temp})?> battery() async {
     try {
       final raw = await _channel.invokeMapMethod<String, Object?>('battery');
       if (raw == null) return null;
@@ -134,6 +135,7 @@ class DeviceDetails {
       return (
         present: present,
         level: present ? batteryPercent(raw['level']) : null,
+        temp: present ? (raw['temp'] as num?)?.toDouble() : null,
       );
     } catch (_) {
       return null;
