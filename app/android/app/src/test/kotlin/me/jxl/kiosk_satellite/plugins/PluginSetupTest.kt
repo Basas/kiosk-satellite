@@ -105,6 +105,20 @@ class PluginSetupTest {
         rejects { setup.setChoices("tiles.sensor", arrayOf("a"), null) }
     }
 
+    @Test fun choicesTurnOffAndBackOn() {
+        val setup = PluginSetup(PluginManifest(panels()))
+        assertEquals(emptyList<String>(), setup.snapshot()["choicesOff"])
+        setup.setChoicesEnabled("panels.sensor", false)
+        setup.setChoicesEnabled("device", false)
+        assertFalse(setup.choicesEnabled("panels.sensor"))
+        assertEquals(listOf("panels.sensor", "device"), setup.snapshot()["choicesOff"])
+        setup.setChoicesEnabled("panels.sensor", true)
+        assertTrue(setup.choicesEnabled("panels.sensor"))
+        assertEquals(listOf("device"), setup.snapshot()["choicesOff"])
+        rejects { setup.setChoicesEnabled("host", false) }
+        rejects { setup.setChoicesEnabled("panels.label", false) }
+    }
+
     @Test fun richChoicesCarryGroupsAndDetails() {
         val setup = PluginSetup(PluginManifest(panels()))
         setup.setChoices("panels.sensor", listOf(

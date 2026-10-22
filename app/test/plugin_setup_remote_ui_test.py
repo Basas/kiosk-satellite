@@ -40,7 +40,7 @@ plugin = {
     'values': {'host': '', 'token': '__set__', 'device': 'lamp-2'},
 }
 installed = [copy.deepcopy(plugin)]
-setup = {'runs': {}, 'choices': {}, 'choiceRevisions': {}}
+setup = {'runs': {}, 'choices': {}, 'choiceRevisions': {}, 'choicesOff': []}
 requests = []
 served = []
 
@@ -63,7 +63,7 @@ def api(route):
     elif name == 'getPluginSetup':
         # A caller holding a list's revision does not get it again.
         held = params.get('choiceRevisions')
-        result = {'runs': setup['runs'], 'choiceRevisions': setup['choiceRevisions'],
+        result = {'runs': setup['runs'], 'choiceRevisions': setup['choiceRevisions'], 'choicesOff': setup['choicesOff'],
                   'choices': {k: v for k, v in setup['choices'].items()
                               if held is None or held.get(k) != setup['choiceRevisions'][k]}}
         served.append(result['choices'])
@@ -192,6 +192,18 @@ try:
         assert calls('getPluginSetup')[-1]['choiceRevisions'] == {'device': 1}, calls('getPluginSetup')[-1]
         assert served[-1] == {}, served[-1]
         expect(choice_row.locator('.dp-field')).to_contain_text('Kitchen')
+
+        # The plugin can turn the choice off, such as while its device is
+        # unreachable: the picker and Refresh stop opening, the choice stays.
+        setup['choicesOff'] = ['device']
+        refresh_setup()
+        expect(choice_row.locator('.dp-field')).to_be_disabled()
+        expect(choice_row.get_by_role('button', name='Refresh')).to_be_disabled()
+        expect(choice_row.locator('.dp-field')).to_contain_text('Kitchen')
+        setup['choicesOff'] = []
+        refresh_setup()
+        expect(choice_row.locator('.dp-field')).to_be_enabled()
+        expect(choice_row.get_by_role('button', name='Refresh')).to_be_enabled()
 
         # Groups head their choices in the order they appear. A detail is the
         # second line and search finds it. A choice without a group has no heading.

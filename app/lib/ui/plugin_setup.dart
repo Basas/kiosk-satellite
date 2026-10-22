@@ -249,6 +249,10 @@ String _emptyText(BuildContext context, String? text) =>
   final list = pluginChoiceList(plugins, pluginId, path);
   final run = pluginSetupRun(plugins, pluginId, 'choices:$path');
   final busy = run?['state'] == 'running';
+  // The plugin turned it off, such as while its device cannot be reached.
+  final off =
+      (plugins.setup.value[pluginId]?['choicesOff'] as List?)?.contains(path) ??
+      false;
   final status =
       pluginSetupStatus(context, run) ??
       (running && (list == null || list.items.isEmpty)
@@ -258,7 +262,7 @@ String _emptyText(BuildContext context, String? text) =>
     value: value,
     list: list,
     placeholder: deviceText(context, 'Not set'),
-    enabled: enabled,
+    enabled: enabled && !off,
     onTap: () async {
       final outcome = await showItemPicker(
         context,
@@ -289,7 +293,7 @@ String _emptyText(BuildContext context, String? text) =>
       : IconButton(
           tooltip: pluginText(context, 'Refresh'),
           icon: const Icon(Icons.refresh),
-          onPressed: running
+          onPressed: running && !off
               ? () => startPluginSetup(
                   context,
                   plugins,

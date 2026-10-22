@@ -4,6 +4,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 
 ## Unreleased
 
+### Added
+- **Plugins can turn a choice off.** The new `setSettingChoicesEnabled` SDK method turns a plugin's choices setting or list row field off while it cannot work, such as while the device it lists from is unreachable, and back on. Off, its picker and its Refresh button do not open on the device or in the remote admin, and the saved choice still shows.
+
 ### Fixed
 - **Plugin pickers blamed Home Assistant before a plugin listed its choices.** Opening the picker of a plugin setting whose choices the plugin had not listed yet, such as a sensor picker before any computer is added, showed "Could not reach Home Assistant". It now shows the plugin's own message from the new `emptyText` manifest field, such as what to set up first, or "No choices yet. Refresh to look for them." without one.
 

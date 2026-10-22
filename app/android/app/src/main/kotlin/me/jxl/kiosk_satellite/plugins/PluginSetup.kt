@@ -32,6 +32,8 @@ class PluginSetup(private val manifest: PluginManifest, private val store: File?
 
     private val runs = linkedMapOf<String, Run>()
     private val choices = linkedMapOf<String, Listed>()
+    /** Choices the plugin turned off for this session, such as while the device they come from is unreachable. */
+    private val off = linkedSetOf<String>()
     private val writing = Any()
 
     init { restore() }
@@ -142,6 +144,13 @@ class PluginSetup(private val manifest: PluginManifest, private val store: File?
 
     @Synchronized fun hasChoices() = choices.isNotEmpty()
 
+    @Synchronized fun setChoicesEnabled(key: String, enabled: Boolean) {
+        require(key in manifest.choiceKeys) { "Setting $key does not take plugin choices" }
+        if (enabled) off.remove(key) else off.add(key)
+    }
+
+    @Synchronized fun choicesEnabled(key: String) = key !in off
+
     /**
      * Runs, the revision of each key's choices and the choices themselves. With [sent], only the
      * lists whose revision it lacks come along, and it records them, so an unchanged list is not
@@ -152,6 +161,7 @@ class PluginSetup(private val manifest: PluginManifest, private val store: File?
             mapOf("run" to run.id, "state" to run.state, "message" to run.message, "code" to run.code, "origin" to run.origin, "confirm" to run.confirm)
         },
         "choiceRevisions" to choices.mapValues { it.value.revision },
+        "choicesOff" to off.toList(),
         "choices" to LinkedHashMap(choices.filter { (key, listed) -> sent == null || sent.put(key, listed.revision) != listed.revision }.mapValues { it.value.items }),
     )
 

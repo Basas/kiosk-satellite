@@ -1297,7 +1297,7 @@ void main() {
       expect(plugins.setup.value, isEmpty);
       expect(
         (await commands.execute('getPluginSetup', {'id': 'hello-world'})).data,
-        {'runs': {}, 'choiceRevisions': {}, 'choices': {}},
+        {'runs': {}, 'choiceRevisions': {}, 'choicesOff': [], 'choices': {}},
       );
       final run = await commands.execute('runPluginSetup', {
         'id': 'hello-world',
@@ -1591,6 +1591,45 @@ void main() {
     expect(save['patch'], isTrue);
     expect(find.text('This choice is no longer listed.'), findsNothing);
     expect(find.text('Kitchen'), findsOneWidget);
+    // The plugin can turn the choice off, such as while its device is
+    // unreachable: the picker and Refresh stop opening, the choice stays.
+    await native('setup', {
+      'id': 'hello-world',
+      'session': 's',
+      'setup': {
+        'runs': const {},
+        'choices': {
+          'device': [
+            {'id': 'lamp-1', 'label': 'Kitchen'},
+          ],
+        },
+        'choicesOff': ['device'],
+      },
+    });
+    await tester.pump();
+    expect(tester.widget<PickField>(find.byType(PickField)).enabled, isFalse);
+    expect(
+      tester
+          .widget<IconButton>(find.widgetWithIcon(IconButton, Icons.refresh))
+          .onPressed,
+      isNull,
+    );
+    expect(find.text('Kitchen'), findsOneWidget);
+    await native('setup', {
+      'id': 'hello-world',
+      'session': 's',
+      'setup': {
+        'runs': const {},
+        'choices': {
+          'device': [
+            {'id': 'lamp-1', 'label': 'Kitchen'},
+          ],
+        },
+        'choicesOff': [],
+      },
+    });
+    await tester.pump();
+    expect(tester.widget<PickField>(find.byType(PickField)).enabled, isTrue);
     expect(tester.takeException(), isNull);
   });
 

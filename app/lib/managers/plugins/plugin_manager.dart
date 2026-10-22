@@ -1253,9 +1253,11 @@ class PluginManager extends Manager implements FleetPluginHost {
     final revisions = value['choiceRevisions'] as Map?;
     final held = previous?['choices'] as Map? ?? const {};
     final runs = jsonDecode(jsonEncode(value['runs'] ?? const {}));
+    final off = [...?(value['choicesOff'] as List?)];
     final next = <String, Object?>{
       'runs': runs,
       'choiceRevisions': {...?revisions},
+      'choicesOff': off,
       'choices': {
         for (final key in revisions?.keys ?? sent.keys)
           if (sent.containsKey(key))
@@ -1267,6 +1269,7 @@ class PluginManager extends Manager implements FleetPluginHost {
     if (sent.isEmpty &&
         previous != null &&
         jsonEncode(previous['runs']) == jsonEncode(runs) &&
+        jsonEncode(previous['choicesOff']) == jsonEncode(off) &&
         jsonEncode(previous['choiceRevisions']) ==
             jsonEncode(next['choiceRevisions'])) {
       return;
@@ -1300,6 +1303,7 @@ class PluginManager extends Manager implements FleetPluginHost {
     return {
       'runs': state?['runs'] ?? const {},
       'choiceRevisions': revisions,
+      'choicesOff': state?['choicesOff'] ?? const [],
       'choices': paths.isEmpty
           ? sent
           : {

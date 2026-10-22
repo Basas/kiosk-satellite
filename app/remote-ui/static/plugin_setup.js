@@ -87,8 +87,9 @@ export function setupButtonRow(plugin, button, settled) {
 export function choiceControl(plugin, setting, value, settled, onPick) {
   const spec = choiceSpec(plugin.id, setting.key, setting.emptyText);
   let picked = value;
+  const open = plugin.running === true || !!value;
   const field = pickField({
-    spec, value, placeholder: deviceText('Not set'), enabled: plugin.running === true || !!value,
+    spec, value, placeholder: deviceText('Not set'), enabled: open && !choicesOff(plugin.id, setting.key),
     onClick: async () => {
       const out = await pickItem({ title: setting.title, spec, selected: picked || null, allowClear: true });
       if (!out || (out.id ?? '') === picked) return;
@@ -116,6 +117,7 @@ export function choiceControl(plugin, setting, value, settled, onPick) {
     attach(row) {
       row.dataset.setupTarget = target;
       row.dataset.setupPlugin = plugin.id;
+      row.choicesSwitched = (off) => field.setEnabled(open && !off);
       if (setting.emptyText) row.dataset.choicesEmpty = setting.emptyText;
       refresh.onclick = async () => {
         if (row.dataset.running === 'true') await cancel(plugin, target);
@@ -168,16 +170,24 @@ export function watchPluginSetup(id) {
   if (!states.has(id)) refreshPluginSetup(id);
 }
 
+// Whether the plugin turned the choices at [key] off, such as while its
+// device cannot be reached.
+function choicesOff(id, key) {
+  return !!states.get(id)?.choicesOff?.includes(key);
+}
+
 function paint(row, id, running) {
   const state = states.get(id) || {};
   const target = row.dataset.setupTarget;
   const run = state.runs?.[target] || null;
   const busy = run?.state === 'running';
+  const off = target.startsWith('choices:') && choicesOff(id, target.slice('choices:'.length));
+  row.choicesSwitched?.(off);
   row.dataset.running = String(busy);
   const start = row.querySelector('.plugin-setup-start');
   if (start) {
-    start.dataset.pluginDisabled = String(!running);
-    start.disabled = !running;
+    start.dataset.pluginDisabled = String(!running || off);
+    start.disabled = !running || (off && !busy);
     if (start.dataset.label) {
       start.textContent = busy ? pluginText('Cancel') : start.dataset.label;
       start.classList.toggle('plugin-setup-running', busy);
@@ -214,7 +224,7 @@ export async function refreshPluginSetup(id) {
     const list = key in sent ? sent[key] : states.get(id)?.choices?.[key];
     if (list) { choices[key] = list; kept[key] = revision; }
   }
-  states.set(id, { runs: data.runs || {}, choiceRevisions: kept, choices });
+  states.set(id, { runs: data.runs || {}, choiceRevisions: kept, choices, choicesOff: data.choicesOff || [] });
   applyPluginSetup(id);
 }
 

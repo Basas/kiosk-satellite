@@ -580,6 +580,11 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
                 setup.setChoices(key, requireNotNull(choices) { "Missing choices" })
                 notifySetup()
             }
+            override fun setSettingChoicesEnabled(key: String, enabled: Boolean) {
+                check(alive.get()) { "Plugin session has ended" }
+                setup.setChoicesEnabled(key, enabled)
+                notifySetup()
+            }
             private fun publishEntity(type: String, key: String, name: String, metadata: Map<String, Any>, state: Any?) {
                 check(alive.get() && "entities" in manifest.capabilities) { "SDK 1 entities access is required" }
                 entities.publish(type, key, name, metadata, state)
@@ -1380,6 +1385,7 @@ class PluginBridge(private val context: Context, messenger: BinaryMessenger) {
             }
             "choices" -> {
                 require(manifest.choicesVisible(key, config)) { "Unknown or hidden choices setting" }
+                require(session.setup.choicesEnabled(key)) { "The plugin turned this choice off" }
                 Triple("choices:$key", "settings.choices", "key")
             }
             else -> throw IllegalArgumentException("Unknown setup target")
