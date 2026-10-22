@@ -924,7 +924,9 @@ class KioskManager extends Manager with WidgetsBindingObserver {
   /// every sleep and that dream launches HOME, which with the kiosk as the
   /// home app arrived here a second after the kiosk's own screenOff; the
   /// screensaver dismissal it triggered lit the panel again, so an
-  /// explicit screen off never held (issue #553).
+  /// explicit screen off never held (issue #553). That HOME is now dropped
+  /// natively by its extra (HomeRole.isHomePress), since after a power
+  /// button press its SCREEN_OFF arrives here seconds after it.
   void onHomePressed() {
     if (!_screenOn) {
       log.info(name, 'HOME while the screen is off: ignored');
