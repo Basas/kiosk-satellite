@@ -319,7 +319,15 @@ class PluginHostApi {
   static const _fields = {
     'getLightLevel': ['present', 'lux', 'live'],
     'getNoiseLevel': ['available', 'dbfs', 'held', 'updated'],
-    'getStats': ['battery', 'charging', 'cpu', 'temp', 'memFree', 'memTotal'],
+    'getStats': [
+      'battery',
+      'charging',
+      'cpu',
+      'temp',
+      'batteryTemp',
+      'memFree',
+      'memTotal',
+    ],
     'getUptime': ['app', 'network'],
     'getDeviceInfo': [
       'name',

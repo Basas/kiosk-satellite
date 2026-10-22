@@ -310,6 +310,26 @@ void main() {
     },
   );
 
+  test('getStats carries the battery temperature', () async {
+    register(
+      'getStats',
+      (_) async => const CommandResult.ok({
+        'battery': 64,
+        'charging': false,
+        'cpu': 18.5,
+        'temp': 44.0,
+        'batteryTemp': 31.8,
+        'memFree': 1073741824,
+        'memTotal': 4294967296,
+        'thermalZones': ['cpu-0'],
+      }),
+    );
+    final data = (await read('getStats'))['data'] as Map;
+    expect(data['batteryTemp'], 31.8);
+    expect(data['temp'], 44.0);
+    expect(data.containsKey('thermalZones'), false);
+  });
+
   test(
     'missing capability, stale sessions and stopped reads are rejected',
     () async {
@@ -834,7 +854,10 @@ void main() {
       ]) {
         expect((await run('setScreensaverMode', params: params))['ok'], false);
       }
-      expect((await run('clearScreensaverMode', params: {'x': 'y'}))['ok'], false);
+      expect(
+        (await run('clearScreensaverMode', params: {'x': 'y'}))['ok'],
+        false,
+      );
       final unknown = await run('setScreensaverMode', params: {'mode': 'nope'});
       expect(unknown['ok'], false);
       expect(unknown['error'], 'Unknown screensaver mode');

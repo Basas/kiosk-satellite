@@ -5,7 +5,7 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ## Unreleased
 
 ### Added
-- **Battery temperature sensor.** Devices with a battery have a new **Battery temperature** diagnostic sensor in Home Assistant, read from Android's battery report. It needs no permission, so it works on devices that report no CPU temperature. It also shows on the **Hardware** page of the remote admin, under **Battery level**.
+- **Battery temperature sensor.** Devices with a battery have a new **Battery temperature** diagnostic sensor in Home Assistant, read from Android's battery report. It needs no permission, so it works on devices that report no CPU temperature. It also shows on the **Hardware** page of the remote admin, under **Battery level**. Plugins read it as `batteryTemp` from `getStats`.
 - **Plugins can turn a choice off.** The new `setSettingChoicesEnabled` SDK method turns a plugin's choices setting or list row field off while it cannot work, such as while the device it lists from is unreachable, and back on. Off, its picker and its Refresh button do not open on the device or in the remote admin, and the saved choice still shows.
 
 ### Fixed
