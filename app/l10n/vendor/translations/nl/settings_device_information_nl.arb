@@ -10,6 +10,7 @@
   "deviceAppUptime": "Actieve tijd van app",
   "deviceNetworkUptime": "Actieve tijd van netwerk",
   "deviceCpuUsage": "CPU-gebruik",
+  "deviceCpuClock": "CPU-kloksnelheid",
   "deviceCpuTemp": "CPU-temperatuur",
   "deviceBatteryLevel": "Batterijniveau",
   "deviceBatteryTemp": "Batterijtemperatuur",

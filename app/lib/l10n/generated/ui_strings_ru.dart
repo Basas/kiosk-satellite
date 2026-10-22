@@ -5815,6 +5815,9 @@ class UiStringsRu extends UiStrings {
   String get deviceCpuUsage => 'Загрузка ЦП';
 
   @override
+  String get deviceCpuClock => 'Частота ЦП';
+
+  @override
   String get deviceCpuTemp => 'Температура ЦП';
 
   @override

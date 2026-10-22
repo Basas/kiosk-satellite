@@ -5569,6 +5569,9 @@ class UiStringsZh extends UiStrings {
   String get deviceCpuUsage => 'CPU 使用率';
 
   @override
+  String get deviceCpuClock => 'CPU 频率';
+
+  @override
   String get deviceCpuTemp => 'CPU 温度';
 
   @override
@@ -19887,6 +19890,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get deviceCpuUsage => 'CPU 使用率';
+
+  @override
+  String get deviceCpuClock => 'CPU 频率';
 
   @override
   String get deviceCpuTemp => 'CPU 温度';

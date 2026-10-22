@@ -239,6 +239,7 @@ const deviceTextMessageIds = <String, String>{
   "App uptime": "deviceAppUptime",
   "Network uptime": "deviceNetworkUptime",
   "CPU usage": "deviceCpuUsage",
+  "CPU clock": "deviceCpuClock",
   "CPU temperature": "deviceCpuTemp",
   "Battery level": "deviceBatteryLevel",
   "Battery temperature": "deviceBatteryTemp",

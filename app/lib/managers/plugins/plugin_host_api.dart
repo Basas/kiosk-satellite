@@ -323,6 +323,7 @@ class PluginHostApi {
       'battery',
       'charging',
       'cpu',
+      'cpuClock',
       'temp',
       'batteryTemp',
       'memFree',

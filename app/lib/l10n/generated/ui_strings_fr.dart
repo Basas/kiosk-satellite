@@ -5873,6 +5873,9 @@ class UiStringsFr extends UiStrings {
   String get deviceCpuUsage => 'Utilisation du CPU';
 
   @override
+  String get deviceCpuClock => 'Fréquence du CPU';
+
+  @override
   String get deviceCpuTemp => 'Température du CPU';
 
   @override

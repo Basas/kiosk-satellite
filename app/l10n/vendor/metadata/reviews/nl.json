@@ -26936,5 +26936,11 @@
     "translation": "b3bc03638252fe31c4f5b5d78108f794550255f757738fd8131b27441997f4a3",
     "author": "Xavier Larrea",
     "ownerAuthored": true
+  },
+  "deviceCpuClock": {
+    "source": "96b5f11930d1d5d3fd2e68af5492ca050db6cd2d9843ff5eb70b918c4c1dcdd9",
+    "translation": "b481002e6d64ca7cd089ea1a0895b260fd5f5b33daf108ae80f98ce5c54b03d7",
+    "author": "Xavier Larrea",
+    "ownerAuthored": true
   }
 }

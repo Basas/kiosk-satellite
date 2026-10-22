@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "repository": "https://github.com/jxlarrea/kiosk-satellite",
-  "revision": "6c55b1430ffd1ac5c2e7a16c27590ebd31c7bef2",
+  "revision": "37ea8b98be86ef84e979a70b26d5af6d282e40c1",
   "workingTree": true,
   "files": {
     "about_identity_en.arb": "dd006567f69f846e2e3b73f09ad13784f0022d282ea3101fa9be7fc95175ec2d",
@@ -88,7 +88,7 @@
     "settings_device_analytics_en.arb": "5292b4b76300c1778474159f823c126c5a2c432be9aa4b7b31510e964c47e745",
     "settings_device_configuration_en.arb": "794a1a47defafd2faf983ffca852f6a368936cd48a8c83291af54d5fab593e8f",
     "settings_device_en.arb": "c984561fea75d41c67780433af0e50eec1606c856f0c12c34fbe4cc35aa8af39",
-    "settings_device_information_en.arb": "9001ca2efbcac787a622d07884c29bd13eae5a09e12cecc8a5d32ecce98befe2",
+    "settings_device_information_en.arb": "3d093e9af968fbe85339f29aacb1813093add8295af51f8374026d7afed47d42",
     "settings_device_permissions_en.arb": "808b5bc4c66bd941a1cdea0e101df97b3ab2210ca746986fae13d35acfef796c",
     "settings_device_remote_administration_en.arb": "c3881e729e892cf7e352ee2521ae015b335f9e1f3e79b2ce39d08542d359ab81",
     "settings_device_service_en.arb": "da7ef8a17474d17b19d3022d8bfd577ff329395cd3364effa8ca36d1e621ae14",

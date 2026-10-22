@@ -5916,6 +5916,9 @@ class UiStringsDe extends UiStrings {
   String get deviceCpuUsage => 'CPU-Auslastung';
 
   @override
+  String get deviceCpuClock => 'CPU-Takt';
+
+  @override
   String get deviceCpuTemp => 'CPU-Temperatur';
 
   @override

@@ -500,6 +500,15 @@ class EspEntitySurface {
     final stats = await commands.execute('getStats', const {});
     final cpuTempPresent =
         stats.ok && stats.data is Map && (stats.data as Map)['temp'] != null;
+    // CPU usage only where a load source is readable, and CPU clock only
+    // where cpufreq is. A device with neither used to get the clock position
+    // passed off as load (issue #824).
+    final cpuUsagePresent =
+        stats.ok && stats.data is Map && (stats.data as Map)['cpu'] != null;
+    final cpuClockPresent =
+        stats.ok &&
+        stats.data is Map &&
+        (stats.data as Map)['cpuClock'] != null;
     final batteryTempPresent =
         stats.ok &&
         stats.data is Map &&
@@ -1042,13 +1051,23 @@ class EspEntitySurface {
         deviceClass: 'battery_charging',
         type: 'binary_sensor',
       ),
-      diagnostic(
-        'cpu',
-        'CPU usage',
-        icon: 'mdi:chip',
-        unit: '%',
-        stateClass: 1,
-      ),
+      if (cpuUsagePresent)
+        diagnostic(
+          'cpu',
+          'CPU usage',
+          icon: 'mdi:chip',
+          unit: '%',
+          stateClass: 1,
+        ),
+      if (cpuClockPresent)
+        diagnostic(
+          'cpu_clock',
+          'CPU clock',
+          deviceClass: 'frequency',
+          icon: 'mdi:speedometer',
+          unit: 'MHz',
+          stateClass: 1,
+        ),
       if (cpuTempPresent)
         diagnostic(
           'cpu_temp',
@@ -2995,6 +3014,8 @@ class EspEntitySurface {
       await _send('charging', data['charging'] == true);
       final cpu = (data['cpu'] as num?)?.round();
       if (cpu != null) await _send('cpu', cpu);
+      final cpuClock = (data['cpuClock'] as num?)?.round();
+      if (cpuClock != null) await _send('cpu_clock', cpuClock);
       final temp = data['temp'] as num?;
       if (temp != null) await _send('cpu_temp', temp.round());
       final batteryTemp = data['batteryTemp'] as num?;

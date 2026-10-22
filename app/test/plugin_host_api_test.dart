@@ -310,13 +310,14 @@ void main() {
     },
   );
 
-  test('getStats carries the battery temperature', () async {
+  test('getStats carries the CPU clock and battery temperature', () async {
     register(
       'getStats',
       (_) async => const CommandResult.ok({
         'battery': 64,
         'charging': false,
         'cpu': 18.5,
+        'cpuClock': 1324.8,
         'temp': 44.0,
         'batteryTemp': 31.8,
         'memFree': 1073741824,
@@ -326,6 +327,7 @@ void main() {
     );
     final data = (await read('getStats'))['data'] as Map;
     expect(data['batteryTemp'], 31.8);
+    expect(data['cpuClock'], 1324.8);
     expect(data['temp'], 44.0);
     expect(data.containsKey('thermalZones'), false);
   });

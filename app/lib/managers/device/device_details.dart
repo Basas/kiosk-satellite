@@ -88,8 +88,9 @@ class DeviceDetails {
     }
   }
 
-  /// Live CPU load (`usage`, 0-100) and temperature (`temp`, °C). Either is
-  /// null when the platform declines; the whole map is empty off-Android.
+  /// Live CPU load (`usage`, 0-100), average clock (`clock`, MHz) and
+  /// temperature (`temp`, °C). Each is null when the platform declines; the
+  /// whole map is empty off-Android.
   static Future<Map<String, Object?>> cpu() async {
     try {
       return await _channel.invokeMapMethod<String, Object?>('cpu') ?? const {};

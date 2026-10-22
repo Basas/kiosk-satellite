@@ -28,6 +28,9 @@ void main() {
   int? battery = 73;
   // Null for a battery whose HAL has no temperature sensor.
   double? batteryTemp = 31.46;
+  // Null where no CPU load source is readable (issue #824).
+  double? cpuUsage = 12.4;
+  double? cpuClock = 1785.6;
   var cameraFacings = <String>['front', 'back'];
   var bluetooth = <String, Object?>{};
   var vsState = <String, Object?>{};
@@ -51,6 +54,8 @@ void main() {
     };
     battery = 73;
     batteryTemp = 31.46;
+    cpuUsage = 12.4;
+    cpuClock = 1785.6;
     storage = {'free': 16384 * 1024 * 1024, 'total': 32768 * 1024 * 1024};
     dashboardsUnreachable = false;
     catalogChanges = 0;
@@ -138,7 +143,8 @@ void main() {
         handler: (_) async => CommandResult.ok({
           'battery': battery,
           'charging': true,
-          'cpu': 12.4,
+          'cpu': cpuUsage,
+          'cpuClock': cpuClock,
           'temp': 41,
           'batteryTemp': batteryTemp,
         }),
@@ -1046,6 +1052,7 @@ void main() {
         'battery',
         'charging',
         'cpu',
+        'cpu_clock',
         'cpu_temp',
         'battery_temp',
         'ram_free',
@@ -1397,6 +1404,38 @@ void main() {
     },
   );
 
+  test(
+    'a device with no CPU load source gets CPU clock but no CPU usage',
+    () async {
+      cpuUsage = null;
+      final catalog = await surface.build();
+      final byObject = {for (final d in catalog) '${d['objectId']}': d};
+      expect(byObject.containsKey('cpu'), isFalse);
+      expect(byObject.containsKey('cpu_clock'), isTrue);
+      await attach();
+      final byId = {for (final (id, value) in pushed) id: value};
+      expect(byId.containsKey('cpu'), isFalse);
+      expect(byId['cpu_clock'], 1786);
+    },
+  );
+
+  test('a device without cpufreq gets no CPU clock entity', () async {
+    cpuClock = null;
+    final catalog = await surface.build();
+    final byObject = {for (final d in catalog) '${d['objectId']}': d};
+    expect(byObject.containsKey('cpu_clock'), isFalse);
+    expect(byObject.containsKey('cpu'), isTrue);
+  });
+
+  test('CPU clock is a frequency diagnostic in MHz', () async {
+    final catalog = await surface.build();
+    final entity = catalog.firstWhere((d) => d['objectId'] == 'cpu_clock');
+    expect(entity['deviceClass'], 'frequency');
+    expect(entity['unit'], 'MHz');
+    expect(entity['category'], 2);
+    expect(entity['stateClass'], 1);
+  });
+
   test('Battery temperature is a one-decimal temperature diagnostic', () async {
     final catalog = await surface.build();
     final entity = catalog.firstWhere((d) => d['objectId'] == 'battery_temp');
@@ -1413,6 +1452,7 @@ void main() {
     expect(byId['battery'], 73);
     expect(byId['charging'], true);
     expect(byId['cpu'], 12);
+    expect(byId['cpu_clock'], 1786);
     expect(byId['cpu_temp'], 41);
     expect(byId['battery_temp'], 31.5);
     expect(byId['ram_free'], 512);

@@ -22408,5 +22408,10 @@
     "source": "f24963472b82af3772d82296e3afd121a845081e2484b53fcf5d12d6712acedc",
     "translation": "225b3fe4c332e1c962e7df5fbd3f97aa809c5a806c39fbafa9c7e5f1b3feabba",
     "author": "Xavier Larrea"
+  },
+  "deviceCpuClock": {
+    "source": "96b5f11930d1d5d3fd2e68af5492ca050db6cd2d9843ff5eb70b918c4c1dcdd9",
+    "translation": "ec660de48c4706784cb523d649f68e92eca2ad2f9082d4be8f344fbc68202ed2",
+    "author": "Xavier Larrea"
   }
 }

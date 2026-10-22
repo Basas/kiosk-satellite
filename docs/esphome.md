@@ -122,7 +122,8 @@ Every item in this list corresponds directly to a kiosk setting. They are fully 
 |---|---|---|
 | **Battery** | sensor | Reports battery percentage. Only devices with a physical battery receive this entity; a mains powered device without a battery will only report the Charging status. |
 | **Charging** | binary sensor | Indicates if the device is currently receiving power. |
-| **CPU usage** | sensor | Reports current CPU load as a percentage. |
+| **CPU usage** | sensor | Reports how busy the CPU is as a percentage. Only available on devices that let an app measure CPU load. |
+| **CPU clock** | sensor | Reports the average clock speed of the active CPU cores in MHz. |
 | **CPU temperature** | sensor | Only available on devices that report thermal data. |
 | **RAM available**, **RAM total** | sensor | Reported in Megabytes (MB). |
 | **Internal storage free**, **Internal storage total** | sensor | Available space and capacity of Android's internal data partition in mebibytes (MiB). Refresh every minute. Free space includes a valid zero when the partition is full. |

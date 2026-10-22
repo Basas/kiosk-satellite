@@ -10,6 +10,7 @@
   "deviceAppUptime": "Temps de fonctionnement de l'application",
   "deviceNetworkUptime": "Temps de fonctionnement réseau",
   "deviceCpuUsage": "Utilisation du CPU",
+  "deviceCpuClock": "Fréquence du CPU",
   "deviceCpuTemp": "Température du CPU",
   "deviceBatteryLevel": "Niveau de batterie",
   "deviceBatteryTemp": "Température de la batterie",

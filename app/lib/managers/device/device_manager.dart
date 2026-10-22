@@ -532,7 +532,7 @@ class DeviceManager extends Manager {
       Command(
         name: 'getStats',
         description:
-            'Battery, CPU load and temperature only: the live header '
+            'Battery, CPU load, clock and temperature only: the live header '
             'numbers, without everything else getDeviceInfo gathers.',
         // Executed every 4 seconds for as long as an admin page is open.
         quiet: true,
@@ -674,7 +674,11 @@ class DeviceManager extends Manager {
     return {
       'battery': battery.level,
       'charging': charging,
+      // Percent busy, null where no load source is readable. Never the
+      // clock position, which is its own number below.
       'cpu': cpu['usage'],
+      // MHz, the average clock of the online cores.
+      'cpuClock': cpu['clock'],
       'temp': cpu['temp'],
       // °C, null for a device without a battery or a HAL with no sensor.
       'batteryTemp': battery.temp,

@@ -10,6 +10,7 @@
   "deviceAppUptime": "App-Laufzeit",
   "deviceNetworkUptime": "Netzwerk-Laufzeit",
   "deviceCpuUsage": "CPU-Auslastung",
+  "deviceCpuClock": "CPU-Takt",
   "deviceCpuTemp": "CPU-Temperatur",
   "deviceBatteryLevel": "Akkustand",
   "deviceBatteryTemp": "Akkutemperatur",

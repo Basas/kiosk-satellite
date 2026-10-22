@@ -5827,6 +5827,9 @@ class UiStringsUk extends UiStrings {
   String get deviceCpuUsage => 'Використання процесора';
 
   @override
+  String get deviceCpuClock => 'Частота процесора';
+
+  @override
   String get deviceCpuTemp => 'Температура процесора';
 
   @override

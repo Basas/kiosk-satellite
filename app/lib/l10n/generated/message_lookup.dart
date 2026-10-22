@@ -1638,6 +1638,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'deviceAppUptime' => strings.deviceAppUptime,
       'deviceNetworkUptime' => strings.deviceNetworkUptime,
       'deviceCpuUsage' => strings.deviceCpuUsage,
+      'deviceCpuClock' => strings.deviceCpuClock,
       'deviceCpuTemp' => strings.deviceCpuTemp,
       'deviceBatteryLevel' => strings.deviceBatteryLevel,
       'deviceBatteryTemp' => strings.deviceBatteryTemp,

@@ -10,6 +10,7 @@
   "deviceAppUptime": "Час роботи застосунку",
   "deviceNetworkUptime": "Час роботи мережі",
   "deviceCpuUsage": "Використання процесора",
+  "deviceCpuClock": "Частота процесора",
   "deviceCpuTemp": "Температура процесора",
   "deviceBatteryLevel": "Рівень заряду акумулятора",
   "deviceBatteryTemp": "Температура акумулятора",

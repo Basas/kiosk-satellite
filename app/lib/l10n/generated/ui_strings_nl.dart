@@ -5846,6 +5846,9 @@ class UiStringsNl extends UiStrings {
   String get deviceCpuUsage => 'CPU-gebruik';
 
   @override
+  String get deviceCpuClock => 'CPU-kloksnelheid';
+
+  @override
   String get deviceCpuTemp => 'CPU-temperatuur';
 
   @override

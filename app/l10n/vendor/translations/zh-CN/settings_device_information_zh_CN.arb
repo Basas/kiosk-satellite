@@ -10,6 +10,7 @@
   "deviceAppUptime": "应用运行时间",
   "deviceNetworkUptime": "网络连接时间",
   "deviceCpuUsage": "CPU 使用率",
+  "deviceCpuClock": "CPU 频率",
   "deviceCpuTemp": "CPU 温度",
   "deviceBatteryLevel": "电池电量",
   "deviceBatteryTemp": "电池温度",

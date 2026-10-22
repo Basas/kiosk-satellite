@@ -5877,6 +5877,9 @@ class UiStringsEs extends UiStrings {
   String get deviceCpuUsage => 'Uso de CPU';
 
   @override
+  String get deviceCpuClock => 'Frecuencia de CPU';
+
+  @override
   String get deviceCpuTemp => 'Temperatura de CPU';
 
   @override

@@ -10,6 +10,7 @@
   "deviceAppUptime": "Аптайм приложения",
   "deviceNetworkUptime": "Аптайм сети",
   "deviceCpuUsage": "Загрузка ЦП",
+  "deviceCpuClock": "Частота ЦП",
   "deviceCpuTemp": "Температура ЦП",
   "deviceBatteryLevel": "Уровень заряда",
   "deviceBatteryTemp": "Температура аккумулятора",

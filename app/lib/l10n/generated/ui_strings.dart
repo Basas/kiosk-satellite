@@ -10135,6 +10135,12 @@ abstract class UiStrings {
   /// Label or explanation on this Device settings page.
   ///
   /// In en, this message translates to:
+  /// **'CPU clock'**
+  String get deviceCpuClock;
+
+  /// Label or explanation on this Device settings page.
+  ///
+  /// In en, this message translates to:
   /// **'CPU temperature'**
   String get deviceCpuTemp;
 
