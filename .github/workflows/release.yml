@@ -57,6 +57,12 @@ jobs:
           flutter-version: 3.44.6
           cache: true
 
+      - name: Build remote UI assets
+        working-directory: app
+        run: |
+          npm ci --no-audit --no-fund --loglevel=error
+          npm run build
+
       - name: Restore the signing identity
         id: signing
         working-directory: app
