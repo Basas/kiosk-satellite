@@ -3417,6 +3417,12 @@ abstract class UiStrings {
   /// **'Open the calendar'**
   String get gestureOpenCalendar;
 
+  /// Gesture action that opens the Music Library.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Music Library'**
+  String get gestureOpenMusicLibrary;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:

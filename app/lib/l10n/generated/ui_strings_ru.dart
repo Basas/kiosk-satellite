@@ -1899,6 +1899,9 @@ class UiStringsRu extends UiStrings {
   String get gestureOpenCalendar => 'Открыть календарь';
 
   @override
+  String get gestureOpenMusicLibrary => 'Открыть музыкальную библиотеку';
+
+  @override
   String get gestureService => 'Вызвать службу';
 
   @override

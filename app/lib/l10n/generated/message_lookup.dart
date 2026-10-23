@@ -524,6 +524,7 @@ String messageById(UiStrings strings, String? id, String fallback) =>
       'gestureDeepLink' => strings.gestureDeepLink,
       'gestureAndroidSettings' => strings.gestureAndroidSettings,
       'gestureOpenCalendar' => strings.gestureOpenCalendar,
+      'gestureOpenMusicLibrary' => strings.gestureOpenMusicLibrary,
       'gestureService' => strings.gestureService,
       'gestureScript' => strings.gestureScript,
       'gestureAutomation' => strings.gestureAutomation,

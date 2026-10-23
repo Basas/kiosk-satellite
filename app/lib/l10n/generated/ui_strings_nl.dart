@@ -1900,6 +1900,9 @@ class UiStringsNl extends UiStrings {
   String get gestureOpenCalendar => 'Agenda openen';
 
   @override
+  String get gestureOpenMusicLibrary => 'Muziekbibliotheek openen';
+
+  @override
   String get gestureService => 'Een service aanroepen';
 
   @override

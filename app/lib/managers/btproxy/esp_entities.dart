@@ -706,6 +706,13 @@ class EspEntitySurface {
           'Show Music Assistant',
           'mdi:music-box-multiple',
         ),
+      // Only with something to browse, as the kiosk menu entry.
+      if (_musicLibrarySource)
+        button(
+          'show_music_library',
+          'Show Music Library',
+          'mdi:playlist-music',
+        ),
       // The followed player, opt-in from the Media Player page (issue
       // #741): whichever player the surfaces follow, the local Sendspin
       // player, one elsewhere or another app's media session. Buttons
@@ -1297,6 +1304,16 @@ class EspEntitySurface {
   /// The entities that show, light or navigate something, which a device
   /// without a screen leaves out, and the settings entities whose setting
   /// it hides.
+  /// Whether the Music Library has a source to browse: Music Assistant,
+  /// Home Assistant or a known Sonos speaker, as its kiosk menu entry asks.
+  bool get _musicLibrarySource {
+    bool set(defs.SettingDef<String> d) => _settings.get(d).trim().isNotEmpty;
+    final sonos = _settings.get(defs.sendspinSonosHosts).trim();
+    return (set(defs.sendspinMaUrl) && set(defs.sendspinMaToken)) ||
+        (set(defs.haUrl) && set(defs.haToken)) ||
+        (sonos.isNotEmpty && sonos != '{}');
+  }
+
   static const _headlessDropped = {
     'screen',
     'screensaver_active',
@@ -1311,6 +1328,7 @@ class EspEntitySurface {
     'bring_to_front',
     'open_launcher',
     'show_music_assistant',
+    'show_music_library',
     'close_camera_view',
     'active_camera_view',
     'calendar_view',
@@ -2211,6 +2229,8 @@ class EspEntitySurface {
         await commands.execute('showAppLauncher', const {});
       case 'show_music_assistant':
         await commands.execute('showMusicAssistant', const {});
+      case 'show_music_library':
+        await commands.execute('openMusicLibrary', const {});
       case 'camera_view':
         if ('$value' == 'Closed') {
           await commands.execute('hideCameraView', const {});

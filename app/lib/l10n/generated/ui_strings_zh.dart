@@ -1841,6 +1841,9 @@ class UiStringsZh extends UiStrings {
   String get gestureOpenCalendar => '打开日历';
 
   @override
+  String get gestureOpenMusicLibrary => '打开音乐库';
+
+  @override
   String get gestureService => '调用服务';
 
   @override
@@ -16499,6 +16502,9 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get gestureOpenCalendar => '打开日历';
+
+  @override
+  String get gestureOpenMusicLibrary => '打开音乐库';
 
   @override
   String get gestureService => '调用服务';

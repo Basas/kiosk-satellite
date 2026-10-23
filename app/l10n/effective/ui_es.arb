@@ -7348,6 +7348,19 @@
       ]
     }
   },
+  "gestureOpenMusicLibrary": "Abrir la biblioteca musical",
+  "@gestureOpenMusicLibrary": {
+    "context": "Settings > Gestures > Add gesture > Choose an action",
+    "description": "Gesture action that opens the Music Library.",
+    "x-locations": {
+      "device": [
+        "Settings > Gestures > Add gesture > Choose an action"
+      ],
+      "remoteAdmin": [
+        "Gestures > Add gesture > Choose an action"
+      ]
+    }
+  },
   "gestureService": "Llamar a un servicio",
   "@gestureService": {
     "context": "Settings > Gestures > Add gesture > Choose an action",

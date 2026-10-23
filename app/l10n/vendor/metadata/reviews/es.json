@@ -22973,5 +22973,10 @@
     "source": "23c4ee3eefff192ed72fb41594bb836877334cb3098c2e62070defca4d37eaaa",
     "translation": "930cbc0c359c58750af9fdfae8abb16f2fe57ed8951a54a8fef0b12df586da6d",
     "author": "Xavier Larrea"
+  },
+  "gestureOpenMusicLibrary": {
+    "source": "17716778d45313972667a962791741c80307d70fcb7745ba1dee0cfe978eb9f5",
+    "translation": "6a09ec259198b46bb142eecb3fba061f190763aae7b6dc2c480021a35e6aa575",
+    "author": "Xavier Larrea"
   }
 }

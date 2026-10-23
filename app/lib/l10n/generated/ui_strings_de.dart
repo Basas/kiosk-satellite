@@ -1914,6 +1914,9 @@ class UiStringsDe extends UiStrings {
   String get gestureOpenCalendar => 'Kalender öffnen';
 
   @override
+  String get gestureOpenMusicLibrary => 'Musikbibliothek öffnen';
+
+  @override
   String get gestureService => 'Einen Dienst aufrufen';
 
   @override

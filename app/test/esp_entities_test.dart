@@ -268,6 +268,7 @@ void main() {
       'bringToFront',
       'showAppLauncher',
       'showMusicAssistant',
+      'openMusicLibrary',
       'hideCameraView',
       'showCameraView',
       'haNavigate',
@@ -1330,6 +1331,22 @@ void main() {
     executed.clear();
     await surface.handleCommand('show_music_assistant', null);
     expect(executed.map((e) => e.$1).toList(), ['showMusicAssistant']);
+  });
+
+  test('the Music Library button needs a source to browse', () async {
+    await settings.set(defs.haUrl, '');
+    await settings.set(defs.sendspinMaUrl, '');
+    var ids = [for (final d in await surface.build()) '${d['objectId']}'];
+    expect(ids, isNot(contains('show_music_library')));
+
+    await settings.set(defs.sendspinMaUrl, '192.168.1.10:8095');
+    await settings.set(defs.sendspinMaToken, 'token');
+    ids = [for (final d in await surface.build()) '${d['objectId']}'];
+    expect(ids, contains('show_music_library'));
+
+    executed.clear();
+    await surface.handleCommand('show_music_library', null);
+    expect(executed.map((e) => e.$1).toList(), ['openMusicLibrary']);
   });
 
   test('the Restart device button follows the restart support ask', () async {

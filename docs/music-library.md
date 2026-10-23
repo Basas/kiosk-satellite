@@ -2,7 +2,7 @@
 
 The Music Library browses music on the kiosk and plays it on a speaker. It lists music from Music Assistant, from a Home Assistant speaker's media or from a Sonos household, and it plays on the player the [Now Playing](sendspin.md#full-screen-now-playing) view follows. Pick a speaker in the library and Now Playing, the floating player and every play from the library move to it.
 
-Open it from **Music Library** in the kiosk menu or from the library button next to the close button on the Now Playing view. Both show once a source is set up. Turn either off under **Settings > Media Player > Music Library**, and allow the library in a locked kiosk under **Kiosk Mode > Allowed Actions**.
+Open it from **Music Library** in the kiosk menu or from the library button next to the close button on the Now Playing view. Both show once a source is set up. A dashboard button can open it with `ks://music-library` (see [Dashboard Links](dashboard-links.md)), a gesture with the **Open Music Library** action (see [Gestures](gestures.md)) and Home Assistant with the ESPHome **Show Music Library** button (see [ESPHome](esphome.md)). Turn either off under **Settings > Media Player > Music Library**, and allow the library in a locked kiosk under **Kiosk Mode > Allowed Actions**.
 
 ## Sources
 

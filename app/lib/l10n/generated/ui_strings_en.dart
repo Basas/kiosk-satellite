@@ -1892,6 +1892,9 @@ class UiStringsEn extends UiStrings {
   String get gestureOpenCalendar => 'Open the calendar';
 
   @override
+  String get gestureOpenMusicLibrary => 'Open Music Library';
+
+  @override
   String get gestureService => 'Call a service';
 
   @override
