@@ -13,6 +13,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'alarm_ring_overlay.dart';
 import 'alarms_overlay.dart';
+import 'calendar_overlay.dart';
+import 'music_library_overlay.dart';
 import '../core/permissions.dart';
 
 import '../app_container.dart';
@@ -21,6 +23,7 @@ import '../l10n/gesture_messages.dart';
 import 'screensaver_view.dart';
 import '../core/events.dart';
 import '../managers/browser/carousel_script.dart';
+import '../managers/browser/color_scheme_script.dart';
 import '../managers/browser/disable_suspend_script.dart';
 import '../managers/browser/dashboard_camera_script.dart';
 import '../managers/browser/ha_session_script.dart';
@@ -34,6 +37,7 @@ import '../managers/browser/dashboards_watch_script.dart';
 import '../managers/browser/socket_watch_script.dart';
 import '../managers/browser/viewport_zoom_script.dart';
 import '../managers/browser/visibility_mask_script.dart';
+import '../managers/browser/url_filter.dart';
 import '../managers/browser/ws_filter_script.dart';
 import '../managers/kiosk/app_link.dart';
 import '../managers/kiosk/kiosk_link.dart';
@@ -43,15 +47,18 @@ import '../managers/sendspin/music_assistant_api.dart';
 import '../managers/home_assistant/kiosk_mode.dart';
 import '../managers/gestures/gesture_mappings.dart';
 import '../managers/browser/browser_manager.dart';
+import '../managers/plugins/plugin_camera.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' show CameraFacing;
 import '../managers/settings/definitions.dart' as defs;
 import 'app_launcher_overlay.dart';
-import 'ui_scale.dart' show UiScaleExempt;
+import 'ui_scale.dart' show UiScaleExempt, uiScaleFactor;
 import 'lockdown_shield.dart';
 import 'notification_overlay.dart';
 import 'plugin_overlay.dart';
 import 'offline_notice.dart';
 import 'dlna_media_overlay.dart';
 import 'camera_view_overlay.dart';
+import 'code_scanner.dart';
 import 'face_preview_overlay.dart';
 import 'fleet_settings.dart';
 import 'intercom_settings.dart';
@@ -197,12 +204,19 @@ class _KioskScreenState extends State<KioskScreen>
         !c.launcher.visible.value &&
         !c.intercom.rosterVisible.value &&
         !c.alarms.visible.value &&
+        !c.calendar.visible.value &&
+        !c.musicLibrary.visible.value &&
         c.camera.activeViewId.value == null &&
         !c.kiosk.lockdownActive &&
-        c.plugins.windows.value.isNotEmpty) {
-      unawaited(
-        c.plugins.windowEvent(c.plugins.windows.value.last.id, closed: true),
-      );
+        (c.plugins.windows.value.isNotEmpty || c.plugins.backOverlay != null)) {
+      // Windows float over the native overlays, so they close first.
+      if (c.plugins.windows.value.isNotEmpty) {
+        unawaited(
+          c.plugins.windowEvent(c.plugins.windows.value.last.id, closed: true),
+        );
+      } else {
+        unawaited(c.plugins.closeOverlay(c.plugins.backOverlay!));
+      }
       return;
     }
     final deadline = _backArmedUntil;
@@ -214,7 +228,9 @@ class _KioskScreenState extends State<KioskScreen>
       launcherVisible:
           c.launcher.visible.value ||
           c.intercom.rosterVisible.value ||
-          c.alarms.visible.value,
+          c.alarms.visible.value ||
+          c.calendar.visible.value ||
+          c.musicLibrary.visible.value,
       overlayUp: c.browser.overlayUrl.value != null,
       cameraViewUp: c.camera.activeViewId.value != null,
       cameraFocused: c.camera.focusedCameraId.value != null,
@@ -238,9 +254,16 @@ class _KioskScreenState extends State<KioskScreen>
         unawaited(_performBack());
         _backArmedUntil = DateTime.now().add(_backAgainWindow);
       case BackAction.hideLauncher:
+        // The library steps back out of an opened album first.
+        if (c.musicLibrary.visible.value &&
+            (c.musicLibrary.backHandler?.call() ?? false)) {
+          break;
+        }
         c.launcher.visible.value = false;
         c.intercom.rosterVisible.value = false;
         c.alarms.visible.value = false;
+        c.calendar.visible.value = false;
+        c.musicLibrary.visible.value = false;
       case BackAction.dismissOverlay:
         // A link or rotation page covers the dashboard: back uncovers it.
         c.browser.dismissOverlay();
@@ -324,7 +347,7 @@ class _KioskScreenState extends State<KioskScreen>
             (c.settings.get(defs.sendspinFullscreen) &&
                 c.settings.get(defs.sendspinFullscreenShortcut)));
     final hasApps =
-        c.settings.get(defs.launcherEnabled) && c.launcher.apps.isNotEmpty;
+        c.settings.get(defs.launcherEnabled) && c.launcher.kioskApps.isNotEmpty;
     final hasHold = c.settings.get(defs.haHoldMenu);
     return c.plugins.drawerActions.isNotEmpty ||
         c.settings.get(defs.kioskAllowDashboard) ||
@@ -341,15 +364,38 @@ class _KioskScreenState extends State<KioskScreen>
             c.settings.get(defs.lockdownMenu)) ||
         (c.settings.get(defs.kioskAllowApps) && hasApps) ||
         (c.settings.get(defs.kioskAllowAlarms) &&
-            c.settings.get(defs.alarmsMenu));
+            c.settings.get(defs.alarmsMenu)) ||
+        (c.settings.get(defs.kioskAllowCalendar) &&
+            c.settings.get(defs.calendarMenu)) ||
+        (c.settings.get(defs.kioskAllowMusicLibrary) &&
+            c.settings.get(defs.libraryMenu) &&
+            c.musicLibrary.available.isNotEmpty);
   }
 
   /// Pull-to-refresh as the user experiences it: the Web Browsing toggle,
   /// minus the kiosk protection that switches the gesture off while the
-  /// device is locked.
+  /// device is locked, and minus the screensaver. With Double tap to
+  /// dismiss, the Home Assistant Dashboard screensaver lets touches
+  /// through to the page (discussion #1069), and a pull there must not
+  /// reload it.
   bool get _ptrEnabled =>
       c.settings.get(defs.pullToRefresh) &&
-      !(c.kiosk.locked && c.settings.get(defs.kioskDisablePullRefresh));
+      !(c.kiosk.locked && c.settings.get(defs.kioskDisablePullRefresh)) &&
+      !c.screensaver.isActive;
+
+  /// The dashboard carousel as the page runs it: the setting, off while
+  /// the screensaver is up for the same reason as [_ptrEnabled]. A swipe
+  /// must not take the screensaver's view away.
+  bool get _carouselEnabled =>
+      c.settings.get(defs.haDashboardCarousel) && !c.screensaver.isActive;
+
+  /// Push the current effective carousel state onto the live page. The
+  /// sync call makes the script act on it now: build the preview strip, or
+  /// tear a disabled one down instead of leaving it mounted.
+  Future<void> _syncCarousel() => c.browser.runJs(
+    'window.__ksCarouselEnabled = $_carouselEnabled;'
+    'if (window.__ksCarouselSync) window.__ksCarouselSync();',
+  );
 
   /// Push the current effective pull-to-refresh state onto the live WebView:
   /// the native wrapper and the JS probe both hold their own copy.
@@ -378,6 +424,11 @@ class _KioskScreenState extends State<KioskScreen>
   /// The next rebuilt WebView loads the start URL instead of picking up
   /// where the current page was (a token change, see _onSettingChanged).
   bool _rebuildFromStart = false;
+
+  /// The proxied origin the current WebView was created with (its media
+  /// rewrite script names it), and the epoch that WebView belongs to.
+  String? _webViewProxyOrigin;
+  int _webViewProxyEpoch = -1;
 
   /// Set when auto-login turns on: the seed replaces a login done by hand
   /// once, on the first page that sees this marker.
@@ -448,6 +499,11 @@ class _KioskScreenState extends State<KioskScreen>
     // Lockdown flipping is the one key-capture state with no listener of
     // its own here; the sync is diffed, so the rest cost nothing.
     _syncNavCapture();
+    // The theme script names the servers of the custom pages elsewhere.
+    if (e.key == defs.haCustomPages.key) {
+      _pageDarkChanged();
+      return;
+    }
     // HA kiosk mode and its hide choices are applied live: restyling the
     // page in place, with no reload and nothing lost from it.
     if (e.key == defs.haKioskMode.key ||
@@ -463,6 +519,11 @@ class _KioskScreenState extends State<KioskScreen>
     // Zoom applies live via the viewport meta — no rebuild, no reload.
     if (e.key == defs.browserZoom.key) {
       await c.browser.runJs(_zoomJs);
+      _syncContentInsets();
+      return;
+    }
+    if (e.key == defs.uiScale.key) {
+      _syncContentInsets();
       return;
     }
     // Scroll lock rides the zoom path: applied live as page CSS, no rebuild.
@@ -471,14 +532,9 @@ class _KioskScreenState extends State<KioskScreen>
       return;
     }
     // The carousel's document-start seed is frozen at WebView creation;
-    // flip the live flag so the toggle applies without a reload. The sync
-    // call makes the script act on it now: build the preview strip, or
-    // tear a disabled one down instead of leaving it mounted.
+    // flip the live flag so the toggle applies without a reload.
     if (e.key == defs.haDashboardCarousel.key) {
-      await c.browser.runJs(
-        'window.__ksCarouselEnabled = ${e.value == true};'
-        'if (window.__ksCarouselSync) window.__ksCarouselSync();',
-      );
+      await _syncCarousel();
       return;
     }
     // Same live-flag contract; read only on the touch path, so there is
@@ -583,6 +639,8 @@ class _KioskScreenState extends State<KioskScreen>
         c.launcher.visible.value = false;
         c.intercom.rosterVisible.value = false;
         c.alarms.visible.value = false;
+        c.calendar.visible.value = false;
+        c.musicLibrary.visible.value = false;
       }
       return;
     }
@@ -614,6 +672,10 @@ class _KioskScreenState extends State<KioskScreen>
         e.key == defs.kioskAllowIntercom.key ||
         e.key == defs.kioskAllowAlarms.key ||
         e.key == defs.alarmsMenu.key ||
+        e.key == defs.kioskAllowCalendar.key ||
+        e.key == defs.calendarMenu.key ||
+        e.key == defs.kioskAllowMusicLibrary.key ||
+        e.key == defs.libraryMenu.key ||
         e.key == defs.remoteEnabled.key ||
         e.key == defs.remoteFleetDiscovery.key) {
       setState(() {});
@@ -627,6 +689,17 @@ class _KioskScreenState extends State<KioskScreen>
     if (e.key == defs.secureProxy.key) {
       await c.proxy.sync();
       setState(() => _webViewEpoch++);
+      return;
+    }
+    // A start URL on a new Home Assistant origin moves the proxy's upstream
+    // (or starts or stops it), and the media rewrite script of the WebView
+    // on screen still names the old one. Rebuild when the origin it was
+    // created with is no longer the proxied one.
+    if (e.key == defs.startUrl.key) {
+      await c.proxy.sync();
+      if (mounted && c.proxy.targetOrigin != _webViewProxyOrigin) {
+        setState(() => _webViewEpoch++);
+      }
       return;
     }
     // Pull-to-refresh toggles live on the existing WebView; the clear-cache
@@ -674,6 +747,34 @@ class _KioskScreenState extends State<KioskScreen>
     }
   }
 
+  /// The scanner for a plugin's scanBarcode, above every route.
+  Future<Map<String, Object?>> _presentScan(
+    PluginScanRequest request,
+    Future<String> cancel,
+  ) async {
+    final plugin = c.plugins.installed.value
+        .where((p) => p['id'] == request.pluginId)
+        .firstOrNull;
+    final name = plugin?['name'] as String? ?? request.pluginId;
+    final facing = request.facing ?? c.settings.get(defs.cameraDevice);
+    final outcome = await Navigator.of(context, rootNavigator: true)
+        .push<CodeScanOutcome>(
+          MaterialPageRoute(
+            builder: (context) => CodeScanner(
+              title: request.title ?? l10n(context).pluginScanTitle,
+              help: request.message ?? l10n(context).pluginScanHelp,
+              source: l10n(context).pluginScanSource(name),
+              formats: codeScanFormats(request.formats),
+              facing: facing == 'back' ? CameraFacing.back : CameraFacing.front,
+              timeout: request.timeout,
+              cancel: cancel,
+              closeOnError: true,
+            ),
+          ),
+        );
+    return (outcome ?? const CodeScanOutcome.failed('canceled')).toJson();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -698,6 +799,8 @@ class _KioskScreenState extends State<KioskScreen>
     });
     _settingsSub = c.bus.on<SettingChanged>().listen(_onSettingChanged);
     _gestureSub = c.bus.on<KioskExitGesture>().listen(_onExitGesture);
+    // A plugin's barcode scan opens over whatever is showing.
+    c.plugins.camera?.presenter = _presentScan;
     // Dpad and keyboard navigation (issue #377), registered on both stages
     // of the key pipeline; see _onKey for why it takes two.
     HardwareKeyboard.instance.addHandler(_onKey);
@@ -740,9 +843,12 @@ class _KioskScreenState extends State<KioskScreen>
       _syncNavCapture();
     });
     // The screensaver takes the keys the moment it shows (any of them
-    // dismisses it) and hands them back when it goes.
+    // dismisses it) and hands them back when it goes. The page's swipe and
+    // pull gestures stand down with it.
     _saverSub = c.bus.on<ScreensaverStateChanged>().listen((_) {
       _syncNavCapture();
+      unawaited(_syncPullToRefresh());
+      unawaited(_syncCarousel());
     });
     _backSub = c.bus.on<KioskBackPressed>().listen((_) {
       if (!mounted || _settingsOpen) return;
@@ -759,6 +865,8 @@ class _KioskScreenState extends State<KioskScreen>
       c.launcher.visible.value = false;
       c.intercom.rosterVisible.value = false;
       c.alarms.visible.value = false;
+      c.calendar.visible.value = false;
+      c.musicLibrary.visible.value = false;
       if (c.browser.overlayUrl.value != null) c.browser.dismissOverlay();
       if (c.camera.activeViewId.value != null) {
         c.camera.hideView(returnToPreviousApp: false);
@@ -768,15 +876,20 @@ class _KioskScreenState extends State<KioskScreen>
     // The volume key routing follows the player and the screensaver
     // slot (issue #544); the setting rides _onSettingChanged.
     c.sendspin.nowPlaying.addListener(_syncVolumeKeys);
+    c.pageState.pageDark.addListener(_pageDarkChanged);
     c.screensaver.activeView.addListener(_syncVolumeKeys);
     // The build and the native key routing both follow these surfaces.
     c.browser.overlayUrl.addListener(_onOverlayChanged);
     c.launcher.visible.addListener(_onOverlayChanged);
     c.intercom.rosterVisible.addListener(_onOverlayChanged);
     c.alarms.visible.addListener(_onOverlayChanged);
+    c.calendar.visible.addListener(_onOverlayChanged);
+    c.musicLibrary.visible.addListener(_onOverlayChanged);
     c.plugins.windows.addListener(_onOverlayChanged);
     c.plugins.installed.addListener(_onOverlayChanged);
     c.homeLauncher.roleHeld.addListener(_onOverlayChanged);
+    c.plugins.contentInsets.addListener(_syncContentInsets);
+    _syncContentInsets();
 
     // Download feedback lives in-app: the kiosk hides the status bar, so the
     // DownloadManager notification is invisible and without this a download
@@ -846,6 +959,18 @@ class _KioskScreenState extends State<KioskScreen>
     if (mounted) setState(() => _activityAttached = true);
   }
 
+  /// The space plugins keep clear of their bars, in dp, as the page's CSS
+  /// pixels: the Zoom level scales the page, so one CSS pixel spans that
+  /// many dp. Plugins measure in their own dp, which the Scale UI factor
+  /// enlarges like their overlays.
+  void _syncContentInsets() {
+    final zoom = c.settings.get(defs.browserZoom).toDouble();
+    final dp =
+        c.plugins.contentInsets.value *
+        uiScaleFactor(c.settings.get(defs.uiScale));
+    unawaited(c.browser.setContentInsets(zoom > 0 ? dp / zoom : dp));
+  }
+
   /// The zoom-level setting as a viewport-meta scale, see
   /// viewport_zoom_script.dart for why not CSS zoom.
   String get _zoomJs => viewportZoomJs(
@@ -881,6 +1006,11 @@ class _KioskScreenState extends State<KioskScreen>
 
   String get _initialUrl => c.settings.get(defs.startUrl);
 
+  /// The kiosk went light or dark: a custom page on screen, and the next
+  /// one, follow.
+  void _pageDarkChanged() =>
+      unawaited(c.browser.setCustomPageDark(c.pageState.pageDark.value));
+
   /// The JS bridge is always injected at document start. Kiosk mode rides
   /// along as a document-start script too, and is re-asserted per load in
   /// [onLoadStop] so a page that outlived a toggle catches up.
@@ -912,6 +1042,17 @@ class _KioskScreenState extends State<KioskScreen>
     // (frozen at WebView creation), corrected live in _onSettingChanged,
     // and re-asserted every load in onLoadStop for pages loaded after a
     // toggle.
+    // A custom page's prefers-color-scheme answers with the kiosk's light
+    // or dark (PageStateManager.pageDark), for matchMedia and its CSS. Acts
+    // only on custom pages; swapped live by BrowserManager.setCustomPageDark.
+    UserScript(
+      groupName: BrowserManager.customPageSchemeGroup,
+      source: customPageColorSchemeJs(
+        dark: c.pageState.pageDark.value,
+        origins: c.browser.customPageOrigins,
+      ),
+      injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+    ),
     UserScript(
       source: 'window.__ksPtrEnabled = $_ptrEnabled;',
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
@@ -943,6 +1084,22 @@ class _KioskScreenState extends State<KioskScreen>
       source: kioskModeScript,
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
     ),
+    // The room plugins reserve for their bars. A group of its own, so
+    // BrowserManager can swap it when a plugin changes it and every new
+    // page starts with the current value.
+    UserScript(
+      groupName: BrowserManager.contentInsetsGroup,
+      source: c.browser.contentInsetsSource,
+      injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+    ),
+    // The URL Filter's rules for the dashboard, which keep Home
+    // Assistant's own routing (pushState) off the blocked pages. A group of
+    // its own, swapped by BrowserManager when the rules change.
+    UserScript(
+      groupName: BrowserManager.urlFilterGroup,
+      source: c.browser.urlFilterSource(urlFilterDashboard),
+      injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+    ),
     UserScript(
       source: kioskModeApplyJs(
         apply: c.settings.get(defs.haKioskMode),
@@ -972,8 +1129,7 @@ class _KioskScreenState extends State<KioskScreen>
     // needs no reload.
     UserScript(
       source:
-          'window.__ksCarouselEnabled = '
-          '${c.settings.get(defs.haDashboardCarousel)};'
+          'window.__ksCarouselEnabled = $_carouselEnabled;'
           'window.__ksCarouselOverCards = '
           '${c.settings.get(defs.haCarouselOverCards)};',
       injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
@@ -1147,6 +1303,8 @@ class _KioskScreenState extends State<KioskScreen>
         c.launcher.visible.value ||
         c.intercom.rosterVisible.value ||
         c.alarms.visible.value ||
+        c.calendar.visible.value ||
+        c.musicLibrary.visible.value ||
         c.camera.activeViewId.value != null ||
         c.plugins.windows.value.isNotEmpty;
     if (capture == _lastNavCapture) return;
@@ -1259,6 +1417,8 @@ class _KioskScreenState extends State<KioskScreen>
           c.launcher.visible.value ||
           c.intercom.rosterVisible.value ||
           c.alarms.visible.value ||
+          c.calendar.visible.value ||
+          c.musicLibrary.visible.value ||
           c.browser.overlayUrl.value != null ||
           c.camera.activeViewId.value != null,
       // Any route above this one: settings, and every dialog — the exit
@@ -1387,6 +1547,9 @@ class _KioskScreenState extends State<KioskScreen>
   @override
   void dispose() {
     BackgroundListening.onDownloadComplete = null;
+    if (c.plugins.camera?.presenter == _presentScan) {
+      c.plugins.camera?.presenter = null;
+    }
     c.jsApi.detach();
     _refreshingFailsafe?.cancel();
     HardwareKeyboard.instance.removeHandler(_onKey);
@@ -1406,14 +1569,18 @@ class _KioskScreenState extends State<KioskScreen>
     _cameraSub?.cancel();
     _saverSub?.cancel();
     c.sendspin.nowPlaying.removeListener(_syncVolumeKeys);
+    c.pageState.pageDark.removeListener(_pageDarkChanged);
     c.screensaver.activeView.removeListener(_syncVolumeKeys);
     c.browser.overlayUrl.removeListener(_onOverlayChanged);
     c.launcher.visible.removeListener(_onOverlayChanged);
     c.intercom.rosterVisible.removeListener(_onOverlayChanged);
     c.alarms.visible.removeListener(_onOverlayChanged);
+    c.calendar.visible.removeListener(_onOverlayChanged);
+    c.musicLibrary.visible.removeListener(_onOverlayChanged);
     c.plugins.windows.removeListener(_onOverlayChanged);
     c.plugins.installed.removeListener(_onOverlayChanged);
     c.homeLauncher.roleHeld.removeListener(_onOverlayChanged);
+    c.plugins.contentInsets.removeListener(_syncContentInsets);
     super.dispose();
   }
 
@@ -1558,7 +1725,10 @@ class _KioskScreenState extends State<KioskScreen>
                             builder: (context, frozen, child) => Offstage(
                               // Skip platform view compositing only after the
                               // browser confirms it is safe to hide the dashboard.
-                              offstage: view == 'weather_mood' && frozen,
+                              offstage:
+                                  (view == 'weather_mood' ||
+                                      view == 'celestial') &&
+                                  frozen,
                               child: child,
                             ),
                           ),
@@ -1638,6 +1808,13 @@ class _KioskScreenState extends State<KioskScreen>
                   // The alarm list, the launcher's twin again: full
                   // screen, below the screensaver.
                   AlarmsOverlay(container: c),
+                  // The family calendar, the launcher's twin as well:
+                  // full screen, below the screensaver.
+                  CalendarOverlay(container: c),
+                  // The music library, the same kind of page: full
+                  // screen, below the screensaver, so Now Playing opened
+                  // from its player bar comes up over it.
+                  MusicLibraryOverlay(container: c),
                   // The screensaver covers both planes — it owns the whole
                   // display, drawer open or not.
                   // Paused under the native voice overlay, which
@@ -1670,6 +1847,16 @@ class _KioskScreenState extends State<KioskScreen>
                   // turn draws over it (issue #746). Outside a turn it
                   // sits above everything below.
                   ScreensaverBlankOverlay(container: c, underVoice: true),
+                  // A turn a plugin skin draws: double tap dismisses it.
+                  AssistPluginSkinTouch(container: c),
+                  // Plugin overlays that asked to be on top, in the voice
+                  // overlay's slot: over the screensaver, the menu and the
+                  // camera views, under a notification or call card, the
+                  // voice overlay itself and the lockdown shield. During a
+                  // turn they are over the black cover too, so a plugin
+                  // skin draws the turn there. The rest live in the kiosk
+                  // plane.
+                  PluginNativeOverlays(plugins: c.plugins, onTop: true),
                   // Native Voice Satellite: the assist overlay, in the same
                   // slot, over the screensaver and the camera views.
                   AssistOverlay(container: c),
@@ -1713,15 +1900,28 @@ class _KioskScreenState extends State<KioskScreen>
     return fromStart ? _initialUrl : c.browser.currentUrl;
   }
 
-  Widget _webView() => InAppWebView(
+  Widget _webView() {
+    // unmap-then-map settles the URL on whichever origin the CURRENT
+    // proxy state calls for: a rebuild triggered by the proxy toggle
+    // moves a proxied currentUrl back to the real origin (or vice
+    // versa), and both calls pass everything else through untouched.
+    final initialUrl = c.proxy.mapUrl(c.proxy.unmapUrl(_rebuildUrl()));
+    // Recorded once per WebView, not per build: a build that keeps the
+    // same WebView keeps its user scripts too.
+    if (_webViewProxyEpoch != _webViewEpoch) {
+      _webViewProxyEpoch = _webViewEpoch;
+      _webViewProxyOrigin = c.proxy.targetOrigin;
+    }
+    // A custom page skips the HTTP cache from its very first load (see
+    // BrowserManager.prepareLoad), as everything does with Disable cache.
+    final freshLoads =
+        c.settings.get(defs.disableCache) || c.browser.isCustomPage(initialUrl);
+    return _buildWebView(initialUrl, freshLoads);
+  }
+
+  Widget _buildWebView(String initialUrl, bool freshLoads) => InAppWebView(
     key: ValueKey(_webViewEpoch),
-    initialUrlRequest: URLRequest(
-      // unmap-then-map settles the URL on whichever origin the CURRENT
-      // proxy state calls for: a rebuild triggered by the proxy toggle
-      // moves a proxied currentUrl back to the real origin (or vice
-      // versa), and both calls pass everything else through untouched.
-      url: WebUri(c.proxy.mapUrl(c.proxy.unmapUrl(_rebuildUrl()))),
-    ),
+    initialUrlRequest: URLRequest(url: WebUri(initialUrl)),
     initialUserScripts: UnmodifiableListView(_userScripts),
     pullToRefreshController: _pullToRefresh,
     initialSettings: InAppWebViewSettings(
@@ -1746,6 +1946,12 @@ class _KioskScreenState extends State<KioskScreen>
       // it the callback is simply never invoked, and app:// navigations
       // would fall through to Chromium as an unknown scheme.
       useShouldOverrideUrlLoading: true,
+      // The plugin honors CANCEL only for the main frame. An iframe pointed
+      // at ks:// or app:// (a Webpage dashboard, an iframe card) still runs
+      // the action in shouldOverrideUrlLoading, but without this Chromium
+      // goes on to load the link in the frame and shows
+      // ERR_UNKNOWN_URL_SCHEME there (issue #1044).
+      regexToCancelSubFramesLoading: r'(?i)^(ks|app):.*',
       // Long-press menus and text selection, when kiosk mode says so.
       disableContextMenu:
           c.kiosk.locked && c.settings.get(defs.kioskDisableContextMenus),
@@ -1771,9 +1977,7 @@ class _KioskScreenState extends State<KioskScreen>
       // on), so a page's saved config survives. Nothing is cleared;
       // only "Log out" deliberately wipes storage.
       cacheEnabled: !c.settings.get(defs.disableCache),
-      cacheMode: c.settings.get(defs.disableCache)
-          ? CacheMode.LOAD_NO_CACHE
-          : CacheMode.LOAD_DEFAULT,
+      cacheMode: freshLoads ? CacheMode.LOAD_NO_CACHE : CacheMode.LOAD_DEFAULT,
       // Downloads (an APK update from GitHub, a camera clip): without this
       // the WebView silently ignores them.
       useOnDownloadStart: true,
@@ -1803,15 +2007,35 @@ class _KioskScreenState extends State<KioskScreen>
     shouldOverrideUrlLoading: (controller, action) async {
       final url = action.request.url;
       if (url == null) return NavigationActionPolicy.ALLOW;
+      // The URL Filter (issue #989). A link leaving for an external page
+      // answers to the external rules as well as the dashboard's.
+      if ((url.scheme == 'http' || url.scheme == 'https') &&
+          action.isForMainFrame) {
+        final leaving =
+            !c.browser.isDashboardOrigin(url) &&
+            !c.browser.isCustomPageOrigin(url);
+        final rule = c.browser.urlBlockedBy(
+          url.toString(),
+          leaving
+              ? const {urlFilterDashboard, urlFilterExternal}
+              : const {urlFilterDashboard},
+        );
+        if (rule != null) {
+          if (mounted) showUrlBlockedToast(context, c, rule);
+          return NavigationActionPolicy.CANCEL;
+        }
+      }
       // A link leaving the dashboard's origin must not replace the dashboard
       // page: pagehide would tear down the Voice Satellite session, and the
       // wake word and the device's HA entities die with it (issue #86). The
       // tap gets the same fullscreen page on the rotation overlay instead,
       // with the dashboard alive underneath. Subframes stay untouched, and
       // programmatic loads (the loadUrl command) never pass through here.
+      // A custom page on another server is the dashboard's to show too.
       if ((url.scheme == 'http' || url.scheme == 'https') &&
           action.isForMainFrame &&
-          !c.browser.isDashboardOrigin(url)) {
+          !c.browser.isDashboardOrigin(url) &&
+          !c.browser.isCustomPageOrigin(url)) {
         c.browser.showLinkOverlay(url.toString());
         return NavigationActionPolicy.CANCEL;
       }
@@ -1843,6 +2067,12 @@ class _KioskScreenState extends State<KioskScreen>
         return NavigationActionPolicy.CANCEL;
       }
       if (url.scheme != 'app') {
+        // A link or script moving the page to or from a custom page sets
+        // the cache for it before the load starts.
+        if (action.isForMainFrame &&
+            (url.scheme == 'http' || url.scheme == 'https')) {
+          await c.browser.prepareLoad(url.toString());
+        }
         return NavigationActionPolicy.ALLOW;
       }
       final package = appLinkPackage(url.toString());
@@ -1865,7 +2095,7 @@ class _KioskScreenState extends State<KioskScreen>
       return NavigationActionPolicy.CANCEL;
     },
     onWebViewCreated: (controller) {
-      c.browser.attach(controller);
+      c.browser.attach(controller, freshLoads: freshLoads);
       c.jsApi.attach(controller);
       // Scrollable pages report their pulls here (see _pullToRefresh).
       controller.addJavaScriptHandler(
@@ -1878,6 +2108,18 @@ class _KioskScreenState extends State<KioskScreen>
       controller.addJavaScriptHandler(
         handlerName: 'ksHaSocketClosed',
         callback: (_) => c.browser.onHaSocketClosed(),
+      );
+      // Home Assistant tried to route to a blocked page and stayed put
+      // (see urlFilterJs).
+      controller.addJavaScriptHandler(
+        handlerName: 'ksUrlBlocked',
+        callback: (args) {
+          final rule = args.length > 1 && args[1] is String
+              ? args[1] as String
+              : '';
+          c.browser.logUrlBlocked(args.isNotEmpty ? '${args.first}' : '', rule);
+          if (mounted) showUrlBlockedToast(context, c, rule);
+        },
       );
       // The dashboard set may have moved (see dashboards_watch_script).
       controller.addJavaScriptHandler(
@@ -1941,8 +2183,7 @@ class _KioskScreenState extends State<KioskScreen>
       // loaded later.
       c.browser.runJs('window.__ksPtrEnabled = $_ptrEnabled;');
       c.browser.runJs(
-        'window.__ksCarouselEnabled = '
-        '${c.settings.get(defs.haDashboardCarousel)};'
+        'window.__ksCarouselEnabled = $_carouselEnabled;'
         'window.__ksCarouselOverCards = '
         '${c.settings.get(defs.haCarouselOverCards)};',
       );
@@ -2378,6 +2619,19 @@ class _IdleDismissState extends State<_IdleDismiss> {
   );
 }
 
+/// The notice for a navigation the URL Filter stopped, naming the Block
+/// rule, or saying the page is not on the allow list when [rule] is empty.
+/// Nothing while Show blocked page notice is off.
+void showUrlBlockedToast(BuildContext context, AppContainer c, String rule) {
+  if (!c.settings.get(defs.browserUrlFilterNotice)) return;
+  showToast(
+    context,
+    title: l10n(context).urlFilterBlocked,
+    message: rule.isEmpty ? l10n(context).urlFilterNotAllowed : rule,
+    kind: ToastKind.warning,
+  );
+}
+
 /// A bare WebView for a rotation external page, layered over the dashboard.
 ///
 /// Deliberately minimal: no JS bridge, no wake-word or kiosk scripts,
@@ -2420,6 +2674,61 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   /// error until the rotation moved on, a link overlay until dismissed).
   Timer? _retry;
 
+  /// Live updates: the Music Assistant page's zoom level, and the URL
+  /// Filter's rules for external pages.
+  StreamSubscription<SettingChanged>? _settingsSub;
+
+  /// Whether URL Filter rules covered external pages when this view was
+  /// built. Only then are full loads routed through shouldOverrideUrlLoading:
+  /// the plugin cancels and reissues every load it is asked about, which
+  /// nothing else on this page needs.
+  late final bool _filtered = widget.container.browser.urlFilter.any(
+    (r) => r.appliesTo(const {urlFilterExternal}),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    if (_isMusicAssistant) {
+      widget.container.homeAssistant.dashboardDark.addListener(_darkChanged);
+    }
+    _settingsSub = widget.container.bus.on<SettingChanged>().listen((e) {
+      final controller = _controller;
+      if (controller == null) return;
+      if (_isMusicAssistant && e.key == defs.sendspinMaZoom.key) {
+        unawaited(_applyMaZoom(controller));
+      }
+      if (e.key == defs.browserUrlFilter.key) {
+        unawaited(
+          controller.evaluateJavascript(
+            source: widget.container.browser.urlFilterSource(urlFilterExternal),
+          ),
+        );
+      }
+    });
+  }
+
+  /// The dashboard switched between light and dark with this page open.
+  void _darkChanged() {
+    final dark = widget.container.homeAssistant.dashboardDark.value;
+    if (dark == null) return;
+    unawaited(
+      _controller?.evaluateJavascript(source: colorSchemeSetJs(dark: dark)),
+    );
+  }
+
+  /// Music Assistant's zoom level, the dashboard's viewport scale
+  /// (viewport_zoom_script.dart). Re-asserted after every load: the
+  /// rewritten meta dies with each document.
+  Future<void> _applyMaZoom(InAppWebViewController controller) async {
+    await controller.evaluateJavascript(
+      source: viewportZoomJs(
+        zoom: widget.container.settings.get(defs.sendspinMaZoom),
+        pinch: false,
+      ),
+    );
+  }
+
   @override
   void didUpdateWidget(_OverlayWebView old) {
     super.didUpdateWidget(old);
@@ -2431,6 +2740,8 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   @override
   void dispose() {
     _retry?.cancel();
+    _settingsSub?.cancel();
+    widget.container.homeAssistant.dashboardDark.removeListener(_darkChanged);
     super.dispose();
   }
 
@@ -2465,22 +2776,45 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
   /// A Home Assistant page opened here signs in from the dashboard's own
   /// session instead of asking again (discussion #225).
   UnmodifiableListView<UserScript>? get _seedScripts {
+    final own = _ownSeedScripts;
+    if (!_filtered) return own;
+    // The URL Filter's rules for external pages, which keep a page's
+    // own routing (pushState) off the blocked addresses.
+    return UnmodifiableListView([
+      ...?own,
+      UserScript(
+        source: widget.container.browser.urlFilterSource(urlFilterExternal),
+        injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+      ),
+    ]);
+  }
+
+  UnmodifiableListView<UserScript>? get _ownSeedScripts {
     final token = widget.container.settings.get(defs.sendspinMaToken).trim();
     if (_isMusicAssistant) {
-      if (token.isEmpty) return null;
+      // Music Assistant's Auto theme follows the dashboard's light or dark
+      // when the kiosk sets it (issue #907). Otherwise the page answers
+      // from Android, as before.
+      final dark = widget.container.homeAssistant.dashboardDark.value;
       return UnmodifiableListView([
-        UserScript(
-          source:
-              'try {'
-              'var t = ${jsonEncode(token)};'
-              'var cur = localStorage.getItem("ma_access_token");'
-              'if (!cur || cur === localStorage.getItem("ks_ma_seed")) {'
-              'localStorage.setItem("ma_access_token", t);'
-              'localStorage.setItem("ks_ma_seed", t);'
-              '}'
-              '} catch (e) {}',
-          injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
-        ),
+        if (dark != null)
+          UserScript(
+            source: colorSchemeJs(dark: dark),
+            injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+          ),
+        if (token.isNotEmpty)
+          UserScript(
+            source:
+                'try {'
+                'var t = ${jsonEncode(token)};'
+                'var cur = localStorage.getItem("ma_access_token");'
+                'if (!cur || cur === localStorage.getItem("ks_ma_seed")) {'
+                'localStorage.setItem("ma_access_token", t);'
+                'localStorage.setItem("ks_ma_seed", t);'
+                '}'
+                '} catch (e) {}',
+            injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+          ),
       ]);
     }
     final target = Uri.tryParse(widget.url);
@@ -2544,16 +2878,59 @@ class _OverlayWebViewState extends State<_OverlayWebView> {
           ),
           allowsInlineMediaPlayback: true,
           iframeAllow: 'camera; microphone',
+          useShouldOverrideUrlLoading: _filtered,
         ),
         onWebViewCreated: (controller) {
           _controller = controller;
           if (widget.paused) controller.pause();
+          // The page's own routing tried a blocked address and stayed
+          // put (see urlFilterJs).
+          controller.addJavaScriptHandler(
+            handlerName: 'ksUrlBlocked',
+            callback: (args) {
+              final rule = args.length > 1 && args[1] is String
+                  ? args[1] as String
+                  : '';
+              widget.container.browser.logUrlBlocked(
+                args.isNotEmpty ? '${args.first}' : '',
+                rule,
+              );
+              if (mounted) showUrlBlockedToast(context, widget.container, rule);
+            },
+          );
+        },
+        // The URL Filter's external rules, for links and scripts moving
+        // this page. Called only while [_filtered].
+        shouldOverrideUrlLoading: (controller, action) async {
+          final url = action.request.url;
+          if (url == null ||
+              !action.isForMainFrame ||
+              (url.scheme != 'http' && url.scheme != 'https')) {
+            return NavigationActionPolicy.ALLOW;
+          }
+          final rule = widget.container.browser.urlBlockedBy(
+            url.toString(),
+            const {urlFilterExternal},
+          );
+          if (rule == null) return NavigationActionPolicy.ALLOW;
+          if (mounted) {
+            showUrlBlockedToast(context, widget.container, rule);
+          }
+          return NavigationActionPolicy.CANCEL;
         },
         // The user's pasted JavaScript for external pages, after every load
         // (issue #224). The Music Assistant page is the app's own shortcut
         // and is left alone.
         onLoadStop: (controller, url) async {
-          if (_isMusicAssistant) return;
+          if (_isMusicAssistant) {
+            // The color scheme script carries the state from when this
+            // view was built: a reload after a flip catches up here.
+            _darkChanged();
+            if (widget.container.settings.get(defs.sendspinMaZoom) != 1) {
+              await _applyMaZoom(controller);
+            }
+            return;
+          }
           // A Home Assistant page here follows the dashboard's kiosk mode;
           // re-asserted per load because this view can outlive a toggle.
           final settings = widget.container.settings;

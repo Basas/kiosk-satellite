@@ -71,8 +71,9 @@ own login card shows first if its password differs.
 | What is listed | Kiosks with **Remote management** on, a password set and **Find other kiosks** on, on the same network segment. Multicast does not cross VLANs by itself. Through an mDNS reflector on the router it does, and each kiosk is listed under the address its own announcement carries, not the router's, so calls and the switcher reach it as long as the VLANs route to each other. |
 | Saved fleet members | Accepted members remain listed without multicast. Leaders store their followers and send the member directory to each follower. Discovery refreshes known addresses. Opening another kiosk still requires a reachable admin endpoint. |
 | HTTPS with an imported certificate | A kiosk serving HTTPS with an imported certificate also announces the first DNS name that certificate covers, skipping wildcard and `.local` names. The switcher opens it by that name instead of its IP address, so the browser accepts the certificate. The name has to resolve to the kiosk on your network. A kiosk with only a wildcard certificate or the generated one is opened by its IP address. |
+| Behind a reverse proxy | **Admin URL** under Settings → Device → Remote Administration takes an address such as `https://kiosk.example.com`, with an optional port and no path. The kiosk announces it, and the switcher opens it ahead of the certificate's name and the IP address. Blank by default. Fleet sync and the intercom keep using the IP address. It never syncs from a fleet leader. |
 | Switch | **Find other kiosks** under Settings → Device → Remote Administration, on by default. Off, the kiosk neither announces nor listens, and the dropdown stays plain text. |
-| Command | `fleet` answers the same list: `{enabled, devices: [{id, name, version, address, port, url, self}]}`. The WebSocket carries a `fleet` event on every change. |
+| Command | `fleet` answers the same list: `{enabled, devices: [{id, name, version, address, port, url, self}]}`, plus `adminUrl` on a kiosk that has one. The WebSocket carries a `fleet` event on every change. |
 | Port 5353 | Hearing the others needs the mDNS port. Where something on the device holds it exclusively the kiosk still announces, and the log says the others will not be heard. |
 
 ## Fleet Management
@@ -124,7 +125,7 @@ is administrable here by construction.
 |---|---|---|
 | `/api/login` | POST | `{password}` → `{token}`. Optional `ttl_days` for a long-lived automation token (max 3650) |
 | `/api/info` | GET | Device info, app version, battery, screen, current URL |
-| `/api/health` | GET | The Device Info tab's Hardware section as one JSON object: identity, addresses, battery (null on a device without one), screen (`width`, `height`, `density`, `orientation` and `rotation` in degrees from the panel's natural orientation), RAM, storage, CPU usage and temperature, the system WebView (`webview.package` and `webview.version`), the network link and uptimes. `link.type` is `ethernet`, `wifi`, `cellular`, `vpn` or `other`, and on Wi-Fi `link` adds `rssi` (dBm), `speedMbps` and `frequencyMhz`, each null when Android does not know it. `link` is null while offline and never carries the network name, which needs a location permission. `uptime.app`, `uptime.device` and `uptime.network` are in seconds since the app started, the device booted and the network came up. `network` is null while offline and starts counting at app start at the earliest. Meant for external monitoring to poll, so it is the one endpoint that needs no token |
+| `/api/health` | GET | The Device Info tab's Hardware section as one JSON object: identity, addresses, battery (null on a device without one), screen (`width`, `height`, `density`, `orientation` and `rotation` in degrees from the panel's natural orientation), RAM, storage, CPU usage, clock (`cpu.clock`, MHz) and temperature, the system WebView (`webview.package` and `webview.version`), the network link and uptimes. `link.type` is `ethernet`, `wifi`, `cellular`, `vpn` or `other`, and on Wi-Fi `link` adds `rssi` (dBm), `speedMbps` and `frequencyMhz`, each null when Android does not know it. `link` is null while offline and never carries the network name, which needs a location permission. `uptime.app`, `uptime.device` and `uptime.network` are in seconds since the app started, the device booted and the network came up. `network` is null while offline and starts counting at app start at the earliest. Meant for external monitoring to poll, so it is the one endpoint that needs no token |
 | `/api/settings` | GET | All setting definitions + current values |
 | `/api/settings` | PATCH | `{key: value, ...}` partial update |
 | `/api/settings/export` | GET | Full config as JSON (for provisioning) |
@@ -189,7 +190,7 @@ launchable app as `[{package, label}]`), `immichAlbums`,
 people and tags as `[{id, name}]`, for its source and filter pickers), `showAppLauncher` /
 `hideAppLauncher` (the app launcher overlay;
 `showAppLauncher` refuses while the App Launcher is disabled in
-settings), `homeLauncherStatus`, `acquireHomeRole` and `releaseHomeRole`
+settings, and shows only the Allowed Apps while Kiosk Mode is on), `homeLauncherStatus`, `acquireHomeRole` and `releaseHomeRole`
 (the [Home Launcher](home-launcher.md) role: its live state, starting the
 takeover, and giving the role back; `releaseHomeRole` is the recovery
 lever and works with no kiosk screen up, as long as the process runs), `showNotification {message, title, duration, type, chime, scale, icon, chime_file, volume, image}` and

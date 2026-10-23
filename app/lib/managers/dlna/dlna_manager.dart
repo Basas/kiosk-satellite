@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
+import '../../core/headless.dart';
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
@@ -97,7 +98,10 @@ class _Subscription {
 /// [DlnaMediaOverlay], which watches [media]/[transportState] and reports
 /// progress back so GetPositionInfo can answer truthfully.
 class DlnaManager extends Manager {
-  DlnaManager(super.bus, super.commands, super.log, this._settings);
+  DlnaManager(super.bus, super.commands, super.log, this._settings) {
+    transportState.addListener(_syncScreensaverHold);
+    media.addListener(_syncScreensaverHold);
+  }
 
   final SettingsManager _settings;
 
@@ -138,8 +142,7 @@ class DlnaManager extends Manager {
   /// controller declared, so video and streams still take the screen even
   /// when they happen to carry no picture.
   bool get audioInBackground =>
-      media.value?.kind == 'audio' &&
-      _settings.get(defs.dlnaAudioBackground);
+      media.value?.kind == 'audio' && _settings.get(defs.dlnaAudioBackground);
 
   /// Whether the DLNA overlay is on screen (media up, or queued and showing
   /// its loading card). This is the overlay's own visibility rule, shared
@@ -169,8 +172,8 @@ class DlnaManager extends Manager {
   String get _transportActions => media.value == null
       ? ''
       : transportState.value == 'PLAYING'
-          ? 'Stop,Pause,Seek'
-          : 'Play,Stop';
+      ? 'Stop,Pause,Seek'
+      : 'Play,Stop';
 
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
@@ -186,11 +189,18 @@ class DlnaManager extends Manager {
   StreamSubscription<SettingChanged>? _settingsSub;
   Timer? _aliveTimer;
   Timer? _restartDebounce;
-  Timer? _activityTick;
   Timer? _failureStop;
   String _uuid = '';
   String _ip = '';
   String _appVersion = '';
+
+  /// BOOTID.UPNP.ORG for this run. Home Assistant drops an ssdp:alive whose
+  /// headers match the last one it saw from the same UUID, so with a fixed
+  /// value a restarted renderer stayed unavailable until HA's next SSDP scan,
+  /// up to 10 minutes later. A new value on every start tells HA the
+  /// renderer rebooted, and it reconnects on the first alive. Seconds since
+  /// the epoch keep rising and fit the 31 bits the UPnP spec allows.
+  int _bootId = 0;
   final _subs = <String, List<_Subscription>>{
     'AVTransport': [],
     'RenderingControl': [],
@@ -256,6 +266,8 @@ class DlnaManager extends Manager {
     await _settingsSub?.cancel();
     _settingsSub = null;
     await _stop();
+    transportState.removeListener(_syncScreensaverHold);
+    media.removeListener(_syncScreensaverHold);
   }
 
   Future<void> _restart() async {
@@ -269,6 +281,7 @@ class DlnaManager extends Manager {
     final port = int.tryParse(configured) ?? defaultDlnaPort;
     try {
       _ip = await _localIp();
+      _bootId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       _notifyClient = http.Client();
       _server = await serveWithFallback(_route, port);
       _livePort = _server!.port;
@@ -307,8 +320,6 @@ class DlnaManager extends Manager {
   Future<void> _stop() async {
     _aliveTimer?.cancel();
     _aliveTimer = null;
-    _activityTick?.cancel();
-    _activityTick = null;
     _failureStop?.cancel();
     _failureStop = null;
     if (_ssdp != null) {
@@ -354,13 +365,13 @@ class DlnaManager extends Manager {
 
   /// NT/ST values this renderer answers for, with their USNs.
   Map<String, String> get _targets => {
-        'upnp:rootdevice': 'uuid:$_uuid::upnp:rootdevice',
-        'uuid:$_uuid': 'uuid:$_uuid',
-        mediaRendererType: 'uuid:$_uuid::$mediaRendererType',
-        avtType: 'uuid:$_uuid::$avtType',
-        rcsType: 'uuid:$_uuid::$rcsType',
-        cmsType: 'uuid:$_uuid::$cmsType',
-      };
+    'upnp:rootdevice': 'uuid:$_uuid::upnp:rootdevice',
+    'uuid:$_uuid': 'uuid:$_uuid',
+    mediaRendererType: 'uuid:$_uuid::$mediaRendererType',
+    avtType: 'uuid:$_uuid::$avtType',
+    rcsType: 'uuid:$_uuid::$rcsType',
+    cmsType: 'uuid:$_uuid::$cmsType',
+  };
 
   String get _serverHeader =>
       'Android/1.0 UPnP/1.0 KioskSatellite/$_appVersion';
@@ -384,15 +395,12 @@ class DlnaManager extends Manager {
     // Announce twice shortly after start (UDP is lossy), then keep alive.
     _sendAlive();
     Timer(const Duration(milliseconds: 400), _sendAlive);
-    _aliveTimer = Timer.periodic(
-      const Duration(seconds: 600),
-      (_) {
-        // Purge here too: _notifyAll only runs for services that event,
-        // so ConnectionManager subscriptions would otherwise pile up.
-        _purgeSubs();
-        _sendAlive();
-      },
-    );
+    _aliveTimer = Timer.periodic(const Duration(seconds: 600), (_) {
+      // Purge here too: _notifyAll only runs for services that event,
+      // so ConnectionManager subscriptions would otherwise pile up.
+      _purgeSubs();
+      _sendAlive();
+    });
   }
 
   void _onDatagram(Datagram dg) {
@@ -407,22 +415,23 @@ class DlnaManager extends Manager {
     final matches = st == 'ssdp:all'
         ? _targets.entries.toList()
         : _targets.containsKey(st)
-            ? [MapEntry(st, _targets[st]!)]
-            : const <MapEntry<String, String>>[];
+        ? [MapEntry(st, _targets[st]!)]
+        : const <MapEntry<String, String>>[];
     if (matches.isEmpty) return;
     // A short random delay per the spec (MX), spreading replies out.
     Timer(Duration(milliseconds: Random().nextInt(80)), () {
       final sock = _ssdp;
       if (sock == null) return;
       for (final m in matches) {
-        final response = 'HTTP/1.1 200 OK\r\n'
+        final response =
+            'HTTP/1.1 200 OK\r\n'
             'CACHE-CONTROL: max-age=1800\r\n'
             'EXT:\r\n'
             'LOCATION: http://$_ip:$_livePort/device.xml\r\n'
             'SERVER: $_serverHeader\r\n'
             'ST: ${m.key}\r\n'
             'USN: ${m.value}\r\n'
-            'BOOTID.UPNP.ORG: 1\r\n'
+            'BOOTID.UPNP.ORG: $_bootId\r\n'
             '\r\n';
         sock.send(response.codeUnits, dg.address, dg.port);
       }
@@ -433,7 +442,8 @@ class DlnaManager extends Manager {
     final sock = _ssdp;
     if (sock == null) return;
     for (final t in _targets.entries) {
-      final msg = 'NOTIFY * HTTP/1.1\r\n'
+      final msg =
+          'NOTIFY * HTTP/1.1\r\n'
           'HOST: $_ssdpAddress:$_ssdpPort\r\n'
           'CACHE-CONTROL: max-age=1800\r\n'
           'LOCATION: http://$_ip:$_livePort/device.xml\r\n'
@@ -441,7 +451,7 @@ class DlnaManager extends Manager {
           'NTS: $nts\r\n'
           'SERVER: $_serverHeader\r\n'
           'USN: ${t.value}\r\n'
-          'BOOTID.UPNP.ORG: 1\r\n'
+          'BOOTID.UPNP.ORG: $_bootId\r\n'
           '\r\n';
       sock.send(msg.codeUnits, InternetAddress(_ssdpAddress), _ssdpPort);
     }
@@ -456,13 +466,15 @@ class DlnaManager extends Manager {
     final path = request.url.path;
     switch ((request.method, path)) {
       case ('GET', 'device.xml'):
-        return _xml(deviceDescription(
-          friendlyName: _settings.get(defs.deviceName).isEmpty
-              ? 'Kiosk Satellite'
-              : _settings.get(defs.deviceName),
-          uuid: _uuid,
-          appVersion: _appVersion,
-        ));
+        return _xml(
+          deviceDescription(
+            friendlyName: _settings.get(defs.deviceName).isEmpty
+                ? 'Kiosk Satellite'
+                : _settings.get(defs.deviceName),
+            uuid: _uuid,
+            appVersion: _appVersion,
+          ),
+        );
       case ('GET', 'AVTransport.xml'):
         return _xml(avtScpd);
       case ('GET', 'RenderingControl.xml'):
@@ -480,15 +492,12 @@ class DlnaManager extends Manager {
     return Response.notFound('not found');
   }
 
-  Response _xml(String body) => Response.ok(
-        body,
-        headers: {'content-type': 'text/xml; charset="utf-8"'},
-      );
+  Response _xml(String body) =>
+      Response.ok(body, headers: {'content-type': 'text/xml; charset="utf-8"'});
 
   Future<Response> _control(Request request, String service) async {
     final soapAction = request.headers['soapaction'] ?? '';
-    final action =
-        RegExp(r'#(\w+)').firstMatch(soapAction)?[1] ?? 'unknown';
+    final action = RegExp(r'#(\w+)').firstMatch(soapAction)?[1] ?? 'unknown';
     final body = await request.readAsString();
     final args = parseSoapArgs(body);
     log.debug(name, '$service.$action ${args.keys.toList()}');
@@ -566,8 +575,11 @@ class DlnaManager extends Manager {
           title: titleOf(meta),
           hls: mime.contains('mpegurl') || path.endsWith('.m3u8'),
         );
-        log.info(name, 'media set: ${media.value!.kind}'
-            '${media.value!.hls ? ' (hls)' : ''} $uri');
+        log.info(
+          name,
+          'media set: ${media.value!.kind}'
+          '${media.value!.hls ? ' (hls)' : ''} $uri',
+        );
         _position = Duration.zero;
         _duration = Duration.zero;
         // No pending flag while already PLAYING: SetAVTransportURI during
@@ -674,8 +686,10 @@ class DlnaManager extends Manager {
         return {'CurrentVolume': '${volume.value}'};
       case 'SetVolume':
         volume.value =
-            (int.tryParse(args['DesiredVolume'] ?? '') ?? volume.value)
-                .clamp(0, 100);
+            (int.tryParse(args['DesiredVolume'] ?? '') ?? volume.value).clamp(
+              0,
+              100,
+            );
         _notifyRcs();
         return const {};
       case 'GetMute':
@@ -692,7 +706,7 @@ class DlnaManager extends Manager {
   Map<String, String>? _connectionManager(String action) {
     switch (action) {
       case 'GetProtocolInfo':
-        return {'Source': '', 'Sink': sinkProtocolInfo};
+        return {'Source': '', 'Sink': _sinkProtocols};
       case 'GetCurrentConnectionIDs':
         return {'ConnectionIDs': '0'};
       case 'GetCurrentConnectionInfo':
@@ -724,14 +738,18 @@ class DlnaManager extends Manager {
       final sub = subs.where((s) => s.sid == existingSid).firstOrNull;
       if (sub == null) return Response(412);
       sub.expiry = DateTime.now().add(const Duration(seconds: 300));
-      return Response.ok('', headers: {
-        'SID': sub.sid,
-        'TIMEOUT': 'Second-300',
-        'SERVER': _serverHeader,
-      });
+      return Response.ok(
+        '',
+        headers: {
+          'SID': sub.sid,
+          'TIMEOUT': 'Second-300',
+          'SERVER': _serverHeader,
+        },
+      );
     }
-    final callback = RegExp(r'<(.+?)>')
-        .firstMatch(request.headers['callback'] ?? '')?[1];
+    final callback = RegExp(
+      r'<(.+?)>',
+    ).firstMatch(request.headers['callback'] ?? '')?[1];
     final url = callback == null ? null : Uri.tryParse(callback);
     if (url == null) return Response(412);
     final sub = _Subscription(
@@ -748,48 +766,45 @@ class DlnaManager extends Manager {
     Timer(const Duration(milliseconds: 100), () {
       sub.sendQueue = sub.sendQueue.then((_) => _notifyOne(service, sub));
     });
-    return Response.ok('', headers: {
-      'SID': sub.sid,
-      'TIMEOUT': 'Second-300',
-      'SERVER': _serverHeader,
-    });
+    return Response.ok(
+      '',
+      headers: {
+        'SID': sub.sid,
+        'TIMEOUT': 'Second-300',
+        'SERVER': _serverHeader,
+      },
+    );
   }
 
   Map<String, String> _eventProps(String service) {
     switch (service) {
       case 'AVTransport':
         return {
-          'LastChange': lastChange(
-            'urn:schemas-upnp-org:metadata-1-0/AVT/',
-            {
-              'TransportState': transportState.value,
-              'CurrentTransportActions': _transportActions,
-              'TransportStatus': 'OK',
-              'CurrentPlayMode': 'NORMAL',
-              'NumberOfTracks': media.value == null ? '0' : '1',
-              'CurrentTrack': media.value == null ? '0' : '1',
-              'CurrentTrackURI': media.value?.uri ?? '',
-              'CurrentTrackMetaData': media.value?.metadata ?? '',
-              'CurrentTrackDuration': formatUpnpTime(_duration),
-              'AVTransportURI': media.value?.uri ?? '',
-              'AVTransportURIMetaData': media.value?.metadata ?? '',
-            },
-          ),
+          'LastChange': lastChange('urn:schemas-upnp-org:metadata-1-0/AVT/', {
+            'TransportState': transportState.value,
+            'CurrentTransportActions': _transportActions,
+            'TransportStatus': 'OK',
+            'CurrentPlayMode': 'NORMAL',
+            'NumberOfTracks': media.value == null ? '0' : '1',
+            'CurrentTrack': media.value == null ? '0' : '1',
+            'CurrentTrackURI': media.value?.uri ?? '',
+            'CurrentTrackMetaData': media.value?.metadata ?? '',
+            'CurrentTrackDuration': formatUpnpTime(_duration),
+            'AVTransportURI': media.value?.uri ?? '',
+            'AVTransportURIMetaData': media.value?.metadata ?? '',
+          }),
         };
       case 'RenderingControl':
         return {
-          'LastChange': lastChange(
-            'urn:schemas-upnp-org:metadata-1-0/RCS/',
-            {
-              'Volume': '${volume.value}',
-              'Mute': muted.value ? '1' : '0',
-            },
-          ),
+          'LastChange': lastChange('urn:schemas-upnp-org:metadata-1-0/RCS/', {
+            'Volume': '${volume.value}',
+            'Mute': muted.value ? '1' : '0',
+          }),
         };
       default:
         return {
           'SourceProtocolInfo': '',
-          'SinkProtocolInfo': escapeXml(sinkProtocolInfo),
+          'SinkProtocolInfo': escapeXml(_sinkProtocols),
           'CurrentConnectionIDs': '0',
         };
     }
@@ -898,6 +913,10 @@ class DlnaManager extends Manager {
   /// A user tap on the overlay is the same as a controller Stop.
   void userDismiss() => stopPlayback();
 
+  /// Audio only on a device without a screen.
+  String get _sinkProtocols =>
+      Headless.active ? audioSinkProtocolInfo : sinkProtocolInfo;
+
   /// The state event goes out on every stop: a controller-initiated Stop
   /// being echoed back is harmless, and a local stop (tap, media end) MUST
   /// be pushed or HA's entity goes stale. Returns when the event is
@@ -911,27 +930,37 @@ class DlnaManager extends Manager {
     transportState.value = 'STOPPED';
     media.value = null;
     _position = Duration.zero;
-    _activityTick?.cancel();
-    _activityTick = null;
     _failureStop?.cancel();
     _failureStop = null;
     return _notifyAvt();
   }
 
-  /// Pushed media owns the screen: dismiss the screensaver now and keep
-  /// the idle timer at bay while playing, the same signal a touch sends.
-  /// Background audio deliberately sends nothing — keeping the current
-  /// screen includes a screensaver that is already up.
+  /// Pushed media owns the screen: dismiss the screensaver now, the same
+  /// signal a touch sends. [_syncScreensaverHold] then keeps it away while
+  /// the media plays. Background audio deliberately sends nothing, since
+  /// keeping the current screen includes a screensaver that is already up.
   void _onPlaybackStarted() {
     if (!audioInBackground) {
       bus.publish(const ActivityDetected(source: 'dlna'));
     }
-    _activityTick?.cancel();
-    _activityTick = Timer.periodic(const Duration(seconds: 15), (_) {
-      if (transportState.value == 'PLAYING' && !audioInBackground) {
-        bus.publish(const ActivityDetected(source: 'dlna'));
-      }
-    });
+  }
+
+  bool _screensaverHeld = false;
+
+  /// Holds the screensaver's idle clock while media plays on screen and
+  /// lets it go on pause or stop, which starts a full countdown. A
+  /// periodic activity signal used to do this, but an idle timeout shorter
+  /// than its period let the screensaver start in between, over the video.
+  void _syncScreensaverHold() {
+    final held =
+        transportState.value == 'PLAYING' &&
+        media.value != null &&
+        !audioInBackground;
+    if (held == _screensaverHeld) return;
+    _screensaverHeld = held;
+    unawaited(
+      commands.execute('holdScreensaver', {'holder': 'dlna', 'held': held}),
+    );
   }
 }
 

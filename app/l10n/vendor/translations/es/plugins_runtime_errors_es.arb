@@ -8,7 +8,6 @@
   "pluginErrorChecksum": "El SHA-256 del paquete no coincide",
   "pluginErrorDifferentRepository": "Este ID de plugin pertenece a otro repositorio. Desinstálalo antes de cambiar de origen.",
   "pluginErrorRestartReplace": "Este plugin no se detuvo correctamente. Reinicia Kiosk Satellite antes de reemplazarlo.",
-  "pluginErrorPluginLimit": "Se pueden instalar hasta 8 plugins",
   "pluginErrorAlreadyInstalled": "Este paquete ya está instalado",
   "pluginErrorLoadedIntegrity": "El paquete cargado anteriormente no pasó la verificación de integridad. Reinicia Kiosk Satellite antes de reinstalarlo.",
   "pluginErrorRemovePackage": "No se puede eliminar el paquete sin usar",
@@ -25,5 +24,6 @@
   "pluginErrorNativeFileIntegrity": "La biblioteca nativa instalada no pasó la verificación de integridad",
   "pluginErrorReadInstalled": "No se puede leer el plugin instalado: {error}",
   "pluginErrorPreviousRestart": "No se pudo reiniciar la versión anterior: {error}",
-  "pluginErrorUpdateFailed": "La actualización del plugin falló: {error}. {recovery}"
+  "pluginErrorUpdateFailed": "La actualización del plugin falló: {error}. {recovery}",
+  "pluginErrorNeedsScreen": "Este plugin necesita una pantalla"
 }

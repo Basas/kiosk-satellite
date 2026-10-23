@@ -200,7 +200,9 @@ class _VoiceStatusCardState extends State<VoiceStatusCard> {
                 ? voiceText(
                     context,
                     'Add this kiosk under Settings, Devices & services in '
-                    'Home Assistant, where it shows up as discovered.',
+                    'Home Assistant, where it shows up as discovered. If Home '
+                    'Assistant had it before, it asks there for the new '
+                    'Encryption key from the ESPHome page.',
                   )
                 : voiceText(
                     context,
@@ -364,6 +366,20 @@ class _VoiceHaSelectsState extends State<VoiceHaSelects> {
     final options = [
       for (final o in (entity?['options'] as List? ?? const [])) '$o',
     ];
+    // Another engine's wake words, which Home Assistant learns as it
+    // reconnects to the kiosk.
+    if (entity != null &&
+        _data?['wakeWordsPending'] == true &&
+        (key == 'wake_word' || key == 'wake_word_2')) {
+      return DropdownRow<String>(
+        title: voiceText(context, title),
+        description: voiceText(context, description),
+        value: null,
+        options: [for (final o in options) (o, _label(key, o))],
+        onChanged: null,
+        loading: true,
+      );
+    }
     if (entity == null || entity['available'] != true || options.isEmpty) {
       return SettingsRow(
         title: Text(voiceText(context, title)),
@@ -669,6 +685,17 @@ Future<bool> showRealtimeProviderDialog(
 String skinName(BuildContext context, AssistSkin skin) =>
     defs.voiceSkin.localizedOption(context, skin.id, skin.name);
 
+/// The Skin setting's [value] by name: a built-in skin's, or the plugin's
+/// whose voice skin it is.
+String voiceSkinName(
+  BuildContext context,
+  AppContainer container,
+  String value,
+) => defs.isPluginVoiceSkin(value)
+    ? container.plugins.voiceSkinOptions[value] ??
+          voiceText(context, 'Unavailable plugin skin')
+    : skinName(context, assistSkinById(value));
+
 /// The Skin row: the current skin's name, opening the picker.
 class VoiceSkinRow extends StatelessWidget {
   const VoiceSkinRow({
@@ -682,7 +709,7 @@ class VoiceSkinRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skin = assistSkinById(container.settings.get(defs.voiceSkin));
+    final skin = container.settings.get(defs.voiceSkin);
     return SettingsRow(
       title: Text(voiceText(context, 'Skin')),
       subtitle: Text(
@@ -696,7 +723,7 @@ class VoiceSkinRow extends StatelessWidget {
         }
       },
       trailing: Text(
-        skinName(context, skin),
+        voiceSkinName(context, container, skin),
         style: Theme.of(context).textTheme.bodyMedium,
       ),
     );
@@ -719,7 +746,46 @@ class VoiceSkinThumbnail extends StatelessWidget {
   );
 }
 
-/// Every skin as a thumbnail, the current one ringed.
+/// A plugin's voice skin: the picture the plugin ships, or the plugin mark
+/// for one that ships none.
+class _PluginSkinThumbnail extends StatelessWidget {
+  const _PluginSkinThumbnail({required this.container, required this.id});
+
+  final AppContainer container;
+
+  /// The plugin's id.
+  final String id;
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder(
+    future: container.plugins.voiceSkinThumbnail(id),
+    builder: (context, snapshot) => snapshot.data != null
+        ? Image.memory(
+            snapshot.data!,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.medium,
+            errorBuilder: (context, _, _) => _mark(context),
+          )
+        : _mark(context),
+  );
+
+  Widget _mark(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ColoredBox(
+      color: scheme.surfaceContainerHighest,
+      child: Center(
+        child: Icon(
+          Icons.extension_outlined,
+          size: 40,
+          color: scheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}
+
+/// Every skin as a thumbnail, the current one ringed. Installed plugins
+/// that offer a voice skin follow the built-in ones.
 Future<String?> showVoiceSkinPicker(
   BuildContext context,
   AppContainer container,
@@ -729,6 +795,20 @@ Future<String?> showVoiceSkinPicker(
     context: context,
     builder: (context) {
       final wide = MediaQuery.sizeOf(context).width >= 640;
+      final skins = <(String, String, Widget)>[
+        for (final skin in assistSkins)
+          (skin.id, skinName(context, skin), VoiceSkinThumbnail(skin: skin)),
+        for (final MapEntry(:key, :value)
+            in container.plugins.voiceSkinOptions.entries)
+          (
+            key,
+            value,
+            _PluginSkinThumbnail(
+              container: container,
+              id: key.substring('plugin:'.length),
+            ),
+          ),
+      ];
       return AlertDialog(
         title: Text(voiceText(context, 'Skin')),
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
@@ -741,10 +821,10 @@ Future<String?> showVoiceSkinPicker(
             crossAxisSpacing: 14,
             childAspectRatio: 1.25,
             children: [
-              for (final skin in assistSkins)
+              for (final (id, name, thumbnail) in skins)
                 InkWell(
                   borderRadius: BorderRadius.circular(14),
-                  onTap: () => Navigator.of(context).pop(skin.id),
+                  onTap: () => Navigator.of(context).pop(id),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 6,
@@ -754,20 +834,20 @@ Future<String?> showVoiceSkinPicker(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              width: skin.id == current ? 3 : 1,
-                              color: skin.id == current
+                              width: id == current ? 3 : 1,
+                              color: id == current
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).dividerColor,
                             ),
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: VoiceSkinThumbnail(skin: skin),
+                            child: thumbnail,
                           ),
                         ),
                       ),
                       Text(
-                        skinName(context, skin),
+                        name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

@@ -1,12 +1,15 @@
+import { isHeadless } from './headless.js';
 import { cameraStreamsError } from './localization.js';
 import { overviewLabel, overviewMessageBox, overviewModalShell } from './overview_labels.js';
-import { mediaText, mediaError, deviceText, t, screenAudioText, screensaverText, immichError } from './localization.js';
+import { mediaText, mediaError, deviceText, t, screenAudioText, screensaverText, immichError, overviewText } from './localization.js';
 import { receiveUpdate, watchUpdates } from './live.js';
 import { $, api, cmd, state } from './core.js';
 import { readOnlyRow } from './device.js';
-import { hintRow, showToast } from './widgets.js';
+import { INTRO_INFO_ICON, hintRow, introRow, showToast } from './widgets.js';
 import { loadSettings } from './settings.js';
 import { radioRow } from './views.js';
+import { currentDashboardPath, dashboardField } from './dashboard_picker.js';
+import { PLAYER_ICONS, cachedList, fixedPlayerSpec, pickField, pickItem, playerSpec } from './entity_picker.js';
 import { messageBox, modalShell } from './widgets.js';
 
 /* Overlay grant notice: mirror of the device's row directly under
@@ -117,6 +120,9 @@ export function updateMaValidateRow() {
    (issue #722), the device source's second player beside Sendspin. */
 const LOCAL_SESSION = 'session:*';
 const LOCAL_SESSION_NAME = 'Local Media Session';
+/* And its AirPlay receiver, the third: a name no language translates. */
+const AIRPLAY = 'airplay';
+const AIRPLAY_NAME = 'AirPlay';
 
 /* Which player of the picked source the Now Playing surfaces follow
    (issue #265). The definition renders as a text field; this swaps in a
@@ -127,13 +133,13 @@ export async function updatePlayerRow() {
   const tab = document.getElementById('tab-sendspin');
   if (!tab) return;
   // What every source has in common, said once at the top of the page.
-  if (!tab.querySelector('.media-player-intro')) {
-    const intro = hintRow(mediaText('The floating player and Now Playing show only while '
+  // Both surfaces it names need a screen.
+  if (!isHeadless() && !tab.querySelector('.media-player-intro')) {
+    const intro = document.createElement('div');
+    intro.className = 'card media-player-intro';
+    intro.appendChild(introRow(INTRO_INFO_ICON, '', mediaText('The floating player and Now Playing show only while '
       + 'the picked player has a track playing or a queue loaded. With nothing '
-      + 'playing or queued, neither appears.'));
-    intro.classList.add('media-player-intro');
-    // On the page title's line: the title sits 4 in from the card edge.
-    intro.style.cssText = 'margin: 0 0 4px 4px;';
+      + 'playing or queued, neither appears.')));
     tab.prepend(intro);
   }
   const byKey = Object.fromEntries(
@@ -148,74 +154,39 @@ export async function updatePlayerRow() {
   }
   row.stopPlayerWatch?.();
   row.playerSource = source;
-  row.querySelectorAll('input, select').forEach(el => el.remove());
-  const sel = document.createElement('select');
-  sel.className = 'field';
-  sel.dataset.source = source;
-  sel.style.cssText = 'flex-shrink:0; max-width:240px;';
-  row.appendChild(sel);
-  let players = [];
-  let note = '';
-  const paint = () => {
-    if (!row.contains(sel)) return;
+  row.querySelectorAll('input, select, .ep-field').forEach(el => el.remove());
+  row.classList.add('dp-field-row');
+  // The entity picker over the source's players, or this device's own three.
+  const spec = source ? playerSpec(source) : fixedPlayerSpec('players:local', [
+    { id: '', name: mediaText('Sendspin Player'), iconPath: PLAYER_ICONS.speaker,
+      group: '', available: true, raw: {} },
+    { id: AIRPLAY, name: AIRPLAY_NAME, iconPath: PLAYER_ICONS.airplay,
+      group: '', available: true, raw: {} },
+    { id: LOCAL_SESSION, name: mediaText(LOCAL_SESSION_NAME), iconPath: PLAYER_ICONS.session,
+      group: '', available: true, raw: {} },
+  ]);
+  const titles = { ma: 'Music Assistant player', ha: 'Home Assistant media player', sonos: 'Sonos room' };
+  const picked = () => {
     const settings = Object.fromEntries((state.settings || []).map(s => [s.key, s.value]));
-    const id = settings['sendspin.player'] || '';
-    const name = settings['sendspin.player_name'] || '';
-    const add = (value, label) => {
-      const option = document.createElement('option');
-      option.value = value;
-      option.textContent = label;
-      sel.appendChild(option);
-      return option;
-    };
-    sel.replaceChildren();
-    add('', mediaText(source ? 'Pick a player' : 'Sendspin Player'));
-    const localSession = !source && id === LOCAL_SESSION;
-    if (!source) add(LOCAL_SESSION, mediaText(LOCAL_SESSION_NAME));
-    if (source) {
-      if (note && !players.length) add(`note:${source}`, mediaError(note)).disabled = true;
-      const names = {};
-      for (const p of players) names[p.name] = (names[p.name] || 0) + 1;
-      for (const p of players) {
-        const label = p.id === id && name ? name
-          : names[p.name] > 1 && p.sub ? `${p.name} (${p.sub})` : p.name;
-        add(p.id, p.available === false ? t('mediaOfflineName', {name: label}) : label);
-      }
-      if (id && !players.some(p => p.id === id)) add(id, name || id);
-    }
-    sel.value = source || localSession ? id : '';
-    updateSessionPermissions(tab, localSession);
-    tab.querySelector('.player-warn')?.remove();
-    if (source || localSession) {
-      const shown = localSession ? mediaText(LOCAL_SESSION_NAME) : name;
-      const warning = hintRow(t('mediaLocalOffline', {player: shown || mediaText('another player')}), { warn: true });
-      warning.classList.add('player-warn', 'divided');
-      row.insertAdjacentElement('afterend', warning);
-    }
+    return { id: settings['sendspin.player'] || '', name: settings['sendspin.player_name'] || '' };
   };
-  row.refreshPlayer = paint;
-  row.updateSetting = () => { paint(); return true; };
-  paint();
-  row.stopPlayerWatch = watchUpdates(['media-players'], async () => {
-    if (!source) return;
-    const result = await cmd('mediaPlayers', { source });
-    if (!row.contains(sel) || !result.ok || !Array.isArray(result.data?.players)) return;
-    players = result.data.players.filter(p => p.group === source);
-    note = result.data.notes?.[source] || '';
-    // Read the current selection after the request. A device update may
-    // have arrived while the source was listing its players.
-    paint();
-  }, { owner: row, intervalMs: 1000 });
-  sel.addEventListener('change', async () => {
+  let field = null;
+  const choose = async () => {
+    const { id } = picked();
+    const out = await pickItem({
+      title: source ? mediaText(titles[source] || 'Player') : (byKey['sendspin.player']?.title || ''),
+      spec, selected: source ? (id || null) : id,
+    });
+    if (!out || (out.id ?? '') === id) return;
+    const next = out.id ?? '';
     // Stored in English like every other name the pick keeps.
-    const name = sel.value === LOCAL_SESSION ? LOCAL_SESSION_NAME
-      : sel.value
-        ? players.find(p => p.id === sel.value)?.name
-          || sel.options[sel.selectedIndex].textContent : '';
+    const name = next === LOCAL_SESSION ? LOCAL_SESSION_NAME
+      : next === AIRPLAY ? AIRPLAY_NAME
+      : next ? (cachedList(spec.key)?.items.find(p => p.id === next)?.name || next) : '';
     const values = {
-      'sendspin.player': sel.value,
+      'sendspin.player': next,
       'sendspin.player_name': name,
-      'sendspin.player_active': !!sel.value || !!source
+      'sendspin.player_active': !!next || !!source
         || byKey['sendspin.enabled']?.value === true,
     };
     try {
@@ -229,7 +200,58 @@ export async function updatePlayerRow() {
       showToast({ title: mediaText('Could not select player'), message: mediaError(error.message), kind: 'error' });
     }
     paint();
-  });
+  };
+  const paint = () => {
+    if (!row.isConnected && field) return;
+    const { id, name } = picked();
+    const localSession = !source && id === LOCAL_SESSION;
+    const airplay = !source && id === AIRPLAY;
+    const fresh = pickField({
+      spec, value: id,
+      placeholder: mediaText(source ? 'Pick a player' : 'Sendspin Player'),
+      // Only the Local Media Session's name is the app's to translate; a
+      // player's own name stays exactly as the source sent it.
+      fallbackLabel: name === LOCAL_SESSION_NAME ? mediaText(name) : (name || null),
+      flagMissing: false,
+      // This device's Sendspin player is the empty pick.
+      emptyIsPick: !source,
+      onClick: choose,
+    });
+    if (field) field.el.replaceWith(fresh.el); else row.appendChild(fresh.el);
+    field = fresh;
+    updateSessionPermissions(tab, localSession);
+    tab.querySelector('.player-warn')?.remove();
+    const message = offlineNotice(source, id, name);
+    if (message) {
+      const warning = hintRow(message, { warn: true });
+      warning.classList.add('player-warn', 'divided');
+      row.insertAdjacentElement('afterend', warning);
+    }
+  };
+  row.refreshPlayer = paint;
+  row.updateSetting = () => { paint(); return true; };
+  row.stopPlayerWatch = null;
+  paint();
+}
+
+/* What the pick turns off on this device, under the Player row: the
+   Sendspin player and the AirPlay receiver, each only while switched on and
+   not the pick itself. Nothing for a pick that leaves both as they were. The
+   device draws the same (settings_screen.dart, _offlineNotice). */
+function offlineNotice(source, id, name) {
+  const value = (key) => (state.settings || []).find((s) => s.key === key)?.value;
+  const sourceSetting = () => (state.settings || []).find((s) => s.key === 'sendspin.player_source');
+  const sendspinOff = value('sendspin.enabled') === true && !(!source && !id);
+  const airplayOff = value('airplay.enabled') === true && !(!source && id === AIRPLAY);
+  if (!sendspinOff && !airplayOff) return '';
+  const player = !source && !id ? mediaText('Sendspin Player')
+    : !source && id === LOCAL_SESSION ? mediaText(LOCAL_SESSION_NAME)
+    : !source && id === AIRPLAY ? AIRPLAY_NAME
+    // A source with no player picked yet: the source by name.
+    : (name || sourceSetting()?.optionLabels?.[source] || mediaText('another player'));
+  const key = sendspinOff && airplayOff ? 'mediaOfflineBoth'
+    : sendspinOff ? 'mediaOfflineSendspin' : 'mediaOfflineAirplay';
+  return t(key, { player });
 }
 
 /* The Local Media Session's Required system permissions group, at the end
@@ -462,6 +484,8 @@ export async function updateBrightnessGrantNotices() {
     granted = !!(res.data || {}).writeSettings;
   } catch (_) { return; }
   $('#brightnessGrantRow').style.display = granted ? 'none' : '';
+  // No panel to light on a device without a screen.
+  if (isHeadless()) return;
   const root = document.getElementById('tab-screenaudio');
   const existing = root.querySelector('.brightness-grant-card');
   if (granted) { root.querySelectorAll('.brightness-grant-card').forEach((el) => el.remove()); return; }
@@ -506,57 +530,27 @@ $('#brightness').addEventListener('input', (e) =>
 $('#brightness').addEventListener('change', (e) =>
   cmd('setBrightness', { level: e.target.value / 100 }));
 /* The free Load URL box this replaced let an admin point a locked kiosk at
-   any page on the internet; a picker over the instance's own dashboard
-   views navigates without opening that door. Same list, same paths, same
-   command as the rotation picker and the ESPHome Dashboard select. */
+   any page on the internet; the dashboard picker over the instance's own
+   views navigates without opening that door. The field shows the view on
+   screen and opens the picker in go mode: a tap navigates at once and the
+   view on screen reads Showing. */
+// Built on first use, not at module load, so nothing here runs before
+// the modules it imports are ready.
+let viewJump = null;
 export async function loadViewJump() {
-  const sel = $('#viewJump');
-  try {
-    if (!state.dashboardsCache) {
-      state.dashboardsCache = (await (await api('/api/commands/haListDashboards', {
-        method: 'POST', body: '{}' })).json()).data || [];
-    }
-    const dashboards = state.dashboardsCache;
-    sel.innerHTML = '';
-    const ph = document.createElement('option');
-    ph.value = '';
-    overviewLabel(ph, 'Pick a dashboard view…');
-    sel.appendChild(ph);
-    for (const d of dashboards) {
-      let views = [];
-      try {
-        const r = await (await api('/api/commands/haListDashboardViews', {
-          method: 'POST', body: JSON.stringify({ url_path: d.url_path }) })).json();
-        if (r.ok && Array.isArray(r.data) && r.data.length) views = r.data;
-      } catch (_) {}
-      // Auto-generated and strategy dashboards store no view list; their
-      // bare path resolves the default view, same as the rotation picker.
-      if (!views.length) views = [{ route: '' }];
-      const group = document.createElement('optgroup');
-      group.label = d.title || d.url_path;
-      for (const v of views) {
-        const o = document.createElement('option');
-        o.value = v.route ? `${d.url_path}/${v.route}` : d.url_path;
-        if (v.title || v.route) o.textContent = v.title || v.route;
-        else overviewLabel(o, 'Default view');
-        group.appendChild(o);
-      }
-      sel.appendChild(group);
-    }
-    sel.disabled = sel.options.length <= 1;
-    if (sel.disabled) overviewLabel(sel.options[0], 'No dashboards found');
-  } catch (_) {
-    overviewLabel(sel.options[0], 'Views unavailable');
+  const base = () => (state.settings || []).find((o) => o.key === 'ha.url')?.value || '';
+  if (!viewJump) {
+    viewJump = dashboardField({
+      title: overviewText('Go to view'),
+      mode: 'go',
+      showing: () => currentDashboardPath(base()),
+      onPick: (path) => cmd('haNavigate', { path }),
+    });
+    viewJump.el.id = 'viewJump';
+    $('#viewJump').replaceWith(viewJump.el);
   }
+  viewJump.setValue(await currentDashboardPath(base()));
 }
-$('#viewJump').addEventListener('change', async (e) => {
-  const path = e.target.value;
-  if (!path) return;
-  await cmd('haNavigate', { path });
-  // A jump control, not a state display: back to the placeholder so the
-  // row never claims a view the tablet may have since navigated away from.
-  e.target.value = '';
-});
 /* ---- Quick controls ----
    The screen, screensaver and camera view tiles are one tile each that
    reads by what the device is doing, so the dashboard offers the action
@@ -698,6 +692,8 @@ document.getElementById('tileCameraView')?.addEventListener('click', () => {
 });
 
 export async function loadScreenshot() {
+  // Nothing to capture on a device without a screen.
+  if (isHeadless()) return;
   try {
     const res = await api('/api/screenshot');
     if (!res.ok) return false;

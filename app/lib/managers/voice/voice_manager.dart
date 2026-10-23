@@ -15,6 +15,7 @@ import '../analytics/usage_counters.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
 import '../wake_word/engine.dart';
+import '../wake_word/pryon/pryon_catalog.dart';
 import '../wake_word/wake_word_manager.dart';
 import 'assist_view.dart';
 import 'chat_log.dart';
@@ -98,7 +99,12 @@ class VoiceManager extends Manager {
     final next = satelliteState(view.value, busy: busy);
     if (next == _satelliteState) return;
     _satelliteState = next;
-    bus.publish(VoiceSatelliteStateChanged(next));
+    bus.publish(
+      VoiceSatelliteStateChanged(
+        next,
+        announcement: view.value.phase == AssistPhase.announcement,
+      ),
+    );
   }
 
   /// Seconds into the answer (or announcement) playing now and its length,
@@ -222,11 +228,25 @@ class VoiceManager extends Manager {
   String _offeredSent = '';
   Timer? _selectsTimer;
 
+  /// When the kiosk's wake words last changed (another engine or language,
+  /// a custom model). Until Home Assistant's Wake word selects offer them,
+  /// or [_wakeWordsWait] passes, the settings pages show the selects
+  /// loading: Home Assistant only learns them as it reconnects.
+  DateTime? _wakeWordsChangedAt;
+  Timer? _wakeWordsTimer;
+  static const _wakeWordsWait = Duration(seconds: 30);
+
   /// The subscription following Home Assistant's selects into their
   /// settings, the entities it follows and the connection it rides.
   Future<void> Function()? _unwatchSelects;
   String _watchedSelects = '';
   int _watchedOn = -1;
+
+  /// The selects as that subscription last saw them, {state, attributes}
+  /// by entity id: the settings pages read them from here instead of a
+  /// request to Home Assistant per select, which on a slow kiosk took
+  /// seconds while an engine switch kept it busy.
+  final _selectStates = <String, Map<String, Object?>>{};
   Future<void>? _watching;
   Timer? _watchTimer;
 
@@ -429,14 +449,26 @@ class VoiceManager extends Manager {
               e.key == defs.voiceEnabled.key ||
               e.key == defs.voiceMute.key ||
               e.key == defs.voiceWakeWordEngine.key ||
+              e.key == defs.voiceAmazonLocale.key ||
               e.key == defs.voiceWakeWords.key ||
               e.key == defs.voiceWakeWordSensitivity.key ||
               e.key == defs.voiceNoiseGate.key ||
               e.key == defs.voiceStopWord.key) {
             unawaited(_sync());
           }
-          // Another engine offers other wake words.
-          if (e.key == defs.voiceWakeWordEngine.key) _refreshSelects();
+          // Another engine offers other wake words, and Amazon's engine
+          // other ones in another language. The app's language only counts
+          // while it picks that language.
+          if (e.key == defs.voiceWakeWordEngine.key ||
+              e.key == defs.voiceAmazonLocale.key) {
+            _refreshSelects();
+          }
+          if (e.key == defs.uiLanguage.key &&
+              _engine == WakeWordEngineType.pryon &&
+              _settings.get(defs.voiceAmazonLocale).isEmpty) {
+            unawaited(_sync());
+            _refreshSelects();
+          }
           if (e.key == defs.voiceRuntime.key ||
               e.key == defs.voiceEnabled.key) {
             _watchSelects();
@@ -484,6 +516,47 @@ class VoiceManager extends Manager {
             final slot = (p['slot'] as num?)?.toInt() ?? 1;
             _wakeSlot(slot, _phraseForSlot(slot));
             return const CommandResult.ok();
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'setWakeWordMuted',
+          description:
+              'Mute or unmute wake word detection, the same mute as the '
+              'Voice Satellite Mute switch in Home Assistant (issue #991). '
+              'Answers the muted state it set',
+          params: const {'muted': 'true to mute, false to unmute'},
+          handler: (p) async {
+            final muted = p['muted'];
+            if (muted is! bool) {
+              return const CommandResult.fail('muted must be true or false');
+            }
+            if (nativeRuntime) {
+              if (!enabled) {
+                return const CommandResult.fail('Voice Satellite is off');
+              }
+              await _settings.set(defs.voiceMute, muted, source: 'command');
+              return CommandResult.ok(muted);
+            }
+            // The dashboard runtime: the mute is the integration's own
+            // switch in Home Assistant.
+            final controls = await commands.execute('vsControls', const {});
+            final data = controls.ok ? controls.data : null;
+            final entities = data is Map ? data['entities'] : null;
+            final mute = entities is Map ? entities['mute'] : null;
+            final id = mute is Map ? mute['entity_id'] : null;
+            if (id is! String || id.isEmpty) {
+              return const CommandResult.fail(
+                'Voice Satellite has no mute switch',
+              );
+            }
+            final result = await commands.execute('haCallService', {
+              'domain': 'switch',
+              'service': muted ? 'turn_on' : 'turn_off',
+              'entity_id': id,
+            });
+            return result.ok ? CommandResult.ok(muted) : result;
           },
         ),
       )
@@ -778,7 +851,9 @@ class VoiceManager extends Manager {
           description:
               'The wake words an engine offers on this kiosk, id and phrase: '
               'its bundled models and the custom ones added here',
-          params: const {'engine': 'vswakeword, microwakeword or openwakeword'},
+          params: const {
+            'engine': 'vswakeword, microwakeword, openwakeword or pryon',
+          },
           quiet: true,
           handler: (p) async {
             final engine = voiceEngines['${p['engine'] ?? ''}'] ?? _engine;
@@ -787,6 +862,7 @@ class VoiceManager extends Manager {
                 engine,
                 external: _external,
                 custom: _custom.models,
+                pryonLocale: _pryonLocale,
               ))
                 {'id': w.id, 'phrase': w.phrase},
             ]);
@@ -897,6 +973,45 @@ class VoiceManager extends Manager {
                 : CommandResult.fail(error);
           },
         ),
+      )
+      ..register(
+        Command(
+          name: 'voiceTimers',
+          description:
+              'The timers on this kiosk, running, paused and ringing (the '
+              'vs_list_timers action)',
+          quiet: true,
+          handler: (_) async => CommandResult.ok({'timers': timerList()}),
+        ),
+      )
+      ..register(
+        Command(
+          name: 'voiceTimerControl',
+          description:
+              'Pause, resume, cancel or add or remove time from a timer on '
+              'this kiosk by its id (the vs_pause_timer family of actions)',
+          params: const {
+            'timer_id': 'the timer, empty for the only one',
+            'action': 'pause, resume, cancel, add or remove',
+            'hours': 'for add and remove',
+            'minutes': 'for add and remove',
+            'seconds': 'for add and remove',
+          },
+          handler: (p) async {
+            int amount(String key) =>
+                ((p[key] as num?)?.toInt() ?? 0).clamp(0, 604800);
+            final error = await controlTimer(
+              '${p['timer_id'] ?? ''}'.trim(),
+              '${p['action'] ?? ''}',
+              hours: amount('hours'),
+              minutes: amount('minutes'),
+              seconds: amount('seconds'),
+            );
+            return error == null
+                ? const CommandResult.ok()
+                : CommandResult.fail(error);
+          },
+        ),
       );
 
     _registerMigrationCommands();
@@ -918,6 +1033,7 @@ class VoiceManager extends Manager {
       _engine,
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     ))
       '${w.id}=${w.phrase}',
   ].join('|');
@@ -927,6 +1043,14 @@ class VoiceManager extends Manager {
   /// sets up. When the list changed (a custom model, another engine), the
   /// entry is reloaded so the selects offer what the kiosk has now.
   void _refreshSelects() {
+    _wakeWordsChangedAt = DateTime.now();
+    bus.publish(const RemoteStatusChanged('voice-selects'));
+    // Past the wait the pages show what Home Assistant has, whatever it is.
+    _wakeWordsTimer?.cancel();
+    _wakeWordsTimer = Timer(
+      _wakeWordsWait,
+      () => bus.publish(const RemoteStatusChanged('voice-selects')),
+    );
     _selectsTimer?.cancel();
     _selectsTimer = Timer(const Duration(seconds: 2), () {
       final satellite = homeAssistant.value.satelliteEntity;
@@ -959,6 +1083,7 @@ class VoiceManager extends Manager {
     final unwatch = _unwatchSelects;
     _unwatchSelects = null;
     _watchedSelects = '';
+    _selectStates.clear();
     if (unwatch != null) await unwatch();
     if (!want) return;
     final keyOf = {for (final e in entities.entries) e.value: e.key};
@@ -981,23 +1106,52 @@ class VoiceManager extends Manager {
         {'type': 'subscribe_entities', 'entity_ids': keyOf.keys.toList()},
         (event) {
           optionsChanged = false;
-          // subscribe_entities: "a" carries whole states, "c" the changes.
+          // subscribe_entities: "a" carries whole states, "c" the changes
+          // ("+" set, "-" attributes dropped), "r" the entities removed.
           final added = event['a'];
           if (added is Map) {
             added.forEach((entity, raw) {
               if (raw is! Map) return;
+              final attributes = raw['a'];
+              _selectStates['$entity'] = {
+                'state': raw['s'],
+                'attributes': {
+                  if (attributes is Map) ...attributes.cast<String, Object?>(),
+                },
+              };
               _mirrorSelect(keyOf['$entity'], raw['s']);
-              noteOptions(entity, raw['a']);
+              noteOptions(entity, attributes);
             });
           }
           final changed = event['c'];
           if (changed is Map) {
             changed.forEach((entity, raw) {
-              final plus = raw is Map ? raw['+'] : null;
+              if (raw is! Map) return;
+              final plus = raw['+'];
+              final minus = raw['-'];
+              final cached = _selectStates['$entity'];
+              final attributes = cached?['attributes'];
+              if (plus is Map && cached != null) {
+                if (plus.containsKey('s')) cached['state'] = plus['s'];
+                final more = plus['a'];
+                if (more is Map && attributes is Map) {
+                  more.forEach((k, v) => attributes['$k'] = v);
+                }
+              }
+              final gone = minus is Map ? minus['a'] : null;
+              if (gone is List && attributes is Map) {
+                gone.forEach(attributes.remove);
+              }
               if (plus is! Map) return;
               _mirrorSelect(keyOf['$entity'], plus['s']);
               noteOptions(entity, plus['a']);
             });
+          }
+          final removed = event['r'];
+          if (removed is List) {
+            for (final entity in removed) {
+              _selectStates.remove('$entity');
+            }
           }
           if (optionsChanged) {
             bus.publish(const RemoteStatusChanged('voice-selects'));
@@ -1126,6 +1280,7 @@ class VoiceManager extends Manager {
       engine,
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     )) {
       if (w.id == model['id']) return w.phrase;
     }
@@ -1675,7 +1830,7 @@ class VoiceManager extends Manager {
     if (homeAssistant.value.entities.isEmpty) await refreshHomeAssistant();
     final out = <String, Object?>{};
     for (final entry in homeAssistant.value.entities.entries) {
-      final state = await _migration.stateOf(entry.value);
+      final state = await _selectState(entry.value);
       final attributes = state?['attributes'];
       out[entry.key] = {
         'entity_id': entry.value,
@@ -1688,6 +1843,9 @@ class VoiceManager extends Manager {
       };
     }
     out['selectsMissing'] = homeAssistant.value.selectsMissing;
+    final wakeWord = out['wake_word'];
+    out['wakeWordsPending'] =
+        wakeWord is Map && _wakeWordsPending(wakeWord['options']);
     // Every validated realtime provider, more choices for each Assistant,
     // and the one each wake word is on (its option, or null for Assist).
     out['realtime'] = {
@@ -1705,12 +1863,48 @@ class VoiceManager extends Manager {
     return out;
   }
 
+  /// One of Home Assistant's selects, {state, attributes}: as the live
+  /// subscription last saw it, else asked of Home Assistant.
+  Future<Map<String, Object?>?> _selectState(String entity) async {
+    final live =
+        _unwatchSelects != null &&
+        _ha.connected &&
+        _ha.connections == _watchedOn;
+    final cached = live ? _selectStates[entity] : null;
+    return cached ?? await _migration.stateOf(entity);
+  }
+
+  /// Home Assistant's Wake word select still offers other wake words than
+  /// the kiosk has, shortly after they changed. Its options are None and
+  /// the phrases the kiosk offered.
+  bool _wakeWordsPending(Object? options) {
+    final since = _wakeWordsChangedAt;
+    if (since == null || DateTime.now().difference(since) > _wakeWordsWait) {
+      return false;
+    }
+    final offered = {
+      for (final w in offeredWakeWords(
+        _engine,
+        external: _external,
+        custom: _custom.models,
+        pryonLocale: _pryonLocale,
+      ))
+        w.phrase,
+    };
+    final listed = {
+      if (options is List)
+        for (final o in options)
+          if (o != 'no_wake_word') '$o',
+    };
+    return !setEquals(offered, listed);
+  }
+
   /// Sets one of Home Assistant's selects on the kiosk ([key] as in
   /// [VoiceHaState.entities]); false when it has no such option.
   Future<bool> selectOption(String key, String option) async {
     final entity = homeAssistant.value.entities[key];
     if (entity == null) return false;
-    final state = await _migration.stateOf(entity);
+    final state = await _selectState(entity);
     final attributes = state?['attributes'];
     final options = attributes is Map ? attributes['options'] : null;
     if (options is List && !options.contains(option)) return false;
@@ -1780,9 +1974,23 @@ class VoiceManager extends Manager {
     return const ['ok_nabu'];
   }
 
-  WakeWordEngineType get _engine =>
-      voiceEngines[_settings.get(defs.voiceWakeWordEngine)] ??
-      WakeWordEngineType.vsWakeWord;
+  /// The locale Amazon's engine listens with: the Wake word language
+  /// setting, else the app's language (PryonCatalog.resolveLocale).
+  String get _pryonLocale => PryonCatalog.resolveLocale(
+    _settings.get(defs.voiceAmazonLocale),
+    _settings.get(defs.uiLanguage),
+  );
+
+  WakeWordEngineType get _engine {
+    final engine = voiceEngines[_settings.get(defs.voiceWakeWordEngine)];
+    // Amazon's engine set on a device without the Echo Dot image's service,
+    // such as a fleet follower: listen with the default instead of nothing.
+    if (engine == null ||
+        (engine == WakeWordEngineType.pryon && !PryonCatalog.available)) {
+      return WakeWordEngineType.vsWakeWord;
+    }
+    return engine;
+  }
 
   /// The wake word slot (1 or 2) of the model [id], 1 when it is not one
   /// of the configured ones.
@@ -2278,7 +2486,8 @@ class VoiceManager extends Manager {
   }
 
   // What each provider offers when it cannot be asked: xAI documents these
-  // voices by name, and neither OpenAI nor Gemini lists voices over its API
+  // voices and its voice models by name (its model list leaves the voice
+  // models out), and neither OpenAI nor Gemini lists voices over its API
   // at all.
   static const _openAiModels = ['gpt-realtime', 'gpt-realtime-mini'];
   static const _openAiVoices = [
@@ -2293,7 +2502,7 @@ class VoiceManager extends Manager {
     'shimmer',
     'verse',
   ];
-  static const _xaiModels = ['grok-voice-latest', 'grok-voice-think-fast-2.0'];
+  static const _xaiModels = ['grok-voice-latest', 'grok-voice-3.0'];
   static const _xaiVoices = ['ara', 'eve', 'rex'];
   static const _geminiModels = [
     'gemini-3.8-live',
@@ -2469,6 +2678,7 @@ class VoiceManager extends Manager {
       stopWord: _settings.get(defs.voiceStopWord),
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     );
     _ownsWakeWord = true;
     await _wakeWord.configure(config, source: 'native satellite');
@@ -2767,6 +2977,7 @@ class VoiceManager extends Manager {
       _engine,
       external: _external,
       custom: _custom.models,
+      pryonLocale: _pryonLocale,
     );
     _offeredSent = _offeredSignature();
     final listened = listenedWakeWords(_activeIds(), offered);
@@ -2982,6 +3193,7 @@ class VoiceManager extends Manager {
       );
     }
     _pushTimers();
+    _publishTimers();
   }
 
   /// Puts a timer change on Home Assistant's bus as
@@ -3195,6 +3407,46 @@ class VoiceManager extends Manager {
     return '$base${url.startsWith('/') ? '' : '/'}$url';
   }
 
+  /// The timers as `vs_list_timers` answers and the ESPHome sensors read
+  /// them: running and paused ones with their time left as of now, then
+  /// the ringing ones. `ends_at` is null while a timer is paused.
+  List<Map<String, Object?>> timerList() {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    return [
+      for (final t in _timers.values)
+        () {
+          final left = t.active
+              ? (t.secondsLeft - (now - t.at) ~/ 1000).clamp(0, t.secondsLeft)
+              : t.secondsLeft;
+          return {
+            'timer_id': t.id,
+            'name': t.name,
+            'total_seconds': t.createdSeconds,
+            'seconds_left': left,
+            'is_active': t.active,
+            'ends_at': t.active
+                ? DateTime.fromMillisecondsSinceEpoch(
+                    t.at + t.secondsLeft * 1000,
+                  ).toUtc().toIso8601String()
+                : null,
+            'finished': false,
+          };
+        }(),
+      for (final id in _ringing)
+        {
+          'timer_id': id,
+          'name': _ringingNames[id] ?? '',
+          'total_seconds': _ringingTotals[id] ?? 0,
+          'seconds_left': 0,
+          'is_active': false,
+          'ends_at': null,
+          'finished': true,
+        },
+    ];
+  }
+
+  void _publishTimers() => bus.publish(VoiceTimersChanged(timerList()));
+
   void _pushTimers() {
     if (!_settings.get(defs.voiceTimerPills)) {
       unawaited(
@@ -3279,6 +3531,7 @@ class VoiceManager extends Manager {
     _alertSpeech = null;
     _speechGen++;
     _pushAlert();
+    _publishTimers();
   }
 
   Future<void> _onTimerAction(VoiceTimerAction action) async {
@@ -3287,33 +3540,104 @@ class VoiceManager extends Manager {
       _dismissAlert();
       return;
     }
-    final timer = _timers[action.id];
-    if (timer == null) return;
-    final intent = switch (action.action) {
-      'pause' => 'HassPauseTimer',
-      'resume' => 'HassUnpauseTimer',
-      'cancel' => 'HassCancelTimer',
-      _ => null,
-    };
-    if (intent == null) return;
-    // The timer intents find a timer by its name, else by the duration it
-    // was started with.
-    final slots = <String, Object?>{};
-    if (timer.name.isNotEmpty) {
-      slots['name'] = timer.name;
-    } else {
-      final total = timer.createdSeconds;
-      if (total ~/ 3600 > 0) slots['start_hours'] = total ~/ 3600;
-      if (total % 3600 ~/ 60 > 0) slots['start_minutes'] = total % 3600 ~/ 60;
-      if (total % 60 > 0) slots['start_seconds'] = total % 60;
-    }
-    final error = await _intent(intent, slots);
+    if (_timers[action.id] == null) return;
+    final error = await controlTimer(action.id, action.action);
     if (error != null) {
       log.warn(name, 'timer ${action.action} failed: $error');
       await commands.execute('voiceTimerActionFailed', {
         'entityId': timerEntity,
       });
     }
+  }
+
+  /// Pauses, resumes, cancels or adds or removes time from the timer with
+  /// [id], or the kiosk's only timer when [id] is empty. Answers null when
+  /// it worked, else why not. Pausing a paused timer or resuming a running
+  /// one is a no-op.
+  Future<String?> controlTimer(
+    String id,
+    String action, {
+    int hours = 0,
+    int minutes = 0,
+    int seconds = 0,
+  }) async {
+    final _HaTimer? timer;
+    if (id.isNotEmpty) {
+      timer = _timers[id];
+    } else if (_timers.length > 1) {
+      return 'several timers are running, pass a timer_id';
+    } else {
+      timer = _timers.values.firstOrNull;
+    }
+    if (timer == null) return 'no running or paused timer with that id';
+    final amount = <String, Object?>{
+      if (hours > 0) 'hours': hours,
+      if (minutes > 0) 'minutes': minutes,
+      if (seconds > 0) 'seconds': seconds,
+    };
+    final intent = switch (action) {
+      'pause' => 'HassPauseTimer',
+      'resume' => 'HassUnpauseTimer',
+      'cancel' => 'HassCancelTimer',
+      'add' => 'HassIncreaseTimer',
+      'remove' => 'HassDecreaseTimer',
+      _ => null,
+    };
+    if (intent == null) return 'unknown timer action $action';
+    if ((action == 'pause' && !timer.active) ||
+        (action == 'resume' && timer.active)) {
+      return null;
+    }
+    if ((action == 'add' || action == 'remove') && amount.isEmpty) {
+      return 'the change needs a duration';
+    }
+    // The timer intents take no id: they find a timer by its name, else by
+    // the duration it was started with, split the way it was asked for,
+    // and this kiosk's device narrows that down. The split is not known,
+    // so a miss tries the others.
+    String? error;
+    for (final slots in timerSlots(timer.name, timer.createdSeconds)) {
+      error = await _intent(intent, {...slots, ...amount});
+      if (error != 'Timer not found') break;
+    }
+    if (error == null) return null;
+    final twin = _timers.values.any(
+      (t) =>
+          t.id != timer!.id &&
+          (timer.name.isNotEmpty
+              ? t.name.trim().toLowerCase() == timer.name.trim().toLowerCase()
+              : t.name.isEmpty && t.createdSeconds == timer.createdSeconds),
+    );
+    return twin
+        ? 'another timer on this kiosk has the same name or duration, so '
+              'Home Assistant cannot tell them apart'
+        : error;
+  }
+
+  /// The slots a timer intent can find a timer by: its name, else each way
+  /// its starting duration may have been split, the plain one first.
+  @visibleForTesting
+  static List<Map<String, Object?>> timerSlots(String name, int total) {
+    if (name.isNotEmpty) {
+      return [
+        {'name': name},
+      ];
+    }
+    Map<String, Object?> split(int h, int m, int s) => {
+      if (h > 0) 'start_hours': h,
+      if (m > 0) 'start_minutes': m,
+      if (s > 0) 'start_seconds': s,
+    };
+    final candidates = [
+      split(total ~/ 3600, total % 3600 ~/ 60, total % 60), // 1 h 30 min
+      split(0, total ~/ 60, total % 60), // 90 minutes
+      split(0, 0, total), // 90 seconds
+    ];
+    final seen = <String>{};
+    return [
+      for (final c in candidates)
+        if (seen.add('$c')) c,
+    ];
   }
 
   /// A step of a turn in the App Logs, with what was said or answered.
@@ -3483,6 +3807,7 @@ class VoiceManager extends Manager {
     _speaker.dispose();
     _custom.dispose();
     _selectsTimer?.cancel();
+    _wakeWordsTimer?.cancel();
     for (final sub in _subs) {
       await sub.cancel();
     }

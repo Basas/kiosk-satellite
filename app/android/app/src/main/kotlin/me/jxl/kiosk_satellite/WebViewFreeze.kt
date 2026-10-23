@@ -3,6 +3,8 @@ package me.jxl.kiosk_satellite
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.ServiceWorkerController
+import android.webkit.WebSettings
 import android.webkit.WebView
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
@@ -57,8 +59,43 @@ class WebViewFreeze(
                         result.success(setScrollBars(hidden, prefix))
                     }
                 }
+                "setCacheMode" -> {
+                    val noCache = call.argument<Boolean>("noCache") ?: false
+                    val prefix = call.argument<String>("urlPrefix") ?: ""
+                    if (prefix.isEmpty()) {
+                        result.success(0)
+                    } else {
+                        result.success(setCacheMode(noCache, prefix))
+                    }
+                }
+                "clearMemoryCache" -> {
+                    val prefix = call.argument<String>("urlPrefix") ?: ""
+                    if (prefix.isEmpty()) {
+                        result.success(0)
+                    } else {
+                        // false keeps the disk cache: only the renderer's
+                        // in-memory copies go.
+                        result.success(forEachWebView(prefix) { view -> view.clearCache(false) })
+                    }
+                }
                 else -> result.notImplemented()
             }
+        }
+    }
+
+    companion object {
+        /**
+         * Whether [url] belongs to [prefix]. An origin prefix ends with the
+         * URL's authority, so `https://ha.example.net` does not take in
+         * `https://ha.example.net:8095`. That is Music Assistant on Home
+         * Assistant's host: the overlay showing it was hidden along with
+         * the dashboard frozen under it, leaving a black page. A bare
+         * scheme prefix (`http`) still matches every page.
+         */
+        fun matchesPrefix(url: String?, prefix: String): Boolean {
+            if (url == null || !url.startsWith(prefix)) return false
+            if (!prefix.contains("://")) return true
+            return url.length == prefix.length || url[prefix.length] in "/?#"
         }
     }
 
@@ -71,7 +108,7 @@ class WebViewFreeze(
         while (stack.isNotEmpty()) {
             val view = stack.removeLast()
             if (view is WebView) {
-                if (view.url?.startsWith(prefix) == true) {
+                if (matchesPrefix(view.url, prefix)) {
                     action(view)
                     matched++
                 }
@@ -127,6 +164,23 @@ class WebViewFreeze(
      * [revealWithoutScrollbarFlash] so a drag inside a reveal's suppression
      * window cannot resurrect bars early or restore a suppressed state.
      */
+    /** Skip the HTTP cache or use it again on the matching views. A custom
+     *  page under Home Assistant's /local/ is served to be cached for a
+     *  month, so an edited page would otherwise stay stale on the kiosk.
+     *  Set straight on WebSettings: the plugin's setSettings re-applies
+     *  every field of the settings object it is handed, defaults included. */
+    private fun setCacheMode(noCache: Boolean, prefix: String): Int {
+        val mode = if (noCache) WebSettings.LOAD_NO_CACHE else WebSettings.LOAD_DEFAULT
+        // Home Assistant's service worker refreshes the /local/ files it
+        // keeps through the HTTP cache as well, which is shared by every
+        // service worker of the app rather than set per view.
+        try {
+            ServiceWorkerController.getInstance().serviceWorkerWebSettings.cacheMode = mode
+        } catch (_: Throwable) {
+        }
+        return forEachWebView(prefix) { view -> view.settings.cacheMode = mode }
+    }
+
     /** Saved View.overScrollMode per view while a drag suppresses it. */
     private val savedOverscroll = HashMap<WebView, Int>()
 

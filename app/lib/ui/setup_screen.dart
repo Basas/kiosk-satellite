@@ -15,6 +15,7 @@ import '../managers/service/service_manager.dart'
 import '../managers/settings/definitions.dart' as defs;
 import '../managers/wake_word/background_listening.dart';
 import '../managers/wake_word/system_permissions.dart';
+import 'dashboard_view_picker.dart' show DashboardCatalog, DashboardPicker;
 import 'import_options_dialog.dart';
 import 'kiosk_screen.dart';
 import 'kit.dart' show LabeledField, NoticeBanner, NoticeKind, SectionHeading;
@@ -146,22 +147,31 @@ class _SetupScreenState extends State<SetupScreen> {
       );
       return;
     }
-    final token = await Navigator.of(
-      context,
-    ).push<String>(MaterialPageRoute(builder: (_) => const TokenQrScanner()));
+    // The scanner opens the camera itself, so no other session may hold it.
+    final motion = widget.container.motion;
+    await motion.holdForScanner();
+    if (!mounted) {
+      motion.releaseScanner();
+      return;
+    }
+    String? scanned;
+    try {
+      scanned = await Navigator.of(
+        context,
+      ).push<String>(MaterialPageRoute(builder: (_) => const TokenQrScanner()));
+    } finally {
+      motion.releaseScanner();
+    }
+    final token = scanned;
     if (token != null && token.isNotEmpty && mounted) {
       setState(() => _haToken.text = token);
     }
   }
 
-  // Step 3 — dashboards. The kiosk lands on a single view, so the chosen
-  // dashboard carries a chosen view (its route), defaulting to the first.
-  // `_dashboardViews` are the views of `_dashboard`, for the "Change view"
-  // popup; a null list is a strategy dashboard whose views cannot be read.
-  List<Map<String, Object?>>? _dashboards;
-  String? _dashboard;
-  String? _dashboardView;
-  List<Map<String, Object?>>? _dashboardViews;
+  // Step 3 — dashboards. The kiosk lands on a single view: the navigation
+  // path picked in the inline dashboard picker, defaulting to the first
+  // dashboard's first view.
+  String? _dashboardPath;
 
   // Step 4 — Voice Satellite. The kiosk is its own satellite: the switch
   // turns it on with the ESPHome server Home Assistant adds it through.
@@ -450,24 +460,16 @@ class _SetupScreenState extends State<SetupScreen> {
             validatedUri.host != '127.0.0.1') {
           await c.settings.set(defs.secureProxy, true);
         }
-        final dashboards = await c.homeAssistant.listDashboards();
-        final firstDash = dashboards?.firstOrNull?['url_path'] as String?;
-        final views = firstDash != null
-            ? await c.homeAssistant.listDashboardViews(firstDash)
-            : null;
+        final dashboards = await DashboardCatalog.load(c);
+        final first = dashboards?.firstOrNull;
         if (!mounted) return;
         setState(() {
           _busy = false;
-          _dashboards = dashboards;
-          _dashboard = firstDash;
-          _dashboardViews = views;
-          _dashboardView = (views != null && views.isNotEmpty)
-              ? '${views.first['route']}'
-              : '';
+          _dashboardPath ??= first?.pathOf(first.views.firstOrNull);
           _step = 2;
         });
       case 2:
-        if (_dashboard == null) {
+        if (_dashboardPath == null) {
           _fail(
             l10n(context).setupSelectDashboard,
             l10n(context).setupSelectDashboardHelp,
@@ -533,12 +535,9 @@ class _SetupScreenState extends State<SetupScreen> {
           ],
         });
         // Last: setting the start URL is what flips the app to configured.
-        final route = _dashboardView ?? '';
         await c.settings.set(
           defs.startUrl,
-          route.isEmpty
-              ? '${c.homeAssistant.baseUrl}/$_dashboard'
-              : '${c.homeAssistant.baseUrl}/$_dashboard/$route',
+          '${c.homeAssistant.baseUrl}/$_dashboardPath',
         );
         _enterKiosk();
     }
@@ -549,56 +548,6 @@ class _SetupScreenState extends State<SetupScreen> {
     _errorHint = null;
     _step = _step - 1;
   });
-
-  String _viewPath(String urlPath, String route) =>
-      route.isEmpty ? urlPath : '$urlPath/$route';
-
-  /// Select a dashboard: load its views and default to the first one.
-  Future<void> _pickDashboard(String urlPath) async {
-    final views = await c.homeAssistant.listDashboardViews(urlPath);
-    if (!mounted) return;
-    setState(() {
-      _dashboard = urlPath;
-      _dashboardViews = views;
-      _dashboardView = (views != null && views.isNotEmpty)
-          ? '${views.first['route']}'
-          : '';
-    });
-  }
-
-  /// The "Change view" popup for the selected dashboard's views.
-  Future<void> _changeView() async {
-    final views = _dashboardViews;
-    final dash = _dashboard;
-    if (views == null || views.isEmpty || dash == null) return;
-    final current = _dashboardView ?? '';
-    final picked = await showDialog<String>(
-      context: context,
-      builder: (ctx) {
-        final theme = Theme.of(ctx);
-        return SimpleDialog(
-          title: Text(l10n(ctx).haChooseView),
-          children: [
-            for (final v in views)
-              ListTile(
-                leading: Icon(
-                  '${v['route']}' == current
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_off,
-                  color: '${v['route']}' == current
-                      ? theme.colorScheme.primary
-                      : null,
-                ),
-                title: Text('${v['title']}'),
-                subtitle: Text(_viewPath(dash, '${v['route']}')),
-                onTap: () => Navigator.pop(ctx, '${v['route']}'),
-              ),
-          ],
-        );
-      },
-    );
-    if (picked != null && mounted) setState(() => _dashboardView = picked);
-  }
 
   // ── UI ─────────────────────────────────────────────────────────────────
 
@@ -1015,38 +964,18 @@ class _SetupScreenState extends State<SetupScreen> {
           heading(l10n(context).setupChooseDashboard),
           lead(l10n(context).setupDashboardHelp),
           _Card([
-            if (_dashboards == null || _dashboards!.isEmpty)
-              ListTile(title: Text(l10n(context).haNoDashboards))
-            else
-              for (final d in _dashboards!)
-                for (final urlPath in ['${d['url_path']}'])
-                  for (final isSel in [_dashboard == urlPath])
-                    ListTile(
-                      leading: Icon(
-                        isSel
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_off,
-                        color: isSel ? theme.colorScheme.primary : null,
-                      ),
-                      title: Text('${d['title'] ?? urlPath}'),
-                      // The selected dashboard shows its chosen view's path
-                      // (defaulting to the first); the rest name the dashboard.
-                      subtitle: Text(
-                        isSel
-                            ? _viewPath(urlPath, _dashboardView ?? '')
-                            : urlPath,
-                      ),
-                      trailing:
-                          isSel &&
-                              _dashboardViews != null &&
-                              _dashboardViews!.isNotEmpty
-                          ? TextButton(
-                              onPressed: _changeView,
-                              child: Text(l10n(context).haChangeView),
-                            )
-                          : null,
-                      onTap: isSel ? null : () => _pickDashboard(urlPath),
-                    ),
+            // The whole picker inline, searchable, the step's one task.
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: SizedBox(
+                height: 460,
+                child: DashboardPicker(
+                  container: c,
+                  selected: {?_dashboardPath},
+                  onPick: (path) => setState(() => _dashboardPath = path),
+                ),
+              ),
+            ),
           ]),
         ]);
       case 3:
@@ -1141,7 +1070,11 @@ class _SetupScreenState extends State<SetupScreen> {
                       initialValue: _engine,
                       isExpanded: true,
                       items: [
-                        for (final engine in defs.voiceWakeWordEngine.options!)
+                        // Amazon's engine only where the Echo Dot image's
+                        // service answered (PryonCatalog hides it elsewhere).
+                        for (final engine in c.settings.optionsFor(
+                          defs.voiceWakeWordEngine,
+                        ))
                           DropdownMenuItem(
                             value: engine,
                             child: Text(
@@ -1189,7 +1122,8 @@ class _SetupScreenState extends State<SetupScreen> {
                 context,
                 'After setup, add this kiosk in Home Assistant under '
                 'Settings, Devices & services, where it shows up as '
-                'discovered.',
+                'discovered. If Home Assistant had it before, it asks there '
+                'for the new Encryption key from the ESPHome page.',
               ),
             ),
           _Card([

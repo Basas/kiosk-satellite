@@ -33,12 +33,22 @@ class MaRemotePlayer implements RemotePlayer {
     required this.onSnapshot,
     required this.log,
     this.label = 'remote player',
+    this.showInputs = false,
   }) : _api = MusicAssistantApi(baseUrl: baseUrl, token: token);
 
   /// What the log calls this connection: the follower of a remote player,
   /// or the watcher that keeps the local player's queue state (shuffle,
   /// the queue panel) in step with Music Assistant.
   final String label;
+
+  /// Whether a TV or line-in input shows as a card named for the input.
+  /// Off, the room reads as idle while one plays, so a soundbar under a
+  /// television does not hold the screensaver off.
+  final bool showInputs;
+
+  /// The active sources Music Assistant's Sonos provider gives a TV
+  /// (HDMI or optical) and a line-in input, with the names to show.
+  static const _inputs = {'tv': 'TV', 'line_in': 'Line-in'};
 
   static const _name = 'sendspin';
 
@@ -129,6 +139,17 @@ class MaRemotePlayer implements RemotePlayer {
   Object? _queue;
   Map? _player;
   bool _usingPlayerMedia = false;
+
+  /// The player a protocol player plays for: the one that names it among
+  /// its output protocols, a universal player wrapping a Sendspin client
+  /// for one. Music Assistant lists the sources and what each can do only
+  /// on that one, so the protocol player's own list is empty.
+  String _ownerId = '';
+  Map? _owner;
+
+  /// The server's provider names by instance id, read once a connection
+  /// is up, for the audio quality to name its source.
+  Map<String, String> _providerNames = const {};
   Timer? _refreshDebounce;
 
   /// Whether this session has seen the queue actually play. An idle queue
@@ -209,12 +230,55 @@ class MaRemotePlayer implements RemotePlayer {
         _player = player;
         _readVolume(player);
         await _readGroup(session, player);
+        await _readOwner(session, player);
       }
     } catch (e) {
       log.warn(_name, '$label player lookup failed: $e');
     }
     if (_stopped || !identical(_session, session)) return;
     publishQueue(queue);
+  }
+
+  /// Follow the player [player] plays for while it is a protocol player
+  /// (see [_ownerId]), found once among all players and read again on
+  /// every refresh after that.
+  Future<void> _readOwner(MaSession session, Map player) async {
+    if (player['type'] != 'protocol') {
+      _ownerId = '';
+      _owner = null;
+      return;
+    }
+    try {
+      if (_ownerId.isEmpty) {
+        final players = await session.send('players/all', const {});
+        _ownerId = players is List ? ownerOf(players, playerId) : '';
+      }
+      if (_ownerId.isEmpty) return;
+      final owner = await session.send('players/get', {'player_id': _ownerId});
+      _owner = owner is Map ? owner : null;
+    } catch (e) {
+      log.warn(_name, '$label owner lookup failed: $e');
+    }
+  }
+
+  @visibleForTesting
+  set ownerId(String id) => _ownerId = id;
+
+  /// The id of the player in [players] that plays through [protocolId] as
+  /// one of its output protocols, or empty when none does.
+  @visibleForTesting
+  static String ownerOf(List players, String protocolId) {
+    for (final p in players) {
+      if (p is! Map || p['player_id'] == protocolId) continue;
+      final protocols = p['output_protocols'];
+      if (protocols is! List) continue;
+      for (final o in protocols) {
+        if (o is Map && o['output_protocol_id'] == protocolId) {
+          return '${p['player_id'] ?? ''}';
+        }
+      }
+    }
+    return '';
   }
 
   void _readVolume(Object? player) {
@@ -473,11 +537,27 @@ class MaRemotePlayer implements RemotePlayer {
       await session.send('auth', {'token': _api.token});
       _attempts = 0;
       log.info(_name, '$label: following $playerId');
+      await _readProviderNames(session);
       await refresh();
     } catch (e) {
       log.warn(_name, '$label connect failed: $e');
       await _close();
       _scheduleRetry();
+    }
+  }
+
+  Future<void> _readProviderNames(MaSession session) async {
+    try {
+      final providers = await session.send('providers', const {});
+      if (providers is! List) return;
+      _providerNames = {
+        for (final p in providers.whereType<Map>())
+          if ('${p['instance_id'] ?? ''}'.isNotEmpty &&
+              '${p['name'] ?? ''}'.isNotEmpty)
+            '${p['instance_id']}': '${p['name']}',
+      };
+    } catch (e) {
+      log.warn(_name, '$label provider lookup failed: $e');
     }
   }
 
@@ -507,6 +587,8 @@ class MaRemotePlayer implements RemotePlayer {
     _session = null;
     _client = null;
     _player = null;
+    _owner = null;
+    _ownerId = '';
     _queue = null;
     _queueId = '';
     _groupLeader = '';
@@ -575,6 +657,13 @@ class MaRemotePlayer implements RemotePlayer {
         // another room or Music Assistant's own group slider.
         _readGroupVolume(data);
         _reemit();
+      case 'player_updated' when objectId == _ownerId && _ownerId.isNotEmpty:
+        // The owner's update carries the source list, what each source
+        // can do included.
+        if (data is Map) _owner = data;
+        if (_usingPlayerMedia || _hasExternalSource) {
+          _publishSnapshot(preservePosition: true);
+        }
       case 'player_removed' when objectId == playerId:
         _player = null;
         _queue = null;
@@ -600,6 +689,7 @@ class MaRemotePlayer implements RemotePlayer {
           : queue,
       webBase: musicAssistantWebUrl(_api.baseUrl),
       currentMedia: _radioPlayerMedia,
+      providerNames: _providerNames,
     );
     _usingPlayerMedia = snap == null;
     queueEmpty = queue is Map && snap == null;
@@ -698,11 +788,33 @@ class MaRemotePlayer implements RemotePlayer {
     final media = player?['current_media'];
     final state = player?['playback_state'] ?? player?['state'];
     final title = media is Map ? '${media['title'] ?? ''}'.trim() : '';
+    final active = state == 'playing' || state == 'paused';
+    // A TV or line-in input: nothing to show but the input's name, and
+    // by default not even that.
+    final input = player == null ? null : _inputs[player['active_source']];
+    if (input != null &&
+        showInputs &&
+        active &&
+        player!['available'] != false) {
+      queueEmpty = false;
+      _emit({
+        'title': input,
+        'positionMs': 0,
+        'receivedAt': DateTime.now().millisecondsSinceEpoch,
+        'playing': state == 'playing',
+        'stream': true,
+        'supportedCommands': ['stop', if (_volume != null) 'volume'],
+        'volume': ?_volume,
+        'muted': ?_muted,
+      });
+      return;
+    }
     if (player == null ||
+        input != null ||
         player['available'] == false ||
         media is! Map ||
         title.isEmpty ||
-        (state != 'playing' && state != 'paused')) {
+        !active) {
       queueEmpty = player != null;
       _emit(null);
       return;
@@ -723,11 +835,18 @@ class MaRemotePlayer implements RemotePlayer {
     final duration = media['media_type'] == 'radio' ? null : media['duration'];
     final durationMs = duration is num ? (duration * 1000).round() : 0;
     position = max(0, durationMs > 0 ? min(position, durationMs) : position);
+    // A protocol player lists no sources of its own: its owner's list
+    // says what the source can do.
     Map? source;
-    if (player['source_list'] case final List sources) {
-      for (final item in sources) {
-        if (item is Map && item['id'] == player['active_source']) source = item;
+    for (final holder in [player, _owner]) {
+      if (holder?['source_list'] case final List sources) {
+        for (final item in sources) {
+          if (item is Map && item['id'] == player['active_source']) {
+            source = item;
+          }
+        }
       }
+      if (source != null) break;
     }
     _emit({
       'title': title,

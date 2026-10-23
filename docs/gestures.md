@@ -26,6 +26,7 @@ Each entry on this page binds one specific gesture to one specific action. When 
 | Claps | 2 to 4 distinct claps, detected through the device microphone. |
 | Show fingers | An open hand, or a hand showing 1 to 4 fingers, presented to the device camera. |
 | Plugin trigger | Fired by a plugin when it notices something, such as a hardware button press. See [Plugin triggers](#plugin-triggers). |
+| Button | A press, a double press or a hold of the Action button on a device without a screen, such as an [Echo Dot](echo-dot.md#the-buttons). Only offered there. |
 
 The corner hitboxes are approximately 1.5 centimeters square. You can map two different gestures to the exact same corner using different tap counts; the system will automatically wait a beat after the shorter sequence to ensure you aren't simply entering the longer one.
 
@@ -39,6 +40,7 @@ The action chooser groups options into three categories: Kiosk Satellite, Androi
 | --- | --- |
 | Go to a dashboard view | Select from a dynamic list of your instance's dashboards and views. |
 | Open a web page | Opens an external URL in an overlay (the same type used for dashboard links), complete with a close button. |
+| Refresh the dashboard | Reloads the page, like pull to refresh without its cache clearing. Handy when you leave **Browser > Enable pull to refresh** off because a card such as a map takes downward drags. |
 | Show a camera view | Displays any configured camera view. This action toggles: performing the exact same gesture again will close the view it just opened. A separate, dedicated close action exists if you simply want to close whatever view is currently visible. |
 | Show the floating player | Displays the floating media player card. You can hide it by simply flinging the card away. |
 | Show Now Playing | Opens the full-screen Now Playing view for the selected media player, including a paused track. Requires Now Playing to be enabled and a track to be loaded. |
@@ -47,9 +49,16 @@ The action chooser groups options into three categories: Kiosk Satellite, Androi
 | Open the app launcher | Opens the app launcher overlay displaying the specific apps you selected under App Launcher configuration. You can close it via its close button or by tapping outside the overlay. This requires the App Launcher to be enabled with at least one app selected. It works even if the Apps entry is hidden from the main kiosk menu (meaning you can hide the menu entry via Kiosk Mode, Allowed Actions, but keep the launcher accessible via a secret gesture). |
 | Call a kiosk | Rings the kiosk picked when the gesture was set up, over the [intercom](intercom.md). A kiosk that is off, on Do not disturb or on another key ends the call with the reason on the card. |
 | Open Call a kiosk | Opens the [intercom's](intercom.md) Call a kiosk sheet, Announce to all first. Requires the intercom to be enabled with the remote admin on. Works even if the Intercom entry is hidden from the restricted kiosk menu under Kiosk Mode, Allowed Actions. |
-| End the intercom call | Ends the [intercom](intercom.md) call the way the hang up button does: a call being placed, a live call or either end of an announcement. A ringing call still needs Answer or Decline on the screen. Pairs well with claps or Show fingers to hang up from across the room. Does nothing outside a call. |
+| End the intercom call | Ends the [intercom](intercom.md) call the way the hang up button does: a call being placed, a live call or either end of an announcement. A ringing call is left alone. Pairs well with claps or Show fingers to hang up from across the room. Does nothing outside a call. |
+| Accept intercom call | Answers the [intercom](intercom.md) call ringing on this kiosk, the same as its Answer button. With a plugin trigger, a hardware button can pick up a call on a device without a usable screen. Does nothing unless a call is ringing. |
+| Decline intercom call | Declines the [intercom](intercom.md) call ringing on this kiosk, the same as its Decline button. Does nothing unless a call is ringing. |
 | Stop the alarm | Stops the ringing [alarm](alarms.md) the way the Stop button does. It also ends a snooze or a sunrise, and a stopped sunrise skips its ring. Pairs well with claps or Show fingers to silence an alarm from bed. Does nothing when no alarm is going. |
 | Snooze the alarm | Snoozes the ringing [alarm](alarms.md) for the snooze length, the same as the Snooze button. Does nothing unless an alarm is ringing. |
+| Open the calendar | Opens the full screen [calendar](calendar.md) on its default view. Like the other actions, it works even with **Show in the kiosk menu** off. |
+| Open Music Library | Opens the [Music Library](music-library.md). It works even with **Show in the kiosk menu** off, once a source is set up. |
+| Start a voice command | Starts listening for a command, as if the wake word had been heard. Requires the native [Voice Satellite](voice-satellite.md). |
+| Stop the voice assistant | Dismisses a ringing timer, or ends the voice turn or the answer, the same as the stop word. |
+| Mute or unmute Voice Satellite | Mutes wake word detection, or unmutes it when muted, the same as the **VS Mute** switch in Home Assistant. |
 | Start the screensaver | Immediately launches whatever screensaver mode is currently configured. |
 | Stop the screensaver | While redundant for touch gestures (since any screen tap dismisses a screensaver), this is highly useful for clap gestures, allowing you to wake the screen from across the room. |
 | Toggle hold mode | Pins the current view, pausing the screensaver, dashboard rotation, and the return to home timer. Performing the same gesture again releases the hold. This pairs exceptionally well with a clap gesture when cooking from a recipe. |
@@ -77,6 +86,7 @@ Microphone behavior for claps:
 * Lockdown Mode and Kiosk Mode's Disable Gestures toggle will silence clap detection exactly as they silence touch gestures.
 * The detection thresholds automatically adapt to the room's environment. Constant ambient noise (like background music or a running TV) will raise the acoustic bar a clap must clear to trigger, preventing false positives. While it works reliably over music, extremely percussive tracks played at high volumes can sometimes register as claps. For any critical action that must never misfire, configure it to require 3 or 4 claps.
 * A clap must appear deliberate to the system: it must emerge from a relatively calm moment, land on an even beat, and maintain consistent loudness. While random room clatter might share a clap's acoustic shape, it rarely exhibits all three of these traits. If you still experience false triggers (children playing with toys can occasionally mimic clapping sounds), go to the Gestures page and set **Clap detection** to Strict. This forces the algorithm to tighten those checks and demand significantly louder claps. In these environments, prefer 3 or 4 claps over 2.
+* In a large room with hard surfaces, a clap rings for a while before it dies away, and Standard and Strict throw it out as sustained sound. If claps never register and the app logs show `clap sequence discarded: sustained sound`, set **Clap detection** to Large room. It gives a clap that is still fading up to 0.8 seconds. A slow drum in loud music rings the same way, so prefer 3 or 4 claps there.
 * On Android 12 and later, the standard system microphone indicator will remain visible while clap detection is active, just as it does for wake word detection.
 
 ## Show Fingers
@@ -109,7 +119,7 @@ A [plugin](plugins.md) can declare triggers and fire them when it notices someth
 * A mapping keeps its trigger when the plugin is disabled, but nothing fires until the plugin runs again.
 * Plugins are installed per device, so Fleet Management never syncs a gesture that uses a plugin trigger or a plugin action.
 
-Plugin authors can find the manifest format and `host.fireTrigger` in the [plugin SDK documentation](https://github.com/jxlarrea/kiosk-satellite-plugin-hello-world/blob/main/docs/creating-plugins.md#gesture-triggers).
+Plugin authors can find the manifest format and `host.fireTrigger` in the [plugin SDK documentation](https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/creating-plugins.md#gesture-triggers).
 
 ## Timing
 

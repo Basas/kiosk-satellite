@@ -17,10 +17,10 @@ Navigate to **Settings > Screensaver** (available in the on device settings and 
 | Brighten for notifications | on | Automatically restores full display brightness while an incoming notification is visible. Appears when Screensaver brightness is enabled. |
 | Turn screen off after | 0 (never) | Powers off the physical display panel after the screensaver has been running for the specified duration. |
 | Use a black screen instead | off | Appears when **Turn screen off after** is greater than 0. Shows a plain black screen at zero brightness without powering off the panel. Hides widgets, timers, notifications and Now Playing. |
-| Wake to screensaver | off | Motion, face, proximity or person detection after the screen has turned off brings the screensaver back instead of the dashboard, with a fresh **Turn screen off after** countdown. Touch still opens the dashboard. |
+| Wake to screensaver | Off | Picks what brings the screensaver back instead of the dashboard after the screen has turned off: motion, face, proximity, person, the power button and touch. The **Turn screen off after** countdown starts over. See [Turning the Screen Off](#turning-the-screen-off). |
 | Pixel shift | off | Periodically shifts on screen elements every minute to prevent image retention on OLED displays. Not applicable to Black mode. |
 | Show in the kiosk menu | on | Keeps the **Start Screensaver** entry in the kiosk menu. Turn it off to shorten the menu on a device that never starts the screensaver by hand. The idle timeout, gestures, the ESPHome switch and the API commands still start it. |
-| Follow Android animation settings | off | Pauses Weather Mood on a still frame while Android's **Transition animation scale** is off in Developer options. Turn it on to save CPU on low-power devices where the animation scales are zeroed. |
+| Follow Android animation settings | off | Pauses Weather Mood and the Celestial twinkle on a still frame while Android's **Transition animation scale** is off in Developer options. Turn it on to save CPU on low-power devices where the animation scales are zeroed. |
 | Screensaver mode | Black | Selects the active screensaver display mode. Options for the chosen mode appear directly below this selector. |
 
 The **Widgets** configuration group sits directly beneath the mode settings, allowing small overlays to be anchored to display corners.
@@ -35,7 +35,7 @@ Use **Scene blur** in the main group to soften the weather scene from 0 to 30 pi
 
 Weather Mood starts with only the animated scene. Its **Clock** and **Weather information** groups add optional information directly to the scene. All widget types and At a Glance pills remain available. Outside preview mode, if no weather entity is selected for Weather Mood, a black screen asks you to select one in its settings. The clock, weather chips, widgets and At a Glance stay hidden until an entity is selected.
 
-Turn on **Enable clock** to reveal **Font Family**, **Font weight**, **24-hour clock**, **Show seconds**, **Show date**, **Clock size**, **Clock color** and **Text drop shadow**. The clock uses the same digital face and defaults as the Clock screensaver, with a drop shadow enabled for readability. These settings belong to Weather Mood and do not change the Clock screensaver.
+Turn on **Enable clock** to reveal **Font Family**, **Font weight**, **24-hour clock**, **Show AM/PM**, **Show seconds**, **Show date**, **Clock size**, **Clock color** and **Text drop shadow**. The clock uses the same digital face and defaults as the Clock screensaver, with a drop shadow enabled for readability. These settings belong to Weather Mood and do not change the Clock screensaver.
 
 Weather information appears as chips over the scene. A chip at the bottom left shows the conditions icon, temperature and conditions. Each reading gets a matching chip at the bottom right with its icon and value. The chips default to white text with a drop shadow on frosted glass with a thin light rim, so they take on the colors of every sky. The glass blurs the scene behind it, except on 32-bit devices, where the blur would cost too many frames. Devices that do not use the Impeller renderer show tinted chips instead.
 
@@ -49,6 +49,67 @@ Turn off **Lightning flashes** to keep thunderstorm clouds and rain without the 
 
 Older devices use fewer cloud samples and a smaller cloud image that adjusts when frames remain slow. The renderer caches the sky at the display's resolution and renders a fresh cloud image about once a second, twice as often in full wind. Precipitation, twinkling stars and lightning animate separately at up to 20 frames per second. This reduces repeated GPU work while keeping the sun, moon and stars sharp. Weather Preview changes refresh the background immediately.
 
+### Celestial
+
+Celestial shows the sky above the kiosk as it is right now: the stars down to the faintest you can see by eye, the planets, the Moon in its current phase, the Sun, constellation figures and names, the Milky Way and the brightest galaxies and nebulae. Hills, mountains or plains run along the horizon, or nothing at all. Everything is computed on the kiosk from bundled data, so the screensaver needs no internet connection.
+
+Celestial needs to know where the kiosk is. Pick where that comes from under **Location**:
+
+* **GPS** reads the device's GPS receiver, whether or not **Report location** is on in ESPHome. Most tablets have no receiver. It needs the **Location** permission with precise location, shown under **Required system permissions** right below the Location group, on the device and in the remote admin. On Android 12 and later, approximate location is not enough, and **Grant** asks to change it to precise. Once Android stops asking, **Grant** opens the app's page in the Android settings.
+* **Home Assistant home** (the default) uses the home zone set in Home Assistant.
+* **Home Assistant entity** uses a person, device tracker or zone you pick.
+* **Manual** takes a latitude and longitude you type, like `40.71, -74.01`.
+
+With **GPS**, the sky follows the device's live position while the screensaver runs, so a kiosk that travels keeps the right sky. The kiosk remembers the last GPS fix, so the sky starts there while the receiver looks for a new one, indoors too. Until the very first fix, the screensaver says it is waiting for one.
+
+A **Current location** row shows the coordinates the source found, or why it has none, such as a device without a GPS receiver or an entity without a location. If the chosen source has no position, the screensaver shows a black screen that asks you to choose another.
+
+Turn on **Point at the sky** to make the kiosk a sky viewer on a device with a compass, which Android fuses with the tilt sensors into its rotation vector sensor. Hold the device up and the sky on screen turns with it, roll included, so whatever is in front of you is named on screen. It works with any location source. A pinch still zooms and a double tap still closes the screensaver. While it runs, motion, face, person and proximity detection do not close the screensaver, since moving the device around would trigger them. On a device without a compass, the view stays on touch. A compass that has not moved for a while can be far off, even facing the wrong way. While Android reports it as uncalibrated, a note asks you to move the device in a figure eight, and it goes away once the compass settles.
+
+Drag to look around the sky and pinch to zoom in or out. A single tap does nothing but show a reminder, and a double tap closes the screensaver. The kiosk remembers where you left the view and starts there next time. Until you move it, the view faces the equator with the horizon near the bottom of the screen.
+
+Any touch also brings up a quiet status bar along the bottom of the screen, dim enough for dark-adapted eyes, which goes away after 5 seconds without a touch. Widgets and the At a Glance row step aside while the controls are up. Each control has its own switch under **Controls**:
+
+* **Position** shows the latitude and longitude the sky is seen from.
+* **Azimuth** and **Altitude** show the compass direction the center of the screen faces and how high above the horizon it is.
+* **Field of view** shows how much of the sky the screen spans, in degrees across its long side.
+* **Time** shows the time of the sky. After a timelapse, **Now** returns the sky to the present.
+* **Timelapse** speeds up time so you can watch the sky turn. Tap its button to step through 60×, 600× and 3600×, which is one minute, ten minutes and one hour of sky per second, then back to off. Turning it off keeps the sky at the time it reached.
+* **Point at the sky switch** is a button that turns Point at the sky on and off. It shows only on devices with a compass.
+* **Moon phase** shows the phase of the Moon and how much of it is lit.
+
+| Setting | Default | What it does |
+| --- | --- | --- |
+| Location | Home Assistant home | Where the sky is seen from: **GPS**, **Home Assistant home**, **Home Assistant entity** or **Manual**. |
+| Entity | empty | With **Home Assistant entity**, the person, device tracker or zone to follow. |
+| Coordinates | empty | With **Manual**, the latitude and longitude of the kiosk. |
+| Landscape | Hills | The ground along the horizon: **Hills**, **Mountains** or **Plains**. **None** leaves out the ground, so the whole screen shows the sky, stars below the horizon included. The air no longer dims stars near the horizon, and the Sun stays hidden while it is down. |
+| Point at the sky | off | The view turns with the device's compass and tilt. Needs a compass sensor. |
+| Daytime sky | on | Brightens the sky and fades the stars while the Sun is up. Turn it off to show the night sky all day, with the Sun drawn where it is. |
+| Milky Way | on | The glow of our galaxy, from NASA's Deep Star Maps. |
+| Planets | on | Mercury to Neptune, each shown only when it is bright enough to see. |
+| Galaxies and nebulae | on | Soft glows for the Andromeda and Triangulum galaxies and the Orion, Lagoon and Carina nebulae, with names for them and a few star clusters. |
+| Light pollution | 0% | Simulates the glow of city lights. Higher values hide the fainter stars, then the Milky Way, and warm the sky near the horizon. At 100% only stars brighter than about magnitude 2 remain, as in a city center. |
+| Twinkling stars | on | The stars shimmer, most of all near the horizon. Turn it off to save power: the sky then redraws only every 10 seconds and when you move it. |
+| Larger Moon | on | Draws the Moon at three times its real size and the Sun at twice. Off shows both at their true size. |
+| Constellation lines | on | Connects the stars of each constellation. The lines are clearest in the middle of the screen and fade out toward its edges. |
+| Constellation names | on | Names the constellations. More appear as you zoom in, and names fade out toward the edges of the screen like the lines. |
+| Star and planet names | on | Names the Sun, the Moon, the planets, the brightest stars and the galaxies. More stars get names as you zoom in. |
+| Compass points | on | Marks north, east, south and west on the horizon. |
+| Label size | 100% | Scales the labels on the sky from 50 to 200 percent. |
+| Controls | all on | The controls a touch brings up: **Position**, **Azimuth**, **Altitude**, **Field of view**, **Time**, **Timelapse**, **Point at the sky switch** and **Moon phase**. |
+| Controls size | 100% | Scales the controls from 50 to 200 percent. |
+
+Positions come from orbital elements and are accurate to a few arcminutes, about a pixel at the closest zoom. Each star is drawn from its apparent magnitude, so brightness and size follow what you would see. Stars dim and redden near the horizon the way the air dims them, and moonlight, twilight and light pollution wash out the fainter ones. The sky follows the clock in real time, unless a timelapse runs.
+
+Constellation names follow the interface language in Spanish, German, French, Russian and Chinese and use the Latin names in the other languages. Star names are the official IAU names.
+
+### Calendar
+
+Shows the [calendar](calendar.md) as the screensaver, on today, with the calendars, colors and hidden chips set up for it. Selecting the mode reveals the **Calendar screensaver** group with one row, **Calendar view**, which picks Day, Week (the default), Month or Schedule. It is separate from the calendar's own **Default view**, so the kiosk menu can open the calendar on one view while the screensaver shows another.
+
+The calendar stays usable while it is the screensaver: tap an event, switch views, move between days and hide calendars with their chips as usual. A tap does not dismiss it. Use the X button in the top corner instead. The calendar's **Close when idle** does not apply, and widgets and the At a Glance row stay off it. Motion, face, proximity and person detection, the wake word, the brightness settings, the schedule and **Turn screen off after** work as in the other modes. Like the open calendar, the screensaver keeps the calendars live from Home Assistant while it shows.
+
 ### Dim
 
 Reduces the display backlight to the configured **Dim level** while keeping the live Home Assistant dashboard visible underneath. Because the dashboard remains visible, the **Pause dashboard during screensaver** optimization cannot be applied in this mode. As a result, the browser process continues to consume CPU, GPU, and battery power.
@@ -59,18 +120,21 @@ Displays a completely black screen while leaving the underlying application runn
 
 ### Clock
 
-Renders a full screen clock with three selectable styles via **Style**: **Digital Clock**, **Flip Clock** (split-flap cards), or **Roller Clock** (rolling digits styled after the Lenovo Smart Clock 2). Date formats adapt automatically to the device's system language.
+Renders a full screen clock with four selectable styles via **Style**: **Digital Clock**, **Flip Clock** (split-flap cards), **Roller Clock** (rolling digits styled after the Lenovo Smart Clock 2) or **Hand Clock** (a dial with hands, ticks and numbers). Date formats adapt automatically to the device's system language.
 
 | Setting | Notes |
 | --- | --- |
 | Font Family | Available across all faces. Options include Rubik (default app font), Nunito (rounded style similar to Apple StandBy), Inter (clean grotesque style), Oswald (tall condensed digits, the wall clock look), Roboto Slab (a warm slab serif), system font families (System, Serif, Condensed, Monospace, Casual, Cursive), or LCD (segmented LED alarm clock font covering digits, date, and AM/PM). |
 | Font weight | Available across all faces. Default matches the face's native style. Options include Light, Regular, Medium, Bold, or Black. The LCD font uses a single fixed weight. |
-| 24-hour clock | Applies to all clock faces. |
+| 24-hour clock | Applies to every clock face except Hand Clock. |
+| Show AM/PM | Digital face only. Appears when **24-hour clock** is off. Turn it off to show the time as 7:45 instead of 7:45 PM. |
 | Show seconds | Digital face only. |
 | Show date | Digital face only (enabled by default). |
 | Clock size | Scales the display size from 50% to 300%. |
-| Clock color | Digital face only. Flip and Roller styles utilize dedicated custom color controls for cards, digits, and backgrounds. |
-| Background color | Digital face only. Sets the solid color behind the clock (black by default). Setting a white background with a black clock color creates a high-contrast inverted face ideal for e-ink panels. |
+| Numbers | Hand Clock only. Shows numbers at 12, 3, 6 and 9 (default) or at every hour. |
+| Show seconds hand | Hand Clock only (enabled by default). The seconds hand ticks once a second. |
+| Clock color | Digital and Hand faces, each with its own color. On the Hand Clock it colors the hands, numbers and ticks. Flip and Roller styles utilize dedicated custom color controls for cards, digits, and backgrounds. |
+| Background color | Digital and Hand faces, each with its own color. Sets the solid color behind the clock (black by default). Setting a white background with a black clock color creates a high-contrast inverted face ideal for e-ink panels. |
 | Background photo | Displays a custom background image behind any clock face instead of a solid color. Accepts a path to an image on the device or an `http(s)://` image URL the device fetches itself. |
 | Refresh URL background | Minutes between fetches of a URL background. 0 by default, which only fetches when the setting is written. |
 
@@ -89,20 +153,38 @@ Changes apply live while the clock is running, and writing an empty value clears
 | Hide background photo | Disabled by default. Hides the photo while Night mode is active so the clock uses the Night background color. Works with every clock face and restores the photo when the room brightens. Changes apply immediately. |
 | Hide widgets and At a Glance | Disabled by default. Hides the corner widgets and the At a Glance row while Night mode is active, leaving only the clock. Both come back when the room brightens. Changes apply immediately. |
 | Night card color | Flip Clock face only. Sets the card color in the dark (near-black by default). |
+| Turn screen off at night after | Configurable from 0 to 60 minutes (0 by default, which keeps the screen on). Turns the screen off once Night mode has lasted the set time and back on when the room brightens. A warning comes up when it is first moved off 0, because some devices misbehave with the display off. Needs the Device Administrator permission, shown under **Required system permissions** at the end of the page. |
+| Use a black screen instead | Disabled by default. Shows a black screen at zero brightness instead of powering off the display. No Device Administrator permission is needed. |
 
 **Let alarms take over** (on by default) makes a ringing [alarm](alarms.md) show on the Clock screensaver in its own style: the date line becomes the alarm's label and Snooze and Stop come in under the clock in the clock's colors, Night mode included. Turn it off to ring on the alarm's own screen instead.
+
+**Turn screen off at night after** only applies while the Clock screensaver is showing, including when a schedule picks it. A voice conversation, a ringing alarm, the Now Playing view or another app keeps the screen on and the countdown starts over afterwards. Every wake that leaves the screensaver up also starts the countdown over. The screen comes back on once the light rises past **Light level** by a quarter, or when the slider is set to 0 or Night mode is turned off. A screen turned off by hand or by **Turn screen off after** stays off.
+
+Some light sensors stop reporting while the display is off. On those devices the screen cannot come back on by itself in the morning, so use **Use a black screen instead**. If the Device Administrator permission is missing, the screen stays on and no permission prompt appears at night.
 
 ### Home Assistant Media
 
 Streams media served by Home Assistant's media browser, including single images, image folders, video files, or `camera.*` entities (which stream over WebRTC with an MJPEG fallback). **Media source** opens the picker. Selecting an image folder unlocks playlist controls (**Seconds per image**, **Shuffle**, **Include subfolders**, **Transition**, and **Tap edges to change slides**). Video assets play through to completion. Photos follow standard [Slideshow behavior](#slideshow-behavior) scaling rules, whereas videos and camera streams preserve their native aspect ratio.
 
+**Show metadata** puts each photo's details in a corner, read from the photo's own EXIF. **Date taken** shows when it was taken and **Camera details** shows the camera model with the focal length, aperture and ISO. **Metadata position**, **Text drop shadow**, **Text scaling** and **Vignette strength** work as they do on Immich Media. Location is left out because turning GPS coordinates into a place name needs an online lookup service. The details come from JPEG photos. Videos and camera streams show none.
+
 ### Local Media
 
 Displays an image slideshow loaded from a local folder on the device. Configuration options include **Local folder** (selected on device or typed into the remote admin), **Seconds per photo**, **Shuffle**, **Include subfolders**, **Transition**, **Fill the screen**, and **Tap edges to change slides**.
 
+**Show metadata** puts each photo's details in a corner, read from the photo's own EXIF. **Date taken** shows when it was taken and **Camera details** shows the camera model with the focal length, aperture and ISO. **Metadata position**, **Text drop shadow**, **Text scaling** and **Vignette strength** work as they do on Immich Media. Location is left out because turning GPS coordinates into a place name needs an online lookup service. The details come from JPEG photos. Videos show none.
+
 ### Photo Gallery
 
 Operates similarly to Local Media, but selects files using the native system gallery picker. This avoids needing broad storage permissions. Selected images are stored locally to survive device reboots. Options include **Photos** selection, **Seconds per photo**, **Shuffle**, **Transition**, **Fill the screen**, and **Tap edges to change slides**.
+
+### Image URL
+
+Shows photos from a single web address that returns an image. The device fetches the address again for every slide, so it suits an endpoint that returns a random photo, a camera snapshot or an image an automation renders. Options include **Image URL**, **Seconds per photo** (60 by default), **Transition**, **Fill the screen** and **Tap edges to change slides**.
+
+The current photo stays on screen until the next one has loaded, so a slow server never fades the screen to black. If a fetch fails, the current photo stays and the device tries again 30 seconds later. If the first fetch fails, the screen says so until a photo loads. The device keeps the last four photos in memory. **Screensaver previous slide** and a tap on the left edge step back through them. A step forward shows those photos again before it fetches a new one. Changing the address fetches from the new one right away.
+
+**Show metadata** works as it does on Local Media, reading the date and camera details from each photo's EXIF. The device fetches the address itself, so it can point at anything the device can reach, such as a file under Home Assistant's `/local/` folder or a photo server on your network.
 
 ### Immich Media
 
@@ -128,15 +210,15 @@ Rotation can be stepped manually in either direction using the **Screensaver nex
 
 ### Home Assistant Dashboard
 
-Shows a Home Assistant dashboard view as the screensaver. Selecting the mode reveals the **Home Assistant Dashboard screensaver** group. Pick the view with the **Select dashboard** button on its **Dashboard view** row, which opens the same view list the **Go to a dashboard view** gesture uses. The mode needs a connected Home Assistant.
+Shows a Home Assistant dashboard view as the screensaver. Selecting the mode reveals the **Home Assistant Dashboard screensaver** group. Pick the view by tapping the field on its **Dashboard view** row, which opens the dashboard picker the **Go to a dashboard view** gesture also uses. The mode needs a connected Home Assistant.
 
 The view opens in the dashboard's own web view with the same in-page navigation view rotation uses, so Home Assistant does not reload and the Voice Satellite integration keeps running. When the screensaver ends, the dashboard goes back to the view it was on before. With **Return to home dashboard view** on it goes to the home view instead. If something in Home Assistant navigated the dashboard while the screensaver was up, it stays where that navigation left it.
 
-A tap anywhere dismisses the screensaver without pressing the card under the finger. Motion, face, proximity and person detection, the brightness settings, the schedule, widgets and the At a Glance row work as in the other modes. When no view is picked the screensaver keeps whatever the dashboard shows. Like Dim, this mode keeps the dashboard rendering, so **Pause dashboard during screensaver** does not apply.
+A tap anywhere dismisses the screensaver without pressing the card under the finger. Turn on **Double tap to dismiss** to use the dashboard while the screensaver is up. Single taps then press buttons, move sliders and open popups, and a double tap dismisses the screensaver. Motion, face, proximity and person detection, the brightness settings, the schedule, widgets and the At a Glance row work as in the other modes. When no view is picked the screensaver keeps whatever the dashboard shows. Like Dim, this mode keeps the dashboard rendering, so **Pause dashboard during screensaver** does not apply.
 
 ## Slideshow Behavior
 
-Photo slideshow modes (Home Assistant Media, Local Media, Photo Gallery, Immich Media) share unified image processing logic:
+Photo slideshow modes (Home Assistant Media, Local Media, Photo Gallery, Image URL, Immich Media) share unified image processing logic:
 
 * **Transitions**: Offers None, Crossfade, Slide, Zoom, Ken Burns, or Random. Ken Burns applies exclusively to still images (videos crossfade), while Random selects a different transition effect for each slide change.
 * **Fill the screen** (Smart by default): Dictates image cropping rules to fit the display panel:
@@ -148,7 +230,7 @@ Photo slideshow modes (Home Assistant Media, Local Media, Photo Gallery, Immich 
   | Always | Scales the image to cover the display completely regardless of aspect ratio, cropping overflow. A 4:3 image on a 2:1 display loses approximately one-third of its vertical framing. |
 
 * **Videos** play muted to completion, overriding image interval timers. Unplayable video files are skipped automatically.
-* The slideshow playlist builds upon screensaver activation. Newly added files appear during the next screensaver launch rather than mid-session.
+* The slideshow playlist builds upon screensaver activation. Newly added files appear during the next screensaver launch rather than mid-session. Image URL has no playlist and fetches a new photo for every slide.
 * Images decode at the native panel resolution, and memory for previous slides is released immediately to prevent memory exhaustion on low-RAM devices.
 * **Tap edges to change slides** (on by default): A tap on the left or right fifth of the screen shows the previous or next slide and resets its full display interval. Taps on the middle three fifths dismiss the screensaver as usual. Each slideshow mode has its own switch on its settings page, and turning it off makes every tap dismiss again. Home Assistant Media offers it for image folders only, since a single image, video, or camera stream has nothing to step.
 * **Manual Stepping via Home Assistant**: Triggering **Screensaver next slide** or **Screensaver previous slide** on the [ESPHome](esphome.md) device advances the slideshow by one item and resets the full display interval. These controls also step Camera Streams rotations. Triggering these actions while other screensaver modes are active performs no operation.
@@ -159,24 +241,25 @@ Widgets are small status overlays anchored to display corners, configured within
 
 Every widget has its own **Scale** slider (-50% to +50%) in its editor, which sizes that widget relative to the others. The **Global widget scaling** slider (50% to 200%) then scales all of them together for the display, keeping their relative sizes, and previews live while the screensaver is running. Widgets draw in Rubik unless the **Global font family** and **Global font weight** rows say otherwise, with the same choices as the Clock screensaver's Font Family and Font weight rows. Each widget's editor has its own **Font family** and **Font weight** pickers, Default following the global rows, so one widget can wear the clock's face while the rest stay in Rubik. When running over the Clock screensaver in Night mode, all active widgets inherit the clock's **Night color** to maintain low light levels. **Text drop shadow**, enabled by default, adds a defined shadow beneath widget text. Turn it off for text without a shadow. Changes preview live. Widgets render over a soft dark vignette to ensure text readability against bright background images. The **Vignette strength** slider (0% to 100%, 40% default) adjusts vignette opacity with live previewing. Setting this to 0% removes shading entirely for a clean frame look.
 
-Widgets hold corner priority over the Immich metadata overlay; if a widget claims a corner, the Immich overlay automatically moves to the next available corner. However, when Immich displays a side-by-side portrait pair, both bottom corners are reserved for photo details, temporarily hiding any widgets assigned to those corners until the next single slide displays. A stacked landscape pair only reserves the bottom corner on the overlay's side, since the top photo's details sit at the bottom of its own half, so the top corners stay free.
+Widgets hold corner priority over the photo metadata overlay of Immich Media, Home Assistant Media, Local Media and Image URL. If a widget claims a corner, the overlay automatically moves to the next available corner. However, when Immich displays a side-by-side portrait pair, both bottom corners are reserved for photo details, temporarily hiding any widgets assigned to those corners until the next single slide displays. A stacked landscape pair only reserves the bottom corner on the overlay's side, since the top photo's details sit at the bottom of its own half, so the top corners stay free.
 
 ### Small Clock
 
-Displays a corner clock over any screensaver mode except Clock and WebRTC Camera:
+Displays a corner clock over any screensaver mode except Clock, Calendar and Camera Streams:
 
 | Setting | Default | Notes |
 | --- | --- | --- |
 | Corner | First free corner | Automatically shifts if another widget or overlay claims a corner. |
 | Color | White | Sets the text color. |
 | 24-hour clock | Off | Independent switch from the main Clock screensaver mode setting. |
+| Show AM/PM | On | Appears when **24-hour clock** is off. Turn it off to drop AM or PM from the time. |
 | Show date | Off | Displays a localized short date line directly below the time. |
 
 Renders over a soft vignette for legibility and supports pixel shift adjustments. Legacy small clock configurations automatically migrate into standard clock widgets while retaining their original settings and corner assignments.
 
 ### Weather
 
-Displays real-time weather data pulled from a Home Assistant `weather` entity over any mode except Camera Streams. The widget layout displays top-to-bottom: location name, current temperature with units (e.g., "28°C"), condition text with a matching icon, humidity, wind speed, and visibility. Units are provided directly by the Home Assistant entity, and icons render in a monochrome style matching the widget color.
+Displays real-time weather data pulled from a Home Assistant `weather` entity over any mode except Calendar and Camera Streams. The widget layout displays top-to-bottom: location name, current temperature with units (e.g., "28°C"), condition text with a matching icon, humidity, wind speed, and visibility. Units are provided directly by the Home Assistant entity, and icons render in a monochrome style matching the widget color.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -192,7 +275,7 @@ Data updates automatically via a live Home Assistant subscription while the scre
 
 ### Battery
 
-Displays the device's physical battery status in a display corner over any mode except Camera Streams. Renders an adaptive battery icon, a lightning bolt indicator during external charging, and the current charge percentage.
+Displays the device's physical battery status in a display corner over any mode except Calendar and Camera Streams. Renders an adaptive battery icon, a lightning bolt indicator during external charging, and the current charge percentage.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
@@ -205,25 +288,37 @@ Reads hardware battery state directly from Android rather than a Home Assistant 
 
 ### Next alarm
 
-Shows the next [alarm](alarms.md) set on the kiosk when it rings within 24 hours, and the snooze while one runs, over any mode except Camera Streams. The corner stays empty the rest of the time. A tap on the widget opens the alarm list.
+Shows the next [alarm](alarms.md) set on the kiosk when it rings within 24 hours, and the snooze while one runs, over any mode except Calendar and Camera Streams. The corner stays empty the rest of the time. A tap on the widget opens the alarm list.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
 | Corner | First free corner | Displays in the first available corner. |
 | Color | White | Applies to the icon and the time. |
 
+### Up next
+
+Shows what is still to come today on the [calendar](calendar.md), over any mode except Calendar and Camera Streams: a dot in each event's calendar color, the start time and the title. Calendars hidden with their chips are left out. The corner stays empty once nothing else is on today. A tap on the widget opens the calendar on the Schedule view.
+
+| Setting | Default | Notes |
+| --- | --- | --- |
+| Corner | First free corner | Displays in the first available corner. |
+| Color | White | Applies to the times and titles. |
+| Events shown | 3 | How many coming events it lists, 1 to 5. |
+
 ### Entity
 
-Displays a single Home Assistant entity in a display corner over any mode except Camera Streams. Styled similarly to the widget family, the layout features the entity icon and value on a single line with the entity name centered underneath. Ideal for displaying specific metrics, such as a room temperature sensor over an Immich photo slideshow.
+Displays a single Home Assistant entity in a display corner over any mode except Calendar and Camera Streams. Styled similarly to the widget family, the layout features the entity icon and value on a single line with the entity name centered underneath. Ideal for displaying specific metrics, such as a room temperature sensor over an Immich photo slideshow.
 
 | Setting | Default | Notes |
 | --- | --- | --- |
 | Entity | None | Selected by entity name or ID via the picker. The widget remains hidden until assigned. |
 | Name | Empty | Custom label displayed under the value. If left empty, the default Home Assistant entity name displays. |
 | Displayed value | State | Selects whether to display the primary entity state or a specific attribute value. |
+| Visible states | Empty | A comma separated list of values. The widget only shows when its value matches one of them, such as `Open` or `on`. The list matches the displayed value or the raw Home Assistant value and ignores case. Leave it empty to always show the widget. |
 | Corner | First free corner | Displays in the first available corner. |
 | Color | White | Applies to icon, value, and label text. |
 | Show name | On | Disabling this hides the bottom label, displaying only the icon and value. |
+| Show icon | On | Disabling this hides the icon, displaying only the value and its name. |
 
 The widget hides completely, vignette included, while the value is blank. A text sensor that clears when an alert ends takes the widget with it and brings it back with the next alert. Unknown and Unavailable still display.
 
@@ -241,19 +336,25 @@ When [Adaptive brightness](screen.md#adaptive-brightness) is enabled, the screen
 
 The screensaver pauses when another application takes the foreground. The idle timeout clock stops counting when Kiosk Satellite moves to the background (such as launching an external app via the App Launcher, a gesture, or Home Assistant, or pressing Home on unmanaged devices). An active screensaver closes so the newly opened app receives standard display brightness, and the idle clock resets when Kiosk Satellite returns to the foreground. Turning off the physical display panel pauses Kiosk Satellite in the same manner, preserving screensaver state upon waking.
 
-**Use a black screen instead** uses the same countdown, including schedule overrides, to cover the app with a plain black screen at zero brightness. It keeps the panel powered on and does not need Device admin permission. Widgets, timers, notifications and Now Playing stay hidden until the screen wakes. Touch restores the dashboard and its brightness. Detection follows the existing dismiss switches, including **Only when screen is off** and **Wake to screensaver**. With **Wake to screensaver** enabled, detection restores the configured screensaver and starts a fresh countdown.
+**Use a black screen instead** uses the same countdown, including schedule overrides, to cover the app with a plain black screen at zero brightness. It keeps the panel powered on and does not need Device admin permission. Widgets, timers, notifications and Now Playing stay hidden until the screen wakes. Touch restores the dashboard and its brightness. Detection follows the existing dismiss switches, including **Only when screen is off** and **Wake to screensaver**. A detection picked under **Wake to screensaver** restores the configured screensaver and starts a fresh countdown. With **Touch** picked, the first touch does the same and a second touch opens the dashboard.
 
 The screensaver holds a CPU wake lock while active, preventing Android's system display timeout from turning off the screen. **Turn screen off after** powers off the display panel after the screensaver has been running for a set duration. Both the global setting and schedule overrides range from 1 to 60 minutes in 1-minute increments. Set the value to 0 to disable panel power off. Powering off the display panel requires the **Device admin** permission (**Settings > Device > Permissions Manager**). If this permission is missing, a warning is logged and the panel remains powered on.
 
-Android automatically arms the lock screen when display admin power-off is called, regardless of whether a PIN is configured. Waking a panel to an active lock screen causes the display to turn off again seconds later while the kiosk remains paused underneath. To prevent this, Kiosk Satellite automatically clears unsecured lock screens (swipe-to-unlock screens without PINs, patterns, or passwords) upon waking. On Android 10 and newer, clearing lock screens requires the **Display over other apps** permission. Secured lock screens are left intact, requiring manual user unlock while logging the status. Fire OS 8 strictly blocks non-Amazon apps from clearing lock screens, requiring a specific ADB setting change and reboot (see [Amazon Fire tablets](fire.md)). Kiosks configured to turn off display panels operate best with lock screens disabled entirely.
+Android automatically arms the lock screen when display admin power-off is called, regardless of whether a PIN is configured. Waking a panel to an active lock screen causes the display to turn off again seconds later while the kiosk remains paused underneath. To prevent this, Kiosk Satellite automatically clears unsecured lock screens (swipe-to-unlock screens without PINs, patterns, or passwords) upon waking. On Android 10 and newer, clearing lock screens requires the **Display over other apps** permission. Secured lock screens are left intact. The kiosk waits behind them until someone unlocks the device, unless **Show over lock screen** is on under **Screen & Audio > Screen**, which shows the dashboard on top of them. Fire OS 8 strictly blocks non-Amazon apps from clearing lock screens, requiring a specific ADB setting change and reboot (see [Amazon Fire tablets](fire.md)). Kiosks configured to turn off display panels operate best with lock screens disabled entirely.
 
-The screensaver session remains active behind a dark panel, ensuring symmetrical wake behavior across all trigger sources. Supported wake triggers include [camera motion detection](microphone.md) (on supported hardware where background camera sessions survive screen off), wake word detection, toggling the ESPHome **Screensaver active** switch off, or calling `stopScreensaver` via Home Assistant automations. All wake triggers return the display directly to the live dashboard rather than the screensaver. Physical power button presses and double-tap-to-wake gestures act as touch interactions, returning to the dashboard and resetting the idle timeout clock. Under [Lockdown Mode](kiosk.md), screensavers persist through wake events as they do for motion. 
+The screensaver session remains active behind a dark panel, ensuring symmetrical wake behavior across all trigger sources. Supported wake triggers include [camera motion detection](microphone.md) (on supported hardware where background camera sessions survive screen off), wake word detection, toggling the ESPHome **Screensaver active** switch off, or calling `stopScreensaver` via Home Assistant automations. All wake triggers return the display directly to the live dashboard rather than the screensaver. Physical power button presses and double-tap-to-wake gestures act as touch interactions, returning to the dashboard and resetting the idle timeout clock. Under [Lockdown Mode](kiosk.md) or with **Power button** picked under **Wake to screensaver**, screensavers persist through these wake events as they do for motion. 
 
 The single wake event that preserves screensaver state is toggling display power via the ESPHome **Screen** light entity. Turning the Screen light entity on in the morning restores the active screensaver with a fresh power-off countdown, allowing an automation to subsequently turn off **Screensaver active** when it is time to display the dashboard.
 
-**Wake to screensaver** gives motion, face, proximity and person detection that same behavior. With it on, a detection after the panel has powered off only turns the screen back on: the screensaver is still up, the **Turn screen off after** countdown starts over and a quiet room lets the panel go dark again. A touch is what opens the dashboard. This is the photo frame pattern: someone walking into the room brings the photos back and nobody sees the dashboard until they ask for it. The switch sits under the **Turn screen off after** slider and does nothing while that slider is at 0. Detection on a lit screensaver keeps its normal rules, so pair it with **Only when screen is off** on each detection type you use if the visible slideshow should survive people moving about. The wake word, the ESPHome **Screensaver active** switch and `stopScreensaver` still dismiss to the dashboard, and each detection type still needs its own Dismiss switch (or a schedule override) to wake the panel at all.
+**Wake to screensaver** gives other wakes that same behavior. Its box opens a list to pick from: **Motion**, **Face**, **Proximity**, **Person**, **Power button** and **Touch**. A picked wake after the panel has powered off only turns the screen back on: the screensaver is still up, the **Turn screen off after** countdown starts over and a quiet room lets the panel go dark again. Anything not picked opens the dashboard as before. This is the photo frame pattern: someone walking into the room brings the photos back and nobody sees the dashboard until they ask for it. The setting does nothing while **Turn screen off after** is at 0.
 
-Example configuration workflow: Display photo slideshows during the day, transition to Black mode in the evening via the [schedule](#schedule), and set **Turn screen off after** to 10 minutes. The display turns off completely overnight after the room empties, and the first morning wake event (motion or wake word) restores the dashboard immediately. Add **Wake to screensaver** and the morning motion brings the photos back instead, with the dashboard a touch away.
+* **Motion**, **Face**, **Proximity** and **Person** still need their own Dismiss switch (or a schedule override) to wake the panel at all. Detection on a lit screensaver keeps its normal rules, so pair it with **Only when screen is off** on each detection type you use if the visible slideshow should survive people moving about.
+* **Power button** covers every wake Kiosk Satellite did not start itself, because Android does not tell apps what woke the screen. That includes the power button (on an Echo Show running LineageOS, that is the mute button on top), double-tap to wake and any other app turning the screen on.
+* **Touch**: the first touch brings the screensaver back and a second touch opens the dashboard. A panel that **Turn screen off after** powered off takes no touches, so this applies when **Use a black screen instead** keeps the panel on. Until **Turn screen off after** is above 0 and **Use a black screen instead** is on, **Touch** is grayed out in the list. Waking a powered-off panel with double-tap to wake counts as **Power button**.
+
+The wake word, the ESPHome **Screensaver active** switch and `stopScreensaver` always dismiss to the dashboard. Before **Wake to screensaver** became a list it was a switch. A kiosk that had it on picks everything except **Touch** after the update, and one that had it off picks nothing.
+
+Example configuration workflow: Display photo slideshows during the day, transition to Black mode in the evening via the [schedule](#schedule), and set **Turn screen off after** to 10 minutes. The display turns off completely overnight after the room empties, and the first morning wake event (motion or wake word) restores the dashboard immediately. Pick **Motion** under **Wake to screensaver** and the morning motion brings the photos back instead, with the dashboard a touch away.
 
 ## Schedule
 
@@ -278,6 +379,12 @@ When the [device camera](camera.md) is enabled, two Motion Detection settings co
 * **Postpone screensaver on motion**: Monitors the camera between screensaver sessions, continuously resetting the idle timeout clock whenever room movement is detected. This keeps the camera active continuously and requires Dismiss on motion to be enabled.
 
 Motion analysis functions in total darkness, filters out whole-room light shifts (such as TV flashes or turning on a lamp), and suppresses detection for a few seconds during internal app brightness and slide transitions to prevent false wakes. Sensitivity, frame rates, and camera selection are configured in Camera settings (see [Device Camera](camera.md)). Under [Lockdown Mode](kiosk.md), motion events will neither dismiss nor postpone screensavers.
+
+### External Motion Sensor
+
+A Home Assistant sensor can detect motion in place of the camera, for a tablet whose camera does not work or a room that already has a motion sensor. Turn on **Use Home Assistant entity** under **Screensaver > Motion Detection > External Motion Sensor**, then pick the sensor in **Motion sensor entity**. The picker lists occupancy, motion and presence binary sensors. Once one is picked, the row shows whether it reads Detected or Clear.
+
+With the switch on, the entity drives **Dismiss on motion**, **Only when screen is off** and **Postpone screensaver on motion** above it, and the camera no longer runs for them. Neither the Camera switch nor a camera on the device is needed. The sensor turning on dismisses the screensaver. While it stays on, it postpones the screensaver the way movement does, but it never dismisses a screensaver that started while it was already on. When it clears, the idle timeout runs out as usual and the screensaver can turn the screen off after its own delay. The **Motion** `binary_sensor`, face detection and the Show fingers gesture keep using the camera. Dismiss on motion still takes precedence over Dismiss on face.
 
 ## Face Detection
 
@@ -321,7 +428,7 @@ Proximity Detection uses the device's physical proximity sensor instead of the c
 * **Only when screen is off**: Keeps the visible screensaver up when something approaches. Once the display turns off, a new approach dismisses the screensaver and wakes the dashboard. Requires Dismiss on proximity.
 * **Postpone screensaver on proximity**: Monitors the sensor between screensaver sessions, resetting the idle timeout clock while an object remains close. Requires Dismiss on proximity. Proximity sensing incurs virtually zero power overhead as it relies on hardware interrupt lines.
 
-Proximity sensing requires no camera permissions and functions in complete darkness. However, hardware availability is limited: most kiosk-class tablets (such as Galaxy Tab devices, Fire tablets, and Echo Show hardware) lack physical proximity sensors. On unsupported devices, this setting appears disabled. While modern smartphones include proximity sensors, many use virtual "palm proximity" software sensors designed for phone calls that only trigger on direct screen contact. The settings page displays the reported sensor hardware name: physical infrared or time-of-flight sensors (such as STK3310, VCNL4040, or TMD2755) support hover detection at a few centimeters, whereas virtual "palm" or "touch" sensors do not.
+Proximity sensing requires no camera permissions and functions in complete darkness. However, hardware availability is limited: most kiosk-class tablets (such as Galaxy Tab devices, Fire tablets, and Echo Show hardware) lack physical proximity sensors. On unsupported devices, this setting appears disabled. While modern smartphones include proximity sensors, many use virtual "palm proximity" software sensors designed for phone calls that only trigger on direct screen contact. The settings page displays the reported sensor hardware name: physical infrared or time-of-flight sensors (such as STK3310, VCNL4040, or TMD2755) support hover detection at a few centimeters, whereas virtual "palm" or "touch" sensors do not. Some wall panels, such as the Sonoff NSPanel Pro, report a raw reading that rises as something comes closer instead of a distance. Kiosk Satellite recognizes these and treats a clear rise over the resting reading as an approach, which on the NSPanel Pro reaches about 20 cm.
 
 Objects resting on the sensor when monitoring begins do not trigger an approach event, preventing tablet cases or mounts from causing continuous wake loops. While an object remains near the sensor, presence checks repeat every few seconds to hold off screensaver activation when Postpone is enabled. Repeat checks do not trigger wake events; only initial approach events dismiss the screensaver. Under [Lockdown Mode](kiosk.md), proximity events will neither dismiss nor postpone screensavers.
 
@@ -345,11 +452,11 @@ Each detection page has its own **Only when screen is off** toggle in the app an
 
 The toggles restrict dismissal, so the camera and sensors keep monitoring while the screensaver is visible and after the display turns off. Postpone settings still control activity before the screensaver starts. Schedule detection overrides still decide whether a detection type is enabled and **Only when screen is off** also applies when a schedule enables it. Motion retains priority over face detection.
 
-What a detection does once the display has turned off is decided by **Wake to screensaver** (see [Turning the Screen Off](#turning-the-screen-off)). Off, the detection wakes the dashboard. On, it only lights the panel and the screensaver carries on.
+What a detection does once the display has turned off is decided by **Wake to screensaver** (see [Turning the Screen Off](#turning-the-screen-off)). A detection that is not picked there wakes the dashboard. A picked one only lights the panel and the screensaver carries on.
 
 The standard method for launching the screensaver is the idle timeout clock. Manual launch options include selecting **Start Screensaver** in the kiosk menu, triggering a mapped [gesture](gestures.md), toggling the ESPHome **Screensaver active** switch, or sending the `startScreensaver` command via the [remote API](remote-api.md) or [JavaScript API](js-api.md).
 
-Touch interactions instantly dismiss the screensaver and reset the idle clock. The one exception is a tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on, which steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). Additional dismissal triggers include:
+Touch interactions instantly dismiss the screensaver and reset the idle clock. There are four exceptions. A tap on the left or right fifth of a photo slideshow with **Tap edges to change slides** on steps the slide instead (see [Slideshow behavior](#slideshow-behavior)). The [Celestial](#celestial) screensaver takes a double tap, since a drag there looks around the sky. The [Website](#website) and [Home Assistant Dashboard](#home-assistant-dashboard) screensavers take a double tap when their **Double tap to dismiss** is on. The [Calendar](#calendar) screensaver stays until its X button is pressed. Additional dismissal triggers include:
 
 * **Wake Word**: Dismisses the screensaver immediately and pauses the idle clock for the entire voice turn so the display remains active during conversation.
 * **Camera Motion**: Triggers wake when Dismiss on motion is active.
@@ -366,18 +473,19 @@ Touch interactions instantly dismiss the screensaver and reset the idle clock. T
 
 While a screensaver obscures the web page, the **Pause dashboard during screensaver** optimization (enabled by default) completely halts web view rendering. This produces the majority of screensaver power and thermal savings (see benchmark details in [Optimizations](optimizations.md)). Dim and Home Assistant Dashboard are the exceptions, as the dashboard remains visible.
 
-Automated dashboard view rotation pauses while a screensaver is active, resuming from its current position when dismissed. Conversely, the **Return to home dashboard view** timer continues running quietly behind screensavers, ensuring the kiosk resets to the primary home dashboard view overnight without illuminating the display. Under the Home Assistant Dashboard screensaver that return happens when the screensaver ends.
+Automated dashboard view rotation pauses while a screensaver is active, resuming from its current position when dismissed. Conversely, the **Return to home dashboard view** timer continues running quietly behind screensavers, ensuring the kiosk resets to the primary home dashboard view overnight without illuminating the display. Under the Home Assistant Dashboard screensaver that return happens when the screensaver ends. Now Playing can land somewhere else with its [After dismissing](sendspin.md#full-screen-now-playing) setting.
 
 When using the Voice Satellite integration on the dashboard, the **Turn off the Voice Satellite screensaver** setting (enabled by default in Voice Satellite settings) automatically disables the web integration's internal screensaver to prevent software conflicts.
 
 ## At a Glance
 
-The **At a glance** feature displays a live status row containing up to four Home Assistant entity states across all screensaver modes except the Camera Streams grid. Data updates over an independent Home Assistant subscription while the screensaver is active. Full setup details are available in the [At a Glance](at-a-glance.md) guide.
+The **At a glance** feature displays a live status row containing up to four Home Assistant entity states across all screensaver modes except Calendar and the Camera Streams grid. Data updates over an independent Home Assistant subscription while the screensaver is active. Full setup details are available in the [At a Glance](at-a-glance.md) guide.
 
 ## Home Assistant
 
 When ESPHome **Expose kiosk entities** is enabled, the screensaver provides comprehensive remote entity controls:
 * **Screensaver** master switch
+* **Screensaver schedule** switch (turns scheduled screensavers on or off)
 * **Screensaver active** switch (start/dismiss)
 * **Postpone screensaver** button (resets idle clock from external automations)
 * **Screensaver mode** and **Clock style** select dropdowns
@@ -388,3 +496,5 @@ When ESPHome **Expose kiosk entities** is enabled, the screensaver provides comp
 * **Screensaver next slide** and **Screensaver previous slide** buttons (steps active slideshows or camera rotation grids)
 
 All entities surface natively on the kiosk's primary ESPHome device.
+
+Automations can follow the screensaver through the `esphome.kiosk_satellite_screensaver` [event](events.md#screensaver). Apps on the kiosk itself, like Tasker or MacroDroid, can use [Android Broadcasts](android-broadcasts.md#screensaver).

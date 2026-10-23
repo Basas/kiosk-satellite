@@ -133,6 +133,80 @@ class HintRow extends StatelessWidget {
   }
 }
 
+/// A page's opening row: its glyph on a soft primary tile, a headline and a
+/// line or two under it saying what the page is for. The first row of the
+/// page's first card. Without a [title] the line stands alone, centered on
+/// the tile (an information glyph for a page that only needs a note).
+/// Mirrored by the remote admin's introRow (widgets.js).
+class IntroRow extends StatelessWidget {
+  const IntroRow({super.key, required this.icon, this.title, this.subtitle});
+
+  /// The page's glyph, drawn in the primary color.
+  final Widget icon;
+  final String? title;
+  final String? subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final head = title;
+    final sub = subtitle;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Ks.inset, vertical: 20),
+      child: Row(
+        crossAxisAlignment: head == null
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: scheme.primary.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(Ks.radiusRow),
+            ),
+            alignment: Alignment.center,
+            child: IconTheme(
+              data: IconThemeData(color: scheme.primary, size: 26),
+              child: icon,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (head != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    head,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+                if (sub != null && sub.isNotEmpty) ...[
+                  if (head != null) const SizedBox(height: 4),
+                  Text(
+                    sub,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// [HintRow]'s cautionary sibling: same shape, warning color.
 class WarnRow extends StatelessWidget {
   const WarnRow(this.text, {super.key});
@@ -488,11 +562,16 @@ class ControlBox extends StatelessWidget {
     required this.child,
     this.onTap,
     this.padding = const EdgeInsets.symmetric(horizontal: 12),
+    this.borderColor,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final EdgeInsetsGeometry padding;
+
+  /// Replaces the hairline, 1.5 wide: the error color for a stored value
+  /// that no longer resolves.
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -503,7 +582,9 @@ class ControlBox extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
-        border: Border.all(color: scheme.outlineVariant),
+        border: borderColor == null
+            ? Border.all(color: scheme.outlineVariant)
+            : Border.all(color: borderColor!, width: 1.5),
         borderRadius: radius,
       ),
       child: child,
@@ -724,6 +805,7 @@ class KsDropdown<T> extends StatelessWidget {
     required this.items,
     required this.onChanged,
     this.expand = false,
+    this.loading = false,
   });
 
   final T? value;
@@ -734,6 +816,11 @@ class KsDropdown<T> extends StatelessWidget {
 
   /// Fill the available width instead of hugging the value.
   final bool expand;
+
+  /// The choices are on their way: disabled, a spinner and Loading… in
+  /// place of the value. The items stay, so the box keeps its width. The
+  /// remote admin's twin is selectLoading in widgets.js.
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -767,7 +854,7 @@ class KsDropdown<T> extends StatelessWidget {
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<T>(
-                value: value,
+                value: loading ? null : value,
                 isExpanded: expand,
                 borderRadius: BorderRadius.circular(Ks.radiusControl),
                 focusColor: Colors.transparent,
@@ -776,7 +863,23 @@ class KsDropdown<T> extends StatelessWidget {
                   color: scheme.onSurface,
                 ),
                 items: items,
-                onChanged: onChanged,
+                onChanged: loading ? null : onChanged,
+                disabledHint: loading
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox.square(
+                            dimension: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: scheme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(l10n(context).commonLoading),
+                        ],
+                      )
+                    : null,
               ),
             ),
           );
@@ -945,21 +1048,29 @@ class DropdownRow<T> extends StatelessWidget {
     required this.value,
     required this.options,
     required this.onChanged,
+    this.loading = false,
   });
 
   final String title;
-  final String description;
+
+  /// Null leaves the row without a description line.
+  final String? description;
   final T? value;
 
   /// (value, label) pairs; labels are built with single-line ellipsis so a
   /// long device name truncates instead of wrapping inside the menu.
   final List<(T, String)> options;
 
-  final ValueChanged<T?> onChanged;
+  /// Null disables the dropdown.
+  final ValueChanged<T?>? onChanged;
+
+  /// The options are still loading (see [KsDropdown.loading]).
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
     final tight = tightPane(context);
+    final description = this.description;
     final dropdown = KsDropdown<T>(
       value: value,
       expand: tight,
@@ -971,11 +1082,12 @@ class DropdownRow<T> extends StatelessWidget {
           ),
       ],
       onChanged: onChanged,
+      loading: loading,
     );
     if (!tight) {
       return ListTile(
         title: Text(title),
-        subtitle: Text(description),
+        subtitle: description == null ? null : Text(description),
         trailing: dropdown,
       );
     }
@@ -986,8 +1098,10 @@ class DropdownRow<T> extends StatelessWidget {
         children: [
           const SizedBox(height: 6),
           dropdown,
-          const SizedBox(height: 8),
-          Text(description),
+          if (description != null) ...[
+            const SizedBox(height: 8),
+            Text(description),
+          ],
         ],
       ),
     );

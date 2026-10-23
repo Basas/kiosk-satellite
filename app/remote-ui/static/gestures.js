@@ -1,3 +1,4 @@
+import { isHeadless } from './headless.js';
 import { gestureText, cameraText, localizeSetting, t } from './localization.js';
 import { watchUpdates } from './live.js';
 import {
@@ -11,7 +12,11 @@ import {
 import { api, cmd, state } from './core.js';
 import { applyManagedBanners } from './fleetsync.js';
 import { settingRow } from './rows.js';
-import { dashboardViewEntries, pickDashboardView, radioRow } from './views.js';
+import { radioRow } from './views.js';
+import { pickDashboard } from './dashboard_picker.js';
+import {
+  entitySpec, onListLoaded, pickEntity, pickField, pickItem, serviceEntityDomains, serviceSpec,
+} from './entity_picker.js';
 import { messageBox, localizedMessageBox, modalShell } from './widgets.js';
 
 /* ---- Gestures (issue #99) ----
@@ -34,22 +39,48 @@ export const GESTURE_TRIGGERS = [
   ['claps', 'Claps'],
   ['fingers', 'Show fingers'],
   ['plugin', 'Plugin trigger'],
+  ['button', 'Button'],
+];
+// What a device without a screen can do: its buttons, claps and plugins
+// trigger, and the actions that show, open or navigate something are left
+// out (headless.js).
+const HEADLESS_TRIGGERS = new Set(['button', 'claps', 'plugin']);
+const DISPLAY_ACTIONS = new Set([
+  'navigate', 'refresh', 'url', 'camera_view', 'sendspin_player', 'now_playing',
+  'music_assistant', 'app_launcher', 'intercom_open', 'screensaver', 'screensaver_stop',
+  'hold_mode', 'ha_kiosk', 'launch_app', 'open_uri', 'android_settings', 'calendar',
+  'music_library',
+]);
+// The buttons that reach the app. The Echo Dot's LineageOS build keeps the
+// microphone and volume buttons for itself (they mute and change the volume
+// there), so the Action button is the one to map.
+export const GESTURE_BUTTONS = [['action', 'Action']];
+export const GESTURE_PRESSES = [
+  ['single', 'Press'], ['double', 'Double press'], ['long', 'Hold'],
 ];
 export const GESTURE_ACTION_GROUPS = [
   ['Kiosk Satellite', [
     ['navigate', 'Go to a dashboard view', 'grid'],
+    ['refresh', 'Refresh the dashboard', 'refresh'],
     ['url', 'Open a web page', 'globe'],
     ['camera_view', 'Show a camera view', 'video'],
     ['sendspin_player', 'Show the floating player', 'speaker'],
     ['now_playing', 'Show Now Playing', 'playCircle'],
     ['music_assistant', 'Open Music Assistant', 'music'],
+    ['music_library', 'Open Music Library', 'queueMusic'],
     ['media_play_pause', 'Play or pause media', 'playPause'],
     ['app_launcher', 'Open the app launcher', 'apps'],
     ['intercom_open', 'Open Call a kiosk', 'speaker'],
     ['intercom_call', 'Call a kiosk', 'speaker'],
     ['intercom_hangup', 'End the intercom call', 'callEnd'],
+    ['intercom_answer', 'Accept intercom call', 'call'],
+    ['intercom_decline', 'Decline intercom call', 'callOff'],
     ['alarm_stop', 'Stop the alarm', 'alarmOff'],
     ['alarm_snooze', 'Snooze the alarm', 'snooze'],
+    ['calendar', 'Open the calendar', 'calendar'],
+    ['voice_wake', 'Start a voice command', 'mic'],
+    ['voice_stop', 'Stop the voice assistant', 'stop'],
+    ['voice_mute', 'Mute or unmute Voice Satellite', 'micOff'],
     ['screensaver', 'Start the screensaver', 'moon'],
     ['screensaver_stop', 'Stop the screensaver', 'sun'],
     ['hold_mode', 'Toggle hold mode', 'pauseCircle'],
@@ -97,6 +128,13 @@ export function describeGestureTrigger(trigger) {
       return count === 5 ? gestureText('Show an open hand') : t(count === 1 ? 'gestureDescribeOneFinger' : 'gestureDescribeFingers', {count});
     }
     case 'plugin': return describePluginTrigger(trigger);
+    case 'button': {
+      const name = GESTURE_BUTTONS.find(([id]) => id === trigger.button)?.[1] || 'Action';
+      const button = gestureText(name);
+      if (trigger.press === 'double') return t('gestureDescribeButtonDouble', {button});
+      if (trigger.press === 'long') return t('gestureDescribeButtonHold', {button});
+      return t('gestureDescribeButtonPress', {button});
+    }
   }
   return gestureText('Gesture');
 }
@@ -106,6 +144,7 @@ export function describeGestureAction(a) {
   switch (a.type) {
     case 'navigate': return t('gestureGoTo', {value: a.path});
     case 'url': return t('gestureOpen', {value: a.url});
+    case 'refresh': return gestureText('Refresh the dashboard');
     case 'camera_view':
       if (a.mode === 'hide') return gestureText('Close the camera view');
       return a.viewName ? t('gestureCameraToggleName', {name: a.viewName}) : gestureText('Toggle the camera view');
@@ -117,8 +156,15 @@ export function describeGestureAction(a) {
     case 'intercom_open': return gestureText('Open Call a kiosk');
     case 'intercom_call': return t('gestureCall', {value: a.kioskName || a.kioskId});
     case 'intercom_hangup': return gestureText('End the intercom call');
+    case 'intercom_answer': return gestureText('Accept intercom call');
+    case 'intercom_decline': return gestureText('Decline intercom call');
     case 'alarm_stop': return gestureText('Stop the alarm');
     case 'alarm_snooze': return gestureText('Snooze the alarm');
+    case 'calendar': return gestureText('Open the calendar');
+    case 'music_library': return gestureText('Open Music Library');
+    case 'voice_wake': return gestureText('Start a voice command');
+    case 'voice_stop': return gestureText('Stop the voice assistant');
+    case 'voice_mute': return gestureText('Mute or unmute Voice Satellite');
     case 'screensaver': return gestureText('Start the screensaver');
     case 'screensaver_stop': return gestureText('Stop the screensaver');
     case 'hold_mode': return gestureText('Toggle hold mode');
@@ -274,46 +320,19 @@ export function gestureValidateRow(getCheck) {
 // One Home Assistant entity plus a Validate check: the script and
 // automation dialogs. A bare name is qualified with the domain.
 export async function configureGestureHaEntity(current, spec) {
-  const body = document.createElement('div');
-  const entity = cameraField(spec.label, current?.entityId || '');
-  entity.input.placeholder = spec.hint;
-  const qualified = () => {
-    const value = entity.input.value.trim();
-    return !value || value.includes('.') ? value : `${spec.domain}.${value}`;
-  };
-  body.append(entity.wrap, gestureValidateRow(() => qualified()
-    ? { domain: spec.domain, service: spec.service, entity: qualified() }
-    : t('gestureEntityRequired', {domain: spec.domain})));
-  let out = null;
-  const saved = await cameraEditor({
-    title: spec.title,
-    body,
-    save: async () => {
-      const value = qualified();
-      if (!value.startsWith(`${spec.domain}.`)
-        || value.length <= spec.domain.length + 1) {
-        return { ok: false, error: t('gestureEntityRequired', {domain: spec.domain}) };
-      }
-      out = { type: spec.type, entityId: value };
-      return { ok: true };
-    },
-  });
-  return saved ? out : null;
+  // The entity picker over this domain's entities: picked from Home
+  // Assistant's own list, there is nothing to type or validate.
+  const out = await pickEntity({ title: spec.title, selected: current?.entityId || null,
+    domains: [spec.domain] });
+  return out?.id ? { type: spec.type, entityId: out.id } : null;
 }
 
 export async function configureGestureNavigate(current) {
-  // The same flattened "dashboard / view" list the Home Assistant
-  // Dashboard screensaver picks from.
-  const entries = await dashboardViewEntries();
-  if (!entries.length) {
-    await messageBox({
-      title: gestureText('No dashboards'),
-      message: gestureText('Could not list dashboards. Is Home Assistant connected?'),
-    });
-    return null;
-  }
-  const path = await pickDashboardView(gestureText('Go to a dashboard view'),
-    entries, current?.path);
+  // The dashboard picker every dashboard view setting opens.
+  const path = await pickDashboard({
+    title: gestureText('Go to a dashboard view'),
+    selected: current?.path || null,
+  });
   return path ? { type: 'navigate', path } : null;
 }
 
@@ -367,38 +386,79 @@ export function parseGestureData(text) {
 
 export async function configureGestureHaService(current) {
   const body = document.createElement('div');
-  const domain = cameraField(gestureText('Domain'), current?.domain || '');
-  domain.input.placeholder = 'light';
-  const service = cameraField(gestureText('Service'), current?.service || '');
-  service.input.placeholder = 'turn_on';
-  const entity = cameraField(gestureText('Entity (optional)'), current?.entityId || '');
-  entity.input.placeholder = 'light.kitchen';
+  // One pick, domain.service, stored split as before.
+  let serviceId = current?.domain && current?.service ? `${current.domain}.${current.service}` : '';
+  let entityId = current?.entityId || '';
+  const labeled = (label, field) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'form-field';
+    const title = document.createElement('span');
+    title.className = 'desc';
+    title.textContent = label;
+    wrap.append(title, field.el);
+    return wrap;
+  };
+  const split = () => {
+    const dot = serviceId.indexOf('.');
+    return dot < 0 ? ['', serviceId] : [serviceId.slice(0, dot), serviceId.slice(dot + 1)];
+  };
+  // Only the entities the service acts on. Off until a service is picked,
+  // and for one that takes none.
+  const entity = pickField({
+    spec: entitySpec(), value: entityId,
+    onClick: async () => {
+      const domains = serviceEntityDomains(serviceId);
+      if (!domains) return;
+      const out = await pickItem({ title: gestureText('Entity (optional)'),
+        spec: entitySpec({ domains }), selected: entityId || null, allowClear: true });
+      if (!out) return;
+      entityId = out.id ?? '';
+      entity.setValue(entityId);
+    },
+  });
+  const syncEntity = () => {
+    const domains = serviceEntityDomains(serviceId);
+    entity.setEnabled(!!domains);
+    entity.setPlaceholder(serviceId && !domains ? gestureText('Not used by this service') : null);
+  };
+  // Picked from Home Assistant's own services, under their domains.
+  const service = pickField({
+    spec: serviceSpec(), value: serviceId, placeholder: gestureText('Choose a service'),
+    onClick: async () => {
+      const out = await pickItem({ title: gestureText('Service'), spec: serviceSpec(),
+        selected: serviceId || null });
+      if (!out?.id) return;
+      serviceId = out.id;
+      service.setValue(serviceId);
+      // An entity the new service cannot act on goes with the old one.
+      const domains = serviceEntityDomains(serviceId);
+      if (!domains || (domains.length && !domains.includes(entityId.split('.')[0]))) {
+        entityId = '';
+        entity.setValue('');
+      }
+      syncEntity();
+    },
+  });
+  syncEntity();
+  onListLoaded('services', service.el, syncEntity);
   const data = gestureTextarea(gestureText('Service data (optional)'),
     current?.data ? JSON.stringify(current.data) : '', '{"brightness_pct": 60}');
-  body.append(domain.wrap, service.wrap, entity.wrap, data.wrap,
-    gestureValidateRow(() => domain.input.value.trim() && service.input.value.trim()
-      ? {
-        domain: domain.input.value.trim(),
-        service: service.input.value.trim(),
-        entity: entity.input.value.trim(),
-      }
-      : gestureText('Domain and service are required.')));
+  body.append(labeled(gestureText('Service'), service),
+    labeled(gestureText('Entity (optional)'), entity), data.wrap,
+    gestureValidateRow(() => serviceId
+      ? { domain: split()[0], service: split()[1], entity: entityId }
+      : gestureText('Choose a service')));
   let out = null;
   const saved = await cameraEditor({
     title: gestureText('Call a Home Assistant service'),
     body,
     save: async () => {
-      if (!domain.input.value.trim() || !service.input.value.trim()) {
-        return { ok: false, error: gestureText('Domain and service are required.') };
-      }
+      if (!serviceId) return { ok: false, error: gestureText('Choose a service') };
       const parsed = parseGestureData(data.input.value);
       if (!parsed.ok) return { ok: false, error: gestureText('Service data must be a JSON object.') };
-      out = {
-        type: 'ha_service',
-        domain: domain.input.value.trim(),
-        service: service.input.value.trim(),
-      };
-      if (entity.input.value.trim()) out.entityId = entity.input.value.trim();
+      const [domain, name] = split();
+      out = { type: 'ha_service', domain, service: name };
+      if (entityId) out.entityId = entityId;
       if (parsed.value) out.data = parsed.value;
       return { ok: true };
     },
@@ -435,7 +495,9 @@ export async function configureGestureHaEvent(current) {
 // nothing to configure resolve directly.
 export async function pickGestureAction(current) {
   const items = [];
-  for (const [group, actions] of GESTURE_ACTION_GROUPS) {
+  for (const [group, all] of GESTURE_ACTION_GROUPS) {
+    const actions = isHeadless() ? all.filter(([value]) => !DISPLAY_ACTIONS.has(value)) : all;
+    if (!actions.length) continue;
     items.push({ header: group });
     for (const [value, label, icon] of actions) {
       items.push({
@@ -450,7 +512,7 @@ export async function pickGestureAction(current) {
     case 'plugin_action': {
       const result = await cmd('getPluginActions');
       if (!result.ok) { await messageBox({ title: gestureText('Plugin actions'), message: result.error || gestureText('Could not load plugin actions.') }); return null; }
-      const actions = (result.data || []).filter((action) => action.available);
+      const actions = (Array.isArray(result.data) ? result.data : []).filter((action) => action.available);
       if (!actions.length) { await messageBox({ title: gestureText('Plugin actions'), message: gestureText('Enable a plugin with actions in Plugin Manager first.') }); return null; }
       return gestureListModal(gestureText('Plugin action'), actions.map((action) => ({
         name: action.title, desc: action.pluginName,
@@ -462,7 +524,10 @@ export async function pickGestureAction(current) {
     case 'screensaver': case 'screensaver_stop': case 'hold_mode':
     case 'ha_kiosk': case 'now_playing': case 'music_assistant':
     case 'media_play_pause': case 'intercom_open': case 'intercom_hangup':
-    case 'alarm_stop': case 'alarm_snooze':
+    case 'intercom_answer': case 'intercom_decline':
+    case 'alarm_stop': case 'alarm_snooze': case 'calendar': case 'refresh':
+    case 'music_library':
+    case 'voice_wake': case 'voice_stop': case 'voice_mute':
       return { type };
     case 'navigate': return configureGestureNavigate(carried);
     case 'url': return configureGestureText(carried, {
@@ -515,11 +580,23 @@ export async function editGesture(existing) {
   // Show fingers needs a hand runtime this Android version cannot load
   // (issue #331): not offered, though an existing mapping still opens.
   const handsOk = !(state.visionSupport && state.visionSupport.hands === false);
+  // The buttons are a headless device's, and touch and hands need a screen
+  // and a camera.
+  const headless = isHeadless();
+  const offered = ([value]) => value === triggerValue.type
+    || (headless ? HEADLESS_TRIGGERS.has(value) : value !== 'button');
   const typeSel = cameraSelectField(gestureText('Gesture'),
     GESTURE_TRIGGERS
+      .filter(offered)
       .filter(([value]) => handsOk || value !== 'fingers' || triggerValue.type === 'fingers')
       .map(([value, label]) => ({ value, label: gestureText(label) })),
-    triggerValue.type || 'corner_taps');
+    triggerValue.type || (headless ? 'button' : 'corner_taps'));
+  const buttonSel = cameraSelectField(gestureText('Button'),
+    GESTURE_BUTTONS.map(([value, label]) => ({ value, label: gestureText(label) })),
+    GESTURE_BUTTONS.some(([id]) => id === triggerValue.button) ? triggerValue.button : 'action');
+  const pressSel = cameraSelectField(gestureText('Press'),
+    GESTURE_PRESSES.map(([value, label]) => ({ value, label: gestureText(label) })),
+    GESTURE_PRESSES.some(([id]) => id === triggerValue.press) ? triggerValue.press : 'single');
   const cornerSel = cameraSelectField(gestureText('Corner'),
     Object.entries(GESTURE_CORNERS).map(([value, label]) => ({
       value, label: gestureCorner(value),
@@ -557,8 +634,11 @@ export async function editGesture(existing) {
   const pluginKey = (trigger) => `${trigger.pluginId}/${trigger.trigger}`;
   const pluginTriggers = new Map();
   if (triggerValue.type === 'plugin') pluginTriggers.set(pluginKey(triggerValue), triggerValue);
+  // Anything but a list (an older kiosk, a failed read) means no plugin
+  // triggers, never an editor that will not open.
   const listed = await cmd('getPluginTriggers').catch(() => null);
-  for (const item of (listed?.ok ? listed.data || [] : []).filter((item) => item.available)) {
+  const triggers = listed?.ok && Array.isArray(listed.data) ? listed.data : [];
+  for (const item of triggers.filter((item) => item.available)) {
     pluginTriggers.set(pluginKey(item), {
       type: 'plugin', pluginId: item.pluginId, trigger: item.trigger,
       pluginName: item.pluginName, title: item.title,
@@ -633,11 +713,13 @@ export async function editGesture(existing) {
     }
   }));
 
-  body.append(typeSel.wrap, cornerSel.wrap, tapsSel.wrap, fingersSel.wrap,
+  body.append(typeSel.wrap, buttonSel.wrap, pressSel.wrap, cornerSel.wrap, tapsSel.wrap, fingersSel.wrap,
     fingerTapsSel.wrap, clapsSel.wrap, clapsNote, fingerCountSel.wrap,
     holdWrap, palmNote, pluginSel.wrap, pluginNote, seqWrap, actionRow);
   const update = () => {
     const type = typeSel.select.value;
+    buttonSel.wrap.style.display = type === 'button' ? '' : 'none';
+    pressSel.wrap.style.display = type === 'button' ? '' : 'none';
     cornerSel.wrap.style.display =
       type === 'corner_taps' || type === 'corner_hold' ? '' : 'none';
     tapsSel.wrap.style.display = type === 'corner_taps' ? '' : 'none';
@@ -684,6 +766,10 @@ export async function editGesture(existing) {
       if (type === 'corner_sequence') trigger.sequence = [...sequence];
       if (type === 'claps') trigger.claps = Number(clapsSel.select.value);
       if (type === 'fingers') trigger.fingers = Number(fingerCountSel.select.value);
+      if (type === 'button') {
+        trigger.button = buttonSel.select.value;
+        trigger.press = pressSel.select.value;
+      }
       const mappings = readGestureMappings();
       const mapping = {
         id: existing?.id || `g${Date.now()}`, trigger, action,
@@ -752,7 +838,7 @@ export async function loadGestures() {
         }, false, 'delete'),
       ],
       {
-        icon: { claps: 'clap', fingers: 'hand', plugin: 'extension' }[mapping.trigger?.type] || 'gesture',
+        icon: { claps: 'clap', fingers: 'hand', plugin: 'extension', button: 'button' }[mapping.trigger?.type] || 'gesture',
         onClick: async () => {
           if (await editGesture(mapping)) refresh();
         },
@@ -771,7 +857,9 @@ export async function loadGestures() {
 
   const note = document.createElement('div');
   note.className = 'group-note';
-  note.textContent = gestureText('Gestures are observed, not blocked: the taps also reach the dashboard, so corners and multi-finger shapes keep them from firing anything there.');
+  note.textContent = isHeadless()
+    ? gestureText('A button press no gesture claims keeps its own job: Action answers, stops or dismisses what is ringing and otherwise starts a voice command, Microphone mutes Voice Satellite and the volume buttons change the volume.')
+    : gestureText('Gestures are observed, not blocked: the taps also reach the dashboard, so corners and multi-finger shapes keep them from firing anything there.');
   root.appendChild(note);
 
   // Mirrors the device's Clapper section (ui/gesture_settings.dart).
@@ -790,7 +878,7 @@ export async function loadGestures() {
     root.appendChild(clapperCard);
   }
   const hold = settings.find((s) => s.key === 'gestures.hand_hold_seconds');
-  if (hold) {
+  if (hold && !hold.hidden) {
     const heading = document.createElement('h2');
     heading.className = 'card-title';
     heading.textContent = gestureText('Hand Gestures');
@@ -807,7 +895,8 @@ export async function loadGestures() {
 // Satellite shares the Home Assistant tab, as it shares that pane on the
 // device.
 export const CATEGORY_TABS = [
-  ['tab-browser', ['Browser']],
+  // The URL Filter page, which no setting draws (url_filter.js).
+  ['tab-browser', ['Browser'], { extra: ['URL Filter'] }],
   ['tab-kiosk', ['Kiosk']],
   ['tab-lockdown', ['Lockdown']],
   ['tab-launcher', ['Launcher']],
@@ -820,7 +909,9 @@ export const CATEGORY_TABS = [
   ['tab-dlna', ['DLNA']],
   ['tab-intercom', ['Intercom']],
   ['tab-alarms', ['Alarms']],
+  ['tab-calendar', ['Calendar']],
   ['tab-esphome', ['ESPHome']],
+  ['tab-leds', ['LED Control']],
   ['device-settings', ['Device'],
     // Read-only reports, filled by loadDeviceInfo: no setting declares
     // them, so the tab names them here.

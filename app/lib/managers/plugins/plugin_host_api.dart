@@ -1,26 +1,95 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import '../../core/command_registry.dart';
 import '../../core/event_bus.dart';
 import '../../core/events.dart';
 import '../browser/dashboard_state.dart';
 import '../home_assistant/plugin_entities.dart';
+import '../home_assistant/plugin_ha_socket.dart';
 import '../intercom/intercom_sensors.dart';
+import '../sendspin/plugin_ma_socket.dart';
 import '../settings/definitions.dart' as defs;
+import '../settings/settings_manager.dart';
+import '../voice/assist_view.dart';
+
+/// What plugins follow of a voice turn: the overlay's view, the level its
+/// bar follows and the settings that pick what it shows.
+class PluginVoiceFeed {
+  const PluginVoiceFeed({
+    required this.view,
+    required this.level,
+    required this.settings,
+  });
+
+  final ValueListenable<AssistView> view;
+  final ValueListenable<double> level;
+  final SettingsManager settings;
+}
+
+/// The screensaver mode plugins with the screensaver.mode capability read
+/// and hold, through the screensaver manager.
+class PluginScreensaverModes {
+  const PluginScreensaverModes({
+    required this.read,
+    required this.hold,
+    required this.release,
+  });
+
+  /// {mode, saved, schedule, override, active, modes}.
+  final Map<String, Object?> Function() read;
+
+  /// Holds the screensaver on a mode for an owner. False for a mode the
+  /// device cannot show.
+  final bool Function(String owner, String mode) hold;
+
+  /// Drops the owner's hold.
+  final void Function(String owner) release;
+}
 
 /// Explicit SDK 1 host surface. Registry additions do not expand plugin access.
 class PluginHostApi {
-  PluginHostApi(this.commands, EventBus bus, this.sendEvent) {
+  PluginHostApi(
+    this.commands,
+    EventBus bus,
+    this.sendEvent, {
+    this.ha,
+    this.ma,
+    this.voice,
+    this.screensaverModes,
+  }) {
     _events = bus.stream.listen(_onEvent);
+    ha?.emit = _onHaEvent;
+    ma?.emit = _onMaEvent;
+    voice?.view.addListener(_onVoice);
+    voice?.level.addListener(_onVoiceLevel);
   }
 
   final CommandRegistry commands;
+
+  /// Home Assistant commands and subscriptions for sessions that declare
+  /// the `ha` capability.
+  final HaPluginSocket? ha;
+
+  /// Music Assistant commands and events for sessions that declare the
+  /// `ma` capability.
+  final MaPluginSocket? ma;
   final Future<void> Function(Map<String, Object?>) sendEvent;
+
+  /// The voice turn, for voice.text, voice.level and voice.skin.
+  final PluginVoiceFeed? voice;
+
+  /// The screensaver mode, for sessions that declare screensaver.mode.
+  final PluginScreensaverModes? screensaverModes;
   late final StreamSubscription<AppEvent> _events;
   final _sessions = <String, _HostSession>{};
   bool _disposed = false;
   String? _intercomSent;
+  String? _voiceTextSent;
+  String _overlaySent = 'hidden';
+  double _voiceLevelSent = 0;
 
   static const commandNames = [
     'getHostApi',
@@ -41,10 +110,14 @@ class PluginHostApi {
     'getCameraViewState',
     'getWakeWordState',
     'getVoiceState',
+    'getVoiceAppearance',
     'getIntercomState',
     'haStatus',
     'getHaEntityState',
     'getDashboardState',
+    'getCameraViews',
+    'getDashboards',
+    'getSendspinPlayer',
   ];
   static const controlNames = [
     'startScreensaver',
@@ -61,17 +134,44 @@ class PluginHostApi {
     'hideNowPlaying',
     'sendspinControl',
     'setVolume',
+    'setWakeWordMuted',
     'showAppLauncher',
     'hideAppLauncher',
     'showOverlayPage',
     'showLinkPage',
     'hideOverlayPage',
     'showMusicAssistant',
+    'openCalendar',
+    'hideCalendar',
     'loadUrl',
     'loadDashboard',
     'loadStartUrl',
     'haNavigate',
     'reload',
+  ];
+
+  /// The room's noise level, for sessions that also declare the noise
+  /// capability (issue #910): a plugin that reads how loud the room is says
+  /// so in its manifest.
+  static const noiseCommandNames = ['getNoiseLevel'];
+  static const noiseEventNames = ['audio.noise'];
+
+  /// What was said and answered, for sessions that also declare the
+  /// voice.text capability (issue #1027). It follows the Conversation
+  /// settings the overlay follows.
+  static const voiceTextCommandNames = ['getVoiceText'];
+  static const voiceTextEventNames = ['voice.text'];
+
+  /// The longest command or answer a plugin gets, in characters.
+  static const maxVoiceText = 16000;
+
+  /// Which screensaver shows, for sessions that declare the
+  /// screensaver.mode capability. A plugin holds a mode in place of the
+  /// schedule and the setting until it clears it or its session ends.
+  static const screensaverModeCommandNames = [
+    'getScreensaverMode',
+    'setScreensaverMode',
+    'clearScreensaverMode',
   ];
 
   static bool _volumeChannel(Map params) =>
@@ -103,6 +203,19 @@ class PluginHostApi {
         RegExp(
           r'^/?[a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)*$',
         ).hasMatch(params[key] as String);
+    // A view path with an optional query and fragment, such as
+    // cameras/0?camera=garage. Segments may hold dots, as custom pages do,
+    // but never stand for a parent folder.
+    bool viewPath(String key) {
+      if (!text(key)) return false;
+      final value = params[key] as String;
+      final route = value.split(RegExp(r'[?#]')).first;
+      return RegExp(
+            r'^/?[a-zA-Z0-9_.-]+(?:/[a-zA-Z0-9_.-]+)*/?(?:\?[^\s#]*)?(?:#\S*)?$',
+          ).hasMatch(value) &&
+          !route.split('/').any((segment) => segment == '.' || segment == '..');
+    }
+
     switch (name) {
       case 'getHaEntityState':
         return keys({'entityId'}) &&
@@ -128,6 +241,8 @@ class PluginHostApi {
             value != null &&
             value >= 0 &&
             value <= 100;
+      case 'setWakeWordMuted':
+        return params.length == 1 && params['muted'] is bool;
       case 'sendspinControl':
         return keys({'command'}) &&
             const [
@@ -145,10 +260,26 @@ class PluginHostApi {
             const ['http', 'https'].contains(uri.scheme) &&
             uri.host.isNotEmpty &&
             uri.userInfo.isEmpty;
+      case 'openCalendar':
+        final date = params['date'];
+        return keys({'view', 'date'}) &&
+            (!params.containsKey('view') ||
+                const [
+                  'day',
+                  'week',
+                  'month',
+                  'schedule',
+                ].contains(params['view'])) &&
+            (date == null ||
+                (date is String &&
+                    RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(date) &&
+                    DateTime.tryParse(date) != null));
       case 'loadDashboard':
         return keys({'dashboard'}) && path('dashboard');
+      case 'setScreensaverMode':
+        return params.length == 1 && text('mode');
       case 'haNavigate':
-        return keys({'path'}) && path('path');
+        return keys({'path'}) && viewPath('path');
       default:
         return params.isEmpty;
     }
@@ -173,16 +304,31 @@ class PluginHostApi {
     'detection.presence',
     'voice.interaction',
     'voice.state',
+    'voice.level',
+    'voice.overlay',
+    'voice.skin',
+    'voice.appearance',
     'intercom.state',
     'wakeword.state',
     'wakeword.detected',
     'stopword.detected',
     'camera.view',
     'browser.state',
+    'sendspin.player',
   ];
   static const _fields = {
     'getLightLevel': ['present', 'lux', 'live'],
-    'getStats': ['battery', 'charging', 'cpu', 'temp', 'memFree', 'memTotal'],
+    'getNoiseLevel': ['available', 'dbfs', 'held', 'updated'],
+    'getStats': [
+      'battery',
+      'charging',
+      'cpu',
+      'cpuClock',
+      'temp',
+      'batteryTemp',
+      'memFree',
+      'memTotal',
+    ],
     'getUptime': ['app', 'network'],
     'getDeviceInfo': [
       'name',
@@ -222,10 +368,24 @@ class PluginHostApi {
       'engineLabel',
       'status',
       'statusLabel',
+      'muted',
     ],
-    'getVoiceState': ['enabled', 'state'],
+    'getVoiceState': ['enabled', 'state', 'skinSelected', 'overlay'],
     'getIntercomState': ['enabled', 'state', 'kiosk', 'dnd'],
     'haStatus': ['configured', 'connected'],
+    'getSendspinPlayer': [
+      'enabled',
+      'running',
+      'connected',
+      'clientId',
+      'playerName',
+      'serverName',
+      'maConfigured',
+      'maPlayerId',
+      'maServerId',
+      'maServerName',
+      'maServerVersion',
+    ],
     'getDashboardState': [
       'homeAssistantUrl',
       'startUrl',
@@ -241,7 +401,14 @@ class PluginHostApi {
     if (id is! String || token is! String || token.isEmpty) return;
     final capabilities = args['capabilities'];
     if (capabilities is! List ||
-        !capabilities.any((c) => c == 'host.read' || c == 'host.control')) {
+        !capabilities.any(
+          (c) =>
+              c == 'host.read' ||
+              c == 'host.control' ||
+              c == 'ha' ||
+              c == 'ma' ||
+              c == 'screensaver.mode',
+        )) {
       return;
     }
     final previous = _sessions.remove(id);
@@ -251,6 +418,11 @@ class PluginHostApi {
       token,
       capabilities.contains('host.read'),
       capabilities.contains('host.control'),
+      canNoise: capabilities.contains('noise'),
+      canHa: capabilities.contains('ha'),
+      canMa: capabilities.contains('ma'),
+      canVoiceText: capabilities.contains('voice.text'),
+      canScreensaverMode: capabilities.contains('screensaver.mode'),
     );
   }
 
@@ -266,6 +438,11 @@ class PluginHostApi {
     unawaited(
       commands.execute('haPluginUnwatchEntity', {'owner': session.owner}),
     );
+    if (session.canHa) ha?.release(session.owner);
+    if (session.canMa) ma?.release(session.owner);
+    if (session.canScreensaverMode) {
+      screensaverModes?.release(session.owner);
+    }
   }
 
   static String? entityEventId(String event) {
@@ -287,7 +464,10 @@ class PluginHostApi {
     if (session == null ||
         !session.canRead ||
         name is! String ||
-        (!eventNames.contains(name) && entityEventId(name) == null)) {
+        (!eventNames.contains(name) &&
+            !(session.canNoise && noiseEventNames.contains(name)) &&
+            !(session.canVoiceText && voiceTextEventNames.contains(name)) &&
+            entityEventId(name) == null)) {
       return;
     }
     final entityId = entityEventId(name);
@@ -334,6 +514,14 @@ class PluginHostApi {
     if (name is! String ||
         (name != 'getHostApi' &&
             !(session.canRead && commandNames.contains(name)) &&
+            !(session.canRead &&
+                session.canNoise &&
+                noiseCommandNames.contains(name)) &&
+            !(session.canRead &&
+                session.canVoiceText &&
+                voiceTextCommandNames.contains(name)) &&
+            !(session.canScreensaverMode &&
+                screensaverModeCommandNames.contains(name)) &&
             !(session.canControl && isControl))) {
       return const CommandResult.fail(
         'Command is not available through this plugin session',
@@ -350,19 +538,103 @@ class PluginHostApi {
         'entitySubscriptions': session.canRead
             ? {'eventPrefix': 'ha.entity.', 'maxEntities': 16}
             : null,
+        'haSubscriptions': session.canHa && ha != null
+            ? {
+                'eventPrefix': 'ha.subscription.',
+                'maxSubscriptions': HaPluginSocket.maxSubscriptions,
+              }
+            : null,
+        'maSubscriptions': session.canMa && ma != null
+            ? {
+                'eventPrefix': 'ma.subscription.',
+                'maxSubscriptions': MaPluginSocket.maxSubscriptions,
+              }
+            : null,
         'capabilities': [
           if (session.canRead) 'host.read',
           if (session.canControl) 'host.control',
+          if (session.canRead && session.canNoise) 'noise',
+          if (session.canHa && ha != null) 'ha',
+          if (session.canMa && ma != null) 'ma',
+          if (session.canRead && session.canVoiceText) 'voice.text',
+          if (session.canScreensaverMode && screensaverModes != null)
+            'screensaver.mode',
         ],
         'commands': [
           'getHostApi',
           if (session.canRead) ...commandNames.skip(1),
+          if (session.canRead && session.canNoise) ...noiseCommandNames,
+          if (session.canRead && session.canVoiceText) ...voiceTextCommandNames,
+          if (session.canScreensaverMode && screensaverModes != null)
+            ...screensaverModeCommandNames,
           if (session.canControl) ...controlNames,
         ],
-        'events': session.canRead ? eventNames : <String>[],
+        'events': [
+          if (session.canRead) ...eventNames,
+          if (session.canRead && session.canNoise) ...noiseEventNames,
+          if (session.canRead && session.canVoiceText) ...voiceTextEventNames,
+        ],
       }).toJson();
     }
+    if (name == 'getVoiceAppearance') {
+      final appearance = _appearance();
+      return appearance == null
+          ? const CommandResult.fail(
+              'KS could not complete this command. The feature may be unavailable.',
+            ).toJson()
+          : CommandResult.ok(appearance).toJson();
+    }
+    if (screensaverModeCommandNames.contains(name)) {
+      final modes = screensaverModes;
+      if (modes == null) {
+        return const CommandResult.fail(
+          'KS could not complete this command. The feature may be unavailable.',
+        ).toJson();
+      }
+      if (name == 'getScreensaverMode') {
+        return CommandResult.ok(modes.read()).toJson();
+      }
+      if (name == 'setScreensaverMode') {
+        return modes.hold(session.owner, params['mode'] as String)
+            ? const CommandResult.ok().toJson()
+            : const CommandResult.fail('Unknown screensaver mode').toJson();
+      }
+      modes.release(session.owner);
+      return const CommandResult.ok().toJson();
+    }
+    if (name == 'getVoiceText') {
+      final text = _voiceText();
+      return text == null
+          ? const CommandResult.fail(
+              'KS could not complete this command. The feature may be unavailable.',
+            ).toJson()
+          : CommandResult.ok(text).toJson();
+    }
     try {
+      if (name == 'getCameraViews' || name == 'getDashboards') {
+        final scoped = commands.as('plugin:${session.id}');
+        final data =
+            await (name == 'getCameraViews'
+                    ? _cameraViews(scoped)
+                    : _dashboards(scoped))
+                .timeout(const Duration(seconds: 8));
+        if (_session(args) != session) {
+          return const CommandResult.fail(
+            'Plugin session is no longer active',
+          ).toJson();
+        }
+        if (data == null) {
+          return const CommandResult.fail(
+            'KS could not complete this command. The feature may be unavailable.',
+          ).toJson();
+        }
+        if (utf8.encode(jsonEncode(data)).length > 32768) {
+          return const CommandResult.fail(
+            'Read response is too large',
+          ).toJson();
+        }
+        return CommandResult.ok(data).toJson();
+      }
       final result = await commands
           .as('plugin:${session.id}')
           .execute(
@@ -370,6 +642,7 @@ class PluginHostApi {
               'getHaEntityState' => 'haPluginReadEntity',
               'getVoiceState' => 'voiceStatus',
               'getIntercomState' => 'intercomSensors',
+              'getSendspinPlayer' => 'sendspinPlayer',
               _ => name,
             },
             name == 'screenOff'
@@ -390,15 +663,18 @@ class PluginHostApi {
       if (isControl) {
         // Camera results contain internal state. Controls return only documented
         // scalar outcomes, with state available separately through host.read.
-        return CommandResult.ok(
-          const [
-                'nextScreensaverSlide',
-                'previousScreensaverSlide',
-                'haNavigate',
-              ].contains(name)
-              ? result.data == true
-              : null,
-        ).toJson();
+        return CommandResult.ok(switch (name) {
+          'nextScreensaverSlide' ||
+          'previousScreensaverSlide' => result.data == true,
+          // haNavigate reports what happened. A page already on the view
+          // counts as arrived.
+          'haNavigate' =>
+            result.data == 'navigated' || result.data == 'already',
+          // The muted state it set. Home Assistant may still be applying it
+          // on the dashboard runtime; wakeword.state follows.
+          'setWakeWordMuted' => result.data == true,
+          _ => null,
+        }).toJson();
       }
       Object? data = result.data;
       if (name == 'getHaEntityState') {
@@ -432,7 +708,14 @@ class PluginHostApi {
             'KS returned an unexpected read response',
           ).toJson();
         }
-        data = {for (final key in fields) key: data[key]};
+        data = {
+          for (final key in fields)
+            key: switch (key) {
+              'skinSelected' => _skinSelected(session),
+              'overlay' => _overlay(),
+              _ => data[key],
+            },
+        };
         if (data.entries.any((entry) {
           final value = entry.value;
           if (name == 'getDeviceInfo' &&
@@ -475,6 +758,234 @@ class PluginHostApi {
     }
   }
 
+  /// Run one Home Assistant websocket command for a plugin. Answers
+  /// `{ok: true, data: result}` or `{ok: false, error, data: {code, message}}`.
+  Future<Map<String, Object?>> haCall(Map args) async {
+    final session = _haSession(args);
+    final message = _haMessage(args['message']);
+    if (session == null || message == null) return _haRefused(session);
+    final result = await ha!.call(session.owner, message);
+    if (_session(args) != session) return _haRefused(null);
+    return _answer(result, data: result['result']);
+  }
+
+  /// Subscribe a plugin to a Home Assistant websocket subscription under
+  /// its own key. Events follow as `ha.subscription.KEY`.
+  Future<Map<String, Object?>> haSubscribe(Map args) async {
+    final session = _haSession(args);
+    final message = _haMessage(args['message']);
+    final key = args['key'];
+    if (session == null || message == null || key is! String) {
+      return _haRefused(session);
+    }
+    final result = await ha!.subscribe(session.owner, key, message);
+    if (_session(args) != session) {
+      ha!.unsubscribe(session.owner, key);
+      return _haRefused(null);
+    }
+    return _answer(result);
+  }
+
+  void haUnsubscribe(Map args) {
+    final session = _haSession(args);
+    final key = args['key'];
+    if (session == null || key is! String) return;
+    ha!.unsubscribe(session.owner, key);
+    session.ordered.removeWhere((e) => e.key == 'ha.subscription.$key');
+    session.orderedDropped.remove('ha.subscription.$key');
+  }
+
+  _HostSession? _haSession(Map args) {
+    final session = _session(args);
+    return session != null && session.canHa && ha != null ? session : null;
+  }
+
+  /// A detached copy of the plugin's message, when it is one.
+  static Map<String, Object?>? _haMessage(Object? message) =>
+      message is Map ? Map<String, Object?>.from(message) : null;
+
+  static Map<String, Object?> _haRefused(_HostSession? session) => _answer({
+    'ok': false,
+    'error': {
+      'code': session == null ? 'not_allowed' : 'invalid_message',
+      'message': session == null
+          ? 'Home Assistant is not available through this plugin session'
+          : 'The message must be a JSON object',
+    },
+  });
+
+  /// A Home Assistant or Music Assistant answer as the SDK hands it over:
+  /// on failure, error reads "code: message" and data keeps both.
+  static Map<String, Object?> _answer(
+    Map<String, Object?> result, {
+    Object? data,
+  }) {
+    if (result['ok'] == true) return {'ok': true, 'data': data};
+    final error = result['error'] is Map
+        ? Map<String, Object?>.from(result['error'] as Map)
+        : <String, Object?>{'code': 'unknown_error', 'message': ''};
+    final message = '${error['message'] ?? ''}';
+    return {
+      'ok': false,
+      'error': message.isEmpty
+          ? '${error['code']}'
+          : '${error['code']}: $message',
+      'data': error,
+    };
+  }
+
+  /// A subscription's event, queued in order: unlike KS's own state
+  /// events, none of these may be merged into the next one.
+  void _onHaEvent(String owner, String key, Map<String, Object?> payload) =>
+      _queueOrdered(owner, 'ha.subscription.$key', payload, (s) => s.canHa);
+
+  void _queueOrdered(
+    String owner,
+    String name,
+    Map<String, Object?> payload,
+    bool Function(_HostSession session) allowed,
+  ) {
+    for (final session in _sessions.values) {
+      if (session.owner != owner || !allowed(session)) continue;
+      if (session.ordered.length >= _HostSession.maxOrdered) {
+        session.orderedDropped[name] = (session.orderedDropped[name] ?? 0) + 1;
+      } else {
+        session.ordered.add(
+          MapEntry(name, {
+            ...payload,
+            'time': DateTime.now().toUtc().toIso8601String(),
+          }),
+        );
+      }
+      _schedule(session);
+    }
+  }
+
+  /// Run one Music Assistant command for a plugin. Answers like [haCall].
+  Future<Map<String, Object?>> maCall(Map args) async {
+    final session = _maSession(args);
+    final command = args['command'];
+    final params = args['args'];
+    if (session == null || command is! String || params is! Map) {
+      return _maRefused(session);
+    }
+    final result = await ma!.call(
+      session.owner,
+      command,
+      Map<String, Object?>.from(params),
+    );
+    if (_session(args) != session) return _maRefused(null);
+    return _answer(result, data: result['result']);
+  }
+
+  /// Hear Music Assistant events under a key of the plugin's own. Events
+  /// follow as `ma.subscription.KEY`.
+  Future<Map<String, Object?>> maSubscribe(Map args) async {
+    final session = _maSession(args);
+    final filter = args['filter'];
+    final key = args['key'];
+    if (session == null || filter is! Map || key is! String) {
+      return _maRefused(session);
+    }
+    final result = await ma!.subscribe(
+      session.owner,
+      key,
+      Map<String, Object?>.from(filter),
+    );
+    if (_session(args) != session) {
+      ma!.unsubscribe(session.owner, key);
+      return _maRefused(null);
+    }
+    return _answer(result);
+  }
+
+  void maUnsubscribe(Map args) {
+    final session = _maSession(args);
+    final key = args['key'];
+    if (session == null || key is! String) return;
+    ma!.unsubscribe(session.owner, key);
+    session.ordered.removeWhere((e) => e.key == 'ma.subscription.$key');
+    session.orderedDropped.remove('ma.subscription.$key');
+  }
+
+  _HostSession? _maSession(Map args) {
+    final session = _session(args);
+    return session != null && session.canMa && ma != null ? session : null;
+  }
+
+  static Map<String, Object?> _maRefused(_HostSession? session) => _answer({
+    'ok': false,
+    'error': {
+      'code': session == null ? 'not_allowed' : 'invalid_message',
+      'message': session == null
+          ? 'Music Assistant is not available through this plugin session'
+          : 'The request needs a command and JSON object args',
+    },
+  });
+
+  /// A Music Assistant subscription's event, queued in order like Home
+  /// Assistant's.
+  void _onMaEvent(String owner, String key, Map<String, Object?> payload) =>
+      _queueOrdered(owner, 'ma.subscription.$key', payload, (s) => s.canMa);
+
+  /// The kiosk's camera views by name, without servers, streams or
+  /// credentials.
+  static Future<List<Map<String, Object?>>?> _cameraViews(
+    CommandRegistry commands,
+  ) async {
+    final result = await commands.execute('cameraGetConfig', const {});
+    final views = result.ok && result.data is Map
+        ? (result.data as Map)['views']
+        : null;
+    if (views is! List) return null;
+    return [
+      for (final view in views.whereType<Map>())
+        {
+          'id': '${view['id']}',
+          'name': '${view['name'] ?? ''}',
+          'cameraCount': (view['cameraIds'] as List?)?.length ?? 0,
+        },
+    ];
+  }
+
+  /// Home Assistant's dashboards and their views, through the same commands
+  /// the dashboard picker reads. Each view's path is what haNavigate takes.
+  static Future<List<Map<String, Object?>>?> _dashboards(
+    CommandRegistry commands,
+  ) async {
+    final listed = await commands.execute('haListDashboards', const {});
+    if (!listed.ok || listed.data is! List) return null;
+    final dashboards = [
+      for (final d in (listed.data as List).whereType<Map>())
+        if ('${d['url_path'] ?? ''}'.isNotEmpty) d,
+    ];
+    final views = await Future.wait([
+      for (final d in dashboards)
+        commands.execute('haListDashboardViews', {'url_path': d['url_path']}),
+    ]);
+    String? icon(Object? value) => value is String ? value : null;
+    return [
+      for (final (i, d) in dashboards.indexed)
+        {
+          'urlPath': '${d['url_path']}',
+          'title': '${d['title'] ?? d['url_path']}',
+          'icon': icon(d['icon']),
+          'custom': d['custom'] == true,
+          'views': [
+            if (views[i].ok && views[i].data is List)
+              for (final v in (views[i].data as List).whereType<Map>())
+                if ('${v['route'] ?? ''}'.isNotEmpty)
+                  {
+                    'path': '${d['url_path']}/${v['route']}',
+                    'title': '${v['title'] ?? v['route']}',
+                    'icon': icon(v['icon']),
+                    'subview': v['subview'] == true,
+                  },
+          ],
+        },
+    ];
+  }
+
   static (String, Map<String, Object?>)? project(
     AppEvent event,
   ) => switch (event) {
@@ -483,6 +994,7 @@ class PluginHostApi {
     SettingChanged e
         when e.key == defs.haUrl.key || e.key == defs.startUrl.key =>
       ('browser.state', {}),
+    SendspinPlayerChanged e => ('sendspin.player', e.player),
     ScreensaverStateChanged e => ('screensaver.state', {'active': e.active}),
     ScreensaverCountdownChanged e => (
       'screensaver.countdown',
@@ -504,6 +1016,10 @@ class PluginHostApi {
             e.key == defs.intercomVolume.key =>
       ('device.volume', {}),
     LightLevelChanged e => ('device.light', {'lux': e.lux}),
+    NoiseLevelChanged e => (
+      'audio.noise',
+      {'available': e.available, 'dbfs': e.dbfs, 'held': e.held},
+    ),
     MotionDetected _ => ('detection.motion', {}),
     FaceDetected _ => ('detection.face', {}),
     ProximityDetected e => ('detection.proximity', {'held': e.held}),
@@ -536,7 +1052,157 @@ class PluginHostApi {
     _ => null,
   };
 
+  /// Whether the Skin setting picks this session's plugin.
+  bool _skinSelected(_HostSession session) =>
+      voice?.settings.get(defs.voiceSkin) == 'plugin:${session.id}';
+
+  /// The turn's words as the overlay would show them: a line whose
+  /// Conversation setting is off is empty.
+  Map<String, Object?>? _voiceText() {
+    final feed = voice;
+    if (feed == null) return null;
+    final view = feed.view.value;
+    final settings = feed.settings;
+    String cap(String text) =>
+        text.length > maxVoiceText ? text.substring(0, maxVoiceText) : text;
+    return {
+      'command': settings.get(defs.voiceShowCommand) ? cap(view.command) : '',
+      'answer': settings.get(defs.voiceShowAnswer) ? cap(view.answer) : '',
+      'tools': settings.get(defs.voiceShowTools)
+          ? [for (final tool in view.tools.take(20)) cap(tool)]
+          : const <String>[],
+      'streaming': view.streaming,
+      'announcement': view.phase == AssistPhase.announcement,
+    };
+  }
+
+  /// Whether the voice overlay shows, and how: `hidden`, `full` or
+  /// `docked`. It shows for a preview and while an answer stays on screen,
+  /// when the turn's state already reads idle.
+  String _overlay() {
+    final view = voice?.view.value;
+    if (view == null || !view.visible) return 'hidden';
+    return view.docked ? 'docked' : 'full';
+  }
+
+  void _onVoice() {
+    _onVoiceLevel();
+    final overlay = _overlay();
+    if (overlay != _overlaySent) {
+      _overlaySent = overlay;
+      for (final session in _sessions.values) {
+        if (!session.subscriptions.contains('voice.overlay')) continue;
+        session.pending['voice.overlay'] = {
+          'overlay': overlay,
+          'time': DateTime.now().toUtc().toIso8601String(),
+        };
+        _schedule(session);
+      }
+    }
+    final text = _voiceText();
+    if (text == null) return;
+    final value = jsonEncode(text);
+    if (value == _voiceTextSent) return;
+    _voiceTextSent = value;
+    for (final session in _sessions.values) {
+      if (!session.canVoiceText ||
+          !session.subscriptions.contains('voice.text')) {
+        continue;
+      }
+      session.pending['voice.text'] = {
+        ...text,
+        'time': DateTime.now().toUtc().toIso8601String(),
+      };
+      _schedule(session);
+    }
+  }
+
+  /// The Appearance settings a skin follows: Theme, Background (null for
+  /// the skin's own), Text size as a factor and Reactive activity bar.
+  Map<String, Object?>? _appearance() {
+    final settings = voice?.settings;
+    if (settings == null) return null;
+    final background = settings.get(defs.voiceBackgroundOpacity).toDouble();
+    return {
+      'theme': settings.get(defs.voiceTheme),
+      'background': background < 0 ? null : background.clamp(0, 100) / 100,
+      'textScale': settings.get(defs.voiceTextScale).toDouble() / 100,
+      'reactive': settings.get(defs.voiceReactiveBar),
+    };
+  }
+
+  /// The level the reactive bar follows: the voice while listening, the
+  /// answer while speaking, 0 while the assistant thinks, the wake chime
+  /// plays, nothing shows or Reactive activity bar is off.
+  double _voiceLevel() {
+    final view = voice!.view.value;
+    final live =
+        voice!.settings.get(defs.voiceReactiveBar) &&
+        view.reactive &&
+        !view.lingering &&
+        const [
+          AssistPhase.listening,
+          AssistPhase.speaking,
+          AssistPhase.announcement,
+        ].contains(view.phase);
+    final level = voice!.level.value;
+    return live && level.isFinite
+        ? (level.clamp(0.0, 1.0) * 1000).roundToDouble() / 1000
+        : 0;
+  }
+
+  void _onVoiceLevel() {
+    if (voice == null) return;
+    final level = _voiceLevel();
+    if (level == _voiceLevelSent) return;
+    _voiceLevelSent = level;
+    for (final session in _sessions.values) {
+      if (!session.subscriptions.contains('voice.level')) continue;
+      session.pending['voice.level'] = {
+        'level': level,
+        'time': DateTime.now().toUtc().toIso8601String(),
+      };
+      _schedule(session);
+    }
+  }
+
   void _onEvent(AppEvent event) {
+    if (event is SettingChanged &&
+        (event.key == defs.voiceTheme.key ||
+            event.key == defs.voiceBackgroundOpacity.key ||
+            event.key == defs.voiceTextScale.key ||
+            event.key == defs.voiceReactiveBar.key)) {
+      final appearance = _appearance();
+      if (appearance == null) return;
+      for (final session in _sessions.values) {
+        if (!session.subscriptions.contains('voice.appearance')) continue;
+        session.pending['voice.appearance'] = {
+          ...appearance,
+          'time': DateTime.now().toUtc().toIso8601String(),
+        };
+        _schedule(session);
+      }
+      if (event.key == defs.voiceReactiveBar.key) _onVoiceLevel();
+      return;
+    }
+    if (event is SettingChanged &&
+        (event.key == defs.voiceShowCommand.key ||
+            event.key == defs.voiceShowAnswer.key ||
+            event.key == defs.voiceShowTools.key)) {
+      _onVoice();
+      return;
+    }
+    if (event is SettingChanged && event.key == defs.voiceSkin.key) {
+      for (final session in _sessions.values) {
+        if (!session.subscriptions.contains('voice.skin')) continue;
+        session.pending['voice.skin'] = {
+          'selected': event.value == 'plugin:${session.id}',
+          'time': DateTime.now().toUtc().toIso8601String(),
+        };
+        _schedule(session);
+      }
+      return;
+    }
     if (event is PluginHaStateChanged) {
       final name = 'ha.entity.${event.entityId}';
       for (final session in _sessions.values) {
@@ -580,32 +1246,62 @@ class PluginHostApi {
     if (session.closed ||
         session.sending ||
         session.timer != null ||
-        session.pending.isEmpty) {
+        (session.pending.isEmpty &&
+            session.ordered.isEmpty &&
+            session.orderedDropped.isEmpty)) {
       return;
     }
-    session.timer = Timer(const Duration(milliseconds: 100), () async {
-      session.timer = null;
-      session.sending = true;
-      final batch = Map.of(session.pending);
-      session.pending.clear();
-      try {
-        for (final entry in batch.entries) {
-          if (session.closed) break;
-          if (!session.subscriptions.contains(entry.key)) continue;
-          await sendEvent({
-            'id': session.id,
-            'session': session.token,
-            'event': entry.key,
-            'payload': entry.value,
-          });
+    // The voice level alone goes out about 30 times a second, so a skin
+    // moves with the voice. Everything else is batched every 100 ms.
+    final levelOnly =
+        session.ordered.isEmpty &&
+        session.orderedDropped.isEmpty &&
+        session.pending.keys.every((k) => k == 'voice.level');
+    session.timer = Timer(
+      Duration(milliseconds: levelOnly ? 33 : 100),
+      () async {
+        session.timer = null;
+        session.sending = true;
+        final batch = [
+          ...session.pending.entries,
+          ...session.ordered,
+          // Events that did not fit: the plugin hears how many it missed.
+          for (final entry in session.orderedDropped.entries)
+            MapEntry(entry.key, {
+              'type': 'overflow',
+              'dropped': entry.value,
+              'time': DateTime.now().toUtc().toIso8601String(),
+            }),
+        ];
+        session.pending.clear();
+        session.ordered.clear();
+        session.orderedDropped.clear();
+        try {
+          for (final entry in batch) {
+            if (session.closed) break;
+            // Unsubscribed while the batch went out. The Android side drops
+            // events for ended Home Assistant and Music Assistant
+            // subscriptions.
+            if (!entry.key.startsWith('ha.subscription.') &&
+                !entry.key.startsWith('ma.subscription.') &&
+                !session.subscriptions.contains(entry.key)) {
+              continue;
+            }
+            await sendEvent({
+              'id': session.id,
+              'session': session.token,
+              'event': entry.key,
+              'payload': entry.value,
+            });
+          }
+        } catch (_) {
+          // Stopping the host or plugin can cancel an event delivery.
+        } finally {
+          session.sending = false;
+          _schedule(session);
         }
-      } catch (_) {
-        // Stopping the host or plugin can cancel an event delivery.
-      } finally {
-        session.sending = false;
-        _schedule(session);
-      }
-    });
+      },
+    );
   }
 
   Future<void> dispose() async {
@@ -614,6 +1310,8 @@ class PluginHostApi {
       _closeSession(session);
     }
     _sessions.clear();
+    voice?.view.removeListener(_onVoice);
+    voice?.level.removeListener(_onVoiceLevel);
     await _events.cancel();
   }
 
@@ -625,14 +1323,36 @@ class PluginHostApi {
 }
 
 class _HostSession {
-  _HostSession(this.id, this.token, this.canRead, this.canControl);
+  _HostSession(
+    this.id,
+    this.token,
+    this.canRead,
+    this.canControl, {
+    this.canNoise = false,
+    this.canHa = false,
+    this.canMa = false,
+    this.canVoiceText = false,
+    this.canScreensaverMode = false,
+  });
+
+  /// Home Assistant and Music Assistant events waiting for a slow plugin.
+  /// Past this the newest are dropped and counted.
+  static const maxOrdered = 64;
+
   final bool canRead;
   final bool canControl;
+  final bool canNoise;
+  final bool canHa;
+  final bool canMa;
+  final bool canVoiceText;
+  final bool canScreensaverMode;
   final String id;
   final String token;
   String get owner => '$id:$token';
   final subscriptions = <String>{};
   final pending = <String, Map<String, Object?>>{};
+  final ordered = <MapEntry<String, Map<String, Object?>>>[];
+  final orderedDropped = <String, int>{};
   Timer? timer;
   bool sending = false;
   bool closed = false;
@@ -640,6 +1360,8 @@ class _HostSession {
     closed = true;
     timer?.cancel();
     pending.clear();
+    ordered.clear();
+    orderedDropped.clear();
     subscriptions.clear();
   }
 }

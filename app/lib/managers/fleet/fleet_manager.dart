@@ -20,6 +20,7 @@ class FleetDevice {
     this.self = false,
     this.tls = false,
     this.dnsName = '',
+    this.adminUrl = '',
   });
 
   final String id;
@@ -35,14 +36,21 @@ class FleetDevice {
   /// The DNS name its imported certificate covers, empty for none.
   final String dnsName;
 
-  /// Where its remote admin answers. Over HTTPS with a CA-signed
-  /// certificate that is its DNS name, since the browser rejects that
-  /// certificate under the IP address (issue #833).
-  String get url => Uri(
-    scheme: tls ? 'https' : 'http',
-    host: tls && dnsName.isNotEmpty ? dnsName : address,
-    port: port,
-  ).toString();
+  /// The Admin URL it was given, such as a reverse proxy name, empty for
+  /// none (issue #967).
+  final String adminUrl;
+
+  /// Where the switcher opens its remote admin: its Admin URL when it has
+  /// one, else over HTTPS with a CA-signed certificate its DNS name, since
+  /// the browser rejects that certificate under the IP address (issue
+  /// #833). Fleet calls and the intercom use [address] and [port] instead.
+  String get url => adminUrl.isNotEmpty
+      ? adminUrl
+      : Uri(
+          scheme: tls ? 'https' : 'http',
+          host: tls && dnsName.isNotEmpty ? dnsName : address,
+          port: port,
+        ).toString();
 
   static final _dnsName = RegExp(
     r'^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$',
@@ -65,6 +73,7 @@ class FleetDevice {
         final n when _dnsName.hasMatch(n) => n,
         _ => '',
       },
+      adminUrl: defs.adminUrlOrigin('${raw['adminUrl'] ?? ''}') ?? '',
     );
   }
 
@@ -76,6 +85,7 @@ class FleetDevice {
     'port': port,
     if (tls) 'tls': true,
     if (dnsName.isNotEmpty) 'dnsName': dnsName,
+    if (adminUrl.isNotEmpty) 'adminUrl': adminUrl,
     'url': url,
     'self': self,
   };
@@ -89,6 +99,7 @@ class FleetDevice {
     'port': port,
     if (tls) 'tls': true,
     if (dnsName.isNotEmpty) 'dnsName': dnsName,
+    if (adminUrl.isNotEmpty) 'adminUrl': adminUrl,
   };
 
   static FleetDevice? directoryEntry(Object? raw) {
@@ -131,10 +142,19 @@ class FleetDevice {
 /// runs with Find other kiosks off too; only the service records and
 /// the listening for the others follow the switch.
 ///
+/// The fleet part also waits for onboarding to finish (start URL set).
+/// A kiosk still in the setup wizard cannot accept a fleet invite, since
+/// the invite prompt lives on the kiosk screen, so it stays out of the
+/// other kiosks' lists until then. The hostname still goes out, which
+/// keeps the remote setup wizard reachable by name.
+///
 /// Over HTTPS with an imported certificate, the DNS name it covers is
 /// announced too, and the other kiosks link here by that name instead of
 /// the IP address their browser would reject the certificate under
 /// (issue #833).
+///
+/// The Admin URL setting is announced the same way, and the other
+/// kiosks' switchers open it ahead of both (issue #967).
 ///
 /// The mDNS name setting is seeded here, the way the ESPHome node name
 /// is at its server's first start: as soon as the device has a name and
@@ -157,7 +177,8 @@ class FleetManager extends Manager {
   bool get enabled =>
       _settings.get(defs.remoteEnabled) &&
       _settings.get(defs.remotePassword).isNotEmpty &&
-      _settings.get(defs.remoteFleetDiscovery);
+      _settings.get(defs.remoteFleetDiscovery) &&
+      _settings.get(defs.startUrl).isNotEmpty;
 
   /// Whether the remote admin serves, which is when there is an address
   /// worth a name.
@@ -247,6 +268,9 @@ class FleetManager extends Manager {
             e.key == defs.remotePort.key ||
             e.key == defs.remoteTls.key ||
             e.key == defs.remoteFleetDiscovery.key ||
+            e.key == defs.remoteAdminUrl.key ||
+            // Onboarding finishing is when the fleet part may start.
+            e.key == defs.startUrl.key ||
             e.key == defs.deviceName.key ||
             e.key == defs.deviceHostname.key) {
           // The seed's own write comes back here, while the start that
@@ -316,11 +340,13 @@ class FleetManager extends Manager {
     final host = hostname;
     final tls = _settings.get(defs.remoteTls);
     final dnsName = _certificateName;
+    final adminUrl = _settings.get(defs.remoteAdminUrl);
     final args = {
       'name': _settings.get(defs.deviceName),
       'port': _settings.get(defs.remotePort).toInt(),
       if (tls) 'tls': true,
       if (dnsName.isNotEmpty) 'dnsName': dnsName,
+      if (adminUrl.isNotEmpty) 'adminUrl': adminUrl,
       'hostname': host,
       'fleet': enabled,
     };

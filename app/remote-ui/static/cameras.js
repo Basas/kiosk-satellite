@@ -3,7 +3,8 @@ import { watchUpdates } from './live.js';
 import { api, cmd, state } from './core.js';
 import { applyManagedBanners } from './fleetsync.js';
 import { settingRow } from './rows.js';
-import { messageBox, localizedMessageBox, modalShell } from './widgets.js';
+import { copyBox, messageBox, localizedMessageBox, modalShell } from './widgets.js';
+import { cachedList, choiceBox, entitySpec, pickEntityValue, pickField, pickItem } from './entity_picker.js';
 
 export function cameraField(label, value = '', type = 'text') {
   const wrap = document.createElement('label');
@@ -108,14 +109,33 @@ export const CAMERA_ICONS = {
   pauseCircle: '<circle cx="12" cy="12" r="9"/>'
     + '<path d="M10 9v6M14 9v6"/>',
   playPause: '<path d="m3 6 8 6-8 6z"/><path d="M15 6v12M20 6v12"/>',
+  // A circular arrow: the refresh action.
+  refresh: '<path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v5h-5"/>',
   // A handset laid on its side: the hang up action.
   callEnd: '<path transform="rotate(135 12 12)" d="M22 16.9v3a2 2 0 0 1-2.2 2'
     + 'A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7'
     + ' 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4'
     + 'c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  // The handset upright, and struck through: answer and decline.
+  call: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1'
+    + ' 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16'
+    + ' 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  callOff: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1'
+    + ' 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16'
+    + ' 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>'
+    + '<path d="M3 3l18 18"/>',
   // The alarm clock struck through, and with a Z: the alarm actions.
   alarmOff: '<circle cx="12" cy="13" r="8"/><path d="M5 3 2 6M19 3l3 3M4 5l16 16"/>',
   snooze: '<circle cx="12" cy="13" r="8"/><path d="M5 3 2 6M19 3l3 3M9.5 10h5l-5 6h5"/>',
+  // A page of a calendar: Open the calendar.
+  calendar: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/>',
+  // A list with a note: Open Music Library.
+  queueMusic: '<path d="M4 6h12M4 11h12M4 16h7"/><path d="M18 9v8"/><circle cx="16" cy="17" r="2"/><path d="M18 9l3-1"/>',
+  // The voice actions: a microphone, struck through for the mute.
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+  micOff: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M3 3l18 18"/>',
+  // A hardware button, pressed from above.
+  button: '<rect x="4" y="13" width="16" height="7" rx="2"/><path d="M9 13V9a3 3 0 0 1 6 0v4"/>',
   fullscreen: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>',
   announce: '<path d="M4 9v6h4l5 4V5L8 9z"/>'
     + '<path d="M16.5 8.5a5 5 0 0 1 0 7"/>',
@@ -332,37 +352,29 @@ export const MIC_GROUP_NOTE =
    (the entity widget's editor, same shape). Applies the edit to `entity`
    and resolves to true when saved. */
 export async function glanceEntityEditor(entity) {
-  let attributes = null;
-  try {
-    const res = await (await api('/api/commands/haEntityAttributes', {
-      method: 'POST', body: JSON.stringify({ entity_id: entity.entity_id }) })).json();
-    if (res.ok) attributes = res.data || {};
-  } catch (_) {}
-  if (!attributes) {
-    messageBox({ title: screensaverText('At a glance'), message: t('screensaverOverlayUnreachable') });
-    return false;
-  }
-  /* Presentation metadata and structured values are left out, same list as
-     the device's picker: a forecast array is not a glanceable reading. */
-  const hidden = ['friendly_name', 'icon', 'entity_picture',
-    'supported_features', 'attribution'];
-  const names = Object.keys(attributes).filter((k) =>
-    !hidden.includes(k)
-    && (attributes[k] === null || typeof attributes[k] !== 'object')).sort();
   const body = document.createElement('div');
+  body.className = 'modal-form';
   const field = cameraField(screensaverText('Name'), entity.custom_name || '');
   field.input.placeholder = entity.name || entity.entity_id;
   const note = document.createElement('div');
   note.className = 'desc';
   note.style.marginTop = '8px';
   note.textContent = screensaverText('Leave empty to use the Home Assistant name.');
-  const current = entity.attribute || '';
-  const value = cameraSelectField(screensaverText('Displayed value'),
-    [{ value: '', label: screensaverText('State') },
-      ...names.map((n) => ({ value: n, label: `${n} \u00b7 ${attributes[n]}` }))],
-    names.includes(current) ? current : '');
-  value.wrap.style.marginTop = '16px';
-  body.append(field.wrap, note, value.wrap);
+  // What it displays: the state or one attribute, from the value step.
+  let attribute = entity.attribute || '';
+  const value = choiceBox(attribute || screensaverText('State'), async () => {
+    const picked = await pickEntityValue({ entityId: entity.entity_id, current: attribute });
+    if (picked == null) return;
+    attribute = picked;
+    value.setText(picked || screensaverText('State'));
+  });
+  const valueWrap = document.createElement('div');
+  valueWrap.className = 'form-field';
+  const valueTitle = document.createElement('span');
+  valueTitle.className = 'desc';
+  valueTitle.textContent = screensaverText('Displayed value');
+  valueWrap.append(valueTitle, value.el);
+  body.append(field.wrap, note, valueWrap);
   const saved = await cameraEditor({
     title: entity.name || entity.entity_id, body, width: 460,
     save: async () => ({ ok: true }) });
@@ -370,253 +382,9 @@ export async function glanceEntityEditor(entity) {
   const name = field.input.value.trim();
   if (name) entity.custom_name = name;
   else delete entity.custom_name;
-  const picked = value.select.value;
-  if (picked) entity.attribute = picked;
+  if (attribute) entity.attribute = attribute;
   else delete entity.attribute;
   return true;
-}
-
-export async function glanceEntityPicker(initial) {
-  const chosen = (initial || []).map((e) => ({ ...e }));
-  const body = document.createElement('div');
-
-  const chosenLabel = document.createElement('div');
-  chosenLabel.className = 'desc';
-  chosenLabel.style.cssText = 'margin:0 2px 6px; font-weight:600;';
-  chosenLabel.textContent = screensaverText('Showing');
-  const list = document.createElement('div');
-  list.className = 'card';
-  list.style.cssText = 'margin:0 0 16px; padding:0 16px;';
-
-  const search = document.createElement('input');
-  search.type = 'search';
-  search.placeholder = screensaverText('Search by name or entity id');
-  search.className = 'field';
-  search.style.margin = '0';
-  const results = document.createElement('div');
-  results.className = 'edge-fade';
-  results.style.cssText = 'max-height:320px; overflow:auto; margin-top:8px;';
-  const hint = (text) => {
-    results.innerHTML = '';
-    const el = document.createElement('div');
-    el.className = 'desc';
-    el.style.padding = '14px 2px';
-    el.textContent = text;
-    results.appendChild(el);
-  };
-
-  let lastResults = [];
-  const renderChosen = () => {
-    list.innerHTML = '';
-    chosenLabel.style.display = chosen.length ? '' : 'none';
-    list.style.display = chosen.length ? '' : 'none';
-    chosen.forEach((entity, index) => {
-      const item = document.createElement('div');
-      item.className = 'row';
-      item.style.cssText = 'gap:8px;';
-      const info = document.createElement('div');
-      info.className = 'info';
-      const name = document.createElement('div');
-      name.className = 'name';
-      name.textContent = entity.custom_name || entity.name || entity.entity_id;
-      const desc = document.createElement('div');
-      desc.className = 'desc';
-      desc.textContent = entity.attribute
-        ? `${entity.entity_id} · ${entity.attribute}`
-        : entity.entity_id;
-      info.append(name, desc);
-      const edit = cameraAction(screensaverText('Edit'), async () => {
-        if (await glanceEntityEditor(entity)) renderChosen();
-      }, false, 'pencil');
-      const move = (delta) => {
-        const to = index + delta;
-        if (to < 0 || to >= chosen.length) return;
-        chosen.splice(to, 0, chosen.splice(index, 1)[0]);
-        renderChosen();
-      };
-      const up = cameraAction(screensaverText('Move up'), () => move(-1), false, 'up', index === 0);
-      const down = cameraAction(screensaverText('Move down'), () => move(1), false, 'down',
-        index === chosen.length - 1);
-      const remove = cameraAction(screensaverText('Remove'), () => {
-        chosen.splice(index, 1);
-        renderChosen();
-        renderResults(lastResults);
-      }, false, 'delete');
-      item.append(info, edit, up, down, remove);
-      list.appendChild(item);
-    });
-  };
-
-  const renderResults = (entities) => {
-    lastResults = entities;
-    if (!entities.length) {
-      hint(search.value.trim() ? screensaverText('Nothing matched.') : screensaverText('Type to search entities.'));
-      return;
-    }
-    results.innerHTML = '';
-    for (const entity of entities) {
-      const picked = chosen.some((e) => e.entity_id === entity.entity_id);
-      const item = document.createElement('div');
-      item.className = 'row';
-      const info = document.createElement('div');
-      info.className = 'info';
-      const name = document.createElement('div');
-      name.className = 'name';
-      name.textContent = entity.name;
-      const desc = document.createElement('div');
-      desc.className = 'desc';
-      desc.textContent = `${entity.entity_id} \u00b7 ${entity.state}`;
-      info.append(name, desc);
-      const btn = cameraAction(picked ? screensaverText('Remove') : screensaverText('Add'), () => {
-        if (picked) {
-          const at = chosen.findIndex((e) => e.entity_id === entity.entity_id);
-          if (at >= 0) chosen.splice(at, 1);
-        } else if (chosen.length < GLANCE_MAX) {
-          chosen.push({ entity_id: entity.entity_id, name: entity.name });
-        } else {
-          return;
-        }
-        renderChosen();
-        renderResults(lastResults);
-      }, false, picked ? 'delete' : 'add', !picked && chosen.length >= GLANCE_MAX);
-      item.append(info, btn);
-      results.appendChild(item);
-    }
-  };
-
-  let debounce;
-  search.addEventListener('input', () => {
-    clearTimeout(debounce);
-    const query = search.value.trim();
-    if (!query) { renderResults([]); return; }
-    debounce = setTimeout(async () => {
-      hint(screensaverText('Searching\u2026'));
-      try {
-        const res = await (await api('/api/commands/haSearchEntities', {
-          method: 'POST', body: JSON.stringify({ query }) })).json();
-        if (search.value.trim() !== query) return; // a newer search won
-        if (!res.ok) { hint(t('screensaverOverlayUnreachable')); return; }
-        renderResults(res.data || []);
-      } catch (_) {
-        hint(screensaverText('The device did not answer.'));
-      }
-    }, 350);
-  });
-
-  renderChosen();
-  renderResults([]);
-  body.append(chosenLabel, list, search, results);
-  const saved = await cameraEditor({
-    title: screensaverText('At a glance entities'),
-    body,
-    save: async () => ({ ok: true }),
-  });
-  return saved ? chosen : null;
-}
-
-/* One Home Assistant entity, picked by search: the At a Glance picker's
-   search without the chosen list, for the places that want a single entity
-   (the entity widget). Mirrors the device's dialog. Resolves to
-   {entity_id, name} when a result is clicked, null when dismissed. */
-export function entitySearchPicker(title = null, { allowClear = false } = {}) {
-  return new Promise((resolve) => {
-    let done = false;
-    const finish = (value) => {
-      if (done) return;
-      done = true;
-      resolve(value);
-    };
-    const shell = modalShell({ title: title ?? screensaverText('Entity'), width: 620, onDismiss: () => finish(null) });
-    const body = document.createElement('div');
-    body.classList.add('modal-form');
-    const search = document.createElement('input');
-    search.type = 'search';
-    search.placeholder = screensaverText('Search by name or entity id');
-    search.className = 'field';
-    search.style.margin = '0';
-    const results = document.createElement('div');
-    results.className = 'edge-fade';
-    results.style.cssText = 'max-height:320px; overflow:auto; margin-top:8px;';
-    const hint = (text) => {
-      results.innerHTML = '';
-      const el = document.createElement('div');
-      el.className = 'desc';
-      el.style.padding = '14px 2px';
-      el.textContent = text;
-      results.appendChild(el);
-    };
-    const renderResults = (entities) => {
-      if (!entities.length) {
-        hint(search.value.trim() ? screensaverText('Nothing matched.') : screensaverText('Type to search entities.'));
-        return;
-      }
-      results.innerHTML = '';
-      for (const entity of entities) {
-        const item = document.createElement('div');
-        item.className = 'row camera-row-clickable';
-        item.tabIndex = 0;
-        item.setAttribute('role', 'button');
-        const info = document.createElement('div');
-        info.className = 'info';
-        const name = document.createElement('div');
-        name.className = 'name';
-        name.textContent = entity.name || entity.entity_id;
-        const desc = document.createElement('div');
-        desc.className = 'desc';
-        desc.textContent = `${entity.entity_id} \u00b7 ${entity.state}`;
-        info.append(name, desc);
-        item.appendChild(info);
-        const pick = () => {
-          shell.close();
-          finish({ entity_id: entity.entity_id, name: entity.name || entity.entity_id });
-        };
-        item.addEventListener('click', pick);
-        item.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            pick();
-          }
-        });
-        results.appendChild(item);
-      }
-    };
-    let debounce;
-    search.addEventListener('input', () => {
-      clearTimeout(debounce);
-      const query = search.value.trim();
-      if (!query) { renderResults([]); return; }
-      debounce = setTimeout(async () => {
-        hint(screensaverText('Searching\u2026'));
-        try {
-          const res = await (await api('/api/commands/haSearchEntities', {
-            method: 'POST', body: JSON.stringify({ query }) })).json();
-          if (search.value.trim() !== query) return; // a newer search won
-          if (!res.ok) { hint(t('screensaverOverlayUnreachable')); return; }
-          renderResults(res.data || []);
-        } catch (_) {
-          hint(screensaverText('The device did not answer.'));
-        }
-      }, 350);
-    });
-    renderResults([]);
-    body.append(search, results);
-    shell.body.appendChild(body);
-    const cancel = cameraAction(screensaverText('Cancel'), () => {
-      shell.close();
-      finish(null);
-    });
-    cancel.className = 'btn-text';
-    if (allowClear) {
-      const clear = cameraAction(screensaverText('Clear'), () => {
-        finish({ entity_id: '', name: '' });
-        shell.close();
-      });
-      clear.className = 'btn-text';
-      shell.foot.append(clear);
-    }
-    shell.foot.append(cancel);
-    setTimeout(() => search.focus(), 0);
-  });
 }
 
 export async function editCameraServer(server) {
@@ -679,7 +447,33 @@ export async function editCameraSource(config, camera) {
     camera?.fullscreenStreamName || '',
   );
   const whep = cameraField(cameraStreamsText('WHEP URL'), camera?.whepUrl || '');
-  const entity = cameraField(cameraStreamsText('Camera entity'), camera?.entityId || '');
+  // Picked from Home Assistant's cameras, not typed; `input.value` stays the
+  // id the save reads.
+  const entity = (() => {
+    const spec = entitySpec({ domains: ['camera'] });
+    let value = camera?.entityId || '';
+    const wrap = document.createElement('div');
+    wrap.className = 'form-field';
+    const title = document.createElement('span');
+    title.className = 'desc';
+    title.textContent = cameraStreamsText('Camera entity');
+    const field = pickField({
+      spec, value,
+      onClick: async () => {
+        const out = await pickItem({ title: cameraStreamsText('Camera entity'), spec,
+          selected: value || null });
+        if (!out?.id) return;
+        value = out.id;
+        field.setValue(value);
+        // A new camera takes the entity's name.
+        if (!name.input.value.trim()) {
+          name.input.value = cachedList(spec.key)?.items.find((i) => i.id === value)?.name || '';
+        }
+      },
+    });
+    wrap.append(title, field.el);
+    return { wrap, input: { get value() { return value; } } };
+  })();
   const preferredProtocol = cameraSelectField(cameraStreamsText('Preferred protocol'), [
     { value: 'auto', label: cameraStreamsText('Auto') },
     { value: 'webrtc', label: 'WebRTC' },
@@ -1004,8 +798,21 @@ export async function editCameraView(config, view) {
     available.style.display = hasAvailable ? '' : 'none';
   };
   render();
-  body.append(name.wrap, showNames.wrap, gridField, preview,
-    chosenLabel, chosen, availableLabel, available);
+  // What ks://camera/<id> links and automations take. Unlike the name, it
+  // survives a rename.
+  let idField = null;
+  if (view) {
+    idField = document.createElement('div');
+    idField.className = 'form-field';
+    const idLabel = document.createElement('span');
+    idLabel.className = 'desc';
+    idLabel.textContent = cameraStreamsText('View ID');
+    const idBox = copyBox(view.id).el;
+    idBox.style.width = '100%';
+    idField.append(idLabel, idBox);
+  }
+  body.append(...[name.wrap, idField, showNames.wrap, gridField, preview,
+    chosenLabel, chosen, availableLabel, available].filter(Boolean));
   return cameraEditor({
     formatError: cameraStreamsError,
     title: view ? cameraStreamsText('Edit view') : cameraStreamsText('Create camera view'),

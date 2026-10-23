@@ -15,7 +15,7 @@ import '../../core/manager.dart';
 import '../device/device_details.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
-import 'screensaver_widgets.dart';
+import 'photo_metadata.dart';
 
 /// One entry of the Immich screensaver playlist.
 class ImmichAsset {
@@ -122,51 +122,24 @@ DateTime? _immichDay(String value) {
 /// The metadata overlay's lines and the setting that carries each, in the
 /// order they are drawn (issue #268). The panel, the corner bookkeeping and
 /// the detail lookup all read the same map, so a line that is off is a line
-/// nobody works for.
-/// `camera` (the model) and `settings` (the exposure) are the two halves of
-/// one line and share a toggle.
-const immichMetadataFields = <String, defs.SettingDef<bool>>{
-  'album': defs.screensaverImmichMetadataAlbum,
-  'date': defs.screensaverImmichMetadataDate,
-  'camera': defs.screensaverImmichMetadataCamera,
-  'settings': defs.screensaverImmichMetadataCamera,
-  'location': defs.screensaverImmichMetadataLocation,
-};
+/// nobody works for. The panel is shared with the EXIF modes, so the map
+/// lives with theirs in photo_metadata.dart.
+final immichMetadataFields = photoMetadataDefs['immich']!.fields;
 
 /// Whether one metadata line is on. Lines the overlay itself is off for
 /// never count.
 bool immichMetadataFieldOn(SettingsManager settings, String field) =>
-    settings.get(defs.screensaverImmichMetadata) &&
-    settings.get(immichMetadataFields[field]!);
+    photoMetadataFieldOn(settings, 'immich', field);
 
 /// Whether the overlay has anything left to say: the master toggle on and
-/// at least one line kept. With every line off the panel stands down
-/// entirely rather than claiming a corner for an empty block.
+/// at least one line kept.
 bool immichMetadataVisible(SettingsManager settings) =>
-    settings.get(defs.screensaverImmichMetadata) &&
-    immichMetadataFields.values.any((def) => settings.get(def));
+    photoMetadataVisible(settings, 'immich');
 
-/// The corner the single-photo metadata panel settles in: its configured
-/// corner, or the first free one when a corner widget owns that (the panel
-/// steps aside rather than stacking). Null when the overlay is off, or on
-/// the (unlikely) fully claimed screen where the panel stands down.
-///
-/// Shared by the panel itself and the At a Glance row, which narrows and
-/// wraps when this lands in a bottom corner so the two never overlap.
-String? immichMetadataCorner(SettingsManager settings) {
-  if (!immichMetadataVisible(settings)) return null;
-  final claimed = {
-    for (final w in decodeScreensaverWidgets(
-      settings.get(defs.screensaverWidgets),
-    ))
-      if (screensaverWidgetAllowedOnMode(w.type, 'immich')) w.position,
-  };
-  final preferred = settings.get(defs.screensaverImmichMetadataPosition);
-  return [
-    preferred,
-    ...defs.cornerOptions,
-  ].where((corner) => !claimed.contains(corner)).firstOrNull;
-}
+/// The corner the single-photo metadata panel settles in. See
+/// [photoMetadataCorner].
+String? immichMetadataCorner(SettingsManager settings) =>
+    photoMetadataCorner(settings, 'immich');
 
 /// An aspect ratio (width over height) counts as portrait below this. Not
 /// 1.0: a square photo pairs badly, reading as two small pictures rather
@@ -449,6 +422,12 @@ class ImmichManager extends Manager {
       if (e.key == defs.screensaverImmichCacheMax.key) {
         unawaited(_evict());
       }
+      // Turning the cache off deletes what it kept, so the space comes
+      // back without a separate clear step (issue #895).
+      if (e.key == defs.screensaverImmichCache.key &&
+          !_settings.get(defs.screensaverImmichCache)) {
+        unawaited(_clearCache());
+      }
       // A one-album pick from an older install or backup arrives as a bare
       // id with its name in a setting of its own, in either order.
       if (e.key == defs.screensaverImmichAlbum.key ||
@@ -457,6 +436,11 @@ class ImmichManager extends Manager {
       }
     });
     await _migrateAlbums();
+    // Copies left from before the cache was turned off, on an install
+    // that predates deleting them with the toggle.
+    if (!_settings.get(defs.screensaverImmichCache)) {
+      unawaited(_clearCache());
+    }
 
     commands.register(
       Command(
@@ -538,8 +522,7 @@ class ImmichManager extends Manager {
         name: 'immichClearCache',
         description: 'Delete every locally cached Immich item',
         handler: (_) async {
-          final dir = await _cacheDir();
-          if (await dir.exists()) await dir.delete(recursive: true);
+          await _clearCache();
           return const CommandResult.ok();
         },
       ),
@@ -1325,7 +1308,9 @@ class ImmichManager extends Manager {
         .timeout(const Duration(seconds: 30));
     _throwUnlessOk(response, scope: 'asset.view');
     final bytes = response.bodyBytes;
-    if (caching && cached != null) {
+    // Checked again: the cache may have been turned off and cleared while
+    // this download ran.
+    if (cached != null && _settings.get(defs.screensaverImmichCache)) {
       try {
         // Write-then-rename so a torn download never poses as a cache hit.
         final part = File('${cached.path}.part');
@@ -1399,19 +1384,19 @@ class ImmichManager extends Manager {
       final date = DateTime.tryParse('$when');
       if (date != null) out['date'] = _formatDate(date);
 
-      final make = '${exif['make'] ?? ''}'.trim();
-      final model = '${exif['model'] ?? ''}'.trim();
-      if (model.isNotEmpty) {
-        // Some vendors bake the make into the model ("Canon EOS R5").
-        out['camera'] = model.startsWith(make) ? model : '$make $model'.trim();
-      }
-      final shot = <String>[
-        if (exif['focalLength'] is num)
-          '${_trimNum(exif['focalLength'] as num)}mm',
-        if (exif['fNumber'] is num) 'f/${_trimNum(exif['fNumber'] as num)}',
-        if (exif['iso'] is num) 'ISO ${(exif['iso'] as num).toInt()}',
-      ];
-      if (shot.isNotEmpty) out['settings'] = shot.join('  ');
+      final camera = photoCameraLine(
+        '${exif['make'] ?? ''}',
+        '${exif['model'] ?? ''}',
+      );
+      if (camera != null) out['camera'] = camera;
+      final shot = photoExposureLine(
+        focalLength: exif['focalLength'] is num
+            ? exif['focalLength'] as num
+            : null,
+        fNumber: exif['fNumber'] is num ? exif['fNumber'] as num : null,
+        iso: exif['iso'] is num ? exif['iso'] as num : null,
+      );
+      if (shot != null) out['settings'] = shot;
 
       final location = <String>[
         for (final key in ['city', 'state', 'country'])
@@ -1460,10 +1445,6 @@ class ImmichManager extends Manager {
   // American device, "2 augustus 2026" on a Dutch one.
   static String _formatDate(DateTime date) => longDate(date);
 
-  /// 6.0 → "6", 1.7 → "1.7": EXIF numbers read like camera markings.
-  static String _trimNum(num value) =>
-      value == value.toInt() ? '${value.toInt()}' : value.toStringAsFixed(1);
-
   Directory? _cacheDirMemo;
 
   Future<Directory> _cacheDir() async {
@@ -1472,6 +1453,22 @@ class ImmichManager extends Manager {
     final dir = Directory('${support.path}/immich_cache');
     await dir.create(recursive: true);
     return _cacheDirMemo = dir;
+  }
+
+  /// Delete every cached item. The memo goes too, so the next write
+  /// creates the folder again instead of failing on the deleted one.
+  Future<void> _clearCache() async {
+    try {
+      final support = await getApplicationSupportDirectory();
+      final dir = Directory('${support.path}/immich_cache');
+      _cacheDirMemo = null;
+      if (await dir.exists()) {
+        await dir.delete(recursive: true);
+        log.info(name, 'local cache cleared');
+      }
+    } catch (e) {
+      log.warn(name, 'cache clear failed: $e');
+    }
   }
 
   Future<List<File>> _cacheFiles() async {

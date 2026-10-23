@@ -1,4 +1,5 @@
 import 'browser_microphone_script.dart';
+import 'page_ha_socket_script.dart';
 import 'remote_settings_script.dart';
 
 /// The `window.kioskSatellite` facade injected into every page at document
@@ -26,6 +27,7 @@ String buildKioskSatelliteScript({
 
   $browserMicrophoneScript
   $remoteSettingsScript
+  $pageHaSocketScript
 
   window.kioskSatellite = {
     platform: 'kiosksatellite',
@@ -39,7 +41,30 @@ String buildKioskSatelliteScript({
       return call('voiceTimerActionFailed', { entityId: entityId });
     },
 
+    // Native Voice Satellite's timers, for a dashboard that shows its own.
+    // getVoiceTimers resolves {timers: [...]}, the vs_list_timers shape;
+    // 'kiosksatellite:voice-timers' carries the same after every change.
+    // controlVoiceTimer changes one by its timer_id ('' for the only one):
+    // action 'pause', 'resume', 'cancel', 'add' or 'remove', with
+    // {hours, minutes, seconds} for add and remove.
+    getVoiceTimers: function () { return call('getVoiceTimers'); },
+    controlVoiceTimer: function (id, action, opts) {
+      opts = opts || {};
+      return call('controlVoiceTimer', {
+        timer_id: id == null ? '' : String(id),
+        action: String(action),
+        hours: Number(opts.hours) || 0,
+        minutes: Number(opts.minutes) || 0,
+        seconds: Number(opts.seconds) || 0
+      });
+    },
+
     getDeviceInfo: function () { return call('getDeviceInfo'); },
+    // The app's and Home Assistant's light or dark state, and the kiosk's
+    // modes and overlays. 'kiosksatellite:theme' and
+    // 'kiosksatellite:kiosk-state' carry the same shapes on every change.
+    getTheme: function () { return call('getTheme'); },
+    getKioskState: function () { return call('getKioskState'); },
     getBrightness: function () { return call('getBrightness'); },
     setBrightness: function (level) { return call('setBrightness', { level: level }); },
     screenOn: function () { return call('screenOn'); },
@@ -142,7 +167,13 @@ String buildKioskSatelliteScript({
     stopSound: function (id) { return call('stopSound', { id: id }); },
     setSoundVolume: function (id, volume) {
       return call('setSoundVolume', { id: id, volume: volume });
-    }
+    },
+
+    // The managed Home Assistant connection, for custom pages while Share
+    // Home Assistant connection is on: createSocket for
+    // home-assistant-js-websocket, or call and subscribe. The kiosk signs
+    // in, so the page holds no token. See page_ha_socket_script.dart.
+    ha: ha
   };
 })();
 ''';

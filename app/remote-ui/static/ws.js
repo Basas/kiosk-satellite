@@ -1,3 +1,4 @@
+import { applyHeadless } from './headless.js';
 import { t } from './localization.js';
 import { attachSocket, detachSocket, receiveResult } from './transport.js';
 import { receiveUpdate, syncSubscriptions } from './live.js';
@@ -6,7 +7,7 @@ import { setDeviceName } from './fleet.js';
 import { renderMicLevel } from './audio.js';
 import { $, api, apiUrl, logout, state } from './core.js';
 import { appendLine, logView, updateConsoleMeta } from './logs.js';
-import { showLightLevel } from './notices.js';
+import { showAdaptiveLight, showExternalMotion, showLightLevel } from './notices.js';
 import { applyFullscreenView, applyQuickEvent, applyQuickState, loadScreenshot, quickStateOf } from './panels.js';
 import { loadVsPermissions, renderVsControls } from './vs.js';
 import { modalShell, paintRange } from './widgets.js';
@@ -177,6 +178,8 @@ export function connectWs() {
     // The screensaver and the card both dim behind our back.
     else if (msg.type === 'brightness') showBrightness(msg.level);
     else if (msg.type === 'lightlevel') showLightLevel(msg.lux);
+    else if (msg.type === 'adaptivelight') showAdaptiveLight(msg);
+    else if (msg.type === 'externalmotion') showExternalMotion(msg);
     else if (msg.type === 'micLevel') renderMicLevel(msg.rms);
   };
 }
@@ -276,6 +279,7 @@ export function applyInfo(device, currentUrl, keepQuick = {}) {
   // side by side, "Kiosk Satellite Remote" three times is a guessing game.
   // Login keeps the static default; renames land on the next info refresh.
   if (name) document.title = name + ' - Kiosk Satellite Remote';
+  applyHeadless(device.headless);
   renderStats(device);
   if (device.brightness != null) showBrightness(device.brightness);
   applyQuickState(device, keepQuick);

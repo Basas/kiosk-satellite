@@ -5,6 +5,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderAbstractViewport;
+import 'package:intl/intl.dart' show NumberFormat;
 import 'glance_row.dart';
 import 'lyrics_view.dart';
 import 'theme.dart';
@@ -186,9 +187,10 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
       if (e.key == defs.sendspinLyrics.key ||
           e.key == defs.sendspinFullscreenQueue.key ||
           e.key == defs.sendspinSpeakerPill.key ||
+          e.key == defs.sendspinAudioQuality.key ||
           e.key == defs.sendspinFullscreenTextScale.key ||
           e.key == defs.sendspinFullscreenButtonScale.key ||
-          e.key == defs.sendspinFullscreenHorizontal.key ||
+          e.key == defs.sendspinFullscreenLayout.key ||
           e.key == defs.sendspinFullscreenDoubleTap.key) {
         _onLayoutChanged();
       }
@@ -223,6 +225,7 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
       url,
       c.sendspin.playerChipName,
       c.sendspin.queueOpen,
+      '${now?['audioQuality'] ?? ''}',
     );
     if (presentation == _presentation) return;
     _presentation = presentation;
@@ -280,6 +283,13 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
     final showPlayerChip =
         c.settings.get(defs.sendspinSpeakerPill) &&
         c.sendspin.playerChipName.isNotEmpty;
+    // The way into the music library, beside the close button.
+    final showLibrary =
+        controls &&
+        !widget.alongsideScreensaver &&
+        c.settings.get(defs.libraryNowPlayingButton) &&
+        c.settings.get(defs.kioskAllowMusicLibrary) &&
+        c.musicLibrary.available.isNotEmpty;
     // The queue panel (controls only: its button lives there) and the
     // lyrics share one slot, the queue winning while it is open. Either
     // takes whatever spare axis the panel has: a second column on a
@@ -293,9 +303,14 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
         (c.sendspin.lyrics.value.isNotEmpty ||
             (c.sendspin.lyricsPending.value && _panelShown));
     final havePanel = queue || haveLyrics;
-    final horizontal =
-        !widget.alongsideScreensaver &&
-        c.settings.get(defs.sendspinFullscreenHorizontal);
+    final layout = widget.alongsideScreensaver
+        ? 'vertical'
+        : c.settings.get(defs.sendspinFullscreenLayout);
+    final horizontal = layout == 'horizontal';
+    // The cover alone, the details and transport over it only after a
+    // touch, which leaves nowhere for lyrics or the queue: those open in
+    // the vertical layouts.
+    final artOnly = layout == 'art_only' && !havePanel;
     final landscape = screen.width > screen.height;
     final sideBySide = havePanel && landscape && screen.width >= 560;
     final stacked = havePanel && !landscape && screen.height >= 620;
@@ -310,6 +325,9 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
         c.settings.get(defs.screensaverGlanceNowPlaying) &&
         c.glance.entities.value.isNotEmpty;
     final edge = (screen.width * 0.06).clamp(16.0, 64.0);
+    final quality = c.settings.get(defs.sendspinAudioQuality)
+        ? audioQualityLabels(context, now?['audioQuality'])
+        : const <String>[];
     _panelShown =
         sideBySide || stacked || panelOnly || (horizontal && havePanel);
 
@@ -332,42 +350,53 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
             centred: stacked && !horizontal,
           );
 
-    Widget horizontalContent() {
-      final horizontalPadding = (screen.width * 0.04).clamp(32.0, 48.0);
-      // Only the close button needs clearance. The speaker pill floats
-      // over the content briefly after interaction.
-      final verticalPadding = showClose ? 64.0 : 24.0;
-      Widget details() => Column(
-        key: const ValueKey('horizontal-track-details'),
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: titleSize,
-              fontWeight: FontWeight.w700,
-              height: 1.15,
-            ),
+    // Title, artist and album on lines of their own, for the layouts with
+    // room for all three.
+    Widget trackDetails(Key key, {List<Shadow>? shadows}) => Column(
+      key: key,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: titleSize,
+            fontWeight: FontWeight.w700,
+            height: 1.15,
+            shadows: shadows,
           ),
-          for (final value in [now?['artist'], now?['album']])
-            if (value != null && '$value'.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  '$value',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white70, fontSize: artistSize),
+        ),
+        for (final value in [now?['artist'], now?['album']])
+          if (value != null && '$value'.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                '$value',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                // Gray loses to a busy cover, so text over one stays white.
+                style: TextStyle(
+                  color: shadows == null ? Colors.white70 : Colors.white,
+                  fontSize: artistSize,
+                  shadows: shadows,
                 ),
               ),
-        ],
-      );
+            ),
+      ],
+    );
 
+    Widget horizontalContent() {
+      Widget details() =>
+          trackDetails(const ValueKey('horizontal-track-details'));
+
+      final horizontalPadding = (screen.width * 0.04).clamp(32.0, 48.0);
+      // Only the close button needs clearance. The speaker pill floats
+      // over the content, artwork included, briefly after interaction.
+      final verticalPadding = showClose ? 64.0 : 24.0;
       Widget half(String key, Widget child, {bool centered = true}) => Expanded(
         child: SizedBox.expand(
           key: ValueKey(key),
@@ -500,6 +529,144 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
       );
     }
 
+    // The cover as large as the screen allows, centered, and nothing
+    // else until a touch or a key: then the view dims and the track
+    // details and transport come up for a few seconds, the transport
+    // docked to the bottom of the screen, the way a video player shows
+    // its controls. On a portrait screen they reach below the cover.
+    Widget artOnlyContent() {
+      final safe = MediaQuery.paddingOf(context);
+      final sidePadding = (screen.width * 0.04).clamp(24.0, 48.0);
+      final inset = (short * 0.04).clamp(16.0, 32.0);
+      // The close button comes and goes with the controls, so the cover
+      // needs no room kept for it.
+      final padding = EdgeInsets.fromLTRB(
+        sidePadding + safe.left,
+        24 + safe.top,
+        sidePadding + safe.right,
+        24 + safe.bottom,
+      );
+      return LayoutBuilder(
+        builder: (context, full) {
+          final area = padding.deflateRect(Offset.zero & full.biggest);
+          final coverSize = max(0.0, min(area.width, area.height));
+          final cover = Rect.fromCenter(
+            center: area.center,
+            width: coverSize,
+            height: coverSize,
+          );
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned.fromRect(
+                rect: cover,
+                child: AnimatedSwitcher(
+                  key: const ValueKey('art-only-cover'),
+                  duration: const Duration(milliseconds: 700),
+                  child: art == null
+                      ? const Center(
+                          key: ValueKey('art-only-no-art'),
+                          child: Icon(
+                            Icons.music_note,
+                            size: 96,
+                            color: Colors.white24,
+                          ),
+                        )
+                      : ClipRRect(
+                          key: ValueKey(_loadedArtUrl),
+                          borderRadius: BorderRadius.circular(24),
+                          child: Image.memory(
+                            art,
+                            width: double.infinity,
+                            height: double.infinity,
+                            cacheWidth:
+                                (coverSize *
+                                        MediaQuery.devicePixelRatioOf(context))
+                                    .ceil(),
+                            fit: BoxFit.cover,
+                            gaplessPlayback: true,
+                          ),
+                        ),
+                ),
+              ),
+              _TransientOnActivity(
+                container: c,
+                visibilityKey: const ValueKey('art-only-controls-visibility'),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    const ColoredBox(color: Color(0x99000000)),
+                    // As wide as the cover, as tall as the screen allows.
+                    // Half the inset below: the transport already keeps a
+                    // margin under its buttons.
+                    Positioned(
+                      left: cover.left,
+                      width: coverSize,
+                      top: area.top,
+                      bottom: full.maxHeight - area.bottom,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          inset,
+                          inset,
+                          inset,
+                          inset / 2,
+                        ),
+                        child: LayoutBuilder(
+                          builder: (context, inner) => Align(
+                            alignment: Alignment.bottomCenter,
+                            child: _fitted(
+                              Column(
+                                key: const ValueKey('art-only-track-controls'),
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (glance)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 16,
+                                      ),
+                                      child: GlanceRow(
+                                        container: c,
+                                        scale: (short / 800).clamp(0.7, 1.0),
+                                      ),
+                                    ),
+                                  trackDetails(
+                                    const ValueKey('art-only-track-details'),
+                                    shadows: _overArtShadows,
+                                  ),
+                                  if (controls) ...[
+                                    SizedBox(height: gap * 0.5),
+                                    _ControlTouch(
+                                      container: c,
+                                      child: _NowPlayingControls(
+                                        container: c,
+                                        width: inner.maxWidth,
+                                        scale: controlsScale,
+                                        // Sized to the cover, not the
+                                        // column a portrait screen leaves.
+                                        maxHeight:
+                                            min(inner.maxHeight, coverSize) *
+                                            0.5,
+                                        shadows: _overArtShadows,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              width: inner.maxWidth,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     Widget content() {
       if (panelOnly) {
         return Padding(
@@ -594,6 +761,57 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
       }
     }
 
+    // The content above, the row and the transport pinned below it:
+    // the transport keeps its place whatever the content does.
+    Widget verticalContent() => Column(
+      children: [
+        Expanded(child: content()),
+        if (glance)
+          Padding(
+            padding: EdgeInsets.only(
+              top: 8,
+              bottom: controls ? 4 : (screen.height * 0.06).clamp(12.0, 48.0),
+            ),
+            // The default cards carry their own backdrop, and the
+            // text-only style's grey-on-black palette reads over the
+            // black backdrop and the scrimmed art alike, so no tint.
+            child: GlanceRow(
+              container: c,
+              scale: min(1.0, screen.height / 480).clamp(0.75, 1.0),
+            ),
+          ),
+        if (controls)
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              16,
+              gap * 0.4,
+              16,
+              (screen.height * 0.03).clamp(8.0, 24.0),
+            ),
+            child: Center(
+              child: _ControlTouch(
+                container: c,
+                child: _NowPlayingControls(
+                  container: c,
+                  // A wide bar: most of the screen, so the thumb has
+                  // room to land and the times can read at a distance.
+                  width: min(
+                    max(artSize * 1.4, screen.width * 0.62),
+                    screen.width - 32,
+                  ),
+                  scale: controlsScale,
+                  maxHeight: screen.height * 0.5,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+
+    // The close button joins the controls in coming and going.
+    Widget transientInArtOnly(Widget child) =>
+        artOnly ? _TransientOnActivity(container: c, child: child) : child;
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -630,57 +848,23 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
         ),
         // Blur + scrim so the backdrop reads as atmosphere, not content.
         if (art != null) const ColoredBox(color: Color(0x99000000)),
-        // The content above, the row and the transport pinned below it:
-        // the transport keeps its place whatever the content does.
-        if (horizontal)
-          horizontalContent()
-        else
-          Column(
-            children: [
-              Expanded(child: content()),
-              if (glance)
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 8,
-                    bottom: controls
-                        ? 4
-                        : (screen.height * 0.06).clamp(12.0, 48.0),
-                  ),
-                  // The default cards carry their own backdrop, and the
-                  // text-only style's grey-on-black palette reads over the
-                  // black backdrop and the scrimmed art alike, so no tint.
-                  child: GlanceRow(
-                    container: c,
-                    scale: min(1.0, screen.height / 480).clamp(0.75, 1.0),
-                  ),
-                ),
-              if (controls)
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    16,
-                    gap * 0.4,
-                    16,
-                    (screen.height * 0.03).clamp(8.0, 24.0),
-                  ),
-                  child: Center(
-                    child: _ControlTouch(
-                      container: c,
-                      child: _NowPlayingControls(
-                        container: c,
-                        // A wide bar: most of the screen, so the thumb has
-                        // room to land and the times can read at a distance.
-                        width: min(
-                          max(artSize * 1.4, screen.width * 0.62),
-                          screen.width - 32,
-                        ),
-                        scale: controlsScale,
-                        maxHeight: screen.height * 0.5,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+        // The layout above, the audio quality pills along the bottom edge.
+        Column(
+          children: [
+            Expanded(
+              child: horizontal
+                  ? horizontalContent()
+                  : artOnly
+                  ? artOnlyContent()
+                  : verticalContent(),
+            ),
+            if (quality.isNotEmpty)
+              _AudioQualityPills(
+                labels: quality,
+                fontSize: (short * 0.024).clamp(11.0, 15.0) * textScale,
+              ),
+          ],
+        ),
         // Whose music this is: the shown player's name in a chip opposite
         // the close button, and the way into its group where the source
         // can put other players in it.
@@ -689,9 +873,21 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
             top: 12,
             left: 12,
             child: SafeArea(
-              child: _TransientPlayerChip(
+              child: _TransientOnActivity(
                 container: c,
-                maxWidth: max(80, screen.width - (showClose ? 80 : 24)),
+                visibilityKey: const ValueKey('speaker-pill-visibility'),
+                child: _PlayerChip(
+                  container: c,
+                  maxWidth: max(
+                    80,
+                    screen.width -
+                        (showClose ? 80 : 24) -
+                        (showLibrary ? 58 : 0),
+                  ),
+                  // It follows the text up but never shrinks below its
+                  // touch target.
+                  scale: max(1.0, textScale),
+                ),
               ),
             ),
           ),
@@ -699,25 +895,59 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
         // explicit: the same floating close the page overlays wear. It
         // reports its own source so the manager can tell it from the
         // touches it is holding.
+        if (showLibrary)
+          Positioned(
+            top: 12,
+            right: showClose ? 70 : 12,
+            child: SafeArea(
+              child: transientInArtOnly(
+                _ControlTouch(
+                  container: c,
+                  child: Material(
+                    color: Colors.black45,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      focusColor: Colors.white24,
+                      onTap: () => unawaited(
+                        c.commands.execute('openMusicLibrary', const {}),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Icon(
+                          Icons.library_music_outlined,
+                          color: Colors.white,
+                          size: 24,
+                          semanticLabel: l10n(context).libraryTitle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         if (showClose)
           Positioned(
             top: 12,
             right: 12,
             child: SafeArea(
-              child: Material(
-                color: Colors.black45,
-                shape: const CircleBorder(),
-                child: InkWell(
-                  customBorder: const CircleBorder(),
-                  focusColor: Colors.white24,
-                  onTap: () => c.screensaver.notifyActivity('close'),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 24,
-                      semanticLabel: l10n(context).commonClose,
+              child: transientInArtOnly(
+                Material(
+                  color: Colors.black45,
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    focusColor: Colors.white24,
+                    onTap: () => c.screensaver.notifyActivity('close'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 24,
+                        semanticLabel: l10n(context).commonClose,
+                      ),
                     ),
                   ),
                 ),
@@ -860,6 +1090,99 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
           ),
         );
       },
+    );
+  }
+}
+
+/// The pills [_AudioQualityPills] shows for a track's audio quality (see
+/// audioQualityOf), in order: Hi-Res or CD quality for lossless audio and
+/// Lossy for a compressed codec, the codec, the bit depth (for a lossy
+/// codec, the depth it decodes to), the sample rate, the bitrate and the
+/// source. Empty when the server reported none of it.
+List<String> audioQualityLabels(BuildContext context, Object? quality) {
+  if (quality is! Map) return const [];
+  final strings = l10n(context);
+  final number = NumberFormat(
+    '0.#',
+    Localizations.localeOf(context).toString(),
+  );
+  final lossless = quality['lossless'] == true;
+  final codec = quality['codec'] as String?;
+  final sampleRate = quality['sampleRate'] as num?;
+  final bitDepth = quality['bitDepth'] as num?;
+  final bitRate = quality['bitRate'] as num?;
+  final hiRes = (bitDepth ?? 0) > 16 || (sampleRate ?? 0) > 48000;
+  final cd =
+      (sampleRate == 44100 || sampleRate == 48000) &&
+      (bitDepth == null || bitDepth == 16);
+  return [
+    if (lossless && hiRes)
+      strings.mediaAudioHiRes
+    else if (lossless && cd)
+      strings.mediaAudioCdQuality
+    else if (!lossless && codec != null)
+      strings.mediaAudioLossy,
+    ?codec,
+    if (bitDepth != null) strings.mediaAudioBitDepth('$bitDepth'),
+    if (sampleRate != null)
+      strings.mediaAudioSampleRate(number.format(sampleRate / 1000)),
+    if (bitRate != null) strings.mediaAudioBitRate('$bitRate'),
+    if (quality['source'] case final String source) source,
+  ];
+}
+
+/// The audio quality pills along the bottom edge of the Now Playing view
+/// (sendspin.audio_quality), centered and wrapping onto a second line on a
+/// narrow panel rather than shrinking.
+class _AudioQualityPills extends StatelessWidget {
+  const _AudioQualityPills({required this.labels, required this.fontSize});
+
+  final List<String> labels;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final safe = MediaQuery.paddingOf(context);
+    return Padding(
+      key: const ValueKey('audio-quality-pills'),
+      padding: EdgeInsets.fromLTRB(
+        16 + safe.left,
+        4,
+        16 + safe.right,
+        12 + safe.bottom,
+      ),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 8,
+        runSpacing: 6,
+        children: [
+          for (final label in labels)
+            DecoratedBox(
+              decoration: ShapeDecoration(
+                color: Colors.black38,
+                shape: const StadiumBorder(
+                  side: BorderSide(color: Colors.white24),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: fontSize * 0.8,
+                  vertical: fontSize * 0.3,
+                ),
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -1620,19 +1943,29 @@ class _QueueThumbState extends State<_QueueThumb> {
   }
 }
 
-/// Reveals the floating speaker pill briefly after screen interaction.
-/// Listening to activity also covers touches in the shared screensaver.
-class _TransientPlayerChip extends StatefulWidget {
-  const _TransientPlayerChip({required this.container, required this.maxWidth});
+/// Shows [child] for a few seconds after each touch or key press, then
+/// fades it out: the speaker pill, and the album art only layout's
+/// details, transport and close button. Hidden, it takes no touches or
+/// focus, so the touch that brings it up never lands on a button under
+/// the finger.
+class _TransientOnActivity extends StatefulWidget {
+  const _TransientOnActivity({
+    required this.container,
+    required this.child,
+    this.visibilityKey,
+  });
 
   final AppContainer container;
-  final double maxWidth;
+  final Widget child;
+
+  /// Keys the fade, for tests to read its opacity.
+  final Key? visibilityKey;
 
   @override
-  State<_TransientPlayerChip> createState() => _TransientPlayerChipState();
+  State<_TransientOnActivity> createState() => _TransientOnActivityState();
 }
 
-class _TransientPlayerChipState extends State<_TransientPlayerChip> {
+class _TransientOnActivityState extends State<_TransientOnActivity> {
   StreamSubscription<ActivityDetected>? _activitySub;
   Timer? _hide;
   bool _visible = false;
@@ -1663,13 +1996,10 @@ class _TransientPlayerChipState extends State<_TransientPlayerChip> {
     child: ExcludeFocus(
       excluding: !_visible,
       child: AnimatedOpacity(
-        key: const ValueKey('speaker-pill-visibility'),
+        key: widget.visibilityKey,
         opacity: _visible ? 1 : 0,
         duration: _visible ? Duration.zero : const Duration(milliseconds: 300),
-        child: _PlayerChip(
-          container: widget.container,
-          maxWidth: widget.maxWidth,
-        ),
+        child: widget.child,
       ),
     ),
   );
@@ -1681,15 +2011,23 @@ class _TransientPlayerChipState extends State<_TransientPlayerChip> {
 /// a checkbox. Reports its touches as control touches so a tap on it is
 /// never a step of the double-tap dismiss chain.
 class _PlayerChip extends StatelessWidget {
-  const _PlayerChip({required this.container, required this.maxWidth});
+  const _PlayerChip({
+    required this.container,
+    required this.maxWidth,
+    required this.scale,
+  });
 
   final AppContainer container;
   final double maxWidth;
+
+  /// The Now Playing text scale, so the chip grows with the title.
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
     final c = container;
     final grouping = c.sendspin.groupAvailable;
+    final iconSize = 20 * scale;
     return _ControlTouch(
       container: c,
       child: Material(
@@ -1697,10 +2035,19 @@ class _PlayerChip extends StatelessWidget {
         shape: const StadiumBorder(),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: grouping ? () => _GroupMenu.show(context, c) : null,
+          onTap: grouping
+              // The menu grows at 70% of the chip's rate, so the list
+              // keeps room for more rows.
+              ? () => _GroupMenu.show(context, c, 1 + (scale - 1) * 0.7)
+              : null,
           focusColor: Colors.white24,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(12, 8, grouping ? 10 : 16, 8),
+            padding: EdgeInsets.fromLTRB(
+              12 * scale,
+              8 * scale,
+              (grouping ? 10 : 16) * scale,
+              8 * scale,
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -1710,30 +2057,33 @@ class _PlayerChip extends StatelessWidget {
                       ? l10n(context).mediaSpeakerSelection
                       : null,
                   color: Colors.white70,
-                  size: 20,
+                  size: iconSize,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8 * scale),
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxWidth: min(240, max(0, maxWidth - (grouping ? 74 : 56))),
+                    maxWidth: min(
+                      240 * scale,
+                      max(0, maxWidth - (grouping ? 74 : 56) * scale),
+                    ),
                   ),
                   child: Text(
                     c.sendspin.playerChipName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 15,
+                      fontSize: 15 * scale,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
                 if (grouping) ...[
-                  const SizedBox(width: 4),
-                  const Icon(
+                  SizedBox(width: 4 * scale),
+                  Icon(
                     Icons.expand_more_rounded,
                     color: Colors.white70,
-                    size: 20,
+                    size: iconSize,
                   ),
                 ],
               ],
@@ -1755,13 +2105,21 @@ class _GroupMenu extends StatefulWidget {
     required this.container,
     required this.anchor,
     required this.panelWidth,
+    required this.scale,
   });
 
   final AppContainer container;
   final Rect anchor;
   final double panelWidth;
 
-  static Future<void> show(BuildContext context, AppContainer container) {
+  /// The chip's scale, slowed down by [_PlayerChip].
+  final double scale;
+
+  static Future<void> show(
+    BuildContext context,
+    AppContainer container,
+    double scale,
+  ) {
     final box = context.findRenderObject()! as RenderBox;
     final overlay =
         Navigator.of(
@@ -1779,6 +2137,7 @@ class _GroupMenu extends StatefulWidget {
         container: container,
         anchor: anchor,
         panelWidth: panelWidth,
+        scale: scale,
       ),
     );
   }
@@ -1892,24 +2251,34 @@ class _GroupMenuState extends State<_GroupMenu> {
   /// player's name [indent] in. Sent when the finger lifts, as the view's
   /// slider does.
   Widget _volume(String id, int level, double indent) {
+    final scale = widget.scale;
     final value = _levels[id] ?? level.toDouble();
     return Padding(
-      padding: EdgeInsets.fromLTRB(indent - 14, 0, 16, 4),
+      padding: EdgeInsets.fromLTRB(
+        (indent - 14) * scale,
+        0,
+        16 * scale,
+        4 * scale,
+      ),
       child: SizedBox(
-        height: 32,
+        height: 32 * scale,
         child: Row(
           children: [
             Expanded(
               child: SliderTheme(
-                data: const SliderThemeData(
-                  trackHeight: 3,
+                data: SliderThemeData(
+                  trackHeight: 3 * scale,
                   activeTrackColor: Colors.white,
                   inactiveTrackColor: Colors.white24,
                   thumbColor: Colors.white,
                   overlayColor: Colors.white24,
-                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
-                  overlayShape: RoundSliderOverlayShape(overlayRadius: 14),
-                  trackShape: RectangularSliderTrackShape(),
+                  thumbShape: RoundSliderThumbShape(
+                    enabledThumbRadius: 6 * scale,
+                  ),
+                  overlayShape: RoundSliderOverlayShape(
+                    overlayRadius: 14 * scale,
+                  ),
+                  trackShape: const RectangularSliderTrackShape(),
                 ),
                 child: Slider(
                   key: ValueKey('group-volume-$id'),
@@ -1925,11 +2294,11 @@ class _GroupMenuState extends State<_GroupMenu> {
               ),
             ),
             SizedBox(
-              width: 40,
+              width: 40 * scale,
               child: Text(
                 '${value.round()}%',
                 textAlign: TextAlign.right,
-                style: const TextStyle(color: Colors.white54, fontSize: 13),
+                style: TextStyle(color: Colors.white54, fontSize: 13 * scale),
               ),
             ),
           ],
@@ -1944,20 +2313,29 @@ class _GroupMenuState extends State<_GroupMenu> {
     final group = _group;
     final members = _members;
     final isLocal = widget.container.sendspin.followedPlayerName.isEmpty;
-    const titleStyle = TextStyle(
+    final scale = widget.scale;
+    final titleStyle = TextStyle(
       color: Colors.white,
-      fontSize: 16,
+      fontSize: 16 * scale,
       fontWeight: FontWeight.w600,
     );
-    const rowStyle = TextStyle(color: Colors.white, fontSize: 15);
+    final rowStyle = TextStyle(color: Colors.white, fontSize: 15 * scale);
     Widget note(String text) => Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      padding: EdgeInsets.fromLTRB(
+        16 * scale,
+        12 * scale,
+        16 * scale,
+        16 * scale,
+      ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white54, fontSize: 14),
+        style: TextStyle(color: Colors.white54, fontSize: 14 * scale),
       ),
     );
-    final width = min(340.0, min(widget.panelWidth - 24, screen.width - 24));
+    final width = min(
+      340.0 * scale,
+      min(widget.panelWidth - 24, screen.width - 24),
+    );
     final left = widget.anchor.left.clamp(12.0, screen.width - width - 12);
     final top = widget.anchor.bottom + 8;
     return Align(
@@ -1990,15 +2368,20 @@ class _GroupMenuState extends State<_GroupMenu> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+                  padding: EdgeInsets.fromLTRB(
+                    16 * scale,
+                    14 * scale,
+                    16 * scale,
+                    10 * scale,
+                  ),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.speaker_group_outlined,
                         color: Colors.white70,
-                        size: 20,
+                        size: 20 * scale,
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10 * scale),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -2017,7 +2400,7 @@ class _GroupMenuState extends State<_GroupMenu> {
                                 mediaText(context, 'Leads the group'),
                                 style: TextStyle(
                                   color: Colors.white54,
-                                  fontSize: 13,
+                                  fontSize: 13 * scale,
                                 ),
                               ),
                           ],
@@ -2033,13 +2416,13 @@ class _GroupMenuState extends State<_GroupMenu> {
                   _volume(group!.leaderId, level, 46),
                 const Divider(height: 1, color: Colors.white12),
                 if (_loading)
-                  const Padding(
-                    padding: EdgeInsets.all(20),
+                  Padding(
+                    padding: EdgeInsets.all(20 * scale),
                     child: Center(
                       child: SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
+                        width: 22 * scale,
+                        height: 22 * scale,
+                        child: const CircularProgressIndicator(
                           strokeWidth: 2,
                           color: Colors.white70,
                         ),
@@ -2054,7 +2437,7 @@ class _GroupMenuState extends State<_GroupMenu> {
                   Flexible(
                     child: ListView(
                       shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: 6 * scale),
                       children: [
                         for (final (i, m) in members.indexed) ...[
                           InkWell(
@@ -2062,22 +2445,23 @@ class _GroupMenuState extends State<_GroupMenu> {
                             focusColor: Colors.white12,
                             onTap: () => _toggle(m),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 10,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 14 * scale,
+                                vertical: 10 * scale,
                               ),
                               child: Row(
                                 children: [
                                   SizedBox(
-                                    width: 24,
-                                    height: 24,
+                                    width: 24 * scale,
+                                    height: 24 * scale,
                                     child: _pending.contains(m.id)
-                                        ? const Padding(
-                                            padding: EdgeInsets.all(3),
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              color: Colors.white70,
-                                            ),
+                                        ? Padding(
+                                            padding: EdgeInsets.all(3 * scale),
+                                            child:
+                                                const CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                  color: Colors.white70,
+                                                ),
                                           )
                                         : Icon(
                                             m.inGroup
@@ -2087,9 +2471,10 @@ class _GroupMenuState extends State<_GroupMenu> {
                                             color: m.inGroup
                                                 ? Colors.white
                                                 : Colors.white54,
+                                            size: 24 * scale,
                                           ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12 * scale),
                                   Expanded(
                                     child: Text(
                                       m.available
@@ -2110,12 +2495,12 @@ class _GroupMenuState extends State<_GroupMenu> {
                                   // name the source may spell its own
                                   // way: unchecking it is leaving.
                                   if (m.id == group?.selfId && isLocal) ...[
-                                    const SizedBox(width: 10),
+                                    SizedBox(width: 10 * scale),
                                     Text(
                                       mediaText(context, 'This device'),
                                       style: TextStyle(
                                         color: Colors.white54,
-                                        fontSize: 13,
+                                        fontSize: 13 * scale,
                                       ),
                                     ),
                                   ],
@@ -2154,6 +2539,7 @@ class _NowPlayingControls extends StatefulWidget {
     required this.width,
     required this.scale,
     required this.maxHeight,
+    this.shadows,
   });
 
   final AppContainer container;
@@ -2165,6 +2551,10 @@ class _NowPlayingControls extends StatefulWidget {
   final double scale;
 
   final double maxHeight;
+
+  /// Drop shadows under the buttons, the bars and the times, for controls
+  /// drawn over the cover.
+  final List<Shadow>? shadows;
 
   @override
   State<_NowPlayingControls> createState() => _NowPlayingControlsState();
@@ -2342,6 +2732,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
       color: Colors.white70,
       fontSize: 17 * scale,
       fontFeatures: const [FontFeature.tabularFigures()],
+      shadows: widget.shadows,
     );
 
     Widget btn(
@@ -2352,7 +2743,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
       Color color = Colors.white,
       FocusNode? focusNode,
     }) => IconButton(
-      icon: Icon(icon, size: size * scale),
+      icon: Icon(icon, size: size * scale, shadows: widget.shadows),
       tooltip: label,
       color: color,
       disabledColor: color,
@@ -2378,6 +2769,10 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
     // missing one leaves its width behind so the transport stays
     // centered under the cover either way.
     const toggleSize = 32.0;
+    // Off stays close to on so a toggle never fades into the artwork; the
+    // icon itself tells the two apart where the state matters.
+    const off = Colors.white70;
+    const unknown = Colors.white38;
     final toggleBlank = SizedBox(width: (toggleSize + 16) * scale);
     // The heart: unknown (the lookup still out) draws faint and inert,
     // and without a Music Assistant library behind the source there is
@@ -2396,8 +2791,8 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
             color: favorite == true
                 ? Colors.white
                 : favorite == null
-                ? Colors.white24
-                : Colors.white38,
+                ? unknown
+                : off,
           )
         : toggleBlank;
     // Repeat: off dim, all lit, one lit with the numbered glyph. The
@@ -2415,7 +2810,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
               _ => l10n(context).mediaRepeatOff,
             },
             size: toggleSize,
-            color: repeatMode == 'off' ? Colors.white38 : Colors.white,
+            color: repeatMode == 'off' ? off : Colors.white,
           )
         : toggleBlank;
     final shuffleOn = _shuffleOverride ?? (now['shuffle'] == true);
@@ -2427,7 +2822,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
                 ? l10n(context).mediaShuffleOff
                 : l10n(context).mediaShuffleOn,
             size: toggleSize,
-            color: shuffleOn ? Colors.white : Colors.white38,
+            color: shuffleOn ? Colors.white : off,
           )
         : toggleBlank;
     // Lyrics need a position close enough to sing along with, which
@@ -2444,7 +2839,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
                 ? l10n(context).mediaHideLyrics
                 : l10n(context).mediaShowLyrics,
             size: toggleSize,
-            color: lyricsOn ? Colors.white : Colors.white38,
+            color: lyricsOn ? Colors.white : off,
           )
         : toggleBlank;
     final queue = c.sendspin.queueAvailable
@@ -2455,7 +2850,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
                 ? l10n(context).mediaHideQueue
                 : l10n(context).mediaShowQueue,
             size: toggleSize,
-            color: queueOpen ? Colors.white : Colors.white38,
+            color: queueOpen ? Colors.white : off,
           )
         : toggleBlank;
     // The volume toggle leads the left cluster; the right one keeps a
@@ -2479,7 +2874,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
                 ? l10n(context).mediaHideVolume
                 : l10n(context).mediaShowVolume,
             size: toggleSize,
-            color: volumeOpen ? Colors.white : Colors.white38,
+            color: volumeOpen ? Colors.white : off,
           )
         : toggleBlank;
     // Each side packs its buttons against the transport and pushes the
@@ -2577,33 +2972,37 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
                     color: muted ? Colors.white : Colors.white70,
                   ),
                   Expanded(
-                    child: SliderTheme(
-                      data: SliderThemeData(
-                        trackHeight: 4 * scale,
-                        activeTrackColor: Colors.white,
-                        inactiveTrackColor: Colors.white30,
-                        thumbColor: Colors.white,
-                        overlayColor: Colors.white24,
-                        thumbShape: RoundSliderThumbShape(
-                          enabledThumbRadius: 7 * scale,
+                    child: _trackShadow(
+                      scale: scale,
+                      shadows: widget.shadows,
+                      child: SliderTheme(
+                        data: SliderThemeData(
+                          trackHeight: 4 * scale,
+                          activeTrackColor: Colors.white,
+                          inactiveTrackColor: Colors.white30,
+                          thumbColor: Colors.white,
+                          overlayColor: Colors.white24,
+                          thumbShape: RoundSliderThumbShape(
+                            enabledThumbRadius: 7 * scale,
+                          ),
+                          overlayShape: RoundSliderOverlayShape(
+                            overlayRadius: 16 * scale,
+                          ),
+                          trackShape: const RectangularSliderTrackShape(),
                         ),
-                        overlayShape: RoundSliderOverlayShape(
-                          overlayRadius: 16 * scale,
+                        child: Slider(
+                          semanticFormatterCallback: (value) =>
+                              '${l10n(context).mediaVolume}: ${value.round()}%',
+                          value: level ?? 0,
+                          max: 100,
+                          onChanged: level == null
+                              ? null
+                              : (v) {
+                                  _armVolumeClose();
+                                  setState(() => _volumeDrag = v);
+                                },
+                          onChangeEnd: level == null ? null : _setVolume,
                         ),
-                        trackShape: const RectangularSliderTrackShape(),
-                      ),
-                      child: Slider(
-                        semanticFormatterCallback: (value) =>
-                            '${l10n(context).mediaVolume}: ${value.round()}%',
-                        value: level ?? 0,
-                        max: 100,
-                        onChanged: level == null
-                            ? null
-                            : (v) {
-                                _armVolumeClose();
-                                setState(() => _volumeDrag = v);
-                              },
-                        onChangeEnd: level == null ? null : _setVolume,
                       ),
                     ),
                   ),
@@ -2628,6 +3027,7 @@ class _NowPlayingControlsState extends State<_NowPlayingControls> {
               container: c,
               scale: scale,
               active: !volumeOpen,
+              shadows: widget.shadows,
             ),
           ),
           if (compact) ...[
@@ -2692,10 +3092,12 @@ class _NowPlayingProgress extends StatefulWidget {
     required this.container,
     required this.scale,
     required this.active,
+    this.shadows,
   });
   final AppContainer container;
   final double scale;
   final bool active;
+  final List<Shadow>? shadows;
 
   @override
   State<_NowPlayingProgress> createState() => _NowPlayingProgressState();
@@ -2714,8 +3116,9 @@ class _NowPlayingProgressState extends State<_NowPlayingProgress> {
   /// A seek just sent, held on screen until the next position report
   /// replaces it, so the bar does not snap back for the beat the round
   /// trip takes. The local engine adopts the target itself (Music
-  /// Assistant sends no fresh progress after a seek), so the report that
-  /// replaces this one already agrees with it.
+  /// Assistant sends no fresh progress after a seek) and reports it when
+  /// the restarted stream's music plays, so the bar stands still at the
+  /// target through the silence before it.
   int? _seekMs;
   int? _seekAt;
 
@@ -2772,7 +3175,7 @@ class _NowPlayingProgressState extends State<_NowPlayingProgress> {
   }
 
   Future<void> _seek(double ms) async {
-    final target = ms.round();
+    final target = c.sendspin.seekTarget(ms.round());
     setState(() {
       _dragMs = null;
       _dragging = false;
@@ -2797,15 +3200,15 @@ class _NowPlayingProgressState extends State<_NowPlayingProgress> {
     final bookDuration = (now['durationMs'] as num?)?.toInt() ?? 0;
     // Live position: the last report plus the wall time since, the way
     // the card and the lyrics extrapolate it; a seek in flight shows its
-    // target for at most a few seconds.
+    // target, still, for at most a few seconds.
     var position = (now['positionMs'] as num?)?.toInt() ?? 0;
     final receivedAt = (now['receivedAt'] as num?)?.toInt();
     final wall = DateTime.now().millisecondsSinceEpoch;
     if (playing && receivedAt != null) position += wall - receivedAt;
     final seekAt = _seekAt;
     if (_seekMs != null && seekAt != null) {
-      if (wall - seekAt < 4000) {
-        position = _seekMs! + (playing ? wall - seekAt : 0);
+      if (wall - seekAt < 6000) {
+        position = _seekMs!;
       } else {
         _seekMs = null;
         _seekAt = null;
@@ -2837,6 +3240,7 @@ class _NowPlayingProgressState extends State<_NowPlayingProgress> {
       color: Colors.white70,
       fontSize: 17 * scale,
       fontFeatures: const [FontFeature.tabularFigures()],
+      shadows: widget.shadows,
     );
 
     if (duration <= 0) return const SizedBox.shrink();
@@ -2853,44 +3257,50 @@ class _NowPlayingProgressState extends State<_NowPlayingProgress> {
             ),
           SizedBox(
             height: 24 * scale,
-            child: SliderTheme(
-              data: SliderThemeData(
-                trackHeight: 4 * scale,
-                activeTrackColor: Colors.white,
-                inactiveTrackColor: Colors.white30,
-                disabledActiveTrackColor: Colors.white,
-                disabledInactiveTrackColor: Colors.white30,
-                thumbColor: Colors.white,
-                disabledThumbColor: Colors.transparent,
-                overlayColor: Colors.white24,
-                // No thumb where a seek cannot land: the bar reads as
-                // the card's progress line then.
-                thumbShape: RoundSliderThumbShape(
-                  enabledThumbRadius: 7 * scale,
-                  disabledThumbRadius: 0,
+            child: _trackShadow(
+              scale: scale,
+              shadows: widget.shadows,
+              child: SliderTheme(
+                data: SliderThemeData(
+                  trackHeight: 4 * scale,
+                  activeTrackColor: Colors.white,
+                  inactiveTrackColor: Colors.white30,
+                  disabledActiveTrackColor: Colors.white,
+                  disabledInactiveTrackColor: Colors.white30,
+                  thumbColor: Colors.white,
+                  disabledThumbColor: Colors.transparent,
+                  overlayColor: Colors.white24,
+                  // No thumb where a seek cannot land: the bar reads as
+                  // the card's progress line then.
+                  thumbShape: RoundSliderThumbShape(
+                    enabledThumbRadius: 7 * scale,
+                    disabledThumbRadius: 0,
+                  ),
+                  overlayShape: RoundSliderOverlayShape(
+                    overlayRadius: 16 * scale,
+                  ),
+                  trackShape: const RectangularSliderTrackShape(),
                 ),
-                overlayShape: RoundSliderOverlayShape(
-                  overlayRadius: 16 * scale,
+                child: Slider(
+                  semanticFormatterCallback: (value) =>
+                      '${l10n(context).mediaPlaybackPosition}: ${_clock(value.round())}',
+                  value: shown,
+                  max: duration.toDouble(),
+                  onChangeStart: canSeek
+                      ? (_) => setState(() {
+                          _dragging = true;
+                          _dragChapter = chapter;
+                        })
+                      : null,
+                  onChanged: canSeek
+                      ? (v) => setState(() => _dragMs = v)
+                      : null,
+                  onChangeEnd: canSeek
+                      ? (v) => _seek(
+                          chapter?.absolutePosition(v.round()).toDouble() ?? v,
+                        )
+                      : null,
                 ),
-                trackShape: const RectangularSliderTrackShape(),
-              ),
-              child: Slider(
-                semanticFormatterCallback: (value) =>
-                    '${l10n(context).mediaPlaybackPosition}: ${_clock(value.round())}',
-                value: shown,
-                max: duration.toDouble(),
-                onChangeStart: canSeek
-                    ? (_) => setState(() {
-                        _dragging = true;
-                        _dragChapter = chapter;
-                      })
-                    : null,
-                onChanged: canSeek ? (v) => setState(() => _dragMs = v) : null,
-                onChangeEnd: canSeek
-                    ? (v) => _seek(
-                        chapter?.absolutePosition(v.round()).toDouble() ?? v,
-                      )
-                    : null,
               ),
             ),
           ),
@@ -2915,6 +3325,48 @@ class _NowPlayingProgressState extends State<_NowPlayingProgress> {
       ),
     );
   }
+}
+
+/// Drop shadows for the track details and controls the album art only
+/// layout draws over the cover. Tight and nearly opaque, so they read as an edge
+/// around the white rather than a glow that a busy cover swallows.
+const _overArtShadows = [
+  Shadow(color: Color(0xE6000000), offset: Offset(0, 1), blurRadius: 2),
+  Shadow(color: Color(0x99000000), blurRadius: 1),
+];
+
+/// [child], a now-playing slider, with [shadows] under its track. The
+/// track spans the slider less its 16 point overlay radius a side.
+Widget _trackShadow({
+  required double scale,
+  required List<Shadow>? shadows,
+  required Widget child,
+}) {
+  if (shadows == null) return child;
+  return Stack(
+    fit: StackFit.expand,
+    alignment: Alignment.center,
+    children: [
+      Positioned(
+        left: 16 * scale,
+        right: 16 * scale,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            boxShadow: [
+              for (final shadow in shadows)
+                BoxShadow(
+                  color: shadow.color,
+                  offset: shadow.offset,
+                  blurRadius: shadow.blurRadius,
+                ),
+            ],
+          ),
+          child: SizedBox(height: 4 * scale),
+        ),
+      ),
+      child,
+    ],
+  );
 }
 
 /// Shared by the floating card and the full-screen view: the manager's

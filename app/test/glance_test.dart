@@ -29,6 +29,9 @@ class _RecordingHa extends HomeAssistantManager {
     List<String> entityIds,
     void Function(String entityId, Map<String, Object?> state) onState, {
     void Function(Map<String, int> precisions)? onPrecision,
+    String? translationDomain,
+    void Function(Map<String, String> translations)? onTranslations,
+    void Function(EntityStateLabels labels)? onStateLabels,
   }) async {
     attempts.add(List.of(entityIds));
     return null;
@@ -378,21 +381,23 @@ void main() {
     }
   });
 
-  test('the appearance rows sit in their own group at the subpage end', () {
+  test('the entities and appearance rows sit in their own groups', () {
     final glancePage = defs.allSettings
         .where((d) => d.subpage == 'At a Glance')
         .toList();
-    // The behavior rows lead under the subpage's own heading; the
-    // Appearance group closes the page.
+    // The switches lead under the subpage's own heading, the entities get
+    // a group of their own and the Appearance group closes the page.
     expect(
       [for (final d in glancePage) d.section],
       [
         'At a Glance',
         'At a Glance',
-        'At a Glance',
+        'Entities',
         ...List.filled(6, 'Appearance'),
       ],
     );
+    expect(glancePage[1], defs.screensaverGlanceNowPlaying);
+    expect(glancePage[2], defs.screensaverGlanceEntities);
     expect(glancePage.last.section, 'Appearance');
   });
 
@@ -587,6 +592,31 @@ void main() {
       await pump(tester, narrow: true);
       // Narrowed: the width cap breaks the chips onto two lines.
       expect({for (var i = 0; i < 4; i++) top(i)}.length, 2);
+    });
+
+    // Issue #916: the overlay checks this against the room the Immich
+    // metadata leaves, so a row given exactly this much has to fit.
+    testWidgets('the compact width holds two columns of chips', (tester) async {
+      await pump(tester);
+      final context = tester.element(find.byType(GlanceRow));
+      final compact = GlanceRow.compactWidth(context, container, 1);
+      final spread = tester.getSize(find.byType(Row).first).width;
+      expect(compact, lessThan(spread));
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: compact,
+                child: GlanceRow(container: container, narrow: true),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      double left(int i) => tester.getTopLeft(find.text('Entity $i')).dx;
+      expect({for (var i = 0; i < 4; i++) left(i)}.length, 2);
     });
 
     testWidgets('the Row scaling slider sizes the whole row', (tester) async {

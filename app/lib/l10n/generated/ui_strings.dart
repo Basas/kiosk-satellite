@@ -10,6 +10,7 @@ import 'ui_strings_en.dart';
 import 'ui_strings_es.dart';
 import 'ui_strings_fr.dart';
 import 'ui_strings_nl.dart';
+import 'ui_strings_ru.dart';
 import 'ui_strings_uk.dart';
 import 'ui_strings_zh.dart';
 
@@ -103,6 +104,7 @@ abstract class UiStrings {
     Locale('es'),
     Locale('fr'),
     Locale('nl'),
+    Locale('ru'),
     Locale('uk'),
     Locale('zh'),
     Locale('zh', 'CN'),
@@ -660,6 +662,336 @@ abstract class UiStrings {
   /// **'No launchable apps found.'**
   String get launcherEmpty;
 
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Search apps'**
+  String get launcherSearchApps;
+
+  /// Name of the calendar feature: the kiosk menu entry and the calendar's eyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTitle;
+
+  /// View switcher segment and Default view choice: one day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get calendarViewDay;
+
+  /// View switcher segment and Default view choice: one week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get calendarViewWeek;
+
+  /// View switcher segment and Default view choice: one month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get calendarViewMonth;
+
+  /// View switcher segment and Default view choice: a list of the coming days.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get calendarViewSchedule;
+
+  /// Button that jumps back to today, and the label over today's events.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get calendarToday;
+
+  /// Label over tomorrow's events in the Schedule view.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get calendarTomorrow;
+
+  /// Tooltip of the arrow that goes back one day, week or month.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get calendarPrevious;
+
+  /// Tooltip of the arrow that goes ahead one day, week or month.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get calendarNext;
+
+  /// An event without a time, and the Day view's row for those events.
+  ///
+  /// In en, this message translates to:
+  /// **'All day'**
+  String get calendarAllDay;
+
+  /// A month day with more events than fit. {count} is how many are left out.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String calendarMore(String count);
+
+  /// Heading of the next event today, in the Schedule view and the screensaver widget.
+  ///
+  /// In en, this message translates to:
+  /// **'Up next'**
+  String get calendarUpNext;
+
+  /// How soon the next event starts. {duration} reads like 50 min or 2 h 10 min.
+  ///
+  /// In en, this message translates to:
+  /// **'in {duration}'**
+  String calendarStartsIn(String duration);
+
+  /// The next event has already started.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get calendarHappeningNow;
+
+  /// Heading of the rest of today's events in the Schedule view.
+  ///
+  /// In en, this message translates to:
+  /// **'Later today'**
+  String get calendarLaterToday;
+
+  /// Today has no more events.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing else today'**
+  String get calendarNothingElseToday;
+
+  /// A day or a span without events.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned'**
+  String get calendarNothingPlanned;
+
+  /// A week without events in the Week view.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned this week'**
+  String get calendarNothingThisWeek;
+
+  /// Shown when no calendar is added.
+  ///
+  /// In en, this message translates to:
+  /// **'No calendars yet'**
+  String get calendarEmptyTitle;
+
+  /// Under No calendars yet in the calendar itself.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the Home Assistant calendars to show in Settings > Calendar.'**
+  String get calendarEmptyHint;
+
+  /// Banner while the calendar cannot reach Home Assistant. {time} is when the events were last updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant is not reachable. Showing the events from {time}.'**
+  String calendarOffline(String time);
+
+  /// An event's start and end time.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} to {end}'**
+  String calendarTimeRange(String start, String end);
+
+  /// Two calendars sharing an event, or the last two of several.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} and {second}'**
+  String calendarPeopleTwo(String first, String second);
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get calendarRepeatsDaily;
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every week'**
+  String get calendarRepeatsWeekly;
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every month'**
+  String get calendarRepeatsMonthly;
+
+  /// How a repeating event repeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Every year'**
+  String get calendarRepeatsYearly;
+
+  /// A repeating event whose rule has no simple name.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeats'**
+  String get calendarRepeats;
+
+  /// Closes an event's details.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get calendarDone;
+
+  /// Heading of the list of calendars the kiosk shows.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendars'**
+  String get calendarCalendarsSection;
+
+  /// Button that picks a Home Assistant calendar to show.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a calendar'**
+  String get calendarAdd;
+
+  /// Toast when the picked calendar was added before.
+  ///
+  /// In en, this message translates to:
+  /// **'That calendar is already on the list.'**
+  String get calendarAlreadyAdded;
+
+  /// Row that shows the calendar on this kiosk.
+  ///
+  /// In en, this message translates to:
+  /// **'Open calendar'**
+  String get calendarOpen;
+
+  /// Under Open calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the calendar on this kiosk.'**
+  String get calendarOpenHint;
+
+  /// Field for the name on the calendar's chip.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get calendarEditName;
+
+  /// Heading of the calendar's color choices.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get calendarEditColor;
+
+  /// Field for the Home Assistant person the calendar belongs to.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get calendarEditPerson;
+
+  /// Under Person.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows their picture on the calendar chips.'**
+  String get calendarEditPersonHint;
+
+  /// No person picked.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get calendarEditPersonNone;
+
+  /// Title of the calendar picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a calendar'**
+  String get calendarPickCalendar;
+
+  /// Title of the person picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a person'**
+  String get calendarPickPerson;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Teal'**
+  String get calendarColorTeal;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Rust'**
+  String get calendarColorRust;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get calendarColorBlue;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Plum'**
+  String get calendarColorPlum;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Ochre'**
+  String get calendarColorOchre;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Sage'**
+  String get calendarColorSage;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Rose'**
+  String get calendarColorRose;
+
+  /// A calendar color.
+  ///
+  /// In en, this message translates to:
+  /// **'Slate'**
+  String get calendarColorSlate;
+
+  /// Picks any other color.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get calendarColorCustom;
+
+  /// How many coming events the Up next widget lists.
+  ///
+  /// In en, this message translates to:
+  /// **'Events shown'**
+  String get calendarWidgetEvents;
+
+  /// Heading of the group about managing the calendar by voice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice Calendar'**
+  String get calendarVoiceSection;
+
+  /// Row that opens the guide to adding and changing calendar events by voice. Keep Voice Satellite unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage the calendar using Voice Satellite'**
+  String get calendarVoiceManage;
+
+  /// Description under that row. Keep Kiosk Satellite and Home Assistant unchanged. A blueprint is a Home Assistant template for a script.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs the Kiosk Satellite calendar blueprint and an LLM conversation agent in Home Assistant.'**
+  String get calendarVoiceHint;
+
   /// Page title.
   ///
   /// In en, this message translates to:
@@ -1020,6 +1352,168 @@ abstract class UiStrings {
   /// **'Select all'**
   String get commonSelectAll;
 
+  /// Search box hint in the dashboard view picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search views'**
+  String get dashboardPickerSearch;
+
+  /// Search box hint where the picker lists dashboards first.
+  ///
+  /// In en, this message translates to:
+  /// **'Search dashboards and views'**
+  String get dashboardPickerSearchAll;
+
+  /// Heading over the view chosen now.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get dashboardPickerCurrent;
+
+  /// Heading over the list of Home Assistant dashboards.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboards'**
+  String get dashboardPickerDashboards;
+
+  /// Heading over a dashboard's subviews (views opened from a card, not the tabs).
+  ///
+  /// In en, this message translates to:
+  /// **'Subviews'**
+  String get dashboardPickerSubviews;
+
+  /// Tag on a view that is a Home Assistant subview.
+  ///
+  /// In en, this message translates to:
+  /// **'Subview'**
+  String get dashboardPickerSubview;
+
+  /// Choice for a dashboard that has no views of its own to pick.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole dashboard'**
+  String get dashboardPickerWhole;
+
+  /// Second line of a dashboard Home Assistant generates on the fly (a strategy dashboard).
+  ///
+  /// In en, this message translates to:
+  /// **'Builds its own views'**
+  String get dashboardPickerBuildsOwn;
+
+  /// Second line of an app from the Home Assistant sidebar, such as Music Assistant, whose web page Home Assistant shows through ingress.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingress page'**
+  String get dashboardPickerIngressPage;
+
+  /// Note under the Whole dashboard choice.
+  ///
+  /// In en, this message translates to:
+  /// **'This dashboard builds its own views, so the kiosk opens it whole.'**
+  String get dashboardPickerWholeHelp;
+
+  /// How many views a dashboard has, two or more.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} views'**
+  String dashboardPickerViewCount(String count);
+
+  /// A dashboard with a single view.
+  ///
+  /// In en, this message translates to:
+  /// **'1 view'**
+  String get dashboardPickerOneView;
+
+  /// Title when the dashboards cannot be listed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach Home Assistant'**
+  String get dashboardPickerOffline;
+
+  /// Message when the dashboards cannot be listed.
+  ///
+  /// In en, this message translates to:
+  /// **'The dashboards load once the connection is back.'**
+  String get dashboardPickerOfflineHelp;
+
+  /// Button that lists the dashboards again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get dashboardPickerTryAgain;
+
+  /// Title when Home Assistant has no dashboards.
+  ///
+  /// In en, this message translates to:
+  /// **'No dashboards yet'**
+  String get dashboardPickerEmpty;
+
+  /// Message when Home Assistant has no dashboards.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboards you add in Home Assistant show up here.'**
+  String get dashboardPickerEmptyHelp;
+
+  /// Shown when a search finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No views match'**
+  String get dashboardPickerNoMatch;
+
+  /// How many views are picked for the rotation.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String dashboardPickerSelected(String count);
+
+  /// Button that keeps the picked views.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get dashboardPickerDone;
+
+  /// Tag on the view the kiosk shows right now.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing'**
+  String get dashboardPickerShowing;
+
+  /// Shown under a setting whose stored view no longer exists.
+  ///
+  /// In en, this message translates to:
+  /// **'This view is gone from Home Assistant. Choose another.'**
+  String get dashboardPickerMissing;
+
+  /// Row that opens the picker to add views to the rotation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add views'**
+  String get dashboardPickerAddViews;
+
+  /// Setting name: the view the kiosk shows when it starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Default dashboard'**
+  String get dashboardPickerDefault;
+
+  /// Description of the Default dashboard setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The view the kiosk shows when it starts.'**
+  String get dashboardPickerDefaultHelp;
+
+  /// How many custom pages the Custom Pages entry lists, exactly one.
+  ///
+  /// In en, this message translates to:
+  /// **'1 page'**
+  String get dashboardPickerOnePage;
+
+  /// How many custom pages the Custom Pages entry lists, two or more.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} pages'**
+  String dashboardPickerPageCount(String count);
+
   /// Playback failure caused by the device video decoder.
   ///
   /// In en, this message translates to:
@@ -1332,6 +1826,66 @@ abstract class UiStrings {
   /// **'No release notes.'**
   String get drawerNoReleaseNotes;
 
+  /// Heading over entities that are in no Home Assistant area.
+  ///
+  /// In en, this message translates to:
+  /// **'No area'**
+  String get entityPickerNoArea;
+
+  /// Filter chip that shows every kind of entity or every source.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get entityPickerAll;
+
+  /// Empty value of a setting that stores a Home Assistant entity.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an entity'**
+  String get entityPickerChoose;
+
+  /// Shown when a search or filter finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches'**
+  String get entityPickerNoMatch;
+
+  /// Message when Home Assistant's entities cannot be listed.
+  ///
+  /// In en, this message translates to:
+  /// **'The entities load once the connection is back.'**
+  String get entityPickerOfflineHelp;
+
+  /// Shown under a setting whose stored entity no longer exists.
+  ///
+  /// In en, this message translates to:
+  /// **'This entity is gone from Home Assistant. Choose another.'**
+  String get entityPickerMissing;
+
+  /// Note under the picked entities, which can be reordered.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag or use the arrows to change the order.'**
+  String get entityPickerOrderHint;
+
+  /// Shown when the most entities that can be picked are picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove one to add another.'**
+  String get entityPickerFull;
+
+  /// Row that opens the picker to add entities.
+  ///
+  /// In en, this message translates to:
+  /// **'Add entities'**
+  String get entityPickerAdd;
+
+  /// How many entities are picked out of the most allowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing {count} of {max}'**
+  String entityPickerShowing(String count, String max);
+
   /// Summary when no entities are excluded.
   ///
   /// In en, this message translates to:
@@ -1493,6 +2047,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Uploaded'**
   String get filesUploaded;
+
+  /// Translate the visible message. Keep placeholders and any technical names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading {current} of {total}…'**
+  String filesUploadingProgress(String current, String total);
+
+  /// Translate the visible message. Keep placeholders and any technical names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} files uploaded'**
+  String filesUploadedCount(String count);
 
   /// Translate the visible message. Keep placeholders and any technical names unchanged.
   ///
@@ -2458,6 +3024,24 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
+  /// **'Plugins: {names}'**
+  String fleetPluginsNames(String names);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not install {name}: {reason}'**
+  String fleetCouldNotInstallNameReason(String name, String reason);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Reinstall {name} on this kiosk to sync it'**
+  String fleetReinstallNameOnThisKioskToSyncIt(String name);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Switch kiosk'**
   String get fleetSwitchKiosk;
 
@@ -2626,6 +3210,30 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
+  /// **'Plugins'**
+  String get fleetPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Plugin secrets'**
+  String get fleetPluginSecrets;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'No plugins installed on this kiosk'**
+  String get fleetNoPluginsInstalledOnThisKiosk;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosks on this profile install these and take their settings from this kiosk.'**
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Update the fleet'**
   String get fleetUpdateTheFleet;
 
@@ -2722,6 +3330,18 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'Accept intercom call'**
+  String get gestureIntercomAnswer;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline intercom call'**
+  String get gestureIntercomDecline;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Stop the alarm'**
   String get gestureAlarmStop;
 
@@ -2748,6 +3368,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Toggle hold mode'**
   String get gestureHoldMode;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh the dashboard'**
+  String get gestureRefresh;
 
   /// Label or guidance in this section.
   ///
@@ -2784,6 +3410,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Open Android Settings'**
   String get gestureAndroidSettings;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the calendar'**
+  String get gestureOpenCalendar;
+
+  /// Gesture action that opens the Music Library.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Music Library'**
+  String get gestureOpenMusicLibrary;
 
   /// Label or guidance in this section.
   ///
@@ -2860,30 +3498,6 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'No dashboards'**
-  String get gestureNoDashboards;
-
-  /// Label or guidance in this section.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not list dashboards'**
-  String get gestureDashboardsFailed;
-
-  /// Label or guidance in this section.
-  ///
-  /// In en, this message translates to:
-  /// **'Is Home Assistant connected?'**
-  String get gestureHaConnected;
-
-  /// Label or guidance in this section.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not list dashboards. Is Home Assistant connected?'**
-  String get gestureDashboardsHelp;
-
-  /// Label or guidance in this section.
-  ///
-  /// In en, this message translates to:
   /// **'Camera view'**
   String get gestureCameraTitle;
 
@@ -2910,6 +3524,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'No kiosk found on the network yet.'**
   String get gestureIntercomEmpty;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a voice command'**
+  String get gestureVoiceWake;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop the voice assistant'**
+  String get gestureVoiceStop;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute or unmute Voice Satellite'**
+  String get gestureVoiceMute;
 
   /// Label or guidance in this section.
   ///
@@ -3052,6 +3684,24 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'Press the {button} button'**
+  String gestureDescribeButtonPress(String button);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Double-press the {button} button'**
+  String gestureDescribeButtonDouble(String button);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the {button} button'**
+  String gestureDescribeButtonHold(String button);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Looks good.'**
   String get gestureValid;
 
@@ -3100,12 +3750,6 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'Domain'**
-  String get gestureDomain;
-
-  /// Label or guidance in this section.
-  ///
-  /// In en, this message translates to:
   /// **'Entity (optional)'**
   String get gestureEntityOptional;
 
@@ -3120,12 +3764,6 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Call a Home Assistant service'**
   String get gestureServiceTitle;
-
-  /// Label or guidance in this section.
-  ///
-  /// In en, this message translates to:
-  /// **'Domain and service are required.'**
-  String get gestureServiceRequired;
 
   /// Label or guidance in this section.
   ///
@@ -3162,6 +3800,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Event data must be a JSON object.'**
   String get gestureEventJson;
+
+  /// Hint in the search box of the service picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Search services'**
+  String get gestureServiceSearch;
+
+  /// Empty value of the Service field, and the message when the gesture is saved without one.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a service'**
+  String get gestureServiceChoose;
+
+  /// Shown in the Entity field when the picked service acts on no entity.
+  ///
+  /// In en, this message translates to:
+  /// **'Not used by this service'**
+  String get gestureServiceNoEntity;
 
   /// Label or guidance in this section.
   ///
@@ -3612,6 +4268,36 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Enable a plugin with triggers in Plugin Manager first.'**
   String get gesturePluginTriggerHelp;
+
+  /// Gesture type and field label: a hardware button of a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Button'**
+  String get gestureButton;
+
+  /// Field label and option: how the button is pressed (a single press).
+  ///
+  /// In en, this message translates to:
+  /// **'Press'**
+  String get gesturePress;
+
+  /// Option: two presses of the button in quick succession.
+  ///
+  /// In en, this message translates to:
+  /// **'Double press'**
+  String get gestureDoublePress;
+
+  /// Option: the button held down.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold'**
+  String get gestureHoldPress;
+
+  /// Note under the gesture list on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'A button press no gesture claims keeps its own job: Action answers, stops or dismisses what is ringing and otherwise starts a voice command, Microphone mutes Voice Satellite and the volume buttons change the volume.'**
+  String get gestureButtonDefaults;
 
   /// Label or guidance in this section.
   ///
@@ -4369,6 +5055,546 @@ abstract class UiStrings {
   /// **'unknown'**
   String get logsUnknown;
 
+  /// Name of the Music Library feature: the kiosk menu entry, the overlay's eyebrow and the Allowed Actions switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Library'**
+  String get libraryTitle;
+
+  /// Label of the picker for where the library lists music from: Music Assistant, Home Assistant or Sonos.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get librarySource;
+
+  /// Source name.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Assistant'**
+  String get librarySourceMa;
+
+  /// Source name.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant'**
+  String get librarySourceHa;
+
+  /// Source name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonos'**
+  String get librarySourceSonos;
+
+  /// What the Music Assistant source offers, under its name in the source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Library, search and radio'**
+  String get librarySourceMaHint;
+
+  /// What the Home Assistant source offers: the media the picked speaker's integration lists.
+  ///
+  /// In en, this message translates to:
+  /// **'Media from each speaker'**
+  String get librarySourceHaHint;
+
+  /// What the Sonos source offers: My Sonos favorites, Sonos playlists and the indexed music library.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites and playlists'**
+  String get librarySourceSonosHint;
+
+  /// Navigation entry and page title: recommendations and recently played music.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get libraryDiscover;
+
+  /// Navigation entry: search the source.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get librarySearch;
+
+  /// Navigation entry and page title: the source's own folders.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse'**
+  String get libraryBrowse;
+
+  /// Navigation entry and sidebar heading over the library lists (artists, albums and so on).
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get libraryLibrary;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists'**
+  String get libraryArtists;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get libraryAlbums;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracks'**
+  String get libraryTracks;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlists'**
+  String get libraryPlaylists;
+
+  /// Library list and search filter: radio stations.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio'**
+  String get libraryRadio;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Podcasts'**
+  String get libraryPodcasts;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Audiobooks'**
+  String get libraryAudiobooks;
+
+  /// Sonos library list: My Sonos favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get libraryFavorites;
+
+  /// Sonos library list: playlists saved in the Sonos app.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonos playlists'**
+  String get librarySonosPlaylists;
+
+  /// Discover shelf title.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently played'**
+  String get libraryRecentlyPlayed;
+
+  /// Discover shelf title.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently added'**
+  String get libraryRecentlyAdded;
+
+  /// Search results shelf for entries of other kinds.
+  ///
+  /// In en, this message translates to:
+  /// **'More results'**
+  String get libraryMoreResults;
+
+  /// Heading over an artist's most played tracks.
+  ///
+  /// In en, this message translates to:
+  /// **'Top tracks'**
+  String get libraryTopTracks;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Artist'**
+  String get libraryKindArtist;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get libraryKindAlbum;
+
+  /// What a search result is.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get libraryKindTrack;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist'**
+  String get libraryKindPlaylist;
+
+  /// What a search result is: a radio station.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio'**
+  String get libraryKindRadio;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Podcast'**
+  String get libraryKindPodcast;
+
+  /// What a search result is: a podcast episode.
+  ///
+  /// In en, this message translates to:
+  /// **'Episode'**
+  String get libraryKindEpisode;
+
+  /// What a search result is.
+  ///
+  /// In en, this message translates to:
+  /// **'Audiobook'**
+  String get libraryKindAudiobook;
+
+  /// Album facts: an album with one track.
+  ///
+  /// In en, this message translates to:
+  /// **'1 track'**
+  String get libraryOneTrack;
+
+  /// Album facts: how many tracks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} tracks'**
+  String libraryTrackCount(String count);
+
+  /// Album facts: total length under an hour.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String libraryMinutes(String minutes);
+
+  /// Album facts: total length of an hour or more.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String libraryHoursMinutes(String hours, String minutes);
+
+  /// Placeholder of the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists, albums, tracks'**
+  String get librarySearchHint;
+
+  /// Tooltip of the button that empties the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get librarySearchClear;
+
+  /// Search filter chip: every kind of result.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get librarySearchAll;
+
+  /// Shown before anything is typed in the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for artists, albums, tracks and more.'**
+  String get librarySearchPrompt;
+
+  /// A list, folder or search with no entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet.'**
+  String get libraryEmpty;
+
+  /// A list or page failed to load. The error follows on the next line.
+  ///
+  /// In en, this message translates to:
+  /// **'This could not be loaded.'**
+  String get libraryLoadFailed;
+
+  /// No source is configured on this device.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up Music Assistant, Home Assistant or a Sonos speaker to browse music.'**
+  String get libraryNoSource;
+
+  /// Home Assistant source with no speaker picked: the media tree belongs to the speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a speaker to see the media it can play.'**
+  String get libraryHaPickSpeaker;
+
+  /// Speaker pill label and button when no speaker of the source is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a speaker'**
+  String get libraryChooseSpeaker;
+
+  /// Prompt over the Speakers sheet when a play needs a speaker first.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the speaker to play on.'**
+  String get libraryPickSpeakerHint;
+
+  /// Button: play the album, playlist or artist, replacing the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get libraryPlay;
+
+  /// Player bar button.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Now Playing'**
+  String get libraryOpenNowPlaying;
+
+  /// Player bar with no track.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing playing'**
+  String get libraryNothingPlaying;
+
+  /// Tooltip of the menu button on a row or a page.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get libraryMore;
+
+  /// Menu action: play now, keeping the rest of the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Play now'**
+  String get libraryPlayNow;
+
+  /// Menu action: play after the current track.
+  ///
+  /// In en, this message translates to:
+  /// **'Play next'**
+  String get libraryPlayNext;
+
+  /// Menu action: add to the end of the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to queue'**
+  String get libraryAddToQueue;
+
+  /// Menu action and button: play and keep going with similar music.
+  ///
+  /// In en, this message translates to:
+  /// **'Start radio'**
+  String get libraryStartRadio;
+
+  /// Menu action.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to artist'**
+  String get libraryGoToArtist;
+
+  /// Menu action.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favorites'**
+  String get libraryAddFavorite;
+
+  /// Menu action.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get libraryRemoveFavorite;
+
+  /// Toast after Add to favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites'**
+  String get libraryAddedFavorite;
+
+  /// Toast after Remove from favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get libraryRemovedFavorite;
+
+  /// Toast when the favorite change failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites could not be changed'**
+  String get libraryFavoriteFailed;
+
+  /// Toast after Play next.
+  ///
+  /// In en, this message translates to:
+  /// **'Plays next'**
+  String get libraryPlaysNext;
+
+  /// Toast after Add to queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to queue'**
+  String get libraryAddedToQueue;
+
+  /// Toast action: open Now Playing with the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get libraryView;
+
+  /// Toast when a play failed. The error follows.
+  ///
+  /// In en, this message translates to:
+  /// **'This could not be played'**
+  String get libraryPlayFailed;
+
+  /// Title of the Speakers sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Speakers'**
+  String get librarySpeakers;
+
+  /// Label over the name of the speaker the music plays on, in the Speakers sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing on'**
+  String get libraryPlayingOn;
+
+  /// Heading over the speakers that can be picked instead.
+  ///
+  /// In en, this message translates to:
+  /// **'Other speakers'**
+  String get libraryOtherSpeakers;
+
+  /// The source has no other speakers to pick.
+  ///
+  /// In en, this message translates to:
+  /// **'No other speakers.'**
+  String get libraryNoOtherSpeakers;
+
+  /// Under the name of this device's own player in the Speakers sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get libraryThisDevice;
+
+  /// Under the name of a speaker that is offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get libraryUnavailable;
+
+  /// Button that opens the list of speakers to group with the playing one.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get libraryGroup;
+
+  /// Label of the volume slider for the whole group.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get libraryGroupAll;
+
+  /// Title of the grouping dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Group with {speaker}'**
+  String libraryGroupWith(String speaker);
+
+  /// Text in the grouping dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Grouped speakers play the same music in sync.'**
+  String get libraryGroupHint;
+
+  /// A group's name: the leading speaker and how many others play with it.
+  ///
+  /// In en, this message translates to:
+  /// **'{speaker} + {count}'**
+  String libraryGroupName(String speaker, String count);
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Music Library entry to the kiosk menu.'**
+  String get settingLibraryMenuDescription;
+
+  /// Allowed Actions switch description.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse music and play it on a speaker.'**
+  String get settingKioskAllowMusicLibraryDescription;
+
+  /// Hint under the Music Library entry on the Media Player settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse music and play it on a speaker'**
+  String get libraryPageHint;
+
+  /// Setting description. Automatic is the first choice of the Source setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the library lists music from. Automatic starts with the source of the speaker Now Playing follows.'**
+  String get settingLibrarySourceDescription;
+
+  /// Setting label: the Music Library button on the Now Playing view.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on Now Playing'**
+  String get settingLibraryNowPlayingButtonTitle;
+
+  /// Setting description. The close button is the one on the Now Playing view.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Music Library button next to the close button.'**
+  String get settingLibraryNowPlayingButtonDescription;
+
+  /// Title of the queue panel in the Music Library.
+  ///
+  /// In en, this message translates to:
+  /// **'Queue'**
+  String get libraryQueueTitle;
+
+  /// Tooltip of the button that closes the queue panel.
+  ///
+  /// In en, this message translates to:
+  /// **'Close queue'**
+  String get libraryCloseQueue;
+
+  /// Button that empties the queue, and the confirm button of its dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get libraryClear;
+
+  /// Title of the dialog that confirms emptying the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear the queue?'**
+  String get libraryClearQueueTitle;
+
+  /// Text of the dialog that confirms emptying the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'The music stops and every track leaves the queue.'**
+  String get libraryClearQueueMessage;
+
+  /// Menu action on a queue row.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from queue'**
+  String get libraryRemoveFromQueue;
+
+  /// Accessibility label of the handle that moves a queue row.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder'**
+  String get libraryReorder;
+
+  /// Toast when moving, removing or clearing failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The queue could not be changed'**
+  String get libraryQueueFailed;
+
   /// Heading when the device has a network but the dashboard failed to load.
   ///
   /// In en, this message translates to:
@@ -4591,6 +5817,42 @@ abstract class UiStrings {
   /// **'command not supported or not sent'**
   String get mediaCannotControl;
 
+  /// Badge for lossless audio above CD quality (more than 16 bits or 48 kHz).
+  ///
+  /// In en, this message translates to:
+  /// **'Hi-Res'**
+  String get mediaAudioHiRes;
+
+  /// Badge for lossless audio at 16 bits and 44.1 or 48 kHz.
+  ///
+  /// In en, this message translates to:
+  /// **'CD quality'**
+  String get mediaAudioCdQuality;
+
+  /// Badge for compressed audio such as AAC, Vorbis or MP3.
+  ///
+  /// In en, this message translates to:
+  /// **'Lossy'**
+  String get mediaAudioLossy;
+
+  /// Bit depth of the playing audio, for example 24-bit.
+  ///
+  /// In en, this message translates to:
+  /// **'{bits}-bit'**
+  String mediaAudioBitDepth(String bits);
+
+  /// Sample rate of the playing audio, for example 96 kHz.
+  ///
+  /// In en, this message translates to:
+  /// **'{rate} kHz'**
+  String mediaAudioSampleRate(String rate);
+
+  /// Bitrate of the playing audio, for example 320 kbps.
+  ///
+  /// In en, this message translates to:
+  /// **'{rate} kbps'**
+  String mediaAudioBitRate(String rate);
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -4651,6 +5913,24 @@ abstract class UiStrings {
   /// **'Close {name}'**
   String pluginCloseWindow(String name);
 
+  /// Scanner heading when the plugin that opened the scanner gives none. A code is a barcode or a QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a code'**
+  String get pluginScanTitle;
+
+  /// Help under the scanner heading when the plugin gives none.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the code inside the frame.'**
+  String get pluginScanHelp;
+
+  /// Says which plugin opened the scanner. The placeholder is the plugin's name.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested by {name}'**
+  String pluginScanSource(String name);
+
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
@@ -4696,20 +5976,26 @@ abstract class UiStrings {
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
-  /// **'Select an entity'**
-  String get pluginSelectAnEntity;
-
-  /// Visible label, help or status in this section.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose {name}'**
-  String pluginChooseName(String name);
-
-  /// Visible label, help or status in this section.
-  ///
-  /// In en, this message translates to:
   /// **'Configure {name}'**
   String pluginConfigureName(String name);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The plugin did not answer in time.'**
+  String get pluginThePluginDidNotAnswerInTime;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'No choices yet. Refresh to look for them.'**
+  String get pluginNoChoicesYetRefreshToLookForThem;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'This choice is no longer listed.'**
+  String get pluginThisChoiceIsNoLongerListed;
 
   /// Visible label, help or status in this section.
   ///
@@ -4844,6 +6130,72 @@ abstract class UiStrings {
   /// **'Enable {name}'**
   String pluginEnableName(String name);
 
+  /// Tooltip of the button that shows or hides the text typed into a plugin's secret setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get pluginShowPassword;
+
+  /// Tooltip of the button that shows or hides the text typed into a plugin's secret setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get pluginHidePassword;
+
+  /// Name shown for a row of a plugin's list setting that has no name yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get pluginUntitled;
+
+  /// Placeholder of the search box in the icon picker of a plugin setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Search icons'**
+  String get pluginSearchIcons;
+
+  /// Placeholder of a plugin icon setting with no icon chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an icon'**
+  String get pluginChooseIcon;
+
+  /// Placeholder of the search box in the camera view picker of a plugin setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Search camera views'**
+  String get pluginSearchCameraViews;
+
+  /// Placeholder of a plugin camera view setting with no view chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a camera view'**
+  String get pluginChooseCameraView;
+
+  /// Shown under a plugin camera view setting whose saved view was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This camera view is gone. Choose another.'**
+  String get pluginCameraViewGone;
+
+  /// Label of the handle that drags a row of a plugin's list setting to a new position.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder'**
+  String get pluginDragToReorder;
+
+  /// Button that keeps the changes to a nested row and returns to the row that holds it, in the row editor of a plugin list setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get pluginDone;
+
+  /// Shown beside the label of an empty required field in the row editor of a plugin list setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get pluginRequired;
+
   /// Visible label, help or status in this section.
   ///
   /// In en, this message translates to:
@@ -4939,6 +6291,186 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Could not read the selected ZIP'**
   String get pluginCouldNotReadTheSelectedZip;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse plugins'**
+  String get pluginBrowsePlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Find plugins made by the community'**
+  String get pluginFindPluginsMadeByTheCommunity;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Search plugins'**
+  String get pluginSearchPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get pluginUpdate;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed'**
+  String get pluginInstalled;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Stars'**
+  String get pluginStars;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads'**
+  String get pluginDownloads;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Active installs'**
+  String get pluginActiveInstalls;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'No plugins match your search.'**
+  String get pluginNoPluginsMatchYourSearch;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Plugins has no plugins yet.'**
+  String get pluginCommunityPluginsHasNoPluginsYet;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit your plugin'**
+  String get pluginSubmitYourPlugin;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'List your plugin in Community Plugins.'**
+  String get pluginListYourPluginInCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach Community Plugins. Check the internet connection.'**
+  String get pluginCouldNotReachCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load Community Plugins. Try again later.'**
+  String get pluginCouldNotLoadCommunityPlugins;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get pluginTurnOn;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Enable Plugins to install this plugin.'**
+  String get pluginTurnOnEnablePluginsToInstall;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous page'**
+  String get pluginPreviousPage;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Next page'**
+  String get pluginNextPage;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page} of {pages}'**
+  String pluginPageOfPages(String page, String pages);
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get pluginSortBy;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Most stars'**
+  String get pluginSortMostStars;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently updated'**
+  String get pluginSortRecentlyUpdated;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get pluginSortNewest;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get pluginSortName;
+
+  /// An order for the Browse plugins list, picked under Sort by.
+  ///
+  /// In en, this message translates to:
+  /// **'Most downloads'**
+  String get pluginSortMostDownloads;
+
+  /// Visible label, help or status in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Plugins per page'**
+  String get pluginPluginsPerPage;
+
+  /// A page size for the Browse plugins list, such as 10 per page.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} per page'**
+  String pluginCountPerPage(String count);
+
+  /// Who made the plugin, under its name in the install review.
+  ///
+  /// In en, this message translates to:
+  /// **'by {author}'**
+  String pluginByAuthor(String author);
+
+  /// A label in the install review that says whether the plugin is in the Community Plugins directory.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed in Community Plugins'**
+  String get pluginListedChip;
+
+  /// A label in the install review that says whether the plugin is in the Community Plugins directory.
+  ///
+  /// In en, this message translates to:
+  /// **'Not listed in Community Plugins'**
+  String get pluginNotListedChip;
 
   /// Visible label, help or status in this section.
   ///
@@ -5237,12 +6769,6 @@ abstract class UiStrings {
   /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
   ///
   /// In en, this message translates to:
-  /// **'GitHub did not return the release tag revision'**
-  String get pluginErrorTagRevision;
-
-  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
-  ///
-  /// In en, this message translates to:
   /// **'Confirm that you trust the plugin author'**
   String get pluginErrorTrustAuthor;
 
@@ -5357,12 +6883,6 @@ abstract class UiStrings {
   /// Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.
   ///
   /// In en, this message translates to:
-  /// **'At most 8 plugins can be installed'**
-  String get pluginErrorPluginLimit;
-
-  /// Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.
-  ///
-  /// In en, this message translates to:
   /// **'This package is already installed'**
   String get pluginErrorAlreadyInstalled;
 
@@ -5431,6 +6951,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Android version is too old'**
   String get pluginErrorAndroidOld;
+
+  /// Shown on a device without a screen for a plugin that only shows overlays or screensavers. Keep plugin identifiers and diagnostic details unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This plugin needs a screen'**
+  String get pluginErrorNeedsScreen;
 
   /// Explain the failure and recovery action. Keep plugin identifiers and diagnostic details unchanged.
   ///
@@ -5684,6 +7210,60 @@ abstract class UiStrings {
   /// **'Invalid or duplicate trigger ID'**
   String get pluginErrorTriggerId;
 
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid list setting'**
+  String get pluginErrorListSetting;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid setting condition'**
+  String get pluginErrorSettingCondition;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected an MDI icon name'**
+  String get pluginErrorIcon;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected a dashboard path'**
+  String get pluginErrorDashboard;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected a camera view ID'**
+  String get pluginErrorCameraView;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected a list setting'**
+  String get pluginErrorListValue;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many or too few list items'**
+  String get pluginErrorListCount;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in every required field'**
+  String get pluginErrorRequiredField;
+
+  /// Explain the failure. Keep technical identifiers, file names and product names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'List settings must be at most 32 KB'**
+  String get pluginErrorListSize;
+
   /// Translate the visible message. Keep placeholders and any technical names unchanged.
   ///
   /// In en, this message translates to:
@@ -5875,6 +7455,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Kiosk Satellite {version} is ready to install. The installation is confirmed on the tablet screen.'**
   String overviewInstallHelp(String version);
+
+  /// Translate the interface text. Keep external names, versions and technical details unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosk Satellite {version} is ready to install. It installs without a confirmation on the device.'**
+  String overviewInstallSilentHelp(String version);
+
+  /// Translate the interface text. Keep external names, versions and technical details unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosk Satellite {version} is ready to install. This device has no screen to confirm it on, so make Kiosk Satellite the device owner, use Shizuku or install it over adb.'**
+  String overviewInstallHeadlessHelp(String version);
 
   /// Translate the interface text. Keep external names, versions and technical details unchanged.
   ///
@@ -6386,6 +7978,18 @@ abstract class UiStrings {
   /// **'{value}°C'**
   String overviewMetricDegrees(String value);
 
+  /// Home Assistant chip status while a custom page (a person's own HTML page) is on screen instead of a Home Assistant dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing custom pages'**
+  String get overviewShowingCustomPages;
+
+  /// Home Assistant status tile on a device without a screen, which has no dashboard to report on.
+  ///
+  /// In en, this message translates to:
+  /// **'Headless mode'**
+  String get overviewHeadlessMode;
+
   /// Translate the interface text. Keep external names, versions and technical details unchanged.
   ///
   /// In en, this message translates to:
@@ -6445,36 +8049,6 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Go to view'**
   String get overviewGoView;
-
-  /// Translate the interface text. Keep external names, versions and technical details unchanged.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading views…'**
-  String get overviewLoadingViews;
-
-  /// Translate the interface text. Keep external names, versions and technical details unchanged.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a dashboard view…'**
-  String get overviewPickView;
-
-  /// Translate the interface text. Keep external names, versions and technical details unchanged.
-  ///
-  /// In en, this message translates to:
-  /// **'Default view'**
-  String get overviewDefaultView;
-
-  /// Translate the interface text. Keep external names, versions and technical details unchanged.
-  ///
-  /// In en, this message translates to:
-  /// **'No dashboards found'**
-  String get overviewNoDashboards;
-
-  /// Translate the interface text. Keep external names, versions and technical details unchanged.
-  ///
-  /// In en, this message translates to:
-  /// **'Views unavailable'**
-  String get overviewViewsUnavailable;
 
   /// Translate the visible message. Keep placeholders and any technical names unchanged.
   ///
@@ -6541,6 +8115,18 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Every video in this playlist is too large for this device to play.'**
   String get screensaverVideosTooLarge;
+
+  /// Translate the visible message. Keep placeholders and any technical names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'No image URL set. Add one in Settings.'**
+  String get screensaverUrlNotSet;
+
+  /// Translate the visible message. Keep placeholders and any technical names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the image.'**
+  String get screensaverUrlLoadFailed;
 
   /// Setting label.
   ///
@@ -6800,6 +8386,18 @@ abstract class UiStrings {
   /// **'Time without a touch in the other app before the kiosk comes back.'**
   String get settingLauncherAutoReturnSecondsDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait while media plays'**
+  String get settingLauncherAutoReturnMediaTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not come back while video or music is playing.'**
+  String get settingLauncherAutoReturnMediaDescription;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -6830,11 +8428,161 @@ abstract class UiStrings {
   /// **'Android may pause the app behind the other one, and a paused clock never brings the kiosk back. The grant dialog appears on the tablet.'**
   String get launcherBatteryRemote;
 
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The kiosk stays away while video or music plays in another app.'**
+  String get launcherNotificationAccessHeld;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Without this the kiosk cannot tell when video or music is playing and comes back anyway.'**
+  String get launcherNotificationAccessMissing;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Without this the kiosk cannot tell when video or music is playing and comes back anyway. The grant screen appears on the tablet.'**
+  String get launcherNotificationAccessRemote;
+
   /// Description in settings search results.
   ///
   /// In en, this message translates to:
   /// **'The grants Return automatically leans on.'**
   String get launcherPermissionsSearch;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Default view'**
+  String get settingCalendarDefaultViewTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The view Calendar opens on.'**
+  String get settingCalendarDefaultViewDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Week starts on'**
+  String get settingCalendarWeekStartTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Follows the device language unless set.'**
+  String get settingCalendarWeekStartDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Weather'**
+  String get settingCalendarWeatherEntityTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Adds the forecast to each day.'**
+  String get settingCalendarWeatherEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show in the kiosk menu'**
+  String get settingCalendarMenuTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Calendar entry to the kiosk menu.'**
+  String get settingCalendarMenuDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Close when idle'**
+  String get settingCalendarIdleCloseMinutesTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Returns to the dashboard after no touch for this long.'**
+  String get settingCalendarIdleCloseMinutesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get settingKioskAllowCalendarTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the family calendar from the kiosk menu.'**
+  String get settingKioskAllowCalendarDescription;
+
+  /// Week starts on: the device language's first day.
+  ///
+  /// In en, this message translates to:
+  /// **'Language default'**
+  String get calendarWeekStartLocale;
+
+  /// Week starts on Sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get calendarWeekStartSunday;
+
+  /// Week starts on Monday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get calendarWeekStartMonday;
+
+  /// Week starts on Saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get calendarWeekStartSaturday;
+
+  /// Close when idle: the calendar stays open.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get calendarIdleNever;
+
+  /// Close when idle after one minute.
+  ///
+  /// In en, this message translates to:
+  /// **'1 minute'**
+  String get calendarIdle1Minute;
+
+  /// Close when idle after two minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'2 minutes'**
+  String get calendarIdle2Minutes;
+
+  /// Settings page name.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get settingsMenuCalendar;
+
+  /// Under Calendar in the settings menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Family calendars from Home Assistant'**
+  String get settingsMenuCalendarSummary;
+
+  /// What stays per kiosk when the Calendar category syncs.
+  ///
+  /// In en, this message translates to:
+  /// **'the calendars hidden with their chips'**
+  String get fleetTheCalendarsHiddenWithTheirChips;
 
   /// Setting label.
   ///
@@ -7631,6 +9379,72 @@ abstract class UiStrings {
   /// Section heading.
   ///
   /// In en, this message translates to:
+  /// **'Motion Events'**
+  String get cameraMotionEventsHeading;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Send motion events'**
+  String get settingCameraOnvifEventsTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Let ONVIF clients such as NVRs know when motion is detected.'**
+  String get settingCameraOnvifEventsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion source'**
+  String get settingCameraOnvifEventsSourceTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The sensor that sends motion events.'**
+  String get settingCameraOnvifEventsSourceDescription;
+
+  /// Choice in the Motion source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera motion sensor'**
+  String get cameraOnvifEventsSourceCamera;
+
+  /// Choice in the Motion source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Person sensor'**
+  String get cameraOnvifEventsSourcePerson;
+
+  /// Choice in the Motion source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant sensor'**
+  String get cameraOnvifEventsSourceEntity;
+
+  /// Warning below the Motion source picker. Camera > Motion Sensor is the settings page to open.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera motion sensor is off. Turn it on in Camera > Motion Sensor.'**
+  String get cameraOnvifEventsMotionSensorOff;
+
+  /// Warning below the Motion source picker. Motion analysis while streaming is the setting of that name on this page.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion analysis while streaming is off, so the camera cannot detect motion while a viewer is connected.'**
+  String get cameraOnvifEventsAnalysisOff;
+
+  /// Warning below the Motion source picker. Camera > Person Sensor is the settings page to open.
+  ///
+  /// In en, this message translates to:
+  /// **'The person sensor is off. Turn it on in Camera > Person Sensor.'**
+  String get cameraOnvifEventsPersonSensorOff;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
   /// **'Overlays'**
   String get cameraOverlaysHeading;
 
@@ -8261,6 +10075,12 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'View ID'**
+  String get cameraStreamsViewId;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Show camera names'**
   String get cameraStreamsShowNames;
 
@@ -8798,6 +10618,72 @@ abstract class UiStrings {
   /// **'Open settings on device'**
   String get deviceOpenSettingsDevice;
 
+  /// Permissions Manager row on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardware buttons'**
+  String get deviceHardwareButtons;
+
+  /// Permissions Manager row on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'The device buttons reach gestures and Voice Satellite.'**
+  String get deviceHardwareButtonsHeld;
+
+  /// Permissions Manager row on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'The device buttons do nothing until the button service is switched on.'**
+  String get deviceHardwareButtonsMissing;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO'**
+  String get deviceHeadlessAdbMicrophone;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS'**
+  String get deviceHeadlessAdbNotifications;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION'**
+  String get deviceHeadlessAdbLocation;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, then the same for BLUETOOTH_CONNECT'**
+  String get deviceHeadlessAdbBluetooth;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite'**
+  String get deviceHeadlessAdbBattery;
+
+  /// Grant instructions on a device without a screen. Keep the adb command unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, then the same for WRITE_EXTERNAL_STORAGE'**
+  String get deviceHeadlessAdbStorage;
+
+  /// Grant instructions on a device without a screen. Keep the adb commands unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen. Switch it on over adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, then adb shell settings put secure accessibility_enabled 1'**
+  String get deviceHeadlessAdbButtons;
+
+  /// Grant instructions on a device without a screen. Keep the adb commands unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The button service is switched on but has not started. Restart the device to start it: adb reboot'**
+  String get deviceHeadlessAdbButtonsRestart;
+
   /// Label or explanation on this Device settings page.
   ///
   /// In en, this message translates to:
@@ -8861,6 +10747,12 @@ abstract class UiStrings {
   /// Label or explanation on this Device settings page.
   ///
   /// In en, this message translates to:
+  /// **'CPU clock'**
+  String get deviceCpuClock;
+
+  /// Label or explanation on this Device settings page.
+  ///
+  /// In en, this message translates to:
   /// **'CPU temperature'**
   String get deviceCpuTemp;
 
@@ -8869,6 +10761,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Battery level'**
   String get deviceBatteryLevel;
+
+  /// Label or explanation on this Device settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery temperature'**
+  String get deviceBatteryTemp;
 
   /// Label or explanation on this Device settings page.
   ///
@@ -9385,6 +11283,30 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Announce this device on the network and list the other kiosks in the remote admin, to switch between them.'**
   String get settingRemoteFleetDiscoveryDescription;
+
+  /// Setting label. The web address used to open this kiosk's remote admin from other kiosks.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin URL'**
+  String get settingRemoteAdminUrlTitle;
+
+  /// Help below the Admin URL field. Switch kiosk is the name of the kiosk picker in the remote admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Address other kiosks open in Switch kiosk to reach this one, such as a reverse proxy name. Leave blank to use its network address.'**
+  String get settingRemoteAdminUrlDescription;
+
+  /// Error under the Admin URL field when the value is not a web address. Keep the example address as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid address, for example https://kiosk.example.com'**
+  String get deviceAdminUrlInvalid;
+
+  /// Error under the Admin URL field when the address has a path after the host. Keep the example address as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter only the address, without a path. Example: https://kiosk.example.com'**
+  String get deviceAdminUrlPath;
 
   /// Label or explanation on this Device settings page.
   ///
@@ -11511,6 +13433,12 @@ abstract class UiStrings {
   /// **'Location is off in the device settings, so the receiver delivers nothing.'**
   String get esphomeLocationServicesOff;
 
+  /// Location permission row when only approximate location is allowed (Android 12 and later). The GPS receiver needs precise location.
+  ///
+  /// In en, this message translates to:
+  /// **'Only approximate location is allowed, and the GPS receiver needs precise location.'**
+  String get esphomeLocationApproximate;
+
   /// Interface label or status message.
   ///
   /// In en, this message translates to:
@@ -11676,8 +13604,8 @@ abstract class UiStrings {
   /// Help below this setting.
   ///
   /// In en, this message translates to:
-  /// **'Strict needs louder, evenly spaced claps; try it if household noise false-triggers.'**
-  String get settingClapStrictnessDescription;
+  /// **'Strict needs louder, evenly spaced claps. Large room gives claps time to fade in an echoey room.'**
+  String get settingClapDetectionDescription;
 
   /// Clap detection option.
   ///
@@ -11690,6 +13618,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Strict'**
   String get gestureStrictnessStrict;
+
+  /// Clap detection option, for big rooms where claps echo.
+  ///
+  /// In en, this message translates to:
+  /// **'Large room'**
+  String get gestureStrictnessLargeRoom;
 
   /// Label or guidance in this section.
   ///
@@ -11792,6 +13726,138 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'{seconds} s'**
   String gestureHoldSeconds(String seconds);
+
+  /// Name of the settings page and of the dashboard picker entry that lists a person's own HTML pages hosted in Home Assistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Pages'**
+  String get haCustomPages;
+
+  /// Hint under the Custom Pages entry row: the person's own HTML pages, shown by the kiosk in place of a dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Your custom HTML pages served as a dashboard'**
+  String get haCustomPagesHintDashboard;
+
+  /// Title of the switch that lets custom pages use the kiosk's own Home Assistant connection.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Home Assistant connection'**
+  String get settingHaCustomPagesSocketTitle;
+
+  /// Description under Share Home Assistant connection. A token is the Home Assistant access token a page would otherwise need to hold.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom pages talk to Home Assistant through the kiosk\'s connection, with no token in the page.'**
+  String get settingHaCustomPagesSocketDescription;
+
+  /// Button that opens the dialog to add a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add page'**
+  String get haCustomPagesAdd;
+
+  /// Shown while no custom page is added yet. www is a folder name and stays as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Add HTML pages from the Home Assistant www folder or another server to pick them like a dashboard.'**
+  String get haCustomPagesEmptyAnyServer;
+
+  /// Row that opens the documentation about building a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom page guide'**
+  String get haCustomPagesGuide;
+
+  /// Description under the Custom page guide row.
+  ///
+  /// In en, this message translates to:
+  /// **'How to build a page that talks to Home Assistant.'**
+  String get haCustomPagesGuideHint;
+
+  /// Title of the dialog that adds a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add custom page'**
+  String get haCustomPageAddTitle;
+
+  /// Title of the dialog that changes a custom page.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit custom page'**
+  String get haCustomPageEditTitle;
+
+  /// Field label: the name the dashboard picker shows for the page.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get haCustomPageName;
+
+  /// Field label: where the page is, a path inside Home Assistant such as /local/dashboard.html or the full address of a page on another web server.
+  ///
+  /// In en, this message translates to:
+  /// **'Path or URL'**
+  String get haCustomPageLocation;
+
+  /// Help under the Path or URL field. Keep www and /local/dashboard.html unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'A file in the Home Assistant www folder, such as /local/dashboard.html, or the URL of a page on another server.'**
+  String get haCustomPageLocationHint;
+
+  /// Error in the custom page dialog when the name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name.'**
+  String get haCustomPageNameMissing;
+
+  /// Error in the custom page dialog when the text is neither a path under /local/ nor a web address. Keep /local/, http and https unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a path under /local/ or an http or https URL.'**
+  String get haCustomPageLocationInvalid;
+
+  /// Error in the custom page dialog when the path is already in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Another page already uses this path.'**
+  String get haCustomPageDuplicate;
+
+  /// Error in the custom page dialog when Home Assistant answers that the file does not exist.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant has no file at this path.'**
+  String get haCustomPageNotFound;
+
+  /// Error in the custom page dialog when the web server of a page outside Home Assistant answers that it does not exist.
+  ///
+  /// In en, this message translates to:
+  /// **'The server has no page at this URL.'**
+  String get haCustomPageUrlNotFound;
+
+  /// Error in the custom page dialog when Home Assistant does not answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach Home Assistant.'**
+  String get haCustomPageUnreachable;
+
+  /// Error in the custom page dialog when the web server of a page outside Home Assistant does not answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server.'**
+  String get haCustomPageUrlUnreachable;
+
+  /// Error in the custom page dialog when Home Assistant answers the page with an HTTP status other than 200. HTTP stays as is.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant answered with HTTP {code}.'**
+  String haCustomPageStatus(String code);
+
+  /// Error in the custom page dialog when the web server of a page outside Home Assistant answers with an HTTP status other than 200. HTTP stays as is.
+  ///
+  /// In en, this message translates to:
+  /// **'The server answered with HTTP {code}.'**
+  String haCustomPageUrlStatus(String code);
 
   /// Setting label.
   ///
@@ -12003,6 +14069,12 @@ abstract class UiStrings {
   /// **'This view uses {count} entities, which crosses the filtering threshold. Filtering is disabled.'**
   String haThreshold(String count);
 
+  /// Live update-filter status while a custom page (a person's own HTML page) is on screen: the filter leaves those pages alone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not used on custom pages.'**
+  String get haCustomPageFilter;
+
   /// Setting label.
   ///
   /// In en, this message translates to:
@@ -12122,12 +14194,6 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Cycle through views, dwell time, fade'**
   String get haRotationHint;
-
-  /// Rotation subpage label, guidance or validation error.
-  ///
-  /// In en, this message translates to:
-  /// **'Default view'**
-  String get haDefaultView;
 
   /// Rotation subpage label, guidance or validation error.
   ///
@@ -12284,48 +14350,6 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Choose a view'**
   String get haChooseView;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading dashboards…'**
-  String get haLoadingDashboards;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not list dashboards'**
-  String get haListFailed;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap to retry.'**
-  String get haRetryHint;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'Change view'**
-  String get haChangeView;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'No sub views'**
-  String get haNoViews;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'This dashboard has no selectable sub views.'**
-  String get haNoViewsHelp;
-
-  /// Connection status, action or dashboard picker text.
-  ///
-  /// In en, this message translates to:
-  /// **'No dashboards found'**
-  String get haNoDashboards;
 
   /// Setting label.
   ///
@@ -13095,6 +15119,36 @@ abstract class UiStrings {
   /// **'Help'**
   String get intercomOptionHangupHelp;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Hang up button while ringing'**
+  String get settingIntercomHangupKeyRingingTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'What the button does when a call rings here.'**
+  String get settingIntercomHangupKeyRingingDescription;
+
+  /// Visible option, the button answers the ringing call. Its stored value stays unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get intercomOptionHangupRingingAnswer;
+
+  /// Visible option, the button declines the ringing call. Its stored value stays unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get intercomOptionHangupRingingDecline;
+
+  /// Visible option, the button keeps its usual action while a call rings. Its stored value stays unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore'**
+  String get intercomOptionHangupRingingIgnore;
+
   /// Section heading.
   ///
   /// In en, this message translates to:
@@ -13256,6 +15310,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Which quick actions the kiosk menu offers'**
   String get kioskAllowedHelp;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed Apps'**
+  String get settingKioskAllowedAppsTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The launcher apps offered while kiosk mode is on.'**
+  String get settingKioskAllowedAppsDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Add apps in Settings > App Launcher first.'**
+  String get kioskAllowedAppsEmpty;
 
   /// Setting label.
   ///
@@ -13467,6 +15539,378 @@ abstract class UiStrings {
   /// **'Open settings on device'**
   String get kioskOpenSettingsDevice;
 
+  /// Setting label: the master switch of the LED Control page.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable LED Control'**
+  String get settingLedEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Kiosk Satellite control the lights.'**
+  String get settingLedEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Animate effects'**
+  String get settingLedAnimationsTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the arcs and fade the pulses. Turn off to make every effect static instead.'**
+  String get settingLedAnimationsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Light up when idle'**
+  String get settingLedIdleEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay lit while nothing else is showing.'**
+  String get settingLedIdleEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedIdleBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedIdleBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedIdleLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedIdleLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Effect'**
+  String get settingLedIdleStyleTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How the lights show while idle.'**
+  String get settingLedIdleStyleDescription;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid'**
+  String get settingLedIdleStyleOptionSolid;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing'**
+  String get settingLedIdleStyleOptionBreathe;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show voice activity'**
+  String get settingLedVoiceEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Light up while Voice Satellite listens, thinks and answers.'**
+  String get settingLedVoiceEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedVoiceBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedVoiceBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedVoiceLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Under an arc that turns while listening, alternating while thinking and fading while answering.'**
+  String get settingLedVoiceLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Accent color'**
+  String get settingLedVoiceAccentColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The arc that moves around the lights.'**
+  String get settingLedVoiceAccentColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show when muted'**
+  String get settingLedVoiceMutedTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay lit while Voice Satellite is muted.'**
+  String get settingLedVoiceMutedDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted color'**
+  String get settingLedVoiceMutedColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights while muted.'**
+  String get settingLedVoiceMutedColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show timers'**
+  String get settingLedTimersEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse while a timer rings.'**
+  String get settingLedTimersEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedTimersBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedTimersBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedTimersLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedTimersLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the countdown'**
+  String get settingLedTimersCountdownTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The lights go out one by one as the next timer runs down.'**
+  String get settingLedTimersCountdownDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show alarms'**
+  String get settingLedAlarmsEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse while an alarm rings.'**
+  String get settingLedAlarmsEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedAlarmsBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedAlarmsBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedAlarmsLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedAlarmsLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show intercom calls'**
+  String get settingLedIntercomEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse while a call rings and turn while it is live.'**
+  String get settingLedIntercomEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedIntercomBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedIntercomBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedIntercomLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedIntercomLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show notifications'**
+  String get settingLedNotificationsEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse slowly while a notification is waiting.'**
+  String get settingLedNotificationsEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedNotificationsBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedNotificationsBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedNotificationsLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedNotificationsLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show music'**
+  String get settingLedMediaEnabledTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Light up while music plays on this device.'**
+  String get settingLedMediaEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Brightness'**
+  String get settingLedMediaBrightnessTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How bright the lights shine for this.'**
+  String get settingLedMediaBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get settingLedMediaLightColorTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the lights for this.'**
+  String get settingLedMediaLightColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Effect'**
+  String get settingLedMediaStyleTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'How the lights show music.'**
+  String get settingLedMediaStyleDescription;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Solid'**
+  String get settingLedMediaStyleOptionSolid;
+
+  /// Option of the Effect setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing'**
+  String get settingLedMediaStyleOptionBreathe;
+
   /// Setting label.
   ///
   /// In en, this message translates to:
@@ -13562,6 +16006,66 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'The grants the lockdown protections lean on.'**
   String get lockdownPermissionsSearch;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable AirPlay receiver'**
+  String get settingAirplayEnabledTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The device shows up as an AirPlay speaker in the AirPlay menu of an iPhone, iPad or Mac.'**
+  String get settingAirplayEnabledDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker name'**
+  String get settingAirplayNameTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The name in the AirPlay menu. Empty uses the device name.'**
+  String get settingAirplayNameDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the sender\'s volume'**
+  String get settingAirplaySenderVolumeTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The volume control on the iPhone, iPad or Mac changes how loud this device plays. Off, only this device\'s volume does.'**
+  String get settingAirplaySenderVolumeDescription;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Negative plays this device earlier, to line the sound up with video on the sender. Applies live.'**
+  String get settingAirplaySyncOffsetDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Let another sender take over'**
+  String get settingAirplayTakeoverTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'A second iPhone, iPad or Mac can take over while one plays. Off, it has to wait until the first one disconnects.'**
+  String get settingAirplayTakeoverDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Play audio from an iPhone, iPad or Mac'**
+  String get mediaAirplayHint;
 
   /// Label or guidance in this section.
   ///
@@ -13740,8 +16244,8 @@ abstract class UiStrings {
   /// Help below this setting.
   ///
   /// In en, this message translates to:
-  /// **'This device\'s volume buttons change the followed player\'s volume instead of its own. Only while the Now Playing view is on screen, or whenever the player is playing.'**
-  String get settingSendspinVolumeKeysDescription;
+  /// **'This device\'s volume buttons change the followed player\'s volume instead of its own. While this device plays in a group they change the group\'s volume. Only while the Now Playing view is on screen or whenever the player is playing.'**
+  String get settingSendspinVolumeKeysGroupDescription;
 
   /// Setting label.
   ///
@@ -13794,8 +16298,20 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'This device\'s own Sendspin player stays offline while {player} is controlled.'**
-  String mediaLocalOffline(String player);
+  /// **'The Sendspin player stays offline while {player} is picked.'**
+  String mediaOfflineSendspin(String player);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The AirPlay receiver stays off while {player} is picked.'**
+  String mediaOfflineAirplay(String player);
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'The Sendspin player and the AirPlay receiver stay offline while {player} is picked.'**
+  String mediaOfflineBoth(String player);
 
   /// Setting label.
   ///
@@ -13929,6 +16445,12 @@ abstract class UiStrings {
   /// **'The floating close button can sit on top of Music Assistant\'s own controls, like the Now Playing menu. Without it, dismiss with the back button or by using the kiosk\'s drawer menu.'**
   String get settingSendspinMaHideCloseDescription;
 
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scales the whole Music Assistant page.'**
+  String get settingSendspinMaZoomDescription;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -14058,14 +16580,32 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
-  /// **'Horizontal mode'**
-  String get settingSendspinFullscreenHorizontalTitle;
+  /// **'Layout mode'**
+  String get settingSendspinFullscreenLayoutTitle;
 
   /// Help below this setting.
   ///
   /// In en, this message translates to:
-  /// **'Split artwork and controls into equal left and right halves. With lyrics or the queue open, track details move below the artwork. Ignored while Now Playing is shown alongside a screensaver.'**
-  String get settingSendspinFullscreenHorizontalDescription;
+  /// **'How Now Playing arranges artwork, track details and controls. Horizontal splits them into left and right halves. Album art only fills the screen with artwork and shows track details and controls for a few seconds after a tap, switching to Vertical while lyrics or the queue are open. Ignored while Now Playing is shown alongside a screensaver.'**
+  String get settingSendspinFullscreenLayoutDescription;
+
+  /// Option: artwork, track details and controls stacked from top to bottom.
+  ///
+  /// In en, this message translates to:
+  /// **'Vertical'**
+  String get mediaLayoutVertical;
+
+  /// Option: artwork in the left half of the screen, track details and controls in the right half.
+  ///
+  /// In en, this message translates to:
+  /// **'Horizontal'**
+  String get mediaLayoutHorizontal;
+
+  /// Option: only the artwork shows, centered and filling the screen. Track details and controls appear over it for a few seconds after a tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Album art only'**
+  String get mediaLayoutArtOnly;
 
   /// Setting label.
   ///
@@ -14106,6 +16646,42 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'After dismissing'**
+  String get settingSendspinFullscreenReturnTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The dashboard view to show after Now Playing is dismissed. Default follows Return to home dashboard view.'**
+  String get settingSendspinFullscreenReturnDescription;
+
+  /// Option: go back to the dashboard view the kiosk showed before the screensaver started.
+  ///
+  /// In en, this message translates to:
+  /// **'Last view'**
+  String get mediaReturnLastView;
+
+  /// Option: go to a dashboard view picked below.
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen view'**
+  String get mediaReturnChosenView;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard view'**
+  String get settingSendspinFullscreenReturnViewTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The view to show after Now Playing is dismissed.'**
+  String get settingSendspinFullscreenReturnViewDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Show in the kiosk menu'**
   String get settingSendspinFullscreenShortcutTitle;
 
@@ -14126,6 +16702,36 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Shows speaker selection for 5 seconds after screen interaction. Add or remove speakers from the current group.'**
   String get settingSendspinSpeakerPillDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter the speaker selection pill'**
+  String get settingSendspinSpeakerPillPlayersTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Only these speakers show in the pill. Speakers already in the group always show.'**
+  String get settingSendspinSpeakerPillPlayersDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show audio quality'**
+  String get settingSendspinAudioQualityTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the format, bit depth, sample rate, bitrate and source of the current track at the bottom of Now Playing. Requires Music Assistant.'**
+  String get settingSendspinAudioQualityDescription;
+
+  /// Shown in the speaker filter when no speakers are picked: the pill offers every speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'All speakers'**
+  String get mediaAllSpeakers;
 
   /// Setting label.
   ///
@@ -14841,6 +17447,12 @@ abstract class UiStrings {
   /// **'Media & Cameras'**
   String get settingsGroupMediaCameras;
 
+  /// Settings menu group heading over Intercom, Alarms and Calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Household'**
+  String get settingsGroupHousehold;
+
   /// Heading above a group of Settings menu entries.
   ///
   /// In en, this message translates to:
@@ -14889,6 +17501,84 @@ abstract class UiStrings {
   /// **'Automatic'**
   String get settingsMenuThemeAuto;
 
+  /// Summary below Overview on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Status and quick controls'**
+  String get settingsMenuOverviewHeadlessSummary;
+
+  /// Summary below Home Assistant on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection'**
+  String get settingsMenuHomeAssistantHeadlessSummary;
+
+  /// The Screen & Audio page on a device without a screen, and its menu group.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get settingsMenuAudio;
+
+  /// Summary below Audio on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume, microphone'**
+  String get settingsMenuAudioSummary;
+
+  /// Menu group on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Media'**
+  String get settingsGroupMedia;
+
+  /// Summary below DLNA Renderer on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Play audio remotely'**
+  String get settingsMenuDlnaHeadlessSummary;
+
+  /// Summary below Gestures on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Button and clap gestures'**
+  String get settingsMenuGesturesHeadlessSummary;
+
+  /// The LED Control page, on devices with status lights.
+  ///
+  /// In en, this message translates to:
+  /// **'LED Control'**
+  String get settingsMenuLeds;
+
+  /// Summary below LED Control in the Settings menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Status light colors and effects'**
+  String get settingsMenuLedsSummary;
+
+  /// Group on the LED Control page.
+  ///
+  /// In en, this message translates to:
+  /// **'Timers'**
+  String get settingsLedTimers;
+
+  /// Group on the LED Control page.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsLedNotifications;
+
+  /// Group on the LED Control page: what the lights do when nothing else is showing.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle'**
+  String get settingsLedIdle;
+
+  /// Group on the LED Control page: how the lights move.
+  ///
+  /// In en, this message translates to:
+  /// **'Effects'**
+  String get settingsLedEffects;
+
   /// Setting label.
   ///
   /// In en, this message translates to:
@@ -14900,6 +17590,30 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Dim the screen as the room gets darker, using the ambient light sensor.'**
   String get settingAdaptiveBrightnessDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Home Assistant entity'**
+  String get settingAdaptiveUseEntityTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the room\'s light level from a Home Assistant sensor.'**
+  String get settingAdaptiveUseEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Light sensor entity'**
+  String get settingAdaptiveLightEntityTitle;
+
+  /// Help below the setting, shown until an entity is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'The Home Assistant sensor that reports the light level in lux.'**
+  String get settingAdaptiveLightEntityDescription;
 
   /// Setting label.
   ///
@@ -15270,6 +17984,42 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Hide status bar'**
+  String get settingScreenHideStatusBarTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off to keep the clock and notification icons at the top of the screen. Kiosk mode always hides it.'**
+  String get settingScreenHideStatusBarDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide navigation bar'**
+  String get settingScreenHideNavigationBarTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off to keep the navigation buttons on screen, along with the taskbar on tablets. Kiosk mode always hides it.'**
+  String get settingScreenHideNavigationBarDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show over lock screen'**
+  String get settingScreenShowOnLockScreenTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the dashboard on top of a PIN, pattern or password lock screen. The rest of the device stays locked.'**
+  String get settingScreenShowOnLockScreenDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Keep screen on'**
   String get settingKeepScreenOnTitle;
 
@@ -15480,6 +18230,738 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Location'**
+  String get settingScreensaverCelestialLocationTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the sky is seen from.'**
+  String get settingScreensaverCelestialLocationDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Entity'**
+  String get settingScreensaverCelestialEntityTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'A person, device tracker or zone with a location.'**
+  String get settingScreensaverCelestialEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get settingScreensaverCelestialCoordinatesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude and longitude, like 40.71, -74.01.'**
+  String get settingScreensaverCelestialCoordinatesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Landscape'**
+  String get settingScreensaverCelestialTerrainTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The ground along the horizon.'**
+  String get settingScreensaverCelestialTerrainDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at the sky'**
+  String get settingScreensaverCelestialFollowDeviceTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the device up and the sky on screen turns with it, so you can name what you are looking at. Needs a compass sensor.'**
+  String get settingScreensaverCelestialFollowDeviceDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Daytime sky'**
+  String get settingScreensaverCelestialDaytimeTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Brighten the sky and fade the stars while the Sun is up. Turn off to show the night sky all day.'**
+  String get settingScreensaverCelestialDaytimeDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Milky Way'**
+  String get settingScreensaverCelestialMilkyWayTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the glow of our galaxy across the night sky.'**
+  String get settingScreensaverCelestialMilkyWayDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Planets'**
+  String get settingScreensaverCelestialPlanetsTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the planets where they are tonight.'**
+  String get settingScreensaverCelestialPlanetsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Galaxies and nebulae'**
+  String get settingScreensaverCelestialDeepSkyTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the Andromeda Galaxy, the Orion Nebula and other objects you can see without a telescope.'**
+  String get settingScreensaverCelestialDeepSkyDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Light pollution'**
+  String get settingScreensaverCelestialLightPollutionTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate the glow of city lights. Higher values hide the fainter stars and the Milky Way.'**
+  String get settingScreensaverCelestialLightPollutionDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Twinkling stars'**
+  String get settingScreensaverCelestialTwinkleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the stars shimmer, most of all near the horizon. Turn off to save power.'**
+  String get settingScreensaverCelestialTwinkleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger Moon'**
+  String get settingScreensaverCelestialLargeMoonTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw the Moon at three times its real size and the Sun at twice, so the phase is easy to see.'**
+  String get settingScreensaverCelestialLargeMoonDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Constellation lines'**
+  String get settingScreensaverCelestialLinesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the stars of each constellation.'**
+  String get settingScreensaverCelestialLinesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Constellation names'**
+  String get settingScreensaverCelestialConstellationNamesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Name the constellations. More appear as you zoom in.'**
+  String get settingScreensaverCelestialConstellationNamesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Star and planet names'**
+  String get settingScreensaverCelestialNamesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Name the Sun, the Moon, the planets, the brightest stars and the galaxies. More stars get names as you zoom in.'**
+  String get settingScreensaverCelestialNamesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass points'**
+  String get settingScreensaverCelestialCompassTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark north, east, south and west on the horizon.'**
+  String get settingScreensaverCelestialCompassDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Label size'**
+  String get settingScreensaverCelestialLabelScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the labels on the sky from 50 to 200 percent.'**
+  String get settingScreensaverCelestialLabelScaleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Position'**
+  String get settingScreensaverCelestialControlCoordinatesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the latitude and longitude the sky is seen from.'**
+  String get settingScreensaverCelestialControlCoordinatesDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Azimuth'**
+  String get settingScreensaverCelestialControlAzimuthTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the compass direction the center of the screen faces.'**
+  String get settingScreensaverCelestialControlAzimuthDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Altitude'**
+  String get settingScreensaverCelestialControlAltitudeTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show how high above the horizon the center of the screen is.'**
+  String get settingScreensaverCelestialControlAltitudeDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Field of view'**
+  String get settingScreensaverCelestialControlFovTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show how much of the sky the screen spans, in degrees.'**
+  String get settingScreensaverCelestialControlFovDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get settingScreensaverCelestialControlTimeTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the time of the sky, with a Now button after a timelapse.'**
+  String get settingScreensaverCelestialControlTimeDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Timelapse'**
+  String get settingScreensaverCelestialControlTimelapseTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed up time to watch the sky turn. Tap to change the speed.'**
+  String get settingScreensaverCelestialControlTimelapseDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at the sky switch'**
+  String get settingScreensaverCelestialControlPointAtSkyTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn Point at the sky on and off. Shows only on devices with a compass.'**
+  String get settingScreensaverCelestialControlPointAtSkyDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon phase'**
+  String get settingScreensaverCelestialControlMoonPhaseTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the phase of the Moon and how much of it is lit.'**
+  String get settingScreensaverCelestialControlMoonPhaseDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls size'**
+  String get settingScreensaverCelestialControlScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the controls from 50 to 200 percent.'**
+  String get settingScreensaverCelestialControlScaleDescription;
+
+  /// Screensaver mode choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Celestial'**
+  String get screensaverModeCelestial;
+
+  /// Landscape choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Hills'**
+  String get screensaverCelestialTerrainHills;
+
+  /// Landscape choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountains'**
+  String get screensaverCelestialTerrainMountains;
+
+  /// Landscape choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Plains'**
+  String get screensaverCelestialTerrainPlains;
+
+  /// Landscape choice: no ground at all, so the whole screen shows the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get screensaverCelestialTerrainNone;
+
+  /// Location source choice.
+  ///
+  /// In en, this message translates to:
+  /// **'GPS'**
+  String get screensaverCelestialLocationGps;
+
+  /// Location source choice: the home zone in Home Assistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant home'**
+  String get screensaverCelestialLocationHaHome;
+
+  /// Location source choice: a person, device tracker or zone.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant entity'**
+  String get screensaverCelestialLocationHaEntity;
+
+  /// Location source choice: coordinates typed in.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get screensaverCelestialLocationManual;
+
+  /// Status row title under the location source.
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get screensaverCelestialCurrentLocation;
+
+  /// Location status when the GPS source is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no GPS receiver.'**
+  String get screensaverCelestialNoGpsReceiver;
+
+  /// Location status when the GPS source is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission not granted.'**
+  String get screensaverCelestialLocationPermission;
+
+  /// Location status when the GPS source is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'No GPS fix yet.'**
+  String get screensaverCelestialNoGpsFix;
+
+  /// Location status for the Home Assistant home source.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant has no home zone.'**
+  String get screensaverCelestialNoHomeZone;
+
+  /// Location status for the Home Assistant sources.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant is not connected.'**
+  String get screensaverCelestialHaNotConnected;
+
+  /// Location status for the Home Assistant entity source.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an entity with a location.'**
+  String get screensaverCelestialPickEntity;
+
+  /// Location status for the Home Assistant entity source.
+  ///
+  /// In en, this message translates to:
+  /// **'This entity has no location.'**
+  String get screensaverCelestialEntityNoLocation;
+
+  /// Settings page and section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Celestial screensaver'**
+  String get screensaverCelestialPage;
+
+  /// Summary under the page entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Location, landscape, sky, labels, controls'**
+  String get screensaverCelestialSummary;
+
+  /// Group heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Sky'**
+  String get screensaverCelestialSkyGroup;
+
+  /// Group heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Labels'**
+  String get screensaverCelestialLabelsGroup;
+
+  /// Group heading: switches for the chips a touch brings up over the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls'**
+  String get screensaverCelestialControlsGroup;
+
+  /// Location permission row under Required system permissions, shown while the GPS source has no location grant.
+  ///
+  /// In en, this message translates to:
+  /// **'Without this the GPS receiver cannot be read and the sky has no location.'**
+  String get screensaverCelestialLocationGrantMissing;
+
+  /// Location permission row under Required system permissions, shown once the location grant is given.
+  ///
+  /// In en, this message translates to:
+  /// **'The sky can follow the GPS receiver.'**
+  String get screensaverCelestialLocationGrantReady;
+
+  /// Error under the coordinates field.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a latitude and longitude, like 40.71, -74.01'**
+  String get screensaverCelestialCoordinatesInvalid;
+
+  /// Prompt shown on a black screen when the location source has no position.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a location in Settings > Screensaver > Celestial.'**
+  String get screensaverCelestialNoLocation;
+
+  /// Shown on a black screen while the GPS source looks for its first position.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a GPS fix...'**
+  String get screensaverCelestialWaitingForGps;
+
+  /// Hint shown after a single tap on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to close'**
+  String get screensaverCelestialDoubleTapHint;
+
+  /// Note over the sky while the compass is not calibrated.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the device in a figure eight to calibrate the compass.'**
+  String get screensaverCelestialCalibrate;
+
+  /// Label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get celestialSun;
+
+  /// Label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon'**
+  String get celestialMoon;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Mercury'**
+  String get celestialMercury;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Venus'**
+  String get celestialVenus;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Mars'**
+  String get celestialMars;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Jupiter'**
+  String get celestialJupiter;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturn'**
+  String get celestialSaturn;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Uranus'**
+  String get celestialUranus;
+
+  /// Planet label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Neptune'**
+  String get celestialNeptune;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Andromeda Galaxy'**
+  String get celestialAndromedaGalaxy;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Triangulum Galaxy'**
+  String get celestialTriangulumGalaxy;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Large Magellanic Cloud'**
+  String get celestialLargeMagellanicCloud;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Small Magellanic Cloud'**
+  String get celestialSmallMagellanicCloud;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Orion Nebula'**
+  String get celestialOrionNebula;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Lagoon Nebula'**
+  String get celestialLagoonNebula;
+
+  /// Deep-sky object label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Carina Nebula'**
+  String get celestialCarinaNebula;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Pleiades'**
+  String get celestialPleiades;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Beehive Cluster'**
+  String get celestialBeehiveCluster;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Double Cluster'**
+  String get celestialDoubleCluster;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'Omega Centauri'**
+  String get celestialOmegaCentauri;
+
+  /// Star cluster label on the sky.
+  ///
+  /// In en, this message translates to:
+  /// **'47 Tucanae'**
+  String get celestialTucanae47;
+
+  /// Compass point on the horizon: north, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'N'**
+  String get celestialCompassNorth;
+
+  /// Compass point on the horizon: east, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'E'**
+  String get celestialCompassEast;
+
+  /// Compass point on the horizon: south, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get celestialCompassSouth;
+
+  /// Compass point on the horizon: west, one or two letters.
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get celestialCompassWest;
+
+  /// Compass direction in the Azimuth chip: northeast, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'NE'**
+  String get celestialCompassNorthEast;
+
+  /// Compass direction in the Azimuth chip: southeast, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'SE'**
+  String get celestialCompassSouthEast;
+
+  /// Compass direction in the Azimuth chip: southwest, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'SW'**
+  String get celestialCompassSouthWest;
+
+  /// Compass direction in the Azimuth chip: northwest, short like N or E.
+  ///
+  /// In en, this message translates to:
+  /// **'NW'**
+  String get celestialCompassNorthWest;
+
+  /// Short label before the azimuth in the bar over the sky, like astronomy programs use. Keep it to a few letters.
+  ///
+  /// In en, this message translates to:
+  /// **'Az'**
+  String get celestialAzimuthShort;
+
+  /// Short label before the altitude in the bar over the sky, like astronomy programs use. Keep it to a few letters.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt'**
+  String get celestialAltitudeShort;
+
+  /// Short label before the field of view in the bar over the sky, like astronomy programs use. Keep it to a few letters.
+  ///
+  /// In en, this message translates to:
+  /// **'FOV'**
+  String get celestialFovShort;
+
+  /// Button in the bar over the sky that brings the sky back to the current time after a timelapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get celestialNow;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'New Moon'**
+  String get celestialMoonNew;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing crescent'**
+  String get celestialMoonWaxingCrescent;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'First quarter'**
+  String get celestialMoonFirstQuarter;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing gibbous'**
+  String get celestialMoonWaxingGibbous;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Moon'**
+  String get celestialMoonFull;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning gibbous'**
+  String get celestialMoonWaningGibbous;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Last quarter'**
+  String get celestialMoonLastQuarter;
+
+  /// Moon phase in the Moon phase chip, followed by the lit percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning crescent'**
+  String get celestialMoonWaningCrescent;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Style'**
   String get settingScreensaverClockStyleTitle;
 
@@ -15684,6 +19166,54 @@ abstract class UiStrings {
   /// Setting label.
   ///
   /// In en, this message translates to:
+  /// **'Numbers'**
+  String get settingScreensaverHandNumbersTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Which hours the dial shows as numbers.'**
+  String get settingScreensaverHandNumbersDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show seconds hand'**
+  String get settingScreensaverHandSecondsTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw a seconds hand on the dial.'**
+  String get settingScreensaverHandSecondsDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Clock color'**
+  String get settingScreensaverHandColorTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The color of the hands, numbers and ticks.'**
+  String get settingScreensaverHandColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Background color'**
+  String get settingScreensaverHandBgColorTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The color behind the clock.'**
+  String get settingScreensaverHandBgColorDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
   /// **'Night mode'**
   String get settingScreensaverClockNightTitle;
 
@@ -15798,6 +19328,24 @@ abstract class UiStrings {
   /// Label, status or guidance in this section.
   ///
   /// In en, this message translates to:
+  /// **'Hand Clock'**
+  String get screensaverStyleHand;
+
+  /// Label, status or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'12, 3, 6 and 9'**
+  String get screensaverHandNumbersQuarters;
+
+  /// Label, status or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'All hours'**
+  String get screensaverHandNumbersAll;
+
+  /// Label, status or guidance in this section.
+  ///
+  /// In en, this message translates to:
   /// **'Default'**
   String get screensaverFontDefault;
 
@@ -15861,6 +19409,36 @@ abstract class UiStrings {
   /// **'Use at most {count} characters'**
   String screensaverMaxCharacters(String count);
 
+  /// Setting label. A switch shown while the 24-hour clock is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Show AM/PM'**
+  String get settingScreensaverClockAmPmTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add AM or PM after the time.'**
+  String get settingScreensaverClockAmPmDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn screen off at night after'**
+  String get settingScreensaverClockNightTurnOffMinutesTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Turns the screen off once Night mode has lasted the set time and back on when the room brightens. Set to 0 to keep the screen on. Requires Device Administrator permission.'**
+  String get settingScreensaverClockNightTurnOffMinutesDescription;
+
+  /// Warning before Night mode is allowed to power the screen off.
+  ///
+  /// In en, this message translates to:
+  /// **'When the display really powers off, the tablet\'s own power management takes over. Many Android models misbehave in that state: Wi-Fi naps or drops, Home Assistant entities go unavailable, the camera can be revoked and some models kill background apps. Some light sensors also stop reporting with the display off, so the screen may not turn back on by itself when the room brightens. What happens depends on the manufacturer.\n\nThe reliable alternative is Use a black screen instead. The panel looks just as dark and the app keeps full control.'**
+  String get screensaverNightTurnOffWarning;
+
   /// Label or guidance in this editor.
   ///
   /// In en, this message translates to:
@@ -15906,30 +19484,6 @@ abstract class UiStrings {
   /// Label or guidance in this editor.
   ///
   /// In en, this message translates to:
-  /// **'Name or entity id'**
-  String get screensaverOverlaySearchHint;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Search by name or entity id'**
-  String get screensaverOverlaySearchHintRemote;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Type to search entities.'**
-  String get screensaverOverlaySearchEmpty;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing matched.'**
-  String get screensaverOverlayNoMatches;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
   /// **'Searching…'**
   String get screensaverOverlaySearching;
 
@@ -15944,12 +19498,6 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'The device did not answer.'**
   String get screensaverOverlayNoAnswer;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not search entities: {error}'**
-  String screensaverOverlaySearchError(String error);
 
   /// Setting label.
   ///
@@ -16230,8 +19778,56 @@ abstract class UiStrings {
   /// Help below the setting.
   ///
   /// In en, this message translates to:
-  /// **'Motion, face, proximity or person detection after the screen has turned off brings the screensaver back instead of the dashboard, with a fresh Turn screen off after countdown. Touch still opens the dashboard.'**
-  String get settingScreensaverScreenOffWakeToScreensaverDescription;
+  /// **'Choose what brings the screensaver back instead of the dashboard after the screen has turned off. The Turn screen off after countdown starts over.'**
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources;
+
+  /// Value of the Wake to screensaver row when every way of waking is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get screensaverWakeSourcesAll;
+
+  /// Choice in the Wake to screensaver dialog: motion detection wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion'**
+  String get screensaverWakeSourceMotion;
+
+  /// Choice in the Wake to screensaver dialog: face detection wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Face'**
+  String get screensaverWakeSourceFace;
+
+  /// Choice in the Wake to screensaver dialog: the proximity sensor wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Proximity'**
+  String get screensaverWakeSourceProximity;
+
+  /// Choice in the Wake to screensaver dialog: person detection wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Person'**
+  String get screensaverWakeSourcePerson;
+
+  /// Choice in the Wake to screensaver dialog: the device power button wakes the screen to the screensaver.
+  ///
+  /// In en, this message translates to:
+  /// **'Power button'**
+  String get screensaverWakeSourcePower;
+
+  /// Choice in the Wake to screensaver dialog: touching the black screen brings the screensaver back.
+  ///
+  /// In en, this message translates to:
+  /// **'Touch'**
+  String get screensaverWakeSourceTouch;
+
+  /// Hint under the grayed-out Touch choice in the Wake to screensaver dialog. Both quoted names are other settings on the same page.
+  ///
+  /// In en, this message translates to:
+  /// **'Requires both \"Turn screen off after\" and \"Use a black screen instead.\"'**
+  String get screensaverWakeSourceTouchRequires;
 
   /// Label, status or guidance in this section.
   ///
@@ -16371,17 +19967,47 @@ abstract class UiStrings {
   /// **'The Home Assistant dashboard view the screensaver shows.'**
   String get settingScreensaverDashboardViewDescription;
 
-  /// Label, status or guidance in this section.
+  /// Setting label.
   ///
   /// In en, this message translates to:
-  /// **'Select dashboard'**
-  String get screensaverSelectDashboard;
+  /// **'Double tap to dismiss'**
+  String get settingScreensaverDashboardDoubleTapTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Single taps interact with the dashboard instead of dismissing.'**
+  String get settingScreensaverDashboardDoubleTapDescription;
 
   /// Label, status or guidance in this section.
   ///
   /// In en, this message translates to:
   /// **'Home Assistant Dashboard screensaver'**
   String get screensaverDashboardSection;
+
+  /// Screensaver mode that shows an image fetched from a web address. Also the title of the address field.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
+  String get screensaverModeUrl;
+
+  /// Heading of the group for the Calendar screensaver mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar screensaver'**
+  String get screensaverCalendarSection;
+
+  /// Setting label: which calendar view (Day, Week, Month or Schedule) the screensaver opens on.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar view'**
+  String get settingScreensaverCalendarViewTitle;
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'The calendar view the screensaver opens on.'**
+  String get settingScreensaverCalendarViewDescription;
 
   /// Setting label.
   ///
@@ -16506,38 +20132,8 @@ abstract class UiStrings {
   /// Label or guidance in this editor.
   ///
   /// In en, this message translates to:
-  /// **'Showing (drag to reorder)'**
-  String get screensaverOverlayReorder;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'That is the most the row can show. Remove one to add another.'**
-  String get screensaverOverlayFull;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'At a glance entities'**
-  String get screensaverOverlayPickerTitle;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'None yet. Up to {count} entities.'**
-  String screensaverOverlayGlanceEmpty(String count);
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
   /// **'None yet'**
   String get screensaverOverlayNone;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Up to {count} entities.'**
-  String screensaverOverlayLimit(String count);
 
   /// Subpage navigation title or summary.
   ///
@@ -17619,6 +21215,96 @@ abstract class UiStrings {
   /// **'A tap on the left or right fifth of the screen shows the previous or next slide instead of dismissing.'**
   String get settingScreensaverMediaEdgeTapsDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show metadata'**
+  String get settingScreensaverMediaMetadataTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and camera details over the photo.'**
+  String get settingScreensaverMediaMetadataDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Date taken'**
+  String get settingScreensaverMediaMetadataDateTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show when the photo was taken.'**
+  String get settingScreensaverMediaMetadataDateDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera details'**
+  String get settingScreensaverMediaMetadataCameraTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show focal length, aperture and ISO.'**
+  String get settingScreensaverMediaMetadataCameraDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata position'**
+  String get settingScreensaverMediaMetadataPositionTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Which corner the details sit in.'**
+  String get settingScreensaverMediaMetadataPositionDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text drop shadow'**
+  String get settingScreensaverMediaMetadataTextShadowTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a drop shadow to metadata text for readability on photos.'**
+  String get settingScreensaverMediaMetadataTextShadowDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text scaling'**
+  String get settingScreensaverMediaMetadataScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the photo details to better fit your screen size.'**
+  String get settingScreensaverMediaMetadataScaleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Vignette strength'**
+  String get settingScreensaverMediaVignetteStrengthTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Darkness of the shading behind the details, for readability on bright photos. 0 turns it off.'**
+  String get settingScreensaverMediaVignetteStrengthDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant Media metadata'**
+  String get screensaverMediaHaMetadata;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -17628,8 +21314,8 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'Media source, timing, shuffle, fill'**
-  String get screensaverMediaHaHint;
+  /// **'Media source, timing, shuffle, fill, metadata'**
+  String get screensaverMediaHaPageHint;
 
   /// Label or guidance in this section.
   ///
@@ -17781,6 +21467,96 @@ abstract class UiStrings {
   /// **'A tap on the left or right fifth of the screen shows the previous or next slide instead of dismissing.'**
   String get settingScreensaverLocalEdgeTapsDescription;
 
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Show metadata'**
+  String get settingScreensaverLocalMetadataTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and camera details over the photo.'**
+  String get settingScreensaverLocalMetadataDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Date taken'**
+  String get settingScreensaverLocalMetadataDateTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show when the photo was taken.'**
+  String get settingScreensaverLocalMetadataDateDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera details'**
+  String get settingScreensaverLocalMetadataCameraTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Show focal length, aperture and ISO.'**
+  String get settingScreensaverLocalMetadataCameraDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata position'**
+  String get settingScreensaverLocalMetadataPositionTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Which corner the details sit in.'**
+  String get settingScreensaverLocalMetadataPositionDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text drop shadow'**
+  String get settingScreensaverLocalMetadataTextShadowTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a drop shadow to metadata text for readability on photos.'**
+  String get settingScreensaverLocalMetadataTextShadowDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Text scaling'**
+  String get settingScreensaverLocalMetadataScaleTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale the photo details to better fit your screen size.'**
+  String get settingScreensaverLocalMetadataScaleDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Vignette strength'**
+  String get settingScreensaverLocalVignetteStrengthTitle;
+
+  /// Help below the setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Darkness of the shading behind the details, for readability on bright photos. 0 turns it off.'**
+  String get settingScreensaverLocalVignetteStrengthDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Media metadata'**
+  String get screensaverMediaLocalMetadata;
+
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
@@ -17790,8 +21566,38 @@ abstract class UiStrings {
   /// Label or guidance in this section.
   ///
   /// In en, this message translates to:
-  /// **'Folder, timing, shuffle, transition'**
-  String get screensaverMediaLocalHint;
+  /// **'Folder, timing, shuffle, transition, metadata'**
+  String get screensaverMediaLocalPageHint;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'An image address the device fetches again for every slide.'**
+  String get settingScreensaverUrlImageDescription;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'How long each photo shows before the next fetch.'**
+  String get settingScreensaverUrlIntervalDescription;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL screensaver'**
+  String get screensaverMediaUrlPage;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'URL, timing, transition, metadata'**
+  String get screensaverMediaUrlPageHint;
+
+  /// Label or guidance in this section.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL metadata'**
+  String get screensaverMediaUrlMetadata;
 
   /// Setting label.
   ///
@@ -17846,6 +21652,36 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Motion detection is tuned in the Camera settings.'**
   String get screensaverDetectionMotionTuning;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Home Assistant entity'**
+  String get settingMotionUseEntityTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Detect motion with a Home Assistant sensor instead of the camera.'**
+  String get settingMotionUseEntityDescription;
+
+  /// Setting label.
+  ///
+  /// In en, this message translates to:
+  /// **'Motion sensor entity'**
+  String get settingMotionEntityTitle;
+
+  /// Help below this setting.
+  ///
+  /// In en, this message translates to:
+  /// **'The Home Assistant occupancy, motion or presence sensor to follow.'**
+  String get settingMotionEntityDescription;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'External Motion Sensor'**
+  String get screensaverDetectionExternalMotionHeading;
 
   /// Setting label.
   ///
@@ -18861,6 +22697,30 @@ abstract class UiStrings {
   /// **'The name under the value.'**
   String get screensaverOverlayShowNameHelp;
 
+  /// Label or guidance in this editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Show icon'**
+  String get screensaverOverlayShowIcon;
+
+  /// Label or guidance in this editor.
+  ///
+  /// In en, this message translates to:
+  /// **'The icon beside the value.'**
+  String get screensaverOverlayShowIconHelp;
+
+  /// Label or guidance in this editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible states'**
+  String get screensaverOverlayVisibleStates;
+
+  /// Label or guidance in this editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.'**
+  String get screensaverOverlayVisibleStatesHelp;
+
   /// Generic font family option. Font brand names stay unchanged.
   ///
   /// In en, this message translates to:
@@ -18908,24 +22768,6 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Weather entity'**
   String get screensaverOverlayWeatherEntity;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'No weather entities'**
-  String get screensaverOverlayNoWeather;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Home Assistant reported none.'**
-  String get screensaverOverlayNoWeatherHelp;
-
-  /// Label or guidance in this editor.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a weather entity…'**
-  String get screensaverOverlayPickWeather;
 
   /// Label or guidance in this editor.
   ///
@@ -19317,6 +23159,12 @@ abstract class UiStrings {
   /// **'Available while the kiosk is showing your Home Assistant dashboard.'**
   String get voiceDashboardRequired;
 
+  /// The Skin row's value when it picks a plugin that is no longer installed. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable plugin skin'**
+  String get voiceSkinUnavailablePlugin;
+
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:
@@ -19664,6 +23512,42 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'The wake, done and error sounds.'**
   String get settingVoiceWakeSoundDescription;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Wake sound volume'**
+  String get voiceChimeWakeVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Done sound volume'**
+  String get voiceChimeDoneVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Error sound volume'**
+  String get voiceChimeErrorVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer sound volume'**
+  String get voiceChimeTimerVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Announcement sound volume'**
+  String get voiceChimeAnnounceVolumeTitle;
+
+  /// Chime selection, playback or help shown on the device and in Remote Admin.
+  ///
+  /// In en, this message translates to:
+  /// **'A share of the assistant volume.'**
+  String get voiceChimeVolumeDescription;
 
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
@@ -20088,8 +23972,8 @@ abstract class UiStrings {
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:
-  /// **'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered.'**
-  String get voiceHaAddHint;
+  /// **'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.'**
+  String get voiceHaAddAgainHint;
 
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
@@ -21570,6 +25454,18 @@ abstract class UiStrings {
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:
+  /// **'Arbitration offset'**
+  String get settingVoiceWakeArbitrationOffsetTitle;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to how loud this kiosk heard the wake word. Raise it if this kiosk loses when it is closer, lower it if it answers from too far away.'**
+  String get settingVoiceWakeArbitrationOffsetDescription;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
   /// **'Wake Word Arbitration'**
   String get voiceSectionWakeArbitration;
 
@@ -21704,6 +25600,24 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'The model does not load: {error}'**
   String voiceModelNoLoad(String error);
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Wake word language'**
+  String get settingVoiceAmazonLocaleTitle;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'The language of Amazon\'s wake word models. The wake word selects offer the wake words it has.'**
+  String get settingVoiceAmazonLocaleDescription;
+
+  /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosk Satellite\'s language'**
+  String get voiceOptionAppLanguage;
 
   /// Setting label.
   ///
@@ -21866,6 +25780,186 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'// Example: zoom a site that ignores the dashboard zoom level\ndocument.documentElement.style.zoom = \'1.25\';'**
   String get browserInjectJsExternalPlaceholder;
+
+  /// Name of the settings page that blocks or allows the addresses the dashboard and external pages open, and of its entry row.
+  ///
+  /// In en, this message translates to:
+  /// **'URL Filter'**
+  String get urlFilterTitle;
+
+  /// Hint under the URL Filter entry row.
+  ///
+  /// In en, this message translates to:
+  /// **'Block or allow pages by address pattern or regular expression'**
+  String get urlFilterHint;
+
+  /// Headline of the intro at the top of the URL Filter page.
+  ///
+  /// In en, this message translates to:
+  /// **'Control which pages open'**
+  String get urlFilterIntroTitle;
+
+  /// Text under the URL Filter intro headline. Block and Allow only are the two choices of a rule's Action field.
+  ///
+  /// In en, this message translates to:
+  /// **'Links or pages that match a Block rule don\'t load. Add an Allow only rule to load only the pages it matches.'**
+  String get urlFilterIntroSub;
+
+  /// Row at the end of the URL Filter list that opens the editor for a new rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Add rule'**
+  String get urlFilterAdd;
+
+  /// Title of the editor dialog for a new URL Filter rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Add filter rule'**
+  String get urlFilterAddTitle;
+
+  /// Title of the editor dialog for an existing URL Filter rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit filter rule'**
+  String get urlFilterEditTitle;
+
+  /// Label of the rule's name field in the URL Filter editor.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get urlFilterName;
+
+  /// Label of the field holding the address pattern or regular expression a rule blocks.
+  ///
+  /// In en, this message translates to:
+  /// **'Pattern'**
+  String get urlFilterPattern;
+
+  /// Help under the Pattern field for a wildcard rule. Keep * and /history* as they are.
+  ///
+  /// In en, this message translates to:
+  /// **'Use * to match anything. A pattern starting with / matches the path on any server, such as /history*.'**
+  String get urlFilterPatternWildcardHint;
+
+  /// Help under the Pattern field for a regular expression rule.
+  ///
+  /// In en, this message translates to:
+  /// **'A regular expression matched anywhere in the address, ignoring case.'**
+  String get urlFilterPatternRegexHint;
+
+  /// Label of the choice between a wildcard pattern and a regular expression.
+  ///
+  /// In en, this message translates to:
+  /// **'Pattern type'**
+  String get urlFilterType;
+
+  /// Pattern type option: a pattern where * matches anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Wildcard'**
+  String get urlFilterTypeWildcard;
+
+  /// Pattern type option: a regular expression.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular expression'**
+  String get urlFilterTypeRegex;
+
+  /// Label of the choice between blocking the pages a rule matches and allowing only them.
+  ///
+  /// In en, this message translates to:
+  /// **'Action'**
+  String get urlFilterAction;
+
+  /// Action option: pages that match the rule do not load.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get urlFilterActionBlock;
+
+  /// Action option: only pages that match an Allow only rule load where the rule applies. Also shown on the rule's row in the list.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow only'**
+  String get urlFilterActionAllow;
+
+  /// Help under the Action field when Allow only is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Where this rule applies, only pages that match an Allow only rule load. Home Assistant sign-in and the start dashboard always load.'**
+  String get urlFilterActionAllowHint;
+
+  /// Label of the choice of where a rule blocks addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to'**
+  String get urlFilterScope;
+
+  /// Applies to option: both the dashboard and external pages.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard and external pages'**
+  String get urlFilterScopeAll;
+
+  /// Applies to option: the dashboard and custom pages.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get urlFilterScopeDashboard;
+
+  /// Applies to option: pages opened from dashboard links and dashboard rotation pages, shown over the dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'External pages'**
+  String get urlFilterScopeExternal;
+
+  /// Help under the Applies to choice.
+  ///
+  /// In en, this message translates to:
+  /// **'External pages are links opened from the dashboard and dashboard rotation pages.'**
+  String get urlFilterScopeHint;
+
+  /// Error in the URL Filter editor when the name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name.'**
+  String get urlFilterErrorName;
+
+  /// Error in the URL Filter editor when the pattern is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a pattern.'**
+  String get urlFilterErrorPattern;
+
+  /// Error in the URL Filter editor when the regular expression has a syntax error.
+  ///
+  /// In en, this message translates to:
+  /// **'This regular expression is not valid.'**
+  String get urlFilterErrorRegex;
+
+  /// Title of the notice shown on the kiosk when a link or the page tries to open an address a URL Filter rule blocks. The rule's name shows under it.
+  ///
+  /// In en, this message translates to:
+  /// **'Page blocked'**
+  String get urlFilterBlocked;
+
+  /// Shown under Page blocked when a page is blocked because no Allow only rule matches it.
+  ///
+  /// In en, this message translates to:
+  /// **'Not on the allowed pages'**
+  String get urlFilterNotAllowed;
+
+  /// Title of the switch that shows a notice on the kiosk when a URL Filter rule blocks a page.
+  ///
+  /// In en, this message translates to:
+  /// **'Show blocked page notice'**
+  String get settingBrowserUrlFilterNoticeTitle;
+
+  /// Description under Show blocked page notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Show a short notice with the rule\'s name when a page is blocked.'**
+  String get settingBrowserUrlFilterNoticeDescription;
 
   /// Page heading.
   ///
@@ -22034,6 +26128,12 @@ abstract class UiStrings {
   /// In en, this message translates to:
   /// **'Choose the dashboard the kiosk will display. You can change it later in Settings.'**
   String get setupSelectDashboardHelp;
+
+  /// Permissions step of the remote setup wizard on a device without a screen.
+  ///
+  /// In en, this message translates to:
+  /// **'This device has no screen, so Android cannot ask for these on it. Give each one over adb, then finish here.'**
+  String get setupHeadlessGrants;
 
   /// Welcome step label.
   ///
@@ -22410,8 +26510,8 @@ abstract class UiStrings {
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
   /// In en, this message translates to:
-  /// **'After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered.'**
-  String get setupVoiceAddHint;
+  /// **'After setup, add this kiosk in Home Assistant under Settings, Devices & services, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.'**
+  String get setupVoiceAddAgainHint;
 
   /// Translate the visible label or help. Keep Voice Satellite, Kiosk Satellite, Home Assistant, ESPHome, HACS and model names unchanged.
   ///
@@ -22873,6 +26973,7 @@ class _UiStringsDelegate extends LocalizationsDelegate<UiStrings> {
     'es',
     'fr',
     'nl',
+    'ru',
     'uk',
     'zh',
   ].contains(locale.languageCode);
@@ -22906,6 +27007,8 @@ UiStrings lookupUiStrings(Locale locale) {
       return UiStringsFr();
     case 'nl':
       return UiStringsNl();
+    case 'ru':
+      return UiStringsRu();
     case 'uk':
       return UiStringsUk();
     case 'zh':

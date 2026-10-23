@@ -1,3 +1,5 @@
+import { isHeadless } from './headless.js';
+
 /* ---- System permissions ----
    What the app can ask Android for, what each grant is for, and whether a
    switched-on feature needs it right now. One list, read by the Device
@@ -5,11 +7,53 @@
    Overview's Needs attention card (only what is needed and missing).
    `on(key)` answers whether a boolean setting is on, `value(key)` reads
    any setting. */
-export function permissionSpecs(on, value = () => undefined) {
-  const background = on('wake_word.enabled') && on('wake_word.background');
+export function permissionSpecs(on, value = () => undefined, headless = isHeadless()) {
+  const specs = allPermissionSpecs(on, value);
+  if (!headless) return specs;
+  // No screen to accept a grant on: adb gives each one, and the grants for
+  // display features are left out. The buttons are the device's own row.
+  return [
+    ...specs
+      .filter((spec) => ['microphone', 'batteryUnrestricted', 'bluetooth', 'notification', 'location', 'allFiles'].includes(spec.key))
+      .map((spec) => ({ ...spec, adb: HEADLESS_ADB[spec.key] || spec.adb })),
+    { key: 'hardwareButtons', name: 'Hardware buttons',
+      needed: true,
+      // Switched on but not running: Android 7 starts a service enabled at
+      // runtime only after a reboot, so the commands would not help again.
+      adb: (all) => (all.hardwareButtonsOn ? HEADLESS_ADB.hardwareButtonsRestart : HEADLESS_ADB.hardwareButtons),
+      held: 'The device buttons reach gestures and Voice Satellite.',
+      missing: 'The device buttons do nothing until the button service is switched on.',
+      idle: '' },
+  ];
+}
+
+// The adb command for each grant a device without a screen needs, since
+// Android cannot ask for it there.
+export const HEADLESS_ADB = {
+    microphone: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO',
+    notification: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS',
+    location: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION',
+    bluetooth: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, then the same for BLUETOOTH_CONNECT',
+    batteryUnrestricted: 'This device has no screen. Grant it over adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite',
+    allFiles: 'This device has no screen. Grant it over adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, then the same for WRITE_EXTERNAL_STORAGE',
+    hardwareButtons: 'This device has no screen. Switch it on over adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, then adb shell settings put secure accessibility_enabled 1',
+    hardwareButtonsRestart: 'The button service is switched on but has not started. Restart the device to start it: adb reboot',
+};
+
+/** A row's adb line, which for some rows depends on what the status says. */
+export function adbHint(spec, all = {}) {
+  return typeof spec.adb === 'function' ? spec.adb(all) : spec.adb;
+}
+
+function allPermissionSpecs(on, value) {
+  // Nothing listens for the wake word with the native satellite switched
+  // off. A dashboard runtime starts the engine from the page instead.
+  const listening = on('wake_word.enabled')
+    && (value('voice.runtime') === 'dashboard' || on('voice.enabled'));
+  const background = listening && on('wake_word.background');
   return [
     { key: 'microphone', name: 'Microphone', ask: 'microphone',
-      needed: on('wake_word.enabled'),
+      needed: listening,
       held: 'Allows microphone usage for wake word detection, speech to text and intercom calls.',
       missing: 'Wake word detection is on and nothing is listening.',
       idle: 'Needed by wake word detection, the intercom and pages that ask for the microphone.' },
@@ -86,7 +130,9 @@ export function permissionSpecs(on, value = () => undefined) {
       missing: 'Without this Android lists no media sessions, so Now Playing cannot follow the apps playing on this device.',
       idle: 'Lets Now Playing follow the apps playing on this device.' },
     { key: 'location', name: 'Location', ask: 'location',
-      needed: on('btproxy.enabled') || on('location.enabled'),
+      needed: on('btproxy.enabled') || on('location.enabled')
+        || (value('screensaver.mode') === 'celestial'
+          && value('screensaver.celestial_location') === 'gps'),
       held: 'Pages, Bluetooth scanning and the location sensors can use the device position.',
       missing: 'Android will not deliver Bluetooth scan results without Location, and the location sensors cannot read the GPS receiver.',
       idle: 'Used by pages that ask for your location, by Bluetooth scanning and by the ESPHome location sensors.' },

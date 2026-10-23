@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart' show EdgeInsets;
 import 'package:flutter/widgets.dart'
     show AppLifecycleState, WidgetsBinding, WidgetsBindingObserver;
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+import 'color_scheme_script.dart';
+import 'content_insets_script.dart';
 import 'no_cache_script.dart';
+import 'url_filter.dart';
 import 'dashboard_camera_script.dart';
 import 'dashboard_state.dart';
 import 'visibility_mask_script.dart';
@@ -20,6 +24,7 @@ import '../device/device_details.dart';
 import '../device/screen_capture.dart';
 import '../device/webview_freeze.dart';
 import '../device/webview_recovery.dart';
+import '../home_assistant/custom_pages.dart';
 import '../sendspin/music_assistant_api.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
@@ -53,6 +58,17 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
   String _currentUrl = '';
 
   String get currentUrl => _currentUrl;
+
+  /// The URL of the document in the dashboard WebView right now, as the
+  /// WebView reports it. [currentUrl] only moves when a load finishes, and
+  /// a page's own scripts run before that.
+  Future<String> liveUrl() async {
+    try {
+      final url = await _controller?.getUrl();
+      if (url != null) return url.toString();
+    } catch (_) {}
+    return _currentUrl;
+  }
 
   /// Whether a live WebView is attached. A configured, foregrounded kiosk
   /// always has one; the frame watchdog treats its prolonged absence as
@@ -187,6 +203,10 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
   /// origin is not when the secure context proxy is on: the page runs on
   /// loopback, while a screensaver or link URL names the real host.
   bool isHomeAssistantOrigin(Uri url) {
+    // A custom page on another server can be the page on screen, which
+    // makes it the dashboard's origin for links, but it never gets Home
+    // Assistant's session.
+    if (isCustomPageOrigin(url)) return false;
     if (isDashboardOrigin(url)) return true;
     final base = Uri.tryParse(_settings.get(defs.haUrl).trim());
     return base != null &&
@@ -333,6 +353,12 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
       if (e.key == defs.haUrl.key) unawaited(_migrateStartUrlOrigin(e));
     });
     bus.on<SettingChanged>().listen((e) {
+      // The start page is one of the allow list's exemptions.
+      if (e.key == defs.browserUrlFilter.key || e.key == defs.startUrl.key) {
+        unawaited(_applyUrlFilter());
+      }
+    });
+    bus.on<SettingChanged>().listen((e) {
       if (e.key == defs.pauseDashboardCameras.key) {
         _scheduleDashboardCameraSync();
       }
@@ -372,6 +398,76 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
             _screensaverActive = false;
             _freezeDelay?.cancel();
             await _syncFreeze();
+            return const CommandResult.ok();
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'saveUrlFilterRule',
+          description:
+              'Add a URL Filter rule or change one. Backs Save in the URL '
+              'Filter editors on both settings surfaces. Fails with name, '
+              'pattern or regex when that field is not usable.',
+          params: const {
+            'name': 'the name the list and the blocked notice show',
+            'pattern': 'a wildcard pattern or a regular expression',
+            'type': 'wildcard (default) or regex',
+            'scope': 'all (default), dashboard or external',
+            'action':
+                'block (default), or allow to let only matching addresses '
+                'open where the rule applies',
+            'index':
+                'optional: the position of the rule being changed, absent '
+                'for a new one',
+          },
+          handler: (p) async {
+            final rule = UrlFilterRule(
+              name: '${p['name'] ?? ''}'.trim(),
+              pattern: '${p['pattern'] ?? ''}'.trim(),
+              type: urlFilterTypes.contains(p['type'])
+                  ? p['type'] as String
+                  : urlFilterWildcard,
+              scope: urlFilterScopes.contains(p['scope'])
+                  ? p['scope'] as String
+                  : urlFilterAll,
+              action: urlFilterActions.contains(p['action'])
+                  ? p['action'] as String
+                  : urlFilterBlock,
+            );
+            final error = urlFilterRuleError(rule);
+            if (error != null) return CommandResult.fail(error);
+            final rules = [...urlFilter];
+            final index = p['index'] is num ? (p['index'] as num).toInt() : -1;
+            if (index >= 0 && index < rules.length) {
+              rules[index] = rule;
+            } else {
+              rules.add(rule);
+            }
+            await _settings.setFromJson(
+              defs.browserUrlFilter.key,
+              encodeUrlFilter(rules),
+            );
+            return const CommandResult.ok();
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'removeUrlFilterRule',
+          description: 'Remove a URL Filter rule.',
+          params: const {'index': 'the position of the rule in the list'},
+          handler: (p) async {
+            final rules = [...urlFilter];
+            final index = p['index'] is num ? (p['index'] as num).toInt() : -1;
+            if (index < 0 || index >= rules.length) {
+              return const CommandResult.fail('no such rule');
+            }
+            rules.removeAt(index);
+            await _settings.setFromJson(
+              defs.browserUrlFilter.key,
+              encodeUrlFilter(rules),
+            );
             return const CommandResult.ok();
           },
         ),
@@ -559,6 +655,9 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
           name: 'reload',
           description: 'Reload the current page',
           handler: (_) async {
+            // A custom page reloads its edited files too, not the copies
+            // Home Assistant's service worker kept.
+            if (isCustomPage(_currentUrl)) await _dropCustomPageCopies();
             await _controller?.reload();
             return const CommandResult.ok();
           },
@@ -777,7 +876,11 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
     );
   }
 
-  void attach(InAppWebViewController controller) {
+  void attach(InAppWebViewController controller, {bool freshLoads = false}) {
+    _freshLoads = freshLoads;
+    // The WebView took its own cache mode at creation; the service worker's
+    // follows it here (no view matches yet, so only that part applies).
+    unawaited(WebViewFreeze.setCacheMode(noCache: freshLoads, urlPrefix: '-'));
     _rendererRecovery?.cancel();
     _rendererRecovery = null;
     _rendererRebuildPending = false;
@@ -1245,8 +1348,16 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
     _loadErrorThisLoad = false;
     _httpErrorThisLoad = false;
     if (!loadFailed.value) _clearErrorReload();
+    if (!loadFailed.value && isCustomPage(url)) {
+      unawaited(UsageCounters.bump(_settings, 'custom_page_loads'));
+    }
     _currentUrl = url;
     log.info(name, 'loaded $url');
+    // A page reached without passing through prepareLoad (Back, a reload
+    // the renderer started on its own) sets the cache for what follows,
+    // and a custom page's own files leave the service worker's cache so a
+    // reload nobody prepared for still finds the edited ones.
+    unawaited(prepareLoad(url));
     bus.publish(PageChanged(url: url));
     unawaited(_applyPendingLocalStorage());
     final loaded = Uri.tryParse(url);
@@ -1430,7 +1541,262 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
     // sitting above it would make the navigation invisible.
     dismissOverlay();
     final mapped = urlMapper?.call(url) ?? url;
+    await prepareLoad(mapped);
     await _controller?.loadUrl(urlRequest: URLRequest(url: WebUri(mapped)));
+  }
+
+  /// The document-start script group that hands every page the space
+  /// plugins keep clear of their bars (see contentInsetsJs).
+  static const contentInsetsGroup = 'ks-content-insets';
+
+  /// The insets the page last heard, in CSS pixels.
+  EdgeInsets get contentInsets => _contentInsets;
+  EdgeInsets _contentInsets = EdgeInsets.zero;
+
+  /// The page on screen pads by [css] at once, and the document-start
+  /// script is swapped so the next page starts with it too.
+  Future<void> setContentInsets(EdgeInsets css) async {
+    if (css == _contentInsets) return;
+    _contentInsets = css;
+    final controller = _controller;
+    if (controller == null) return;
+    try {
+      await controller.removeUserScriptsByGroupName(
+        groupName: contentInsetsGroup,
+      );
+      await controller.addUserScript(
+        userScript: UserScript(
+          groupName: contentInsetsGroup,
+          source: contentInsetsSource,
+          injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+        ),
+      );
+    } catch (e) {
+      log.debug(name, 'content insets script not swapped: $e');
+    }
+    await runJs(contentInsetsSource);
+  }
+
+  /// [contentInsets] as page script.
+  String get contentInsetsSource => contentInsetsJs(
+    left: _contentInsets.left,
+    top: _contentInsets.top,
+    right: _contentInsets.right,
+    bottom: _contentInsets.bottom,
+  );
+
+  /// The document-start script group that hands every page the URL
+  /// Filter rules for the dashboard (see urlFilterJs).
+  static const urlFilterGroup = 'ks-url-filter';
+
+  String _urlFilterRaw = '';
+  List<UrlFilterRule> _urlFilter = const [];
+
+  /// The URL Filter rules, parsed once per change of the setting.
+  List<UrlFilterRule> get urlFilter {
+    final raw = _settings.get(defs.browserUrlFilter);
+    if (raw != _urlFilterRaw) {
+      _urlFilterRaw = raw;
+      _urlFilter = parseUrlFilter(raw);
+    }
+    return _urlFilter;
+  }
+
+  /// Whether [url] is blocked on any of [surfaces] (urlFilterDashboard,
+  /// urlFilterExternal): null when it may open, the Block rule's name, or ''
+  /// when an allow list leaves it out (see urlFilterBlockedBy). Logged when
+  /// it is blocked, so the reason for a dead link is in the log.
+  String? urlBlockedBy(String url, Set<String> surfaces) {
+    final rule = urlFilterBlockedBy(
+      urlFilter,
+      url,
+      surfaces,
+      exemptions: urlFilterExemptions(startUrl),
+    );
+    if (rule != null) logUrlBlocked(url, rule);
+    return rule;
+  }
+
+  /// One line in the log for a navigation the URL Filter stopped, by the
+  /// Block rule's [rule] name or '' for the allow list.
+  void logUrlBlocked(String url, String rule) {
+    log.info(
+      name,
+      rule.isEmpty
+          ? 'blocked $url (not on the URL Filter allow list)'
+          : 'blocked $url (URL Filter rule "$rule")',
+    );
+    unawaited(UsageCounters.bump(_settings, 'url_filter_blocked'));
+  }
+
+  /// The page script for the rules covering [surface].
+  String urlFilterSource(String surface) => urlFilterJs([
+    for (final r in urlFilter)
+      if (r.appliesTo({surface})) r,
+  ], exemptions: urlFilterExemptions(startUrl));
+
+  /// The rules changed: the page on screen follows at once, and the
+  /// document-start script is swapped so the next page starts with them.
+  Future<void> _applyUrlFilter() async {
+    final controller = _controller;
+    if (controller == null) return;
+    final source = urlFilterSource(urlFilterDashboard);
+    try {
+      await controller.removeUserScriptsByGroupName(groupName: urlFilterGroup);
+      await controller.addUserScript(
+        userScript: UserScript(
+          groupName: urlFilterGroup,
+          source: source,
+          injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+        ),
+      );
+    } catch (e) {
+      log.debug(name, 'URL Filter script not swapped: $e');
+    }
+    await runJs(source);
+  }
+
+  /// The document-start script group that answers a custom page's
+  /// `prefers-color-scheme` (see customPageColorSchemeJs).
+  static const customPageSchemeGroup = 'ks-custom-page-scheme';
+
+  /// A custom page's `prefers-color-scheme` follows [dark] from now on:
+  /// the page on screen flips at once, and the document-start script is
+  /// swapped so the next page starts on it too. Called again when the pages
+  /// change, since the script names the servers of the external ones.
+  Future<void> setCustomPageDark(bool dark) async {
+    final controller = _controller;
+    if (controller == null) return;
+    try {
+      await controller.removeUserScriptsByGroupName(
+        groupName: customPageSchemeGroup,
+      );
+      await controller.addUserScript(
+        userScript: UserScript(
+          groupName: customPageSchemeGroup,
+          source: customPageColorSchemeJs(
+            dark: dark,
+            origins: customPageOrigins,
+          ),
+          injectionTime: UserScriptInjectionTime.AT_DOCUMENT_START,
+        ),
+      );
+    } catch (e) {
+      log.debug(name, 'custom page color scheme not swapped: $e');
+    }
+    await runJs(colorSchemeSetJs(dark: dark));
+  }
+
+  /// Whether the dashboard WebView skips the HTTP cache right now: always
+  /// with Disable cache on, otherwise while a custom page is the target.
+  bool _freshLoads = false;
+
+  /// Whether [url] is a custom page in Home Assistant, a file under its
+  /// /local/. The dashboard WebView holds no other origin's /local/ unless
+  /// the person added that server's pages, so the path says it all.
+  static bool isCustomPageUrl(String url) =>
+      Uri.tryParse(url)?.path.startsWith('/local/') ?? false;
+
+  /// The origins of the custom pages on other servers.
+  Set<String> get customPageOrigins =>
+      externalPageOrigins(parseCustomPages(_settings.get(defs.haCustomPages)));
+
+  /// Whether [url] is on the server of a custom page someone added. Every
+  /// page there counts as theirs: links between their own pages stay in
+  /// the dashboard WebView, and the managed Home Assistant connection
+  /// serves them.
+  bool isCustomPageOrigin(Uri url) =>
+      url.hasAuthority && customPageOrigins.contains(url.origin);
+
+  /// Whether [url] is a custom page, in Home Assistant or on another
+  /// server.
+  bool isCustomPage(String url) {
+    if (isCustomPageUrl(url)) return true;
+    final uri = Uri.tryParse(url);
+    return uri != null && isCustomPageOrigin(uri);
+  }
+
+  /// Prepare the dashboard WebView for loading [target]. Home Assistant
+  /// keeps /local/ files twice over: its service worker answers them from
+  /// its `file-cache` and refreshes that copy in the background, through an
+  /// HTTP cache told to keep them for a month. Either way an edited custom
+  /// page stays stale. So the copies of a custom page the service worker
+  /// holds are dropped before it loads or is left. The WebView and the
+  /// service worker skip the HTTP cache while a custom page is up. Home
+  /// Assistant's own frontend keeps both caches, which its quick start
+  /// depends on.
+  Future<void> prepareLoad(String target) async {
+    final entering = isCustomPage(target);
+    if (entering || isCustomPage(_currentUrl)) {
+      await _dropCustomPageCopies(target: entering ? target : null);
+    }
+    final want = _settings.get(defs.disableCache) || entering;
+    if (want == _freshLoads) return;
+    final prefix = _origin(_currentUrl) ?? _origin(target);
+    if (prefix == null) return;
+    final n = await WebViewFreeze.setCacheMode(
+      noCache: want,
+      urlPrefix: prefix,
+    );
+    if (n > 0) _freshLoads = want;
+  }
+
+  /// Every copy of a custom page's files the kiosk could load again without
+  /// asking Home Assistant: the service worker's, then the renderer's
+  /// in-memory ones, which a reload or a revisit otherwise reuses.
+  Future<void> _dropCustomPageCopies({String? target}) async {
+    await _purgeCustomPageCache(target: target);
+    final prefix = _origin(_currentUrl);
+    if (prefix != null) await WebViewFreeze.clearMemoryCache(urlPrefix: prefix);
+  }
+
+  /// Drop custom page files from the service worker's `file-cache`, run in
+  /// the page on screen (Cache Storage belongs to its origin): everything in
+  /// [target]'s folder, where a page keeps its scripts and data. When a
+  /// custom page is on screen, also that page and every /local/ file it
+  /// loaded.
+  /// A dashboard file caught in the sweep is only read again from the HTTP
+  /// cache. Best effort: a page without Cache Storage or one too busy to
+  /// answer simply keeps them.
+  Future<void> _purgeCustomPageCache({String? target}) async {
+    final path = target == null ? null : Uri.tryParse(target)?.path;
+    final body =
+        '''
+const target = ${jsonEncode(path)};
+if (!self.caches) return 0;
+const drop = new Set();
+const folder = target ? target.slice(0, target.lastIndexOf('/') + 1) : null;
+if (location.pathname.indexOf('/local/') === 0) {
+  drop.add(location.pathname);
+  for (const e of performance.getEntriesByType('resource')) {
+    try {
+      const u = new URL(e.name);
+      if (u.origin === location.origin && u.pathname.indexOf('/local/') === 0) {
+        drop.add(u.pathname);
+      }
+    } catch (_) {}
+  }
+}
+if (!(await caches.has('file-cache'))) return 0;
+const cache = await caches.open('file-cache');
+let n = 0;
+for (const request of await cache.keys()) {
+  const path = new URL(request.url).pathname;
+  const gone = drop.has(path) || (folder && path.indexOf(folder) === 0);
+  if (gone && await cache.delete(request)) n++;
+}
+return n;
+''';
+    try {
+      final override = evalOverride;
+      if (override != null) {
+        await override(body);
+      } else {
+        await _controller
+            ?.callAsyncJavaScript(functionBody: body)
+            .timeout(const Duration(seconds: 2));
+      }
+    } catch (_) {}
   }
 
   /// Evaluate JavaScript and return its stringified result — the REPL in
@@ -1914,6 +2280,16 @@ class BrowserManager extends Manager with WidgetsBindingObserver {
   }) async {
     if (_controller == null && evalOverride == null) return false;
     if (await _haConnected()) return true;
+    // A page with no Home Assistant frontend on it (a custom page, the
+    // login form) has no socket here to bring back, and waiting out the
+    // timeout for one held every wake word on a custom page for seconds.
+    // The launch screen still waits: its frontend is on the way.
+    switch (await _probePageState()) {
+      case 'other':
+        return true;
+      case 'error-page':
+        return false;
+    }
     await reconnectHaSocket();
     final deadline = DateTime.now().add(timeout);
     while (DateTime.now().isBefore(deadline)) {

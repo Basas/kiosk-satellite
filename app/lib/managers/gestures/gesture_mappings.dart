@@ -31,9 +31,15 @@
 /// #888). The names are display copies of the manifest's:
 ///  - plugin:          pluginId, trigger, pluginName, title
 ///
+/// One is a hardware button of a device without a screen (HardwareKeys.kt
+/// through HardwareButtons):
+///  - button:          button (action|microphone|volume_up|volume_down),
+///                     press (single|double|long)
+///
 /// Action types (run in GesturesManager):
 ///  - plugin_action:    pluginId, command (a declared plugin command)
 ///  - navigate:         path (a dashboard view, via haNavigate)
+///  - refresh:          reload the dashboard, like pull to refresh (#983)
 ///  - url:              url (opened in the external link overlay)
 ///  - camera_view:      mode (show|hide), viewId (empty = default view);
 ///                      show toggles: the same gesture again closes the view
@@ -46,8 +52,16 @@
 ///  - intercom_open:    open the intercom's Call a kiosk sheet
 ///  - intercom_call:    kioskId, kioskName: call that kiosk straight away
 ///  - intercom_hangup:  end the intercom call, like the hang up button
+///  - intercom_answer:  answer the call ringing here (#991)
+///  - intercom_decline: decline the call ringing here
 ///  - alarm_stop:       stop the ringing, snoozed or sunrise alarm (#872)
 ///  - alarm_snooze:     snooze the ringing alarm
+///  - calendar:         open the calendar, on view? (day, week, month,
+///                      schedule) when a ks:// link names one
+///  - music_library:    open the Music Library
+///  - voice_wake:       start a voice command, as if the wake word fired
+///  - voice_stop:       dismiss a ringing timer, else end the voice turn
+///  - voice_mute:       mute or unmute Voice Satellite
 ///  - screensaver:      start the screensaver
 ///  - screensaver_stop: stop it (redundant for touch, made for claps)
 ///  - hold_mode:        toggle hold mode (pin the current view, issue #266)
@@ -123,7 +137,7 @@ List<Map<String, Object?>> nativeGestureTriggers(
   List<GestureMapping> mappings,
 ) => [
   for (final m in mappings)
-    if (!const {'claps', 'fingers', 'plugin'}.contains(m.triggerType))
+    if (!const {'claps', 'fingers', 'plugin', 'button'}.contains(m.triggerType))
       {
         'id': m.id,
         'type': m.triggerType,
@@ -182,9 +196,50 @@ String describeGestureTrigger(Map<String, Object?> trigger) {
           : 'Show $n finger${n == 1 ? '' : 's'}';
     case 'plugin':
       return describePluginTrigger(trigger);
+    case 'button':
+      final button = buttonNames['${trigger['button']}'] ?? 'Action';
+      return switch (buttonPress(trigger)) {
+        'double' => 'Double-press the $button button',
+        'long' => 'Hold the $button button',
+        _ => 'Press the $button button',
+      };
   }
   return 'Gesture';
 }
+
+/// Key codes of the buttons a headless device's gestures can use. The Echo
+/// Dot's keypad reports these: its action button as KEYCODE_HELP and its
+/// microphone button as KEYCODE_MUTE.
+const buttonAction = 259;
+const buttonMicrophone = 91;
+
+const buttonKeyCodes = {
+  'action': buttonAction,
+  'microphone': buttonMicrophone,
+  'volume_up': 24,
+  'volume_down': 25,
+};
+
+const buttonNames = {
+  'action': 'Action',
+  'microphone': 'Microphone',
+  'volume_up': 'Volume up',
+  'volume_down': 'Volume down',
+};
+
+/// The buttons with a job of their own for a press no gesture claims
+/// (see HardwareButtons).
+const buttonDefaults = [buttonAction, buttonMicrophone];
+
+int? buttonKeyCode(Map<String, Object?> trigger) =>
+    buttonKeyCodes['${trigger['button']}'];
+
+String buttonPress(Map<String, Object?> trigger) =>
+    switch ('${trigger['press']}') {
+      'double' => 'double',
+      'long' => 'long',
+      _ => 'single',
+    };
 
 /// "Hello World: Hardware key": both names come from the plugin's manifest
 /// and read the same in every language, like a plugin action's.
@@ -214,6 +269,8 @@ String describeGestureAction(Map<String, Object?> action) {
       return 'Go to ${action['path']}';
     case 'url':
       return 'Open ${action['url']}';
+    case 'refresh':
+      return 'Refresh the dashboard';
     case 'camera_view':
       if (action['mode'] == 'hide') return 'Close the camera view';
       final name = '${action['viewName'] ?? ''}';
@@ -236,10 +293,20 @@ String describeGestureAction(Map<String, Object?> action) {
       return 'Call ${action['kioskName'] ?? action['kioskId']}';
     case 'intercom_hangup':
       return 'End the intercom call';
+    case 'intercom_answer':
+      return 'Accept intercom call';
+    case 'intercom_decline':
+      return 'Decline intercom call';
     case 'alarm_stop':
       return 'Stop the alarm';
     case 'alarm_snooze':
       return 'Snooze the alarm';
+    case 'voice_wake':
+      return 'Start a voice command';
+    case 'voice_stop':
+      return 'Stop the voice assistant';
+    case 'voice_mute':
+      return 'Mute or unmute Voice Satellite';
     case 'screensaver':
       return 'Start the screensaver';
     case 'screensaver_stop':
@@ -256,6 +323,10 @@ String describeGestureAction(Map<String, Object?> action) {
       return 'Open Android Settings';
     case 'alarms':
       return 'Open the alarm list';
+    case 'calendar':
+      return 'Open the calendar';
+    case 'music_library':
+      return 'Open Music Library';
     case 'ha_service':
       return 'Call ${action['domain']}.${action['service']}';
     case 'ha_script':

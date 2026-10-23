@@ -8,9 +8,9 @@ import '../l10n/gesture_messages.dart';
 import '../managers/gestures/gesture_mappings.dart';
 import '../managers/settings/definitions.dart' as defs;
 import 'dashboard_view_picker.dart';
+import 'entity_picker.dart';
 import 'hand_gesture_tester.dart';
 import 'kit.dart';
-import 'toast.dart';
 import 'settings_search.dart';
 
 /// The Gestures page (issue #99): the list of gestures and the
@@ -35,18 +35,30 @@ const _actionGroups = <(String, List<(String, String, IconData)>)>[
     'Kiosk Satellite',
     [
       ('navigate', 'Go to a dashboard view', Icons.dashboard_outlined),
+      ('refresh', 'Refresh the dashboard', Icons.refresh),
       ('url', 'Open a web page', Icons.public),
       ('camera_view', 'Show a camera view', Icons.videocam_outlined),
       ('sendspin_player', 'Show the floating player', Icons.speaker_outlined),
       ('now_playing', 'Show Now Playing', Icons.play_circle_outline),
       ('music_assistant', 'Open Music Assistant', Icons.library_music_outlined),
+      ('music_library', 'Open Music Library', Icons.queue_music_rounded),
       ('media_play_pause', 'Play or pause media', Icons.play_arrow_outlined),
       ('app_launcher', 'Open the app launcher', Icons.apps_outlined),
       ('intercom_open', 'Open Call a kiosk', Icons.speaker_phone_outlined),
       ('intercom_call', 'Call a kiosk', Icons.phone_outlined),
       ('intercom_hangup', 'End the intercom call', Icons.call_end_outlined),
+      ('intercom_answer', 'Accept intercom call', Icons.call_outlined),
+      (
+        'intercom_decline',
+        'Decline intercom call',
+        Icons.phone_disabled_outlined,
+      ),
       ('alarm_stop', 'Stop the alarm', Icons.alarm_off_outlined),
       ('alarm_snooze', 'Snooze the alarm', Icons.snooze_outlined),
+      ('calendar', 'Open the calendar', Icons.calendar_month_outlined),
+      ('voice_wake', 'Start a voice command', Icons.mic_none_outlined),
+      ('voice_stop', 'Stop the voice assistant', Icons.stop_circle_outlined),
+      ('voice_mute', 'Mute or unmute Voice Satellite', Icons.mic_off_outlined),
       ('screensaver', 'Start the screensaver', Icons.nightlight_outlined),
       ('screensaver_stop', 'Stop the screensaver', Icons.light_mode_outlined),
       ('hold_mode', 'Toggle hold mode', Icons.pause_circle_outline),
@@ -146,6 +158,7 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
                   'claps' => Icons.sign_language_outlined,
                   'fingers' => Icons.waving_hand_outlined,
                   'plugin' => Icons.extension_outlined,
+                  'button' => Icons.radio_button_checked,
                   _ => Icons.gesture,
                 }),
                 title: Text(localizedGestureTrigger(context, mapping.trigger)),
@@ -190,6 +203,7 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
                 options: [
                   ('standard', gestureText(context, 'Standard')),
                   ('strict', gestureText(context, 'Strict')),
+                  ('large_room', gestureText(context, 'Large room')),
                 ],
                 onChanged: (value) async {
                   if (value == null) return;
@@ -775,6 +789,7 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
       'plugin_action' => _configurePluginAction(),
       // Actions with nothing to configure skip the second dialog.
       'android_settings' ||
+      'refresh' ||
       'sendspin_player' ||
       'now_playing' ||
       'music_assistant' ||
@@ -782,8 +797,15 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
       'app_launcher' ||
       'intercom_open' ||
       'intercom_hangup' ||
+      'intercom_answer' ||
+      'intercom_decline' ||
       'alarm_stop' ||
       'alarm_snooze' ||
+      'calendar' ||
+      'music_library' ||
+      'voice_wake' ||
+      'voice_stop' ||
+      'voice_mute' ||
       'screensaver' ||
       'screensaver_stop' ||
       'hold_mode' ||
@@ -833,19 +855,13 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
         carried,
         type: 'ha_script',
         title: 'Run a script',
-        label: 'Script entity',
-        hint: 'script.good_morning',
         domain: 'script',
-        service: 'turn_on',
       ),
       'ha_automation' => _configureHaEntity(
         carried,
         type: 'ha_automation',
         title: 'Trigger an automation',
-        label: 'Automation entity',
-        hint: 'automation.lights_off',
         domain: 'automation',
-        service: 'trigger',
       ),
       'ha_event' => _configureHaEvent(carried),
       _ => Future<Map<String, Object?>?>.value(),
@@ -947,7 +963,7 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
     BuildContext context, {
     required bool checking,
     required (bool, String)? verdict,
-    required VoidCallback onValidate,
+    required VoidCallback? onValidate,
   }) => Row(
     children: [
       TextButton.icon(
@@ -982,123 +998,30 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
     Map<String, Object?>? current, {
     required String type,
     required String title,
-    required String label,
-    required String hint,
     required String domain,
-    required String service,
   }) async {
-    final entity = TextEditingController(text: '${current?['entityId'] ?? ''}');
-    String? error;
-    var checking = false;
-    (bool, String)? verdict;
-    // A bare name is obviously meant as one of this domain's entities.
-    String qualified() {
-      final value = entity.text.trim();
-      return value.isEmpty || value.contains('.') ? value : '$domain.$value';
-    }
-
-    final route = DialogRoute<Map<String, Object?>>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          void submit() {
-            final value = qualified();
-            if (!value.startsWith('$domain.') ||
-                value.length <= domain.length + 1) {
-              setDialogState(() => error = 'Enter a $domain.* entity.');
-              return;
-            }
-            Navigator.pop(context, {'type': type, 'entityId': value});
-          }
-
-          return AlertDialog(
-            title: Text(gestureText(context, title)),
-            content: SizedBox(
-              width: 480,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 16,
-                children: [
-                  LabeledField(
-                    label: gestureText(context, label),
-                    child: TextField(
-                      controller: entity,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: hint,
-                        errorText: error == null
-                            ? null
-                            : gestureError(context, error!),
-                      ),
-                      onSubmitted: (_) => submit(),
-                    ),
-                  ),
-                  _validateRow(
-                    context,
-                    checking: checking,
-                    verdict: verdict,
-                    onValidate: () async {
-                      setDialogState(() {
-                        checking = true;
-                        verdict = null;
-                      });
-                      final checked = await _validateHaAction(
-                        domain: domain,
-                        service: service,
-                        entity: qualified(),
-                      );
-                      if (!context.mounted) return;
-                      setDialogState(() {
-                        checking = false;
-                        verdict = checked;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(gestureText(context, 'Cancel')),
-              ),
-              FilledButton(
-                onPressed: submit,
-                child: Text(gestureText(context, 'OK')),
-              ),
-            ],
-          );
-        },
-      ),
+    // The entity picker over this domain's entities: picked from Home
+    // Assistant's own list, there is nothing to type or validate.
+    final picked = await showEntityPicker(
+      context,
+      c,
+      title: gestureText(context, title),
+      selected: '${current?['entityId'] ?? ''}',
+      domains: [domain],
     );
-    final result = await Navigator.of(context).push(route);
-    await route.completed;
-    entity.dispose();
-    return result;
+    final id = picked?.id;
+    return id == null ? null : {'type': type, 'entityId': id};
   }
 
   Future<Map<String, Object?>?> _configureNavigate(
     Map<String, Object?>? current,
   ) async {
-    // The same flattened "dashboard / view" list the Home Assistant
-    // Dashboard screensaver picks from.
-    final entries = await listDashboardViewEntries(c);
-    if (!mounted) return null;
-    if (entries.isEmpty) {
-      showToast(
-        context,
-        title: gestureText(context, 'Could not list dashboards'),
-        message: gestureText(context, 'Is Home Assistant connected?'),
-        kind: ToastKind.error,
-      );
-      return null;
-    }
-    final path = await showDashboardViewPicker(
+    // The dashboard picker every dashboard view setting opens.
+    final path = await showDashboardPicker(
       context,
+      container: c,
       title: gestureText(context, 'Go to a dashboard view'),
-      entries: entries,
-      current: '${current?['path'] ?? ''}',
+      selected: '${current?['path'] ?? ''}',
     );
     return path == null ? null : {'type': 'navigate', 'path': path};
   }
@@ -1199,9 +1122,11 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
   Future<Map<String, Object?>?> _configureHaService(
     Map<String, Object?>? current,
   ) async {
-    final domain = TextEditingController(text: '${current?['domain'] ?? ''}');
-    final service = TextEditingController(text: '${current?['service'] ?? ''}');
-    final entity = TextEditingController(text: '${current?['entityId'] ?? ''}');
+    // One pick, `domain.service`, stored split as before.
+    final domain = '${current?['domain'] ?? ''}';
+    final service = '${current?['service'] ?? ''}';
+    var serviceId = domain.isEmpty || service.isEmpty ? '' : '$domain.$service';
+    var entityId = '${current?['entityId'] ?? ''}';
     final data = TextEditingController(
       text: current?['data'] is Map ? jsonEncode(current!['data']) : '',
     );
@@ -1211,139 +1136,196 @@ class _GestureSettingsPanelState extends State<GestureSettingsPanel> {
     final route = DialogRoute<Map<String, Object?>>(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          void submit() {
-            if (domain.text.trim().isEmpty || service.text.trim().isEmpty) {
-              setDialogState(() => error = 'Domain and service are required.');
-              return;
-            }
-            Object? parsed;
-            if (data.text.trim().isNotEmpty) {
-              try {
-                parsed = jsonDecode(data.text);
-                if (parsed is! Map) throw const FormatException();
-              } catch (_) {
-                setDialogState(
-                  () => error = 'Service data must be a JSON object.',
-                );
-                return;
+        // Again when the services load: what the entity field offers
+        // follows the picked service.
+        builder: (context, setDialogState) => ValueListenableBuilder(
+          valueListenable: PickCatalog.of('services'),
+          builder: (context, _, _) {
+            // The entity domains the service acts on: null for none, empty
+            // for any.
+            final entityDomains = serviceEntityDomainsOf(serviceId);
+            final (pickedDomain, pickedService) = _splitService(serviceId);
+            void submit() {
+              Object? parsed;
+              if (data.text.trim().isNotEmpty) {
+                try {
+                  parsed = jsonDecode(data.text);
+                  if (parsed is! Map) throw const FormatException();
+                } catch (_) {
+                  setDialogState(
+                    () => error = 'Service data must be a JSON object.',
+                  );
+                  return;
+                }
               }
+              Navigator.pop(context, {
+                'type': 'ha_service',
+                'domain': pickedDomain,
+                'service': pickedService,
+                if (entityId.isNotEmpty) 'entityId': entityId,
+                'data': ?parsed,
+              });
             }
-            Navigator.pop(context, {
-              'type': 'ha_service',
-              'domain': domain.text.trim(),
-              'service': service.text.trim(),
-              if (entity.text.trim().isNotEmpty) 'entityId': entity.text.trim(),
-              'data': ?parsed,
-            });
-          }
 
-          return AlertDialog(
-            title: Text(gestureText(context, 'Call a Home Assistant service')),
-            content: SizedBox(
-              width: 480,
-              child: EdgeFade(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 16,
-                    children: [
-                      LabeledField(
-                        label: gestureText(context, 'Domain'),
-                        child: TextField(
-                          controller: domain,
-                          decoration: const InputDecoration(hintText: 'light'),
-                        ),
-                      ),
-                      LabeledField(
-                        label: gestureText(context, 'Service'),
-                        child: TextField(
-                          controller: service,
-                          decoration: const InputDecoration(
-                            hintText: 'turn_on',
+            return AlertDialog(
+              title: Text(
+                gestureText(context, 'Call a Home Assistant service'),
+              ),
+              content: SizedBox(
+                width: 480,
+                child: EdgeFade(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 16,
+                      children: [
+                        // Picked from Home Assistant's own services, under
+                        // their domains.
+                        LabeledField(
+                          label: gestureText(context, 'Service'),
+                          child: PickFieldBox(
+                            spec: serviceSpec(context, c.commands),
+                            value: serviceId,
+                            placeholder: gestureText(
+                              context,
+                              'Choose a service',
+                            ),
+                            onTap: () async {
+                              final picked = await showItemPicker(
+                                context,
+                                title: gestureText(context, 'Service'),
+                                spec: serviceSpec(context, c.commands),
+                                selected: serviceId.isEmpty ? null : serviceId,
+                              );
+                              if (picked?.id == null) return;
+                              setDialogState(() {
+                                serviceId = picked!.id!;
+                                verdict = null;
+                                // An entity the new service cannot act on
+                                // goes with the old one.
+                                final domains = serviceEntityDomainsOf(
+                                  serviceId,
+                                );
+                                if (domains == null ||
+                                    (domains.isNotEmpty &&
+                                        !domains.contains(
+                                          entityId.split('.').first,
+                                        ))) {
+                                  entityId = '';
+                                }
+                              });
+                            },
                           ),
                         ),
-                      ),
-                      LabeledField(
-                        label: gestureText(context, 'Entity (optional)'),
-                        child: TextField(
-                          controller: entity,
-                          decoration: const InputDecoration(
-                            hintText: 'light.kitchen',
+                        // Only the entities the service acts on. Off until a
+                        // service is picked, and for one that takes none.
+                        LabeledField(
+                          label: gestureText(context, 'Entity (optional)'),
+                          child: PickFieldBox(
+                            spec: entitySpec(
+                              context,
+                              c.commands,
+                              domains: entityDomains ?? const [],
+                            ),
+                            value: entityId,
+                            enabled: entityDomains != null,
+                            placeholder:
+                                serviceId.isNotEmpty && entityDomains == null
+                                ? gestureText(
+                                    context,
+                                    'Not used by this service',
+                                  )
+                                : null,
+                            onTap: () async {
+                              final picked = await showItemPicker(
+                                context,
+                                title: gestureText(
+                                  context,
+                                  'Entity (optional)',
+                                ),
+                                spec: entitySpec(
+                                  context,
+                                  c.commands,
+                                  domains: entityDomains ?? const [],
+                                ),
+                                selected: entityId.isEmpty ? null : entityId,
+                                allowClear: true,
+                              );
+                              if (picked == null) return;
+                              setDialogState(() => entityId = picked.id ?? '');
+                            },
                           ),
                         ),
-                      ),
-                      LabeledField(
-                        label: gestureText(context, 'Service data (optional)'),
-                        child: TextField(
-                          controller: data,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            hintText: '{"brightness_pct": 60}',
-                            errorText: error == null
-                                ? null
-                                : gestureError(context, error!),
+                        LabeledField(
+                          label: gestureText(
+                            context,
+                            'Service data (optional)',
+                          ),
+                          child: TextField(
+                            controller: data,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              hintText: '{"brightness_pct": 60}',
+                              errorText: error == null
+                                  ? null
+                                  : gestureError(context, error!),
+                            ),
                           ),
                         ),
-                      ),
-                      _validateRow(
-                        context,
-                        checking: checking,
-                        verdict: verdict,
-                        onValidate: () async {
-                          if (domain.text.trim().isEmpty ||
-                              service.text.trim().isEmpty) {
-                            setDialogState(
-                              () => verdict = (
-                                false,
-                                'Domain and service are required.',
-                              ),
-                            );
-                            return;
-                          }
-                          setDialogState(() {
-                            checking = true;
-                            verdict = null;
-                          });
-                          final checked = await _validateHaAction(
-                            domain: domain.text.trim(),
-                            service: service.text.trim(),
-                            entity: entity.text.trim(),
-                          );
-                          if (!context.mounted) return;
-                          setDialogState(() {
-                            checking = false;
-                            verdict = checked;
-                          });
-                        },
-                      ),
-                    ],
+                        _validateRow(
+                          context,
+                          checking: checking,
+                          verdict: verdict,
+                          onValidate: serviceId.isEmpty
+                              ? null
+                              : () async {
+                                  setDialogState(() {
+                                    checking = true;
+                                    verdict = null;
+                                  });
+                                  final checked = await _validateHaAction(
+                                    domain: pickedDomain,
+                                    service: pickedService,
+                                    entity: entityId,
+                                  );
+                                  if (!context.mounted) return;
+                                  setDialogState(() {
+                                    checking = false;
+                                    verdict = checked;
+                                  });
+                                },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(gestureText(context, 'Cancel')),
-              ),
-              FilledButton(
-                onPressed: submit,
-                child: Text(gestureText(context, 'OK')),
-              ),
-            ],
-          );
-        },
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(gestureText(context, 'Cancel')),
+                ),
+                FilledButton(
+                  onPressed: serviceId.isEmpty ? null : submit,
+                  child: Text(gestureText(context, 'OK')),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
     final result = await Navigator.of(context).push(route);
     await route.completed;
-    domain.dispose();
-    service.dispose();
-    entity.dispose();
     data.dispose();
     return result;
+  }
+
+  /// `light.turn_on` as its domain and service.
+  (String, String) _splitService(String id) {
+    final dot = id.indexOf('.');
+    return dot < 0 ? ('', id) : (id.substring(0, dot), id.substring(dot + 1));
   }
 
   Future<Map<String, Object?>?> _configureHaEvent(

@@ -14,6 +14,7 @@ import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_web_socket/shelf_web_socket.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../core/headless.dart';
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
@@ -252,6 +253,30 @@ class RemoteManager extends Manager {
       bus.on<LightLevelChanged>().listen((e) {
         if (_wsClients.isEmpty) return;
         _broadcast({'type': 'lightlevel', 'lux': e.lux});
+      }),
+    );
+
+    // The light level adaptive brightness follows, the sensor's or a Home
+    // Assistant entity's (issue #911), for the curve's marker and the
+    // Light sensor entity row.
+    _subscriptions.add(
+      bus.on<AdaptiveLightChanged>().listen((e) {
+        if (_wsClients.isEmpty) return;
+        _broadcast({
+          'type': 'adaptivelight',
+          'source': e.source,
+          'lux': e.lux,
+          'live': e.live,
+        });
+      }),
+    );
+
+    // What the Home Assistant motion entity reads (issue #973), for its
+    // row on the Motion Sensor page.
+    _subscriptions.add(
+      bus.on<ExternalMotionChanged>().listen((e) {
+        if (_wsClients.isEmpty) return;
+        _broadcast({'type': 'externalmotion', 'detected': e.detected});
       }),
     );
 
@@ -508,6 +533,8 @@ class RemoteManager extends Manager {
       final deviceName = data?['name'];
       return _json(200, {
         'setupNeeded': _setupMode,
+        // The wizard skips the dashboard on a device without a screen.
+        'headless': Headless.active,
         'passwordNeeded': _settings.get(defs.remotePassword).isEmpty,
         'deviceName': deviceName is String ? deviceName : '',
         'language': _settings.get(defs.uiLanguage),
@@ -780,6 +807,15 @@ class RemoteManager extends Manager {
           'length': request.contentLength,
         });
         return _json(r.ok ? 200 : 400, r.toJson());
+      // A plugin package from the leader, the raw body, held until the
+      // push that installs it.
+      case ('PUT', 'api/fleet/plugins'):
+        final r = await commands.execute('fleetStagePlugin', {
+          'sha256': request.url.queryParameters['sha256'] ?? '',
+          'stream': request.read(),
+          'length': request.contentLength,
+        });
+        return _json(r.ok ? 200 : 400, r.toJson());
       case ('DELETE', 'api/fleet/wake-models'):
         final r = await commands.execute('removeCustomWakeModelFile', {
           'path': request.url.queryParameters['path'] ?? '',
@@ -862,7 +898,11 @@ class RemoteManager extends Manager {
       'screen': det['screen'],
       'ram': det['ram'],
       'storage': det['storage'],
-      'cpu': {'usage': info['cpu'], 'temp': info['temp']},
+      'cpu': {
+        'usage': info['cpu'],
+        'clock': info['cpuClock'],
+        'temp': info['temp'],
+      },
       // The system WebView updates itself out from under the app, so it is
       // the first suspect when one panel renders unlike its neighbors.
       'webview': det['webview'],
@@ -1012,6 +1052,7 @@ class RemoteManager extends Manager {
     'api/fleet/leave',
     'api/fleet/roster',
     'api/fleet/wake-models',
+    'api/fleet/plugins',
     // The leader's fleet backup reads each follower's full configuration.
     'api/config/export',
     'api/commands/getUpdateStatus',
@@ -1561,7 +1602,7 @@ class RemoteManager extends Manager {
   /// back each time by ETag: an update that changes a picture shows it
   /// right away instead of a day later.
   Future<Response> _voiceSkin(Request request, String file) async {
-    if (!RegExp(r'^[a-z-]+\.webp$').hasMatch(file)) {
+    if (!RegExp(r'^[a-z0-9-]+\.webp$').hasMatch(file)) {
       return Response.notFound('not found');
     }
     try {

@@ -27,6 +27,54 @@ export function updateEdgeFade(el) {
   setEdgeFadeVar(el, '--fade-top', top);
   setEdgeFadeVar(el, '--fade-bottom', bottom);
 }
+// Lets a mouse drag scroll a row that only scrolls sideways, the way a
+// finger already does: a chip row has no scrollbar to grab and a wheel
+// only scrolls it with Shift. A press that moves past a few pixels turns
+// into a drag, and the click that ends it is swallowed so no chip under
+// the pointer gets picked.
+export function dragScroll(el) {
+  let start = null;
+  let dragged = false;
+  el.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+    start = { x: event.clientX, left: el.scrollLeft, id: event.pointerId };
+    dragged = false;
+  });
+  el.addEventListener('pointermove', (event) => {
+    if (!start || event.pointerId !== start.id) return;
+    const dx = event.clientX - start.x;
+    if (!dragged && Math.abs(dx) < 5) return;
+    if (!dragged) {
+      dragged = true;
+      el.setPointerCapture(event.pointerId);
+      el.classList.add('dragging');
+    }
+    el.scrollLeft = start.left - dx;
+  });
+  const end = () => {
+    if (!start) return;
+    start = null;
+    el.classList.remove('dragging');
+  };
+  el.addEventListener('pointerup', end);
+  el.addEventListener('pointercancel', end);
+  el.addEventListener('click', (event) => {
+    if (!dragged) return;
+    dragged = false;
+    event.stopPropagation();
+    event.preventDefault();
+  }, true);
+}
+
+// Scrolls a sideways row so [child] sits in its middle, as far as the
+// row's ends allow.
+export function centerInRow(row, child, behavior = 'smooth') {
+  const box = row.getBoundingClientRect();
+  const own = child.getBoundingClientRect();
+  const left = row.scrollLeft + own.left - box.left - (row.clientWidth - own.width) / 2;
+  row.scrollTo({ left: Math.max(0, left), behavior });
+}
+
 export function setEdgeFadeVar(el, name, px) {
   const value = px > 0 ? px.toFixed(1) + 'px' : '0px';
   if (el.style.getPropertyValue(name) !== value) {
@@ -190,6 +238,38 @@ export function hintRow(text, { warn = false, className = '' } = {}) {
     + (warn ? HINT_ICONS.warn : HINT_ICONS.info) + '</svg><span></span>';
   div.querySelector('span').textContent = text;
   return div;
+}
+
+// A page's opening row, the device's IntroRow: its glyph (an svg string)
+// on a soft primary tile, a headline and a line or two saying what the page
+// is for. The first row of the page's first card. Without a title the line
+// stands alone, centered on the tile (INTRO_INFO_ICON for a page that only
+// needs a note).
+export const INTRO_INFO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+  + ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + HINT_ICONS.info + '</svg>';
+
+export function introRow(icon, title, sub) {
+  const row = document.createElement('div');
+  row.className = 'row intro-row' + (title ? '' : ' no-title');
+  const glyph = document.createElement('span');
+  glyph.className = 'intro-icon';
+  glyph.innerHTML = icon || '';
+  const text = document.createElement('div');
+  text.className = 'intro-text';
+  if (title) {
+    const head = document.createElement('div');
+    head.className = 'intro-title';
+    head.textContent = title;
+    text.appendChild(head);
+  }
+  if (sub) {
+    const note = document.createElement('div');
+    note.className = 'intro-sub';
+    note.textContent = sub;
+    text.appendChild(note);
+  }
+  row.append(glyph, text);
+  return row;
 }
 
 // A banner above the rows it affects: the device's Banner. `error` for a
@@ -784,6 +864,21 @@ const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"'
 const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"'
   + ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
   + '<path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+// A dropdown whose choices are on their way, the device's KsDropdown
+// loading: disabled, a spinner inside the box and Loading… in place of the
+// value. The other options stay, so the box keeps its width.
+export function selectLoading(sel) {
+  const opt = document.createElement('option');
+  opt.value = '';
+  opt.hidden = true;
+  opt.textContent = t('commonLoading', {}, 'Loading…');
+  sel.prepend(opt);
+  sel.selectedIndex = 0;
+  sel.disabled = true;
+  sel.classList.add('loading');
+  return sel;
+}
 
 // A value the user takes elsewhere (the ESPHome encryption key): the
 // control box, read only, the value in mono, with a 36 copy disc inside

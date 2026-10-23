@@ -5,6 +5,7 @@ import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../../core/headless.dart';
 import '../../core/command_registry.dart';
 import '../../core/event_bus.dart';
 import '../../core/events.dart';
@@ -12,6 +13,7 @@ import '../../core/logging.dart';
 import '../device/ip_addresses.dart';
 import '../intercom/intercom_sensors.dart';
 import 'dashboard_views.dart';
+import '../home_assistant/custom_pages.dart';
 import 'interaction_stamp.dart';
 import '../sendspin/music_assistant_api.dart';
 import '../screensaver/screensaver_manager.dart'
@@ -185,6 +187,20 @@ class EspEntitySurface {
   /// two values to one recorder row per half minute.
   late final _lux = LuxLimiter((lux) => _send('illuminance', lux));
 
+  /// The Ambient noise sensor (issue #910), through the same bucket. The
+  /// meter already holds it to one reading per 5 seconds and 2 dB moves,
+  /// but a TV's dialogue clears that all evening.
+  late final _noise = LuxLimiter((dbfs) => _send('ambient_noise', dbfs));
+
+  void _sendNoise(int? dbfs) {
+    if (dbfs != null) {
+      _noise.offer(dbfs);
+    } else {
+      _noise.reset();
+      unawaited(_send('ambient_noise', null));
+    }
+  }
+
   /// Unknown while the screensaver shows: a clock still running under a
   /// commanded session is not a moment anyone wants to trigger on.
   void _sendCountdown() => _countdown.set(_screensaverActive ? null : _idleDue);
@@ -211,14 +227,19 @@ class EspEntitySurface {
           'mdi:brightness-4',
           defs.screensaverBrightnessEnabled,
         ),
-        // Catalog-gated below on the light sensor, like the illuminance
-        // sensor it reads.
+        // Not gated on the light sensor: a Home Assistant entity can
+        // drive it instead (issue #911).
         'adaptive_brightness': (
           'Adaptive brightness',
           'mdi:brightness-auto',
           defs.adaptiveBrightness,
         ),
         'screensaver': ('Screensaver', 'mdi:sleep', defs.screensaverEnabled),
+        'screensaver_schedule': (
+          'Screensaver schedule',
+          'mdi:calendar-clock',
+          defs.screensaverScheduleEnabled,
+        ),
         'hold_mode': ('Hold mode', 'mdi:pause-circle-outline', defs.haHoldMode),
         'camera_enabled': (
           'Camera enabled',
@@ -349,6 +370,22 @@ class EspEntitySurface {
       deviceClass: 'duration',
       mode: 1,
     ),
+    // Turn screen off after, in minutes (issue #960): an automation can
+    // keep a bedroom panel lit by day and let it go dark at night. A write
+    // under a running screensaver restarts the countdown, unless the active
+    // schedule entry carries its own minutes.
+    'screensaver_screen_off_after': (
+      name: 'Screensaver screen off after',
+      icon: 'mdi:monitor-off',
+      def: defs.screensaverScreenOffMinutes,
+      fraction: false,
+      min: 0,
+      max: 60,
+      step: 1,
+      unit: 'min',
+      deviceClass: 'duration',
+      mode: 2,
+    ),
     'assistant_volume': _percent(
       'Assistant volume',
       'mdi:account-voice',
@@ -463,6 +500,19 @@ class EspEntitySurface {
     final stats = await commands.execute('getStats', const {});
     final cpuTempPresent =
         stats.ok && stats.data is Map && (stats.data as Map)['temp'] != null;
+    // CPU usage only where a load source is readable, and CPU clock only
+    // where cpufreq is. A device with neither used to get the clock position
+    // passed off as load (issue #824).
+    final cpuUsagePresent =
+        stats.ok && stats.data is Map && (stats.data as Map)['cpu'] != null;
+    final cpuClockPresent =
+        stats.ok &&
+        stats.data is Map &&
+        (stats.data as Map)['cpuClock'] != null;
+    final batteryTempPresent =
+        stats.ok &&
+        stats.data is Map &&
+        (stats.data as Map)['batteryTemp'] != null;
     // A device without a battery gets no Battery sensor (issue #367): the
     // one gate every consumer reads through answers null for a mains-
     // powered box, and an entity that could only ever show a sentinel is
@@ -589,13 +639,31 @@ class EspEntitySurface {
       // runs no pipeline, so the satellite entity Home Assistant keeps
       // stays idle through it. Never beside the switch above, which only
       // the dashboard runtime lists.
-      if (_voiceNative)
+      if (_voiceNative) ...[
         {
           'type': 'text_sensor',
           'objectId': 'voice_satellite_state',
           'name': 'Voice Satellite',
           'icon': 'mdi:account-voice',
         },
+        // The timers on the kiosk, running or paused, and when the next
+        // running one ends. ESPHome has no attributes, so the list itself
+        // is the vs_list_timers action's answer.
+        {
+          'type': 'sensor',
+          'objectId': 'vs_timers',
+          'name': 'VS Timers',
+          'icon': 'mdi:timer-outline',
+          'accuracyDecimals': 0,
+        },
+        {
+          'type': 'text_sensor',
+          'objectId': 'vs_next_timer',
+          'name': 'VS Next timer',
+          'icon': 'mdi:timer-sand',
+          'deviceClass': 'timestamp',
+        },
+      ],
       button(
         'postpone_screensaver',
         'Postpone screensaver',
@@ -637,6 +705,13 @@ class EspEntitySurface {
           'show_music_assistant',
           'Show Music Assistant',
           'mdi:music-box-multiple',
+        ),
+      // Only with something to browse, as the kiosk menu entry.
+      if (_musicLibrarySource)
+        button(
+          'show_music_library',
+          'Show Music Library',
+          'mdi:playlist-music',
         ),
       // The followed player, opt-in from the Media Player page (issue
       // #741): whichever player the surfaces follow, the local Sendspin
@@ -683,6 +758,15 @@ class EspEntitySurface {
           'icon': 'mdi:cctv',
         },
       ],
+      // The calendar's view, Closed while it is not up: the select both
+      // shows which view is up and opens or closes it.
+      {
+        'type': 'select',
+        'objectId': 'calendar_view',
+        'name': 'Calendar view',
+        'icon': 'mdi:calendar-month',
+        'options': [for (final (label, _) in _calendarViews) label],
+      },
       if (_dashboardViews.isNotEmpty) ...[
         {
           'type': 'select',
@@ -742,6 +826,17 @@ class EspEntitySurface {
           'unit': 'lx',
           'stateClass': 1,
         },
+      // Home Assistant's sound pressure class takes dB and dBA only. This
+      // is a level off the microphone, not a calibrated meter, so it
+      // carries no class.
+      {
+        'type': 'sensor',
+        'objectId': 'ambient_noise',
+        'name': 'Ambient noise',
+        'icon': 'mdi:ear-hearing',
+        'unit': 'dBFS',
+        'stateClass': 1,
+      },
       // Listed with the camera and unknown while the Motion sensor
       // setting or the camera is off, so neither switch re-lists the
       // catalog.
@@ -892,7 +987,6 @@ class EspEntitySurface {
                     e.key != 'screensaver_motion' &&
                     e.key != 'screensaver_face')) &&
             (proximityPresent || e.key != 'screensaver_proximity') &&
-            (lightSensorPresent || e.key != 'adaptive_brightness') &&
             (!e.key.startsWith('vs_') || _voiceNative))
           {
             'type': 'switch',
@@ -944,7 +1038,7 @@ class EspEntitySurface {
             'name': e.value.$1,
             'icon': e.value.$2,
             'options': [
-              for (final option in e.value.$3.options ?? const <String>[])
+              for (final option in _settings.optionsFor(e.value.$3))
                 e.value.$3.optionLabels?[option] ?? option,
             ],
             'category': 1,
@@ -964,13 +1058,23 @@ class EspEntitySurface {
         deviceClass: 'battery_charging',
         type: 'binary_sensor',
       ),
-      diagnostic(
-        'cpu',
-        'CPU usage',
-        icon: 'mdi:chip',
-        unit: '%',
-        stateClass: 1,
-      ),
+      if (cpuUsagePresent)
+        diagnostic(
+          'cpu',
+          'CPU usage',
+          icon: 'mdi:chip',
+          unit: '%',
+          stateClass: 1,
+        ),
+      if (cpuClockPresent)
+        diagnostic(
+          'cpu_clock',
+          'CPU clock',
+          deviceClass: 'frequency',
+          icon: 'mdi:speedometer',
+          unit: 'MHz',
+          stateClass: 1,
+        ),
       if (cpuTempPresent)
         diagnostic(
           'cpu_temp',
@@ -979,6 +1083,18 @@ class EspEntitySurface {
           unit: '°C',
           stateClass: 1,
         ),
+      // A tenth of a degree, as BatteryManager reports it.
+      if (batteryTempPresent)
+        {
+          ...diagnostic(
+            'battery_temp',
+            'Battery temperature',
+            deviceClass: 'temperature',
+            unit: '°C',
+            stateClass: 1,
+          ),
+          'accuracyDecimals': 1,
+        },
       diagnostic(
         'ram_free',
         'RAM available',
@@ -1173,6 +1289,9 @@ class EspEntitySurface {
         ),
       );
     }
+    if (Headless.active) {
+      catalog.removeWhere((e) => _headlessDrops('${e['objectId']}'));
+    }
     if (includeExcluded) return catalog;
     final excluded = defs.decodeEspHomeExcludedEntities(
       _settings.get(defs.esphomeExcludedEntities),
@@ -1180,6 +1299,75 @@ class EspEntitySurface {
     return catalog
         .where((entity) => !excluded.contains(entity['objectId']))
         .toList();
+  }
+
+  /// The entities that show, light or navigate something, which a device
+  /// without a screen leaves out, and the settings entities whose setting
+  /// it hides.
+  /// Whether the Music Library has a source to browse: Music Assistant,
+  /// Home Assistant or a known Sonos speaker, as its kiosk menu entry asks.
+  bool get _musicLibrarySource {
+    bool set(defs.SettingDef<String> d) => _settings.get(d).trim().isNotEmpty;
+    final sonos = _settings.get(defs.sendspinSonosHosts).trim();
+    return (set(defs.sendspinMaUrl) && set(defs.sendspinMaToken)) ||
+        (set(defs.haUrl) && set(defs.haToken)) ||
+        (sonos.isNotEmpty && sonos != '{}');
+  }
+
+  static const _headlessDropped = {
+    'screen',
+    'screensaver_active',
+    'now_playing',
+    'postpone_screensaver',
+    'screensaver_next_slide',
+    'screensaver_previous_slide',
+    'notifications_dismiss_all',
+    'reload',
+    'load_start_url',
+    'clear_cache',
+    'bring_to_front',
+    'open_launcher',
+    'show_music_assistant',
+    'show_music_library',
+    'close_camera_view',
+    'active_camera_view',
+    'calendar_view',
+    'dashboard_view',
+    'default_dashboard',
+    'screenshot',
+    'take_screenshot',
+    'last_screenshot',
+    'last_interaction',
+    'next_screensaver',
+    'clock_background',
+    'panel_brightness',
+    'url',
+  };
+
+  /// The Calendar view select's options and the views they open, Closed
+  /// first (no view).
+  static const _calendarViews = <(String, String?)>[
+    ('Closed', null),
+    ('Day', 'day'),
+    ('Week', 'week'),
+    ('Month', 'month'),
+    ('Schedule', 'schedule'),
+  ];
+
+  static String _calendarViewLabel(String? view) => _calendarViews
+      .firstWhere((v) => v.$2 == view, orElse: () => _calendarViews.first)
+      .$1;
+
+  static bool _headlessDrops(String objectId) {
+    if (_headlessDropped.contains(objectId) ||
+        objectId.startsWith('camera_view')) {
+      return true;
+    }
+    final def =
+        _settingSwitches[objectId]?.$3 ??
+        _settingSelects[objectId]?.$3 ??
+        _settingNumbers[objectId]?.def;
+    return def != null && defs.deviceHiddenKeys.contains(def.key);
   }
 
   String? _excludedValue;
@@ -1253,6 +1441,52 @@ class EspEntitySurface {
       'supportsResponse': true,
       'args': [
         {'name': 'name', 'type': 'string'},
+        {'name': 'hours', 'type': 'int'},
+        {'name': 'minutes', 'type': 'int'},
+        {'name': 'seconds', 'type': 'int'},
+      ],
+    },
+    // The timers on this kiosk, as an automation reads them through
+    // response_variable: the list the VS Timers sensor counts.
+    {'name': 'vs_list_timers', 'supportsResponse': true, 'args': []},
+    // Change one of those timers by its timer_id, or the kiosk's only one
+    // when the id is empty. They go through Home Assistant's timer intents.
+    {
+      'name': 'vs_pause_timer',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'timer_id', 'type': 'string'},
+      ],
+    },
+    {
+      'name': 'vs_resume_timer',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'timer_id', 'type': 'string'},
+      ],
+    },
+    {
+      'name': 'vs_cancel_timer',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'timer_id', 'type': 'string'},
+      ],
+    },
+    {
+      'name': 'vs_add_time',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'timer_id', 'type': 'string'},
+        {'name': 'hours', 'type': 'int'},
+        {'name': 'minutes', 'type': 'int'},
+        {'name': 'seconds', 'type': 'int'},
+      ],
+    },
+    {
+      'name': 'vs_remove_time',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'timer_id', 'type': 'string'},
         {'name': 'hours', 'type': 'int'},
         {'name': 'minutes', 'type': 'int'},
         {'name': 'seconds', 'type': 'int'},
@@ -1353,6 +1587,11 @@ class EspEntitySurface {
     // Ends the call, cancels one still ringing or closes an announcement.
     // Answers so "no call" reaches the automation as an error.
     {'name': 'intercom_hangup', 'supportsResponse': true, 'args': []},
+    // Answer or decline the call ringing here, so a headless kiosk or one
+    // out of reach can be picked up from Home Assistant (issue #943).
+    // Answers so "nothing is ringing" reaches the automation as an error.
+    {'name': 'intercom_answer', 'supportsResponse': true, 'args': []},
+    {'name': 'intercom_decline', 'supportsResponse': true, 'args': []},
     // A web page over the dashboard, the surface a tapped dashboard link
     // or the Music Assistant entry gets: the dashboard stays alive under
     // it and the wake word keeps listening. Answers so a bad URL reaches
@@ -1369,6 +1608,19 @@ class EspEntitySurface {
     },
     // Drops that page, whoever put it up; nothing up is not an error.
     {'name': 'close_url', 'supportsResponse': true, 'args': []},
+    // A shell command line through Shizuku, as adb shell would run it.
+    // Answers with exit_code, stdout and stderr; a command that ran and
+    // failed is still a success, and only one that could not run (no
+    // Shizuku, no grant) is an error. timeout is in seconds, 0 is 10 and
+    // 25 is the most, since Home Assistant stops waiting at 30.
+    {
+      'name': 'shizuku_command',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'command', 'type': 'string'},
+        {'name': 'timeout', 'type': 'int'},
+      ],
+    },
     {
       'name': 'set_brightness',
       'supportsResponse': true,
@@ -1422,6 +1674,30 @@ class EspEntitySurface {
         });
         if (!result.ok) throw StateError(result.error ?? 'timer not started');
         return const {};
+      case 'vs_pause_timer':
+      case 'vs_resume_timer':
+      case 'vs_cancel_timer':
+      case 'vs_add_time':
+      case 'vs_remove_time':
+        final result = await commands.execute('voiceTimerControl', {
+          'timer_id': args['timer_id'] ?? '',
+          'action': switch (name) {
+            'vs_pause_timer' => 'pause',
+            'vs_resume_timer' => 'resume',
+            'vs_cancel_timer' => 'cancel',
+            'vs_add_time' => 'add',
+            _ => 'remove',
+          },
+          'hours': args['hours'] ?? 0,
+          'minutes': args['minutes'] ?? 0,
+          'seconds': args['seconds'] ?? 0,
+        });
+        if (!result.ok) throw StateError(result.error ?? 'timer not changed');
+        return const {};
+      case 'vs_list_timers':
+        final result = await commands.execute('voiceTimers', const {});
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return {'timers': (result.data as Map?)?['timers'] ?? const []};
       case 'set_brightness':
       case 'set_screensaver_brightness':
         final brightness = args['brightness'];
@@ -1542,6 +1818,14 @@ class EspEntitySurface {
         final result = await commands.execute('intercomHangup', const {});
         if (!result.ok) throw StateError(result.error ?? 'refused');
         return const {};
+      case 'intercom_answer':
+        final result = await commands.execute('intercomAnswer', const {});
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return const {};
+      case 'intercom_decline':
+        final result = await commands.execute('intercomDecline', const {});
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return const {};
       case 'open_url':
         final url = '${args['url'] ?? ''}'.trim();
         final uri = Uri.tryParse(url);
@@ -1567,6 +1851,13 @@ class EspEntitySurface {
         final result = await commands.execute('hideOverlayPage', const {});
         if (!result.ok) throw StateError(result.error ?? 'refused');
         return const {};
+      case 'shizuku_command':
+        final result = await commands.execute('runShizukuCommand', {
+          'command': '${args['command'] ?? ''}',
+          'timeout': args['timeout'] ?? 0,
+        });
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return fitCommandResponse((result.data as Map).cast<String, Object?>());
       default:
         log.warn('esphome', 'unknown action $name');
         return null;
@@ -1684,9 +1975,15 @@ class EspEntitySurface {
       // on the last known value rather than unknown.
       bus.on<LightLevelChanged>().listen((e) => _lux.offer(e.lux.round())),
     );
+    _subs.add(bus.on<NoiseLevelChanged>().listen((e) => _sendNoise(e.dbfs)));
     _subs.add(bus.on<LocationChanged>().listen(_sendLocation));
     _subs.add(
       bus.on<PersonSensorChanged>().listen((e) => _sendPerson(e.present)),
+    );
+    _subs.add(
+      bus.on<CalendarViewChanged>().listen(
+        (e) => _send('calendar_view', _calendarViewLabel(e.view)),
+      ),
     );
     _subs.add(
       bus.on<CameraViewStateChanged>().listen((e) {
@@ -1755,6 +2052,11 @@ class EspEntitySurface {
         if (_voiceNative) _send('voice_satellite_state', e.state);
       }),
     );
+    _subs.add(
+      bus.on<VoiceTimersChanged>().listen((e) {
+        if (_voiceNative) unawaited(_sendTimers(e.timers));
+      }),
+    );
     // A person waking the panel by hand counts too (issue #348); see the
     // ScreenStateChanged listener below for why only the OS-reported wake
     // qualifies.
@@ -1769,6 +2071,19 @@ class EspEntitySurface {
     _subs.add(bus.on<SettingChanged>().listen(_onSettingChanged));
     _poll = Timer.periodic(_pollInterval, (_) => _refresh());
     _sendInitial();
+  }
+
+  /// VS Timers counts the timers still counting or paused, and VS Next
+  /// timer is the soonest end among the running ones, unknown when none
+  /// runs.
+  Future<void> _sendTimers(List<Map<String, Object?>> timers) async {
+    final pending = timers.where((t) => t['finished'] != true);
+    final ends = [
+      for (final t in pending)
+        if (t['ends_at'] is String) t['ends_at'] as String,
+    ]..sort();
+    await _send('vs_timers', pending.length);
+    await _send('vs_next_timer', ends.isEmpty ? null : ends.first);
   }
 
   /// The intercom's three sensors from one status shape. See
@@ -1801,6 +2116,7 @@ class EspEntitySurface {
     _interaction.dispose();
     _countdown.dispose();
     _lux.reset();
+    _noise.reset();
   }
 
   /// A command from Home Assistant landed (via the native hub). State
@@ -1831,7 +2147,7 @@ class EspEntitySurface {
       // automations outside HA can use the raw vocabulary.
       final text = '$value';
       String? stored;
-      for (final option in def.options ?? const <String>[]) {
+      for (final option in _settings.optionsFor(def)) {
         if (option == text || def.optionLabels?[option] == text) {
           stored = option;
           break;
@@ -1933,6 +2249,8 @@ class EspEntitySurface {
         await commands.execute('showAppLauncher', const {});
       case 'show_music_assistant':
         await commands.execute('showMusicAssistant', const {});
+      case 'show_music_library':
+        await commands.execute('openMusicLibrary', const {});
       case 'camera_view':
         if ('$value' == 'Closed') {
           await commands.execute('hideCameraView', const {});
@@ -1946,6 +2264,16 @@ class EspEntitySurface {
               'viewId': '${view['id']}',
             });
           }
+        }
+      case 'calendar_view':
+        final view = _calendarViews
+            .where((v) => v.$1 == '$value')
+            .map((v) => v.$2)
+            .firstOrNull;
+        if (view == null) {
+          await commands.execute('hideCalendar', const {});
+        } else {
+          await commands.execute('openCalendar', {'view': view});
         }
       case 'close_camera_view':
         await commands.execute('hideCameraView', const {});
@@ -2066,6 +2394,10 @@ class EspEntitySurface {
       _sendDefaultDashboard();
       return;
     }
+    if (e.key == defs.haCustomPages.key) {
+      unawaited(_followCustomPages());
+      return;
+    }
     for (final entry in _settingSwitches.entries) {
       if (entry.value.$3.key == e.key) {
         _send(entry.key, e.value == true);
@@ -2150,6 +2482,12 @@ class EspEntitySurface {
       }
     }
     await _refresh();
+    final noise = await commands.execute('getNoiseLevel', const {});
+    _sendNoise(
+      noise.ok && noise.data is Map
+          ? ((noise.data as Map)['dbfs'] as num?)?.toInt()
+          : null,
+    );
     await _sendScreen();
     await _sendPanelBrightness();
     await _sendVolume();
@@ -2214,6 +2552,12 @@ class EspEntitySurface {
           ? (voice.data as Map)['state']
           : null;
       await _send('voice_satellite_state', '${state ?? 'idle'}');
+      final timers = await commands.execute('voiceTimers', const {});
+      await _sendTimers([
+        if (timers.ok && timers.data is Map)
+          for (final t in ((timers.data as Map)['timers'] as List? ?? const []))
+            if (t is Map) t.cast<String, Object?>(),
+      ]);
     }
     if (_settings.get(defs.intercomEnabled)) {
       final intercom = await commands.execute('intercomStatus', const {});
@@ -2227,6 +2571,15 @@ class EspEntitySurface {
     // dashboard select derives from the page currently showing.
     await _send('camera_view', 'Closed');
     await _send('active_camera_view', 'none');
+    final calendar = await commands.execute('calendarStatus', const {});
+    await _send(
+      'calendar_view',
+      _calendarViewLabel(
+        calendar.ok && calendar.data is Map
+            ? (calendar.data as Map)['view'] as String?
+            : null,
+      ),
+    );
     await _sendDefaultDashboard();
     // The server (re)started: that IS a fresh sighting, and readable
     // connectivity is by definition on.
@@ -2525,12 +2878,44 @@ class EspEntitySurface {
   /// which raced the same way (issue #362). A stale list is corrected by
   /// the re-reads that follow, with a restart only when it moved.
   Future<void> _refreshDashboardViews() async {
-    _dashboardViews = _rememberedDashboardViews();
-    if (_dashboardViews.isNotEmpty) return;
+    final remembered = _rememberedDashboardViews();
+    if (remembered.isNotEmpty) {
+      _dashboardViews = _withCustomPages(remembered);
+      return;
+    }
     final learned = await _learnDashboardViews();
-    if (learned.isEmpty) return;
+    if (learned.isEmpty) {
+      _dashboardViews = _withCustomPages(const []);
+      return;
+    }
     _dashboardViews = learned;
     await _settings.setInternal(_dashboardViewsKey, jsonEncode(learned));
+  }
+
+  /// [views] with the custom pages as they are in the settings now, last.
+  /// They are added here rather than learned with the views because the
+  /// list they come from is the kiosk's own: the re-read that learns the
+  /// views needs the Home Assistant page on screen and cannot run while a
+  /// custom page is showing.
+  List<String> _withCustomPages(List<String> views) => [
+    for (final v in views)
+      if (!isCustomPagePath(v)) v,
+    for (final p in parseCustomPages(_settings.get(defs.haCustomPages)))
+      p.navPath,
+  ];
+
+  /// A page added, changed or removed: the selects' options follow at
+  /// once, re-registering the device only when the list really moved.
+  Future<void> _followCustomPages() async {
+    final next = _withCustomPages(_dashboardViews);
+    if (jsonEncode(next) == jsonEncode(_dashboardViews)) return;
+    _dashboardViews = next;
+    if (next.any((v) => !isCustomPagePath(v))) {
+      await _settings.setInternal(_dashboardViewsKey, jsonEncode(next));
+    }
+    if (_push == null) return;
+    log.info('esphome', 'custom pages changed; re-listing entities');
+    onCatalogChanged?.call();
   }
 
   List<String> _rememberedDashboardViews() {
@@ -2575,7 +2960,11 @@ class EspEntitySurface {
       log.warn('esphome', 'default_dashboard: no Home Assistant URL');
       return;
     }
-    await _settings.set(defs.startUrl, '$base/$path', source: 'esphome');
+    await _settings.set(
+      defs.startUrl,
+      viewPathUrl(base, path),
+      source: 'esphome',
+    );
   }
 
   /// The Home Assistant origin the start URL is built on, as the manager
@@ -2610,7 +2999,8 @@ class EspEntitySurface {
     for (final d in dashboards.data as List) {
       if (d is! Map) continue;
       final urlPath = '${d['url_path'] ?? ''}';
-      if (urlPath.isEmpty) continue;
+      // The custom pages join after the read (see _withCustomPages).
+      if (urlPath.isEmpty || urlPath == customPagesDashboardPath) continue;
       final views = await commands.execute('haListDashboardViews', {
         'url_path': urlPath,
       });
@@ -2626,7 +3016,7 @@ class EspEntitySurface {
         options.add(urlPath);
       }
     }
-    return options;
+    return options.isEmpty ? options : _withCustomPages(options);
   }
 
   /// Re-reads the list while serving, when the page reports the dashboard
@@ -2664,8 +3054,14 @@ class EspEntitySurface {
       await _send('charging', data['charging'] == true);
       final cpu = (data['cpu'] as num?)?.round();
       if (cpu != null) await _send('cpu', cpu);
+      final cpuClock = (data['cpuClock'] as num?)?.round();
+      if (cpuClock != null) await _send('cpu_clock', cpuClock);
       final temp = data['temp'] as num?;
       if (temp != null) await _send('cpu_temp', temp.round());
+      final batteryTemp = data['batteryTemp'] as num?;
+      if (batteryTemp != null) {
+        await _send('battery_temp', (batteryTemp * 10).round() / 10);
+      }
     }
     final details = await commands.execute('getDeviceDetails', const {});
     final ram = details.ok && details.data is Map
@@ -2735,4 +3131,43 @@ class EspEntitySurface {
     // Every completed poll IS a sighting.
     await _send('last_seen', DateTime.now().toUtc().toIso8601String());
   }
+}
+
+/// A command's answer cut to fit one ESPHome frame, which holds at most
+/// 64 KB: stdout and stderr can each be 32 KB and JSON escaping grows
+/// them further. stderr keeps its head and stdout gives up the rest, with
+/// truncated set whenever anything was cut.
+Map<String, Object?> fitCommandResponse(
+  Map<String, Object?> response, {
+  int limit = 48000,
+}) {
+  int size(Map<String, Object?> value) => utf8.encode(jsonEncode(value)).length;
+  var fitted = Map<String, Object?>.of(response);
+  final stderr = '${fitted['stderr'] ?? ''}';
+  if (stderr.length > 4096) {
+    fitted = {
+      ...fitted,
+      'stderr': stderr.substring(0, 4096),
+      'truncated': true,
+    };
+  }
+  final stdout = '${fitted['stdout'] ?? ''}';
+  if (size(fitted) <= limit) return fitted;
+  // The longest head of stdout that fits. Escaping makes the byte cost of
+  // a character anywhere from 1 to 6, so search rather than estimate.
+  Map<String, Object?> cut(int length) => {
+    ...fitted,
+    'stdout': stdout.substring(0, length),
+    'truncated': true,
+  };
+  var low = 0, high = stdout.length;
+  while (low < high) {
+    final mid = (low + high + 1) ~/ 2;
+    if (size(cut(mid)) <= limit) {
+      low = mid;
+    } else {
+      high = mid - 1;
+    }
+  }
+  return cut(low);
 }

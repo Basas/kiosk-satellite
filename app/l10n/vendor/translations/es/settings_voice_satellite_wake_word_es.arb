@@ -67,6 +67,8 @@
   "settingVoiceWakeArbitrationDescription": "Cuando varios kioskos oyen la palabra de activación, responde el más cercano. Aumenta la latencia de detección.",
   "settingVoiceWakeArbitrationWindowTitle": "Ventana de arbitraje",
   "settingVoiceWakeArbitrationWindowDescription": "Cuánto esperar a los otros kioskos. Súbela si un kiosko más lento pierde cuando está más cerca.",
+  "settingVoiceWakeArbitrationOffsetTitle": "Ajuste de arbitraje",
+  "settingVoiceWakeArbitrationOffsetDescription": "Se suma a lo fuerte que este kiosko oyó la palabra de activación. Súbelo si este kiosko pierde cuando está más cerca y bájalo si responde desde demasiado lejos.",
   "voiceSectionWakeArbitration": "Arbitraje de la palabra de activación",
   "voiceOptionSlightly": "Poco sensible",
   "voiceOptionModerately": "Moderadamente sensible",
@@ -89,5 +91,8 @@
   "voiceModelNotOnnx": "No es un modelo ONNX.",
   "voiceModelNotOww": "No es un modelo openWakeWord.",
   "voiceModelOwwWindow": "No es un modelo openWakeWord: no acepta la ventana de embeddings de 16 x 96.",
-  "voiceModelNoLoad": "El modelo no se carga: {error}"
+  "voiceModelNoLoad": "El modelo no se carga: {error}",
+  "settingVoiceAmazonLocaleTitle": "Idioma de la palabra de activación",
+  "settingVoiceAmazonLocaleDescription": "El idioma de los modelos de palabras de activación de Amazon. Los selectores de palabra de activación ofrecen las palabras de activación de ese idioma.",
+  "voiceOptionAppLanguage": "Idioma de Kiosk Satellite"
 }

@@ -1,0 +1,13 @@
+{
+  "@@locale": "ru",
+  "screensaverOverlayEntity": "Сущность",
+  "screensaverOverlayNotSet": "Не задано",
+  "screensaverOverlayName": "Название",
+  "screensaverOverlayNameHelp": "Оставьте пустым, чтобы использовать имя из Home Assistant.",
+  "screensaverOverlayValue": "Показываемое значение",
+  "screensaverOverlayState": "Состояние",
+  "screensaverOverlayEntityRequired": "Выберите сущность.",
+  "screensaverOverlaySearching": "Поиск…",
+  "screensaverOverlayUnreachable": "Home Assistant недоступен",
+  "screensaverOverlayNoAnswer": "Устройство не ответило."
+}

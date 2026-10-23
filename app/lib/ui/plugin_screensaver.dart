@@ -3,12 +3,16 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../app_container.dart';
 import '../core/events.dart';
 import 'package:kiosk_satellite/core/lifecycle.dart';
+import '../managers/plugins/plugin_manager.dart' show PluginNativeOverlay;
 import '../managers/settings/definitions.dart' as defs;
+import 'plugin_overlay.dart' show PluginNativeOverlays, pluginOverlayTheme;
+import 'ui_scale.dart' show UiScaleScope;
 
 /// An isolated rendering document. All input and screensaver policy stays in KS.
 String pluginScreensaverDocument(String html) =>
@@ -51,7 +55,55 @@ Uri? pluginScreensaverAssetUrl(Map<String, Object?> renderer) {
       .replace(fragment: renderer['dataJson'] as String? ?? '{}');
 }
 
-class PluginScreensaver extends StatelessWidget {
+/// One rendering document and the renderer publication it shows.
+typedef PluginDocument = ({Object key, Map<String, Object?> renderer});
+
+/// The documents a plugin screensaver keeps mounted. Inline HTML updates load
+/// into the live WebView. Anything else that changes the document's origin or
+/// options needs a new one, which loads beneath the shown document and only
+/// replaces it once it has painted. A fresh WebView has nothing to draw until
+/// then, so swapping right away blanked the screensaver on every asset
+/// publication (#918).
+class PluginDocuments {
+  PluginDocument? shown;
+  PluginDocument? next;
+
+  static Object keyOf(Map<String, Object?> renderer) => (
+    renderer['entry'],
+    renderer['assetOrigin'],
+    renderer['assetDirectory'],
+    renderer['dataJson'],
+  );
+
+  /// Applies a publication, or its removal. Returns true when it starts
+  /// loading a new replacement document.
+  bool publish(Map<String, Object?>? renderer) {
+    if (renderer == null) {
+      shown = next = null;
+      return false;
+    }
+    final key = keyOf(renderer);
+    final document = (key: key, renderer: renderer);
+    if (shown == null || shown!.key == key) {
+      shown = document;
+      next = null;
+      return false;
+    }
+    final fresh = next?.key != key;
+    next = document;
+    return fresh;
+  }
+
+  /// The replacement with [key] has painted. Returns true when it took over.
+  bool ready(Object key) {
+    if (next?.key != key) return false;
+    shown = next;
+    next = null;
+    return true;
+  }
+}
+
+class PluginScreensaver extends StatefulWidget {
   const PluginScreensaver({
     super.key,
     required this.container,
@@ -61,33 +113,112 @@ class PluginScreensaver extends StatelessWidget {
   final String mode;
 
   @override
-  Widget build(BuildContext context) =>
-      ValueListenableBuilder<Map<String, Map<String, Object?>>>(
-        valueListenable: container.plugins.screensavers,
-        builder: (context, renderers, _) {
-          final renderer = renderers[mode];
-          if (renderer == null) return const ColoredBox(color: Colors.black);
-          return _Document(
-            // Inline HTML updates load into the live WebView. Anything else
-            // that changes the document's origin or options rebuilds it.
-            key: ValueKey((
-              mode,
-              renderer['entry'],
-              renderer['assetOrigin'],
-              renderer['assetDirectory'],
-              renderer['dataJson'],
-            )),
-            container: container,
-            renderer: renderer,
-          );
-        },
+  State<PluginScreensaver> createState() => _PluginScreensaverState();
+}
+
+class _PluginScreensaverState extends State<PluginScreensaver> {
+  final _documents = PluginDocuments();
+  Timer? _fallback;
+
+  ValueNotifier<Map<String, Map<String, Object?>>> get _renderers =>
+      widget.container.plugins.screensavers;
+
+  /// The mode's renderer when it is a document. A native renderer has no
+  /// document to keep mounted.
+  Map<String, Object?>? get _document {
+    final renderer = _renderers.value[widget.mode];
+    return renderer?['view'] == true ? null : renderer;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _renderers.addListener(_publish);
+    _documents.publish(_document);
+  }
+
+  @override
+  void didUpdateWidget(covariant PluginScreensaver oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.mode != widget.mode) {
+      _fallback?.cancel();
+      _documents.publish(null);
+      _documents.publish(_document);
+    }
+  }
+
+  void _publish() {
+    if (!mounted) return;
+    setState(() {
+      if (_documents.publish(_document)) {
+        // Swaps anyway when the replacement never reports its first paint,
+        // such as one loading while the screen is off.
+        _fallback?.cancel();
+        final key = _documents.next!.key;
+        _fallback = Timer(const Duration(seconds: 3), () => _ready(key));
+      }
+    });
+  }
+
+  void _ready(Object key) {
+    if (!mounted || _documents.next?.key != key) return;
+    _fallback?.cancel();
+    setState(() => _documents.ready(key));
+  }
+
+  @override
+  void dispose() {
+    _renderers.removeListener(_publish);
+    _fallback?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final renderer = _renderers.value[widget.mode];
+    if (renderer?['view'] == true) {
+      return _NativeScreensaver(
+        // A republication builds a fresh view from the new factory.
+        key: ValueKey((widget.mode, renderer!['generation'])),
+        container: widget.container,
+        renderer: renderer,
       );
+    }
+    final shown = _documents.shown;
+    if (shown == null) return const ColoredBox(color: Colors.black);
+    final next = _documents.next;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        if (next != null)
+          _Document(
+            key: ValueKey((widget.mode, next.key)),
+            container: widget.container,
+            renderer: next.renderer,
+            onReady: () => _ready(next.key),
+          ),
+        _Document(
+          key: ValueKey((widget.mode, shown.key)),
+          container: widget.container,
+          renderer: shown.renderer,
+        ),
+      ],
+    );
+  }
 }
 
 class _Document extends StatefulWidget {
-  const _Document({super.key, required this.container, required this.renderer});
+  const _Document({
+    super.key,
+    required this.container,
+    required this.renderer,
+    this.onReady,
+  });
   final AppContainer container;
   final Map<String, Object?> renderer;
+
+  /// Called once the document has loaded and painted.
+  final VoidCallback? onReady;
   @override
   State<_Document> createState() => _DocumentState();
 }
@@ -102,7 +233,12 @@ class _DocumentState extends State<_Document> with WidgetsBindingObserver {
   bool _foreground = true;
   bool _failed = false;
   bool _loaded = false;
+  bool _visible = false;
   String? _html;
+
+  void _checkReady() {
+    if (_loaded && _visible) widget.onReady?.call();
+  }
 
   @override
   void initState() {
@@ -230,6 +366,9 @@ class _DocumentState extends State<_Document> with WidgetsBindingObserver {
                             ),
                           ),
                     initialSettings: InAppWebViewSettings(
+                      // The black ColoredBox shows through until the page
+                      // paints, instead of the WebView's default white.
+                      transparentBackground: true,
                       webViewAssetLoader: assetUrl == null
                           ? null
                           : WebViewAssetLoader(
@@ -277,17 +416,136 @@ class _DocumentState extends State<_Document> with WidgetsBindingObserver {
                       _controller = controller;
                       unawaited(_activity());
                     },
+                    onPageCommitVisible: (_, _) {
+                      _visible = true;
+                      _checkReady();
+                    },
                     onLoadStop: (_, _) {
                       _loaded = true;
                       unawaited(_updateDocument());
+                      _checkReady();
                     },
                     onRenderProcessGone: (_, detail) {
                       if (mounted) setState(() => _failed = true);
+                      widget.onReady?.call();
                     },
                   ),
                 ),
               ),
             ),
+    );
+  }
+}
+
+/// A native renderer: the plugin's Android view, built through the plugin
+/// overlay platform view, filling the screensaver at the kiosk's theme and
+/// UI scale. Touches stay with KS and it moves with Pixel shift like the
+/// documents. Leaving disposes the platform view, which tells the plugin to
+/// stop drawing.
+class _NativeScreensaver extends StatefulWidget {
+  const _NativeScreensaver({
+    super.key,
+    required this.container,
+    required this.renderer,
+  });
+  final AppContainer container;
+  final Map<String, Object?> renderer;
+
+  @override
+  State<_NativeScreensaver> createState() => _NativeScreensaverState();
+}
+
+class _NativeScreensaverState extends State<_NativeScreensaver> {
+  StreamSubscription<ScreenStateChanged>? _screen;
+  StreamSubscription<SettingChanged>? _settings;
+  StreamSubscription<ActivityAttached>? _attached;
+  Timer? _shift;
+  Offset _offset = Offset.zero;
+  bool _screenOn = true;
+
+  /// A re-created Activity takes the platform view with it, so it is built
+  /// again, as overlays are.
+  int _epoch = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final bus = widget.container.bus;
+    _screen = bus.on<ScreenStateChanged>().listen((e) => _screenOn = e.on);
+    _attached = bus.on<ActivityAttached>().listen((_) {
+      if (mounted) setState(() => _epoch++);
+    });
+    _settings = bus.on<SettingChanged>().listen((e) {
+      if (e.key == defs.screensaverPixelShift.key &&
+          !widget.container.settings.get(defs.screensaverPixelShift) &&
+          mounted) {
+        setState(() => _offset = Offset.zero);
+      }
+    });
+    _shift = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (!mounted ||
+          !Lifecycle.onScreen ||
+          !_screenOn ||
+          !widget.container.settings.get(defs.screensaverPixelShift)) {
+        return;
+      }
+      final max = min(24.0, MediaQuery.sizeOf(context).width * .015);
+      final random = Random();
+      setState(
+        () => _offset = Offset(
+          (random.nextDouble() * 2 - 1) * max,
+          (random.nextDouble() * 2 - 1) * max,
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _screen?.cancel();
+    _settings?.cancel();
+    _attached?.cancel();
+    _shift?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Exempt from the Scale UI factor like the documents: the view gets a
+    // density that includes it instead, as overlays do.
+    final scale = UiScaleScope.of(context);
+    final theme = widget.container.plugins.overlayTheme(
+      pluginOverlayTheme(Theme.of(context)),
+    );
+    final renderer = widget.renderer;
+    return ColoredBox(
+      color: Colors.black,
+      child: ClipRect(
+        child: Transform.translate(
+          offset: _offset,
+          child: IgnorePointer(
+            child: AndroidView(
+              // The density is fixed when the view is built, so a new Scale
+              // UI factor builds it again.
+              key: ValueKey((scale, _epoch)),
+              viewType: PluginNativeOverlays.viewType,
+              creationParams: {
+                'kind': 'screensaver',
+                'id': renderer['pluginId'],
+                'session': renderer['session'],
+                'key': renderer['key'],
+                'generation': renderer['generation'],
+                'width': PluginNativeOverlay.fill,
+                'height': PluginNativeOverlay.fill,
+                'insets': const [0, 0, 0, 0],
+                'scale': scale,
+                'theme': theme,
+              },
+              creationParamsCodec: const StandardMessageCodec(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

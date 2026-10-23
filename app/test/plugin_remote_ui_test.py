@@ -33,6 +33,8 @@ plugin = {
 plugin['settings'][0]['group'] = 'Chart demo'
 plugin['settings'][1]['group'] = 'Home Assistant demo'
 plugin['settings'].append({'key': 'diagnostic', 'title': 'Enable diagnostic', 'type': 'boolean', 'default': False, 'group': 'Shizuku demo'})
+plugin['settings'].append({'key': 'token', 'title': 'API token', 'type': 'secret', 'default': '', 'group': 'Shizuku demo'})
+plugin['values']['token'] = '__set__'
 plugin['groups'] = [
     {'title': 'Chart demo', 'charts': ['demo'], 'readingsTitle': 'Chart readings', 'readings': ['sensor.wave']},
     {'title': 'Home Assistant demo', 'readingsTitle': 'Home Assistant readings', 'readings': ['text_sensor.ha_state']},
@@ -94,8 +96,9 @@ def api(route):
                    'pluginId': 'hello-world', 'pluginName': 'Hello World'}] if plugins_enabled and installed and installed[0]['running'] else []
     elif name == 'getPluginReadings':
         result = readings
-    elif name == 'haSearchEntities':
-        result = [{'entity_id': 'sensor.room', 'name': 'Room temperature', 'state': '21'}]
+    elif name == 'haListEntities':
+        result = [{'entity_id': 'sensor.room', 'name': 'Room temperature', 'state': '21 °C', 'domain': 'sensor'},
+                  {'entity_id': 'light.porch', 'name': 'Porch light', 'state': 'On', 'domain': 'light'}]
     elif name == 'checkPluginUpdate':
         assert params == {'id': 'hello-world'}
         result = {**preview, 'installedVersion': installed[0]['version'], 'updateAvailable': update_available, 'compatible': compatible, 'compatibilityError': 'Unsupported SDK' if not compatible else ''}
@@ -107,7 +110,11 @@ def api(route):
         if name in ('enablePlugin', 'disablePlugin'):
             installed[0]['enabled'] = name == 'enablePlugin'
         elif name == 'configurePlugin':
-            installed[0]['values'] = params['values']
+            # A patch writes over the saved values, like the host.
+            installed[0]['values'] = {**(installed[0]['values'] if params.get('patch') else {}), **params['values']}
+            # The host lists a saved secret as __set__, never its value.
+            if installed[0]['values'].get('token'):
+                installed[0]['values']['token'] = '__set__'
         elif name == 'removePlugin':
             installed = []
         result = installed
@@ -131,7 +138,7 @@ try:
           (await import('/static/tabs.js')).showTab('plugins', {refresh: false});
         }""")
         root = page.locator('#tab-plugins')
-        row = root.locator('.subpage-entry')
+        row = root.locator('.subpage-entry[data-subpage-entry="hello-world"]')
         expect(row.get_by_text('Hello World', exact=True)).to_be_visible()
         expect(root.get_by_role('button', name='Save settings')).not_to_be_visible()
         master = root.get_by_role('checkbox', name='Enable Plugins', exact=True)
@@ -170,7 +177,7 @@ try:
         expect(root.get_by_role('button', name='Uninstall Hello World')).not_to_be_visible()
         expect(page.locator('#pageTitle')).to_contain_text('Hello World')
         expect(root.get_by_text('Shizuku reading', exact=True)).to_be_visible(timeout=10000)
-        ordered = ['Chart demo', 'Greeting', 'Activity chart', 'Chart readings', 'Wave reading', 'Home Assistant demo', 'Home Assistant entity', 'Home Assistant readings', 'HA reading', 'Shizuku demo', 'Enable diagnostic', 'Shizuku readings', 'Shizuku reading']
+        ordered = ['Chart demo', 'Greeting', 'Activity chart', 'Chart readings', 'Wave reading', 'Home Assistant demo', 'Home Assistant entity', 'Home Assistant readings', 'HA reading', 'Shizuku demo', 'Enable diagnostic', 'API token', 'Shizuku readings', 'Shizuku reading']
         positions = [root.get_by_text(label, exact=True).bounding_box()['y'] for label in ordered]
         assert positions == sorted(positions), 'Demo settings and output are out of order'
         page.screenshot(path='/tmp/kiosk-plugin-grouped-demo.png', full_page=True)
@@ -196,23 +203,60 @@ try:
         expect(page.locator('#statusGrid .status.plugin')).to_have_count(0)
         installed[0]['running'] = True
         page.evaluate("async () => (await import('/static/tabs.js')).showTab('plugins/hello-world', {refresh:false})")
-        root.get_by_role('button', name='Choose Home Assistant entity').click()
-        modal = page.locator('.modal-card')
-        modal.get_by_placeholder('Search by name or entity id').fill('room')
+        # The entity field opens the entity picker; Clear empties it.
+        field = root.locator('[data-plugin-setting="entity"] .ep-field, .row:has-text("Home Assistant entity") .ep-field').first
+        field.click()
+        modal = page.locator('.dash-picker-card')
+        modal.locator('.dp-search').fill('room')
+        expect(modal.get_by_text('Porch light', exact=True)).to_have_count(0)
         modal.get_by_text('Room temperature', exact=True).click()
-        expect(root.get_by_text('sensor.room', exact=True)).to_be_visible()
+        expect(field).to_contain_text('Room temperature')
         assert installed[0]['values']['entity'] == 'sensor.room'
-        root.get_by_role('button', name='Choose Home Assistant entity').click()
-        page.locator('.modal-card').get_by_role('button', name='Clear', exact=True).click()
-        expect(root.get_by_text('sensor.room', exact=True)).to_have_count(0)
+        field.click()
+        page.locator('.dash-picker-card').get_by_role('button', name='Clear', exact=True).click()
+        expect(field).not_to_contain_text('Room temperature')
         assert installed[0]['values']['entity'] == ''
         root.get_by_role('textbox', name='Greeting').fill('Changed on the subpage')
         root.get_by_role('textbox', name='Greeting').press('Tab')
         expect(root.get_by_role('button', name='Save settings')).to_have_count(0)
         expect(root.get_by_role('textbox', name='Greeting')).to_have_value('Changed on the subpage')
+        # A saved secret shows only a placeholder. Typing replaces it and
+        # other edits leave it out. The eye shows only what is typed.
+        token = root.get_by_label('API token', exact=True)
+        expect(token).to_have_attribute('type', 'password')
+        expect(token).to_have_value('')
+        expect(token).to_have_attribute('placeholder', '•••••• (set)')
+        configured = lambda: [r for r in requests if r[0] == 'configurePlugin'][-1][1]['values']
+        assert configured() == {'message': 'Changed on the subpage'}
+        assert [r for r in requests if r[0] == 'configurePlugin'][-1][1]['patch'] is True
+        expect(root.locator('.plugin-secret').get_by_role('button', name='Clear')).to_have_count(0)
+        reveal = root.locator('.plugin-secret').get_by_role('button', name='Show password')
+        expect(reveal).to_be_hidden()
+        token.fill('rotated')
+        expect(reveal).to_be_visible()
+        reveal.click()
+        expect(token).to_have_attribute('type', 'text')
+        hide = root.locator('.plugin-secret').get_by_role('button', name='Hide password')
+        expect(hide).to_be_visible()
+        field_box, button_box = token.bounding_box(), hide.bounding_box()
+        assert field_box['x'] < button_box['x'] and button_box['x'] + button_box['width'] <= field_box['x'] + field_box['width'], (field_box, button_box)
+        hide.click()
+        expect(token).to_have_attribute('type', 'password')
+        token.press('Enter')
+        expect(root.get_by_label('API token', exact=True)).to_have_value('')
+        expect(root.get_by_label('API token', exact=True)).to_have_attribute('placeholder', '•••••• (set)')
+        assert configured()['token'] == 'rotated'
+        expect(root.locator('.plugin-secret').get_by_role('button', name='Show password')).to_be_hidden()
         assert page.url.endswith('#plugins/hello-world')
+        # The open page checks in so the plugin knows, and leaving it says so.
+        page_checks = lambda: [r[1] for r in requests if r[0] == 'setPluginPageOpen']
+        assert page_checks() and page_checks()[-1]['id'] == 'hello-world' and 'open' not in page_checks()[-1], page_checks()
         page.locator('#pageTitle').get_by_role('button', name='Back').click()
         expect(row).to_be_visible()
+        for _ in range(20):
+            if page_checks()[-1].get('open') is False: break
+            page.wait_for_timeout(100)
+        assert page_checks()[-1] == {**page_checks()[0], 'open': False}, page_checks()
         row.locator('label.switch').click()
         expect(row.get_by_role('checkbox')).to_be_checked()
         expect(root.get_by_role('button', name='Add plugin')).to_be_enabled()
@@ -285,7 +329,8 @@ try:
         update_available = True
         installs_before = sum(name == 'installPluginRepository' for name, _ in requests)
         check.click()
-        expect(modal.get_by_text('Installed version', exact=True)).to_be_visible()
+        # The version chip shows the installed version and the release's.
+        expect(modal.locator('.plugin-review-chip').first).to_contain_text('1.0.0 → 1.0.0')
         modal.get_by_role('button', name='Cancel', exact=True).click()
         assert sum(name == 'installPluginRepository' for name, _ in requests) == installs_before
         compatible = False
@@ -316,8 +361,12 @@ try:
         title_bounds = row.locator('.info').bounding_box()
         about_bounds = row.get_by_role('button', name='About Hello World').bounding_box()
         delete_bounds = row.get_by_role('button', name='Uninstall Hello World').bounding_box()
-        assert toggle_bounds['x'] < title_bounds['x'] < about_bounds['x'] < delete_bounds['x']
-        assert abs(toggle_bounds['y'] + toggle_bounds['height']/2 - delete_bounds['y'] - delete_bounds['height']/2) < 2
+        row_bounds = row.bounding_box()
+        # On a phone the name and repository keep the row beside the switch
+        # and the buttons take a line of their own under them.
+        assert toggle_bounds['x'] < title_bounds['x'] and about_bounds['x'] < delete_bounds['x']
+        assert title_bounds['width'] > row_bounds['width'] * 0.55, (title_bounds, row_bounds)
+        assert delete_bounds['y'] >= title_bounds['y'] + title_bounds['height'] - 1, (delete_bounds, title_bounds)
         page.screenshot(path='/tmp/kiosk-plugin-row-mobile.png', full_page=True)
         row.get_by_role('button', name='About Hello World').click()
         expect(modal.get_by_role('heading', name='Reviewed README')).to_be_visible()

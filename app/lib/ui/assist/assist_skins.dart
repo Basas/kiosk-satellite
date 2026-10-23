@@ -6,8 +6,21 @@ import 'package:flutter/material.dart';
 /// overlay, the chat, the bar and the art read these and nothing else, so
 /// a skin changes by changing its entry.
 
-/// The canvas-drawn backgrounds three skins add over the backdrop.
-enum SkinArt { none, waveform, lensFlares, inkBlobs }
+/// The canvas-drawn backgrounds the animated skins add over the backdrop.
+enum SkinArt {
+  none,
+  waveform,
+  lensFlares,
+  inkBlobs,
+  jarvis,
+  kitt,
+  hal;
+
+  /// The art stands at the top of the screen with the conversation under
+  /// it (Jarvis's reactor, KITT's voice box, HAL's eye) rather than behind
+  /// the text.
+  bool get hasTopSlot => this == jarvis || this == kitt || this == hal;
+}
 
 /// The thinking indicator: three bouncing bullets, the terminal's blinking
 /// bullets, or the Kiosk Satellite mark's four bars.
@@ -332,6 +345,33 @@ const _flareUserShadow = [
   CssShadow(Color(0xBF000000), 14),
   CssShadow(Color(0xCC000000), 4, dy: 2),
 ];
+const _jarvisShadow = [
+  CssShadow(Color(0xE6000000), 4),
+  CssShadow(Color(0x9900C8E0), 12),
+];
+const _jarvisAnswerShadow = [
+  CssShadow(Color(0xF2000000), 4),
+  CssShadow(Color(0xCC000000), 14),
+  CssShadow(Color(0x8000C8E0), 16),
+];
+const _kittShadow = [
+  CssShadow(Color(0xE6000000), 4),
+  CssShadow(Color(0x80FF2B1C), 12),
+];
+const _kittAnswerShadow = [
+  CssShadow(Color(0xF2000000), 4),
+  CssShadow(Color(0xCC000000), 14),
+  CssShadow(Color(0x66FF2B1C), 16),
+];
+const _halShadow = [
+  CssShadow(Color(0xE6000000), 4),
+  CssShadow(Color(0x66FF1E0A), 12),
+];
+const _halAnswerShadow = [
+  CssShadow(Color(0xF2000000), 4),
+  CssShadow(Color(0xCC000000), 14),
+  CssShadow(Color(0x4DFF1E0A), 16),
+];
 const _flareAnswerShadow = [
   CssShadow(Color(0xF2000000), 4),
   CssShadow(Color(0xD9000000), 14),
@@ -634,6 +674,93 @@ final assistSkins = <AssistSkin>[
     blur: 0,
     chatBottomReactive: 72,
     announcementTop: 0.72,
+    idleDotSize: 22,
+    toolSize: 22,
+  ),
+  const AssistSkin(
+    id: 'jarvis',
+    name: 'Jarvis',
+    light: SkinPalette(
+      backdrop: Color(0xFF02090E),
+      opacity: 1,
+      user: Color(0xD98FE3EC),
+      answer: Color(0xFFE6FCFF),
+      tool: Color(0xFF7CCAD4),
+      pill: Color(0xFF06222A),
+      dots: [Color(0xFF4EE6F0), Color(0xFFA6F8FF), Color(0xFF1FB5C9)],
+      userShadows: _jarvisShadow,
+      answerShadows: _jarvisAnswerShadow,
+      toolShadows: _jarvisShadow,
+    ),
+    bar: NoBar(),
+    art: SkinArt.jarvis,
+    font: 'Inter',
+    blur: 0,
+    // No bar under the chat.
+    chatBottom: 40,
+    chatBottomReactive: 40,
+    centered: true,
+    userWeight: FontWeight.w300,
+    toolWeight: FontWeight.w300,
+    announcementTop: 0.8,
+    idleDotSize: 22,
+    toolSize: 22,
+  ),
+  const AssistSkin(
+    id: 'kitt',
+    name: 'KITT',
+    light: SkinPalette(
+      backdrop: Color(0xFF000000),
+      opacity: 1,
+      user: Color(0xD9FF8A7E),
+      answer: Color(0xFFFFE9E6),
+      tool: Color(0xFFD9645A),
+      pill: Color(0xFF220A08),
+      dots: [Color(0xFFFF2B1C), Color(0xFFFF6A5C), Color(0xFFB01E14)],
+      userShadows: _kittShadow,
+      answerShadows: _kittAnswerShadow,
+      toolShadows: _kittShadow,
+    ),
+    bar: NoBar(),
+    art: SkinArt.kitt,
+    font: 'Inter',
+    blur: 0,
+    // No bar under the chat.
+    chatBottom: 40,
+    chatBottomReactive: 40,
+    centered: true,
+    userWeight: FontWeight.w300,
+    toolWeight: FontWeight.w300,
+    announcementTop: 0.8,
+    idleDotSize: 22,
+    toolSize: 22,
+  ),
+  const AssistSkin(
+    id: 'hal-9000',
+    name: 'HAL 9000',
+    light: SkinPalette(
+      backdrop: Color(0xFF000000),
+      opacity: 1,
+      user: Color(0xD9FF8A7E),
+      answer: Color(0xFFFFEDE8),
+      tool: Color(0xFFD9645A),
+      pill: Color(0xFF220A08),
+      dots: [Color(0xFFFF1E0A), Color(0xFFFFB347), Color(0xFFB01000)],
+      userShadows: _halShadow,
+      answerShadows: _halAnswerShadow,
+      toolShadows: _halShadow,
+    ),
+    bar: NoBar(),
+    art: SkinArt.hal,
+    font: 'Inter',
+    blur: 0,
+    // No bar under the chat.
+    chatBottom: 40,
+    chatBottomReactive: 40,
+    centered: true,
+    userWeight: FontWeight.w300,
+    toolWeight: FontWeight.w300,
+    announcementTop: 0.8,
     idleDotSize: 22,
     toolSize: 22,
   ),

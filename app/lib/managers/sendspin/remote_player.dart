@@ -114,6 +114,23 @@ class RemoteGroup {
   /// name and it has no row.
   bool get leads => selfId == leaderId;
 
+  /// The menu with only the [allowed] players as candidates (issue #974).
+  /// A player already in the group keeps its row so it can be taken out,
+  /// and so does the shown player, whose row is how it leaves. An empty
+  /// [allowed] keeps every row.
+  RemoteGroup allowing(Set<String> allowed) => allowed.isEmpty
+      ? this
+      : RemoteGroup(
+          selfId: selfId,
+          leaderId: leaderId,
+          leaderName: leaderName,
+          leaderVolume: leaderVolume,
+          members: [
+            for (final m in members)
+              if (m.inGroup || m.id == selfId || allowed.contains(m.id)) m,
+          ],
+        );
+
   /// [members] in the chip's order: the grouped ones first, then the
   /// rest, by name within each.
   static List<GroupMember> ordered(Iterable<GroupMember> members) {
@@ -172,6 +189,9 @@ enum PlayerSourceKind {
   /// Another app's media session on this device, `session:<package>`, or
   /// `session:*` for whichever app plays.
   mediaSession,
+
+  /// This device's AirPlay receiver, `airplay`.
+  airplay,
 }
 
 /// A parsed `sendspin.player` value: which system the player belongs to
@@ -185,6 +205,7 @@ class PlayerSource {
   factory PlayerSource.parse(String value) {
     final v = value.trim();
     if (v.isEmpty) return const PlayerSource(PlayerSourceKind.local, '');
+    if (v == 'airplay') return const PlayerSource(PlayerSourceKind.airplay, '');
     if (v.startsWith('ha:')) {
       return PlayerSource(PlayerSourceKind.homeAssistant, v.substring(3));
     }
@@ -212,5 +233,6 @@ class PlayerSource {
     PlayerSourceKind.homeAssistant => 'ha:$id',
     PlayerSourceKind.sonos => 'sonos:$id',
     PlayerSourceKind.mediaSession => 'session:$id',
+    PlayerSourceKind.airplay => 'airplay',
   };
 }

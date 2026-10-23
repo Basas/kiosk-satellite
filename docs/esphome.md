@@ -36,7 +36,7 @@ Each connection attempt temporarily pauses scanning to perform its handshake (si
 
 ## Kiosk Entities
 
-Turn on **Expose kiosk entities** to add all the entities listed below to the device in Home Assistant. This is off by default, meaning if you only enable ESPHome for the Bluetooth proxy, no extra entities are created. Rows marked with a requirement only appear if that hardware is present; for example, a kiosk with no camera simply will not have camera entities, rather than displaying dead ones. Because the ESPHome protocol does not use attributes, any hardware details that would normally ride on a sensor as an attribute are split into their own distinct entities.
+**Expose kiosk entities** adds all the entities listed below to the device in Home Assistant. It is on by default. Turn it off if you only enable ESPHome for the Bluetooth proxy, and no extra entities are created. A kiosk set up before this default keeps the choice it had. Rows marked with a requirement only appear if that hardware is present; for example, a kiosk with no camera simply will not have camera entities, rather than displaying dead ones. Because the ESPHome protocol does not use attributes, any hardware details that would normally ride on a sensor as an attribute are split into their own distinct entities.
 
 Native Voice Satellite adds its own VS entities and actions, listed in [Voice Satellite](voice-satellite.md#home-assistant-entities-and-actions).
 
@@ -52,19 +52,21 @@ Use **Settings > ESPHome > Excluded entities** to pick entities that should stay
 | **Volume** | number | Controls the media volume percentage. |
 | **Voice Satellite** | switch | Voice Satellite integration on the dashboard only. Starts and stops the voice engine on the page, identical to the Start and Stop buttons found in the kiosk's Voice Satellite settings. Requires a satellite bound to the kiosk (which is handled during the setup wizard or on the Voice Satellite settings page). Binding or unbinding a satellite will refresh the entity list on the next server start. |
 | **Postpone screensaver** | button | Restarts the idle countdown timer. |
-| **Screensaver next slide**, **Screensaver previous slide** | button | Steps a Home Assistant Media, Local Media, Photo Gallery, or Immich Media slideshow forward or backward by one slide, holding the new slide for its full interval. If Camera Streams are active, it steps between camera views. Pressing this does nothing if any other mode (or no screensaver) is active. |
+| **Screensaver next slide**, **Screensaver previous slide** | button | Steps a Home Assistant Media, Local Media, Photo Gallery, Image URL or Immich Media slideshow forward or backward by one slide, holding the new slide for its full interval. If Camera Streams are active, it steps between camera views. Pressing this does nothing if any other mode (or no screensaver) is active. |
 | **Notifications dismiss all** | button | The button equivalent of the `notification_dismiss` action below: acknowledging a leak on one display can clear the alerts on all the rest. |
 | **Reload page**, **Go to dashboard**, **Clear cache**, **Restart app**, **Bring to front** | button | Triggers the exact same actions available in the kiosk's side drawer. |
 | **Restart device** | button | Restarts the whole device, not just the app. Listed only where the restart can land: with Kiosk Satellite provisioned as the [device owner](kiosk.md#going-further-device-ownership), or with a granted [Shizuku](shizuku.md) connection. A Shizuku started over ADB stops at the reboot, so on such a kiosk the button is gone until Shizuku runs again. |
 | **Open app launcher** | button | Requires the App launcher setting to be enabled. |
 | **Show Music Assistant** | button | Requires a Music Assistant server address to be configured. |
+| **Show Music Library** | button | Opens the [Music Library](music-library.md). Listed once Music Assistant, Home Assistant or a Sonos speaker is set up. |
 | **Media play**, **Media pause**, **Media next**, **Media previous** | button | Transport for the player the Media Player page follows: the Sendspin player, a Home Assistant, Music Assistant or Sonos player, or the [Local Media Session](sendspin.md#local-media-session). Requires **Expose ESPHome entities** on the Media Player page. |
 | **Media state**, **Media title**, **Media artist**, **Media source** | text sensor | What that player is doing: `playing`, `paused` or `idle`, the track, the artist and the player's name. For the Local Media Session the source is the app that plays, such as YouTube. Requires **Expose ESPHome entities** on the Media Player page. |
 | **Camera view** | select | Includes a "Closed" option, plus one option for every camera view containing cameras. Requires camera views to be configured. The option list is built when the server starts; if you add new views, simply toggle ESPHome off and on, or restart the app to refresh the list. |
+| **Calendar view** | select | Shows which [calendar](calendar.md) view is up, or "Closed". Pick Day, Week, Month or Schedule to open the calendar on that view, or Closed to close it. |
 | **Show <view>** (one per camera view), **Close camera view** | button | Opens a specific named view or closes whichever view is currently open. |
 | **Active camera view** | text sensor | Displays the name of the view currently on screen, or reads `none` when closed. |
 | **Intercom**, **Intercom kiosk** | text sensor | The [intercom's](intercom.md#home-assistant) state (`idle`, `calling`, `ringing`, `in_call`, `broadcasting`, `listening`, `missed` for a minute after a call nobody answered) and the other kiosk's name. Listed while the intercom is on. |
-| **Dashboard view** | select | Provides one option per dashboard view (`dashboard/view`). This list re reads when Home Assistant reports that a dashboard was created, deleted, or edited, and when the dashboard connection returns after an outage (it never re reads on a timer). The last read list is saved across restarts, so the selector is available immediately upon the first connection even if Home Assistant is temporarily down. |
+| **Dashboard view** | select | Provides one option per dashboard view (`dashboard/view`), then one per app in the Home Assistant sidebar (`1e25efb6_panalume`), followed by your [custom pages](custom-pages.md) (`local/page.html`). This list re reads when Home Assistant reports that a dashboard or sidebar panel was created, deleted, or edited, and when the dashboard connection returns after an outage (it never re reads on a timer). The last read list is saved across restarts, so the selector is available immediately upon the first connection even if Home Assistant is temporarily down. |
 | **Update** | update | Displays the latest release and its release notes, which you can install directly from Home Assistant (see [updates.md](updates.md)). Calling `homeassistant.update_entity` on it checks the release source right away instead of waiting for the next scheduled check. |
 | **Screenshot** | camera | Exposes the display as a still camera on every kiosk. It is fed by the Take screenshot button or by fetching the entity itself. |
 | **Take screenshot** | button | Manually captures the display. |
@@ -73,6 +75,7 @@ Use **Settings > ESPHome > Excluded entities** to pick entities that should stay
 | **Take camera snapshot** | button | Requires physical camera hardware. |
 | **Last camera snapshot** | timestamp | Requires physical camera hardware. The value is saved across restarts. |
 | **Ambient light** | sensor | Reports light levels in Lux. Requires a physical light sensor. A real change reaches Home Assistant at once. A sensor that keeps flapping between values is held to one update every 30 seconds so it cannot flood the recorder. |
+| **Ambient noise** | sensor | Reports how loud the room is in dBFS, averaged over 5 seconds. Reads unknown while wake word detection is off or muted. A real change reaches Home Assistant at once. A level that keeps moving is held to one update every 30 seconds, the same as Ambient light. See the [Ambient Noise](#ambient-noise) section. |
 | **GPS latitude**, **GPS longitude** | sensor | Reports coordinates in degrees, precise to six decimals. Requires **Report location** to be on and a physical GPS receiver. See the [GPS Sensor](#gps-sensor) section. |
 | **GPS accuracy**, **Altitude** | sensor | Reports accuracy and altitude in meters. Requires **Report location** to be on and a physical GPS receiver. |
 | **Speed** | sensor | Reports speed in meters per second (Home Assistant will automatically convert this to your preferred unit system). Requires **Report location** to be on and a physical GPS receiver. |
@@ -96,12 +99,14 @@ Every item in this list corresponds directly to a kiosk setting. They are fully 
 |---|---|---|
 | **Screensaver brightness level**, **Assistant volume**, **Media volume** | number | Values in percentage. |
 | **Screensaver timeout** | number | The idle timeout in seconds, the same value as **Idle timeout** on the Screensaver page. A write restarts the idle clock at the new value right away, so an automation can shorten it at night and stretch it back in the morning. `0` turns the idle clock off, so the screensaver only starts from the switch, a schedule or a gesture. |
+| **Screensaver screen off after** | number | Minutes the screensaver runs before the display powers off, the same value as **Turn screen off after** on the Screensaver page. `0` keeps the screen on. A write under a running screensaver restarts the countdown at the new value. An active [schedule](screensavers.md#schedule) entry with its own screen off time takes precedence. |
 | **Clock background** | text | The Clock screensaver's background photo: a path to an image on the device or an image URL the device fetches. Every write reloads the image, an unchanged value included. |
 | **Kiosk mode**, **Lockdown mode**, **HA kiosk mode**, **Keep screen on**, **Remote management**, **Screensaver brightness**, **Screensaver**, **Hold mode** | switch | Standard toggle switches. |
-| **Adaptive brightness** | switch | Requires a physical light sensor. |
+| **Adaptive brightness** | switch | Follows the device's light sensor or the Home Assistant entity picked in its settings. |
 | **Camera enabled**, **Screensaver motion detection**, **Screensaver face detection** | switch | Requires physical camera hardware. The Camera enabled switch can be safely toggled throughout the day; the camera entities will remain listed. |
 | **RTSP Streaming** | switch | Enables or disables the RTSP server using the saved stream settings. Requires physical camera hardware. Camera enabled and Android camera permission must also be on. Changes sync with the local and remote settings pages without reconnecting ESPHome. |
 | **Screensaver proximity detection** | switch | Requires a physical proximity sensor. |
+| **Screensaver schedule** | switch | Turns [scheduled screensavers](screensavers.md#schedule) on or off, the same as **Enable scheduled screensavers** on the device. The times themselves are set on the device. |
 | **Intercom enabled** | switch | The [intercom's](intercom.md) master switch. Its state sensors and the answer mode appear while it is on. |
 | **Voice Satellite auto start** | switch | Voice Satellite integration on the dashboard only. Controls whether the voice engine starts automatically with the dashboard. This allows an automation to delay voice services on slower devices that need all their processing power for the initial dashboard load. Requires a bound satellite. |
 | **Theme** | select | Options are Auto, Light, or Dark. Selecting Light or Dark forcibly pins the dashboard theme, overriding both the on device schedule and the app theme sync for as long as it is active. If theme sync is enabled, pinning the theme will flip the app's internal screens as well. |
@@ -118,8 +123,10 @@ Every item in this list corresponds directly to a kiosk setting. They are fully 
 |---|---|---|
 | **Battery** | sensor | Reports battery percentage. Only devices with a physical battery receive this entity; a mains powered device without a battery will only report the Charging status. |
 | **Charging** | binary sensor | Indicates if the device is currently receiving power. |
-| **CPU usage** | sensor | Reports current CPU load as a percentage. |
+| **CPU usage** | sensor | Reports how busy the CPU is as a percentage. Only available on devices that let an app measure CPU load. |
+| **CPU clock** | sensor | Reports the average clock speed of the active CPU cores in MHz. |
 | **CPU temperature** | sensor | Only available on devices that report thermal data. |
+| **Battery temperature** | sensor | Reports the battery temperature in °C from Android's battery report. Only devices with a battery that has a temperature sensor receive this entity. |
 | **RAM available**, **RAM total** | sensor | Reported in Megabytes (MB). |
 | **Internal storage free**, **Internal storage total** | sensor | Available space and capacity of Android's internal data partition in mebibytes (MiB). Refresh every minute. Free space includes a valid zero when the partition is full. |
 | **Current page** | text sensor | Displays the URL currently on screen, perfectly tracking Single Page Application (SPA) navigations. |
@@ -354,7 +361,7 @@ Two actions follow a player from an automation, the way the Media Player page's 
 
 `esphome.<node name>_media_player_list` takes no arguments and answers with every player the kiosk can follow, read through `response_variable`: each with its `source` (`device`, `home_assistant`, `music_assistant` or `sonos`), its `name`, its `id` and whether it is `available`, plus `current`, the pick in force. A Sonos room's id is the serial the Sonos page shows under its address.
 
-`esphome.<node name>_media_player_set` takes a `source` and a `player`, the player by its name as listed or by its id, and answers with what it picked. The `device` source puts the kiosk back on its own Sendspin player; its `player` is then ignored but must still be given, since no ESPHome action argument is optional.
+`esphome.<node name>_media_player_set` takes a `source` and a `player`, the player by its name as listed or by its id, and answers with what it picked. The `device` source puts the kiosk back on its own Sendspin player, or with `player` set to `media_session` on the Local Media Session and `airplay` on the AirPlay receiver. Any other `player` picks the Sendspin player, but one must still be given, since no ESPHome action argument is optional.
 
 ```yaml
 - action: esphome.kitchen_tablet_media_player_set
@@ -417,7 +424,7 @@ Each announcement can override these options without changing the kiosk's settin
 
 ## Intercom actions
 
-Two actions run the [intercom](intercom.md#home-assistant) from an automation or a dashboard button, listed with **Expose kiosk entities**. `esphome.<node name>_intercom_call` rings another kiosk from this one, its `kiosk` argument the other kiosk's name, any case, or its IP address, and answers with the `id` and `kiosk` it rang. `esphome.<node name>_intercom_hangup` takes no arguments and ends the call, cancels one still ringing or closes an announcement. Both report an error when the intercom is off, the kiosk is unknown, this kiosk is already in a call, the other kiosk refused or there is no call to end.
+Four actions run the [intercom](intercom.md#home-assistant) from an automation or a dashboard button, listed with **Expose kiosk entities**. `esphome.<node name>_intercom_call` rings another kiosk from this one, its `kiosk` argument the other kiosk's name, any case, or its IP address, and answers with the `id` and `kiosk` it rang. `esphome.<node name>_intercom_hangup` takes no arguments and ends the call, cancels one still ringing or closes an announcement. `esphome.<node name>_intercom_answer` and `esphome.<node name>_intercom_decline` take no arguments and answer or decline the call ringing on this kiosk. All four report an error when the intercom is off, the kiosk is unknown, this kiosk is already in a call, the other kiosk refused, there is no call to end or nothing is ringing.
 
 ```yaml
 - action: esphome.kitchen_tablet_intercom_call
@@ -440,6 +447,38 @@ The page has the same footing as any other link the kiosk opens: it follows the 
 
 On the [remote API](remote-api.md) the same two are the `showLinkPage` and `hideOverlayPage` commands, `showLinkPage` with the same `hold` flag.
 
+## Run a Shizuku command
+
+`esphome.<node name>_shizuku_command` runs a shell command on the kiosk through [Shizuku](shizuku.md), the same way `adb shell` would. It is listed with **Expose kiosk entities** and needs Shizuku running with Kiosk Satellite allowed under **Settings > Device > Shizuku**. The command runs as the user Shizuku runs as, which is Android's shell user when Shizuku was started over ADB and root when it was started as root.
+
+```yaml
+- action: esphome.kitchen_tablet_shizuku_command
+  data:
+    command: settings put system screen_off_timeout 600000
+    timeout: 0
+  response_variable: result
+```
+
+`command` is one command line and can use pipes, `&&` and redirects. `timeout` is how many seconds to wait for it, up to 25. Set it to 0 for the default of 10. A command that runs past its timeout is stopped.
+
+The action answers through `response_variable` with `exit_code`, `stdout`, `stderr`, `timed_out` and `truncated`. A command that runs and fails still answers, so check `exit_code` in the automation. Output longer than about 48 KB is cut and `truncated` is true. The action reports an error to Home Assistant when the command could not run at all: Shizuku is not installed, not running, older than version 13 or Kiosk Satellite is not allowed in it. Commands run one at a time in the order they arrive.
+
+Anyone who can run actions on this device in Home Assistant can run commands on the kiosk with the same access as `adb shell`. Turn off **Expose kiosk entities** or revoke Kiosk Satellite in the Shizuku app if that is more access than you want to give Home Assistant. On the [remote API](remote-api.md), the equivalent command is `runShizukuCommand` with the same `command` and `timeout` arguments.
+
+## Ambient Noise
+
+The **Ambient noise** sensor reports how loud the room is as one number in dBFS. A typical use is an automation that lowers the assistant's volume when the house is quiet at night and raises it when the TV is on. Plugins that declare the `noise` capability read the same level.
+
+Only the level leaves the microphone, never audio:
+
+* The figure is the average over 5 seconds, rounded to a whole dB. Home Assistant hears about it when it moves by 2 dB or more.
+* It comes from the capture the wake word engine already has open, so it never opens the microphone. With wake word detection off or the satellite muted there is no level and the sensor reads unknown.
+* It holds its last value through voice turns, announcements, timers, alarms, media playback and intercom calls, so speech never shows up in it. Any 5 seconds in which the kiosk played a sound of its own are dropped as well. The value stays held until a clean reading replaces it.
+
+dBFS is relative to the loudest sound the microphone can record, which reads 0. It is not a calibrated sound level. Quieter rooms read lower. **Microphone gain** shifts the reading by the same number of dB, so set the gain first and then watch the sensor for a day to find your room's quiet and loud levels. Sound from the dashboard's web pages and the DLNA video player can't be told apart from the room, so it counts as noise.
+
+To keep the sensor out of Home Assistant, add it to **Settings > ESPHome > Excluded entities**.
+
 ## GPS Sensor
 
 If your device travels (like a tablet mounted in an RV), it can transmit its exact location to Home Assistant using its built in GPS receiver. You must explicitly opt in via **Settings > ESPHome > GPS Sensor**.
@@ -450,7 +489,7 @@ If your device travels (like a tablet mounted in an RV), it can transmit its exa
 | **Update interval** | Sets the time in seconds between readings, defaulting to 60. The app only pushes a new reading when the receiver actively delivers one, ensuring a parked kiosk costs Home Assistant absolutely zero processing overhead. |
 | **Last coordinates** | Displayed directly under the switch, this shows the most recent coordinate reading, including its accuracy and age, or the specific reason why no data is available. |
 | No GPS receiver | If the hardware lacks a receiver, the switch is permanently disabled and clearly states the reason. Most standard kiosk style tablets do not include GPS hardware. |
-| **Location** grant | This is the only permission requested on this page, but it requires location services to be enabled in the core Android settings as well. Tapping **Grant** will prompt for the permission, or directly open the system location settings if the master switch is what is turned off. |
+| **Location** grant | This is the only permission requested on this page, but it requires location services to be enabled in the core Android settings as well. Tapping **Grant** will prompt for the permission, or directly open the system location settings if the master switch is what is turned off. The receiver needs precise location: on Android 12 and later, allowing only approximate location leaves the grant missing, and **Grant** asks to change it to precise. Once Android stops asking, after two refusals, **Grant** opens the app's page in the Android settings instead. |
 | Screen off | The Kiosk Satellite Service explicitly attaches Android's location foreground type while the switch is on. This ensures location readings continue arriving flawlessly even if the panel powers off or another app takes the foreground. |
 | Cold start | The first reading after booting typically relies on the receiver's last known position. Securing a fresh fix under an open sky can take several minutes. The most recent reading is always preserved across device restarts. |
 

@@ -39,6 +39,11 @@ object HomeRole {
     private const val TAG = "HomeRole"
     private const val EXTRA_INTERNAL_LAUNCH = "ks.internal_launch"
 
+    /** Set by the Meta Portal's stock dream (HomeDreamService), which
+     *  starts HOME on every sleep. */
+    private const val EXTRA_FROM_PORTAL_DREAM =
+        "com.facebook.aloha.home.intent.extra.EXTRA_FROM_DREAMSERVICE"
+
     /** How long the "Set as default" dialog is deferred after enabling the
      *  alias: some OEM role controllers snapshot the candidate list lazily,
      *  and a request racing the component flip can come up empty. */
@@ -71,9 +76,12 @@ object HomeRole {
 
     /** Reuse the HOME task when we own it. A LAUNCHER start creates a
      *  separate standard task even with singleTask. Both activities then
-     *  compete for the process's one Flutter engine. */
+     *  compete for the process's one Flutter engine. Null on a device
+     *  without a screen, which every recovery and bring-forward path
+     *  funnels through: there is no Activity to bring back. */
     fun launchIntent(context: Context): Intent? =
-        if (aliasEnabled(context) && isHeld(context)) homeLaunchIntent(context)
+        if (Headless.active(context)) null
+        else if (aliasEnabled(context) && isHeld(context)) homeLaunchIntent(context)
         else context.packageManager.getLaunchIntentForPackage(context.packageName)
 
     // Keep the component implicit and HOME as the only category.
@@ -86,11 +94,18 @@ object HomeRole {
             .putExtra(EXTRA_INTERNAL_LAUNCH, true)
 
     /** Recovery and detection resume the current screen. Only a Home
-     *  button press should close overlays and return to the dashboard. */
+     *  button press should close overlays and return to the dashboard.
+     *  The Portal dream's HOME is not one either: it lands as the panel
+     *  goes to sleep, and the screensaver it dismissed turned the screen
+     *  back on. Dart also drops a HOME press while the screen is off
+     *  (issue #553), but after a power button press it hears the screen
+     *  went off only from SCREEN_OFF, which the Portal delivers seconds
+     *  after the dream's HOME. */
     fun isHomePress(intent: Intent): Boolean =
         intent.action == Intent.ACTION_MAIN &&
             intent.hasCategory(Intent.CATEGORY_HOME) &&
-            !intent.getBooleanExtra(EXTRA_INTERNAL_LAUNCH, false)
+            !intent.getBooleanExtra(EXTRA_INTERNAL_LAUNCH, false) &&
+            !intent.getBooleanExtra(EXTRA_FROM_PORTAL_DREAM, false)
 
     /** Whether this device lets an app take the HOME role at all, and if
      *  not, why. Fire OS is unsupported outright: its role service claims

@@ -1,6 +1,6 @@
 import { confirmRemoteProtocol } from './tls.js';
 import { brightnessCurveRow } from './brightness_curve.js';
-import { esphomeText, launcherText, messageLanguage, voiceText } from './localization.js';
+import { esphomeText, kioskText, launcherText, messageLanguage, voiceText } from './localization.js';
 import { intercomError, mediaText, cameraText, cameraError, deviceText, haText, screensaverText, screensaverError, t } from './localization.js';
 import { watchUpdates } from './live.js';
 import {
@@ -10,20 +10,36 @@ import {
   cameraListRow,
   cameraSelectField,
   cameraToggle,
-  entitySearchPicker,
-  glanceEntityPicker,
+  glanceEntityEditor,
 } from './cameras.js';
 import { api, depSatisfied, gatedOn, state } from './core.js';
 import { readOnlyRow } from './device.js';
 import { openEspHomeEntityPicker } from './esphome.js';
-import { updateAdaptiveBrightnessRows, updateFaceRows, syncScreenOffAdminNotice } from './notices.js';
 import {
+  cachedList, choiceBox, entitySpec, loadEntityList, loadList, onListLoaded, pickEntityValue,
+  pickField, pickItem, pickItems, pickListRow, speakerPillSpec,
+} from './entity_picker.js';
+import {
+  entityLightReading,
+  externalMotionReading,
+  probeExternalMotion,
+  updateAdaptiveBrightnessRows,
+  updateFaceRows,
+  updateMotionCameraRows,
+  syncScreenOffAdminNotice,
+} from './notices.js';
+import {
+  WAKE_SOURCES,
+  decodeWakeSources,
   openImmichNamesPicker,
   openLauncherAppsPicker,
   openMediaBrowser,
+  openWakeSourcesPicker,
+  wakeSourcesText,
 } from './pickers.js';
-import { loadSettings, refreshRealMacNote, updatePersonSensorRows, updateRtspRows } from './settings.js';
-import { dashboardViewEntries, pickDashboardView } from './views.js';
+import { loadSettings, refreshRealMacNote, syncSubpages, updateCelestialLocationRow, updateCelestialPermissionRows, updateClockNightAdminRows, updateOnvifEventsRows, updatePersonSensorRows, updateRtspRows } from './settings.js';
+import { dashboardField } from './dashboard_picker.js';
+import { updatePlayerRow } from './panels.js';
 import {
   attachSlider,
   dateBox,
@@ -36,6 +52,12 @@ import {
 // The Immich name-picker rows (albums, people, tags): which command lists
 // the choices, and the words for an empty pick and an empty list, the same
 // as the device's.
+// Mirrors cameraAutoDismissStops in definitions.dart.
+const CAMERA_DISMISS_STOPS = [
+  ...Array.from({length: 11}, (_, i) => i * 30),
+  ...Array.from({length: 11}, (_, i) => (i + 2) * 300),
+];
+
 const IMMICH_NAMED_ROWS = {
   'screensaver.immich_album': {
     command: 'immichAlbums', empty: 'All media',
@@ -93,11 +115,18 @@ export function syncGatedRows(key, anchorRow) {
   // it reaches live: only a row whose presence must change counts.
   const changes = (o) => visible(o) !== !!document.querySelector(`[data-key="${o.key}"]`);
   if (!reached.some(changes)) return true;
-  if (!reached.every(sameCard)) return false;
+  // Rows on second-level pages of the tab this row is on (the Player pick
+  // swapping the Sendspin Player page for the AirPlay one) come and go with
+  // their pages, drawn in place too.
+  const away = reached.filter((o) => !sameCard(o) && changes(o));
+  if (away.length && (anchor.subpage || !away.every((o) => o.subpage)
+      || !syncSubpages(away))) {
+    return false;
+  }
   // Schema order within the card decides where a returning row goes back:
   // in front of the first row after it that is currently on screen.
   const order = all.filter(sameCard);
-  for (const o of reached) {
+  for (const o of reached.filter(sameCard)) {
     const existing = card.querySelector(`[data-key="${o.key}"]`);
     if (!visible(o)) { existing?.remove(); continue; }
     if (existing) continue;
@@ -195,6 +224,17 @@ function albumArtCacheRow() {
   return row;
 }
 
+// A labeled control in an editor dialog, the device's LabeledField.
+function formField(label, control) {
+  const wrap = document.createElement('div');
+  wrap.className = 'form-field';
+  const title = document.createElement('span');
+  title.className = 'desc';
+  title.textContent = label;
+  wrap.append(title, control);
+  return wrap;
+}
+
 export function settingRow(s) {
   const row = document.createElement('div'); row.className = 'row';
   // Lets a saved row find another row without a re-render (see save()).
@@ -270,6 +310,8 @@ export function settingRow(s) {
     if (gatedOn(state.settings || [], s.key).length) {
       if (!syncGatedRows(s.key, row)) await loadSettings();
     }
+    // The Player row lists the new source's players.
+    if (s.key === 'sendspin.player_source') updatePlayerRow();
     if (s.key === 'screensaver.screen_off_black' || s.key === 'screensaver.screen_off_minutes') {
       syncScreenOffAdminNotice();
     }
@@ -280,13 +322,35 @@ export function settingRow(s) {
       || s.key === 'screensaver.dismiss_on_face') {
       updateFaceRows();
     }
+    // A Home Assistant entity in the camera's place frees Dismiss on
+    // motion from the camera (issue #973).
+    if (s.key === 'motion.use_entity') updateMotionCameraRows();
     // The person sensor pages' status rows answer for their own switches.
     if (s.key === 'screensaver.dismiss_on_person' || s.key === 'person.sensor') updatePersonSensorRows();
+    // Turn screen off at night's grant group answers for the Night mode
+    // settings above it.
+    if (['screensaver.clock_night', 'screensaver.clock_night_turn_off_minutes',
+      'screensaver.clock_night_turn_off_black'].includes(s.key)) updateClockNightAdminRows();
     if (s.key === 'camera.rtsp.enabled' || s.key === 'camera.rtsp.protocol') updateRtspRows();
+    // The ONVIF motion events notice answers for the source and its sensor.
+    if (['camera.rtsp.enabled', 'camera.rtsp.protocol', 'camera.rtsp.analysis', 'camera.onvif.events',
+      'camera.onvif.events_source', 'motion.sensor', 'person.sensor'].includes(s.key)) updateOnvifEventsRows();
     // The hints under the brightness sliders come and go with the
     // adaptive brightness switch (issue #343). After the gated sync, so
     // the curve rows the switch reveals are in place first.
     if (s.key === 'screen.adaptive_brightness') updateAdaptiveBrightnessRows();
+    // The Celestial location status follows its source and entity, and
+    // the GPS source brings its Location grant.
+    if (s.key === 'screensaver.celestial_location' || s.key === 'screensaver.celestial_entity') {
+      updateCelestialLocationRow();
+    }
+    if (s.key === 'screensaver.celestial_location' || s.key === 'screensaver.mode') {
+      updateCelestialPermissionRows();
+    }
+    // The Ambient light row follows the reading's source (issue #911).
+    if (s.key === 'screen.adaptive_use_entity' || s.key === 'screen.adaptive_light_entity') {
+      updateAdaptiveBrightnessRows({ reprobe: true });
+    }
     // The real-MAC status row and its field answer for the switch and the
     // typed address as they are now (issues #252, #300). After the gated
     // sync: the field is a hidden definition gated on the switch, which
@@ -345,78 +409,118 @@ export function settingRow(s) {
     return row;
   }
 
-  // Weather Mood uses the same weather entity search as the widget editor.
-  if (s.key === 'screensaver.weather_entity') {
-    const select = document.createElement('select');
-    const paint = () => {
-      if (![...select.options].some(option => option.value === (s.value || ''))) {
-        select.add(new Option(s.value || screensaverText('Pick a weather entity…'), s.value || ''));
-      }
-      select.value = s.value || '';
-    };
-    paint();
-    select.addEventListener('change', () => save(select.value));
-    row.appendChild(select);
-    bindUpdate(select, paint);
-    const load = async () => {
-      try {
-        const response = await api('/api/commands/haSearchEntities', {
-          method: 'POST', body: JSON.stringify({ query: 'weather.' }),
-        });
-        const result = await response.json();
-        if (!response.ok || !result.ok || !Array.isArray(result.data)) {
-          throw new Error(screensaverText('Could not reach Home Assistant'));
-        }
-        const entities = result.data.filter(entity => String(entity.entity_id || '').startsWith('weather.'));
-        select.replaceChildren(new Option(screensaverText('Pick a weather entity…'), ''));
-        for (const entity of entities) select.add(new Option(entity.name || entity.entity_id, entity.entity_id));
-        paint();
-        clearRowError(row);
-        if (!entities.length) showRowError(row, screensaverText('No weather entities'), load);
-      } catch (_) {
-        showRowError(row, screensaverText('Could not reach Home Assistant'), load);
-      }
-    };
-    load();
+  // An entity setting, mirroring the device's PickRow: the field shows the
+  // stored entity and opens the entity picker, narrowed to what the setting
+  // takes. A stored entity gone from Home Assistant gets a line in error.
+  const entityRow = (spec, { allowClear = false, placeholder = null } = {}) => {
+    const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '';
+    const missing = document.createElement('div');
+    missing.className = 'desc dp-missing';
+    missing.textContent = haText('This entity is gone from Home Assistant. Choose another.');
+    missing.hidden = true;
+    row.querySelector('.info .name').after(missing);
+    const field = pickField({
+      spec, value: current(), placeholder,
+      onClick: async () => {
+        const out = await pickItem({ title: s.title, spec, selected: current() || null, allowClear });
+        if (!out || (out.id ?? '') === current()) return;
+        await save(out.id ?? '');
+        field.setValue(current());
+      },
+    });
+    field.el.addEventListener('dp-painted', (e) => { missing.hidden = !e.detail.missing; });
+    // Once more now that someone listens: the first paint went unheard.
+    field.repaint();
+    bindUpdate(field.el, () => field.setValue(current()));
+    row.classList.add('dp-field-row');
+    row.appendChild(field.el);
+    return field;
+  };
+  // Weather Mood's and the calendar's weather entity: weather only.
+  if (s.key === 'screensaver.weather_entity' || s.key === 'calendar.weather_entity') {
+    entityRow(entitySpec({ domains: ['weather'] }), { allowClear: true });
     return row;
   }
-  // The Home Assistant Dashboard screensaver's view is picked from the
-  // instance's dashboards, the same modal the Go to a dashboard view
-  // gesture uses, mirroring the device's row.
-  if (s.key === 'screensaver.dashboard_view') {
+  // The Celestial screensaver's location entity: anything with a latitude
+  // and longitude.
+  if (s.key === 'screensaver.celestial_entity') {
+    entityRow(entitySpec({ domains: ['person', 'device_tracker', 'zone'] }), { allowClear: true });
+    return row;
+  }
+  // Adaptive brightness's light sensor entity (issue #911), mirroring the
+  // device's row: light level sensors only, and once one is picked its
+  // live reading stands in for the description.
+  if (s.key === 'screen.adaptive_light_entity') {
+    const desc = info.querySelector('.desc');
+    const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '';
+    const paint = () => {
+      desc.textContent = current() ? entityLightReading() : s.description;
+    };
+    paint();
+    const repaint = () => {
+      if (row.isConnected) paint();
+      else document.removeEventListener('ks-adaptivelight', repaint);
+    };
+    document.addEventListener('ks-adaptivelight', repaint);
+    const field = entityRow(entitySpec({ deviceClass: 'illuminance' }), { allowClear: true });
+    row.updateSetting = () => { paint(); field.setValue(current()); return true; };
+    return row;
+  }
+  // The external motion sensor (issue #973), mirroring the device's row:
+  // occupancy, motion and presence sensors only, and once one is picked
+  // what it reads stands in for the description.
+  if (s.key === 'motion.entity') {
+    const desc = info.querySelector('.desc');
+    const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '';
+    const paint = () => {
+      desc.textContent = current() ? externalMotionReading() : s.description;
+    };
+    paint();
+    const repaint = () => {
+      if (row.isConnected) paint();
+      else document.removeEventListener('ks-externalmotion', repaint);
+    };
+    document.addEventListener('ks-externalmotion', repaint);
+    probeExternalMotion();
+    const field = entityRow(entitySpec({ deviceClass: 'occupancy' }), { allowClear: true });
+    row.updateSetting = () => {
+      probeExternalMotion(true);
+      paint();
+      field.setValue(current());
+      return true;
+    };
+    return row;
+  }
+  // The Home Assistant sensor ONVIF motion events follow (issue #1098),
+  // mirroring the device's row.
+  if (s.key === 'camera.onvif.events_entity') {
+    const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '';
+    const field = entityRow(entitySpec({ deviceClass: 'occupancy' }), { allowClear: true });
+    row.updateSetting = () => { field.setValue(current()); return true; };
+    return row;
+  }
+  // The Home Assistant Dashboard screensaver's view and Now Playing's
+  // chosen view are picked in the dashboard picker, mirroring the
+  // device's row: the field shows the stored view and opens the picker.
+  if (s.key === 'screensaver.dashboard_view' || s.key === 'sendspin.fullscreen_return_view') {
     // The live value: save() writes the confirmed pick into the cache.
     const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '';
-    const val = document.createElement('span');
-    val.className = 'device';
-    val.style.cssText =
-      'flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap';
-    const paint = () => { val.textContent = current() || screensaverText('Not set'); };
-    paint();
-    const btn = document.createElement('button');
-    btn.className = 'btn-ghost'; btn.textContent = screensaverText('Select dashboard');
-    btn.style.flex = 'none';
-    btn.addEventListener('click', async () => {
-      const entries = await dashboardViewEntries();
-      if (!entries.length) {
-        await messageBox({
-          title: screensaverText('Could not list dashboards'),
-          message: screensaverText('Is Home Assistant connected?'),
-        });
-        return;
-      }
-      const picked = await pickDashboardView(screensaverText('Select dashboard'),
-        entries, current());
-      if (!picked) return;
-      await save(picked);
-      paint();
+    const missing = document.createElement('div');
+    missing.className = 'desc dp-missing';
+    missing.textContent = haText('This view is gone from Home Assistant. Choose another.');
+    missing.hidden = true;
+    row.querySelector('.info .name').after(missing);
+    const field = dashboardField({
+      value: current(),
+      title: s.title,
+      onPick: (path) => save(path),
     });
-    bindUpdate(val, paint);
-    // One wrapper so the value + button occupy a single grid cell on mobile.
-    const controls = document.createElement('div');
-    controls.style.cssText =
-      'display:flex; gap:10px; align-items:center; min-width:0; max-width:60%; flex:0 1 auto';
-    controls.append(val, btn);
-    row.appendChild(controls);
+    field.el.addEventListener('dp-painted', (e) => { missing.hidden = !e.detail.missing; });
+    // Once more now that someone listens: the first paint went unheard.
+    field.repaint();
+    bindUpdate(field.el, () => field.setValue(current()));
+    row.classList.add('dp-field-row');
+    row.appendChild(field.el);
     return row;
   }
   // The screensaver's media is browsed from Home Assistant, not typed, the
@@ -449,9 +553,67 @@ export function settingRow(s) {
     return row;
   }
 
-  // The launcher whitelist, mirroring the device's checkbox picker. The
-  // summary renders from the labels cached in the setting; the picker asks
-  // the device for the live app list.
+  // Wake to screensaver, mirroring the device's row: the picks at rest in
+  // a dropdown-style box that opens a checkbox dialog. Stored as a JSON
+  // list of sources (issue #954).
+  if (s.key === 'screensaver.screen_off_wake_to_screensaver') {
+    const current = () => (state.settings || []).find((o) => o.key === s.key)?.value ?? s.value ?? '[]';
+    const field = choiceBox(wakeSourcesText(decodeWakeSources(current())), async () => {
+      // A powered-off panel takes no touches: Touch can only wake the black
+      // screen that stands in for it.
+      const value = (key) => (state.settings || []).find((o) => o.key === key)?.value;
+      const touchReady = Number(value('screensaver.screen_off_minutes')) > 0
+        && value('screensaver.screen_off_black') === true;
+      const picked = await openWakeSourcesPicker(s.title, decodeWakeSources(current()), touchReady);
+      if (!picked) return;
+      field.setText(wakeSourcesText(picked));
+      await save(JSON.stringify(WAKE_SOURCES.filter((source) => picked.has(source))));
+      field.setText(wakeSourcesText(decodeWakeSources(current())));
+    });
+    bindUpdate(field.el, () => field.setText(wakeSourcesText(decodeWakeSources(current()))));
+    row.classList.add('dp-field-row');
+    row.appendChild(field.el);
+    return row;
+  }
+
+  // The speakers the Now Playing pill offers, mirroring the device's row:
+  // the picks at rest in a dropdown-style box that opens one picker over
+  // Music Assistant's players and the Sonos rooms, a chip per source.
+  // Each pick counts only for its own source's menu.
+  if (s.key === 'sendspin.speaker_pill_players') {
+    const spec = speakerPillSpec();
+    const stored = () => {
+      try {
+        const value = (state.settings || []).find((o) => o.key === s.key)?.value;
+        const list = JSON.parse(value ?? s.value ?? '[]');
+        return Array.isArray(list) ? list.filter((id) => typeof id === 'string' && id) : [];
+      } catch (_) { return []; }
+    };
+    // A pick the list lacks (not loaded yet, or away) reads its id.
+    const text = () => {
+      const ids = stored();
+      if (!ids.length) return mediaText('All speakers');
+      const items = cachedList(spec.key)?.items || [];
+      return ids.map((id) => items.find((i) => i.id === id)?.name || id.slice(id.indexOf(':') + 1))
+        .join(', ');
+    };
+    const field = choiceBox(text(), async () => {
+      const ids = await pickItems({ title: s.title, spec, selected: stored() });
+      if (!ids) return;
+      await save(JSON.stringify(ids));
+      field.setText(text());
+    });
+    onListLoaded(spec.key, field.el, () => field.setText(text()));
+    if (!cachedList(spec.key)) loadList(spec);
+    bindUpdate(field.el, () => field.setText(text()));
+    row.classList.add('dp-field-row');
+    row.appendChild(field.el);
+    return row;
+  }
+
+  // The launcher whitelist, mirroring the device's picker. The summary
+  // renders from the labels cached in the setting; the picker asks the
+  // device for the live app list.
   if (s.key === 'launcher.apps') {
     let chosen = [];
     try { chosen = JSON.parse(s.value || '[]') || []; } catch (_) {}
@@ -481,6 +643,68 @@ export function settingRow(s) {
     controls.append(val, btn);
     row.appendChild(controls);
     return row;
+  }
+
+  // The launcher's apps a locked kiosk offers (issue #1067), mirroring the
+  // device's rows: a switch per launcher app, in the launcher's order.
+  if (s.key === 'kiosk.allowed_apps') {
+    const value = (key) => (state.settings || []).find((o) => o.key === key)?.value;
+    let apps = [];
+    try {
+      if (value('launcher.enabled') === true) apps = JSON.parse(value('launcher.apps') || '[]') || [];
+    } catch (_) {}
+    apps = apps.filter((a) => a && typeof a.package === 'string' && a.package);
+    if (!apps.length) {
+      info.querySelector('.desc').textContent = kioskText('Add apps in Settings > App Launcher first.');
+      return row;
+    }
+    const allowed = () => {
+      try {
+        const list = JSON.parse(value(s.key) ?? s.value ?? '[]');
+        return new Set(Array.isArray(list) ? list : []);
+      } catch (_) { return new Set(); }
+    };
+    const fragment = document.createDocumentFragment();
+    for (const app of apps) {
+      const appRow = document.createElement('div'); appRow.className = 'row';
+      const appInfo = document.createElement('div'); appInfo.className = 'info';
+      appInfo.innerHTML = `<div class="name"></div><div class="desc"></div>`;
+      appInfo.querySelector('.name').textContent = app.label || app.package;
+      appInfo.querySelector('.desc').textContent = app.package;
+      const lbl = document.createElement('label'); lbl.className = 'switch';
+      const cb = document.createElement('input'); cb.type = 'checkbox';
+      const paint = () => { cb.checked = allowed().has(app.package); };
+      paint();
+      cb.addEventListener('change', async () => {
+        const next = allowed();
+        if (cb.checked) next.add(app.package); else next.delete(app.package);
+        const picked = JSON.stringify(apps.map((a) => a.package).filter((p) => next.has(p)));
+        try {
+          const res = await api('/api/settings', { method: 'PATCH', body: JSON.stringify({ [s.key]: picked }) });
+          const out = await res.json().catch(() => null);
+          if (!res.ok || out?.ok !== true || out.rejected?.includes(s.key)) {
+            throw new Error(out?.errors?.[s.key] || out?.error
+              || 'Could not save this setting. Try again.');
+          }
+        } catch (error) {
+          paint();
+          showRowError(appRow, error?.message || 'Could not save this setting. Try again.', null);
+          return;
+        }
+        clearRowError(appRow);
+        const cached = (state.settings || []).find((o) => o.key === s.key);
+        if (cached) cached.value = picked;
+        paint();
+      });
+      const sl = document.createElement('span'); sl.className = 'slider';
+      lbl.append(cb, sl);
+      appRow.append(appInfo, lbl);
+      // Every app's row repaints when the list changes elsewhere.
+      appRow.dataset.key = s.key;
+      appRow.updateSetting = () => { paint(); return true; };
+      fragment.appendChild(appRow);
+    }
+    return fragment;
   }
 
   if (s.key === 'esphome.excluded_entities') {
@@ -885,21 +1109,23 @@ export function settingRow(s) {
       ['bottom_left', screensaverText('Bottom left')], ['bottom_right', screensaverText('Bottom right')]];
     const TYPES = [['clock', screensaverText('Small clock')], ['weather', screensaverText('Weather')],
       ['battery', screensaverText('Battery')], ['entity', screensaverText('Entity')],
-      ['alarm', t('alarmsNextWidget')]];
+      ['alarm', t('alarmsNextWidget')], ['calendar', t('calendarUpNext')]];
     const DEFAULTS = {
       clock: { color: '250,250,250', scale: 0, font: 'default',
-        font_weight: 'default', h24: false, date: false },
+        font_weight: 'default', h24: false, ampm: true, date: false },
       weather: { entity: '', name: '', label: '', color: '250,250,250',
         scale: 0, font: 'default', font_weight: 'default',
         feels_like: false, feels_like_only: false, location: true,
         forecast: true, humidity: true, wind: true, visibility: true },
       battery: { color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default', percent: true, low: false },
-      entity: { entity: '', name: '', label: '', attribute: '',
-        show_name: true, color: '250,250,250', scale: 0, font: 'default',
+      entity: { entity: '', name: '', label: '', attribute: '', show_states: '',
+        show_name: true, show_icon: true, color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default' },
       alarm: { color: '250,250,250', scale: 0, font: 'default',
         font_weight: 'default' },
+      calendar: { color: '250,250,250', scale: 0, font: 'default',
+        font_weight: 'default', count: 3 },
     };
     // The typeface and weight pickers, the clock screensaver's vocabulary
     // (kept with definitions.dart) behind a Default that follows the
@@ -1035,10 +1261,19 @@ export function settingRow(s) {
         if (type === 'clock') {
           refs.h24 = cameraToggle(screensaverText('24-hour clock'),
             config.h24 === true, screensaverText('Show a 24-hour time instead of AM/PM.'));
+          // On unless switched off: entries saved before the switch
+          // existed carry no key. Only a 12-hour time has a period.
+          refs.ampm = cameraToggle(screensaverText('Show AM/PM'),
+            config.ampm !== false, screensaverText('Add AM or PM after the time.'));
+          const syncAmPm = () => {
+            refs.ampm.wrap.style.display = refs.h24.input.checked ? 'none' : '';
+          };
+          refs.h24.input.addEventListener('change', syncAmPm);
+          syncAmPm();
           refs.date = cameraToggle(screensaverText('Show date'),
             config.date === true, screensaverText('Add a short date under the clock.'));
           typeBlock.append(refs.color.wrap, refs.scale.wrap, refs.font.wrap,
-            refs.weight.wrap, refs.h24.wrap, refs.date.wrap);
+            refs.weight.wrap, refs.h24.wrap, refs.ampm.wrap, refs.date.wrap);
           return;
         }
         if (type === 'battery') {
@@ -1051,6 +1286,28 @@ export function settingRow(s) {
             refs.weight.wrap, refs.percent.wrap, refs.low.wrap);
           return;
         }
+        // Up next: how many of today's coming events it lists.
+        if (type === 'calendar') {
+          const count = document.createElement('select');
+          count.className = 'field';
+          for (let n = 1; n <= 5; n++) {
+            const opt = document.createElement('option');
+            opt.value = String(n);
+            opt.textContent = String(n);
+            opt.selected = n === (Number(config.count) || 3);
+            count.appendChild(opt);
+          }
+          refs.count = count;
+          const countField = document.createElement('label');
+          countField.className = 'form-field';
+          const countLabel = document.createElement('span');
+          countLabel.className = 'desc';
+          countLabel.textContent = t('calendarWidgetEvents');
+          countField.append(countLabel, count);
+          typeBlock.append(refs.color.wrap, refs.scale.wrap, refs.font.wrap,
+            refs.weight.wrap, countField);
+          return;
+        }
         // The next alarm: nothing of its own, the look every widget has.
         if (type === 'alarm') {
           typeBlock.append(refs.color.wrap, refs.scale.wrap, refs.font.wrap,
@@ -1061,71 +1318,58 @@ export function settingRow(s) {
           // The entity everything is read from, picked by search the way
           // the At a Glance row's are; the friendly name is cached in the
           // config so both editors can show it without a round trip.
-          const entityRow = document.createElement('div');
-          entityRow.className = 'row';
-          const info = document.createElement('div');
-          info.className = 'info';
-          const name = document.createElement('div');
-          name.className = 'name';
-          name.textContent = screensaverText('Entity');
-          const desc = document.createElement('div');
-          desc.className = 'desc';
-          desc.textContent = config.name || config.entity || screensaverText('Not set');
-          info.append(name, desc);
-          refs.attribute = cameraSelectField(screensaverText('Displayed value'),
-            [{ value: '', label: screensaverText('State') },
-              ...(config.attribute
-                ? [{ value: config.attribute, label: config.attribute }] : [])],
-            config.attribute || '');
-          // What the widget displays: the state (the default) or one of
-          // the entity's attributes, offered from its live attributes with
-          // their current values (the At a Glance dialog's choice).
-          const hidden = ['friendly_name', 'icon', 'entity_picture',
-            'supported_features', 'attribution'];
-          const loadAttributes = async () => {
-            refs.attribute.select.disabled = !config.entity;
+          const spec = entitySpec();
+          const valueBox = choiceBox(config.attribute || screensaverText('State'), async () => {
             if (!config.entity) return;
-            try {
-              const res = await (await api('/api/commands/haEntityAttributes', {
-                method: 'POST',
-                body: JSON.stringify({ entity_id: config.entity }) })).json();
-              if (!res.ok) return;
-              const attributes = res.data || {};
-              const names = Object.keys(attributes).filter((k) =>
-                !hidden.includes(k)
-                && (attributes[k] === null || typeof attributes[k] !== 'object'))
-                .sort();
-              const current = refs.attribute.select.value;
-              refs.attribute.select.innerHTML = '';
-              const state = document.createElement('option');
-              state.value = '';
-              state.textContent = screensaverText('State');
-              refs.attribute.select.appendChild(state);
-              for (const n of names) {
-                const o = document.createElement('option');
-                o.value = n;
-                o.textContent = `${n} \u00b7 ${attributes[n]}`;
-                o.selected = n === current;
-                refs.attribute.select.appendChild(o);
-              }
-            } catch (_) {}
-          };
-          const choose = cameraAction(t('commonChoose'), async () => {
-            const picked = await entitySearchPicker();
-            if (!picked) return;
-            // Another entity has other attributes: back to its state.
-            if (picked.entity_id !== config.entity) {
-              config.attribute = '';
-              refs.attribute.select.value = '';
-            }
-            config.entity = picked.entity_id;
-            config.name = picked.name;
-            desc.textContent = config.name;
-            refs.label.input.placeholder = config.name;
-            loadAttributes();
+            const picked = await pickEntityValue({ entityId: config.entity,
+              current: config.attribute || '' });
+            if (picked == null) return;
+            config.attribute = picked;
+            valueBox.setText(picked || screensaverText('State'));
           });
-          entityRow.append(info, choose);
-          refs.entity = { wrap: entityRow };
+          valueBox.el.disabled = !config.entity;
+          const entityField = pickField({
+            spec, value: config.entity || '',
+            onClick: async () => {
+              const out = await pickItem({ title: screensaverText('Entity'), spec,
+                selected: config.entity || null });
+              if (!out?.id) return;
+              // Another entity has other attributes: back to its state.
+              if (out.id !== config.entity) {
+                config.attribute = '';
+                valueBox.setText(screensaverText('State'));
+              }
+              config.entity = out.id;
+              config.name = cachedList(spec.key)?.items.find((i) => i.id === out.id)?.name || out.id;
+              entityField.setValue(out.id);
+              refs.label.input.placeholder = config.name;
+              valueBox.el.disabled = false;
+            },
+          });
+          refs.entity = { wrap: formField(screensaverText('Entity'), entityField.el) };
+          // What the widget displays: the state (the default) or one of
+          // the entity's attributes, from the value step.
+          refs.attribute = { wrap: formField(screensaverText('Displayed value'), valueBox.el),
+            select: { get value() { return config.attribute || ''; } } };
+          // Compared with the displayed value, so the list follows
+          // whatever that shows (issue #1066).
+          refs.states = (() => {
+            const wrap = document.createElement('label');
+            wrap.className = 'form-field';
+            const title = document.createElement('span');
+            title.className = 'desc';
+            title.textContent = screensaverText('Visible states');
+            const input = document.createElement('input');
+            input.className = 'field';
+            input.type = 'text';
+            input.value = config.show_states || '';
+            input.style.maxWidth = 'none';
+            const hint = document.createElement('span');
+            hint.className = 'desc';
+            hint.textContent = screensaverText('Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.');
+            wrap.append(title, hint, input);
+            return { wrap, input };
+          })();
           refs.label = (() => {
             const wrap = document.createElement('label');
             wrap.className = 'form-field';
@@ -1144,42 +1388,35 @@ export function settingRow(s) {
           })();
           refs.showName = cameraToggle(screensaverText('Show name'),
             config.show_name !== false, screensaverText('The name under the value.'));
+          refs.showIcon = cameraToggle(screensaverText('Show icon'),
+            config.show_icon !== false, screensaverText('The icon beside the value.'));
           typeBlock.append(refs.entity.wrap, refs.label.wrap,
-            refs.attribute.wrap, refs.color.wrap, refs.scale.wrap,
-            refs.font.wrap, refs.weight.wrap, refs.showName.wrap);
-          loadAttributes();
+            refs.attribute.wrap, refs.states.wrap, refs.color.wrap, refs.scale.wrap,
+            refs.font.wrap, refs.weight.wrap, refs.showName.wrap, refs.showIcon.wrap);
           return;
         }
         // Weather: the entity everything is read from, then the line
         // toggles. The temperature always shows; each other line also
         // needs the entity to actually carry the reading.
-        refs.entity = cameraSelectField(screensaverText('Weather entity'),
-          config.entity
-            ? [{ value: config.entity, label: config.name || config.entity }]
-            : [{ value: '', label: screensaverText('Pick a weather entity…') }],
-          config.entity || '');
-        (async () => {
-          try {
-            const res = await (await api('/api/commands/haSearchEntities', {
-              method: 'POST', body: JSON.stringify({ query: 'weather.' }) })).json();
-            if (!res.ok) return;
-            const found = (res.data || [])
-              .filter((e) => String(e.entity_id || '').startsWith('weather.'));
-            if (!found.length) return;
-            refs.entity.select.innerHTML = '';
-            if (!config.entity) {
-              const blank = document.createElement('option');
-              blank.value = ''; blank.textContent = screensaverText('Pick a weather entity…');
-              refs.entity.select.appendChild(blank);
-            }
-            for (const e of found) {
-              const o = document.createElement('option');
-              o.value = e.entity_id; o.textContent = e.name || e.entity_id;
-              o.selected = e.entity_id === config.entity;
-              refs.entity.select.appendChild(o);
-            }
-          } catch (_) {}
-        })();
+        {
+          const spec = entitySpec({ domains: ['weather'] });
+          const field = pickField({
+            spec, value: config.entity || '',
+            onClick: async () => {
+              const out = await pickItem({ title: screensaverText('Weather entity'), spec,
+                selected: config.entity || null });
+              if (!out?.id) return;
+              config.entity = out.id;
+              config.name = cachedList(spec.key)?.items.find((i) => i.id === out.id)?.name || out.id;
+              field.setValue(out.id);
+            },
+          });
+          refs.entity = { wrap: formField(screensaverText('Weather entity'), field.el),
+            select: {
+              get value() { return config.entity || ''; },
+              get selectedOptions() { return [{ textContent: config.name || config.entity }]; },
+            } };
+        }
         // Weather entities carry no city attribute, so the place shown
         // over the temperature is named by hand.
         refs.label = (() => {
@@ -1242,20 +1479,26 @@ export function settingRow(s) {
           let entryConfig;
           if (type === 'clock') {
             entryConfig = { color, scale, font, font_weight,
-              h24: refs.h24.input.checked, date: refs.date.input.checked };
+              h24: refs.h24.input.checked, ampm: refs.ampm.input.checked,
+              date: refs.date.input.checked };
           } else if (type === 'battery') {
             entryConfig = { color, scale, font, font_weight,
               percent: refs.percent.input.checked,
               low: refs.low.input.checked };
           } else if (type === 'alarm') {
             entryConfig = { color, scale, font, font_weight };
+          } else if (type === 'calendar') {
+            entryConfig = { color, scale, font, font_weight,
+              count: Number(refs.count?.value) || 3 };
           } else if (type === 'entity') {
             if (!config.entity) return { ok: false, error: screensaverText('Pick an entity.') };
             entryConfig = { entity: config.entity,
               name: config.name || config.entity,
               label: refs.label.input.value.trim(),
               attribute: refs.attribute.select.value,
-              show_name: refs.showName.input.checked, color, scale, font,
+              show_states: refs.states.input.value.trim(),
+              show_name: refs.showName.input.checked,
+              show_icon: refs.showIcon.input.checked, color, scale, font,
               font_weight };
           } else {
             const entity = refs.entity.select.value;
@@ -1292,7 +1535,7 @@ export function settingRow(s) {
         }, false, 'delete'),
       ],
       {
-        icon: ['weather', 'battery', 'entity', 'alarm'].includes(e.type)
+        icon: ['weather', 'battery', 'entity', 'alarm', 'calendar'].includes(e.type)
           ? e.type : 'clock',
         onClick: () => editWidget(e),
       },
@@ -1326,62 +1569,68 @@ export function settingRow(s) {
     return frag;
   }
 
+  // At a Glance, mirroring the device's rows: the picks in order under the
+  // Entities heading, each with up, down and remove (a click edits its
+  // name and displayed value), then Add entities, which opens the entity
+  // picker for several. The card holds just the list, like Views to rotate.
   if (s.key === 'screensaver.glance_entities') {
     let chosen = [];
     try { chosen = JSON.parse(s.value || '[]') || []; } catch (_) { chosen = []; }
-    const btn = document.createElement('button');
-    btn.className = 'btn-ghost';
-    btn.textContent = t('commonChoose');
-    btn.style.cssText = 'flex-shrink:0;';
-    row.appendChild(btn);
-
-    // Real siblings, not a wrapper: the card's dividers are drawn between
-    // adjacent .row elements, and a wrapping element would break the chain.
-    // The caller appends whatever is returned, so a fragment delivers them
-    // all into the same card.
-    const frag = document.createDocumentFragment();
-    frag.appendChild(row);
-    let entityRows = [];
-    const build = () => {
-      if (!chosen.length) {
-        return [readOnlyRow(screensaverText('None yet'), t('screensaverOverlayLimit', {count: String(GLANCE_MAX)}), '')];
-      }
-      // Numbered so the display order is readable without opening the modal.
-      return chosen.map((entity, index) => readOnlyRow(
-        entity.custom_name || entity.name || entity.entity_id,
-        entity.attribute
-          ? `${entity.entity_id} · ${entity.attribute}`
-          : entity.entity_id,
-        `${index + 1}`));
-    };
-    const repaint = () => {
-      const parent = row.parentNode;
-      const fresh = build();
-      if (!parent) {
-        entityRows.forEach((el) => el.remove());
-        fresh.forEach((el) => frag.appendChild(el));
-      } else {
-        entityRows.forEach((el) => el.remove());
-        let after = row;
-        fresh.forEach((el) => {
-          after.insertAdjacentElement('afterend', el);
-          after = el;
-        });
-      }
-      entityRows = fresh;
-    };
-    repaint();
-
-    btn.addEventListener('click', async () => {
-      const picked = await glanceEntityPicker(chosen);
-      if (!picked) return;
-      chosen = picked;
-      repaint();
+    if (!Array.isArray(chosen)) chosen = [];
+    const list = document.createElement('div');
+    list.className = 'ep-pick-list';
+    list.dataset.key = s.key;
+    const persist = async () => {
+      paint();
       await api('/api/settings', { method: 'PATCH', body: JSON.stringify({
         'screensaver.glance_entities': JSON.stringify(chosen),
       }) });
-    });
-    return frag;
+    };
+    const paint = () => {
+      list.replaceChildren();
+      chosen.forEach((entity, index) => {
+        const move = (delta) => {
+          const to = index + delta;
+          if (to < 0 || to >= chosen.length) return;
+          chosen.splice(to, 0, chosen.splice(index, 1)[0]);
+          persist();
+        };
+        const up = cameraAction(screensaverText('Move up'), () => move(-1), false, 'up', index === 0);
+        const down = cameraAction(screensaverText('Move down'), () => move(1), false, 'down',
+          index === chosen.length - 1);
+        const remove = cameraAction(screensaverText('Remove'), () => {
+          chosen.splice(index, 1);
+          persist();
+        }, false, 'delete');
+        list.appendChild(pickListRow({
+          value: entity.entity_id,
+          name: entity.custom_name || entity.name || null,
+          detail: entity.attribute || null,
+          trailing: [up, down, remove],
+          onClick: async () => { if (await glanceEntityEditor(entity)) persist(); },
+        }));
+      });
+      if (chosen.length < GLANCE_MAX) {
+        const add = document.createElement('button');
+        add.className = 'dp-add-row';
+        add.type = 'button';
+        add.textContent = haText('Add entities');
+        add.addEventListener('click', async () => {
+          const ids = await pickItems({ title: s.title, spec: entitySpec(),
+            selected: chosen.map((e) => e.entity_id), max: GLANCE_MAX });
+          if (!ids) return;
+          // Kept picks keep their own name and value; new ones start plain.
+          chosen = ids.map((id) => chosen.find((e) => e.entity_id === id)
+            || { entity_id: id,
+              name: cachedList('entities')?.items.find((i) => i.id === id)?.name || id });
+          persist();
+        });
+        list.appendChild(add);
+      }
+    };
+    paint();
+    loadEntityList();
+    return list;
   }
 
   // The camera screensaver's views come from the ones configured under
@@ -1528,7 +1777,24 @@ export function settingRow(s) {
   // A bounded number is dragged, not typed, the same slider the device
   // shows. Label updates live; the value saves once, on release.
   if (s.type === 'number' && s.min != null && s.max != null) {
+    // Camera auto-dismiss moves through stops, not seconds: every 30 s up to
+    // 5 min, then every 5 min up to an hour. The slider holds the stop index
+    // and a stored value between stops sits on the nearest one.
+    const stops = s.key === 'camera.auto_dismiss_seconds' ? CAMERA_DISMISS_STOPS : null;
+    const toSlider = (v) => stops
+      ? stops.reduce((best, stop, i) => Math.abs(stop - v) < Math.abs(stops[best] - v) ? i : best, 0)
+      : v;
+    const fromSlider = (v) => stops ? stops[v] : v;
     const label = (v) => {
+      if (stops) {
+        const seconds = stops[v];
+        if (seconds <= 0) return t('cameraStreamsOff');
+        if (seconds < 60) return t('cameraStreamsSeconds', {seconds: String(seconds)});
+        if (seconds % 3600 === 0) return t('haHours', {hours: String(seconds / 3600)});
+        return t('haMinutes', {minutes: new Intl.NumberFormat(messageLanguage(), {
+          maximumFractionDigits: 1,
+        }).format(seconds / 60)});
+      }
       if (s.key === 'gestures.hand_hold_seconds') {
         return Number(v) === 0 ? t('gestureHoldInstant')
           : t('gestureHoldSeconds', {seconds: new Intl.NumberFormat(messageLanguage(), {
@@ -1551,12 +1817,13 @@ export function settingRow(s) {
         : `${v}${s.unit || ''}`;
     };
     const slider = attachSlider(row, {
-      min: s.min, max: s.max, step: s.step ?? 'any',
-      value: typeof s.value === 'number' ? s.value : s.min,
+      min: stops ? 0 : s.min, max: stops ? stops.length - 1 : s.max,
+      step: stops ? 1 : s.step ?? 'any',
+      value: toSlider(typeof s.value === 'number' ? s.value : s.min),
       label,
     });
     slider.input.addEventListener('change', async () => {
-      const next = Number(slider.input.value);
+      const next = fromSlider(Number(slider.input.value));
       // Enabling real screen-off gets a warning first: what a dark panel
       // does to Wi-Fi, the camera and the app itself is the manufacturer's
       // call, and the Black screensaver avoids the whole regime.
@@ -1572,11 +1839,25 @@ export function settingRow(s) {
           return;
         }
       }
+      // Night mode's own, with the light sensor added: the room brightening
+      // is what turns the screen back on.
+      if (s.key === 'screensaver.clock_night_turn_off_minutes' &&
+          Number(s.value || 0) === 0 && next > 0 &&
+          !state.settings.some(o => o.key === 'screensaver.clock_night_turn_off_black' && o.value === true)) {
+        const pick = await localizedMessageBox({
+          titleId: 'screensaverWarningTitle', messageId: 'screensaverNightTurnOffWarning',
+          buttons: [{id:'commonCancel', value:'Cancel'}, {id:'screensaverScreenOffProceed', value:'Proceed'}],
+        });
+        if (pick !== 'Proceed') {
+          slider.set(0);
+          return;
+        }
+      }
       // save() records the value once the device has kept it; recording
       // it here first made a refused value snap "back" to itself.
       save(next);
     });
-    bindUpdate(slider.input, () => slider.set(s.value));
+    bindUpdate(slider.input, () => slider.set(toSlider(s.value)));
     if (s.key === 'sendspin.duck_percent') {
       const fragment = document.createDocumentFragment();
       fragment.append(row, albumArtCacheRow());

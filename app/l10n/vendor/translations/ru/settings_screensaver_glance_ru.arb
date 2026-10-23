@@ -1,0 +1,15 @@
+{
+  "@@locale": "ru",
+  "settingScreensaverGlanceEnabledTitle": "Сводка",
+  "settingScreensaverGlanceEnabledDescription": "Показывать ряд состояний сущностей Home Assistant на заставке.",
+  "settingScreensaverGlanceEntitiesTitle": "Сущности",
+  "settingScreensaverGlanceEntitiesDescription": "До четырёх сущностей, каждая с необязательным собственным названием.",
+  "settingScreensaverGlanceNowPlayingTitle": "Показывать на «Сейчас играет»",
+  "settingScreensaverGlanceNowPlayingDescription": "Показывать ряд на полноэкранном виде «Сейчас играет». Скрывается, пока показан текст песни.",
+  "screensaverOverlayShowing": "Показываются",
+  "screensaverOverlayNone": "Пока пусто",
+  "screensaverOverlayGlancePage": "Сводка",
+  "screensaverOverlayGlanceHint": "Сущности поверх заставки",
+  "glanceUnavailable": "Недоступно",
+  "glanceUnknown": "Неизвестно"
+}

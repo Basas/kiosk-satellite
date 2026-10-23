@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
+import '../../core/headless.dart';
 import '../../core/tls_identity.dart';
 import '../../core/manager.dart';
 import '../device_camera/camera_resolutions.dart';
+import '../wake_word/pryon/pryon_catalog.dart';
 import 'definitions.dart';
 
 export 'definitions.dart';
@@ -23,6 +26,10 @@ class SettingsManager extends Manager {
 
   /// Live renderer names, supplied by the plugin runtime without persisting HTML.
   Map<String, String> Function() pluginScreensavers = () => const {};
+
+  /// Installed plugins that offer a voice skin: `plugin:ID` to the plugin's
+  /// name. Supplied by the plugin runtime.
+  Map<String, String> Function() pluginVoiceSkins = () => const {};
   List<String>? _cameraStreamResolutions;
   List<String>? get cameraStreamResolutions => _cameraStreamResolutions;
   CameraStreamingCapabilities? _cameraStreamingCapabilities;
@@ -116,17 +123,27 @@ class SettingsManager extends Manager {
   List<String> optionsFor(SettingDef<Object> def) =>
       def.key == cameraRtspResolution.key
       ? _cameraStreamResolutions ?? const []
+      : def.key == voiceAmazonLocale.key
+      ? ['', ...PryonCatalog.locales]
       : _realtimeOptions(def) ??
             [
-              ...?def.options,
+              for (final option in def.options ?? const <String>[])
+                if (!(deviceHiddenOptions[def.key]?.contains(option) ?? false))
+                  option,
               if (def.key == screensaverMode.key) ...{
                 ...pluginScreensavers().keys,
                 if (isPluginScreensaver(get(def))) get(def) as String,
+              },
+              if (def.key == voiceSkin.key) ...{
+                ...pluginVoiceSkins().keys,
+                if (isPluginVoiceSkin(get(def))) get(def) as String,
               },
             ];
   String? optionLabel(SettingDef<Object> def, String value) =>
       def.key == cameraRtspResolution.key
       ? cameraResolutionLabel(value)
+      : def.key == voiceAmazonLocale.key && value.isNotEmpty
+      ? PryonCatalog.localeLabel(value)
       // Model ids read as they are; voices are names.
       : _realtimeLists[def.key] != null && value.isNotEmpty
       ? (_realtimeLists[def.key]!.$2
@@ -137,6 +154,11 @@ class SettingsManager extends Manager {
                 ? pluginScreensavers()[value] ??
                       (isPluginScreensaver(value)
                           ? 'Unavailable plugin screensaver'
+                          : null)
+                : def.key == voiceSkin.key
+                ? pluginVoiceSkins()[value] ??
+                      (isPluginVoiceSkin(value)
+                          ? 'Unavailable plugin skin'
                           : null)
                 : null);
 
@@ -253,7 +275,11 @@ class SettingsManager extends Manager {
             // permission request at a time, so a page racing the prompts
             // below gets some of them silently rejected ("A request for
             // permissions is already running").
-            final heldStartUrl = firstSetup ? map.remove(startUrl.key) : null;
+            // A device without a screen has no page to race and no prompts
+            // to show: its grants come over adb, so the import finishes at
+            // once.
+            final prompts = firstSetup && !Headless.active;
+            final heldStartUrl = prompts ? map.remove(startUrl.key) : null;
             var applied = await import(map);
             // A stale backup can carry Immich credentials with the
             // validated flag off (exported after something reset it).
@@ -286,7 +312,7 @@ class SettingsManager extends Manager {
             // on a system dialog. The start URL stays sequenced after the
             // prompts (see above); callers see pendingSetup and wait for
             // the device to become configured instead.
-            if (firstSetup) {
+            if (prompts) {
               importFinishing = true;
               unawaited(
                 Future(() async {
@@ -384,6 +410,19 @@ class SettingsManager extends Manager {
       }
       await setInternal(softwareEchoMigration, '1');
     }
+    // Expose kiosk entities used to be off by default. A configured kiosk
+    // that never chose keeps it off, so ESPHome running only for the
+    // Bluetooth proxy does not suddenly serve every entity. New installs
+    // take the new default.
+    const entitiesDefaultMigration = 'esphome.entities_default_on.migrated';
+    if (internal(entitiesDefaultMigration).isEmpty) {
+      if (_prefs.get(_prefix + esphomeEntities.key) == null &&
+          get(startUrl).isNotEmpty) {
+        await _prefs.setBool(_prefix + esphomeEntities.key, false);
+        log.info(name, 'kept Expose kiosk entities off on upgrade');
+      }
+      await setInternal(entitiesDefaultMigration, '1');
+    }
     // The music duck used to go up to 25%, more than the software echo
     // canceller keeps out of the microphone. Bring existing installs down
     // to the new ceiling once.
@@ -414,6 +453,25 @@ class SettingsManager extends Manager {
     // one design now, so the rows are gone and stored values with them.
     await _prefs.remove('${_prefix}launcher.layout');
     await _prefs.remove('${_prefix}launcher.show_icons');
+    // The locked kiosk offered every launcher app before it had its own
+    // list (issue #1067). Seeded once with all of them, so the quick menu
+    // keeps what it offered and later additions wait to be allowed.
+    if (_prefs.get(_prefix + kioskAllowedApps.key) == null) {
+      var packages = const <Object?>[];
+      try {
+        final apps = jsonDecode(get(launcherApps));
+        if (apps is List) {
+          packages = [
+            for (final app in apps)
+              if (app is Map && app['package'] is String) app['package'],
+          ];
+        }
+      } catch (_) {}
+      await _prefs.setString(
+        _prefix + kioskAllowedApps.key,
+        jsonEncode(packages),
+      );
+    }
     // The Sonos page's own lyrics switch: the Lyrics page's Enable lyrics
     // covers every source now.
     await _prefs.remove('${_prefix}sendspin.sonos_lyrics');
@@ -472,11 +530,13 @@ class SettingsManager extends Manager {
       await _prefs.remove('${_prefix}sendspin.ma_player_name');
     }
     // The pick is filtered by a source now: a pick stored before the
-    // source existed names its own. The Local Media Session is this
-    // device's own pick and belongs under the empty source.
+    // source existed names its own. The Local Media Session and the
+    // AirPlay receiver are this device's own picks and belong under the
+    // empty source.
     final picked = _prefs.getString('${_prefix}sendspin.player') ?? '';
     if (picked.trim().isNotEmpty &&
         !picked.startsWith('session:') &&
+        picked != 'airplay' &&
         (_prefs.getString('${_prefix}sendspin.player_source') ?? '').isEmpty) {
       final source = picked.startsWith('ha:')
           ? 'ha'
@@ -508,6 +568,49 @@ class SettingsManager extends Manager {
         await _prefs.setString(_prefix + key, fill ? 'smart' : 'off');
         log.info(name, 'migrated $key ($fill)');
       }
+    }
+    // Wake to screensaver was a switch and is now a pick of what wakes to
+    // the screensaver (issue #954). On stood for every detection and the
+    // power button, never touch, so nobody's kiosk wakes differently.
+    final wakeKey = _prefix + screensaverScreenOffWakeToScreensaver.key;
+    final wake = _prefs.get(wakeKey);
+    if (wake is bool) {
+      await _prefs.setString(wakeKey, wakeToScreensaverFromSwitch(wake));
+      log.info(
+        name,
+        'migrated ${screensaverScreenOffWakeToScreensaver.key} ($wake)',
+      );
+    }
+    // Horizontal mode was a switch and is now a pick of three layouts. Off
+    // was the vertical layout and on the horizontal one.
+    final horizontalKey = '${_prefix}sendspin.fullscreen_horizontal';
+    final horizontal = _prefs.get(horizontalKey);
+    if (horizontal is bool) {
+      if (_prefs.get(_prefix + sendspinFullscreenLayout.key) == null) {
+        await _prefs.setString(
+          _prefix + sendspinFullscreenLayout.key,
+          sendspinLayoutFromSwitch(horizontal),
+        );
+      }
+      await _prefs.remove(horizontalKey);
+      log.info(
+        name,
+        'migrated sendspin.fullscreen_horizontal -> '
+        '${sendspinFullscreenLayout.key} ($horizontal)',
+      );
+    }
+    // Full screen (issue #1076) split into a switch per bar (issue #1102).
+    // A kiosk that showed both bars keeps showing them.
+    final fullScreenKey = '${_prefix}screen.full_screen';
+    final fullScreen = _prefs.get(fullScreenKey);
+    if (fullScreen is bool) {
+      for (final def in [screenHideStatusBar, screenHideNavigationBar]) {
+        if (_prefs.get(_prefix + def.key) == null) {
+          await _prefs.setBool(_prefix + def.key, fullScreen);
+        }
+      }
+      await _prefs.remove(fullScreenKey);
+      log.info(name, 'migrated screen.full_screen ($fullScreen)');
     }
   }
 
@@ -625,8 +728,29 @@ class SettingsManager extends Manager {
     String? source,
     Map<String, Object?> batch = const {},
   }) async {
+    // The same callers from before Layout mode replaced Horizontal mode.
+    if (key == 'sendspin.fullscreen_horizontal' && value is bool) {
+      key = sendspinFullscreenLayout.key;
+      value = sendspinLayoutFromSwitch(value);
+    }
+    // A backup, a fleet leader or an API caller from before Full screen
+    // became a switch per bar still sends it; it sets both.
+    if (key == 'screen.full_screen' && value is bool) {
+      await setFromJson(
+        screenHideStatusBar.key,
+        value,
+        source: source,
+        batch: batch,
+      );
+      key = screenHideNavigationBar.key;
+    }
     final def = defByKey(key);
     if (def == null) return false;
+    // A backup, a fleet leader or an API caller from before Wake to
+    // screensaver became a pick still sends the switch.
+    if (def.key == screensaverScreenOffWakeToScreensaver.key && value is bool) {
+      value = wakeToScreensaverFromSwitch(value);
+    }
     if (validate(def, value, batch: batch) != null) return false;
     switch (def.type) {
       case SettingType.boolean when value is bool:
@@ -641,7 +765,8 @@ class SettingsManager extends Manager {
                   (def.key == cameraRtspResolution.key &&
                       isCameraStreamResolution(value)) ||
                   (def.key == screensaverMode.key &&
-                      isPluginScreensaver(value))):
+                      isPluginScreensaver(value)) ||
+                  (def.key == voiceSkin.key && isPluginVoiceSkin(value))):
         await set(def, value, source: source);
       default:
         return false;
@@ -721,6 +846,14 @@ class SettingsManager extends Manager {
                 isPluginScreensaver(get(def)) &&
                 !pluginScreensavers().containsKey(get(def)))
               get(def) as String: 'Unavailable plugin screensaver',
+            if (def.key == voiceSkin.key) ...pluginVoiceSkins(),
+            if (def.key == voiceAmazonLocale.key)
+              for (final locale in PryonCatalog.locales)
+                locale: PryonCatalog.localeLabel(locale),
+            if (def.key == voiceSkin.key &&
+                isPluginVoiceSkin(get(def)) &&
+                !pluginVoiceSkins().containsKey(get(def)))
+              get(def) as String: 'Unavailable plugin skin',
           },
         // Number ranges: with min+max present the remote renders a
         // slider, exactly as the device does.

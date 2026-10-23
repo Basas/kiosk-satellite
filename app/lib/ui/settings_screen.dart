@@ -1,4 +1,5 @@
 import 'alarms_overlay.dart' show AlarmsManageCard;
+import 'calendar_settings.dart';
 import '../l10n/fleet_messages.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -22,7 +23,8 @@ import '../core/logging.dart';
 import '../managers/btproxy/ble_identity.dart' show rssiTier, sortNearbyJson;
 import '../managers/camera/models.dart'
     show decodeCameraViewIds, encodeCameraViewIds;
-import '../managers/launcher/app_launcher_manager.dart' show decodeLauncherApps;
+import '../managers/launcher/app_launcher_manager.dart'
+    show LauncherApp, decodeKioskAllowedApps, decodeLauncherApps;
 import '../managers/screensaver/immich_manager.dart'
     show ImmichNamed, decodeImmichNamed;
 import '../managers/notifications/notification_sounds.dart';
@@ -46,12 +48,13 @@ import '../managers/voice/realtime/openai_realtime_backend.dart';
 import '../managers/wake_word/background_listening.dart';
 import '../managers/wake_word/system_permissions.dart';
 import 'color_picker.dart';
+import 'celestial_settings.dart';
 import 'weather_mood_settings.dart';
 import 'date_picker.dart';
 import 'gesture_settings.dart';
 import 'entity_picker.dart';
+import 'glance_rows.dart';
 import 'esphome_entity_picker.dart';
-import 'glance_entity_picker.dart';
 import 'camera_settings.dart';
 import 'tls_settings.dart';
 import 'fleet_settings.dart';
@@ -59,6 +62,9 @@ import 'camera_views_picker.dart';
 import 'dashboard_view_picker.dart';
 import 'import_options_dialog.dart';
 import 'intercom_settings.dart';
+import '../managers/home_assistant/custom_pages.dart' show viewPathUrl;
+import 'custom_pages_settings.dart';
+import 'url_filter_settings.dart';
 import 'custom_wake_models.dart';
 import 'kit.dart';
 import 'time_picker.dart';
@@ -74,6 +80,7 @@ import '../managers/wake_word/permission_descriptions.dart';
 import 'wake_word_tester.dart';
 import 'wake_activations.dart';
 import 'update_helper_settings.dart';
+import 'plugin_directory.dart';
 import 'plugin_settings.dart';
 import 'package:kiosk_satellite/core/lifecycle.dart';
 
@@ -92,6 +99,10 @@ List<Widget> _sectionedCards(
   // the generic tile (the motion switch shown disabled while the Camera
   // section's master switch is off).
   Map<String, Widget> replace = const {},
+  // Cards keyed by setting key, placed on their own just ahead of that
+  // setting's row or page entry (a plugin screensaver's page entry above
+  // Widgets).
+  Map<String, Widget> before = const {},
   // The second-level page being rendered, if any. Definitions declaring a
   // *different* subpage collapse into one entry card here (the row that
   // opens their page); definitions declaring *this* subpage render normally.
@@ -117,6 +128,12 @@ List<Widget> _sectionedCards(
 
   final subpagesEmitted = <String>{};
   for (final def in visible) {
+    if (before[def.key] case final card?) {
+      flush();
+      current = null;
+      entryRun = true;
+      out.add(card);
+    }
     if (def.subpage != subpage) {
       // Lives on a second-level page: the first def of each subpage puts
       // the entry row where the group used to sit; the rest add nothing.
@@ -155,11 +172,13 @@ List<Widget> _sectionedCards(
         final heading = current;
         out.add(
           (def.category == 'ESPHome' ||
+                  def.category == 'Kiosk' ||
                   def.category == 'Device' ||
                   def.category == 'Home Assistant' ||
                   def.category == 'Screen & Audio' ||
                   def.category == 'Screensaver' ||
-                  def.category == 'Voice Satellite')
+                  def.category == 'Voice Satellite' ||
+                  def.category == 'LED Control')
               ? Builder(
                   builder: (context) => SectionHeading(
                     settingsPageText(context, def.category, heading),
@@ -196,6 +215,8 @@ const _analyticsIntro =
 const _analyticsDocsUrl = 'https://kiosksatellite.com/docs/analytics/';
 const _voiceAlarmsDocsUrl =
     'https://kiosksatellite.com/docs/alarms/#setting-alarms-by-voice';
+const _voiceCalendarDocsUrl =
+    'https://kiosksatellite.com/docs/calendar/#managing-the-calendar-by-voice';
 
 // The Updates page closes with a link to the custom repository guide: the
 // folder layout, the releases file and the APK names live in the docs, not
@@ -255,8 +276,6 @@ const _categories = <(String, String, Object, String)>[
     Icons.cast_outlined,
     'Play images, videos and audio remotely',
   ),
-  ('Intercom', 'Intercom', Icons.speaker_phone_outlined, 'Talk between kiosks'),
-  ('Alarms', 'Alarms', Icons.alarm, 'Set alarms, tone, snooze, sunrise'),
   (
     'Camera',
     'Camera',
@@ -268,6 +287,14 @@ const _categories = <(String, String, Object, String)>[
     'Camera Streams',
     Icons.videocam_outlined,
     'Go2RTC and Home Assistant cameras',
+  ),
+  ('Intercom', 'Intercom', Icons.speaker_phone_outlined, 'Talk between kiosks'),
+  ('Alarms', 'Alarms', Icons.alarm, 'Set alarms, tone, snooze, sunrise'),
+  (
+    'Calendar',
+    'Calendar',
+    Icons.calendar_month_outlined,
+    'Family calendars from Home Assistant',
   ),
   (
     'Kiosk',
@@ -288,6 +315,12 @@ const _categories = <(String, String, Object, String)>[
     'Open other apps from the kiosk',
   ),
   ('Gestures', 'Gestures', Icons.gesture, 'Touch, palm and clap gestures'),
+  (
+    'LED Control',
+    'LED Control',
+    Icons.blur_circular,
+    'Status light colors and effects',
+  ),
   (
     'Device',
     'Device',
@@ -318,9 +351,31 @@ const _railGroups = <String, String>{
   'Home Assistant': 'Home Assistant',
   'Screen & Audio': 'Display',
   'Sendspin': 'Media & Cameras',
+  'Intercom': 'Household',
   'Kiosk': 'Kiosk',
   'Device': 'System',
 };
+
+/// The Chimes page: each sound with its volume under it.
+final List<SettingDef<Object>> _chimeRows = [
+  for (final kind in voiceChimeSettings.keys) ...[
+    voiceChimeSettings[kind]!,
+    voiceChimeVolumes[kind]!,
+  ],
+];
+
+/// Whether a category's page is listed. LED Control only exists on a
+/// device with lights the app can drive (LedManager hides its settings
+/// everywhere else).
+bool _categoryShown(String category) =>
+    category != 'LED Control' || _defsFor(category).isNotEmpty;
+
+/// Where the category at [index] sits among the ones listed: what its icon
+/// color cycles by, so a hidden page never leaves two neighbors alike.
+int _shownPosition(int index) => [
+  for (final c in _categories.take(index))
+    if (_categoryShown(c.$1)) c,
+].length;
 
 List<SettingDef<Object>> _defsFor(String category) => [
   for (final def in allSettings)
@@ -467,7 +522,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _cachedSearchIndex = buildSettingsSearchIndex(
         [
           for (final (category, title, _, subtitle) in _categories)
-            (category, title, subtitle),
+            if (_categoryShown(category)) (category, title, subtitle),
         ],
         pageText: (text) => navigationText(context, text),
         deviceTextFor: (text) => deviceText(context, text),
@@ -483,9 +538,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         pluginTextFor: (text) => pluginText(context, text),
         intercomTextFor: (text) => intercomText(context, text),
         alarmsTextFor: (text) => settingsPageText(context, 'Alarms', text),
+        calendarTextFor: (text) => settingsPageText(context, 'Calendar', text),
         mediaTextFor: (text) => mediaText(context, text),
         cameraStreamsTextFor: (text) => cameraStreamsText(context, text),
         cameraTextFor: (text) => cameraText(context, text),
+        browserTextFor: (text) => settingsPageText(context, 'Browser', text),
         titleFor: (def) => def.localizedTitle(context),
         descriptionFor: (def) => def.localizedDescription(context),
       );
@@ -851,11 +908,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   index,
                                   (category, title, icon, subtitle),
                                 )
-                                in _categories.indexed) ...[
-                              if (_railGroups[category] case final heading?)
-                                _RailHeading(heading, first: index == 0),
-                              _railTile(context, index, title, icon, subtitle),
-                            ],
+                                in _categories.indexed)
+                              if (_categoryShown(category)) ...[
+                                if (_railGroups[category] case final heading?)
+                                  _RailHeading(heading, first: index == 0),
+                                _railTile(
+                                  context,
+                                  index,
+                                  title,
+                                  icon,
+                                  subtitle,
+                                ),
+                              ],
                           ],
                         ),
                       ),
@@ -922,6 +986,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           _subpage!,
                                         )
                                       : pluginSubpageTitle(
+                                          context,
                                           widget.container,
                                           category,
                                           _subpage!,
@@ -1012,7 +1077,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _openSubpage(String category, String subpage) {
+    // A page of another category (a plugin screensaver's plugin page) moves
+    // the rail there too, as a search result does.
+    final index = _categories.indexWhere((c) => c.$1 == category);
     setState(() {
+      if (index >= 0) _selected = index;
       _subpage = subpage;
       _landing = null;
     });
@@ -1051,7 +1120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
               children: [
-                _CategoryIcon(index: index, icon: icon),
+                _CategoryIcon(index: _shownPosition(index), icon: icon),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -1092,6 +1161,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   get _hubGroups {
     final groups = <(String, List<(int, (String, String, Object, String))>)>[];
     for (final entry in _categories.indexed) {
+      if (!_categoryShown(entry.$2.$1)) continue;
       final heading = _railGroups[entry.$2.$1];
       if (heading != null) groups.add((heading, []));
       groups.last.$2.add(entry);
@@ -1329,6 +1399,37 @@ Widget _subpageEntryCard(
   ],
 );
 
+/// The entry to the selected plugin screensaver's settings, where the stock
+/// modes put theirs. A plugin's settings live on its Plugin Manager page, so
+/// the row opens that page. Null while the mode is not a plugin's, its
+/// plugin is gone or Enable Plugins is off, which closes that page.
+/// Mirrored on the remote (plugins.js, renderPluginScreensaverEntry).
+Widget? _pluginScreensaverEntry(AppContainer container) {
+  final mode = container.settings.get(screensaverMode);
+  if (!isPluginScreensaver(mode) || !container.plugins.enabled.value) {
+    return null;
+  }
+  final id = mode.split(':')[1];
+  final plugin = container.plugins.installed.value
+      .where((p) => p['id'] == id)
+      .firstOrNull;
+  if (plugin == null) return null;
+  final description = '${plugin['description'] ?? ''}';
+  return SettingsCard(
+    children: [
+      Builder(
+        builder: (context) => ListTile(
+          leading: const Icon(Icons.extension_rounded),
+          title: Text('${plugin['name']}'),
+          subtitle: description.isEmpty ? null : Text(description),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => openSettingsSubpage(context, container, 'Plugins', id),
+        ),
+      ),
+    ],
+  );
+}
+
 /// The One UI second-level entry: one row standing in for every setting that
 /// declares this subpage, with a hint listing what moved inside. Tapping
 /// opens the page; Back (arrow or gesture) returns to this row.
@@ -1383,11 +1484,15 @@ class _SubpageEntryTile extends StatelessWidget {
 /// bar carries the entry row's title and the implicit back arrow; the system
 /// back gesture pops the same route.
 String pluginSubpageTitle(
+  BuildContext context,
   AppContainer container,
   String category,
   String subpage,
 ) {
   if (category != 'Plugins') return subpage;
+  if (subpage == pluginDirectoryPage) {
+    return pluginText(context, 'Browse plugins');
+  }
   return container.plugins.installed.value
               .where((p) => p['id'] == subpage)
               .firstOrNull?['name']
@@ -1440,7 +1545,7 @@ class SubpageSettingsScreen extends StatelessWidget {
                         category,
                         subpage,
                       )
-                    : pluginSubpageTitle(container, category, subpage),
+                    : pluginSubpageTitle(context, container, category, subpage),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -1564,6 +1669,9 @@ class _CategoryContentState extends State<_CategoryContent> {
     widget.container.plugins.screensavers.addListener(
       _pluginScreensaversChanged,
     );
+    // The plugin screensaver's entry row comes and goes with the plugins.
+    widget.container.plugins.installed.addListener(_pluginScreensaversChanged);
+    widget.container.plugins.enabled.addListener(_pluginScreensaversChanged);
     // The Managed banner comes and goes with the leader's pushes.
     _fleetEcho = widget.container.bus.on<FleetSyncChanged>().listen((_) {
       if (mounted) setState(() {});
@@ -1641,6 +1749,10 @@ class _CategoryContentState extends State<_CategoryContent> {
     widget.container.plugins.screensavers.removeListener(
       _pluginScreensaversChanged,
     );
+    widget.container.plugins.installed.removeListener(
+      _pluginScreensaversChanged,
+    );
+    widget.container.plugins.enabled.removeListener(_pluginScreensaversChanged);
     _btAdapterTimer?.cancel();
     _fleetEcho?.cancel();
     _settingsEcho?.cancel();
@@ -2299,7 +2411,44 @@ class _CategoryContentState extends State<_CategoryContent> {
               after: _rowExtras(container),
             ),
           )
-        else if (widget.category == 'Alarms') ...[
+        else if (widget.category == 'Calendar') ...[
+          // Open calendar, then the calendars themselves (hand-built, the
+          // Alarms list's twin), then Display and Kiosk from the
+          // definitions, then Voice Calendar. Mirrored on the remote's
+          // Calendar page.
+          CalendarOpenCard(container: container),
+          SectionHeading(l10n(context).calendarCalendarsSection),
+          CalendarSourcesCard(container: container),
+          ..._sectionedCards(
+            container,
+            _inlineDefsFor('Calendar'),
+            () => setState(() {}),
+            replace: _rowReplacements(container),
+            after: _rowExtras(container),
+          ),
+          // The calendar by voice lives in Home Assistant (the blueprint),
+          // so this group only points at the guide, as Voice Alarms does.
+          SectionHeading(l10n(context).calendarVoiceSection),
+          SettingsCard(
+            children: [
+              SearchLandingTarget(
+                id: 'x:calendar_voice',
+                child: SettingsRow(
+                  leading: const Icon(Icons.record_voice_over_outlined),
+                  title: Text(l10n(context).calendarVoiceManage),
+                  subtitle: Text(l10n(context).calendarVoiceHint),
+                  trailing: const Icon(Icons.open_in_new),
+                  onTap: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    container.commands.execute('showLinkPage', {
+                      'url': _voiceCalendarDocsUrl,
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ] else if (widget.category == 'Alarms') ...[
           // Show in the kiosk menu on its own untitled card, then the list
           // itself (the full screen overlay, opened from here), then the
           // defaults, then Voice Alarms. Mirrored on the remote's Alarms
@@ -2421,15 +2570,14 @@ class _CategoryContentState extends State<_CategoryContent> {
         ] else ...[
           // What every source has in common, said once at the top: the
           // surfaces only show for a player with something to show.
-          // Its icon on the page title's line: the title sits 4 in from
-          // the card edge, so the hint does too.
           if (widget.category == 'Sendspin')
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: HintRow(
-                mediaText(context, _mediaPlayerIntro),
-                inset: false,
-              ),
+            SettingsCard(
+              children: [
+                IntroRow(
+                  icon: const Icon(Icons.info_outline),
+                  subtitle: mediaText(context, _mediaPlayerIntro),
+                ),
+              ],
             ),
           ..._withEsphomeStartError(
             _sectionedCards(
@@ -2447,8 +2595,16 @@ class _CategoryContentState extends State<_CategoryContent> {
               () => setState(() {}),
               replace: _rowReplacements(container),
               after: _rowExtras(container),
+              before: {
+                if (widget.category == 'Screensaver')
+                  screensaverWidgets.key: ?_pluginScreensaverEntry(container),
+              },
             ),
           ),
+          // No setting draws the URL Filter, so its row is placed here,
+          // last on the page.
+          if (widget.category == 'Browser')
+            _subpageEntryCard(container, 'Browser', 'URL Filter'),
         ],
         // Last and on their own card, like the Voice Satellite permissions:
         // the OS's to give, not ours to set. Always shown - Lockdown Mode
@@ -2771,6 +2927,9 @@ class _CategoryContentState extends State<_CategoryContent> {
         id: 'x:dashboard_picker',
         child: _DashboardPickerCard(container: container),
       ),
+      // The person's own pages, offered by the picker above beside the
+      // dashboards. No setting draws the page, so its row is placed here.
+      _subpageEntryCard(container, 'Home Assistant', 'Custom Pages'),
       ..._sectionedCards(container, [
         for (final def in _defsFor('Home Assistant'))
           if (def.key != haUrl.key &&
@@ -2877,8 +3036,11 @@ class _CategoryContentState extends State<_CategoryContent> {
           onChanged: null,
         ),
       ),
+    // A Home Assistant entity in the camera's place (issue #973) keeps the
+    // switch usable without one.
     if (widget.category == 'Screensaver' &&
-        !container.deviceCamera.effectiveEnabled)
+        !container.deviceCamera.effectiveEnabled &&
+        !container.settings.get(motionUseEntity))
       screensaverDismissOnMotion.key: SearchLandingTarget(
         id: screensaverDismissOnMotion.key,
         child: SwitchListTile(
@@ -2963,18 +3125,6 @@ class _CategoryContentState extends State<_CategoryContent> {
           ),
         ),
       ),
-    // No ambient light sensor: the switch says so instead of offering a
-    // curve with nothing to drive it. Mirrored on the remote too.
-    if (widget.category == 'Screen & Audio' && !container.device.hasLightSensor)
-      adaptiveBrightness.key: SearchLandingTarget(
-        id: adaptiveBrightness.key,
-        child: SwitchListTile(
-          title: Text(adaptiveBrightness.localizedTitle(context)),
-          subtitle: Text(screenAudioText(context, _noLightSensorNote)),
-          value: false,
-          onChanged: null,
-        ),
-      ),
     // The announcements' text to speech engine, language and voice are
     // picked from Home Assistant's lists, not typed. Mirrored on the
     // remote (intercom.js).
@@ -2991,6 +3141,13 @@ class _CategoryContentState extends State<_CategoryContent> {
           voiceDef: announcementsTtsVoice,
         ),
     },
+    // The forecast's weather entity is picked, never typed. Mirrored on
+    // the remote (rows.js).
+    if (widget.category == 'Calendar')
+      calendarWeatherEntity.key: SearchLandingTarget(
+        id: calendarWeatherEntity.key,
+        child: CalendarWeatherRow(container: container),
+      ),
     if (widget.category == 'Alarms') ...{
       alarmsTtsEngine.key: AnnouncementTtsEngineRow(
         container: container,
@@ -3062,7 +3219,6 @@ class _CategoryContentState extends State<_CategoryContent> {
   };
 
   bool _adaptiveOn(AppContainer container) =>
-      container.device.hasLightSensor &&
       container.settings.get(adaptiveBrightness);
 
   /// Extra widgets rendered directly under a setting: notices, validate
@@ -3088,6 +3244,26 @@ class _CategoryContentState extends State<_CategoryContent> {
     if (widget.category == 'ESPHome' &&
         !container.location.locationKnownUnsupported)
       locationEnabled.key: _LocationStatusRow(container: container),
+    // Where the Celestial sky's location source places it, or why it
+    // cannot: under the Location select for the GPS and the home zone,
+    // under the picker for an entity. Manual shows its own field.
+    // Mirrored on the remote (settings.js).
+    if (widget.category == 'Screensaver' &&
+        const {
+          'gps',
+          'ha_home',
+        }.contains(container.settings.get(screensaverCelestialLocation)))
+      screensaverCelestialLocation.key: CelestialLocationStatusRow(
+        key: ValueKey(container.settings.get(screensaverCelestialLocation)),
+        container: container,
+        source: container.settings.get(screensaverCelestialLocation),
+      ),
+    if (widget.category == 'Screensaver' &&
+        container.settings.get(screensaverCelestialLocation) == 'ha_entity')
+      screensaverCelestialEntity.key: CelestialLocationStatusRow(
+        container: container,
+        source: 'ha_entity',
+      ),
     // What the device's person sensor is reporting, live, under Dismiss
     // on person: someone in view or not and the age of the last heartbeat,
     // or why nothing is being read. Mirrored on the remote (settings.js,
@@ -3102,16 +3278,27 @@ class _CategoryContentState extends State<_CategoryContent> {
       personSensorEnabled.key: _PersonSensorStatusRow(container: container),
     // The sensor's reading, live, under the switch: the curve's two light
     // levels are typed against it, and what a sensor calls a lit room is
-    // anyone's guess until it is on screen. Mirrored on the remote
+    // anyone's guess until it is on screen. Without a sensor, a note says
+    // so in its place: the switch stays usable, since a Home Assistant
+    // entity can stand in (issue #911). Mirrored on the remote
     // (notices.js, updateAdaptiveBrightnessRows).
-    if (widget.category == 'Screen & Audio' && container.device.hasLightSensor)
-      adaptiveBrightness.key: _AmbientLightRow(container: container),
+    if (widget.category == 'Screen & Audio')
+      adaptiveBrightness.key: container.device.hasLightSensor
+          ? _AmbientLightRow(container: container)
+          : HintRow(screenAudioText(context, _noLightSensorNote)),
     // Under the screensaver's brightness sliders while adaptive brightness
     // is on: the slider is the bright-room level the room's light dims
     // from, which is not what a slider called "brightness" says on its own.
     if (widget.category == 'Screensaver' && _adaptiveOn(container))
       screensaverBrightnessLevel.key: HintRow(
         screenAudioText(context, _adaptiveNote),
+      ),
+    // Under the ONVIF motion events source (issue #1098): picking a sensor
+    // does not turn it on, so say where to. Mirrored on the remote
+    // (settings.js, updateOnvifEventsRows).
+    if (widget.category == 'Camera' && _onvifEventsNotice(container) != null)
+      cameraOnvifEventsSource.key: WarnRow(
+        cameraText(context, _onvifEventsNotice(container)!),
       ),
     if (widget.category == 'Camera')
       cameraRtspResolution.key: HintRow(
@@ -3205,21 +3392,13 @@ class _CategoryContentState extends State<_CategoryContent> {
     // and Immich cards put theirs.
     if (widget.category == 'Sendspin')
       sendspinMaToken.key: _MaValidateRow(container: container),
-    // Say what the pick just did to this device, under the row that
-    // holds it: its own player is gone from Music Assistant and the rows
-    // about it are gone from this page.
+    // Say what the pick turns off on this device, under the row that holds
+    // it: the Sendspin player and the AirPlay receiver, each while switched
+    // on and not the pick itself. Mirrored on the remote (panels.js,
+    // offlineNotice).
     if (widget.category == 'Sendspin' &&
-        (container.settings.get(sendspinPlayerSource).isNotEmpty ||
-            _localSessionPicked(container)))
-      sendspinPlayer.key: WarnRow(
-        l10n(context).mediaLocalOffline(
-          _localSessionPicked(container)
-              ? mediaText(context, SendspinManager.localSessionName)
-              : container.settings.get(sendspinPlayerName).trim().isEmpty
-              ? l10n(context).mediaAnotherPlayer
-              : container.settings.get(sendspinPlayerName).trim(),
-        ),
-      ),
+        _offlineNotice(context, container) != null)
+      sendspinPlayer.key: WarnRow(_offlineNotice(context, container)!),
     // The live list right under the sort picker that orders it.
     // Rides the section's dependsOn: with the proxy off there is
     // nothing to list and none of these rows render.
@@ -3304,10 +3483,21 @@ class _CategoryContentState extends State<_CategoryContent> {
         _MadeByFooter(container: container),
       ];
     }
+    if (widget.category == 'Plugins' && subpage == pluginDirectoryPage) {
+      return [
+        PluginDirectoryPanel(
+          plugins: container.plugins,
+          settings: container.settings,
+          onOpen: (id) =>
+              openSettingsSubpage(context, container, 'Plugins', id),
+        ),
+      ];
+    }
     if (widget.category == 'Plugins') {
       return [
         PluginDetailPanel(
           plugins: container.plugins,
+          container: container,
           id: subpage,
           onDisabled: () => closeSettingsSubpage(context),
         ),
@@ -3472,6 +3662,58 @@ class _CategoryContentState extends State<_CategoryContent> {
             children: [_PersonSensorLogAccessTile(container: container)],
           ),
         ),
+      ];
+    }
+
+    if (widget.category == 'Screensaver' &&
+        subpage == 'Clock screensaver' &&
+        _nightPowersOff(container)) {
+      // Turn screen off at night powers the panel down through the Device
+      // admin grant, so the page closes with it while that is the way.
+      // Mirrored on the remote (settings.js, updateClockNightAdminRows).
+      return [
+        ...sectioned([
+          for (final def in _defsFor(widget.category))
+            if (def.subpage == subpage) def,
+        ]),
+        SectionHeading(screensaverText(context, 'Required system permissions')),
+        SettingsCard(
+          children: [_NightScreenOffAdminTile(container: container)],
+        ),
+      ];
+    }
+
+    if (widget.category == 'Screensaver' &&
+        subpage == 'Celestial screensaver' &&
+        container.settings.visible(screensaverCelestialLocation) &&
+        container.settings.get(screensaverCelestialLocation) == 'gps') {
+      // The GPS source reads the receiver, so the location grant follows
+      // the group holding the Location select rather than waiting at the
+      // end of the long page. Mirrored on the remote (settings.js,
+      // updateCelestialPermissionRows).
+      final defs = [
+        for (final def in _defsFor(widget.category))
+          if (def.subpage == subpage) def,
+      ];
+      final first = defs.first.section;
+      return [
+        ...sectioned([
+          for (final def in defs)
+            if (def.section == first) def,
+        ]),
+        SectionHeading(screensaverText(context, 'Required system permissions')),
+        SearchLandingTarget(
+          id: 'x:celestial_location_permissions',
+          child: SettingsCard(
+            children: [
+              _LocationPermissionsTile(container: container, celestial: true),
+            ],
+          ),
+        ),
+        ...sectioned([
+          for (final def in defs)
+            if (def.section != first) def,
+        ]),
       ];
     }
 
@@ -3768,6 +4010,15 @@ class _CategoryContentState extends State<_CategoryContent> {
                     def: voiceWakeWordEngine,
                     onChanged: changed,
                   ),
+                  // Amazon's engine: which language its models listen in,
+                  // which the wake word selects below follow.
+                  if (container.settings.visible(voiceAmazonLocale) &&
+                      !deviceHiddenKeys.contains(voiceAmazonLocale.key))
+                    SettingTile(
+                      container: container,
+                      def: voiceAmazonLocale,
+                      onChanged: changed,
+                    ),
                   VoiceHaSelects(container: container, rows: voiceWakeWordRows),
                   for (final def in native.skip(1))
                     SettingTile(
@@ -3804,7 +4055,7 @@ class _CategoryContentState extends State<_CategoryContent> {
         case 'Chimes':
           return [
             ...sectioned([voiceWakeSound]),
-            ...sectioned(voiceChimeSettings.values.toList()),
+            ...sectioned(_chimeRows),
           ];
         case 'Wake word diagnostics':
           break;
@@ -3814,7 +4065,7 @@ class _CategoryContentState extends State<_CategoryContent> {
     }
 
     if (widget.category == 'Voice Satellite' && subpage == 'Chimes') {
-      return [...sectioned(voiceChimeSettings.values.toList())];
+      return [...sectioned(_chimeRows)];
     }
 
     // The dashboard runtime's Timers page holds only what the kiosk draws
@@ -3842,6 +4093,10 @@ class _CategoryContentState extends State<_CategoryContent> {
     }
 
     switch (subpage) {
+      case 'Custom Pages':
+        return [CustomPagesCard(container: container)];
+      case 'URL Filter':
+        return [UrlFilterCard(container: container)];
       case 'Dashboard View Rotation':
         // Hand-built: the view checkboxes need the live dashboards from Home
         // Assistant, which the generic renderer cannot supply.
@@ -4584,7 +4839,7 @@ class _LauncherPermissionsTileState extends State<_LauncherPermissionsTile>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Both grants are given on OS screens that report nothing back.
+    // The grants are given on OS screens that report nothing back.
     if (_returned.returned(state)) _refresh();
   }
 
@@ -4661,6 +4916,29 @@ class _LauncherPermissionsTileState extends State<_LauncherPermissionsTile>
           ),
           onGrant: BackgroundListening.requestBatteryUnrestricted,
         ),
+        // Wait while media plays reads other apps' media sessions
+        // (issue #1055), which Android shows to no one without this.
+        if (widget.container.settings.get(launcherAutoReturnMedia))
+          _row(
+            granted: _perms?.notificationAccess,
+            missingIcon: Icons.notifications_off_outlined,
+            title: launcherText(context, 'Notification access'),
+            held: launcherText(
+              context,
+              'The kiosk stays away while video or music plays in another '
+              'app.',
+            ),
+            missing: launcherText(
+              context,
+              'Without this the kiosk cannot tell when video or music is '
+              'playing and comes back anyway.',
+            ),
+            onGrant: () async {
+              await widget.container.commands.execute('requestOsPermissions', {
+                'which': ['notificationAccess'],
+              });
+            },
+          ),
       ]),
     );
   }
@@ -4794,25 +5072,27 @@ class _OverlayGrantRowState extends State<_OverlayGrantRow> {
 /// schedule entry's own (mirrored in the remote UI): what a dark panel does
 /// to Wi-Fi, the camera and the app itself is the manufacturer's call, not
 /// the app's (issue #184 and kin), and the Black screensaver avoids the
-/// whole regime. True when the person chose to go ahead.
-Future<bool> confirmScreenOff(BuildContext context) async {
+/// whole regime. True when the person chose to go ahead. Night mode's Turn
+/// screen off at night passes [message], its own version of the risk.
+Future<bool> confirmScreenOff(BuildContext context, {String? message}) async {
   final go = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(screensaverText(context, 'WARNING: Please Read!')),
       content: Text(
-        screensaverText(
-          context,
-          'Once the display truly powers off, the tablet\'s own '
-          'power management takes over, and many Android models '
-          'misbehave in that state: Wi-Fi naps or drops, the '
-          'Home Assistant entities go unavailable, the camera '
-          'can be revoked, and some models kill background apps '
-          'outright. What happens depends on the manufacturer.\n\n'
-          'The reliable alternative is the Black screensaver '
-          'with this setting left at 0: the panel looks just as '
-          'dark, and the app keeps full control.',
-        ),
+        message ??
+            screensaverText(
+              context,
+              'Once the display truly powers off, the tablet\'s own '
+              'power management takes over, and many Android models '
+              'misbehave in that state: Wi-Fi naps or drops, the '
+              'Home Assistant entities go unavailable, the camera '
+              'can be revoked, and some models kill background apps '
+              'outright. What happens depends on the manufacturer.\n\n'
+              'The reliable alternative is the Black screensaver '
+              'with this setting left at 0: the panel looks just as '
+              'dark, and the app keeps full control.',
+            ),
       ),
       actions: [
         TextButton(
@@ -4827,6 +5107,112 @@ Future<bool> confirmScreenOff(BuildContext context) async {
     ),
   );
   return go == true;
+}
+
+const _nightTurnOffWarning =
+    'When the display really powers off, the tablet\'s own power management '
+    'takes over. Many Android models misbehave in that state: Wi-Fi naps or '
+    'drops, Home Assistant entities go unavailable, the camera can be revoked '
+    'and some models kill background apps. Some light sensors also stop '
+    'reporting with the display off, so the screen may not turn back on by '
+    'itself when the room brightens. What happens depends on the '
+    'manufacturer.\n\n'
+    'The reliable alternative is Use a black screen instead. The panel looks '
+    'just as dark and the app keeps full control.';
+
+/// Whether Turn screen off at night is set to really power the panel off,
+/// the one way it needs the Device admin grant.
+bool _nightPowersOff(AppContainer container) {
+  final settings = container.settings;
+  return settings.visible(screensaverClockNightTurnOffMinutes) &&
+      settings.get(screensaverClockNightTurnOffMinutes) > 0 &&
+      !settings.get(screensaverClockNightTurnOffBlack);
+}
+
+/// The Clock screensaver's Required system permissions group while Turn
+/// screen off at night powers the panel off: the Device admin grant, in the
+/// standard permission row shape. Mirrored in the remote UI.
+class _NightScreenOffAdminTile extends StatefulWidget {
+  const _NightScreenOffAdminTile({required this.container});
+
+  final AppContainer container;
+
+  @override
+  State<_NightScreenOffAdminTile> createState() =>
+      _NightScreenOffAdminTileState();
+}
+
+class _NightScreenOffAdminTileState extends State<_NightScreenOffAdminTile>
+    with WidgetsBindingObserver {
+  bool? _granted;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _refresh();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  final _returned = ReturnWatch();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // The grant is given on Android's own screen, which reports nothing on
+    // the way back; returning here is the moment to look again.
+    if (_returned.returned(state)) _refresh();
+  }
+
+  Future<void> _refresh() async {
+    bool? granted;
+    try {
+      granted = await BackgroundListening.isScreenOffAvailable();
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() => _granted = granted);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final granted = _granted;
+    return SettingsRow(
+      leading: Icon(
+        granted == true
+            ? Icons.check_circle_outline
+            : Icons.admin_panel_settings_outlined,
+        color: granted == true ? null : theme.colorScheme.error,
+      ),
+      title: Text(screensaverText(context, 'Device admin')),
+      subtitle: Text(
+        granted == true
+            ? deviceText(context, 'Allows the app to turn the screen off.')
+            : screensaverText(
+                context,
+                'Not granted, so the screen cannot turn off.',
+              ),
+      ),
+      trailing: granted != false
+          ? null
+          : TextButton(
+              onPressed: () async {
+                await widget.container.commands.execute(
+                  'requestOsPermissions',
+                  {
+                    'which': ['deviceAdmin'],
+                  },
+                );
+                await _refresh();
+              },
+              child: Text(screensaverText(context, 'Enable')),
+            ),
+    );
+  }
 }
 
 /// The device-admin grant, surfaced right under "Turn screen off after"
@@ -5461,51 +5847,10 @@ class _ScheduleEditorState extends State<_ScheduleEditor> {
   }
 }
 
-/// The weather.* entities, picked from Home Assistant by friendly name.
-/// Returns (entity_id, name), or null when dismissed or unreachable.
-Future<(String, String)?> pickScreensaverWeatherEntity(
-  BuildContext context,
-  AppContainer container,
-  String current,
-) async {
-  final result = await container.commands.execute('haSearchEntities', const {
-    'query': 'weather.',
-  });
-  final data = result.data;
-  if (!result.ok || data is! List) {
-    if (context.mounted) {
-      showToast(
-        context,
-        title: screensaverText(context, 'Could not reach Home Assistant'),
-        kind: ToastKind.error,
-      );
-    }
-    return null;
-  }
-  final entities = [
-    for (final e in data)
-      if (e is Map && '${e['entity_id']}'.startsWith('weather.'))
-        ('${e['entity_id']}', '${e['name'] ?? e['entity_id']}'),
-  ];
-  if (entities.isEmpty) {
-    if (context.mounted) {
-      showToast(
-        context,
-        title: screensaverText(context, 'No weather entities'),
-        message: screensaverText(context, 'Home Assistant reported none.'),
-        kind: ToastKind.warning,
-      );
-    }
-    return null;
-  }
-  if (!context.mounted) return null;
-  return showRadioPicker<(String, String)>(
-    context,
-    title: screensaverText(context, 'Weather entity'),
-    options: [for (final e in entities) PickerOption(e, e.$2, detail: e.$1)],
-    selected: entities.where((e) => e.$1 == current).firstOrNull,
-  );
-}
+/// An entity's friendly name from the loaded entity list, the id when the
+/// list does not have it.
+String _entityName(String id) =>
+    PickCatalog.of('entities').value?.find(id)?.name ?? id;
 
 class _WidgetsEditor extends StatefulWidget {
   const _WidgetsEditor({required this.container, required this.onChanged});
@@ -5537,6 +5882,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
     'battery' => Icons.battery_full,
     'entity' => Icons.sensors,
     'alarm' => Icons.alarm,
+    'calendar' => Icons.calendar_month_outlined,
     _ => Icons.widgets_outlined,
   };
 
@@ -5555,7 +5901,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
       context,
       'Hidden in the Camera Streams screensaver mode.',
     ),
-    'entity' || 'alarm' => screensaverText(
+    'entity' || 'alarm' || 'calendar' => screensaverText(
       context,
       'Hidden in the Camera Streams screensaver mode.',
     ),
@@ -5583,6 +5929,10 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
     // The weather location override, or the entity widget's custom name;
     // a controller so edits survive the dialog's rebuilds.
     final labelCtrl = TextEditingController(text: '${config['label'] ?? ''}');
+    // The entity widget's visible states (issue #1066).
+    final statesCtrl = TextEditingController(
+      text: '${config['show_states'] ?? ''}',
+    );
 
     final route = DialogRoute<bool>(
       context: context,
@@ -5795,6 +6145,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                           // from its own defaults.
                           config = {...screensaverWidgetDefaults(type)};
                           labelCtrl.text = '${config['label'] ?? ''}';
+                          statesCtrl.text = '';
                         }),
                       ),
                     ),
@@ -5804,37 +6155,46 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                       fontRow(),
                       fontWeightRow(),
                       toggle(screensaverText(context, '24-hour clock'), 'h24'),
+                      // On unless switched off: entries saved before the
+                      // switch existed carry no key.
+                      if (config['h24'] != true)
+                        SwitchListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(screensaverText(context, 'Show AM/PM')),
+                          value: config['ampm'] != false,
+                          onChanged: (v) =>
+                              setDialogState(() => config['ampm'] = v),
+                        ),
                       toggle(screensaverText(context, 'Show date'), 'date'),
                     ],
                     if (type == 'weather') ...[
                       // The entity everything is read from; the friendly
                       // name is cached in the config so both editors can
                       // show it without a Home Assistant round trip.
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(screensaverText(context, 'Weather entity')),
-                        subtitle: Text(
-                          weatherName.isNotEmpty
-                              ? weatherName
-                              : (weatherEntity.isNotEmpty
-                                    ? weatherEntity
-                                    : screensaverText(context, 'Not set')),
-                        ),
-                        trailing: TextButton(
-                          onPressed: () async {
-                            final picked = await pickScreensaverWeatherEntity(
+                      LabeledField(
+                        label: screensaverText(context, 'Weather entity'),
+                        child: PickFieldBox(
+                          spec: entitySpec(
+                            context,
+                            widget.container.commands,
+                            domains: const ['weather'],
+                          ),
+                          value: weatherEntity,
+                          onTap: () async {
+                            final picked = await showEntityPicker(
                               context,
                               widget.container,
-                              weatherEntity,
+                              title: screensaverText(context, 'Weather entity'),
+                              selected: weatherEntity,
+                              domains: const ['weather'],
                             );
-                            if (picked != null) {
-                              setDialogState(() {
-                                config['entity'] = picked.$1;
-                                config['name'] = picked.$2;
-                              });
-                            }
+                            final id = picked?.id;
+                            if (id == null) return;
+                            setDialogState(() {
+                              config['entity'] = id;
+                              config['name'] = _entityName(id);
+                            });
                           },
-                          child: Text(screensaverText(context, 'Choose')),
                         ),
                       ),
                       // Weather entities carry no city attribute, so the
@@ -5877,6 +6237,26 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                         'visibility',
                       ),
                     ],
+                    if (type == 'calendar') ...[
+                      colorRow(),
+                      scaleRow(),
+                      fontRow(),
+                      fontWeightRow(),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(l10n(context).calendarWidgetEvents),
+                        trailing: DropdownButton<int>(
+                          value: ((config['count'] as num?)?.toInt() ?? 3)
+                              .clamp(1, 5),
+                          items: [
+                            for (var n = 1; n <= 5; n++)
+                              DropdownMenuItem(value: n, child: Text('$n')),
+                          ],
+                          onChanged: (n) =>
+                              setDialogState(() => config['count'] = n ?? 3),
+                        ),
+                      ),
+                    ],
                     if (type == 'battery') ...[
                       colorRow(),
                       scaleRow(),
@@ -5889,39 +6269,34 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                       toggle(screensaverText(context, 'Only when low'), 'low'),
                     ],
                     if (type == 'entity') ...[
-                      // The entity everything is read from, picked by
-                      // search the way the At a Glance row's are; the
-                      // friendly name is cached in the config so both
-                      // editors can show it without a round trip.
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(screensaverText(context, 'Entity')),
-                        subtitle: Text(
-                          weatherName.isNotEmpty
-                              ? weatherName
-                              : (weatherEntity.isNotEmpty
-                                    ? weatherEntity
-                                    : screensaverText(context, 'Not set')),
-                        ),
-                        trailing: TextButton(
-                          onPressed: () async {
-                            final picked = await pickHomeAssistantEntity(
+                      // The entity everything is read from, picked the
+                      // way the At a Glance row's are; the friendly name is
+                      // cached in the config so both editors can show it
+                      // without a round trip.
+                      LabeledField(
+                        label: screensaverText(context, 'Entity'),
+                        child: PickFieldBox(
+                          spec: entitySpec(context, widget.container.commands),
+                          value: weatherEntity,
+                          onTap: () async {
+                            final picked = await showEntityPicker(
                               context,
                               widget.container,
+                              title: screensaverText(context, 'Entity'),
+                              selected: weatherEntity,
                             );
-                            if (picked != null) {
-                              setDialogState(() {
-                                // Another entity has other attributes:
-                                // back to its state.
-                                if (picked.$1 != config['entity']) {
-                                  config['attribute'] = '';
-                                }
-                                config['entity'] = picked.$1;
-                                config['name'] = picked.$2;
-                              });
-                            }
+                            final id = picked?.id;
+                            if (id == null) return;
+                            setDialogState(() {
+                              // Another entity has other attributes: back
+                              // to its state.
+                              if (id != config['entity']) {
+                                config['attribute'] = '';
+                              }
+                              config['entity'] = id;
+                              config['name'] = _entityName(id);
+                            });
                           },
-                          child: Text(screensaverText(context, 'Choose')),
                         ),
                       ),
                       LabeledField(
@@ -5940,21 +6315,16 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                           onChanged: (v) => config['label'] = v.trim(),
                         ),
                       ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          screensaverText(context, 'Displayed value'),
-                        ),
-                        subtitle: Text(
-                          '${config['attribute'] ?? ''}'.isEmpty
+                      LabeledField(
+                        label: screensaverText(context, 'Displayed value'),
+                        child: ChoiceBox(
+                          text: '${config['attribute'] ?? ''}'.isEmpty
                               ? screensaverText(context, 'State')
                               : '${config['attribute']}',
-                        ),
-                        trailing: TextButton(
-                          onPressed: weatherEntity.isEmpty
+                          onTap: weatherEntity.isEmpty
                               ? null
                               : () async {
-                                  final picked = await pickEntityAttribute(
+                                  final picked = await showEntityValuePicker(
                                     context,
                                     widget.container,
                                     entityId: weatherEntity,
@@ -5966,7 +6336,22 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                                     );
                                   }
                                 },
-                          child: Text(screensaverText(context, 'Choose')),
+                        ),
+                      ),
+                      // Compared with the displayed value above, so the
+                      // list follows whatever that shows.
+                      LabeledField(
+                        label: screensaverText(context, 'Visible states'),
+                        child: TextField(
+                          controller: statesCtrl,
+                          decoration: InputDecoration(
+                            helperText: screensaverText(
+                              context,
+                              'Show the widget only when its value is one of these, separated by commas. Leave empty to always show it.',
+                            ),
+                            helperMaxLines: 3,
+                          ),
+                          onChanged: (v) => config['show_states'] = v.trim(),
                         ),
                       ),
                       colorRow(),
@@ -5976,6 +6361,10 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
                       toggle(
                         screensaverText(context, 'Show name'),
                         'show_name',
+                      ),
+                      toggle(
+                        screensaverText(context, 'Show icon'),
+                        'show_icon',
                       ),
                     ],
                   ],
@@ -6009,6 +6398,7 @@ class _WidgetsEditorState extends State<_WidgetsEditor> {
     final submitted = await Navigator.of(context).push(route);
     await route.completed;
     labelCtrl.dispose();
+    statesCtrl.dispose();
     if (submitted != true) return;
     await _save([
       // The corner dropdown only offers free corners, but drop any claimant
@@ -6152,6 +6542,147 @@ class _AmbientLightRowState extends State<_AmbientLightRow> {
     );
   }
 }
+
+/// Adaptive brightness's Home Assistant light sensor (issue #911): the
+/// entity picked, with its reading live beside it, the way the Ambient
+/// light row shows the device sensor's. Tapping it opens the entity
+/// search. Mirrored on the remote (rows.js).
+class _LightEntityRow extends StatefulWidget {
+  const _LightEntityRow({
+    required this.container,
+    required this.def,
+    required this.onChanged,
+  });
+
+  final AppContainer container;
+  final SettingDef<Object> def;
+  final VoidCallback onChanged;
+
+  @override
+  State<_LightEntityRow> createState() => _LightEntityRowState();
+}
+
+class _LightEntityRowState extends State<_LightEntityRow> {
+  StreamSubscription<AdaptiveLightChanged>? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _sub = widget.container.bus.on<AdaptiveLightChanged>().listen((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.container;
+    final def = widget.def;
+    final entity = c.settings.get(adaptiveLightEntity);
+    final light = c.adaptiveLight;
+    final lux = light.source == 'entity' ? light.lux : null;
+    final reading = lux == null
+        ? screenAudioText(context, 'No reading yet')
+        : (light.live
+              ? l10n(context).screenAudioLux
+              : l10n(context).screenAudioLuxLast)(
+            '${lux == lux.roundToDouble() ? lux.toInt() : lux.toStringAsFixed(1)}',
+          );
+    // The field opens the entity picker on light level sensors; the line
+    // under it carries the reading the brightness follows.
+    return PickRow(
+      title: def.localizedTitle(context),
+      description: entity.isEmpty ? def.localizedDescription(context) : reading,
+      spec: entitySpec(context, c.commands, deviceClass: 'illuminance'),
+      value: entity,
+      allowClear: true,
+      onPick: (id) async {
+        await c.settings.setFromJson(def.key, id ?? '');
+        widget.onChanged();
+      },
+    );
+  }
+}
+
+/// The Home Assistant motion sensor picked in the camera's place (issue
+/// #973): the field opens the entity picker on occupancy, motion and
+/// presence sensors, and once one is picked the line under it says what
+/// it reads, live. Mirrored on the remote (rows.js).
+class _MotionEntityRow extends StatefulWidget {
+  const _MotionEntityRow({
+    required this.container,
+    required this.def,
+    required this.onChanged,
+  });
+
+  final AppContainer container;
+  final SettingDef<Object> def;
+  final VoidCallback onChanged;
+
+  @override
+  State<_MotionEntityRow> createState() => _MotionEntityRowState();
+}
+
+class _MotionEntityRowState extends State<_MotionEntityRow> {
+  StreamSubscription<ExternalMotionChanged>? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _sub = widget.container.bus.on<ExternalMotionChanged>().listen((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.container;
+    final def = widget.def;
+    final entity = c.settings.get(motionEntity);
+    final reading = switch (c.motionEntity.detected) {
+      true => screensaverText(context, 'Detected'),
+      false => l10n(context).screensaverDetectionClear,
+      null => screenAudioText(context, 'No reading yet'),
+    };
+    return PickRow(
+      title: def.localizedTitle(context),
+      description: entity.isEmpty ? def.localizedDescription(context) : reading,
+      spec: entitySpec(context, c.commands, deviceClass: 'occupancy'),
+      value: entity,
+      allowClear: true,
+      onPick: (id) async {
+        await c.settings.setFromJson(def.key, id ?? '');
+        widget.onChanged();
+      },
+    );
+  }
+}
+
+/// Why the picked ONVIF motion source sends nothing, or null when it can:
+/// its sensor is off, or the camera cannot watch while it streams.
+String? _onvifEventsNotice(AppContainer c) => switch (c.settings.get(
+  cameraOnvifEventsSource,
+)) {
+  'camera' when !c.settings.get(motionSensor) =>
+    'The camera motion sensor is off. Turn it on in Camera > Motion Sensor.',
+  'camera' when !c.settings.get(cameraRtspAnalysis) =>
+    'Motion analysis while streaming is off, so the camera cannot detect '
+        'motion while a viewer is connected.',
+  'person' when !c.settings.get(personSensorEnabled) =>
+    'The person sensor is off. Turn it on in Camera > Person Sensor.',
+  _ => null,
+};
 
 /// Under the face sensitivity slider: the rest of the tuning is the
 /// motion camera's, shared with it.
@@ -6873,11 +7404,54 @@ bool _localSessionPicked(AppContainer container) =>
     container.settings.get(sendspinPlayerSource).isEmpty &&
     container.settings.get(sendspinPlayer) == SendspinManager.localSessionPick;
 
+/// What the Player pick turns off on this device: the Sendspin player and
+/// the AirPlay receiver, each only while switched on and not the pick
+/// itself. Null for a pick that leaves both as they were.
+String? _offlineNotice(BuildContext context, AppContainer container) {
+  final settings = container.settings;
+  final source = settings.get(sendspinPlayerSource);
+  final local = source.isEmpty;
+  final pick = settings.get(sendspinPlayer);
+  final sendspinOff = settings.get(sendspinEnabled) && !(local && pick.isEmpty);
+  final airplayOff =
+      settings.get(airplayEnabled) &&
+      !(local && pick == SendspinManager.airplayPick);
+  if (!sendspinOff && !airplayOff) return null;
+  final name = settings.get(sendspinPlayerName).trim();
+  final player = local && pick.isEmpty
+      ? mediaText(context, 'Sendspin Player')
+      : _localSessionPicked(container)
+      ? mediaText(context, SendspinManager.localSessionName)
+      : _airplayPicked(container)
+      ? SendspinManager.airplayName
+      : name.isNotEmpty
+      ? name
+      // A source with no player picked yet: the source by name.
+      : sendspinPlayerSource.localizedOption(
+          context,
+          source,
+          sendspinPlayerSource.optionLabels?[source] ??
+              l10n(context).mediaAnotherPlayer,
+        );
+  final strings = l10n(context);
+  return sendspinOff && airplayOff
+      ? strings.mediaOfflineBoth(player)
+      : sendspinOff
+      ? strings.mediaOfflineSendspin(player)
+      : strings.mediaOfflineAirplay(player);
+}
+
+/// Whether this device's AirPlay receiver is the pick: the surfaces follow
+/// whichever iPhone, iPad or Mac plays to it.
+bool _airplayPicked(AppContainer container) =>
+    container.settings.get(sendspinPlayerSource).isEmpty &&
+    container.settings.get(sendspinPlayer) == SendspinManager.airplayPick;
+
 /// Which player of the picked source the Now Playing surfaces follow
 /// (issue #265): a wall tablet showing and controlling the kitchen
 /// speakers instead of itself. The list is the source's, fetched when the
-/// row is tapped. This device offers its own two: the Sendspin player and
-/// the Local Media Session (issue #722).
+/// row is tapped. This device offers its own three: the Sendspin player,
+/// the Local Media Session (issue #722) and the AirPlay receiver.
 class _PlayerRow extends StatefulWidget {
   const _PlayerRow({required this.container, required this.onChanged});
 
@@ -6891,37 +7465,52 @@ class _PlayerRow extends StatefulWidget {
 }
 
 class _PlayerRowState extends State<_PlayerRow> {
-  Future<void> _pick() async {
+  static const _titles = {
+    'ma': 'Music Assistant player',
+    'ha': 'Home Assistant media player',
+    'sonos': 'Sonos room',
+  };
+
+  /// This device's own three players, or the picked source's.
+  PickSpec _spec(BuildContext context, String source) => source.isEmpty
+      ? fixedPlayerSpec(
+          context,
+          key: 'players:local',
+          items: [
+            PickItem(
+              id: '',
+              name: mediaText(context, 'Sendspin Player'),
+              icon: 'mdi:speaker',
+            ),
+            const PickItem(
+              id: SendspinManager.airplayPick,
+              name: SendspinManager.airplayName,
+              // The AirPlay audio mark: a triangle under sound waves.
+              icon: 'mdi:cast-audio-variant',
+            ),
+            PickItem(
+              id: SendspinManager.localSessionPick,
+              name: mediaText(context, SendspinManager.localSessionName),
+              icon: 'mdi:cellphone-sound',
+            ),
+          ],
+        )
+      : playerSpec(context, widget.container.commands, source: source);
+
+  Future<void> _picked(String id, PickSpec spec) async {
     final container = widget.container;
     final source = container.settings.get(sendspinPlayerSource);
-    final current = container.settings.get(sendspinPlayer);
-    final result = await showDialog<List<String>>(
-      context: context,
-      builder: (ctx) => _PlayerPickerDialog(
-        container: container,
-        source: source,
-        current: current,
-        title: source.isEmpty ? sendspinPlayer.localizedTitle(ctx) : null,
-        players: source.isEmpty
-            ? [
-                {'id': '', 'name': mediaText(ctx, 'Sendspin Player')},
-                {
-                  'id': SendspinManager.localSessionPick,
-                  'name': mediaText(ctx, SendspinManager.localSessionName),
-                },
-              ]
-            : null,
-      ),
-    );
-    if (result == null) return;
-    await container.settings.set(sendspinPlayer, result[0]);
+    final name = PickCatalog.of(spec.key).value?.find(id)?.name ?? id;
+    await container.settings.set(sendspinPlayer, id);
     // Stored in English like every other name the pick keeps; the rows
     // translate it on the way out.
     await container.settings.set(
       sendspinPlayerName,
-      result[0] == SendspinManager.localSessionPick
+      id == SendspinManager.localSessionPick
           ? SendspinManager.localSessionName
-          : result[1],
+          : id == SendspinManager.airplayPick
+          ? SendspinManager.airplayName
+          : name,
     );
     // The manager maintains this flag from the same inputs, but over the
     // async bus — write it here too so the pane rebuild below already
@@ -6930,7 +7519,7 @@ class _PlayerRowState extends State<_PlayerRow> {
       sendspinPlayerActive,
       container.settings.get(sendspinEnabled) ||
           source.isNotEmpty ||
-          result[0].isNotEmpty,
+          id.isNotEmpty,
     );
     if (mounted) setState(() {});
     widget.onChanged();
@@ -6939,44 +7528,139 @@ class _PlayerRowState extends State<_PlayerRow> {
   @override
   Widget build(BuildContext context) {
     final settings = widget.container.settings;
-    // This device as the source: its Sendspin player unless the Local
-    // Media Session is picked.
-    final local = settings.get(sendspinPlayerSource).isEmpty;
+    final source = settings.get(sendspinPlayerSource);
+    final local = source.isEmpty;
     final name = settings.get(sendspinPlayerName).trim();
-    final picked = local || settings.get(sendspinPlayer).trim().isNotEmpty;
-    final label = _localSessionPicked(widget.container)
-        ? mediaText(context, SendspinManager.localSessionName)
-        : local
-        ? mediaText(context, 'Sendspin Player')
-        : picked && name.isNotEmpty
-        ? name
-        : mediaText(context, 'Pick a player');
-    return SettingsRow(
-      title: Text(sendspinPlayer.localizedTitle(context)),
-      subtitle: Text(sendspinPlayer.localizedDescription(context)),
-      trailing: ControlBox(
-        onTap: _pick,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 200),
-              child: Text(
-                label,
-                overflow: TextOverflow.ellipsis,
-                style: picked
-                    ? null
-                    : TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+    final spec = _spec(context, source);
+    return PickRow(
+      title: sendspinPlayer.localizedTitle(context),
+      description: sendspinPlayer.localizedDescription(context),
+      dialogTitle: local
+          ? sendspinPlayer.localizedTitle(context)
+          : mediaText(context, _titles[source] ?? 'Player'),
+      spec: spec,
+      value: settings.get(sendspinPlayer),
+      // This device's Sendspin player is the empty pick.
+      emptyIsPick: local,
+      placeholder: local
+          ? mediaText(context, 'Sendspin Player')
+          : mediaText(context, 'Pick a player'),
+      // Only the Local Media Session's name is the app's to translate; a
+      // player's own name stays exactly as the source sent it.
+      fallbackLabel: name.isEmpty
+          ? null
+          : name == SendspinManager.localSessionName
+          ? mediaText(context, name)
+          : name,
+      flagMissing: false,
+      onPick: (id) => _picked(id ?? '', spec),
+    );
+  }
+}
+
+/// The speakers the Now Playing pill offers (issue #974), ticked off
+/// Music Assistant's players and the Sonos rooms in one picker, with a
+/// chip per source. Each pick counts only for its own source's menu.
+/// Mirrored on the remote (rows.js).
+class _SpeakerPillPlayersRow extends StatefulWidget {
+  const _SpeakerPillPlayersRow({
+    required this.container,
+    required this.onChanged,
+  });
+
+  final AppContainer container;
+  final VoidCallback onChanged;
+
+  @override
+  State<_SpeakerPillPlayersRow> createState() => _SpeakerPillPlayersRowState();
+}
+
+class _SpeakerPillPlayersRowState extends State<_SpeakerPillPlayersRow> {
+  AppContainer get c => widget.container;
+
+  /// Whether the list was asked for yet.
+  bool _loaded = false;
+
+  List<String> _stored() =>
+      decodeSpeakerPillPlayers(c.settings.get(sendspinSpeakerPillPlayers));
+
+  Future<void> _pick(PickSpec spec) async {
+    final ids = await showItemMultiPicker(
+      context,
+      title: sendspinSpeakerPillPlayers.localizedTitle(context),
+      spec: spec,
+      selected: _stored(),
+    );
+    if (ids == null) return;
+    await c.settings.set(sendspinSpeakerPillPlayers, jsonEncode(ids));
+    if (mounted) setState(() {});
+    widget.onChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final spec = speakerPillSpec(context, c.commands);
+    if (!_loaded) {
+      _loaded = true;
+      if (PickCatalog.of(spec.key).value == null) {
+        PickCatalog.load(spec.key, spec.loader);
+      }
+    }
+    final picks = _stored();
+    return ValueListenableBuilder<PickList?>(
+      valueListenable: PickCatalog.of(spec.key),
+      builder: (context, list, _) {
+        final scheme = Theme.of(context).colorScheme;
+        // A pick the list lacks (not loaded yet, or away) reads its id.
+        final names = [
+          for (final id in picks)
+            list?.find(id)?.name ?? id.substring(id.indexOf(':') + 1),
+        ];
+        final field = ControlBox(
+          onTap: () => _pick(spec),
+          child: Row(
+            children: [
+              Icon(
+                picks.length > 1 ? Icons.speaker_group_outlined : Icons.speaker,
+                size: 20,
+                color: picks.isEmpty ? scheme.onSurfaceVariant : scheme.primary,
               ),
-            ),
-            const SizedBox(width: 6),
-            const Icon(Icons.arrow_drop_down, size: 22),
-          ],
-        ),
-      ),
-      onTap: _pick,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  picks.isEmpty
+                      ? mediaText(context, 'All speakers')
+                      : names.join(', '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: picks.isEmpty
+                        ? scheme.onSurfaceVariant
+                        : scheme.onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.keyboard_arrow_down,
+                size: 20,
+                color: scheme.onSurfaceVariant,
+              ),
+            ],
+          ),
+        );
+        return SettingsRow(
+          title: Text(sendspinSpeakerPillPlayers.localizedTitle(context)),
+          stack: true,
+          subtitle: Text(
+            sendspinSpeakerPillPlayers.localizedDescription(context),
+          ),
+          trailing: tightPane(context)
+              ? field
+              : SizedBox(width: 300, child: field),
+        );
+      },
     );
   }
 }
@@ -6994,243 +7678,33 @@ class _TtsOutputRow extends StatefulWidget {
 }
 
 class _TtsOutputRowState extends State<_TtsOutputRow> {
-  /// The picked player's name, looked up once: the setting keeps the id.
-  String? _name;
-
   @override
-  void initState() {
-    super.initState();
-    unawaited(_lookUp());
-  }
-
-  Future<void> _lookUp() async {
-    final id = widget.container.settings.get(voiceTtsOutput);
-    if (id.isEmpty) return;
-    final result = await widget.container.commands.execute('mediaPlayers', {
-      'source': 'ha',
-      'speakers': true,
-    });
-    final data = result.data;
-    final list = data is Map ? data['players'] : null;
-    for (final p in (list as List? ?? const [])) {
-      if (p is Map && '${p['id']}' == 'ha:$id' && mounted) {
-        setState(() => _name = '${p['name']}');
-      }
-    }
-  }
-
-  Future<void> _pick() async {
+  Widget build(BuildContext context) {
     final container = widget.container;
-    final result = await showDialog<List<String>>(
-      context: context,
-      builder: (ctx) => _PlayerPickerDialog(
-        container: container,
+    final id = container.settings.get(voiceTtsOutput);
+    return PickRow(
+      title: voiceTtsOutput.localizedTitle(context),
+      description: voiceTtsOutput.localizedDescription(context),
+      spec: playerSpec(
+        context,
+        container.commands,
         source: 'ha',
         speakers: true,
-        current: _listed(container.settings.get(voiceTtsOutput)),
-        title: voiceTtsOutput.localizedTitle(context),
-        noneLabel: voiceText(context, 'This kiosk'),
       ),
-    );
-    if (result == null) return;
-    // The list's ids carry their source; the setting keeps the entity.
-    await container.settings.set(
-      voiceTtsOutput,
-      result[0].replaceFirst('ha:', ''),
-    );
-    if (mounted) setState(() => _name = result[1]);
-    widget.onChanged();
-  }
-
-  /// An entity as the player list names it.
-  static String _listed(String entity) => entity.isEmpty ? '' : 'ha:$entity';
-
-  @override
-  Widget build(BuildContext context) {
-    final id = widget.container.settings.get(voiceTtsOutput);
-    final label = id.isEmpty
-        ? voiceText(context, 'This kiosk')
-        : (_name?.isNotEmpty ?? false)
-        ? _name!
-        : id;
-    return SettingsRow(
-      title: Text(voiceTtsOutput.localizedTitle(context)),
-      subtitle: Text(voiceTtsOutput.localizedDescription(context)),
-      trailing: ControlBox(
-        onTap: _pick,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 200),
-              child: Text(label, overflow: TextOverflow.ellipsis),
-            ),
-            const SizedBox(width: 6),
-            const Icon(Icons.arrow_drop_down, size: 22),
-          ],
-        ),
-      ),
-      onTap: _pick,
-    );
-  }
-}
-
-/// The picked source's players, fetched live. A source that cannot be
-/// listed says why instead of an empty list. Past a handful of rows a
-/// search field filters by name and id.
-class _PlayerPickerDialog extends StatefulWidget {
-  const _PlayerPickerDialog({
-    required this.container,
-    required this.source,
-    required this.current,
-    this.title,
-    this.noneLabel,
-    this.players,
-    this.speakers = false,
-  });
-
-  final AppContainer container;
-  final String source;
-  final String current;
-
-  /// A speaker for sounds: Home Assistant's list keeps Music Assistant's
-  /// own entities.
-  final bool speakers;
-
-  /// A fixed list in place of the source's live one: this device's own
-  /// players.
-  final List<Map<String, Object?>>? players;
-
-  /// The dialog's title, in place of the source's.
-  final String? title;
-
-  /// A first choice that picks no player (id ''), labelled this.
-  final String? noneLabel;
-
-  @override
-  State<_PlayerPickerDialog> createState() => _PlayerPickerDialogState();
-}
-
-class _PlayerPickerDialogState extends State<_PlayerPickerDialog> {
-  List<Map<String, Object?>>? _players;
-  String? _note;
-  String _query = '';
-
-  static const _titles = {
-    'ma': 'Music Assistant player',
-    'ha': 'Home Assistant media player',
-    'sonos': 'Sonos room',
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.players case final fixed?) {
-      _players = fixed;
-      return;
-    }
-    widget.container.commands
-        .execute('mediaPlayers', {
-          'source': widget.source,
-          if (widget.speakers) 'speakers': true,
-        })
-        .then((result) {
-          if (!mounted) return;
-          setState(() {
-            if (!result.ok) {
-              _note = result.error;
-              _players = const [];
-              return;
-            }
-            final data = result.data;
-            final list = data is Map ? data['players'] : null;
-            _players = [
-              for (final p in (list as List? ?? const []))
-                if (p is Map && p['group'] == widget.source)
-                  p.cast<String, Object?>(),
-            ];
-            final notes = data is Map ? data['notes'] : null;
-            final note = notes is Map ? notes[widget.source] : null;
-            _note = note == null ? null : '$note';
-          });
-        });
-  }
-
-  bool _matches(Map<String, Object?> p) {
-    if (_query.isEmpty) return true;
-    final q = _query.toLowerCase();
-    return '${p['name']}'.toLowerCase().contains(q) ||
-        '${p['sub'] ?? ''}'.toLowerCase().contains(q);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final players = _players;
-    final scheme = theme.colorScheme;
-    final body = players == null
-        ? const Padding(
-            padding: EdgeInsets.all(24),
-            child: Center(child: CircularProgressIndicator()),
-          )
-        : RadioGroup<String>(
-            groupValue: widget.current,
-            onChanged: (value) {
-              final id = value ?? '';
-              final name =
-                  '${players.firstWhere((p) => '${p['id']}' == id, orElse: () => const {})['name'] ?? ''}';
-              Navigator.pop(context, [id, name]);
-            },
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                if (players.length > 8)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        hintText: mediaText(context, 'Search players'),
-                        isDense: true,
-                      ),
-                      onChanged: (v) => setState(() => _query = v.trim()),
-                    ),
-                  ),
-                if (widget.noneLabel != null)
-                  RadioListTile<String>(
-                    value: '',
-                    title: Text(widget.noneLabel!),
-                  ),
-                if (_note != null)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
-                    child: Text(
-                      mediaError(context, _note!),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                for (final p in players)
-                  if (_matches(p))
-                    RadioListTile<String>(
-                      value: '${p['id']}',
-                      title: Text('${p['name']}'),
-                      subtitle: p['available'] == false
-                          ? Text(mediaText(context, 'Offline'))
-                          : p['sub'] != null
-                          ? Text('${p['sub']}')
-                          : null,
-                    ),
-              ],
-            ),
-          );
-    return AlertDialog(
-      title: Text(
-        widget.title ?? mediaText(context, _titles[widget.source] ?? 'Player'),
-      ),
-      contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-      content: SizedBox(width: 440, child: body),
+      // The list's ids carry their source; the setting keeps the entity.
+      value: id.isEmpty ? '' : 'ha:$id',
+      placeholder: voiceText(context, 'This kiosk'),
+      // Clear is this kiosk.
+      allowClear: true,
+      flagMissing: false,
+      onPick: (picked) async {
+        await container.settings.set(
+          voiceTtsOutput,
+          (picked ?? '').replaceFirst('ha:', ''),
+        );
+        if (mounted) setState(() {});
+        widget.onChanged();
+      },
     );
   }
 }
@@ -7814,8 +8288,9 @@ class _OptimizationsCardState extends State<_OptimizationsCard> {
   bool _runtimeAll = false;
 
   /// The wrapper's reported mode: 'filtering', 'passthrough' (this view's
-  /// entities cannot be determined, so it is deliberately unfiltered), or
-  /// 'boot' while the allowlist has not been built yet.
+  /// entities cannot be determined, so it is deliberately unfiltered),
+  /// 'custom-page' (a custom page is on screen, never filtered) or 'boot'
+  /// while the allowlist has not been built yet.
   String _mode = 'boot';
 
   /// Tap on the "Watching N entities" link: opens the watched-entities list.
@@ -8087,6 +8562,14 @@ class _OptimizationsCardState extends State<_OptimizationsCard> {
         ),
       );
     }
+    // The person's own page under /local/: nothing of Home Assistant's
+    // to filter.
+    if (_ready && _mode == 'custom-page') {
+      return _telemetryRow(
+        theme,
+        Text(haText(context, 'Not used on custom pages.'), style: base),
+      );
+    }
     final note = _rawFirehose ? _rawFirehoseNote : '';
     final text =
         (_ready && _mode == 'passthrough'
@@ -8135,9 +8618,10 @@ class _OptimizationsCardState extends State<_OptimizationsCard> {
   );
 }
 
-/// The dashboard chooser: every Home Assistant dashboard as a radio row;
-/// the chosen one becomes the start URL. The kiosk navigates immediately —
-/// picking a dashboard and not seeing it would read as a failed tap.
+/// The dashboard chooser: one Default dashboard row whose field opens the
+/// dashboard picker; the chosen view becomes the start URL. The kiosk
+/// navigates immediately, since picking a view and not seeing it would
+/// read as a failed tap.
 class _DashboardPickerCard extends StatefulWidget {
   const _DashboardPickerCard({required this.container});
 
@@ -8148,186 +8632,45 @@ class _DashboardPickerCard extends StatefulWidget {
 }
 
 class _DashboardPickerCardState extends State<_DashboardPickerCard> {
-  late Future<List<Map<String, Object?>>?> _dashboards;
-
-  // Views of the currently selected dashboard, loaded lazily: listing every
-  // sub-view of every dashboard would be an unusable wall, so only the chosen
-  // dashboard's views are fetched, for its row and the "Change view" popup.
-  // `_viewsFor` is the url_path they belong to; a null list is a strategy
-  // dashboard whose view list cannot be read.
-  List<Map<String, Object?>>? _views;
-  String? _viewsFor;
-
   AppContainer get c => widget.container;
   String get _base => c.homeAssistant.baseUrl;
 
-  @override
-  void initState() {
-    super.initState();
-    _dashboards = c.homeAssistant.listDashboards();
-  }
-
-  /// The selected dashboard's url_path, matched against the stored start URL
-  /// by prefix (the URL also carries the view route, and maybe a ?kiosk).
-  String? _selectedDash(List<Map<String, Object?>> dashboards) {
-    final current = c.settings.get(startUrl);
-    for (final d in dashboards) {
-      final url = '$_base/${d['url_path']}';
-      if (current == url || current.startsWith('$url/')) {
-        return '${d['url_path']}';
-      }
-    }
-    return null;
-  }
-
-  /// The view route within [urlPath] the start URL points at, or '' for the
-  /// dashboard's default (first) view.
-  String _selectedRoute(String urlPath) {
-    final current = c.settings.get(startUrl);
-    final prefix = '$_base/$urlPath/';
-    return current.startsWith(prefix) ? current.substring(prefix.length) : '';
-  }
-
-  String _viewPath(String urlPath, String route) =>
-      route.isEmpty ? urlPath : '$urlPath/$route';
-
-  Future<void> _apply(String urlPath, String route) async {
-    final url = route.isEmpty ? '$_base/$urlPath' : '$_base/$urlPath/$route';
+  Future<void> _apply(String path) async {
+    final url = viewPathUrl(_base, path);
     await c.settings.set(startUrl, url);
     await c.commands.execute('loadUrl', {'url': url});
     if (mounted) setState(() {});
   }
 
-  /// Select a dashboard: load its views and land on the first one.
-  Future<void> _pickDashboard(String urlPath) async {
-    final views = await c.homeAssistant.listDashboardViews(urlPath);
-    final route = (views != null && views.isNotEmpty)
-        ? '${views.first['route']}'
-        : '';
-    if (mounted) {
-      setState(() {
-        _views = views;
-        _viewsFor = urlPath;
-      });
-    }
-    await _apply(urlPath, route);
-  }
-
-  /// The "Change view" popup: the dashboard's views as a radio list.
-  Future<void> _changeView(String urlPath) async {
-    final views = _views;
-    if (views == null || views.isEmpty) return;
-    final current = _selectedRoute(urlPath);
-    final picked = await showRadioPicker<String>(
-      context,
-      title: haText(context, 'Choose a view'),
-      selected: current,
-      options: [
-        for (final v in views)
-          PickerOption(
-            '${v['route']}',
-            '${v['title']}',
-            detail: _viewPath(urlPath, '${v['route']}'),
-          ),
-      ],
-    );
-    if (picked != null && picked != current) await _apply(urlPath, picked);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Map<String, Object?>>?>(
-      future: _dashboards,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return SettingsCard(
-            children: [
-              ListTile(
-                title: Text(haText(context, 'Loading dashboards…')),
-                trailing: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2.4),
-                ),
-              ),
-            ],
-          );
-        }
-        final dashboards = snapshot.data;
-        if (dashboards == null || dashboards.isEmpty) {
-          return SettingsCard(
-            children: [
-              ListTile(
-                title: Text(haText(context, 'Could not list dashboards')),
-                subtitle: Text(haText(context, 'Tap to retry.')),
-                trailing: Icon(Icons.refresh),
-                onTap: () => setState(() {
-                  _dashboards = c.homeAssistant.listDashboards();
-                }),
-              ),
-            ],
-          );
-        }
-        final selectedDash = _selectedDash(dashboards);
-        // Lazily load the selected dashboard's views so its row can show the
-        // chosen view and offer "Change view". Guard re-entry with _viewsFor.
-        if (selectedDash != null && _viewsFor != selectedDash) {
-          _viewsFor = selectedDash;
-          c.homeAssistant.listDashboardViews(selectedDash).then((v) {
-            if (mounted) setState(() => _views = v);
-          });
-        }
-        return SettingsCard(
-          children: [
-            for (final d in dashboards)
-              _dashRow(
-                context,
-                '${d['url_path']}',
-                '${d['title'] ?? d['url_path']}',
-                selectedDash,
-              ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _dashRow(
-    BuildContext context,
-    String urlPath,
-    String title,
-    String? selectedDash,
-  ) {
-    final theme = Theme.of(context);
-    final selected = selectedDash == urlPath;
-    // The selected row shows the chosen view's path (defaulting to the first
-    // view); the others just name the dashboard. Only the selected row can
-    // change its view.
-    final subtitle = selected
-        ? _viewPath(urlPath, _selectedRoute(urlPath))
-        : urlPath;
-    final hasViews = selected && _views != null && _views!.isNotEmpty;
-    return ListTile(
-      leading: Icon(
-        selected ? Icons.radio_button_checked : Icons.radio_button_off,
-        color: selected ? theme.colorScheme.primary : null,
-      ),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: selected
-          ? TextButton(
-              onPressed: hasViews ? () => _changeView(urlPath) : null,
-              child: Text(haText(context, 'Change view')),
-            )
-          : null,
-      onTap: selected ? null : () => _pickDashboard(urlPath),
+    final current =
+        dashboardPathOfUrl(
+          c.settings.get(startUrl),
+          _base,
+          pages: c.homeAssistant.customPages,
+        ) ??
+        '';
+    return SettingsCard(
+      children: [
+        DashboardViewRow(
+          container: c,
+          title: haText(context, 'Default dashboard'),
+          description: haText(
+            context,
+            'The view the kiosk shows when it starts.',
+          ),
+          value: current,
+          onPick: _apply,
+        ),
+      ],
     );
   }
 }
 
-/// Dashboard view rotation: the enable toggle, then (once on) the user's
-/// dashboards as plain headers with a checkbox per view beneath each, and
-/// the dwell time. The selection is stored as a JSON array of navigation
+/// Dashboard view rotation: the enable toggle, the dwell time, then (once
+/// on) the picked views in order with an Add views row that opens the
+/// dashboard picker. The selection is stored as a JSON array of navigation
 /// paths ("url_path/view-route") in the hidden ha.rotation_dashboards
 /// setting; the rotation itself runs in HomeAssistantManager.
 class _RotationCard extends StatefulWidget {
@@ -8344,42 +8687,13 @@ class _RotationCard extends StatefulWidget {
 }
 
 class _RotationCardState extends State<_RotationCard> {
-  late Future<List<(String, String, List<Map<String, Object?>>)>?> _views;
-
   AppContainer get c => widget.container;
 
   @override
   void initState() {
     super.initState();
-    _views = _load();
-  }
-
-  /// Every dashboard with its views: (title, url_path, views). A dashboard
-  /// whose config cannot be read (auto-generated strategies) still rotates
-  /// as a whole via a single synthetic entry for its first view.
-  Future<List<(String, String, List<Map<String, Object?>>)>?> _load() async {
-    final dashboards = await c.homeAssistant.listDashboards();
-    if (dashboards == null) return null;
-    final views = await Future.wait([
-      for (final d in dashboards)
-        c.homeAssistant.listDashboardViews('${d['url_path']}'),
-    ]);
-    return [
-      for (final (i, d) in dashboards.indexed)
-        (
-          '${d['title'] ?? d['url_path']}',
-          '${d['url_path']}',
-          views[i] == null || views[i]!.isEmpty
-              // A dashboard whose views cannot be read (the auto "Overview"
-              // and other strategy dashboards) rotates as a whole via its
-              // bare path — an empty route, navigated as /<url_path>, which
-              // resolves the default view. A synthetic "/0" would spin.
-              ? [
-                  {'title': null, 'route': ''},
-                ]
-              : views[i]!,
-        ),
-    ];
+    // The rows name their views once the dashboards are known.
+    if (DashboardCatalog.current.value == null) DashboardCatalog.load(c);
   }
 
   List<String> _selected() {
@@ -8394,14 +8708,22 @@ class _RotationCardState extends State<_RotationCard> {
     }
   }
 
-  Future<void> _toggle(String path) async {
-    final selected = _selected();
-    selected.contains(path) ? selected.remove(path) : selected.add(path);
+  Future<void> _save(List<String> selected) async {
     await c.settings.setFromJson(
       haRotationDashboards.key,
       jsonEncode(selected),
     );
     if (mounted) setState(() {});
+  }
+
+  Future<void> _addViews() async {
+    final picked = await showDashboardMultiPicker(
+      context,
+      container: c,
+      title: haRotationDashboards.localizedTitle(context),
+      selected: _selected(),
+    );
+    if (picked != null) await _save(picked);
   }
 
   final _urlField = TextEditingController();
@@ -8445,7 +8767,7 @@ class _RotationCardState extends State<_RotationCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final enabled = c.settings.get(haRotationEnabled);
-    return SettingsCard(
+    final settings = SettingsCard(
       children: [
         SettingTile(
           container: c,
@@ -8477,121 +8799,85 @@ class _RotationCardState extends State<_RotationCard> {
               def: haRotationFadeSeconds,
               onChanged: () => setState(() {}),
             ),
-          FutureBuilder<List<(String, String, List<Map<String, Object?>>)>?>(
-            future: _views,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return ListTile(
-                  title: Text(haText(context, 'Loading dashboards…')),
-                  trailing: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2.4),
-                  ),
-                );
-              }
-              final dashboards = snapshot.data;
-              if (dashboards == null || dashboards.isEmpty) {
-                return ListTile(
-                  title: Text(haText(context, 'Could not list dashboards')),
-                  subtitle: Text(haText(context, 'Tap to retry.')),
-                  trailing: Icon(Icons.refresh),
-                  onTap: () => setState(() {
-                    _views = _load();
-                  }),
-                );
-              }
-              final selected = _selected();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        ],
+      ],
+    );
+    if (!enabled) return settings;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        settings,
+        // The picked views in rotation order, each with a remove button,
+        // then the row that opens the picker to add more.
+        SectionHeading(haRotationDashboards.localizedTitle(context)),
+        SettingsCard(
+          children: [
+            for (final path in _selected())
+              DashboardViewListRow(
+                value: path,
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: haText(context, 'Remove'),
+                  onPressed: () => _save(_selected()..remove(path)),
+                ),
+              ),
+            ListTile(
+              leading: Icon(
+                Icons.add_circle_outline,
+                color: theme.colorScheme.primary,
+              ),
+              title: Text(
+                haText(context, 'Add views'),
+                style: TextStyle(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: _addViews,
+            ),
+          ],
+        ),
+        // External pages: shown in their own overlay during rotation, so
+        // the dashboard (and Voice Satellite) stays loaded underneath.
+        SectionHeading(haText(context, 'External pages')),
+        SettingsCard(
+          children: [
+            for (final url in _urls())
+              ListTile(
+                title: Text(url, maxLines: 1, overflow: TextOverflow.ellipsis),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: haText(context, 'Remove'),
+                  onPressed: () => _saveUrls(_urls()..remove(url)),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(Ks.inset, 12, 12, 12),
+              child: Row(
                 children: [
-                  for (final (title, urlPath, views) in dashboards) ...[
-                    // The dashboard is a plain header, not a choice — the
-                    // views beneath it are what rotate.
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20, 14, 20, 2),
-                      child: Text(
-                        title,
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  Expanded(
+                    child: TextField(
+                      controller: _urlField,
+                      keyboardType: TextInputType.url,
+                      autocorrect: false,
+                      onSubmitted: (_) => _addUrl(),
+                      // Border and fill come from the input theme.
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        hintText: 'https://example.com',
                       ),
                     ),
-                    for (final v in views)
-                      // Empty route = the dashboard's bare path.
-                      for (final path in [
-                        '${v['route']}'.isEmpty
-                            ? urlPath
-                            : '$urlPath/${v['route']}',
-                      ])
-                        CheckboxListTile(
-                          value: selected.contains(path),
-                          title: Text(
-                            v['title'] == null
-                                ? haText(context, 'Default view')
-                                : '${v['title']}',
-                          ),
-                          subtitle: Text(path),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          contentPadding: EdgeInsets.only(left: 28, right: 20),
-                          onChanged: (_) => _toggle(path),
-                        ),
-                  ],
-                  SizedBox(height: 6),
-                ],
-              );
-            },
-          ),
-          // External pages: shown in their own overlay during rotation, so
-          // the dashboard (and Voice Satellite) stays loaded underneath.
-          Padding(
-            padding: EdgeInsets.fromLTRB(20, 8, 20, 2),
-            child: Text(
-              haText(context, 'External pages'),
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          for (final url in _urls())
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.only(left: 28, right: 12),
-              title: Text(url, style: theme.textTheme.bodyMedium),
-              trailing: IconButton(
-                icon: Icon(Icons.close, size: 20),
-                tooltip: haText(context, 'Remove'),
-                onPressed: () => _saveUrls(_urls()..remove(url)),
-              ),
-            ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(28, 4, 12, 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _urlField,
-                    keyboardType: TextInputType.url,
-                    autocorrect: false,
-                    onSubmitted: (_) => _addUrl(),
-                    // Border and fill come from the input theme.
-                    decoration: InputDecoration(
-                      isDense: true,
-                      hintText: 'https://example.com',
-                    ),
                   ),
-                ),
-                SizedBox(width: 8),
-                FilledButton(
-                  onPressed: _addUrl,
-                  child: Text(haText(context, 'Add')),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    onPressed: _addUrl,
+                    child: Text(haText(context, 'Add')),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ],
     );
   }
@@ -9385,14 +9671,14 @@ class _DevicePermissionsTileState extends State<_DevicePermissionsTile>
   Widget build(BuildContext context) {
     final settings = widget.container.settings;
     final perms = _perms;
-    final background =
-        settings.get(wakeWordEnabled) && settings.get(wakeWordBackground);
+    final listening = widget.container.wakeWord.inUse;
+    final background = listening && settings.get(wakeWordBackground);
     final micBlocked = perms?.microphoneBlocked == true;
     return Column(
       children: separatedRows([
         _row(
           granted: perms?.microphone,
-          needed: settings.get(wakeWordEnabled),
+          needed: listening,
           missingIcon: Icons.mic_off_outlined,
           title: devicePermissionDescriptions['microphone']!.title,
           held: devicePermissionDescriptions['microphone']!.description,
@@ -9593,7 +9879,11 @@ class _DevicePermissionsTileState extends State<_DevicePermissionsTile>
         // the position, and only while switched on (issue #363).
         _row(
           granted: perms?.location,
-          needed: settings.get(btproxyEnabled) || settings.get(locationEnabled),
+          needed:
+              settings.get(btproxyEnabled) ||
+              settings.get(locationEnabled) ||
+              (settings.get(screensaverMode) == 'celestial' &&
+                  settings.get(screensaverCelestialLocation) == 'gps'),
           missingIcon: Icons.location_off_outlined,
           title: devicePermissionDescriptions['location']!.title,
           held: devicePermissionDescriptions['location']!.description,
@@ -9886,11 +10176,18 @@ class _RealMacStatusRowState extends State<_RealMacStatusRow> {
 /// which is what the receiver needs before it reads anything. Grant runs
 /// the dialog, then the OS location settings screen when the switch is
 /// what is off, and nudges the location manager so a stream refused for
-/// the missing grant comes up at once.
+/// the missing grant comes up at once. The Celestial screensaver's GPS
+/// source shows the same row with its own lines.
 class _LocationPermissionsTile extends StatefulWidget {
-  const _LocationPermissionsTile({required this.container});
+  const _LocationPermissionsTile({
+    required this.container,
+    this.celestial = false,
+  });
 
   final AppContainer container;
+
+  /// Worded for the Celestial sky instead of the location sensors.
+  final bool celestial;
 
   @override
   State<_LocationPermissionsTile> createState() =>
@@ -9956,18 +10253,32 @@ class _LocationPermissionsTileState extends State<_LocationPermissionsTile>
       ),
       title: Text(esphomeText(context, 'Location')),
       subtitle: Text(
-        perms == null || !perms.location
+        perms != null && !perms.location && perms.locationApproximate
             ? esphomeText(
                 context,
-                'Without this the GPS receiver cannot be read and the '
-                'location sensors stay unknown.',
+                'Only approximate location is allowed, and the GPS receiver '
+                'needs precise location.',
               )
+            : perms == null || !perms.location
+            ? widget.celestial
+                  ? screensaverText(
+                      context,
+                      'Without this the GPS receiver cannot be read and the '
+                      'sky has no location.',
+                    )
+                  : esphomeText(
+                      context,
+                      'Without this the GPS receiver cannot be read and the '
+                      'location sensors stay unknown.',
+                    )
             : !perms.locationServicesOn
             ? esphomeText(
                 context,
                 'Location is off in the device settings, so the receiver '
                 'delivers nothing.',
               )
+            : widget.celestial
+            ? screensaverText(context, 'The sky can follow the GPS receiver.')
             : esphomeText(
                 context,
                 'The location sensors can read the GPS receiver.',
@@ -10585,6 +10896,23 @@ class _SliderTileState extends State<_SliderTile> {
                   if (mounted) setState(() {});
                   return;
                 }
+              } else if (def.key == screensaverClockNightTurnOffMinutes.key &&
+                  // Night mode's own, with the light sensor added: the room
+                  // brightening is what turns the screen back on.
+                  (widget.container.settings.get(def) as num) == 0 &&
+                  parsed > 0 &&
+                  !widget.container.settings.get(
+                    screensaverClockNightTurnOffBlack,
+                  )) {
+                final go = await confirmScreenOff(
+                  context,
+                  message: screensaverText(context, _nightTurnOffWarning),
+                );
+                if (!go) {
+                  // The slider snaps back to the stored 0.
+                  if (mounted) setState(() {});
+                  return;
+                }
               }
               // A value the definition turns down (an end of a range
               // crossing the other end) snaps back and says why, where a
@@ -10973,21 +11301,52 @@ class SettingTile extends StatelessWidget {
         if (def.key == screensaverWeatherEntity.key) {
           return WeatherMoodEntityRow(container: c);
         }
-        // The Home Assistant Dashboard screensaver's view is picked from
-        // the instance's dashboards, the same modal the Go to a dashboard
-        // view gesture uses, never typed.
-        if (def.key == screensaverDashboardView.key) {
-          return ListTile(
-            title: Text(def.localizedTitle(context)),
-            subtitle: Text(
-              display,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            trailing: TextButton(
-              onPressed: () => _pickDashboardView(context),
-              child: Text(screensaverText(context, 'Select dashboard')),
-            ),
+        if (def.key == screensaverCelestialEntity.key) {
+          return CelestialEntityRow(container: c);
+        }
+        // Adaptive brightness's light sensor entity (issue #911), picked
+        // with the entity search the plugins' entity fields use.
+        if (def.key == adaptiveLightEntity.key) {
+          return _LightEntityRow(container: c, def: def, onChanged: onChanged);
+        }
+        // The external motion sensor (issue #973), picked the same way.
+        if (def.key == motionEntity.key) {
+          return _MotionEntityRow(container: c, def: def, onChanged: onChanged);
+        }
+        // The Home Assistant sensor ONVIF motion events follow (issue
+        // #1098), from the same occupancy, motion and presence sensors.
+        if (def.key == cameraOnvifEventsEntity.key) {
+          return PickRow(
+            title: def.localizedTitle(context),
+            description: def.localizedDescription(context),
+            spec: entitySpec(context, c.commands, deviceClass: 'occupancy'),
+            value: c.settings.get(cameraOnvifEventsEntity),
+            allowClear: true,
+            onPick: (id) async {
+              await c.settings.setFromJson(def.key, id ?? '');
+              onChanged();
+            },
+          );
+        }
+        // The speakers the Now Playing pill offers, ticked off the players
+        // of the source its menu reads from, never typed as JSON.
+        if (def.key == sendspinSpeakerPillPlayers.key) {
+          return _SpeakerPillPlayersRow(container: c, onChanged: onChanged);
+        }
+        // The Home Assistant Dashboard screensaver's view and Now Playing's
+        // chosen view are picked from the instance's dashboards in the
+        // dashboard picker, never typed.
+        if (def.key == screensaverDashboardView.key ||
+            def.key == sendspinFullscreenReturnView.key) {
+          return DashboardViewRow(
+            container: c,
+            title: def.localizedTitle(context),
+            description: def.localizedDescription(context),
+            value: c.settings.get(def as SettingDef<String>),
+            onPick: (path) async {
+              await c.settings.setFromJson(def.key, path);
+              onChanged();
+            },
           );
         }
         // The screensaver's media is picked from Home Assistant, not typed.
@@ -11017,22 +11376,11 @@ class SettingTile extends StatelessWidget {
             ),
           );
         }
-        // The At a Glance entities: a list, edited in its own screen rather
-        // than typed as JSON.
+        // The At a Glance entities: the picks in order, each with its own
+        // name and displayed value, and a row that opens the entity picker
+        // to add more. Never typed as JSON.
         if (def.key == screensaverGlanceEntities.key) {
-          final chosen = _glanceEntities(c);
-          return ListTile(
-            title: Text(def.localizedTitle(context)),
-            subtitle: Text(
-              chosen.isEmpty
-                  ? l10n(context).screensaverOverlayGlanceEmpty(
-                      screensaverGlanceMax.toString(),
-                    )
-                  : chosen.map((e) => e['custom_name'] ?? e['name']).join(', '),
-            ),
-            trailing: const Icon(Icons.edit_outlined),
-            onTap: () => _editGlanceEntities(context),
-          );
+          return GlanceRows(container: c, def: def, onChanged: onChanged);
         }
         // The launcher whitelist: ticked off the device's launchable apps,
         // never typed as JSON.
@@ -11052,6 +11400,54 @@ class SettingTile extends StatelessWidget {
             onTap: () => _pickLauncherApps(context),
           );
         }
+        // The launcher's apps a locked kiosk offers (issue #1067): a switch
+        // per launcher app, in the launcher's order. Mirrored on the remote
+        // (rows.js).
+        if (def.key == kioskAllowedApps.key) {
+          final apps = c.settings.get(launcherEnabled)
+              ? decodeLauncherApps(c.settings.get(launcherApps))
+              : const <LauncherApp>[];
+          if (apps.isEmpty) {
+            return ListTile(
+              title: Text(def.localizedTitle(context)),
+              subtitle: Text(
+                kioskText(
+                  context,
+                  'Add apps in Settings > App Launcher first.',
+                ),
+              ),
+              enabled: false,
+            );
+          }
+          final allowed = decodeKioskAllowedApps(value as String);
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final app in apps)
+                SwitchListTile(
+                  title: Text(app.label),
+                  subtitle: Text(
+                    app.package,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  value: allowed.contains(app.package),
+                  onChanged: (on) async {
+                    final next = {...allowed};
+                    on ? next.add(app.package) : next.remove(app.package);
+                    await c.settings.setFromJson(
+                      def.key,
+                      jsonEncode([
+                        for (final a in apps)
+                          if (next.contains(a.package)) a.package,
+                      ]),
+                    );
+                    onChanged();
+                  },
+                ),
+            ],
+          );
+        }
         // The Immich albums and the people and tag filters: names ticked
         // off the server's lists, never typed as JSON (issue #345).
         final immichNamed = _immichNamedRows[def.key];
@@ -11066,6 +11462,16 @@ class SettingTile extends StatelessWidget {
             ),
             trailing: const Icon(Icons.edit_outlined),
             onTap: () => _pickImmichNamed(context, immichNamed),
+          );
+        }
+        // Wake to screensaver: what wakes to the screensaver, ticked off in a
+        // dialog from a dropdown-style box rather than typed as JSON.
+        if (def.key == screensaverScreenOffWakeToScreensaver.key) {
+          return _WakeToScreensaverRow(
+            container: c,
+            def: def,
+            value: value as String,
+            onChanged: onChanged,
           );
         }
         // The camera screensaver's views are picked from the ones configured
@@ -11168,59 +11574,6 @@ class SettingTile extends StatelessWidget {
     }
   }
 
-  List<Map<String, Object?>> _glanceEntities(AppContainer container) {
-    try {
-      final decoded = jsonDecode(
-        container.settings.get(screensaverGlanceEntities),
-      );
-      if (decoded is! List) return [];
-      return [
-        for (final item in decoded)
-          if (item is Map) item.cast<String, Object?>(),
-      ];
-    } catch (_) {
-      return [];
-    }
-  }
-
-  Future<void> _editGlanceEntities(BuildContext context) async {
-    final saved = await Navigator.of(context).push<List<Map<String, Object?>>>(
-      MaterialPageRoute(
-        builder: (_) =>
-            GlanceEntityPicker(container: c, initial: _glanceEntities(c)),
-      ),
-    );
-    if (saved == null) return;
-    await c.settings.setFromJson(
-      screensaverGlanceEntities.key,
-      jsonEncode(saved),
-    );
-    onChanged();
-  }
-
-  Future<void> _pickDashboardView(BuildContext context) async {
-    final entries = await listDashboardViewEntries(c);
-    if (!context.mounted) return;
-    if (entries.isEmpty) {
-      showToast(
-        context,
-        title: screensaverText(context, 'Could not list dashboards'),
-        message: screensaverText(context, 'Is Home Assistant connected?'),
-        kind: ToastKind.error,
-      );
-      return;
-    }
-    final picked = await showDashboardViewPicker(
-      context,
-      title: screensaverText(context, 'Select dashboard'),
-      entries: entries,
-      current: c.settings.get(screensaverDashboardView),
-    );
-    if (picked == null) return;
-    await c.settings.setFromJson(screensaverDashboardView.key, picked);
-    onChanged();
-  }
-
   Future<void> _pickCameraViews(BuildContext context) async {
     final saved = await showCameraViewsPicker(
       context,
@@ -11235,10 +11588,12 @@ class SettingTile extends StatelessWidget {
     onChanged();
   }
 
+  /// The launcher's apps through the shared picker, in the order they are
+  /// picked and arranged there (issue #1067).
   Future<void> _pickLauncherApps(BuildContext context) async {
     final result = await c.commands.execute('installedApps', const {});
     if (!context.mounted) return;
-    if (!result.ok) {
+    if (!result.ok || result.data is! List) {
       showToast(
         context,
         title: launcherText(context, 'Could not list the apps'),
@@ -11249,67 +11604,26 @@ class SettingTile extends StatelessWidget {
       );
       return;
     }
-    final apps = (result.data as List).cast<Map>();
-    final selected = {
-      for (final app in decodeLauncherApps(c.settings.get(launcherApps)))
-        app.package,
-    };
-    final saved = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: Text(launcherText(context, 'Apps')),
-          content: SizedBox(
-            width: 420,
-            child: apps.isEmpty
-                ? Text(launcherText(context, 'No launchable apps found.'))
-                : EdgeFade(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        for (final app in apps)
-                          CheckboxListTile(
-                            value: selected.contains('${app['package']}'),
-                            title: Text('${app['label']}'),
-                            subtitle: Text(
-                              '${app['package']}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            onChanged: (on) => setState(() {
-                              if (on == true) {
-                                selected.add('${app['package']}');
-                              } else {
-                                selected.remove('${app['package']}');
-                              }
-                            }),
-                          ),
-                      ],
-                    ),
-                  ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(launcherText(context, 'Cancel')),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(launcherText(context, 'Save')),
-            ),
-          ],
-        ),
-      ),
+    final spec = appSpec(context, (result.data as List).cast<Map>());
+    final ids = await showItemMultiPicker(
+      context,
+      title: launcherText(context, 'Apps'),
+      spec: spec,
+      selected: [
+        for (final app in decodeLauncherApps(c.settings.get(launcherApps)))
+          app.package,
+      ],
     );
-    if (saved != true) return;
+    final list = PickCatalog.of(spec.key).value;
+    if (ids == null || list == null) return;
     // Rebuilt from the device's list, so labels refresh and uninstalled
     // leftovers drop out on every save.
     await c.settings.setFromJson(
       launcherApps.key,
       jsonEncode([
-        for (final app in apps)
-          if (selected.contains('${app['package']}'))
-            {'package': '${app['package']}', 'label': '${app['label']}'},
+        for (final id in ids)
+          if (list.find(id) case final app?)
+            {'package': app.id, 'label': app.name},
       ]),
     );
     onChanged();
@@ -12580,4 +12894,121 @@ String _subpageDisplayTitle(
     if (profile != null) return fleetProfileName(context, profile);
   }
   return settingsPageText(context, category, subpage);
+}
+
+/// The labels of Wake to screensaver's sources.
+String _wakeSourceLabel(BuildContext context, String source) =>
+    switch (source) {
+      'motion' => screensaverText(context, 'Motion'),
+      'face' => screensaverText(context, 'Face'),
+      'proximity' => screensaverText(context, 'Proximity'),
+      'person' => screensaverText(context, 'Person'),
+      'power' => screensaverText(context, 'Power button'),
+      _ => screensaverText(context, 'Touch'),
+    };
+
+/// Wake to screensaver as a settings row: the picks at rest in a
+/// dropdown-style box, opening a dialog of checkboxes.
+class _WakeToScreensaverRow extends StatelessWidget {
+  const _WakeToScreensaverRow({
+    required this.container,
+    required this.def,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final AppContainer container;
+  final SettingDef<Object> def;
+  final String value;
+  final VoidCallback onChanged;
+
+  Future<void> _open(BuildContext context) async {
+    final picked = decodeWakeToScreensaver(value);
+    // A powered-off panel takes no touches: Touch can only wake the black
+    // screen that stands in for it.
+    final settings = container.settings;
+    final touchReady =
+        settings.get(screensaverScreenOffMinutes) > 0 &&
+        settings.get(screensaverScreenOffBlack);
+    final hintColor = Theme.of(context).colorScheme.onSurfaceVariant;
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(def.localizedTitle(context)),
+          content: SizedBox(
+            width: 420,
+            child: EdgeFade(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final source in wakeToScreensaverSources)
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: picked.contains(source),
+                      title: Text(_wakeSourceLabel(context, source)),
+                      subtitle: source == 'touch' && !touchReady
+                          ? Text(
+                              screensaverText(
+                                context,
+                                'Requires both "Turn screen off after" and '
+                                '"Use a black screen instead."',
+                              ),
+                              style: TextStyle(color: hintColor),
+                            )
+                          : null,
+                      onChanged: source == 'touch' && !touchReady
+                          ? null
+                          : (on) => setState(() {
+                              if (on == true) {
+                                picked.add(source);
+                              } else {
+                                picked.remove(source);
+                              }
+                            }),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(screensaverText(context, 'Cancel')),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(screensaverText(context, 'Save')),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (saved != true) return;
+    await container.settings.setFromJson(
+      def.key,
+      encodeWakeToScreensaver(picked),
+    );
+    onChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final picked = decodeWakeToScreensaver(value);
+    final text = picked.isEmpty
+        ? screensaverText(context, 'Off')
+        : picked.length == wakeToScreensaverSources.length
+        ? screensaverText(context, 'All')
+        : [
+            for (final source in wakeToScreensaverSources)
+              if (picked.contains(source)) _wakeSourceLabel(context, source),
+          ].join(', ');
+    final field = ChoiceBox(text: text, onTap: () => _open(context));
+    return SettingsRow(
+      title: Text(def.localizedTitle(context)),
+      stack: true,
+      subtitle: Text(def.localizedDescription(context)),
+      trailing: tightPane(context) ? field : SizedBox(width: 300, child: field),
+    );
+  }
 }

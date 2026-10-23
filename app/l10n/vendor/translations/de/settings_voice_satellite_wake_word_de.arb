@@ -67,6 +67,8 @@
   "settingVoiceWakeArbitrationDescription": "Wenn mehrere Kiosks das Aktivierungswort hören, antwortet der nächstgelegene. Erhöht die Erkennungslatenz.",
   "settingVoiceWakeArbitrationWindowTitle": "Arbitrierungsfenster",
   "settingVoiceWakeArbitrationWindowDescription": "Wie lange auf die anderen Kiosks gewartet wird. Erhöhe den Wert, wenn ein langsamerer Kiosk verliert, obwohl er näher ist.",
+  "settingVoiceWakeArbitrationOffsetTitle": "Arbitrierungsausgleich",
+  "settingVoiceWakeArbitrationOffsetDescription": "Wird dazu addiert, wie laut dieser Kiosk das Aktivierungswort gehört hat. Erhöhe den Wert, wenn dieser Kiosk verliert, obwohl er näher ist, und senke ihn, wenn er aus zu großer Entfernung antwortet.",
   "voiceSectionWakeArbitration": "Aktivierungswort-Arbitrierung",
   "voiceOptionSlightly": "Wenig empfindlich",
   "voiceOptionModerately": "Mäßig empfindlich",
@@ -89,5 +91,8 @@
   "voiceModelNotOnnx": "Kein ONNX-Modell.",
   "voiceModelNotOww": "Kein openWakeWord-Modell.",
   "voiceModelOwwWindow": "Kein openWakeWord-Modell: Es nimmt das Embedding-Fenster von 16 x 96 nicht an.",
-  "voiceModelNoLoad": "Das Modell lässt sich nicht laden: {error}"
+  "voiceModelNoLoad": "Das Modell lässt sich nicht laden: {error}",
+  "settingVoiceAmazonLocaleTitle": "Sprache des Aktivierungsworts",
+  "settingVoiceAmazonLocaleDescription": "Die Sprache der Aktivierungswort-Modelle von Amazon. Die Auswahlfelder für Aktivierungswörter bieten die Aktivierungswörter dieser Sprache an.",
+  "voiceOptionAppLanguage": "Sprache von Kiosk Satellite"
 }

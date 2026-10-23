@@ -26,6 +26,11 @@ void main() {
   var cameraPresent = true;
   // Null for a device without a battery (issue #367).
   int? battery = 73;
+  // Null for a battery whose HAL has no temperature sensor.
+  double? batteryTemp = 31.46;
+  // Null where no CPU load source is readable (issue #824).
+  double? cpuUsage = 12.4;
+  double? cpuClock = 1785.6;
   var cameraFacings = <String>['front', 'back'];
   var bluetooth = <String, Object?>{};
   var vsState = <String, Object?>{};
@@ -48,6 +53,9 @@ void main() {
       'releaseUrl': 'https://example/r',
     };
     battery = 73;
+    batteryTemp = 31.46;
+    cpuUsage = 12.4;
+    cpuClock = 1785.6;
     storage = {'free': 16384 * 1024 * 1024, 'total': 32768 * 1024 * 1024};
     dashboardsUnreachable = false;
     catalogChanges = 0;
@@ -135,8 +143,10 @@ void main() {
         handler: (_) async => CommandResult.ok({
           'battery': battery,
           'charging': true,
-          'cpu': 12.4,
+          'cpu': cpuUsage,
+          'cpuClock': cpuClock,
           'temp': 41,
+          'batteryTemp': batteryTemp,
         }),
       ),
     );
@@ -258,6 +268,7 @@ void main() {
       'bringToFront',
       'showAppLauncher',
       'showMusicAssistant',
+      'openMusicLibrary',
       'hideCameraView',
       'showCameraView',
       'haNavigate',
@@ -832,6 +843,153 @@ void main() {
     });
   });
 
+  group('the VS timer sensors', () {
+    Map<String, Object?> timer(
+      String id, {
+      String? endsAt,
+      bool finished = false,
+    }) => {
+      'timer_id': id,
+      'is_active': endsAt != null,
+      'ends_at': endsAt,
+      'finished': finished,
+    };
+
+    test('are listed only while Voice Satellite runs natively', () async {
+      Future<List<String>> ids() async => [
+        for (final d in await surface.build()) '${d['objectId']}',
+      ];
+      await settings.set(defs.voiceRuntime, 'dashboard');
+      await settings.set(defs.voiceEnabled, true);
+      expect(await ids(), isNot(contains('vs_timers')));
+      expect(await ids(), isNot(contains('vs_next_timer')));
+      await settings.set(defs.voiceRuntime, 'native');
+      final catalog = await surface.build();
+      final count = catalog.singleWhere((d) => d['objectId'] == 'vs_timers');
+      expect(count['type'], 'sensor');
+      // A count, not 1.0 timers.
+      expect(count['accuracyDecimals'], 0);
+      expect(
+        catalog.singleWhere(
+          (d) => d['objectId'] == 'vs_next_timer',
+        )['deviceClass'],
+        'timestamp',
+      );
+    });
+
+    test('count pending timers and show the soonest running end', () async {
+      await settings.set(defs.voiceRuntime, 'native');
+      await settings.set(defs.voiceEnabled, true);
+      commands.register(
+        Command(
+          name: 'voiceTimers',
+          description: 'stub',
+          handler: (_) async => CommandResult.ok({
+            'timers': [timer('a', endsAt: '2026-10-08T18:00:00.000Z')],
+          }),
+        ),
+      );
+      await attach();
+      expect(pushed, contains(('vs_timers', 1)));
+      expect(pushed, contains(('vs_next_timer', '2026-10-08T18:00:00.000Z')));
+
+      bus.publish(
+        VoiceTimersChanged([
+          timer('a', endsAt: '2026-10-08T18:00:00.000Z'),
+          timer('b', endsAt: '2026-10-08T17:30:00.000Z'),
+          timer('c'),
+          timer('d', finished: true),
+        ]),
+      );
+      await pumpEventQueue();
+      expect(pushed.reversed.take(2), [
+        ('vs_next_timer', '2026-10-08T17:30:00.000Z'),
+        ('vs_timers', 3),
+      ]);
+
+      bus.publish(VoiceTimersChanged([timer('c')]));
+      await pumpEventQueue();
+      expect(pushed.reversed.take(2), [
+        ('vs_next_timer', null),
+        ('vs_timers', 1),
+      ]);
+    });
+
+    test('vs_list_timers answers with the list', () async {
+      await settings.set(defs.voiceRuntime, 'native');
+      await settings.set(defs.voiceEnabled, true);
+      final action = surface.buildServices().singleWhere(
+        (service) => service['name'] == 'vs_list_timers',
+      );
+      expect(action['supportsResponse'], isTrue);
+      expect(action['args'], isEmpty);
+      commands.register(
+        Command(
+          name: 'voiceTimers',
+          description: 'stub',
+          handler: (_) async => CommandResult.ok({
+            'timers': [timer('a')],
+          }),
+        ),
+      );
+      expect(await surface.handleService('vs_list_timers', const {}), {
+        'timers': [timer('a')],
+      });
+    });
+
+    test('the timer actions run voiceTimerControl', () async {
+      await settings.set(defs.voiceRuntime, 'native');
+      await settings.set(defs.voiceEnabled, true);
+      final names = [for (final s in surface.buildServices()) '${s['name']}'];
+      expect(
+        names,
+        containsAll([
+          'vs_pause_timer',
+          'vs_resume_timer',
+          'vs_cancel_timer',
+          'vs_add_time',
+          'vs_remove_time',
+        ]),
+      );
+      var refuse = false;
+      commands.register(
+        Command(
+          name: 'voiceTimerControl',
+          description: 'stub',
+          handler: (p) async {
+            executed.add(('voiceTimerControl', Map<String, Object?>.from(p)));
+            return refuse
+                ? const CommandResult.fail('no timer')
+                : const CommandResult.ok();
+          },
+        ),
+      );
+      expect(
+        await surface.handleService('vs_add_time', {
+          'timer_id': 'a',
+          'hours': 0,
+          'minutes': 5,
+          'seconds': 0,
+        }),
+        isEmpty,
+      );
+      expect(executed.last.$2, {
+        'timer_id': 'a',
+        'action': 'add',
+        'hours': 0,
+        'minutes': 5,
+        'seconds': 0,
+      });
+      await surface.handleService('vs_resume_timer', {'timer_id': 'a'});
+      expect(executed.last.$2['action'], 'resume');
+      refuse = true;
+      expect(
+        () => surface.handleService('vs_cancel_timer', {'timer_id': 'b'}),
+        throwsA(isA<StateError>()),
+      );
+    });
+  });
+
   test('the catalog carries the full entity set', () async {
     final catalog = await surface.build();
     final ids = [for (final d in catalog) '${d['objectId']}'];
@@ -871,6 +1029,7 @@ void main() {
         'next_screensaver',
         'screensaver_brightness_level',
         'screensaver_timeout',
+        'screensaver_screen_off_after',
         'assistant_volume',
         'media_volume',
         'clock_background',
@@ -881,6 +1040,7 @@ void main() {
         'remote',
         'screensaver_brightness',
         'screensaver',
+        'screensaver_schedule',
         'hold_mode',
         'camera_enabled',
         'rtsp_streaming',
@@ -893,7 +1053,9 @@ void main() {
         'battery',
         'charging',
         'cpu',
+        'cpu_clock',
         'cpu_temp',
+        'battery_temp',
         'ram_free',
         'ram_total',
         'storage_free',
@@ -1140,6 +1302,13 @@ void main() {
     );
   });
 
+  test('the schedule switch turns scheduled screensavers on and off', () async {
+    await surface.handleCommand('screensaver_schedule', true);
+    expect(settings.get(defs.screensaverScheduleEnabled), isTrue);
+    await surface.handleCommand('screensaver_schedule', false);
+    expect(settings.get(defs.screensaverScheduleEnabled), isFalse);
+  });
+
   test('the slide buttons step the showing slideshow', () async {
     executed.clear();
     await surface.handleCommand('screensaver_next_slide', null);
@@ -1162,6 +1331,22 @@ void main() {
     executed.clear();
     await surface.handleCommand('show_music_assistant', null);
     expect(executed.map((e) => e.$1).toList(), ['showMusicAssistant']);
+  });
+
+  test('the Music Library button needs a source to browse', () async {
+    await settings.set(defs.haUrl, '');
+    await settings.set(defs.sendspinMaUrl, '');
+    var ids = [for (final d in await surface.build()) '${d['objectId']}'];
+    expect(ids, isNot(contains('show_music_library')));
+
+    await settings.set(defs.sendspinMaUrl, '192.168.1.10:8095');
+    await settings.set(defs.sendspinMaToken, 'token');
+    ids = [for (final d in await surface.build()) '${d['objectId']}'];
+    expect(ids, contains('show_music_library'));
+
+    executed.clear();
+    await surface.handleCommand('show_music_library', null);
+    expect(executed.map((e) => e.$1).toList(), ['openMusicLibrary']);
   });
 
   test('the Restart device button follows the restart support ask', () async {
@@ -1222,6 +1407,61 @@ void main() {
     },
   );
 
+  test(
+    'a battery with no temperature sensor gets no Battery temperature entity',
+    () async {
+      batteryTemp = null;
+      final catalog = await surface.build();
+      final byObject = {for (final d in catalog) '${d['objectId']}': d};
+      expect(byObject.containsKey('battery_temp'), isFalse);
+      expect(byObject.containsKey('battery'), isTrue);
+      await attach();
+      final byId = {for (final (id, value) in pushed) id: value};
+      expect(byId.containsKey('battery_temp'), isFalse);
+    },
+  );
+
+  test(
+    'a device with no CPU load source gets CPU clock but no CPU usage',
+    () async {
+      cpuUsage = null;
+      final catalog = await surface.build();
+      final byObject = {for (final d in catalog) '${d['objectId']}': d};
+      expect(byObject.containsKey('cpu'), isFalse);
+      expect(byObject.containsKey('cpu_clock'), isTrue);
+      await attach();
+      final byId = {for (final (id, value) in pushed) id: value};
+      expect(byId.containsKey('cpu'), isFalse);
+      expect(byId['cpu_clock'], 1786);
+    },
+  );
+
+  test('a device without cpufreq gets no CPU clock entity', () async {
+    cpuClock = null;
+    final catalog = await surface.build();
+    final byObject = {for (final d in catalog) '${d['objectId']}': d};
+    expect(byObject.containsKey('cpu_clock'), isFalse);
+    expect(byObject.containsKey('cpu'), isTrue);
+  });
+
+  test('CPU clock is a frequency diagnostic in MHz', () async {
+    final catalog = await surface.build();
+    final entity = catalog.firstWhere((d) => d['objectId'] == 'cpu_clock');
+    expect(entity['deviceClass'], 'frequency');
+    expect(entity['unit'], 'MHz');
+    expect(entity['category'], 2);
+    expect(entity['stateClass'], 1);
+  });
+
+  test('Battery temperature is a one-decimal temperature diagnostic', () async {
+    final catalog = await surface.build();
+    final entity = catalog.firstWhere((d) => d['objectId'] == 'battery_temp');
+    expect(entity['deviceClass'], 'temperature');
+    expect(entity['unit'], '°C');
+    expect(entity['category'], 2);
+    expect(entity['accuracyDecimals'], 1);
+  });
+
   test('attach pushes an initial snapshot from the live sources', () async {
     await surface.build();
     await attach();
@@ -1229,7 +1469,9 @@ void main() {
     expect(byId['battery'], 73);
     expect(byId['charging'], true);
     expect(byId['cpu'], 12);
+    expect(byId['cpu_clock'], 1786);
     expect(byId['cpu_temp'], 41);
+    expect(byId['battery_temp'], 31.5);
     expect(byId['ram_free'], 512);
     expect(byId['ram_total'], 4096);
     expect(byId['storage_free'], 16384);
@@ -1496,6 +1738,34 @@ void main() {
   );
 
   test(
+    'screensaver screen off after is a minutes slider clamped to the setting range',
+    () async {
+      final catalog = await surface.build();
+      final screenOff = catalog.firstWhere(
+        (e) => e['objectId'] == 'screensaver_screen_off_after',
+      );
+      expect(screenOff['type'], 'number');
+      expect(screenOff['unit'], 'min');
+      expect(screenOff['deviceClass'], 'duration');
+      expect(screenOff['mode'], 2);
+      expect(screenOff['min'], 0);
+      expect(screenOff['max'], 60);
+      expect(screenOff['step'], 1);
+      expect(screenOff['category'], 1);
+      await attach();
+      pushed.clear();
+      await surface.handleCommand('screensaver_screen_off_after', 15.0);
+      expect(settings.get(defs.screensaverScreenOffMinutes), 15);
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(pushed, contains(('screensaver_screen_off_after', 15)));
+      await surface.handleCommand('screensaver_screen_off_after', 90.0);
+      expect(settings.get(defs.screensaverScreenOffMinutes), 60);
+      await surface.handleCommand('screensaver_screen_off_after', -1.0);
+      expect(settings.get(defs.screensaverScreenOffMinutes), 0);
+    },
+  );
+
+  test(
     'intercom volume is a percent slider listed while the intercom is on',
     () async {
       var catalog = await surface.build();
@@ -1751,6 +2021,39 @@ void main() {
         'lovelace/home',
         'lovelace/cameras',
       ]);
+    });
+
+    test('custom pages join the options and follow the setting', () async {
+      await surface.build();
+      await attach();
+      await settings.setFromJson(
+        defs.haCustomPages.key,
+        jsonEncode([
+          {'name': 'Wall', 'path': '/local/wall.html#den'},
+        ]),
+      );
+      await pumpEventQueue();
+      expect(catalogChanges, 1);
+      var select = (await surface.build()).firstWhere(
+        (d) => d['objectId'] == 'dashboard_view',
+      );
+      expect(select['options'], [
+        'lovelace/home',
+        'lovelace/cameras',
+        'local/wall.html#den',
+      ]);
+
+      // A re-read from the page keeps them, without a second restart.
+      await surface.relearnDashboardViews();
+      expect(catalogChanges, 1);
+
+      await settings.setFromJson(defs.haCustomPages.key, '[]');
+      await pumpEventQueue();
+      expect(catalogChanges, 2);
+      select = (await surface.build()).firstWhere(
+        (d) => d['objectId'] == 'dashboard_view',
+      );
+      expect(select['options'], ['lovelace/home', 'lovelace/cameras']);
     });
 
     test('the page reporting a dashboard change re-reads the list, '
@@ -2302,6 +2605,61 @@ void main() {
         );
         async.elapse(const Duration(seconds: 1));
         expect(lux(), [42]);
+        surface.detach();
+      });
+    });
+  });
+
+  group('the Ambient noise sensor (issue #910)', () {
+    List<Object?> noise() => [
+      for (final p in pushed)
+        if (p.$1 == 'ambient_noise') p.$2,
+    ];
+
+    test('is listed on every kiosk', () async {
+      final catalog = await surface.build();
+      final sensor = catalog.firstWhere(
+        (e) => e['objectId'] == 'ambient_noise',
+      );
+      expect(sensor['name'], 'Ambient noise');
+      expect(sensor['unit'], 'dBFS');
+      expect(sensor['stateClass'], 1);
+    });
+
+    test('follows the meter and goes unknown when it stops', () {
+      fakeAsync((async) {
+        commands.register(
+          Command(
+            name: 'getNoiseLevel',
+            description: 'stub',
+            handler: (_) async =>
+                const CommandResult.ok({'available': true, 'dbfs': -50}),
+          ),
+        );
+        surface.build();
+        async.flushMicrotasks();
+        surface.attach(
+          (objectId, value) async => pushed.add((objectId, value)),
+          (objectId, jpeg) async => images.add((objectId, jpeg)),
+        );
+        async.elapse(const Duration(seconds: 1));
+        expect(noise(), [-50]);
+        bus.publish(
+          const NoiseLevelChanged(available: true, dbfs: -38, held: false),
+        );
+        async.flushMicrotasks();
+        expect(noise(), [-50, -38]);
+        bus.publish(
+          const NoiseLevelChanged(available: false, dbfs: null, held: false),
+        );
+        async.flushMicrotasks();
+        expect(noise(), [-50, -38, null]);
+        // Back again: a first reading, never held by the bucket.
+        bus.publish(
+          const NoiseLevelChanged(available: true, dbfs: -38, held: false),
+        );
+        async.flushMicrotasks();
+        expect(noise().last, -38);
         surface.detach();
       });
     });

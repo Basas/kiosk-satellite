@@ -50,6 +50,18 @@ class DeviceDetails {
     }
   }
 
+  /// Whether videos should start on a platform view instead of Flutter's
+  /// texture: Samsung Exynos devices, whose compressed decoder frames leak
+  /// graphics memory through the texture (issue #894). False where the
+  /// platform cannot say.
+  static Future<bool> platformVideoFirst() async {
+    try {
+      return await _channel.invokeMethod<bool>('platformVideoFirst') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// [tags] as language names in [display]'s language, for the text to
   /// speech Language pickers: en-US reads English (United States). A tag
   /// the platform cannot name, or no platform at all (tests), keeps the tag.
@@ -76,8 +88,9 @@ class DeviceDetails {
     }
   }
 
-  /// Live CPU load (`usage`, 0-100) and temperature (`temp`, °C). Either is
-  /// null when the platform declines; the whole map is empty off-Android.
+  /// Live CPU load (`usage`, 0-100), average clock (`clock`, MHz) and
+  /// temperature (`temp`, °C). Each is null when the platform declines; the
+  /// whole map is empty off-Android.
   static Future<Map<String, Object?>> cpu() async {
     try {
       return await _channel.invokeMapMethod<String, Object?>('cpu') ?? const {};
@@ -112,9 +125,10 @@ class DeviceDetails {
   /// kernel's own word on whether the device has one, `level` the charge
   /// percent screened through [batteryPercent], so a battery-less device
   /// reads null rather than the sentinel Android answers for a property
-  /// it cannot read. Null off Android or when the platform won't say, and
-  /// the caller falls back to the plugin read.
-  static Future<({bool present, int? level})?> battery() async {
+  /// it cannot read. `temp` is the battery's temperature in °C, null when
+  /// the HAL has no sensor behind it. Null off Android or when the platform
+  /// won't say, and the caller falls back to the plugin read.
+  static Future<({bool present, int? level, double? temp})?> battery() async {
     try {
       final raw = await _channel.invokeMapMethod<String, Object?>('battery');
       if (raw == null) return null;
@@ -122,6 +136,7 @@ class DeviceDetails {
       return (
         present: present,
         level: present ? batteryPercent(raw['level']) : null,
+        temp: present ? (raw['temp'] as num?)?.toDouble() : null,
       );
     } catch (_) {
       return null;

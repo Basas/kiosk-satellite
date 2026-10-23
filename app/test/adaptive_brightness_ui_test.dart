@@ -13,7 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// (issue #343): Default brightness stands down with the reason while the
 /// switch is on, the screensaver's brightness sliders carry the
 /// bright-room hint, the page shows the live reading, and a device without
-/// the sensor gets a disabled switch with the reason.
+/// the sensor says so under the switch, which keeps working since a Home
+/// Assistant entity can stand in (issue #911).
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -39,6 +40,7 @@ void main() {
     container.homeAssistant.connectionOk.value = true;
     container.device.hasLightSensor = sensor;
     container.device.lightLux = 12;
+    container.adaptiveLight.seedSensor(present: sensor, lux: 12);
     // Tall enough that a page renders whole: off-screen rows do not exist.
     tester.view.physicalSize = const Size(500, 6000);
     tester.view.devicePixelRatio = 1.0;
@@ -235,12 +237,102 @@ void main() {
     expect(container.settings.get(adaptiveBrightLux), 300);
   });
 
-  testWidgets('without the sensor the switch is disabled with the reason, '
-      'and Default brightness keeps working', (tester) async {
+  // Issue #923: an e-ink reader's backlight wants the screen on in the
+  // dark and off in daylight. Dragging one end past the other turns the
+  // curve over; Minimum and Maximum stay the low and high levels.
+  testWidgets('dragging the dark point above the bright one inverts the '
+      'curve', (tester) async {
+    final container = await open(tester, {
+      'ks.screen.adaptive_brightness': true,
+    });
+    await tab(tester, 'Screen & Audio');
+    await tab(tester, 'Adaptive brightness');
+    final chart = find.descendant(
+      of: find.byType(BrightnessCurveEditor),
+      matching: find.byType(CustomPaint),
+    );
+    final box = tester.getRect(chart.first);
+    final x = box.left + 40 + log(5) / log(1000) * (box.width - 50);
+    final y = box.top + 184 - 0.15 * 170;
+    await tester.dragFrom(Offset(x, y), Offset(0, -0.85 * 170 - 10));
+    await tester.pumpAndSettle();
+    final s = container.settings;
+    expect(s.get(adaptiveInverted), isTrue);
+    expect(s.get(adaptiveMinBrightness), 0.8);
+    expect(s.get(adaptiveMaxBrightness), 1.0);
+    expect(s.get(adaptiveDarkLux), 5);
+    expect(s.get(adaptiveBrightLux), 300);
+    // The middle points kept their places along the way down.
+    expect(s.get(adaptivePoint2Level), closeTo(1 / 3, 1e-3));
+    expect(s.get(adaptivePoint3Level), closeTo(2 / 3, 1e-3));
+    expect(find.text('100%'), findsWidgets);
+  });
+
+  testWidgets('a bright point typed under the dark one inverts the curve', (
+    tester,
+  ) async {
+    final container = await open(tester, {
+      'ks.screen.adaptive_brightness': true,
+    });
+    await tab(tester, 'Screen & Audio');
+    await tab(tester, 'Adaptive brightness');
+    await tester.tap(find.text('300 lx'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).at(1), '0');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    final s = container.settings;
+    expect(s.get(adaptiveInverted), isTrue);
+    expect(s.get(adaptiveMinBrightness), 0);
+    expect(s.get(adaptiveMaxBrightness), 0.15);
+    // Point 2 sits a third of the way down: 10%.
+    expect(find.text('10%'), findsOneWidget);
+  });
+
+  testWidgets('without the sensor the reading says so and the switch '
+      'still works', (tester) async {
     await open(tester, {'ks.screen.adaptive_brightness': true}, sensor: false);
     await tab(tester, 'Screen & Audio');
-    expect(find.text(owns), findsNothing);
+    expect(find.text(owns), findsOneWidget);
     await tab(tester, 'Adaptive brightness');
     expect(find.text(noSensor), findsOneWidget);
+    final toggle = find.widgetWithText(SwitchListTile, 'Adaptive brightness');
+    expect(tester.widget<SwitchListTile>(toggle).onChanged, isNotNull);
+  });
+
+  testWidgets('the entity switch reveals the entity row, which shows the '
+      "entity's reading", (tester) async {
+    final container = await open(tester, {
+      'ks.screen.adaptive_brightness': true,
+    });
+    await tab(tester, 'Screen & Audio');
+    await tab(tester, 'Adaptive brightness');
+    expect(find.text('Use Home Assistant entity'), findsOneWidget);
+    expect(find.text('Light sensor entity'), findsNothing);
+    await container.settings.setFromJson('screen.adaptive_use_entity', true);
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 120));
+    }
+    expect(find.text('Light sensor entity'), findsOneWidget);
+    expect(
+      find.text(
+        'The Home Assistant sensor that reports the light level in lux.',
+      ),
+      findsOneWidget,
+    );
+    // The Ambient light row stays the device sensor's.
+    expect(find.text('12 lx (last known)'), findsOneWidget);
+    await container.settings.setFromJson(
+      'screen.adaptive_light_entity',
+      'sensor.hallway_illuminance',
+    );
+    container.adaptiveLight.seedEntity(lux: 40, live: true);
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 120));
+    }
+    // The entity sits in the field, its reading on the line under it.
+    expect(find.text('sensor.hallway_illuminance'), findsOneWidget);
+    expect(find.text('40 lx'), findsOneWidget);
+    expect(find.text('12 lx (last known)'), findsOneWidget);
   });
 }

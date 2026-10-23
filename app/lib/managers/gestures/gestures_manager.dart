@@ -230,7 +230,9 @@ class GesturesManager extends Manager {
   /// the mappings retunes a live subscription without touching the capture.
   Future<void> _syncClapper() async {
     _detector.targets = _detectorTargets();
-    _detector.strict = _settings.get(defs.clapStrictness) == 'strict';
+    final strictness = _settings.get(defs.clapStrictness);
+    _detector.strict = strictness == 'strict';
+    _detector.largeRoom = strictness == 'large_room';
     final wanted = _clapsWanted;
     if (wanted && _micSub == null) {
       // Ask for the microphone ourselves: on a device with wake word
@@ -350,6 +352,11 @@ class GesturesManager extends Manager {
         return _run('haNavigate', {'path': a['path']});
       case 'url':
         return _run('showLinkPage', {'url': a['url']});
+      case 'refresh':
+        // The plain pull's reload (issue #983), for a dashboard where the
+        // pull itself is turned off because a card such as a map takes
+        // downward drags.
+        return _run('reload', const {});
       case 'camera_view':
         if (a['mode'] == 'hide') {
           return _run('hideCameraView', const {});
@@ -401,10 +408,17 @@ class GesturesManager extends Manager {
       case 'intercom_hangup':
         // The hang up button's path: ends a call being placed, a live
         // call or an announcement, so a call can end from across the room
-        // with claps or a hand. A ringing call is left to Answer and
+        // with claps or a hand. A ringing call is left to Accept and
         // Decline, and with no call the gesture does nothing.
         bus.publish(const IntercomHangupRequested());
         return const CommandResult.ok();
+      case 'intercom_answer':
+        // The Answer and Decline buttons' paths (issue #991), so a kiosk
+        // without a usable screen can take a call. With nothing ringing
+        // the command refuses and the gesture does nothing.
+        return _run('intercomAnswer', const {});
+      case 'intercom_decline':
+        return _run('intercomDecline', const {});
       case 'alarm_stop':
         // The Stop button's path (issue #872): ends a ring, a snooze or a
         // sunrise, so claps or a hand can silence an alarm from bed.
@@ -412,6 +426,17 @@ class GesturesManager extends Manager {
       case 'alarm_snooze':
         // The Snooze button's path: only a ringing alarm snoozes.
         return _run('alarmSnooze', const {'source': 'gesture'});
+      case 'voice_wake':
+        // The wake word without the word, for a button or claps.
+        return _run('voiceWake', const {});
+      case 'voice_stop':
+        // The stop word's job: a ringing timer first, then the turn.
+        return _run('voiceCancel', const {});
+      case 'voice_mute':
+        // A toggle, so one gesture covers both; the setting is the state.
+        return _run('setWakeWordMuted', {
+          'muted': !_settings.get(defs.voiceMute),
+        });
       case 'screensaver':
         return _run('startScreensaver', const {});
       case 'screensaver_stop':
@@ -443,6 +468,16 @@ class GesturesManager extends Manager {
         // kiosk menu's Show in the kiosk menu or Allowed Action switches,
         // the same as the other links.
         return _run('openAlarms', const {});
+      case 'calendar':
+        // Opened by a ks://calendar link, on its view when the link names
+        // one. Like the alarm list, not behind the kiosk menu's switches.
+        return _run('openCalendar', {
+          if (a['view'] is String) 'view': a['view'],
+        });
+      case 'music_library':
+        // Like the calendar, not behind the kiosk menu's switches. It
+        // fails with nothing to browse: no source is set up.
+        return _run('openMusicLibrary', const {});
       case 'ha_script':
         return _runHa(a, 'haCallService', {
           'domain': 'script',

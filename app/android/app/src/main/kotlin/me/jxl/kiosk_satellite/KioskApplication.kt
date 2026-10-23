@@ -73,6 +73,7 @@ class KioskApplication : Application(), CameraXConfig.Provider {
     private lateinit var intercomAudio: IntercomAudio
     private lateinit var realtimeAudio: RealtimeAudio
     private lateinit var mediaSessions: MediaSessionBridge
+    private lateinit var airPlay: AirPlayBridge
     private lateinit var voiceIntents: VoiceIntentBridge
 
     override fun onCreate() {
@@ -113,7 +114,15 @@ class KioskApplication : Application(), CameraXConfig.Provider {
             Log.w("KioskApplication", "CameraX was configured before the app could", e)
         }
 
-        val engine = FlutterEngine(this, RendererGuard.engineArgs(this))
+        // A device without a screen renders nothing, so the engine starts
+        // in software and the renderer crash net (which waits for a first
+        // frame that never comes there) stays out of it.
+        val headless = Headless.active(this)
+        if (headless) Headless.useSoftwareRenderer()
+        val engine = FlutterEngine(
+            this,
+            if (headless) Headless.engineArgs else RendererGuard.engineArgs(this),
+        )
         MainThreadEgl.watch(engine)
         // Plugins before the entrypoint: Dart main() starts the admin server and
         // reads shared_preferences immediately, so shared_preferences,
@@ -144,6 +153,7 @@ class KioskApplication : Application(), CameraXConfig.Provider {
         proximitySensor = ProximitySensor(applicationContext, messenger)
         LogTail(messenger)
         locationSensor = LocationSensor(applicationContext, messenger)
+        OrientationSensor(applicationContext, messenger)
         haptics = HapticsBridge(applicationContext, messenger)
         tapSound = TapSoundBridge(applicationContext, messenger)
         bluetoothProxy = BluetoothProxyBridge(applicationContext, messenger)
@@ -152,7 +162,20 @@ class KioskApplication : Application(), CameraXConfig.Provider {
         intercomAudio = IntercomAudio(applicationContext, messenger)
         realtimeAudio = RealtimeAudio(applicationContext, messenger)
         mediaSessions = MediaSessionBridge(applicationContext, messenger)
+        airPlay = AirPlayBridge(applicationContext, messenger)
         voiceIntents = VoiceIntentBridge(applicationContext, messenger)
+        EventBroadcastBridge(applicationContext, messenger)
+        HardwareKeys.attach(applicationContext, messenger)
+        LedBridge(applicationContext, messenger)
         plugins = me.jxl.kiosk_satellite.plugins.PluginBridge(applicationContext, messenger)
+        // Plugin overlays are platform views on the cached engine, built
+        // with the Activity's context whenever one is attached.
+        engine.platformViewsController.registry.registerViewFactory(
+            me.jxl.kiosk_satellite.plugins.PluginOverlayViews.VIEW_TYPE,
+            plugins.overlayViews,
+        )
+        // Headless, no Activity ever arms the keep-alive service, so the
+        // process does it as it starts, however it was started.
+        if (headless) KioskSatelliteService.ensureRunning(this)
     }
 }

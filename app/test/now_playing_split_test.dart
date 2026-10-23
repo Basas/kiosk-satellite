@@ -117,14 +117,14 @@ void main() {
   }
 
   for (final split in [false, true]) {
-    for (final horizontal in [false, true]) {
+    for (final layout in ['vertical', 'horizontal', 'art_only']) {
       testWidgets(
-        'speaker pill floats without shifting content: split $split, horizontal $horizontal',
+        'speaker pill floats without shifting content: split $split, layout $layout',
         (tester) async {
           await boot(
             tester,
             split: split,
-            prefs: {'ks.sendspin.fullscreen_horizontal': horizontal},
+            prefs: {'ks.sendspin.fullscreen_layout': layout},
           );
           final visibility = find.byKey(
             const ValueKey('speaker-pill-visibility'),
@@ -173,6 +173,57 @@ void main() {
     }
   }
 
+  for (final split in [false, true]) {
+    for (final layout in ['vertical', 'horizontal', 'art_only']) {
+      testWidgets(
+        'audio quality pills sit along the bottom edge: split $split, layout $layout',
+        (tester) async {
+          await boot(
+            tester,
+            split: split,
+            prefs: {
+              'ks.sendspin.fullscreen_layout': layout,
+              'ks.sendspin.audio_quality': true,
+            },
+          );
+          final pills = find.byKey(const ValueKey('audio-quality-pills'));
+          expect(pills, findsNothing);
+          c.sendspin.nowPlaying.value = {
+            ...?c.sendspin.nowPlaying.value,
+            'audioQuality': const {
+              'codec': 'FLAC',
+              'sampleRate': 96000,
+              'bitDepth': 24,
+              'lossless': true,
+              'source': 'Qobuz',
+            },
+          };
+          await tester.pump();
+          expect(pills, findsOneWidget);
+          expect(find.text('Hi-Res'), findsOneWidget);
+          expect(find.text('Qobuz'), findsOneWidget);
+          final pane = tester.getRect(player);
+          final rect = tester.getRect(pills);
+          expect(rect.bottom, pane.bottom);
+          expect(rect.left, greaterThanOrEqualTo(pane.left));
+          expect(rect.right, lessThanOrEqualTo(pane.right));
+          // Below the transport, never over it.
+          if (play.evaluate().isNotEmpty) {
+            expect(tester.getRect(play).bottom, lessThan(rect.top));
+          }
+          expect(tester.takeException(), isNull);
+
+          await c.settings.set(defs.sendspinAudioQuality, false);
+          await tester.pump();
+          await tester.pump();
+          expect(pills, findsNothing);
+          await tester.pumpWidget(const SizedBox());
+          await c.screensaver.dispose();
+        },
+      );
+    }
+  }
+
   testWidgets('speaker pill restarts its timer on touch and key activity', (
     tester,
   ) async {
@@ -209,6 +260,25 @@ void main() {
     await tester.pump();
     expect(tester.widget<AnimatedOpacity>(visibility).opacity, 1);
     // Dispose while the timer is active.
+    await tester.pumpWidget(const SizedBox());
+    await c.screensaver.dispose();
+  });
+
+  testWidgets('speaker pill grows with Text scale but never shrinks', (
+    tester,
+  ) async {
+    await boot(tester);
+    final icon = find.byIcon(Icons.speaker_outlined);
+    expect(tester.getSize(icon).width, closeTo(20, 0.01));
+    await c.settings.set(defs.sendspinFullscreenTextScale, 150);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(tester.getSize(icon).width, closeTo(30, 0.01));
+    await c.settings.set(defs.sendspinFullscreenTextScale, 50);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    expect(tester.getSize(icon).width, closeTo(20, 0.01));
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
     await c.screensaver.dispose();
   });
@@ -374,6 +444,47 @@ void main() {
       },
     );
   }
+
+  testWidgets('speaker menu scales at 70% of its pill', (tester) async {
+    await boot(
+      tester,
+      prefs: {
+        'ks.sendspin.ma_url': 'http://ma.local',
+        'ks.sendspin.ma_token': 'test',
+        'ks.sendspin.client_id': 'tablet',
+        'ks.sendspin.fullscreen_text_scale': 150,
+      },
+    );
+    c.sendspin.apiFactory = ({required baseUrl, required token}) => _GroupApi();
+    final pane = tester.getRect(player);
+    await tester.tapAt(pane.topLeft + const Offset(8, 120));
+    await tester.pump();
+    await tester.tap(
+      find.ancestor(
+        of: find.byIcon(Icons.expand_more_rounded),
+        matching: find.byType(InkWell),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      tester.getSize(find.byIcon(Icons.speaker_group_outlined)).width,
+      closeTo(27, 0.01),
+    );
+    expect(
+      tester
+          .getSize(find.byIcon(Icons.check_box_outline_blank_rounded).first)
+          .width,
+      closeTo(32.4, 0.01),
+    );
+    expect(
+      tester.widget<Text>(find.text('Speaker 0')).style!.fontSize,
+      closeTo(20.25, 0.01),
+    );
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await c.screensaver.dispose();
+  });
 
   testWidgets('widget text shadow switches live independently of metadata', (
     tester,
@@ -545,7 +656,7 @@ void main() {
         tester,
         size: size,
         split: false,
-        prefs: {'ks.sendspin.fullscreen_horizontal': true},
+        prefs: {'ks.sendspin.fullscreen_layout': 'horizontal'},
       );
       final cover = find.byKey(const ValueKey('horizontal-cover'));
       final trackControls = find.byKey(
@@ -591,7 +702,7 @@ void main() {
         tester,
         split: false,
         controls: controls,
-        prefs: {'ks.sendspin.fullscreen_horizontal': true},
+        prefs: {'ks.sendspin.fullscreen_layout': 'horizontal'},
       );
       final half = find.byKey(const ValueKey('horizontal-artwork-half'));
       final cover = find.byKey(const ValueKey('horizontal-cover'));

@@ -52,6 +52,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingRemoteFleetDiscoveryTitle",
     "description": "settingRemoteFleetDiscoveryDescription",
   },
+  "remote.admin_url": {
+    "title": "settingRemoteAdminUrlTitle",
+    "description": "settingRemoteAdminUrlDescription",
+  },
   "service.cpu_awake": {
     "title": "settingServiceCpuAwakeTitle",
     "description": "settingServiceCpuAwakeDescription",
@@ -212,6 +216,18 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingScreenOrientationTitle",
     "description": "settingScreenOrientationDescription",
   },
+  "screen.hide_status_bar": {
+    "title": "settingScreenHideStatusBarTitle",
+    "description": "settingScreenHideStatusBarDescription",
+  },
+  "screen.hide_navigation_bar": {
+    "title": "settingScreenHideNavigationBarTitle",
+    "description": "settingScreenHideNavigationBarDescription",
+  },
+  "screen.show_on_lock_screen": {
+    "title": "settingScreenShowOnLockScreenTitle",
+    "description": "settingScreenShowOnLockScreenDescription",
+  },
   "screen.keep_on": {
     "title": "settingKeepScreenOnTitle",
     "description": "settingKeepScreenOnDescription",
@@ -227,6 +243,14 @@ const settingMessageIds = <String, Map<String, String>>{
   "screen.adaptive_brightness": {
     "title": "settingAdaptiveBrightnessTitle",
     "description": "settingAdaptiveBrightnessDescription",
+  },
+  "screen.adaptive_use_entity": {
+    "title": "settingAdaptiveUseEntityTitle",
+    "description": "settingAdaptiveUseEntityDescription",
+  },
+  "screen.adaptive_light_entity": {
+    "title": "settingAdaptiveLightEntityTitle",
+    "description": "settingAdaptiveLightEntityDescription",
   },
   "screen.adaptive_min_brightness": {
     "title": "settingAdaptiveMinBrightnessTitle",
@@ -291,6 +315,14 @@ const settingMessageIds = <String, Map<String, String>>{
   "screensaver.dashboard_view": {
     "title": "settingScreensaverDashboardViewTitle",
     "description": "settingScreensaverDashboardViewDescription",
+  },
+  "screensaver.dashboard_double_tap": {
+    "title": "settingScreensaverDashboardDoubleTapTitle",
+    "description": "settingScreensaverDashboardDoubleTapDescription",
+  },
+  "screensaver.calendar_view": {
+    "title": "settingScreensaverCalendarViewTitle",
+    "description": "settingScreensaverCalendarViewDescription",
   },
   "screensaver.black_hide_extras": {
     "title": "settingScreensaverBlackHideExtrasTitle",
@@ -363,6 +395,22 @@ const settingMessageIds = <String, Map<String, String>>{
   "screensaver.roller_bg_color": {
     "title": "settingScreensaverRollerBgColorTitle",
     "description": "settingScreensaverRollerBgColorDescription",
+  },
+  "screensaver.hand_numbers": {
+    "title": "settingScreensaverHandNumbersTitle",
+    "description": "settingScreensaverHandNumbersDescription",
+  },
+  "screensaver.hand_seconds": {
+    "title": "settingScreensaverHandSecondsTitle",
+    "description": "settingScreensaverHandSecondsDescription",
+  },
+  "screensaver.hand_color": {
+    "title": "settingScreensaverHandColorTitle",
+    "description": "settingScreensaverHandColorDescription",
+  },
+  "screensaver.hand_bg_color": {
+    "title": "settingScreensaverHandBgColorTitle",
+    "description": "settingScreensaverHandBgColorDescription",
   },
   "screensaver.clock_night": {
     "title": "settingScreensaverClockNightTitle",
@@ -438,7 +486,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "screensaver.screen_off_wake_to_screensaver": {
     "title": "settingScreensaverScreenOffWakeToScreensaverTitle",
-    "description": "settingScreensaverScreenOffWakeToScreensaverDescription",
+    "description": "settingScreensaverScreenOffWakeToScreensaverDescriptionSources",
   },
   "screensaver.schedule_enabled": {
     "title": "settingScreensaverScheduleEnabledTitle",
@@ -828,6 +876,14 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingMotionStartDelayTitle",
     "description": "settingMotionStartDelayDescription",
   },
+  "motion.use_entity": {
+    "title": "settingMotionUseEntityTitle",
+    "description": "settingMotionUseEntityDescription",
+  },
+  "motion.entity": {
+    "title": "settingMotionEntityTitle",
+    "description": "settingMotionEntityDescription",
+  },
   "person.sensor": {
     "title": "settingPersonSensorTitle",
     "description": "settingPersonSensorDescription",
@@ -883,6 +939,18 @@ const settingMessageIds = <String, Map<String, String>>{
   "camera.rtsp.password": {
     "title": "settingCameraRtspPasswordTitle",
     "description": "settingCameraRtspPasswordDescription",
+  },
+  "camera.onvif.events": {
+    "title": "settingCameraOnvifEventsTitle",
+    "description": "settingCameraOnvifEventsDescription",
+  },
+  "camera.onvif.events_source": {
+    "title": "settingCameraOnvifEventsSourceTitle",
+    "description": "settingCameraOnvifEventsSourceDescription",
+  },
+  "camera.onvif.events_entity": {
+    "title": "settingMotionEntityTitle",
+    "description": "settingMotionEntityDescription",
   },
   "camera.allow_h265": {
     "title": "settingCameraAllowH265Title",
@@ -970,7 +1038,7 @@ const settingMessageIds = <String, Map<String, String>>{
   },
   "sendspin.volume_keys": {
     "title": "settingSendspinVolumeKeysTitle",
-    "description": "settingSendspinVolumeKeysDescription",
+    "description": "settingSendspinVolumeKeysGroupDescription",
   },
   "sendspin.volume_key_step": {
     "title": "settingSendspinVolumeKeyStepTitle",
@@ -996,6 +1064,26 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinSonosGroupVolumeTitle",
     "description": "settingSendspinGroupVolumeDescription",
   },
+  "airplay.enabled": {
+    "title": "settingAirplayEnabledTitle",
+    "description": "settingAirplayEnabledDescription",
+  },
+  "airplay.name": {
+    "title": "settingAirplayNameTitle",
+    "description": "settingAirplayNameDescription",
+  },
+  "airplay.sender_volume": {
+    "title": "settingAirplaySenderVolumeTitle",
+    "description": "settingAirplaySenderVolumeDescription",
+  },
+  "airplay.sync_offset_ms": {
+    "title": "settingSendspinSyncOffsetTitle",
+    "description": "settingAirplaySyncOffsetDescription",
+  },
+  "airplay.takeover": {
+    "title": "settingAirplayTakeoverTitle",
+    "description": "settingAirplayTakeoverDescription",
+  },
   "sendspin.ma_url": {
     "title": "settingSendspinMaUrlTitle",
     "description": "settingSendspinMaUrlDescription",
@@ -1003,6 +1091,10 @@ const settingMessageIds = <String, Map<String, String>>{
   "sendspin.ma_token": {
     "title": "settingSendspinMaTokenTitle",
     "description": "settingSendspinMaTokenDescription",
+  },
+  "sendspin.ma_inputs": {
+    "title": "settingSendspinSonosInputsTitle",
+    "description": "settingSendspinSonosInputsDescription",
   },
   "sendspin.ma_shortcut": {
     "title": "settingSendspinMaShortcutTitle",
@@ -1019,6 +1111,10 @@ const settingMessageIds = <String, Map<String, String>>{
   "sendspin.ma_hide_close": {
     "title": "settingSendspinMaHideCloseTitle",
     "description": "settingSendspinMaHideCloseDescription",
+  },
+  "sendspin.ma_zoom": {
+    "title": "settingBrowserZoomTitle",
+    "description": "settingSendspinMaZoomDescription",
   },
   "sendspin.sonos_group_volume": {
     "title": "settingSendspinSonosGroupVolumeTitle",
@@ -1064,6 +1160,14 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinFullscreenOverrideBrightnessTitle",
     "description": "settingSendspinFullscreenOverrideBrightnessDescription",
   },
+  "sendspin.fullscreen_return": {
+    "title": "settingSendspinFullscreenReturnTitle",
+    "description": "settingSendspinFullscreenReturnDescription",
+  },
+  "sendspin.fullscreen_return_view": {
+    "title": "settingSendspinFullscreenReturnViewTitle",
+    "description": "settingSendspinFullscreenReturnViewDescription",
+  },
   "sendspin.fullscreen_controls": {
     "title": "settingSendspinFullscreenControlsTitle",
     "description": "settingSendspinFullscreenControlsDescription",
@@ -1076,9 +1180,9 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingSendspinFullscreenButtonScaleTitle",
     "description": "settingSendspinFullscreenButtonScaleDescription",
   },
-  "sendspin.fullscreen_horizontal": {
-    "title": "settingSendspinFullscreenHorizontalTitle",
-    "description": "settingSendspinFullscreenHorizontalDescription",
+  "sendspin.fullscreen_layout": {
+    "title": "settingSendspinFullscreenLayoutTitle",
+    "description": "settingSendspinFullscreenLayoutDescription",
   },
   "sendspin.fullscreen_double_tap": {
     "title": "settingSendspinFullscreenDoubleTapTitle",
@@ -1099,6 +1203,14 @@ const settingMessageIds = <String, Map<String, String>>{
   "sendspin.speaker_pill": {
     "title": "settingSendspinSpeakerPillTitle",
     "description": "settingSendspinSpeakerPillDescription",
+  },
+  "sendspin.speaker_pill_players": {
+    "title": "settingSendspinSpeakerPillPlayersTitle",
+    "description": "settingSendspinSpeakerPillPlayersDescription",
+  },
+  "sendspin.audio_quality": {
+    "title": "settingSendspinAudioQualityTitle",
+    "description": "settingSendspinAudioQualityDescription",
   },
   "sendspin.queue_art": {
     "title": "settingSendspinQueueArtTitle",
@@ -1171,6 +1283,10 @@ const settingMessageIds = <String, Map<String, String>>{
   "intercom.hangup_key": {
     "title": "settingIntercomHangupKeyTitle",
     "description": "settingIntercomHangupKeyDescription",
+  },
+  "intercom.hangup_key_ringing": {
+    "title": "settingIntercomHangupKeyRingingTitle",
+    "description": "settingIntercomHangupKeyRingingDescription",
   },
   "kiosk.enabled": {
     "title": "settingKioskEnabledTitle",
@@ -1264,6 +1380,10 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingKioskAllowAppsTitle",
     "description": "settingKioskAllowAppsDescription",
   },
+  "kiosk.allowed_apps": {
+    "title": "settingKioskAllowedAppsTitle",
+    "description": "settingKioskAllowedAppsDescription",
+  },
   "home.enabled": {
     "title": "settingHomeLauncherEnabledTitle",
     "description": "settingHomeLauncherEnabledDescription",
@@ -1288,9 +1408,13 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingLauncherAutoReturnSecondsTitle",
     "description": "settingLauncherAutoReturnSecondsDescription",
   },
+  "launcher.auto_return_media": {
+    "title": "settingLauncherAutoReturnMediaTitle",
+    "description": "settingLauncherAutoReturnMediaDescription",
+  },
   "gestures.clap_strictness": {
     "title": "settingClapStrictnessTitle",
-    "description": "settingClapStrictnessDescription",
+    "description": "settingClapDetectionDescription",
   },
   "fleet.leader": {
     "title": "fleetLeadThisFleet",
@@ -1475,6 +1599,26 @@ const settingMessageIds = <String, Map<String, String>>{
   "voice_chimes.announce": {
     "title": "voiceChimeAnnounceTitle",
     "description": "voiceChimeAnnounceDescription",
+  },
+  "voice_chimes.wake_volume": {
+    "title": "voiceChimeWakeVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.done_volume": {
+    "title": "voiceChimeDoneVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.error_volume": {
+    "title": "voiceChimeErrorVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.alert_volume": {
+    "title": "voiceChimeTimerVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
+  },
+  "voice_chimes.announce_volume": {
+    "title": "voiceChimeAnnounceVolumeTitle",
+    "description": "voiceChimeVolumeDescription",
   },
   "screensaver.weather_entity": {
     "title": "settingScreensaverWeatherEntityTitle",
@@ -1679,6 +1823,10 @@ const settingMessageIds = <String, Map<String, String>>{
   "voice.wake_arbitration_window_ms": {
     "title": "settingVoiceWakeArbitrationWindowTitle",
     "description": "settingVoiceWakeArbitrationWindowDescription",
+  },
+  "voice.wake_arbitration_offset_db": {
+    "title": "settingVoiceWakeArbitrationOffsetTitle",
+    "description": "settingVoiceWakeArbitrationOffsetDescription",
   },
   "voice.skin": {
     "title": "voiceSkin",
@@ -1927,5 +2075,401 @@ const settingMessageIds = <String, Map<String, String>>{
   "voice.realtime_gemini_proactive": {
     "title": "settingVoiceRealtimeGeminiProactiveTitle",
     "description": "settingVoiceRealtimeGeminiProactiveDescription",
+  },
+  "screensaver.media_metadata": {
+    "title": "settingScreensaverMediaMetadataTitle",
+    "description": "settingScreensaverMediaMetadataDescription",
+  },
+  "screensaver.media_metadata_date": {
+    "title": "settingScreensaverMediaMetadataDateTitle",
+    "description": "settingScreensaverMediaMetadataDateDescription",
+  },
+  "screensaver.media_metadata_camera": {
+    "title": "settingScreensaverMediaMetadataCameraTitle",
+    "description": "settingScreensaverMediaMetadataCameraDescription",
+  },
+  "screensaver.media_metadata_position": {
+    "title": "settingScreensaverMediaMetadataPositionTitle",
+    "description": "settingScreensaverMediaMetadataPositionDescription",
+  },
+  "screensaver.media_metadata_text_shadow": {
+    "title": "settingScreensaverMediaMetadataTextShadowTitle",
+    "description": "settingScreensaverMediaMetadataTextShadowDescription",
+  },
+  "screensaver.media_metadata_scale": {
+    "title": "settingScreensaverMediaMetadataScaleTitle",
+    "description": "settingScreensaverMediaMetadataScaleDescription",
+  },
+  "screensaver.media_vignette_strength": {
+    "title": "settingScreensaverMediaVignetteStrengthTitle",
+    "description": "settingScreensaverMediaVignetteStrengthDescription",
+  },
+  "screensaver.local_metadata": {
+    "title": "settingScreensaverLocalMetadataTitle",
+    "description": "settingScreensaverLocalMetadataDescription",
+  },
+  "screensaver.local_metadata_date": {
+    "title": "settingScreensaverLocalMetadataDateTitle",
+    "description": "settingScreensaverLocalMetadataDateDescription",
+  },
+  "screensaver.local_metadata_camera": {
+    "title": "settingScreensaverLocalMetadataCameraTitle",
+    "description": "settingScreensaverLocalMetadataCameraDescription",
+  },
+  "screensaver.local_metadata_position": {
+    "title": "settingScreensaverLocalMetadataPositionTitle",
+    "description": "settingScreensaverLocalMetadataPositionDescription",
+  },
+  "screensaver.local_metadata_text_shadow": {
+    "title": "settingScreensaverLocalMetadataTextShadowTitle",
+    "description": "settingScreensaverLocalMetadataTextShadowDescription",
+  },
+  "screensaver.local_metadata_scale": {
+    "title": "settingScreensaverLocalMetadataScaleTitle",
+    "description": "settingScreensaverLocalMetadataScaleDescription",
+  },
+  "screensaver.local_vignette_strength": {
+    "title": "settingScreensaverLocalVignetteStrengthTitle",
+    "description": "settingScreensaverLocalVignetteStrengthDescription",
+  },
+  "ha.custom_pages_socket": {
+    "title": "settingHaCustomPagesSocketTitle",
+    "description": "settingHaCustomPagesSocketDescription",
+  },
+  "browser.url_filter_notice": {
+    "title": "settingBrowserUrlFilterNoticeTitle",
+    "description": "settingBrowserUrlFilterNoticeDescription",
+  },
+  "led.voice.enabled": {
+    "title": "settingLedVoiceEnabledTitle",
+    "description": "settingLedVoiceEnabledDescription",
+  },
+  "led.voice.brightness": {
+    "title": "settingLedVoiceBrightnessTitle",
+    "description": "settingLedVoiceBrightnessDescription",
+  },
+  "led.voice.light_color": {
+    "title": "settingLedVoiceLightColorTitle",
+    "description": "settingLedVoiceLightColorDescription",
+  },
+  "led.voice.accent_color": {
+    "title": "settingLedVoiceAccentColorTitle",
+    "description": "settingLedVoiceAccentColorDescription",
+  },
+  "led.voice.muted": {
+    "title": "settingLedVoiceMutedTitle",
+    "description": "settingLedVoiceMutedDescription",
+  },
+  "led.voice.muted_color": {
+    "title": "settingLedVoiceMutedColorTitle",
+    "description": "settingLedVoiceMutedColorDescription",
+  },
+  "led.timers.enabled": {
+    "title": "settingLedTimersEnabledTitle",
+    "description": "settingLedTimersEnabledDescription",
+  },
+  "led.timers.brightness": {
+    "title": "settingLedTimersBrightnessTitle",
+    "description": "settingLedTimersBrightnessDescription",
+  },
+  "led.timers.light_color": {
+    "title": "settingLedTimersLightColorTitle",
+    "description": "settingLedTimersLightColorDescription",
+  },
+  "led.timers.countdown": {
+    "title": "settingLedTimersCountdownTitle",
+    "description": "settingLedTimersCountdownDescription",
+  },
+  "led.alarms.enabled": {
+    "title": "settingLedAlarmsEnabledTitle",
+    "description": "settingLedAlarmsEnabledDescription",
+  },
+  "led.alarms.brightness": {
+    "title": "settingLedAlarmsBrightnessTitle",
+    "description": "settingLedAlarmsBrightnessDescription",
+  },
+  "led.alarms.light_color": {
+    "title": "settingLedAlarmsLightColorTitle",
+    "description": "settingLedAlarmsLightColorDescription",
+  },
+  "led.intercom.enabled": {
+    "title": "settingLedIntercomEnabledTitle",
+    "description": "settingLedIntercomEnabledDescription",
+  },
+  "led.intercom.brightness": {
+    "title": "settingLedIntercomBrightnessTitle",
+    "description": "settingLedIntercomBrightnessDescription",
+  },
+  "led.intercom.light_color": {
+    "title": "settingLedIntercomLightColorTitle",
+    "description": "settingLedIntercomLightColorDescription",
+  },
+  "led.notifications.enabled": {
+    "title": "settingLedNotificationsEnabledTitle",
+    "description": "settingLedNotificationsEnabledDescription",
+  },
+  "led.notifications.brightness": {
+    "title": "settingLedNotificationsBrightnessTitle",
+    "description": "settingLedNotificationsBrightnessDescription",
+  },
+  "led.notifications.light_color": {
+    "title": "settingLedNotificationsLightColorTitle",
+    "description": "settingLedNotificationsLightColorDescription",
+  },
+  "led.media.enabled": {
+    "title": "settingLedMediaEnabledTitle",
+    "description": "settingLedMediaEnabledDescription",
+  },
+  "led.media.brightness": {
+    "title": "settingLedMediaBrightnessTitle",
+    "description": "settingLedMediaBrightnessDescription",
+  },
+  "led.media.light_color": {
+    "title": "settingLedMediaLightColorTitle",
+    "description": "settingLedMediaLightColorDescription",
+  },
+  "led.media.style": {
+    "title": "settingLedMediaStyleTitle",
+    "description": "settingLedMediaStyleDescription",
+  },
+  "led.idle.enabled": {
+    "title": "settingLedIdleEnabledTitle",
+    "description": "settingLedIdleEnabledDescription",
+  },
+  "led.idle.brightness": {
+    "title": "settingLedIdleBrightnessTitle",
+    "description": "settingLedIdleBrightnessDescription",
+  },
+  "led.idle.light_color": {
+    "title": "settingLedIdleLightColorTitle",
+    "description": "settingLedIdleLightColorDescription",
+  },
+  "led.idle.style": {
+    "title": "settingLedIdleStyleTitle",
+    "description": "settingLedIdleStyleDescription",
+  },
+  "led.animations": {
+    "title": "settingLedAnimationsTitle",
+    "description": "settingLedAnimationsDescription",
+  },
+  "led.enabled": {
+    "title": "settingLedEnabledTitle",
+    "description": "settingLedEnabledDescription",
+  },
+  "screensaver.url_image": {
+    "title": "screensaverModeUrl",
+    "description": "settingScreensaverUrlImageDescription",
+  },
+  "screensaver.url_interval_seconds": {
+    "title": "settingScreensaverLocalIntervalTitle",
+    "description": "settingScreensaverUrlIntervalDescription",
+  },
+  "screensaver.url_transition": {
+    "title": "settingScreensaverLocalTransitionTitle",
+    "description": "settingScreensaverLocalTransitionDescription",
+  },
+  "screensaver.url_fill": {
+    "title": "settingScreensaverLocalFillTitle",
+    "description": "settingScreensaverLocalFillDescription",
+  },
+  "screensaver.url_edge_taps": {
+    "title": "settingScreensaverLocalEdgeTapsTitle",
+    "description": "settingScreensaverLocalEdgeTapsDescription",
+  },
+  "screensaver.url_metadata": {
+    "title": "settingScreensaverLocalMetadataTitle",
+    "description": "settingScreensaverLocalMetadataDescription",
+  },
+  "screensaver.url_metadata_date": {
+    "title": "settingScreensaverLocalMetadataDateTitle",
+    "description": "settingScreensaverLocalMetadataDateDescription",
+  },
+  "screensaver.url_metadata_camera": {
+    "title": "settingScreensaverLocalMetadataCameraTitle",
+    "description": "settingScreensaverLocalMetadataCameraDescription",
+  },
+  "screensaver.url_metadata_position": {
+    "title": "settingScreensaverLocalMetadataPositionTitle",
+    "description": "settingScreensaverLocalMetadataPositionDescription",
+  },
+  "screensaver.url_metadata_text_shadow": {
+    "title": "settingScreensaverLocalMetadataTextShadowTitle",
+    "description": "settingScreensaverLocalMetadataTextShadowDescription",
+  },
+  "screensaver.url_metadata_scale": {
+    "title": "settingScreensaverLocalMetadataScaleTitle",
+    "description": "settingScreensaverLocalMetadataScaleDescription",
+  },
+  "screensaver.url_vignette_strength": {
+    "title": "settingScreensaverLocalVignetteStrengthTitle",
+    "description": "settingScreensaverLocalVignetteStrengthDescription",
+  },
+  "screensaver.clock_ampm": {
+    "title": "settingScreensaverClockAmPmTitle",
+    "description": "settingScreensaverClockAmPmDescription",
+  },
+  "screensaver.weather_clock_ampm": {
+    "title": "settingScreensaverClockAmPmTitle",
+    "description": "settingScreensaverClockAmPmDescription",
+  },
+  "calendar.default_view": {
+    "title": "settingCalendarDefaultViewTitle",
+    "description": "settingCalendarDefaultViewDescription",
+  },
+  "calendar.week_start": {
+    "title": "settingCalendarWeekStartTitle",
+    "description": "settingCalendarWeekStartDescription",
+  },
+  "calendar.weather_entity": {
+    "title": "settingCalendarWeatherEntityTitle",
+    "description": "settingCalendarWeatherEntityDescription",
+  },
+  "calendar.menu": {
+    "title": "settingCalendarMenuTitle",
+    "description": "settingCalendarMenuDescription",
+  },
+  "calendar.idle_close_minutes": {
+    "title": "settingCalendarIdleCloseMinutesTitle",
+    "description": "settingCalendarIdleCloseMinutesDescription",
+  },
+  "kiosk.allow_calendar": {
+    "title": "settingKioskAllowCalendarTitle",
+    "description": "settingKioskAllowCalendarDescription",
+  },
+  "screensaver.celestial_coordinates": {
+    "title": "settingScreensaverCelestialCoordinatesTitle",
+    "description": "settingScreensaverCelestialCoordinatesDescription",
+  },
+  "screensaver.celestial_terrain": {
+    "title": "settingScreensaverCelestialTerrainTitle",
+    "description": "settingScreensaverCelestialTerrainDescription",
+  },
+  "screensaver.celestial_daytime": {
+    "title": "settingScreensaverCelestialDaytimeTitle",
+    "description": "settingScreensaverCelestialDaytimeDescription",
+  },
+  "screensaver.celestial_milky_way": {
+    "title": "settingScreensaverCelestialMilkyWayTitle",
+    "description": "settingScreensaverCelestialMilkyWayDescription",
+  },
+  "screensaver.celestial_planets": {
+    "title": "settingScreensaverCelestialPlanetsTitle",
+    "description": "settingScreensaverCelestialPlanetsDescription",
+  },
+  "screensaver.celestial_deep_sky": {
+    "title": "settingScreensaverCelestialDeepSkyTitle",
+    "description": "settingScreensaverCelestialDeepSkyDescription",
+  },
+  "screensaver.celestial_twinkle": {
+    "title": "settingScreensaverCelestialTwinkleTitle",
+    "description": "settingScreensaverCelestialTwinkleDescription",
+  },
+  "screensaver.celestial_large_moon": {
+    "title": "settingScreensaverCelestialLargeMoonTitle",
+    "description": "settingScreensaverCelestialLargeMoonDescription",
+  },
+  "screensaver.celestial_lines": {
+    "title": "settingScreensaverCelestialLinesTitle",
+    "description": "settingScreensaverCelestialLinesDescription",
+  },
+  "screensaver.celestial_constellation_names": {
+    "title": "settingScreensaverCelestialConstellationNamesTitle",
+    "description": "settingScreensaverCelestialConstellationNamesDescription",
+  },
+  "screensaver.celestial_names": {
+    "title": "settingScreensaverCelestialNamesTitle",
+    "description": "settingScreensaverCelestialNamesDescription",
+  },
+  "screensaver.celestial_compass": {
+    "title": "settingScreensaverCelestialCompassTitle",
+    "description": "settingScreensaverCelestialCompassDescription",
+  },
+  "screensaver.celestial_location": {
+    "title": "settingScreensaverCelestialLocationTitle",
+    "description": "settingScreensaverCelestialLocationDescription",
+  },
+  "screensaver.celestial_entity": {
+    "title": "settingScreensaverCelestialEntityTitle",
+    "description": "settingScreensaverCelestialEntityDescription",
+  },
+  "screensaver.celestial_light_pollution": {
+    "title": "settingScreensaverCelestialLightPollutionTitle",
+    "description": "settingScreensaverCelestialLightPollutionDescription",
+  },
+  "screensaver.celestial_follow_device": {
+    "title": "settingScreensaverCelestialFollowDeviceTitle",
+    "description": "settingScreensaverCelestialFollowDeviceDescription",
+  },
+  "screensaver.celestial_control_coordinates": {
+    "title": "settingScreensaverCelestialControlCoordinatesTitle",
+    "description": "settingScreensaverCelestialControlCoordinatesDescription",
+  },
+  "screensaver.celestial_control_azimuth": {
+    "title": "settingScreensaverCelestialControlAzimuthTitle",
+    "description": "settingScreensaverCelestialControlAzimuthDescription",
+  },
+  "screensaver.celestial_control_altitude": {
+    "title": "settingScreensaverCelestialControlAltitudeTitle",
+    "description": "settingScreensaverCelestialControlAltitudeDescription",
+  },
+  "screensaver.celestial_control_time": {
+    "title": "settingScreensaverCelestialControlTimeTitle",
+    "description": "settingScreensaverCelestialControlTimeDescription",
+  },
+  "screensaver.celestial_control_timelapse": {
+    "title": "settingScreensaverCelestialControlTimelapseTitle",
+    "description": "settingScreensaverCelestialControlTimelapseDescription",
+  },
+  "screensaver.celestial_control_point_at_sky": {
+    "title": "settingScreensaverCelestialControlPointAtSkyTitle",
+    "description": "settingScreensaverCelestialControlPointAtSkyDescription",
+  },
+  "screensaver.celestial_control_moon_phase": {
+    "title": "settingScreensaverCelestialControlMoonPhaseTitle",
+    "description": "settingScreensaverCelestialControlMoonPhaseDescription",
+  },
+  "screensaver.celestial_control_fov": {
+    "title": "settingScreensaverCelestialControlFovTitle",
+    "description": "settingScreensaverCelestialControlFovDescription",
+  },
+  "screensaver.celestial_label_scale": {
+    "title": "settingScreensaverCelestialLabelScaleTitle",
+    "description": "settingScreensaverCelestialLabelScaleDescription",
+  },
+  "screensaver.celestial_control_scale": {
+    "title": "settingScreensaverCelestialControlScaleTitle",
+    "description": "settingScreensaverCelestialControlScaleDescription",
+  },
+  "screensaver.clock_night_turn_off_minutes": {
+    "title": "settingScreensaverClockNightTurnOffMinutesTitle",
+    "description": "settingScreensaverClockNightTurnOffMinutesDescription",
+  },
+  "screensaver.clock_night_turn_off_black": {
+    "title": "settingScreensaverScreenOffBlackTitle",
+    "description": "settingScreensaverScreenOffBlackDescription",
+  },
+  "voice.amazon_locale": {
+    "title": "settingVoiceAmazonLocaleTitle",
+    "description": "settingVoiceAmazonLocaleDescription",
+  },
+  "library.menu": {
+    "title": "settingCalendarMenuTitle",
+    "description": "settingLibraryMenuDescription",
+  },
+  "library.idle_close_minutes": {
+    "title": "settingCalendarIdleCloseMinutesTitle",
+    "description": "settingCalendarIdleCloseMinutesDescription",
+  },
+  "kiosk.allow_music_library": {
+    "title": "libraryTitle",
+    "description": "settingKioskAllowMusicLibraryDescription",
+  },
+  "library.source": {
+    "title": "librarySource",
+    "description": "settingLibrarySourceDescription",
+  },
+  "library.now_playing_button": {
+    "title": "settingLibraryNowPlayingButtonTitle",
+    "description": "settingLibraryNowPlayingButtonDescription",
   },
 };

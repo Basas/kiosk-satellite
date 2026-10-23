@@ -327,6 +327,184 @@ class UiStringsUk extends UiStrings {
   String get launcherEmpty => 'Програм для запуску не знайдено.';
 
   @override
+  String get launcherSearchApps => 'Пошук застосунків';
+
+  @override
+  String get calendarTitle => 'Календар';
+
+  @override
+  String get calendarViewDay => 'День';
+
+  @override
+  String get calendarViewWeek => 'Тиждень';
+
+  @override
+  String get calendarViewMonth => 'Місяць';
+
+  @override
+  String get calendarViewSchedule => 'Розклад';
+
+  @override
+  String get calendarToday => 'Сьогодні';
+
+  @override
+  String get calendarTomorrow => 'Завтра';
+
+  @override
+  String get calendarPrevious => 'Назад';
+
+  @override
+  String get calendarNext => 'Далі';
+
+  @override
+  String get calendarAllDay => 'Увесь день';
+
+  @override
+  String calendarMore(String count) {
+    return 'Ще $count';
+  }
+
+  @override
+  String get calendarUpNext => 'Далі за планом';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return 'через $duration';
+  }
+
+  @override
+  String get calendarHappeningNow => 'Зараз';
+
+  @override
+  String get calendarLaterToday => 'Пізніше сьогодні';
+
+  @override
+  String get calendarNothingElseToday => 'Сьогодні більше нічого';
+
+  @override
+  String get calendarNothingPlanned => 'Нічого не заплановано';
+
+  @override
+  String get calendarNothingThisWeek => 'Цього тижня нічого не заплановано';
+
+  @override
+  String get calendarEmptyTitle => 'Календарів ще немає';
+
+  @override
+  String get calendarEmptyHint =>
+      'Додайте в Налаштування > Календар календарі Home Assistant, які треба показувати.';
+
+  @override
+  String calendarOffline(String time) {
+    return 'Home Assistant недоступний. Показано події станом на $time.';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return 'з $start до $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first і $second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => 'Щодня';
+
+  @override
+  String get calendarRepeatsWeekly => 'Щотижня';
+
+  @override
+  String get calendarRepeatsMonthly => 'Щомісяця';
+
+  @override
+  String get calendarRepeatsYearly => 'Щороку';
+
+  @override
+  String get calendarRepeats => 'Повторюється';
+
+  @override
+  String get calendarDone => 'Готово';
+
+  @override
+  String get calendarCalendarsSection => 'Календарі';
+
+  @override
+  String get calendarAdd => 'Додати календар';
+
+  @override
+  String get calendarAlreadyAdded => 'Цей календар уже є в списку.';
+
+  @override
+  String get calendarOpen => 'Відкрити календар';
+
+  @override
+  String get calendarOpenHint => 'Показати календар на цьому кіоску.';
+
+  @override
+  String get calendarEditName => 'Назва';
+
+  @override
+  String get calendarEditColor => 'Колір';
+
+  @override
+  String get calendarEditPerson => 'Особа';
+
+  @override
+  String get calendarEditPersonHint =>
+      'Показує її фото на позначках календаря.';
+
+  @override
+  String get calendarEditPersonNone => 'Немає';
+
+  @override
+  String get calendarPickCalendar => 'Виберіть календар';
+
+  @override
+  String get calendarPickPerson => 'Виберіть особу';
+
+  @override
+  String get calendarColorTeal => 'Бірюзовий';
+
+  @override
+  String get calendarColorRust => 'Іржавий';
+
+  @override
+  String get calendarColorBlue => 'Синій';
+
+  @override
+  String get calendarColorPlum => 'Сливовий';
+
+  @override
+  String get calendarColorOchre => 'Охра';
+
+  @override
+  String get calendarColorSage => 'Шавлієвий';
+
+  @override
+  String get calendarColorRose => 'Рожевий';
+
+  @override
+  String get calendarColorSlate => 'Сланцевий';
+
+  @override
+  String get calendarColorCustom => 'Власний';
+
+  @override
+  String get calendarWidgetEvents => 'Показано подій';
+
+  @override
+  String get calendarVoiceSection => 'Голосовий календар';
+
+  @override
+  String get calendarVoiceManage => 'Керувати календарем через Voice Satellite';
+
+  @override
+  String get calendarVoiceHint =>
+      'Потрібні blueprint календаря Kiosk Satellite і агент розмови LLM у Home Assistant.';
+
+  @override
   String get cameraViewerTitle => 'Перегляд камери';
 
   @override
@@ -528,6 +706,99 @@ class UiStringsUk extends UiStrings {
   String get commonSelectAll => 'Вибрати все';
 
   @override
+  String get dashboardPickerSearch => 'Пошук видів';
+
+  @override
+  String get dashboardPickerSearchAll => 'Пошук панелей і видів';
+
+  @override
+  String get dashboardPickerCurrent => 'Поточний';
+
+  @override
+  String get dashboardPickerDashboards => 'Панелі керування';
+
+  @override
+  String get dashboardPickerSubviews => 'Вкладені види';
+
+  @override
+  String get dashboardPickerSubview => 'Вкладений вид';
+
+  @override
+  String get dashboardPickerWhole => 'Уся панель';
+
+  @override
+  String get dashboardPickerBuildsOwn => 'Створює власні види';
+
+  @override
+  String get dashboardPickerIngressPage => 'Сторінка Ingress';
+
+  @override
+  String get dashboardPickerWholeHelp =>
+      'Ця панель створює власні види, тому кіоск відкриває її повністю.';
+
+  @override
+  String dashboardPickerViewCount(String count) {
+    return 'Видів: $count';
+  }
+
+  @override
+  String get dashboardPickerOneView => '1 вид';
+
+  @override
+  String get dashboardPickerOffline =>
+      'Не вдалося з\'єднатися з Home Assistant';
+
+  @override
+  String get dashboardPickerOfflineHelp =>
+      'Панелі завантажаться, щойно з\'єднання відновиться.';
+
+  @override
+  String get dashboardPickerTryAgain => 'Спробувати ще раз';
+
+  @override
+  String get dashboardPickerEmpty => 'Панелей ще немає';
+
+  @override
+  String get dashboardPickerEmptyHelp =>
+      'Панелі, які ви додасте в Home Assistant, з\'являться тут.';
+
+  @override
+  String get dashboardPickerNoMatch => 'Немає відповідних видів';
+
+  @override
+  String dashboardPickerSelected(String count) {
+    return 'Вибрано: $count';
+  }
+
+  @override
+  String get dashboardPickerDone => 'Готово';
+
+  @override
+  String get dashboardPickerShowing => 'На екрані';
+
+  @override
+  String get dashboardPickerMissing =>
+      'Цього виду більше немає в Home Assistant. Виберіть інший.';
+
+  @override
+  String get dashboardPickerAddViews => 'Додати види';
+
+  @override
+  String get dashboardPickerDefault => 'Панель керування за замовчуванням';
+
+  @override
+  String get dashboardPickerDefaultHelp =>
+      'Вид, який кіоск показує під час запуску.';
+
+  @override
+  String get dashboardPickerOnePage => '1 сторінка';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return 'Сторінок: $count';
+  }
+
+  @override
   String get dlnaCannotDecode => 'Цей пристрій не може декодувати це відео.';
 
   @override
@@ -696,6 +967,41 @@ class UiStringsUk extends UiStrings {
   String get drawerNoReleaseNotes => 'Примітки до випуску відсутні.';
 
   @override
+  String get entityPickerNoArea => 'Без простору';
+
+  @override
+  String get entityPickerAll => 'Усі';
+
+  @override
+  String get entityPickerChoose => 'Виберіть сутність';
+
+  @override
+  String get entityPickerNoMatch => 'Нічого не знайдено';
+
+  @override
+  String get entityPickerOfflineHelp =>
+      'Сутності завантажаться, щойно з\'єднання відновиться.';
+
+  @override
+  String get entityPickerMissing =>
+      'Цієї сутності більше немає в Home Assistant. Виберіть іншу.';
+
+  @override
+  String get entityPickerOrderHint =>
+      'Перетягніть або скористайтеся стрілками, щоб змінити порядок.';
+
+  @override
+  String get entityPickerFull => 'Видаліть одну, щоб додати іншу.';
+
+  @override
+  String get entityPickerAdd => 'Додати сутності';
+
+  @override
+  String entityPickerShowing(String count, String max) {
+    return 'Показано: $count з $max';
+  }
+
+  @override
   String get esphomeAllExposed => 'Усі доступні сутності надано';
 
   @override
@@ -779,6 +1085,16 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get filesUploaded => 'Завантажено';
+
+  @override
+  String filesUploadingProgress(String current, String total) {
+    return 'Завантаження $current з $total…';
+  }
+
+  @override
+  String filesUploadedCount(String count) {
+    return 'Завантажено файлів: $count';
+  }
 
   @override
   String get filesPermissionMissing =>
@@ -1357,6 +1673,21 @@ class UiStringsUk extends UiStrings {
       'Цей кіоск уже підпорядкований іншому головному пристрою.';
 
   @override
+  String fleetPluginsNames(String names) {
+    return 'Плагіни: $names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return 'Не вдалося встановити $name: $reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return 'Перевстановіть $name на цьому кіоску, щоб синхронізувати його';
+  }
+
+  @override
   String get fleetSwitchKiosk => 'Перемкнути кіоск';
 
   @override
@@ -1453,6 +1784,20 @@ class UiStringsUk extends UiStrings {
   String get fleetMcpServerToken => 'Токен сервера MCP';
 
   @override
+  String get fleetPlugins => 'Плагіни';
+
+  @override
+  String get fleetPluginSecrets => 'Секрети плагінів';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk =>
+      'На цьому кіоску не встановлено плагінів';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      'Кіоски з цим профілем встановлюють їх і беруть їхні налаштування з цього кіоску.';
+
+  @override
   String get fleetUpdateTheFleet => 'Оновити групу';
 
   @override
@@ -1507,6 +1852,12 @@ class UiStringsUk extends UiStrings {
   String get gestureIntercomHangup => 'Завершити виклик інтеркому';
 
   @override
+  String get gestureIntercomAnswer => 'Прийняти виклик інтеркому';
+
+  @override
+  String get gestureIntercomDecline => 'Відхилити виклик інтеркому';
+
+  @override
   String get gestureAlarmStop => 'Зупинити будильник';
 
   @override
@@ -1520,6 +1871,9 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get gestureHoldMode => 'Перемкнути режим блокування';
+
+  @override
+  String get gestureRefresh => 'Оновити панель керування';
 
   @override
   String get gestureMediaPlayPause => 'Відтворити або призупинити медіа';
@@ -1538,6 +1892,12 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get gestureAndroidSettings => 'Відкрити налаштування Android';
+
+  @override
+  String get gestureOpenCalendar => 'Відкрити календар';
+
+  @override
+  String get gestureOpenMusicLibrary => 'Відкрити музичну бібліотеку';
 
   @override
   String get gestureService => 'Викликати службу';
@@ -1577,19 +1937,6 @@ class UiStringsUk extends UiStrings {
   String get gestureUriError => 'Введіть повний URI.';
 
   @override
-  String get gestureNoDashboards => 'Немає панелей керування';
-
-  @override
-  String get gestureDashboardsFailed => 'Не вдалося отримати список панелей';
-
-  @override
-  String get gestureHaConnected => 'Чи підключено Home Assistant?';
-
-  @override
-  String get gestureDashboardsHelp =>
-      'Не вдалося отримати список панелей керування. Чи підключено Home Assistant?';
-
-  @override
   String get gestureCameraTitle => 'Перегляд камери';
 
   @override
@@ -1605,6 +1952,15 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get gestureIntercomEmpty => 'У мережі ще не знайдено жодного кіоска.';
+
+  @override
+  String get gestureVoiceWake => 'Почати голосову команду';
+
+  @override
+  String get gestureVoiceStop => 'Зупинити голосового асистента';
+
+  @override
+  String get gestureVoiceMute => 'Вимкнути або ввімкнути звук Voice Satellite';
 
   @override
   String gestureDescribeCornerTaps(String count, String corner) {
@@ -1710,6 +2066,21 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Натиснути кнопку $button';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Двічі натиснути кнопку $button';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'Утримувати кнопку $button';
+  }
+
+  @override
   String get gestureValid => 'Виглядає добре.';
 
   @override
@@ -1742,9 +2113,6 @@ class UiStringsUk extends UiStrings {
   String get gestureAutomationEntity => 'Сутність автоматизації';
 
   @override
-  String get gestureDomain => 'Домен';
-
-  @override
   String get gestureEntityOptional => 'Сутність (необов\'язково)';
 
   @override
@@ -1752,9 +2120,6 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get gestureServiceTitle => 'Викликати службу Home Assistant';
-
-  @override
-  String get gestureServiceRequired => 'Домен та служба є обов\'язковими.';
 
   @override
   String get gestureServiceJson => 'Дані служби мають бути об\'єктом JSON.';
@@ -1773,6 +2138,15 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get gestureEventJson => 'Дані події мають бути об\'єктом JSON.';
+
+  @override
+  String get gestureServiceSearch => 'Пошук служб';
+
+  @override
+  String get gestureServiceChoose => 'Виберіть службу';
+
+  @override
+  String get gestureServiceNoEntity => 'Ця служба його не використовує';
 
   @override
   String get gestureTester => 'Тестер жестів руками';
@@ -2033,6 +2407,22 @@ class UiStringsUk extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Спочатку ввімкніть плагін із тригерами у менеджері плагінів.';
+
+  @override
+  String get gestureButton => 'Кнопка';
+
+  @override
+  String get gesturePress => 'Натискання';
+
+  @override
+  String get gestureDoublePress => 'Подвійне натискання';
+
+  @override
+  String get gestureHoldPress => 'Утримання';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Натискання, яке не використовує жоден жест, зберігає свою роль: Дія відповідає, зупиняє або відхиляє те, що дзвонить, а інакше починає голосову команду, Мікрофон вимикає Voice Satellite, а кнопки гучності змінюють гучність.';
 
   @override
   String get intercomCall => 'Виклик';
@@ -2459,6 +2849,294 @@ class UiStringsUk extends UiStrings {
   String get logsUnknown => 'невідомо';
 
   @override
+  String get libraryTitle => 'Музична бібліотека';
+
+  @override
+  String get librarySource => 'Джерело';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Бібліотека, пошук і радіо';
+
+  @override
+  String get librarySourceHaHint => 'Медіа кожного динаміка';
+
+  @override
+  String get librarySourceSonosHint => 'Улюблене та плейлисти';
+
+  @override
+  String get libraryDiscover => 'Огляд';
+
+  @override
+  String get librarySearch => 'Пошук';
+
+  @override
+  String get libraryBrowse => 'Перегляд';
+
+  @override
+  String get libraryLibrary => 'Бібліотека';
+
+  @override
+  String get libraryArtists => 'Виконавці';
+
+  @override
+  String get libraryAlbums => 'Альбоми';
+
+  @override
+  String get libraryTracks => 'Треки';
+
+  @override
+  String get libraryPlaylists => 'Плейлисти';
+
+  @override
+  String get libraryRadio => 'Радіо';
+
+  @override
+  String get libraryPodcasts => 'Подкасти';
+
+  @override
+  String get libraryAudiobooks => 'Аудіокниги';
+
+  @override
+  String get libraryFavorites => 'Улюблене';
+
+  @override
+  String get librarySonosPlaylists => 'Плейлисти Sonos';
+
+  @override
+  String get libraryRecentlyPlayed => 'Нещодавно відтворене';
+
+  @override
+  String get libraryRecentlyAdded => 'Нещодавно додане';
+
+  @override
+  String get libraryMoreResults => 'Інші результати';
+
+  @override
+  String get libraryTopTracks => 'Популярні треки';
+
+  @override
+  String get libraryKindArtist => 'Виконавець';
+
+  @override
+  String get libraryKindAlbum => 'Альбом';
+
+  @override
+  String get libraryKindTrack => 'Трек';
+
+  @override
+  String get libraryKindPlaylist => 'Плейлист';
+
+  @override
+  String get libraryKindRadio => 'Радіо';
+
+  @override
+  String get libraryKindPodcast => 'Подкаст';
+
+  @override
+  String get libraryKindEpisode => 'Епізод';
+
+  @override
+  String get libraryKindAudiobook => 'Аудіокнига';
+
+  @override
+  String get libraryOneTrack => '1 трек';
+
+  @override
+  String libraryTrackCount(String count) {
+    return 'Треків: $count';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes хв';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours год $minutes хв';
+  }
+
+  @override
+  String get librarySearchHint => 'Виконавці, альбоми, треки';
+
+  @override
+  String get librarySearchClear => 'Очистити пошук';
+
+  @override
+  String get librarySearchAll => 'Усе';
+
+  @override
+  String get librarySearchPrompt => 'Шукайте виконавців, альбоми, треки тощо.';
+
+  @override
+  String get libraryEmpty => 'Тут поки нічого немає.';
+
+  @override
+  String get libraryLoadFailed => 'Не вдалося завантажити.';
+
+  @override
+  String get libraryNoSource =>
+      'Налаштуйте Music Assistant, Home Assistant або динамік Sonos, щоб переглядати музику.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Виберіть динамік, щоб побачити медіа, які він може відтворювати.';
+
+  @override
+  String get libraryChooseSpeaker => 'Виберіть динамік';
+
+  @override
+  String get libraryPickSpeakerHint => 'Виберіть динамік для відтворення.';
+
+  @override
+  String get libraryPlay => 'Відтворити';
+
+  @override
+  String get libraryOpenNowPlaying => 'Відкрити «Зараз грає»';
+
+  @override
+  String get libraryNothingPlaying => 'Нічого не відтворюється';
+
+  @override
+  String get libraryMore => 'Інші параметри';
+
+  @override
+  String get libraryPlayNow => 'Відтворити зараз';
+
+  @override
+  String get libraryPlayNext => 'Відтворити наступним';
+
+  @override
+  String get libraryAddToQueue => 'Додати до черги';
+
+  @override
+  String get libraryStartRadio => 'Запустити радіо';
+
+  @override
+  String get libraryGoToArtist => 'Перейти до виконавця';
+
+  @override
+  String get libraryAddFavorite => 'Додати до улюбленого';
+
+  @override
+  String get libraryRemoveFavorite => 'Вилучити з улюбленого';
+
+  @override
+  String get libraryAddedFavorite => 'Додано до улюбленого';
+
+  @override
+  String get libraryRemovedFavorite => 'Вилучено з улюбленого';
+
+  @override
+  String get libraryFavoriteFailed => 'Не вдалося змінити улюблене';
+
+  @override
+  String get libraryPlaysNext => 'Відтвориться наступним';
+
+  @override
+  String get libraryAddedToQueue => 'Додано до черги';
+
+  @override
+  String get libraryView => 'Переглянути';
+
+  @override
+  String get libraryPlayFailed => 'Не вдалося відтворити';
+
+  @override
+  String get librarySpeakers => 'Динаміки';
+
+  @override
+  String get libraryPlayingOn => 'Відтворюється на';
+
+  @override
+  String get libraryOtherSpeakers => 'Інші динаміки';
+
+  @override
+  String get libraryNoOtherSpeakers => 'Інших динаміків немає.';
+
+  @override
+  String get libraryThisDevice => 'Цей пристрій';
+
+  @override
+  String get libraryUnavailable => 'Недоступний';
+
+  @override
+  String get libraryGroup => 'Групувати';
+
+  @override
+  String get libraryGroupAll => 'Група';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Групувати з $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Згруповані динаміки синхронно відтворюють ту саму музику.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Додати пункт «Музична бібліотека» до меню кіоска.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Переглядати музику та відтворювати її на динаміку.';
+
+  @override
+  String get libraryPageHint => 'Перегляд музики та відтворення на динаміку';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'Звідки бібліотека бере музику. «Автоматично» починає з джерела динаміка, за яким стежить «Зараз грає».';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle => 'Показувати в «Зараз грає»';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Додати кнопку «Музична бібліотека» поруч із кнопкою закриття.';
+
+  @override
+  String get libraryQueueTitle => 'Черга';
+
+  @override
+  String get libraryCloseQueue => 'Закрити чергу';
+
+  @override
+  String get libraryClear => 'Очистити';
+
+  @override
+  String get libraryClearQueueTitle => 'Очистити чергу?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'Музика зупиниться, а всі треки буде вилучено з черги.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Вилучити з черги';
+
+  @override
+  String get libraryReorder => 'Перетягніть, щоб змінити порядок';
+
+  @override
+  String get libraryQueueFailed => 'Не вдалося змінити чергу';
+
+  @override
   String get offlineDashboard => 'Панель керування недоступна';
 
   @override
@@ -2573,6 +3251,30 @@ class UiStringsUk extends UiStrings {
   String get mediaCannotControl => 'команда не підтримується або не надіслана';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'CD-якість';
+
+  @override
+  String get mediaAudioLossy => 'Із втратами';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits біт';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate кГц';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate кбіт/с';
+  }
+
+  @override
   String get mediaNothingQueued => 'У черзі нічого немає';
 
   @override
@@ -2607,6 +3309,17 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => 'Скануйте код';
+
+  @override
+  String get pluginScanHelp => 'Тримайте код у рамці.';
+
+  @override
+  String pluginScanSource(String name) {
+    return 'Запит від $name';
+  }
+
+  @override
   String get pluginActions => 'Дії';
 
   @override
@@ -2631,17 +3344,20 @@ class UiStringsUk extends UiStrings {
       'Додає кнопку до пристрою ESPHome кіоска. Потрібні ESPHome та нативні сутності.';
 
   @override
-  String get pluginSelectAnEntity => 'Виберіть сутність';
-
-  @override
-  String pluginChooseName(String name) {
-    return 'Вибрати $name';
-  }
-
-  @override
   String pluginConfigureName(String name) {
     return 'Налаштувати $name';
   }
+
+  @override
+  String get pluginThePluginDidNotAnswerInTime => 'Плагін не відповів вчасно.';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem =>
+      'Варіантів поки немає. Оновіть, щоб знайти їх.';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed =>
+      'Цього варіанта більше немає в списку.';
 
   @override
   String get pluginPlugin => 'Плагін';
@@ -2729,6 +3445,40 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Показати пароль';
+
+  @override
+  String get pluginHidePassword => 'Сховати пароль';
+
+  @override
+  String get pluginUntitled => 'Без назви';
+
+  @override
+  String get pluginSearchIcons => 'Пошук піктограм';
+
+  @override
+  String get pluginChooseIcon => 'Виберіть піктограму';
+
+  @override
+  String get pluginSearchCameraViews => 'Пошук виглядів камер';
+
+  @override
+  String get pluginChooseCameraView => 'Виберіть вигляд камер';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Цього вигляду камер більше немає. Виберіть інший.';
+
+  @override
+  String get pluginDragToReorder => 'Перетягніть для зміни порядку';
+
+  @override
+  String get pluginDone => 'Готово';
+
+  @override
+  String get pluginRequired => 'Обов\'язково';
+
+  @override
   String get pluginAddPlugin => 'Додати плагін';
 
   @override
@@ -2782,6 +3532,109 @@ class UiStringsUk extends UiStrings {
   @override
   String get pluginCouldNotReadTheSelectedZip =>
       'Не вдалося прочитати вибраний ZIP-архів';
+
+  @override
+  String get pluginBrowsePlugins => 'Огляд плагінів';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Знайдіть плагіни, створені спільнотою';
+
+  @override
+  String get pluginSearchPlugins => 'Пошук плагінів';
+
+  @override
+  String get pluginUpdate => 'Оновити';
+
+  @override
+  String get pluginInstalled => 'Встановлено';
+
+  @override
+  String get pluginStars => 'Зірки';
+
+  @override
+  String get pluginDownloads => 'Завантаження';
+
+  @override
+  String get pluginActiveInstalls => 'Активні встановлення';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch =>
+      'Немає плагінів, що відповідають пошуку.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'У Плагінах спільноти ще немає плагінів.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Надіслати свій плагін';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'Додайте свій плагін до Плагінів спільноти.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'Не вдалося з\'єднатися з Плагінами спільноти. Перевірте підключення до інтернету.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'Не вдалося завантажити Плагіни спільноти. Спробуйте пізніше.';
+
+  @override
+  String get pluginTurnOn => 'Увімкнути';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Увімкніть «Увімкнути плагіни», щоб встановити цей плагін.';
+
+  @override
+  String get pluginPreviousPage => 'Попередня сторінка';
+
+  @override
+  String get pluginNextPage => 'Наступна сторінка';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Сторінка $page з $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Сортувати за';
+
+  @override
+  String get pluginSortMostStars => 'Найбільше зірок';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Нещодавно оновлені';
+
+  @override
+  String get pluginSortNewest => 'Найновіші';
+
+  @override
+  String get pluginSortName => 'Назва';
+
+  @override
+  String get pluginSortMostDownloads => 'Найбільше завантажень';
+
+  @override
+  String get pluginPluginsPerPage => 'Плагінів на сторінці';
+
+  @override
+  String pluginCountPerPage(String count) {
+    return '$count на сторінці';
+  }
+
+  @override
+  String pluginByAuthor(String author) {
+    return 'від $author';
+  }
+
+  @override
+  String get pluginListedChip => 'Є в Плагінах спільноти';
+
+  @override
+  String get pluginNotListedChip => 'Немає в Плагінах спільноти';
 
   @override
   String get pluginCharts => 'Графіки';
@@ -2959,9 +3812,6 @@ class UiStringsUk extends UiStrings {
       'Контрольна сума релізу має відповідати SHA-256 дайджесту ресурсу GitHub';
 
   @override
-  String get pluginErrorTagRevision => 'GitHub не повернув ревізію тега релізу';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Підтвердіть, що ви довіряєте автору плагіна';
 
@@ -3037,10 +3887,6 @@ class UiStringsUk extends UiStrings {
       'Цей плагін не зупинився коректно. Перезапустіть Kiosk Satellite перед його заміною.';
 
   @override
-  String get pluginErrorPluginLimit =>
-      'Можна встановити щонайбільше 8 плагінів';
-
-  @override
   String get pluginErrorAlreadyInstalled => 'Цей пакет уже встановлено';
 
   @override
@@ -3081,6 +3927,9 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get pluginErrorAndroidOld => 'Версія Android надто стара';
+
+  @override
+  String get pluginErrorNeedsScreen => 'Цьому плагіну потрібен екран';
 
   @override
   String get pluginErrorNativeIntegrity =>
@@ -3237,6 +4086,34 @@ class UiStringsUk extends UiStrings {
       'Недійсний або дубльований ідентифікатор тригера';
 
   @override
+  String get pluginErrorListSetting => 'Недійсне налаштування списку';
+
+  @override
+  String get pluginErrorSettingCondition => 'Недійсна умова налаштування';
+
+  @override
+  String get pluginErrorIcon => 'Очікується назва піктограми MDI';
+
+  @override
+  String get pluginErrorDashboard => 'Очікується шлях до панелі керування';
+
+  @override
+  String get pluginErrorCameraView => 'Очікується ідентифікатор вигляду камер';
+
+  @override
+  String get pluginErrorListValue => 'Очікується налаштування списку';
+
+  @override
+  String get pluginErrorListCount => 'У списку забагато або замало елементів';
+
+  @override
+  String get pluginErrorRequiredField => 'Заповніть усі обов\'язкові поля';
+
+  @override
+  String get pluginErrorListSize =>
+      'Налаштування списку можуть займати не більше 32 КБ';
+
+  @override
   String get remoteDisableTitle => 'Вимкнути віддалене керування?';
 
   @override
@@ -3357,6 +4234,16 @@ class UiStringsUk extends UiStrings {
   @override
   String overviewInstallHelp(String version) {
     return 'Kiosk Satellite $version готовий до встановлення. Встановлення підтверджується на екрані планшета.';
+  }
+
+  @override
+  String overviewInstallSilentHelp(String version) {
+    return 'Kiosk Satellite $version готовий до встановлення. Він встановлюється без підтвердження на пристрої.';
+  }
+
+  @override
+  String overviewInstallHeadlessHelp(String version) {
+    return 'Kiosk Satellite $version готовий до встановлення. Цей пристрій не має екрана для підтвердження, тож зробіть Kiosk Satellite власником пристрою, скористайтеся Shizuku або встановіть через adb.';
   }
 
   @override
@@ -3659,6 +4546,12 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get overviewShowingCustomPages => 'Показ власних сторінок';
+
+  @override
+  String get overviewHeadlessMode => 'Режим без екрана';
+
+  @override
   String get overviewNoScreenshot => 'Немає знімка екрана';
 
   @override
@@ -3691,21 +4584,6 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get overviewGoView => 'Перейти до вигляду';
-
-  @override
-  String get overviewLoadingViews => 'Завантаження виглядів…';
-
-  @override
-  String get overviewPickView => 'Оберіть вигляд панелі…';
-
-  @override
-  String get overviewDefaultView => 'Стандартний вигляд';
-
-  @override
-  String get overviewNoDashboards => 'Панелей керування не знайдено';
-
-  @override
-  String get overviewViewsUnavailable => 'Вигляди недоступні';
 
   @override
   String get screensaverNoPhotos =>
@@ -3752,6 +4630,13 @@ class UiStringsUk extends UiStrings {
   @override
   String get screensaverVideosTooLarge =>
       'Усі відео в цьому списку завеликі для відтворення на цьому пристрої.';
+
+  @override
+  String get screensaverUrlNotSet =>
+      'URL-адресу зображення не задано. Додайте її у Налаштуваннях.';
+
+  @override
+  String get screensaverUrlLoadFailed => 'Не вдалося завантажити зображення.';
 
   @override
   String get settingKioskAllowAlarmsTitle => 'Будильники';
@@ -3905,6 +4790,14 @@ class UiStringsUk extends UiStrings {
       'Час без взаємодії в іншому застосунку до повернення кіоска.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle =>
+      'Чекати під час відтворення';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Не повертатися, поки відтворюється відео або музика.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite може повертатися на передній план і помічати дотики в іншому застосунку.';
 
@@ -3925,8 +4818,95 @@ class UiStringsUk extends UiStrings {
       'Android може призупинити застосунок у фоні, і призупинений таймер ніколи не поверне кіоск. Діалог дозволу зʼявиться на планшеті.';
 
   @override
+  String get launcherNotificationAccessHeld =>
+      'Кіоск не повертається, поки інший застосунок відтворює відео або музику.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Без цього кіоск не знає, коли відтворюється відео або музика, і все одно повертається.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Без цього кіоск не знає, коли відтворюється відео або музика, і все одно повертається. Екран дозволу зʼявиться на планшеті.';
+
+  @override
   String get launcherPermissionsSearch =>
       'Дозволи, на які спирається функція автоматичного повернення.';
+
+  @override
+  String get settingCalendarDefaultViewTitle => 'Вигляд за замовчуванням';
+
+  @override
+  String get settingCalendarDefaultViewDescription =>
+      'Вигляд, з яким відкривається календар.';
+
+  @override
+  String get settingCalendarWeekStartTitle => 'Тиждень починається з';
+
+  @override
+  String get settingCalendarWeekStartDescription =>
+      'Відповідає мові пристрою, якщо не вибрано інше.';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => 'Погода';
+
+  @override
+  String get settingCalendarWeatherEntityDescription =>
+      'Додає прогноз до кожного дня.';
+
+  @override
+  String get settingCalendarMenuTitle => 'Показувати в меню кіоска';
+
+  @override
+  String get settingCalendarMenuDescription =>
+      'Додати пункт «Календар» до меню кіоска.';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle =>
+      'Закривати під час бездіяльності';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription =>
+      'Повертатися до панелі керування після такого часу без дотиків.';
+
+  @override
+  String get settingKioskAllowCalendarTitle => 'Календар';
+
+  @override
+  String get settingKioskAllowCalendarDescription =>
+      'Відкривати сімейний календар з меню кіоска.';
+
+  @override
+  String get calendarWeekStartLocale => 'Як у мові';
+
+  @override
+  String get calendarWeekStartSunday => 'Неділя';
+
+  @override
+  String get calendarWeekStartMonday => 'Понеділок';
+
+  @override
+  String get calendarWeekStartSaturday => 'Субота';
+
+  @override
+  String get calendarIdleNever => 'Ніколи';
+
+  @override
+  String get calendarIdle1Minute => '1 хвилина';
+
+  @override
+  String get calendarIdle2Minutes => '2 хвилини';
+
+  @override
+  String get settingsMenuCalendar => 'Календар';
+
+  @override
+  String get settingsMenuCalendarSummary =>
+      'Сімейні календарі з Home Assistant';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips =>
+      'календарі, приховані своїми позначками';
 
   @override
   String get settingCameraEnabledTitle => 'Увімкнути камеру';
@@ -4400,6 +5380,44 @@ class UiStringsUk extends UiStrings {
       'Інші розміри камери недоступні в поточній конфігурації захоплення.';
 
   @override
+  String get cameraMotionEventsHeading => 'Події руху';
+
+  @override
+  String get settingCameraOnvifEventsTitle => 'Надсилати події руху';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      'Повідомляти клієнтів ONVIF, як-от NVR, коли виявлено рух.';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => 'Джерело руху';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription =>
+      'Датчик, який надсилає події руху.';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => 'Датчик руху камери';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => 'Датчик людей';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Датчик Home Assistant';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      'Датчик руху камери вимкнено. Увімкніть його в розділі Камера планшета > Датчик руху.';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      'Аналіз руху під час трансляції вимкнено, тому камера не може виявляти рух, поки підключено глядача.';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff =>
+      'Датчик людей вимкнено. Увімкніть його в розділі Камера планшета > Датчик людей.';
+
+  @override
   String get cameraOverlaysHeading => 'Накладання';
 
   @override
@@ -4754,6 +5772,9 @@ class UiStringsUk extends UiStrings {
   String get cameraStreamsEditView => 'Редагувати вигляд';
 
   @override
+  String get cameraStreamsViewId => 'ID вигляду';
+
+  @override
   String get cameraStreamsShowNames => 'Показувати назви камер';
 
   @override
@@ -5062,6 +6083,49 @@ class UiStringsUk extends UiStrings {
   String get deviceOpenSettingsDevice => 'Відкрити налаштування на пристрої';
 
   @override
+  String get deviceHardwareButtons => 'Апаратні кнопки';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'Кнопки пристрою доходять до жестів і Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'Кнопки пристрою нічого не роблять, доки не ввімкнено службу кнопок.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, потім те саме для BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbStorage =>
+      'Цей пристрій не має екрана. Надайте через adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, потім те саме для WRITE_EXTERNAL_STORAGE';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'Цей пристрій не має екрана. Увімкніть через adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, потім adb shell settings put secure accessibility_enabled 1';
+
+  @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'Службу кнопок увімкнено, але вона не запустилася. Перезавантажте пристрій, щоб запустити її: adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Апаратне забезпечення';
 
   @override
@@ -5092,10 +6156,16 @@ class UiStringsUk extends UiStrings {
   String get deviceCpuUsage => 'Використання процесора';
 
   @override
+  String get deviceCpuClock => 'Частота процесора';
+
+  @override
   String get deviceCpuTemp => 'Температура процесора';
 
   @override
   String get deviceBatteryLevel => 'Рівень заряду акумулятора';
+
+  @override
+  String get deviceBatteryTemp => 'Температура акумулятора';
 
   @override
   String get deviceScreenBrightness => 'Яскравість екрана';
@@ -5401,6 +6471,21 @@ class UiStringsUk extends UiStrings {
   @override
   String get settingRemoteFleetDiscoveryDescription =>
       'Оголошувати цей пристрій у мережі та відображати інші кіоски у віддаленому адмініструванні для перемикання між ними.';
+
+  @override
+  String get settingRemoteAdminUrlTitle => 'URL адміністрування';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Адреса, яку інші кіоски відкривають у «Перемкнути кіоск», щоб перейти до цього, наприклад ім\'я зворотного проксі. Залиште порожнім, щоб використовувати його мережеву адресу.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Введіть дійсну адресу, наприклад https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Введіть лише адресу, без шляху. Приклад: https://kiosk.example.com';
 
   @override
   String get deviceRemotePage => 'Віддалене адміністрування';
@@ -6661,6 +7746,10 @@ class UiStringsUk extends UiStrings {
       'Геолокацію вимкнено в налаштуваннях пристрою, тому приймач не передає даних.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Дозволено лише приблизне місцезнаходження, а GPS-приймачу потрібне точне.';
+
+  @override
   String get esphomeLocationGranted =>
       'Датчики місцезнаходження можуть зчитувати дані GPS-приймача.';
 
@@ -6761,14 +7850,17 @@ class UiStringsUk extends UiStrings {
   String get settingClapStrictnessTitle => 'Розпізнавання оплесків';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Суворий режим вимагає гучніших і рівномірніших оплесків; спробуйте його, якщо побутовий шум викликає хибні спрацьовування.';
+  String get settingClapDetectionDescription =>
+      'Суворий режим вимагає гучніших і рівномірніших оплесків. «Велике приміщення» дає оплескам час затихнути в приміщенні з луною.';
 
   @override
   String get gestureStrictnessStandard => 'Стандартне';
 
   @override
   String get gestureStrictnessStrict => 'Суворе';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Велике приміщення';
 
   @override
   String get gestureOff => 'Жести вимкнено';
@@ -6827,6 +7919,88 @@ class UiStringsUk extends UiStrings {
   @override
   String gestureHoldSeconds(String seconds) {
     return '$seconds с';
+  }
+
+  @override
+  String get haCustomPages => 'Власні сторінки';
+
+  @override
+  String get haCustomPagesHintDashboard =>
+      'Ваші власні HTML-сторінки як панель керування';
+
+  @override
+  String get settingHaCustomPagesSocketTitle =>
+      'Спільне з\'єднання з Home Assistant';
+
+  @override
+  String get settingHaCustomPagesSocketDescription =>
+      'Власні сторінки працюють з Home Assistant через з\'єднання кіоска, без токена на сторінці.';
+
+  @override
+  String get haCustomPagesAdd => 'Додати сторінку';
+
+  @override
+  String get haCustomPagesEmptyAnyServer =>
+      'Додайте HTML-сторінки з теки www Home Assistant або з іншого сервера, щоб вибирати їх як панель керування.';
+
+  @override
+  String get haCustomPagesGuide => 'Посібник із власних сторінок';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'Як створити сторінку, що працює з Home Assistant.';
+
+  @override
+  String get haCustomPageAddTitle => 'Додати власну сторінку';
+
+  @override
+  String get haCustomPageEditTitle => 'Змінити власну сторінку';
+
+  @override
+  String get haCustomPageName => 'Назва';
+
+  @override
+  String get haCustomPageLocation => 'Шлях або URL';
+
+  @override
+  String get haCustomPageLocationHint =>
+      'Файл у теці www Home Assistant, наприклад /local/dashboard.html, або URL сторінки на іншому сервері.';
+
+  @override
+  String get haCustomPageNameMissing => 'Введіть назву.';
+
+  @override
+  String get haCustomPageLocationInvalid =>
+      'Введіть шлях у /local/ або URL http чи https.';
+
+  @override
+  String get haCustomPageDuplicate =>
+      'Цей шлях уже використовує інша сторінка.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'У Home Assistant немає файлу за цим шляхом.';
+
+  @override
+  String get haCustomPageUrlNotFound =>
+      'На сервері немає сторінки за цією URL-адресою.';
+
+  @override
+  String get haCustomPageUnreachable =>
+      'Не вдалося з\'єднатися з Home Assistant.';
+
+  @override
+  String get haCustomPageUrlUnreachable =>
+      'Не вдалося з\'єднатися із сервером.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant відповів кодом HTTP $code.';
+  }
+
+  @override
+  String haCustomPageUrlStatus(String code) {
+    return 'Сервер відповів кодом HTTP $code.';
   }
 
   @override
@@ -6966,6 +8140,9 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get haCustomPageFilter => 'Не використовується на власних сторінках.';
+
+  @override
   String get settingHaReturnHomeEnabledTitle =>
       'Повернення на головний вигляд панелі керування';
 
@@ -7040,9 +8217,6 @@ class UiStringsUk extends UiStrings {
   @override
   String get haRotationHint =>
       'Циклічне перемикання видів, час показу, плавний перехід';
-
-  @override
-  String get haDefaultView => 'Вид за замовчуванням';
 
   @override
   String get haExternalPages => 'Зовнішні сторінки';
@@ -7132,28 +8306,6 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get haChooseView => 'Виберіть вид';
-
-  @override
-  String get haLoadingDashboards => 'Завантаження панелей керування…';
-
-  @override
-  String get haListFailed => 'Не вдалося отримати список панелей керування';
-
-  @override
-  String get haRetryHint => 'Торкніться, щоб повторити спробу.';
-
-  @override
-  String get haChangeView => 'Змінити вид';
-
-  @override
-  String get haNoViews => 'Немає вкладених видів';
-
-  @override
-  String get haNoViewsHelp =>
-      'У цій панелі керування немає вкладених видів для вибору.';
-
-  @override
-  String get haNoDashboards => 'Панелей керування не знайдено';
 
   @override
   String get settingHaThemeTitle => 'Тема';
@@ -7590,6 +8742,23 @@ class UiStringsUk extends UiStrings {
   String get intercomOptionHangupHelp => 'Довідка';
 
   @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Кнопка завершення під час вхідного виклику';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Що робить кнопка, коли сюди надходить виклик.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Прийняти';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Відхилити';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Ігнорувати';
+
+  @override
   String get intercomTalkSection => 'Розмова';
 
   @override
@@ -7681,6 +8850,17 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get kioskAllowedHelp => 'Які швидкі дії пропонує меню кіоска';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Дозволені застосунки';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'Застосунки лаунчера, доступні, коли режим кіоска увімкнено.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Спочатку додайте застосунки в Налаштування > Лаунчер застосунків.';
 
   @override
   String get settingKioskEnabledTitle => 'Увімкнути режим кіоска';
@@ -7808,6 +8988,221 @@ class UiStringsUk extends UiStrings {
   String get kioskOpenSettingsDevice => 'Відкрити налаштування на пристрої';
 
   @override
+  String get settingLedEnabledTitle => 'Увімкнути керування LED';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Дозволяє Kiosk Satellite керувати індикаторами.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Анімувати ефекти';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Рухає дуги й плавно змінює пульсації. Вимкніть, щоб усі ефекти були статичними.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'Світитися у спокої';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Світиться, поки нічого іншого не показано.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Ефект';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Як індикатори виглядають у спокої.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Постійно';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Дихання';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Показувати голосову активність';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Світиться, поки Voice Satellite слухає, думає й відповідає.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Під дугою, що обертається під час слухання, чергується під час обмірковування й переливається під час відповіді.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Акцентний колір';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'Дуга, що рухається навколо індикаторів.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Показувати, коли вимкнено звук';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Світиться, поки звук Voice Satellite вимкнено.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Колір із вимкненим звуком';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'Колір індикаторів, коли звук вимкнено.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Показувати таймери';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Пульсує, поки дзвонить таймер.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Показувати зворотний відлік';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'Індикатори гаснуть один за одним, поки спливає найближчий таймер.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Показувати будильники';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Пульсує, поки дзвонить будильник.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedIntercomEnabledTitle => 'Показувати дзвінки інтеркому';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Пульсує, поки дзвонить виклик, і обертається, поки він триває.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => 'Показувати сповіщення';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Повільно пульсує, поки чекає сповіщення.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Показувати музику';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'Світиться, поки на цьому пристрої грає музика.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Яскравість';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'Наскільки яскраво світяться індикатори для цього.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Колір';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'Колір індикаторів для цього.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Ефект';
+
+  @override
+  String get settingLedMediaStyleDescription =>
+      'Як індикатори показують музику.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Постійно';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Дихання';
+
+  @override
   String get settingLockdownEnabledTitle => 'Увімкнути режим блокування';
 
   @override
@@ -7864,6 +9259,43 @@ class UiStringsUk extends UiStrings {
   @override
   String get lockdownPermissionsSearch =>
       'Дозволи, на які спирається захист блокування.';
+
+  @override
+  String get settingAirplayEnabledTitle => 'Увімкнути приймач AirPlay';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'Пристрій з\'явиться як гучномовець AirPlay у меню AirPlay на iPhone, iPad або Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Назва гучномовця';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'Назва в меню AirPlay. Якщо порожньо, використовується назва пристрою.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle =>
+      'Враховувати гучність відправника';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'Регулятор гучності на iPhone, iPad або Mac змінює гучність цього пристрою. Якщо вимкнено, діє лише гучність цього пристрою.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Від\'ємне значення змушує цей пристрій грати раніше, щоб звук збігався з відео на відправнику. Застосовується одразу.';
+
+  @override
+  String get settingAirplayTakeoverTitle =>
+      'Дозволити іншому відправнику перехопити';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'Інший iPhone, iPad або Mac може перехопити відтворення, поки грає перший. Якщо вимкнено, він чекатиме, доки перший не від\'єднається.';
+
+  @override
+  String get mediaAirplayHint => 'Відтворення аудіо з iPhone, iPad або Mac';
 
   @override
   String get mediaCacheTitle => 'Кеш обкладинок альбомів';
@@ -7969,8 +9401,8 @@ class UiStringsUk extends UiStrings {
       'Кнопки гучності керують плеєром';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'Кнопки гучності цього пристрою змінюють гучність плеєра, за яким слідують, замість власної. Лише поки на екрані режим «Зараз грає», або завжди, коли плеєр відтворює.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'Кнопки гучності цього пристрою змінюють гучність плеєра, за яким слідують, замість власної. Поки цей пристрій грає у групі, вони змінюють гучність групи. Лише поки на екрані режим «Зараз грає», або завжди, коли плеєр відтворює.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => 'Крок кнопки гучності';
@@ -7999,8 +9431,18 @@ class UiStringsUk extends UiStrings {
   String get mediaAnotherPlayer => 'інший плеєр';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'Власний плеєр Sendspin цього пристрою залишається офлайн, доки керується $player.';
+  String mediaOfflineSendspin(String player) {
+    return 'Плеєр Sendspin залишається офлайн, доки вибрано $player.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'Приймач AirPlay залишається вимкненим, доки вибрано $player.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'Плеєр Sendspin і приймач AirPlay залишаються офлайн, доки вибрано $player.';
   }
 
   @override
@@ -8083,6 +9525,10 @@ class UiStringsUk extends UiStrings {
       'Плаваюча кнопка закриття може розміщуватися поверх власних елементів керування Music Assistant, як-от меню «Зараз грає». Без неї закривайте кнопкою «Назад» або через меню кіоска, що висувається.';
 
   @override
+  String get settingSendspinMaZoomDescription =>
+      'Масштабує всю сторінку Music Assistant.';
+
+  @override
   String get mediaMaHint => 'Сервер, токен, ярлик меню кіоска';
 
   @override
@@ -8155,11 +9601,20 @@ class UiStringsUk extends UiStrings {
       'Розмір кнопок відтворення і смуги прогресу, незалежно від розміру тексту. Стосується обох розкладок і режиму разом із заставкою. Елементи керування заповнюють доступний у плеєрі простір.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Горизонтальний режим';
+  String get settingSendspinFullscreenLayoutTitle => 'Режим макета';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Розділити обкладинку та елементи керування на рівні ліву й праву половини. З відкритим текстом пісні або чергою відомості про трек переміщуються під обкладинку. Ігнорується, коли «Зараз грає» показано поруч із заставкою.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Як «Зараз грає» розташовує обкладинку, відомості про трек та елементи керування. Горизонтальний розділяє їх на ліву й праву половини. Лише обкладинка заповнює екран обкладинкою й показує відомості про трек та елементи керування на кілька секунд після дотику, а з відкритим текстом пісні або чергою перемикається на Вертикальний. Ігнорується, коли «Зараз грає» показано поруч із заставкою.';
+
+  @override
+  String get mediaLayoutVertical => 'Вертикальний';
+
+  @override
+  String get mediaLayoutHorizontal => 'Горизонтальний';
+
+  @override
+  String get mediaLayoutArtOnly => 'Лише обкладинка';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>
@@ -8186,6 +9641,27 @@ class UiStringsUk extends UiStrings {
       'Дозволити руху закривати «Зараз грає», як звичайну заставку. Якщо вимкнено, закриває лише дотик, тож проходження повз не перериває показ музики. Ігнорується, коли «Зараз грає» показано поруч із заставкою.';
 
   @override
+  String get settingSendspinFullscreenReturnTitle => 'Після закриття';
+
+  @override
+  String get settingSendspinFullscreenReturnDescription =>
+      'Вигляд панелі керування, який з\'являється після закриття «Зараз грає». За замовчуванням діє «Повернення на головний вигляд панелі керування».';
+
+  @override
+  String get mediaReturnLastView => 'Останній вигляд';
+
+  @override
+  String get mediaReturnChosenView => 'Вибраний вигляд';
+
+  @override
+  String get settingSendspinFullscreenReturnViewTitle =>
+      'Вигляд панелі керування';
+
+  @override
+  String get settingSendspinFullscreenReturnViewDescription =>
+      'Вигляд, який з\'являється після закриття «Зараз грає».';
+
+  @override
   String get settingSendspinFullscreenShortcutTitle =>
       'Показувати в меню кіоска';
 
@@ -8200,6 +9676,24 @@ class UiStringsUk extends UiStrings {
   @override
   String get settingSendspinSpeakerPillDescription =>
       'Показує вибір гучномовців протягом 5 секунд після взаємодії з екраном. Дозволяє додати або вилучити гучномовці з поточної групи.';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Фільтр панелі вибору гучномовців';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'На панелі показуються лише ці гучномовці. Гучномовці, які вже в групі, показуються завжди.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Показувати якість звуку';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Показує формат, бітову глибину, частоту дискретизації, бітрейт і джерело поточного треку внизу режиму «Зараз грає». Потрібен Music Assistant.';
+
+  @override
+  String get mediaAllSpeakers => 'Усі гучномовці';
 
   @override
   String get settingSendspinQueueArtTitle => 'Показувати обкладинки у черзі';
@@ -8607,6 +10101,9 @@ class UiStringsUk extends UiStrings {
   String get settingsGroupMediaCameras => 'Медіа та камери';
 
   @override
+  String get settingsGroupHousehold => 'Домівка';
+
+  @override
   String get settingsGroupKiosk => 'Кіоск та захист';
 
   @override
@@ -8633,11 +10130,66 @@ class UiStringsUk extends UiStrings {
   String get settingsMenuThemeAuto => 'Авто';
 
   @override
+  String get settingsMenuOverviewHeadlessSummary => 'Стан і швидке керування';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'З\'єднання';
+
+  @override
+  String get settingsMenuAudio => 'Аудіо';
+
+  @override
+  String get settingsMenuAudioSummary => 'Гучність, мікрофон';
+
+  @override
+  String get settingsGroupMedia => 'Медіа';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => 'Відтворення аудіо віддалено';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary =>
+      'Жести кнопками й оплесками';
+
+  @override
+  String get settingsMenuLeds => 'Керування LED';
+
+  @override
+  String get settingsMenuLedsSummary => 'Кольори й ефекти індикаторів стану';
+
+  @override
+  String get settingsLedTimers => 'Таймери';
+
+  @override
+  String get settingsLedNotifications => 'Сповіщення';
+
+  @override
+  String get settingsLedIdle => 'У спокої';
+
+  @override
+  String get settingsLedEffects => 'Ефекти';
+
+  @override
   String get settingAdaptiveBrightnessTitle => 'Адаптивна яскравість';
 
   @override
   String get settingAdaptiveBrightnessDescription =>
       'Зменшує яскравість екрана, коли в кімнаті темнішає, використовуючи датчик освітленості.';
+
+  @override
+  String get settingAdaptiveUseEntityTitle =>
+      'Використовувати сутність Home Assistant';
+
+  @override
+  String get settingAdaptiveUseEntityDescription =>
+      'Отримує рівень освітленості кімнати з датчика Home Assistant.';
+
+  @override
+  String get settingAdaptiveLightEntityTitle => 'Сутність датчика освітленості';
+
+  @override
+  String get settingAdaptiveLightEntityDescription =>
+      'Датчик Home Assistant, що повідомляє рівень освітленості в люксах.';
 
   @override
   String get settingAdaptiveMinBrightnessTitle => 'Мінімальна яскравість';
@@ -8864,6 +10416,29 @@ class UiStringsUk extends UiStrings {
       'Примусово встановити одну орієнтацію екрана. Використовуйте на пристроях без датчика повороту або коли пристрій закріплено так, що датчик визначає положення некоректно.';
 
   @override
+  String get settingScreenHideStatusBarTitle => 'Приховати рядок стану';
+
+  @override
+  String get settingScreenHideStatusBarDescription =>
+      'Вимкніть, щоб годинник і значки сповіщень залишалися вгорі екрана. Режим кіоска завжди його приховує.';
+
+  @override
+  String get settingScreenHideNavigationBarTitle =>
+      'Приховати панель навігації';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      'Вимкніть, щоб кнопки навігації залишалися на екрані разом із панеллю завдань на планшетах. Режим кіоска завжди її приховує.';
+
+  @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Показувати поверх екрана блокування';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Показує панель поверх екрана блокування з PIN-кодом, графічним ключем або паролем. Решта пристрою залишається заблокованою.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Не вимикати екран';
 
   @override
@@ -8982,6 +10557,417 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get screensaverBlackSection => 'Чорна заставка';
+
+  @override
+  String get settingScreensaverCelestialLocationTitle => 'Розташування';
+
+  @override
+  String get settingScreensaverCelestialLocationDescription =>
+      'Місце, звідки видно небо.';
+
+  @override
+  String get settingScreensaverCelestialEntityTitle => 'Об’єкт';
+
+  @override
+  String get settingScreensaverCelestialEntityDescription =>
+      'Людина, трекер пристрою або зона з розташуванням.';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesTitle => 'Координати';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesDescription =>
+      'Широта й довгота, наприклад 40.71, -74.01.';
+
+  @override
+  String get settingScreensaverCelestialTerrainTitle => 'Краєвид';
+
+  @override
+  String get settingScreensaverCelestialTerrainDescription =>
+      'Рельєф уздовж горизонту.';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceTitle => 'Наведіть на небо';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceDescription =>
+      'Підніміть пристрій, і небо на екрані повертатиметься разом із ним, щоб ви могли назвати те, на що дивитеся. Потрібен датчик компаса.';
+
+  @override
+  String get settingScreensaverCelestialDaytimeTitle => 'Денне небо';
+
+  @override
+  String get settingScreensaverCelestialDaytimeDescription =>
+      'Освітлювати небо та приглушувати зорі, поки Сонце над горизонтом. Вимкніть, щоб показувати нічне небо цілий день.';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayTitle => 'Чумацький Шлях';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayDescription =>
+      'Показувати сяйво нашої галактики на нічному небі.';
+
+  @override
+  String get settingScreensaverCelestialPlanetsTitle => 'Планети';
+
+  @override
+  String get settingScreensaverCelestialPlanetsDescription =>
+      'Показувати планети там, де вони сьогодні вночі.';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyTitle =>
+      'Галактики й туманності';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyDescription =>
+      'Показувати галактику Андромеди, туманність Оріона та інші об’єкти, які видно без телескопа.';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionTitle =>
+      'Світлове забруднення';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionDescription =>
+      'Імітувати сяйво міських вогнів. Вищі значення приховують тьмяніші зорі та Чумацький Шлях.';
+
+  @override
+  String get settingScreensaverCelestialTwinkleTitle => 'Мерехтіння зір';
+
+  @override
+  String get settingScreensaverCelestialTwinkleDescription =>
+      'Зорі мерехтять, найсильніше біля горизонту. Вимкніть, щоб заощадити енергію.';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonTitle => 'Більший Місяць';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonDescription =>
+      'Малювати Місяць утричі, а Сонце вдвічі більшими за справжній розмір, щоб фазу було легко розгледіти.';
+
+  @override
+  String get settingScreensaverCelestialLinesTitle => 'Лінії сузір’їв';
+
+  @override
+  String get settingScreensaverCelestialLinesDescription =>
+      'З’єднувати зорі кожного сузір’я.';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesTitle =>
+      'Назви сузір’їв';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesDescription =>
+      'Підписувати сузір’я. Під час наближення з’являється більше.';
+
+  @override
+  String get settingScreensaverCelestialNamesTitle => 'Назви зір і планет';
+
+  @override
+  String get settingScreensaverCelestialNamesDescription =>
+      'Підписувати Сонце, Місяць, планети, найяскравіші зорі та галактики. Під час наближення підписів зір стає більше.';
+
+  @override
+  String get settingScreensaverCelestialCompassTitle => 'Сторони світу';
+
+  @override
+  String get settingScreensaverCelestialCompassDescription =>
+      'Позначати північ, схід, південь і захід на горизонті.';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleTitle => 'Розмір підписів';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Масштабує підписи на небі від 50 до 200 відсотків.';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesTitle => 'Положення';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesDescription =>
+      'Показує широту й довготу, звідки видно небо.';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthTitle => 'Азимут';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthDescription =>
+      'Показує сторону світу, куди дивиться центр екрана.';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeTitle => 'Висота';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeDescription =>
+      'Показує, наскільки високо над горизонтом центр екрана.';
+
+  @override
+  String get settingScreensaverCelestialControlFovTitle => 'Поле зору';
+
+  @override
+  String get settingScreensaverCelestialControlFovDescription =>
+      'Показує, яку частину неба охоплює екран, у градусах.';
+
+  @override
+  String get settingScreensaverCelestialControlTimeTitle => 'Час';
+
+  @override
+  String get settingScreensaverCelestialControlTimeDescription =>
+      'Показує час неба з кнопкою «Зараз» після прискорення.';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseTitle =>
+      'Прискорення часу';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseDescription =>
+      'Прискорює час, щоб побачити, як обертається небо. Торкніться, щоб змінити швидкість.';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyTitle =>
+      'Перемикач «Наведіть на небо»';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyDescription =>
+      'Вмикає та вимикає режим «Наведіть на небо». Показується лише на пристроях із компасом.';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseTitle => 'Фаза Місяця';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseDescription =>
+      'Показує фазу Місяця й частку його освітленого диска.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Розмір елементів керування';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Масштабує елементи керування від 50 до 200 відсотків.';
+
+  @override
+  String get screensaverModeCelestial => 'Зоряне небо';
+
+  @override
+  String get screensaverCelestialTerrainHills => 'Пагорби';
+
+  @override
+  String get screensaverCelestialTerrainMountains => 'Гори';
+
+  @override
+  String get screensaverCelestialTerrainPlains => 'Рівнина';
+
+  @override
+  String get screensaverCelestialTerrainNone => 'Немає';
+
+  @override
+  String get screensaverCelestialLocationGps => 'GPS';
+
+  @override
+  String get screensaverCelestialLocationHaHome => 'Дім у Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationHaEntity => 'Об’єкт Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationManual => 'Вручну';
+
+  @override
+  String get screensaverCelestialCurrentLocation => 'Поточне розташування';
+
+  @override
+  String get screensaverCelestialNoGpsReceiver =>
+      'Цей пристрій не має приймача GPS.';
+
+  @override
+  String get screensaverCelestialLocationPermission =>
+      'Дозвіл на розташування не надано.';
+
+  @override
+  String get screensaverCelestialNoGpsFix => 'Ще немає GPS-координат.';
+
+  @override
+  String get screensaverCelestialNoHomeZone =>
+      'У Home Assistant немає домашньої зони.';
+
+  @override
+  String get screensaverCelestialHaNotConnected =>
+      'Home Assistant не підключено.';
+
+  @override
+  String get screensaverCelestialPickEntity =>
+      'Виберіть об’єкт із розташуванням.';
+
+  @override
+  String get screensaverCelestialEntityNoLocation =>
+      'Цей об’єкт не має розташування.';
+
+  @override
+  String get screensaverCelestialPage => 'Заставка «Зоряне небо»';
+
+  @override
+  String get screensaverCelestialSummary =>
+      'Місце, пейзаж, небо, підписи, елементи керування';
+
+  @override
+  String get screensaverCelestialSkyGroup => 'Небо';
+
+  @override
+  String get screensaverCelestialLabelsGroup => 'Підписи';
+
+  @override
+  String get screensaverCelestialControlsGroup => 'Елементи керування';
+
+  @override
+  String get screensaverCelestialLocationGrantMissing =>
+      'Без цього неможливо зчитати GPS-приймач, і небо не матиме розташування.';
+
+  @override
+  String get screensaverCelestialLocationGrantReady =>
+      'Небо може стежити за GPS-приймачем.';
+
+  @override
+  String get screensaverCelestialCoordinatesInvalid =>
+      'Введіть широту й довготу, наприклад 40.71, -74.01';
+
+  @override
+  String get screensaverCelestialNoLocation =>
+      'Виберіть розташування в меню Налаштування > Заставка > Зоряне небо.';
+
+  @override
+  String get screensaverCelestialWaitingForGps => 'Очікування GPS-позиції...';
+
+  @override
+  String get screensaverCelestialDoubleTapHint =>
+      'Торкніться двічі, щоб закрити';
+
+  @override
+  String get screensaverCelestialCalibrate =>
+      'Рухайте пристроєм вісімкою, щоб відкалібрувати компас.';
+
+  @override
+  String get celestialSun => 'Сонце';
+
+  @override
+  String get celestialMoon => 'Місяць';
+
+  @override
+  String get celestialMercury => 'Меркурій';
+
+  @override
+  String get celestialVenus => 'Венера';
+
+  @override
+  String get celestialMars => 'Марс';
+
+  @override
+  String get celestialJupiter => 'Юпітер';
+
+  @override
+  String get celestialSaturn => 'Сатурн';
+
+  @override
+  String get celestialUranus => 'Уран';
+
+  @override
+  String get celestialNeptune => 'Нептун';
+
+  @override
+  String get celestialAndromedaGalaxy => 'Галактика Андромеди';
+
+  @override
+  String get celestialTriangulumGalaxy => 'Галактика Трикутника';
+
+  @override
+  String get celestialLargeMagellanicCloud => 'Велика Магелланова Хмара';
+
+  @override
+  String get celestialSmallMagellanicCloud => 'Мала Магелланова Хмара';
+
+  @override
+  String get celestialOrionNebula => 'Туманність Оріона';
+
+  @override
+  String get celestialLagoonNebula => 'Туманність Лагуна';
+
+  @override
+  String get celestialCarinaNebula => 'Туманність Кіля';
+
+  @override
+  String get celestialPleiades => 'Плеяди';
+
+  @override
+  String get celestialBeehiveCluster => 'Ясла';
+
+  @override
+  String get celestialDoubleCluster => 'Подвійне скупчення Персея';
+
+  @override
+  String get celestialOmegaCentauri => 'Омега Центавра';
+
+  @override
+  String get celestialTucanae47 => '47 Тукана';
+
+  @override
+  String get celestialCompassNorth => 'Пн';
+
+  @override
+  String get celestialCompassEast => 'Сх';
+
+  @override
+  String get celestialCompassSouth => 'Пд';
+
+  @override
+  String get celestialCompassWest => 'Зх';
+
+  @override
+  String get celestialCompassNorthEast => 'ПнСх';
+
+  @override
+  String get celestialCompassSouthEast => 'ПдСх';
+
+  @override
+  String get celestialCompassSouthWest => 'ПдЗх';
+
+  @override
+  String get celestialCompassNorthWest => 'ПнЗх';
+
+  @override
+  String get celestialAzimuthShort => 'Аз';
+
+  @override
+  String get celestialAltitudeShort => 'Вис';
+
+  @override
+  String get celestialFovShort => 'ПЗ';
+
+  @override
+  String get celestialNow => 'Зараз';
+
+  @override
+  String get celestialMoonNew => 'Новий місяць';
+
+  @override
+  String get celestialMoonWaxingCrescent => 'Молодий місяць';
+
+  @override
+  String get celestialMoonFirstQuarter => 'Перша чверть';
+
+  @override
+  String get celestialMoonWaxingGibbous => 'Зростаючий місяць';
+
+  @override
+  String get celestialMoonFull => 'Повня';
+
+  @override
+  String get celestialMoonWaningGibbous => 'Спадний місяць';
+
+  @override
+  String get celestialMoonLastQuarter => 'Остання чверть';
+
+  @override
+  String get celestialMoonWaningCrescent => 'Старий місяць';
 
   @override
   String get settingScreensaverClockStyleTitle => 'Стиль';
@@ -9104,6 +11090,35 @@ class UiStringsUk extends UiStrings {
       'Колір фону позаду цифр.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Цифри';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Які години циферблат показує цифрами.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle =>
+      'Показувати секундну стрілку';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Малювати секундну стрілку на циферблаті.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Колір годинника';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'Колір стрілок, цифр і позначок.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Колір фону';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'Колір фону за годинником.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Нічний режим';
 
   @override
@@ -9172,6 +11187,15 @@ class UiStringsUk extends UiStrings {
   String get screensaverStyleRoller => 'Барабанний годинник';
 
   @override
+  String get screensaverStyleHand => 'Стрілковий годинник';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 і 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Усі години';
+
+  @override
   String get screensaverFontDefault => 'За замовчуванням';
 
   @override
@@ -9209,6 +11233,25 @@ class UiStringsUk extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'Показувати AM/PM';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Додавати AM або PM після часу.';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle =>
+      'Вимикати екран уночі через';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      'Вимикає екран, коли нічний режим триває зазначений час, і знову вмикає, коли в кімнаті стає світліше. Встановіть 0, щоб екран не вимикався. Вимагає дозволу адміністратора пристрою.';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      'Коли дисплей повністю вимикається, керування переходить до системи енергозбереження планшета. Багато моделей Android у такому стані працюють нестабільно: Wi-Fi може засинати або відключатися, сутності Home Assistant стають недоступними, доступ до камери може скасовуватися, а деякі пристрої закривають фонові програми. Деякі датчики освітлення також перестають передавати дані, коли дисплей вимкнено, тому екран може не ввімкнутися сам, коли в кімнаті стане світліше. Поведінка залежить від виробника.\n\nНадійною альтернативою є «Використовувати чорний екран замість вимкнення». Екран виглядає так само темно, а застосунок зберігає повний контроль.';
+
+  @override
   String get screensaverOverlayEntity => 'Сутність';
 
   @override
@@ -9231,20 +11274,6 @@ class UiStringsUk extends UiStrings {
   String get screensaverOverlayEntityRequired => 'Оберіть сутність.';
 
   @override
-  String get screensaverOverlaySearchHint => 'Назва або entity id';
-
-  @override
-  String get screensaverOverlaySearchHintRemote =>
-      'Пошук за назвою або entity id';
-
-  @override
-  String get screensaverOverlaySearchEmpty =>
-      'Почніть вводити для пошуку сутностей.';
-
-  @override
-  String get screensaverOverlayNoMatches => 'Нічого не знайдено.';
-
-  @override
   String get screensaverOverlaySearching => 'Пошук…';
 
   @override
@@ -9253,11 +11282,6 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get screensaverOverlayNoAnswer => 'Пристрій не відповідає.';
-
-  @override
-  String screensaverOverlaySearchError(String error) {
-    return 'Не вдалося виконати пошук сутностей: $error';
-  }
 
   @override
   String get settingScreensaverDismissOnFaceTitle =>
@@ -9429,8 +11453,33 @@ class UiStringsUk extends UiStrings {
       'Пробудження до заставки';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Розпізнавання руху, обличчя чи наближення після вимкнення екрана відновлює заставку, а не панель, із новим відліком вимкнення екрана. Дотик все одно відкриває панель керування.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      'Виберіть, що повертає заставку замість панелі після вимкнення екрана. Відлік «Вимкнути екран через» починається знову.';
+
+  @override
+  String get screensaverWakeSourcesAll => 'Усе';
+
+  @override
+  String get screensaverWakeSourceMotion => 'Рух';
+
+  @override
+  String get screensaverWakeSourceFace => 'Обличчя';
+
+  @override
+  String get screensaverWakeSourceProximity => 'Наближення';
+
+  @override
+  String get screensaverWakeSourcePerson => 'Людина';
+
+  @override
+  String get screensaverWakeSourcePower => 'Кнопка живлення';
+
+  @override
+  String get screensaverWakeSourceTouch => 'Дотик';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      'Потрібні обидва параметри: «Вимкнути екран через» і «Використовувати чорний екран замість вимкнення».';
 
   @override
   String get screensaverModeDim => 'Затемнення';
@@ -9510,11 +11559,29 @@ class UiStringsUk extends UiStrings {
       'Вигляд панелі керування Home Assistant, який показує заставка.';
 
   @override
-  String get screensaverSelectDashboard => 'Вибрати панель керування';
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Подвійний дотик для закриття';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Одинарні дотики взаємодіють із панеллю керування замість закриття заставки.';
 
   @override
   String get screensaverDashboardSection =>
       'Заставка панелі керування Home Assistant';
+
+  @override
+  String get screensaverModeUrl => 'URL-адреса зображення';
+
+  @override
+  String get screensaverCalendarSection => 'Заставка календаря';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Вигляд календаря';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'Вигляд календаря, з яким відкривається заставка.';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Масштаб рядка';
@@ -9587,28 +11654,7 @@ class UiStringsUk extends UiStrings {
   String get screensaverOverlayShowing => 'Відображається';
 
   @override
-  String get screensaverOverlayReorder =>
-      'Відображається (перетягніть для зміни порядку)';
-
-  @override
-  String get screensaverOverlayFull =>
-      'Це максимальна кількість сутностей у рядку. Видаліть одну, щоб додати іншу.';
-
-  @override
-  String get screensaverOverlayPickerTitle => 'Сутності короткого огляду';
-
-  @override
-  String screensaverOverlayGlanceEmpty(String count) {
-    return 'Ще немає. Щонайбільше $count сутностей.';
-  }
-
-  @override
   String get screensaverOverlayNone => 'Ще немає';
-
-  @override
-  String screensaverOverlayLimit(String count) {
-    return 'До $count сутностей.';
-  }
 
   @override
   String get screensaverOverlayGlancePage => 'Короткий огляд';
@@ -10249,11 +12295,65 @@ class UiStringsUk extends UiStrings {
       'Торкання лівої або правої п\'ятої частини екрана показує попередній або наступний слайд замість закриття заставки.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Показувати метадані';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Дата та параметри камери поверх фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Дата зйомки';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Показувати, коли було зроблено фото.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Параметри камери';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Показувати фокусну відстань, діафрагму та ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Розташування метаданих';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'У якому кутку показувати відомості.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => 'Тінь тексту';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Додати тінь до тексту метаданих для кращої читабельності на фотографіях.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Масштаб тексту';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Масштабувати відомості фото відповідно до розміру екрана.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle =>
+      'Інтенсивність віньєтування';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Затемнення фону за відомостями для читабельності на яскравих фото. 0 вимикає його.';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Метадані медіа Home Assistant';
+
+  @override
   String get screensaverMediaHaPage => 'Заставка медіа Home Assistant';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Джерело медіа, тривалість, випадковий порядок, заповнення';
+  String get screensaverMediaHaPageHint =>
+      'Джерело медіа, тривалість, випадковий порядок, заповнення, метадані';
 
   @override
   String get screensaverMediaChoose => 'Вибрати медіа';
@@ -10342,11 +12442,83 @@ class UiStringsUk extends UiStrings {
       'Торкання лівої або правої п\'ятої частини екрана показує попередній або наступний слайд замість закриття заставки.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Показувати метадані';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Дата та параметри камери поверх фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Дата зйомки';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Показувати, коли було зроблено фото.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Параметри камери';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Показувати фокусну відстань, діафрагму та ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Розташування метаданих';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'У якому кутку показувати відомості.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => 'Тінь тексту';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Додати тінь до тексту метаданих для кращої читабельності на фотографіях.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Масштаб тексту';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Масштабувати відомості фото відповідно до розміру екрана.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle =>
+      'Інтенсивність віньєтування';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Затемнення фону за відомостями для читабельності на яскравих фото. 0 вимикає його.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Метадані локальних медіа';
+
+  @override
   String get screensaverMediaLocalPage => 'Заставка локальних медіа';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Папка, тривалість, випадковий порядок, перехід';
+  String get screensaverMediaLocalPageHint =>
+      'Папка, тривалість, випадковий порядок, перехід, метадані';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'Адреса зображення, яке пристрій завантажує заново для кожного слайда.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'Скільки часу кожне фото показується перед завантаженням наступного.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Заставка URL-адреси зображення';
+
+  @override
+  String get screensaverMediaUrlPageHint =>
+      'URL-адреса, тривалість, перехід, метадані';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Метадані URL-адреси зображення';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Вихід за рухом';
@@ -10381,6 +12553,25 @@ class UiStringsUk extends UiStrings {
   @override
   String get screensaverDetectionMotionTuning =>
       'Чутливість виявлення руху налаштовується в параметрах Камери.';
+
+  @override
+  String get settingMotionUseEntityTitle =>
+      'Використовувати сутність Home Assistant';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Визначає рух за датчиком Home Assistant замість камери.';
+
+  @override
+  String get settingMotionEntityTitle => 'Сутність датчика руху';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'Датчик зайнятості, руху або присутності Home Assistant, за яким слід стежити.';
+
+  @override
+  String get screensaverDetectionExternalMotionHeading =>
+      'Зовнішній датчик руху';
 
   @override
   String get settingScreensaverDismissOnPersonTitle =>
@@ -10966,6 +13157,19 @@ class UiStringsUk extends UiStrings {
   String get screensaverOverlayShowNameHelp => 'Назва під значенням.';
 
   @override
+  String get screensaverOverlayShowIcon => 'Показувати піктограму';
+
+  @override
+  String get screensaverOverlayShowIconHelp => 'Піктограма поруч зі значенням.';
+
+  @override
+  String get screensaverOverlayVisibleStates => 'Видимі стани';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Показувати віджет лише тоді, коли його значення збігається з одним із цих, розділених комами. Залиште порожнім, щоб показувати завжди.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Системний';
 
   @override
@@ -10988,16 +13192,6 @@ class UiStringsUk extends UiStrings {
 
   @override
   String get screensaverOverlayWeatherEntity => 'Об\'єкт погоди';
-
-  @override
-  String get screensaverOverlayNoWeather => 'Немає об\'єктів погоди';
-
-  @override
-  String get screensaverOverlayNoWeatherHelp =>
-      'Home Assistant не повідомив про жоден об\'єкт.';
-
-  @override
-  String get screensaverOverlayPickWeather => 'Виберіть об\'єкт погоди...';
 
   @override
   String get screensaverOverlayWeatherRequired => 'Виберіть об\'єкт погоди.';
@@ -11234,6 +13428,9 @@ class UiStringsUk extends UiStrings {
       'Доступно, коли кіоск показує панель керування Home Assistant.';
 
   @override
+  String get voiceSkinUnavailablePlugin => 'Недоступне оформлення плагіна';
+
+  @override
   String get voiceSkinDefault => 'За оформленням';
 
   @override
@@ -11427,6 +13624,24 @@ class UiStringsUk extends UiStrings {
   @override
   String get settingVoiceWakeSoundDescription =>
       'Звуки активації, завершення та помилки.';
+
+  @override
+  String get voiceChimeWakeVolumeTitle => 'Гучність звуку активації';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Гучність звуку завершення';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Гучність звуку помилки';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Гучність звуку таймера';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle => 'Гучність звуку оголошення';
+
+  @override
+  String get voiceChimeVolumeDescription => 'Частка гучності асистента.';
 
   @override
   String get settingVoiceShowCommandTitle => 'Показувати, що ви сказали';
@@ -11660,8 +13875,8 @@ class UiStringsUk extends UiStrings {
   String get voiceWordAdded => 'Додано';
 
   @override
-  String get voiceHaAddHint =>
-      'Додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений.';
+  String get voiceHaAddAgainHint =>
+      'Додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений. Якщо Home Assistant уже мав його, там він попросить новий Ключ шифрування зі сторінки ESPHome.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -12525,6 +14740,13 @@ class UiStringsUk extends UiStrings {
       'Як довго чекати на інші кіоски. Збільште, якщо повільніший кіоск програє, хоча він ближче.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Поправка арбітражу';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Додається до того, наскільки гучно цей кіоск почув слово активації. Збільште, якщо цей кіоск програє, хоча він ближче, і зменште, якщо він відповідає здалеку.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Арбітраж слова активації';
 
   @override
@@ -12620,6 +14842,16 @@ class UiStringsUk extends UiStrings {
   String voiceModelNoLoad(String error) {
     return 'Модель не завантажується: $error';
   }
+
+  @override
+  String get settingVoiceAmazonLocaleTitle => 'Мова слова активації';
+
+  @override
+  String get settingVoiceAmazonLocaleDescription =>
+      'Мова моделей слів активації Amazon. У списках слів активації доступні слова активації цієї мови.';
+
+  @override
+  String get voiceOptionAppLanguage => 'Мова Kiosk Satellite';
 
   @override
   String get settingDisableCacheTitle => 'Вимкнути кеш';
@@ -12725,6 +14957,104 @@ class UiStringsUk extends UiStrings {
       '// Приклад: масштабувати сайт, який ігнорує масштаб панелі керування\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlFilterTitle => 'Фільтр URL';
+
+  @override
+  String get urlFilterHint =>
+      'Блокування або дозвіл сторінок за шаблоном адреси чи регулярним виразом';
+
+  @override
+  String get urlFilterIntroTitle => 'Керування тим, які сторінки відкриваються';
+
+  @override
+  String get urlFilterIntroSub =>
+      'Посилання або сторінки, що відповідають правилу «Блокувати», не завантажуються. Додайте правило «Лише дозволити», щоб завантажувалися тільки сторінки, які йому відповідають.';
+
+  @override
+  String get urlFilterAdd => 'Додати правило';
+
+  @override
+  String get urlFilterAddTitle => 'Додати правило фільтра';
+
+  @override
+  String get urlFilterEditTitle => 'Редагувати правило фільтра';
+
+  @override
+  String get urlFilterName => 'Назва';
+
+  @override
+  String get urlFilterPattern => 'Шаблон';
+
+  @override
+  String get urlFilterPatternWildcardHint =>
+      'Використовуйте * для збігу з будь-чим. Шаблон, що починається з /, збігається зі шляхом на будь-якому сервері, наприклад /history*.';
+
+  @override
+  String get urlFilterPatternRegexHint =>
+      'Регулярний вираз, який шукається в будь-якому місці адреси без урахування регістру.';
+
+  @override
+  String get urlFilterType => 'Тип шаблону';
+
+  @override
+  String get urlFilterTypeWildcard => 'Шаблон із *';
+
+  @override
+  String get urlFilterTypeRegex => 'Регулярний вираз';
+
+  @override
+  String get urlFilterAction => 'Дія';
+
+  @override
+  String get urlFilterActionBlock => 'Блокувати';
+
+  @override
+  String get urlFilterActionAllow => 'Лише дозволити';
+
+  @override
+  String get urlFilterActionAllowHint =>
+      'Там, де діє це правило, завантажуються лише сторінки, що відповідають правилу «Лише дозволити». Вхід у Home Assistant і стартова панель завантажуються завжди.';
+
+  @override
+  String get urlFilterScope => 'Застосовується до';
+
+  @override
+  String get urlFilterScopeAll => 'Панель і зовнішні сторінки';
+
+  @override
+  String get urlFilterScopeDashboard => 'Панель';
+
+  @override
+  String get urlFilterScopeExternal => 'Зовнішні сторінки';
+
+  @override
+  String get urlFilterScopeHint =>
+      'Зовнішні сторінки: посилання, відкриті з панелі, та сторінки ротації панелі.';
+
+  @override
+  String get urlFilterErrorName => 'Введіть назву.';
+
+  @override
+  String get urlFilterErrorPattern => 'Введіть шаблон.';
+
+  @override
+  String get urlFilterErrorRegex => 'Цей регулярний вираз недійсний.';
+
+  @override
+  String get urlFilterBlocked => 'Сторінку заблоковано';
+
+  @override
+  String get urlFilterNotAllowed => 'Немає серед дозволених сторінок';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle =>
+      'Показувати сповіщення про блокування';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Показувати коротке сповіщення з назвою правила, коли сторінку заблоковано.';
+
+  @override
   String get setupConnectHeading => 'Підключення до Home Assistant';
 
   @override
@@ -12822,6 +15152,10 @@ class UiStringsUk extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Виберіть панель керування, яку відображатиме кіоск. Ви зможете змінити її пізніше в Налаштуваннях.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'Цей пристрій не має екрана, тому Android не може запитати їх на ньому. Надайте кожен через adb, а потім завершіть тут.';
 
   @override
   String get setupWelcome => 'Вітаємо';
@@ -13038,8 +15372,8 @@ class UiStringsUk extends UiStrings {
       'Перетворіть цей кіоск на голосового асистента для Home Assistant. Усе можна змінити пізніше.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Після налаштування додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений.';
+  String get setupVoiceAddAgainHint =>
+      'Після налаштування додайте цей кіоск у Home Assistant у розділі Налаштування, Пристрої та служби, де він відображається як виявлений. Якщо Home Assistant уже мав його, там він попросить новий Ключ шифрування зі сторінки ESPHome.';
 
   @override
   String get setupRecommendedWall =>

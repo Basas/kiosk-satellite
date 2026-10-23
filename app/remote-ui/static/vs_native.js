@@ -1,7 +1,10 @@
+import { isHeadless } from './headless.js';
 import { t, voiceText, voiceVadOption } from './localization.js';
 import { api, cmd, state } from './core.js';
+import { pickRow, playerSpec } from './entity_picker.js';
 import { readOnlyRow } from './device.js';
-import { banner, messageBox, modalShell, showToast } from './widgets.js';
+import { SUBPAGE_ICONS } from './icons.js';
+import { banner, messageBox, modalShell, selectLoading, showToast } from './widgets.js';
 import { vsSelectRow } from './vs.js';
 import { watchUpdates } from './live.js';
 import { toggleRow } from './audio.js';
@@ -84,7 +87,7 @@ async function paintStatus(card, byKey) {
       : muted ? 'var(--muted)' : 'var(--primary)');
   const reload = entity && status.selectsMissing === true;
   const haRow = voiceRow('Home Assistant', reload ? VS_RELOAD_HINT : entity ? '' : esphome
-    ? 'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered.'
+    ? 'Add this kiosk under Settings, Devices & services in Home Assistant, where it shows up as discovered. If Home Assistant had it before, it asks there for the new Encryption key from the ESPHome page.'
     : 'Turn on the ESPHome server so Home Assistant can add this kiosk as a satellite.');
   if (entity && !reload) haRow.querySelector('.desc').textContent = entity;
   if (esphome) {
@@ -113,41 +116,31 @@ async function paintStatus(card, byKey) {
 async function ttsOutputRow(row, current) {
   const title = row.querySelector('.name')?.textContent || 'Play sounds on';
   const desc = row.querySelector('.desc')?.textContent || '';
-  let players = [];
-  try {
-    // Music Assistant's own entities stay in: any of them plays sounds.
-    const r = await cmd('mediaPlayers', { source: 'ha', speakers: true });
-    const list = r.ok ? r.data?.players : null;
-    players = (Array.isArray(list) ? list : []).filter((p) => p.group === 'ha');
-  } catch (_) {}
-  if (!row.isConnected) return;
-  const options = [{ value: '', label: voiceText('This kiosk') },
-    // The list's ids carry their source; the setting keeps the entity.
-    ...players.map((p) => ({ value: `${p.id}`.replace(/^ha:/, ''), label: `${p.name}` }))];
-  // A player Home Assistant no longer lists still shows as picked.
-  if (current && !options.some((o) => o.value === current)) {
-    options.push({ value: current, label: current });
-  }
-  const picker = vsSelectRow(title, desc, options, current, (value) => {
-    api('/api/settings', { method: 'PATCH', body: JSON.stringify({ 'voice.tts_output': value }) })
-      .catch(() => null);
+  // The entity picker over Home Assistant's media players, Music
+  // Assistant's own entities kept: any of them plays sounds. The list's
+  // ids carry their source; the setting keeps the entity. Clear is this
+  // kiosk.
+  const picker = pickRow({
+    name: title, desc,
+    spec: playerSpec('ha', { speakers: true }),
+    value: current ? `ha:${current}` : '',
+    placeholder: voiceText('This kiosk'),
+    allowClear: true,
+    flagMissing: false,
+    onPick: (id) => {
+      api('/api/settings', { method: 'PATCH',
+        body: JSON.stringify({ 'voice.tts_output': `${id ?? ''}`.replace(/^ha:/, '') }) })
+        .catch(() => null);
+    },
   });
-  picker.dataset.key = 'voice.tts_output';
+  picker.el.dataset.key = 'voice.tts_output';
   // An echo of the pick, or a change from the device, lands in place.
-  picker.updateSetting = () => {
+  picker.el.updateSetting = () => {
     const value = `${settingValue('voice.tts_output') ?? ''}`;
-    const select = picker.querySelector('select');
-    if (!select) return false;
-    if (![...select.options].some((o) => o.value === value)) {
-      const option = document.createElement('option');
-      option.value = value;
-      option.textContent = value;
-      select.appendChild(option);
-    }
-    select.value = value;
+    picker.setValue(value ? `ha:${value}` : '');
     return true;
   };
-  row.replaceWith(picker);
+  row.replaceWith(picker.el);
 }
 
 function settingValue(key) {
@@ -160,15 +153,34 @@ function settingValue(key) {
 function skinRow(row, current) {
   const title = row.querySelector('.name')?.textContent || voiceText('Skin');
   const desc = row.querySelector('.desc')?.textContent || '';
-  const skins = [...(row.querySelector('select')?.options || [])]
-    .map((o) => ({ id: o.value, name: o.textContent }));
+  // A plugin's skin reads as the plugin's name. One no longer installed
+  // says so in the kiosk's language.
+  const skinName = (id, label) => id.startsWith('plugin:') && label === 'Unavailable plugin skin'
+    ? voiceText('Unavailable plugin skin') : label;
+  let skins = [...(row.querySelector('select')?.options || [])]
+    .map((o) => ({ id: o.value, name: skinName(o.value, o.textContent) }));
   if (!skins.length) return;
+  const builtIn = skins.filter((k) => !k.id.startsWith('plugin:'));
   const nameOf = (id) => skins.find((k) => k.id === id)?.name || id;
+  // Plugins come and go while the page is open: the list is read again
+  // each time the picker opens. Built-in skins keep their localized names.
+  const refresh = async () => {
+    try {
+      const data = await api('/api/settings').then((r) => r.json());
+      const def = (data.settings || []).find((x) => x.key === 'voice.skin');
+      if (!Array.isArray(def?.options)) return;
+      skins = [...builtIn, ...def.options.filter((id) => `${id}`.startsWith('plugin:'))
+        .map((id) => ({ id, name: skinName(id, `${def.optionLabels?.[id] || id}`) }))];
+      current = `${def.value ?? current}`;
+      picker.lastElementChild.textContent = nameOf(current);
+    } catch (_) {}
+  };
   const picker = readOnlyRow(title, desc, nameOf(current), false);
   picker.dataset.key = 'voice.skin';
   picker.style.cursor = 'pointer';
   picker.tabIndex = 0;
   const open = async () => {
+    await refresh();
     const picked = await openSkinPicker(skins, current);
     if (!picked || picked === current) return;
     current = picked;
@@ -200,11 +212,33 @@ function openSkinPicker(skins, current) {
       tile.type = 'button';
       tile.style.cssText = 'display:flex; flex-direction:column; gap:6px; padding:0; border:0; background:none; color:inherit; text-align:start; cursor:pointer; font:inherit';
       const picked = skin.id === current;
-      const img = document.createElement('img');
-      img.src = `voice_skins/${skin.id}.webp`;
-      img.alt = skin.name;
-      img.loading = 'lazy';
-      img.style.cssText = `display:block; width:100%; aspect-ratio:16/10; object-fit:cover; border-radius:12px; box-sizing:border-box; border:${picked ? '3px solid var(--primary)' : '1px solid var(--divider)'}`;
+      const frame = `display:block; width:100%; aspect-ratio:16/10; border-radius:12px; box-sizing:border-box; border:${picked ? '3px solid var(--primary)' : '1px solid var(--divider)'}`;
+      let img;
+      if (skin.id.startsWith('plugin:')) {
+        // A plugin's skin: the picture it ships, or the plugin mark.
+        img = document.createElement('div');
+        img.innerHTML = SUBPAGE_ICONS.Plugins;
+        img.style.cssText = `${frame}; display:flex; align-items:center; justify-content:center; background:var(--surface-2); color:var(--muted); overflow:hidden`;
+        const glyph = img.firstElementChild;
+        glyph.setAttribute('width', '40');
+        glyph.setAttribute('height', '40');
+        const box = img;
+        cmd('getPluginVoiceSkinThumbnail', { id: skin.id.slice('plugin:'.length) }, { timeoutMs: 15000 })
+          .then((r) => {
+            if (!r?.ok || !r.data?.data) return;
+            const picture = document.createElement('img');
+            picture.src = `data:${r.data.mime};base64,${r.data.data}`;
+            picture.alt = skin.name;
+            picture.style.cssText = 'display:block; width:100%; height:100%; object-fit:cover';
+            box.replaceChildren(picture);
+          }).catch(() => null);
+      } else {
+        img = document.createElement('img');
+        img.src = `voice_skins/${skin.id}.webp`;
+        img.alt = skin.name;
+        img.loading = 'lazy';
+        img.style.cssText = `${frame}; object-fit:cover`;
+      }
       const name = document.createElement('div');
       name.textContent = skin.name;
       name.style.cssText = 'font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis';
@@ -235,6 +269,15 @@ async function haSelectRows(container, rows) {
   for (const [key, title, desc] of rows) {
     const entity = data[key];
     const options = Array.isArray(entity?.options) ? entity.options.map(String) : [];
+    // Another engine's wake words, which Home Assistant learns as it
+    // reconnects to the kiosk.
+    if (entity && data.wakeWordsPending === true && (key === 'wake_word' || key === 'wake_word_2')) {
+      const row = vsSelectRow(voiceText(title), voiceText(desc),
+        options.map((o) => ({ value: o, label: label(key, o) })), null, () => {});
+      selectLoading(row.querySelector('select'));
+      container.appendChild(row);
+      continue;
+    }
     if (!entity || entity.available !== true || !options.length) {
       container.appendChild(voiceRow(title, desc,
         voiceText(data.selectsMissing === true ? 'Reload needed' : 'Not available')));
@@ -265,6 +308,9 @@ async function haSelectRows(container, rows) {
 export const VS_SELECT_SETTINGS = new Set([
   'voice.ha_pipeline', 'voice.ha_pipeline_2', 'voice.ha_vad_sensitivity',
   'voice.ha_wake_word', 'voice.ha_wake_word_2', 'voice.pending_selects',
+  // The kiosk's copy of the wake words Home Assistant set: no row of its
+  // own, and every pick in the Wake word selects saves it.
+  'voice.wake_words',
   'voice.engine_1', 'voice.engine_2',
   'voice.realtime_openai_validated', 'voice.realtime_xai_validated',
   'voice.realtime_gemini_validated',
@@ -525,14 +571,15 @@ export async function renderNativeVs(root, byKey) {
     if (ttsRow) ttsOutputRow(ttsRow, byKey['voice.tts_output']?.value || '');
     const wake = panel('Wake Word');
     if (wake) {
-      // Engine, Home Assistant's wake words, then sensitivity, the noise
-      // gate and the stop word in one card, the engine's own tuning after.
+      // Engine, the language of Amazon's engine, Home Assistant's wake
+      // words (which follow both), then sensitivity, the noise gate and the
+      // stop word in one card, the engine's own tuning after.
       const first = document.createElement('div');
       first.className = 'card';
-      for (const key of ['voice.wake_word_engine', 'voice.wake_word_sensitivity', 'voice.noise_gate', 'voice.stop_word']) {
+      for (const key of ['voice.wake_word_engine', 'voice.amazon_locale', 'voice.wake_word_sensitivity', 'voice.noise_gate', 'voice.stop_word']) {
         const row = wake.querySelector(`[data-key="${key}"]`);
         if (row) first.appendChild(row);
-        if (key === 'voice.wake_word_engine') first.appendChild(selectsBlock(WAKE_ROWS));
+        if (key === 'voice.amazon_locale') first.appendChild(selectsBlock(WAKE_ROWS));
       }
       wake.querySelectorAll(':scope > .card').forEach((c) => { if (!c.children.length) c.remove(); });
       wake.prepend(first);
@@ -558,7 +605,9 @@ export async function renderNativeVs(root, byKey) {
     const r = await cmd('haDetectVoiceSatellite', {});
     installed = r.ok && r.data === true;
   } catch (_) {}
-  if (!installed || !root.isConnected || root.querySelector('#vsRollbackCard')) return;
+  // The dashboard runtime runs in the WebView, which a device without a
+  // screen does not have.
+  if (!installed || isHeadless() || !root.isConnected || root.querySelector('#vsRollbackCard')) return;
   const back = document.createElement('div');
   back.className = 'card';
   back.id = 'vsRollbackCard';

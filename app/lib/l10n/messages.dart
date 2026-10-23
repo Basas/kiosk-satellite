@@ -441,7 +441,28 @@ String settingsPageText(
   'Sendspin' => mediaText(context, english),
   'Launcher' => launcherText(context, english),
   'Gestures' => gestureText(context, english),
+  // Its groups are named after the pages of the features they light up.
+  'LED Control' => navigationText(context, english),
   'Kiosk' || 'Home' || 'Lockdown' => kioskText(context, english),
+  // Its groups reuse the settings rail's group names.
+  'Calendar' => switch (english) {
+    'Display' || 'Kiosk' => navigationText(context, english),
+    // The hand-built rows search finds.
+    'Open calendar' => l10n(context).calendarOpen,
+    'Show the calendar on this kiosk.' => l10n(context).calendarOpenHint,
+    'Add a calendar' => l10n(context).calendarAdd,
+    'Add the Home Assistant calendars to show in Settings > Calendar.' => l10n(
+      context,
+    ).calendarEmptyHint,
+    'Voice Calendar' => l10n(context).calendarVoiceSection,
+    'Manage the calendar using Voice Satellite' => l10n(
+      context,
+    ).calendarVoiceManage,
+    'Needs the Kiosk Satellite calendar blueprint and an LLM conversation '
+        'agent in Home Assistant.' =>
+      l10n(context).calendarVoiceHint,
+    _ => english,
+  },
   'Alarms' => switch (english) {
     'Defaults' => l10n(context).alarmsDefaultsSection,
     'Text to Speech' => l10n(context).alarmsTtsSection,
@@ -450,6 +471,22 @@ String settingsPageText(
     'Needs the Kiosk Satellite alarms blueprint and an LLM conversation '
         'agent in Home Assistant.' =>
       l10n(context).alarmsVoiceHint,
+    _ => english,
+  },
+  'Browser' => switch (english) {
+    'URL Filter' => l10n(context).urlFilterTitle,
+    'Block or allow pages by address pattern or regular expression' => l10n(
+      context,
+    ).urlFilterHint,
+    'Add rule' => l10n(context).urlFilterAdd,
+    'Show blocked page notice' => l10n(
+      context,
+    ).settingBrowserUrlFilterNoticeTitle,
+    "Show a short notice with the rule's name when a page is blocked." => l10n(
+      context,
+    ).settingBrowserUrlFilterNoticeDescription,
+    "Links or pages that match a Block rule don't load. Add an Allow only rule to load only the pages it matches." =>
+      l10n(context).urlFilterIntroSub,
     _ => english,
   },
   'Intercom' => switch (english) {
@@ -714,7 +751,7 @@ String pluginError(BuildContext context, String error) => _ownedError(error, (
   match = RegExp(r'^Plugin needs Android API ([0-9]+)$').firstMatch(text);
   if (match != null) return strings.pluginErrorAndroidApi(match.group(1)!);
   match = RegExp(
-    r'^Invalid (id|name|version|entryClass|description|author|license|key|title|group|readingsTitle)$',
+    r'^Invalid (id|name|version|entryClass|description|author|license|key|title|group|readingsTitle|input)$',
   ).firstMatch(text);
   if (match != null) return strings.pluginErrorInvalidField(match.group(1)!);
   match = RegExp(

@@ -27,6 +27,8 @@ void main() {
     'supported': true,
     'name': 'STK3310 Proximity',
     'vendor': 'Sensortek',
+    'maximumRange': 5.0,
+    'resolution': 1.0,
   };
 
   var listens = 0;
@@ -92,8 +94,8 @@ void main() {
     }
   }
 
-  void reading({required bool near, bool initial = false}) {
-    sink!.success({'near': near, 'initial': initial});
+  void reading({required bool near, bool initial = false, double? distance}) {
+    sink!.success({'near': near, 'initial': initial, 'distance': ?distance});
   }
 
   test('no sensor: the switch is kept off and both surfaces get the '
@@ -155,6 +157,65 @@ void main() {
     expect(res.data, {...irSensor, 'maximumRange': 9.0, 'resolution': 9.0});
   });
 
+  test(
+    'an NSPanel Pro logs its driver, source, readings and summaries',
+    () async {
+      const panel = {
+        'supported': true,
+        'name': 'Proximity sensor',
+        'vendor': 'The Android Open Source Project',
+        'maximumRange': 9.0,
+        'resolution': 9.0,
+        'driver': 'ps_stk3a5x',
+        'rawFile': '/sys/class/st_psensor/psensor_value',
+      };
+      nativeAnswer = panel;
+      await build({'ks.screensaver.dismiss_on_proximity': true});
+      final res = await commands.execute('getProximitySupport', const {});
+      expect(res.data, panel);
+
+      bus.publish(const ScreensaverStateChanged(active: true));
+      await pump();
+      sink!.success({
+        'diagnostic':
+            'source: raw counts from /sys/class/st_psensor/'
+            'psensor_value (driver ps_stk3a5x), polled every 200 ms',
+        'level': 'info',
+      });
+      sink!.success({
+        'near': false,
+        'initial': true,
+        'distance': 1032.0,
+        'resting': 1032.0,
+      });
+      sink!.success({'near': true, 'distance': 1210.0, 'resting': 1031.5});
+      sink!.success({
+        'diagnostic':
+            'raw file /sys/class/st_psensor/psensor_value '
+            'unreadable (Permission denied), reading sensor events instead',
+        'level': 'warn',
+      });
+      await pump();
+
+      final lines = log.recent.where((e) => e.tag == 'proximity').toList();
+      expect(
+        lines.map((e) => e.message),
+        containsAll([
+          'sensor on (Proximity sensor, range 9.0, resolution 9.0, '
+              'driver ps_stk3a5x)',
+          'source: raw counts from /sys/class/st_psensor/psensor_value '
+              '(driver ps_stk3a5x), polled every 200 ms',
+          'resting far (1032.0, resting 1032.0)',
+          'near (1210.0, resting 1031.5)',
+        ]),
+      );
+      expect(
+        lines.where((e) => e.level == LogLevel.warn).map((e) => e.message),
+        contains(startsWith('raw file /sys/class/st_psensor/psensor_value')),
+      );
+    },
+  );
+
   test('no native answer counts as supported, never switching the feature '
       'off on a guess', () async {
     nativeAnswer = null;
@@ -179,15 +240,31 @@ void main() {
     expect(listens, 1);
 
     // Something resting on the sensor as it registers is not an approach.
-    reading(near: true, initial: true);
+    reading(near: true, initial: true, distance: 0);
     await pump();
     expect(events, isEmpty);
-    reading(near: false);
+    reading(near: false, distance: 5);
     await pump();
     expect(events, isEmpty);
-    reading(near: true);
+    reading(near: true, distance: 0);
     await pump();
     expect(events.length, 1);
+
+    // The log carries the sensor's shape and raw readings, so a report
+    // from a device with an odd driver shows what it sends.
+    final lines = log.recent
+        .where((e) => e.tag == 'proximity')
+        .map((e) => e.message)
+        .toList();
+    expect(
+      lines,
+      containsAll([
+        'sensor on (STK3310 Proximity, range 5.0, resolution 1.0)',
+        'resting near (0.0)',
+        'far (5.0)',
+        'near (0.0)',
+      ]),
+    );
 
     // A held near repeats, so the postpone leg can keep holding.
     await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -273,6 +350,41 @@ void main() {
         'ks.screensaver.enabled': true,
         'ks.screensaver.dismiss_on_proximity': false,
       });
+      await saver.start();
+      await pumpEventQueue();
+      bus.publish(const ProximityDetected());
+      await pumpEventQueue();
+      expect(saver.isActive, isTrue);
+    });
+
+    test('a screensaver that starts over a panel already off counts as '
+        'dark for Only when screen is off (issue #980)', () async {
+      await buildSaver({
+        'ks.screensaver.enabled': true,
+        'ks.screensaver.dismiss_on_proximity': true,
+        'ks.screensaver.dismiss_on_proximity_screen_off_only': true,
+      });
+      var screenOn = false;
+      commands.register(
+        Command(
+          name: 'isScreenOn',
+          description: 'test stub',
+          handler: (_) async => CommandResult.ok(screenOn),
+        ),
+      );
+      await saver.start();
+      await pumpEventQueue();
+      expect(saver.isActive, isTrue);
+      expect(
+        log.recent.where((e) => e.message.startsWith('start (')).last.message,
+        endsWith(', screen off'),
+      );
+      bus.publish(const ProximityDetected());
+      await pumpEventQueue();
+      expect(saver.isActive, isFalse);
+
+      // Lit at the start, the same approach leaves it up.
+      screenOn = true;
       await saver.start();
       await pumpEventQueue();
       bus.publish(const ProximityDetected());

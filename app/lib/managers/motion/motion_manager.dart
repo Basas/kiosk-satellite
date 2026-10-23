@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../core/headless.dart';
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
@@ -209,10 +210,16 @@ class MotionManager extends Manager {
   /// the camera brings motion detection back without re-setup. An active
   /// schedule entry's motion override (issue #89) stands in for the dismiss
   /// switch while it holds — a Black entry overnight can keep the camera off
-  /// entirely.
+  /// entirely. A Home Assistant entity picked in the camera's place (issue
+  /// #973) leaves the camera out of it.
   bool get enabled =>
-      (_schedulePolicy ?? _settings.get(defs.screensaverDismissOnMotion)) &&
-      _settings.get(defs.cameraEnabled);
+      _dismissOnMotion &&
+      _settings.get(defs.cameraEnabled) &&
+      !_settings.get(defs.motionUseEntity);
+
+  /// Dismiss on motion as the screensaver reads it, whatever the source.
+  bool get _dismissOnMotion =>
+      _schedulePolicy ?? _settings.get(defs.screensaverDismissOnMotion);
 
   /// Whether the postpone leg wants the camera: between screensavers, with
   /// the screen actually lit, on a device whose screensaver can start at
@@ -224,7 +231,8 @@ class MotionManager extends Manager {
       _settings.get(defs.screensaverPostponeOnMotion) &&
       _settings.get(defs.screensaverDismissOnMotion) &&
       _settings.get(defs.screensaverEnabled) &&
-      _settings.get(defs.cameraEnabled);
+      _settings.get(defs.cameraEnabled) &&
+      !_settings.get(defs.motionUseEntity);
 
   /// Whether the standalone motion sensor wants the camera: whenever it is
   /// on. No screensaver or screen-state gates (see the class comment).
@@ -234,12 +242,12 @@ class MotionManager extends Manager {
   /// The face leg (issue #304): "Dismiss on face" rides the same session
   /// under the same gates as Dismiss on motion (screensaver showing, camera
   /// on, the schedule's per-entry override standing in for the switch),
-  /// plus one of its own: Dismiss on motion takes precedence. With motion
-  /// effectively on, the face leg is idle, which the settings pages say
-  /// under the switch.
+  /// plus one of its own: Dismiss on motion takes precedence, from the
+  /// camera or from a Home Assistant entity. With motion effectively on,
+  /// the face leg is idle, which the settings pages say under the switch.
   bool get faceEnabled =>
       _vision.faces &&
-      !enabled &&
+      !_dismissOnMotion &&
       (_faceSchedulePolicy ?? _settings.get(defs.screensaverDismissOnFace)) &&
       _settings.get(defs.cameraEnabled);
 
@@ -318,6 +326,86 @@ class MotionManager extends Manager {
   bool get _handTestWanted =>
       _handTesting && _vision.hands && _settings.get(defs.cameraEnabled);
   bool get _wantPalms => (palmEnabled || _handTestWanted) && _screenOn;
+
+  /// The plugin holding the camera (the SDK's openCamera): the analysis
+  /// size and lens it asked for, and who hears when the camera goes. It
+  /// keeps the session up on its own, like the sensor leg, and frames go
+  /// to the plugin natively. [_streamPlugin] is what the running stream
+  /// was bound with.
+  PluginCameraClaim? _plugin;
+  PluginCameraClaim? _streamPlugin;
+  void Function(String reason)? _pluginLost;
+
+  /// The barcode scanner has the camera (see [holdForScanner]): no
+  /// session runs, whatever wants one.
+  bool _scannerHeld = false;
+  bool get scannerHeld => _scannerHeld;
+
+  /// Run the camera for a plugin, or update what it runs with. Returns
+  /// null when the claim stands, otherwise why it cannot: `disabled`
+  /// with the Camera settings off, `busy` while the barcode scanner has
+  /// the camera, `no_camera` without one. [lost] hears why a standing
+  /// claim ended, unless [releaseForPlugin] ended it.
+  String? claimForPlugin(
+    PluginCameraClaim claim,
+    void Function(String reason) lost,
+  ) {
+    if (Headless.active) return 'no_camera';
+    if (!_settings.get(defs.cameraEnabled)) return 'disabled';
+    if (_scannerHeld) return 'busy';
+    _plugin = claim;
+    _pluginLost = lost;
+    log.info(
+      name,
+      'plugin camera ${claim.width}x${claim.height}'
+      '${claim.facing == null ? '' : ' ${claim.facing}'}',
+    );
+    _sync();
+    return null;
+  }
+
+  /// The plugin let the camera go.
+  void releaseForPlugin() {
+    if (_plugin == null) return;
+    _plugin = null;
+    _pluginLost = null;
+    log.info(name, 'plugin camera released');
+    _sync();
+  }
+
+  /// End the plugin's claim and tell it why. The caller syncs.
+  void _losePlugin(String reason) {
+    final lost = _pluginLost;
+    if (_plugin == null) return;
+    _plugin = null;
+    _pluginLost = null;
+    log.info(name, 'plugin camera ended ($reason)');
+    lost?.call(reason);
+  }
+
+  /// Give the camera to the barcode scanner, which opens it through its
+  /// own CameraX binding. That binding unbinds every other use case in
+  /// the process, and a session bound while it runs would unbind the
+  /// scanner's in turn, so nothing binds until [releaseScanner]. A plugin
+  /// holding the camera loses it as `busy`. Returns once the native side
+  /// has let go of the camera.
+  Future<void> holdForScanner() async {
+    _scannerHeld = true;
+    _losePlugin('busy');
+    _stop();
+    try {
+      await NativeMotion.release();
+    } catch (e) {
+      log.debug(name, 'release failed: $e');
+    }
+  }
+
+  /// The scanner closed: the sessions that want the camera come back.
+  void releaseScanner() {
+    if (!_scannerHeld) return;
+    _scannerHeld = false;
+    _sync();
+  }
 
   StreamSubscription<void>? _camera;
   bool _screensaverActive = false;
@@ -464,14 +552,18 @@ class MotionManager extends Manager {
     // flags below; the native detectors survive the runtime failing to
     // load in that window (FaceDetector.kt), so the race is a log line,
     // not a crash.
-    unawaited(
-      VisionSupport.probe().then((v) {
-        final changed = v.faces != _vision.faces || v.hands != _vision.hands;
-        _vision = v;
-        _warnUnsupported();
-        if (changed) _sync();
-      }),
-    );
+    // Headless there is no camera to run detectors on, and the probe loads
+    // the native inference libraries on older Android.
+    if (!Headless.active) {
+      unawaited(
+        VisionSupport.probe().then((v) {
+          final changed = v.faces != _vision.faces || v.hands != _vision.hands;
+          _vision = v;
+          _warnUnsupported();
+          if (changed) _sync();
+        }),
+      );
+    }
     // Every branch below is the app relighting the room with its own
     // display: the change the camera is about to see is self-inflicted
     // (see _selfLightQuiet), the loop being a screensaver whose own dark
@@ -552,6 +644,7 @@ class MotionManager extends Manager {
           e.key == defs.screensaverDismissOnFace.key ||
           e.key == defs.screensaverPostponeOnFace.key ||
           e.key == defs.motionSensor.key ||
+          e.key == defs.motionUseEntity.key ||
           e.key == defs.screensaverEnabled.key ||
           e.key == defs.cameraEnabled.key ||
           // The hand leg's gates: the mappings themselves and the
@@ -563,6 +656,9 @@ class MotionManager extends Manager {
       // Entity-side only (the ESPHome sensor times its own clear): no
       // reason to restart the camera over it.
       if (e.key == defs.motionSensorOffDelay.key) return;
+      // The entity is the motion entity manager's to follow; the camera
+      // only cares whether the switch is on.
+      if (e.key == defs.motionEntity.key) return;
       // The preview's look and span are read when a preview shows; only
       // the switch itself changes what the session is bound with.
       if (e.key == defs.facePreviewSeconds.key ||
@@ -578,6 +674,10 @@ class MotionManager extends Manager {
           // resolution needs a rebind to take effect mid-screensaver.
           e.key != defs.cameraSnapshotResolution.key) {
         return;
+      }
+      if (e.key == defs.cameraEnabled.key &&
+          !_settings.get(defs.cameraEnabled)) {
+        _losePlugin('disabled');
       }
       if (isGate &&
           (enabled ||
@@ -672,15 +772,18 @@ class MotionManager extends Manager {
   /// Whether the camera should be running right now: dismiss-on-motion or
   /// dismiss-on-face wants it during a screensaver session, either
   /// postpone leg between them (screen on), the hand leg whenever the
-  /// screen is on, and the sensor leg always.
+  /// screen is on, and the sensor leg and a plugin holding the camera
+  /// always. Nothing runs while the barcode scanner has the camera.
   bool get _shouldRun =>
-      (_rtspDemand && _rtspEnabled) ||
-      _sensorEnabled ||
-      _wantPalms ||
-      _previewHolding ||
-      (_screensaverActive
-          ? enabled || faceEnabled
-          : (_postponeEnabled || _postponeFaceEnabled) && _screenOn);
+      !_scannerHeld &&
+      ((_rtspDemand && _rtspEnabled) ||
+          _plugin != null ||
+          _sensorEnabled ||
+          _wantPalms ||
+          _previewHolding ||
+          (_screensaverActive
+              ? enabled || faceEnabled
+              : (_postponeEnabled || _postponeFaceEnabled) && _screenOn));
 
   void _sync() {
     if (_disposed) return;
@@ -691,7 +794,10 @@ class MotionManager extends Manager {
     }
     // A preview in progress keeps the session it is drawn from as it
     // is; the hold's end runs this again and settles it.
-    if (_previewHolding && _camera != null && _streamRtsp == _rtspDemand) {
+    if (_previewHolding &&
+        _camera != null &&
+        _streamRtsp == _rtspDemand &&
+        _streamPlugin == _plugin) {
       return;
     }
     // A session already up but asked for the wrong things restarts: the
@@ -701,7 +807,8 @@ class MotionManager extends Manager {
             _streamFaces != _wantFaces ||
             _streamPalms != _wantPalms ||
             _streamPreview != _wantPreview ||
-            _streamRtsp != _rtspDemand)) {
+            _streamRtsp != _rtspDemand ||
+            _streamPlugin != _plugin)) {
       log.info(
         name,
         'camera restarting (motion=$_wantMotion faces=$_wantFaces '
@@ -718,6 +825,7 @@ class MotionManager extends Manager {
     try {
       if (!await _ensurePermission()) {
         log.warn(name, 'camera permission not granted; motion detection idle');
+        _losePlugin('permission');
         return;
       }
       // State may have flipped while awaiting the permission check.
@@ -727,7 +835,10 @@ class MotionManager extends Manager {
           .get(defs.motionSensitivity)
           .toInt()
           .clamp(1, 100);
-      final camera = _settings.get(defs.cameraDevice);
+      // A plugin that asked for a lens gets it for as long as it holds
+      // the camera, and every leg rides along on that lens meanwhile.
+      final plugin = _plugin;
+      final String camera = plugin?.facing ?? _settings.get(defs.cameraDevice);
       final (snapW, snapH) = snapshotResolution(
         _settings.get(defs.cameraSnapshotResolution),
       );
@@ -747,6 +858,7 @@ class MotionManager extends Manager {
       _streamPalms = palms;
       _streamPreview = preview;
       _streamRtsp = _rtspDemand;
+      _streamPlugin = plugin;
       _boundBlind = !_screenOn;
       log.info(
         name,
@@ -755,6 +867,7 @@ class MotionManager extends Manager {
         '${faces ? ' faces>=${(faceMinWidth * 100).round()}%' : ''}'
         '${palms ? ' hands' : ''}'
         '${preview ? ' preview' : ''}'
+        '${plugin == null ? '' : ' plugin ${plugin.width}x${plugin.height}'}'
         '${motion ? '' : ' motion off'}'
         '${_boundBlind ? ', panel off: restart on wake unless frames flow' : ''})',
       );
@@ -773,6 +886,9 @@ class MotionManager extends Manager {
             paused: _voiceTurn,
             preview: preview,
             rtsp: _streamRtsp,
+            plugin: plugin == null
+                ? null
+                : (width: plugin.width, height: plugin.height),
           ).listen(
             (tick) {
               // Frames flowing again: the session is healthy, forget any
@@ -853,6 +969,9 @@ class MotionManager extends Manager {
                 return;
               }
               log.warn(name, 'camera error: $e');
+              // The plugin hears it and decides whether to open again;
+              // the other legs rebind on the backoff.
+              _losePlugin('camera_failed');
               _onCameraLost();
             },
           );
@@ -984,6 +1103,10 @@ class MotionManager extends Manager {
     handTest.dispose();
   }
 }
+
+/// What a plugin holding the camera asked for: the analysis size and
+/// `front` or `back`, or null for the Camera settings' lens.
+typedef PluginCameraClaim = ({int width, int height, String? facing});
 
 /// One reading for the hand gesture tester: hands in view and, for the
 /// largest, the count and which digits are up (thumb, index, middle,

@@ -154,6 +154,61 @@ void main() {
     expect(emitted.last, isNull);
   });
 
+  // Music Assistant's Sonos provider names a home theater input `tv` and
+  // a line-in `line_in`, with the input's name as the title.
+  Map<String, Object?> input(String source, String name) => {
+    ..._player(),
+    'active_source': source,
+    'current_media': {'uri': 'x-sonos-htastream:RINCON_1:spdif', 'title': name},
+    'source_list': [
+      {
+        'id': source,
+        'can_play_pause': false,
+        'can_next_previous': false,
+        'can_seek': false,
+      },
+    ],
+  };
+
+  test('a TV or line-in input reads as idle by default', () {
+    remote.publishQueue(null);
+    update(_player());
+    expect(emitted.last, isNotNull);
+    update(input('tv', 'TV'));
+    expect(emitted.last, isNull);
+    update(input('line_in', 'Line-in'));
+    expect(emitted.last, isNull);
+    // Back to music, the card returns.
+    update(_player());
+    expect(emitted.last!['title'], 'Hey Jude');
+  });
+
+  test('a shown input is named for it with only stop and volume', () async {
+    await remote.stop();
+    remote = MaRemotePlayer(
+      baseUrl: 'http://ma.local',
+      token: 'test',
+      playerId: 'p1',
+      onSnapshot: emitted.add,
+      log: Logger(),
+      showInputs: true,
+    );
+    remote.publishQueue(null);
+    update({...input('tv', ''), 'current_media': null});
+    final tv = emitted.last!;
+    expect(tv['title'], 'TV');
+    expect(tv['artist'], isNull);
+    expect(tv['stream'], isTrue);
+    expect(tv['playing'], isTrue);
+    expect(tv['volume'], 35);
+    expect(tv['supportedCommands'], ['stop', 'volume']);
+    update({...input('line_in', 'Line-in'), 'playback_state': 'paused'});
+    expect(emitted.last!['title'], 'Line-in');
+    expect(emitted.last!['playing'], isFalse);
+    update({...input('tv', 'TV'), 'playback_state': 'idle'});
+    expect(emitted.last, isNull);
+  });
+
   test(
     'external position uses its timestamp and does not advance paused audio',
     () {
@@ -231,4 +286,135 @@ void main() {
       },
     );
   }
+  group('a protocol player', () {
+    // A Sendspin client under a universal player lists no sources: the
+    // universal player that names it among its output protocols does.
+    Map<String, Object?> protocol({String source = 'airplay'}) => {
+      ..._player(),
+      'type': 'protocol',
+      'active_source': source,
+      'source_list': const [],
+    };
+    Map<String, Object?> owner(Map<String, Object?> source) => {
+      'player_id': 'up1',
+      'type': 'player',
+      'output_protocols': [
+        {'output_protocol_id': 'p1', 'is_native': false},
+      ],
+      'source_list': [
+        {
+          'id': 'up1',
+          'can_play_pause': true,
+          'can_next_previous': true,
+          'can_seek': true,
+        },
+        source,
+      ],
+    };
+    const airplay = {
+      'id': 'airplay',
+      'can_play_pause': false,
+      'can_next_previous': false,
+      'can_seek': false,
+    };
+    const connect = {
+      'id': 'airplay',
+      'can_play_pause': true,
+      'can_next_previous': true,
+      'can_seek': false,
+    };
+
+    test('is found among all players by its output protocol', () {
+      final players = [
+        {
+          'player_id': 'p1',
+          'output_protocols': [
+            {'output_protocol_id': 'p1', 'is_native': true},
+          ],
+        },
+        {'player_id': 'other', 'output_protocols': const []},
+        owner(airplay),
+      ];
+      expect(MaRemotePlayer.ownerOf(players, 'p1'), 'up1');
+      expect(MaRemotePlayer.ownerOf(players, 'missing'), '');
+    });
+
+    test('takes what the source can do from its owner', () {
+      remote.ownerId = 'up1';
+      remote.publishQueue(null);
+      update(protocol());
+      // Nothing known about the source yet: stop and volume.
+      expect(emitted.last!['supportedCommands'], ['stop', 'volume']);
+      remote.handleEvent('player_updated', 'up1', owner(airplay));
+      expect(emitted.last!['title'], 'Hey Jude');
+      expect(emitted.last!['supportedCommands'], ['stop', 'volume']);
+      remote.handleEvent('player_updated', 'up1', owner(connect));
+      expect(emitted.last!['supportedCommands'], [
+        'stop',
+        'play',
+        'pause',
+        'next',
+        'previous',
+        'volume',
+      ]);
+    });
+
+    test('reads its owner on a refresh', () async {
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      WebSocket? socket;
+      final ready = Completer<void>();
+      final asked = <String>[];
+      server.listen((request) async {
+        socket = await WebSocketTransformer.upgrade(request);
+        socket!.listen((message) {
+          final call = jsonDecode(message as String) as Map;
+          final command = '${call['command']}';
+          final id = (call['args'] as Map?)?['player_id'];
+          asked.add(id == null ? command : '$command $id');
+          final Object? result = switch (command) {
+            'players/get' when id == 'p1' => protocol(),
+            'players/get' when id == 'up1' => owner(connect),
+            'players/all' => [protocol(), owner(connect)],
+            _ => null,
+          };
+          socket!.add(
+            jsonEncode({'message_id': call['message_id'], 'result': result}),
+          );
+        });
+      });
+      await remote.stop();
+      remote = MaRemotePlayer(
+        baseUrl: 'http://127.0.0.1:${server.port}',
+        token: 'test',
+        playerId: 'p1',
+        log: Logger(),
+        onSnapshot: (snap) {
+          emitted.add(snap);
+          if (snap != null && !ready.isCompleted) ready.complete();
+        },
+      );
+      try {
+        remote.start();
+        await ready.future.timeout(const Duration(seconds: 5));
+        expect(emitted.last!['supportedCommands'], [
+          'stop',
+          'play',
+          'pause',
+          'next',
+          'previous',
+          'volume',
+        ]);
+        expect(asked, containsAllInOrder(['players/all', 'players/get up1']));
+        // Found once: the next refresh reads the owner straight away.
+        asked.clear();
+        await remote.refresh();
+        expect(asked, isNot(contains('players/all')));
+        expect(asked, contains('players/get up1'));
+      } finally {
+        await remote.stop();
+        await socket?.close();
+        await server.close(force: true);
+      }
+    });
+  });
 }

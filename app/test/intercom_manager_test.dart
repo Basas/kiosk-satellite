@@ -59,6 +59,9 @@ void main() {
   /// How long the fake audio takes to stop a ring, zero unless a test
   /// needs the teardown to take as long as it does on a device.
   var stopRingDelay = Duration.zero;
+
+  /// The rate the fake decoder answers a file's own rate with.
+  var decodedRate = 16000;
   late List<Uint8List> audioWritten;
   late StreamController<Uint8List> mic;
   late List<Map<String, Object?>> peers;
@@ -104,6 +107,8 @@ void main() {
       'ks.intercom.key': key,
       'ks.remote.enabled': true,
       'ks.remote.password': 'secret',
+      // Onboarding done: the fleet directory waits for it.
+      'ks.browser.start_url': 'http://ha.local:8123/lovelace',
       ...prefs,
     });
     bus = EventBus();
@@ -117,6 +122,7 @@ void main() {
     audioCalls = [];
     audioArgs = [];
     stopRingDelay = Duration.zero;
+    decodedRate = 16000;
     audioWritten = [];
     mic = StreamController<Uint8List>.broadcast();
     answers = {
@@ -147,7 +153,7 @@ void main() {
         ),
       );
     }
-    for (final name in ['playChime', 'screenOn']) {
+    for (final name in ['playChime', 'screenOn', 'stopSound']) {
       commands.register(
         Command(
           name: name,
@@ -193,8 +199,15 @@ void main() {
         if (method == 'stopRing') await Future<void>.delayed(stopRingDelay);
         if (method == 'write') audioWritten.add(args as Uint8List);
         if (method == 'start') return true;
-        if (method == 'decode') return Uint8List(32000);
-        if (method == 'chimePcm') return Uint8List(16000);
+        if (method == 'decode') {
+          // One second of PCM at the rate asked for, or the file's own.
+          final asked = (args as Map)['rate'] as int;
+          final rate = asked > 0 ? asked : decodedRate;
+          return {'pcm': Uint8List(rate * 2), 'rate': rate};
+        }
+        if (method == 'chimePcm') {
+          return Uint8List(((args as Map)['rate'] as int) ~/ 2 * 2);
+        }
         return null;
       };
     await intercom.init();
@@ -203,6 +216,26 @@ void main() {
 
   Future<void> settle([int ms = 250]) =>
       Future<void>.delayed(Duration(milliseconds: ms));
+
+  /// A sounds folder holding ring.mp3, picked as the ring sound.
+  Future<void> pickRingSound() async {
+    await settings.set(defs.intercomRingSound, 'ring.mp3');
+    final root = await Directory.systemTemp.createTemp('ring-sounds-');
+    final sounds = await Directory('${root.path}/sounds').create();
+    await File('${sounds.path}/ring.mp3').writeAsBytes([1]);
+    final originalPaths = PathProviderPlatform.instance;
+    PathProviderPlatform.instance = _AnnouncementPaths(root.path);
+    addTearDown(() async {
+      PathProviderPlatform.instance = originalPaths;
+      await root.delete(recursive: true);
+    });
+  }
+
+  Iterable<Map<String, Object?>> ringSounds() =>
+      executed.where((e) => e.$1 == 'playChime').map((e) => e.$2);
+
+  Iterable<Object?> stoppedSounds() =>
+      executed.where((e) => e.$1 == 'stopSound').map((e) => e.$2['id']);
 
   setUp(() {
     peers = [
@@ -663,6 +696,19 @@ void main() {
       expect(kiosk(intercom.status(), 'kitchen')['status'], 'unreachable');
     });
 
+    test('an Admin URL never takes calls off the address', () async {
+      // A proxy name may lead to a web server that is not the kiosk at
+      // all, so the intercom keeps to the address the kiosk announced.
+      peers.first['adminUrl'] = 'https://kitchen.example.com';
+      peers.first['url'] = 'https://kitchen.example.com';
+      await build();
+      await commands.execute('intercomKiosks', {'probe': true});
+      expect(sent, isNotEmpty);
+      expect(sent.any((r) => r.url.host == 'kitchen.example.com'), isFalse);
+      expect(sent.any((r) => r.url.host == '192.168.1.70'), isTrue);
+      expect(kiosk(intercom.status(), 'kitchen')['status'], 'ready');
+    });
+
     test('a kiosk with the same key and its intercom on is ready', () async {
       await build();
       await settle();
@@ -951,6 +997,57 @@ void main() {
       expect(good.ok, isTrue);
     });
 
+    test(
+      'a picked ring sound plays one copy at a time and stops on answer',
+      () async {
+        await build();
+        await pickRingSound();
+        intercom
+          ..ringCadence = const Duration(milliseconds: 20)
+          ..ringForOverride = (() => const Duration(seconds: 5));
+        answers['POST /api/intercom/call/c1'] = (_) => {'ok': true};
+        await commands.execute('intercomIncoming', {
+          'call': 'c1',
+          'kind': 'call',
+          'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+          'address': '192.168.1.70',
+          'token': tokenFor('c1'),
+        });
+        // Several cadence ticks pass while the first copy still plays.
+        await settle(150);
+        expect(ringSounds(), hasLength(1));
+        expect(ringSounds().single['id'], 'intercom-ring');
+        // Once it ends, the next tick rings again.
+        bus.publish(const SoundEnded(id: 'intercom-ring'));
+        await settle(60);
+        expect(ringSounds(), hasLength(2));
+        final r = await commands.execute('intercomAnswer', const {});
+        expect(r.ok, isTrue, reason: r.error);
+        expect(stoppedSounds(), ['intercom-ring']);
+        await settle(60);
+        expect(ringSounds(), hasLength(2));
+      },
+    );
+
+    test('a broadcast plays only the start of a picked ring sound', () async {
+      await build();
+      await pickRingSound();
+      intercom.shortRingSound = const Duration(milliseconds: 50);
+      await commands.execute('intercomIncoming', {
+        'call': 'b1',
+        'kind': 'broadcast',
+        'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+        'address': '192.168.1.70',
+        'token': tokenFor('b1'),
+      });
+      await settle(20);
+      expect(ringSounds(), hasLength(1));
+      expect(stoppedSounds(), isEmpty);
+      await settle(80);
+      expect(stoppedSounds(), ['intercom-ring']);
+      expect(intercom.state, 'listening');
+    });
+
     test('Maximum call duration hangs up a live call', () async {
       await build();
       intercom.maxCallOverride = () => const Duration(milliseconds: 100);
@@ -1005,9 +1102,10 @@ void main() {
           'token': tokenFor('c1'),
         });
         await pumpEventQueue();
-        // A ringing call is answered or declined on the screen.
+        // Ignore, the default: a ringing call is answered or declined on
+        // the screen.
         expect(armed, isEmpty);
-        bus.publish(const IntercomHangupRequested());
+        bus.publish(const IntercomHangupRequested(button: true));
         await pumpEventQueue();
         expect(intercom.state, 'ringing');
         await commands.execute('intercomAnswer', const {});
@@ -1020,6 +1118,49 @@ void main() {
         expect(armed, [25, 0]);
       },
     );
+
+    for (final (pick, outcome) in [
+      ('answer', 'in_call'),
+      ('decline', 'ended'),
+    ]) {
+      test('Hang up button while ringing set to $pick', () async {
+        await build(
+          prefs: {
+            'ks.intercom.hangup_key': 'volume_mute',
+            'ks.intercom.hangup_key_ringing': pick,
+          },
+        );
+        final armed = <int>[];
+        bus.on<IntercomHangupKeyArmed>().listen((e) => armed.add(e.keyCode));
+        answers['POST /api/intercom/call/c1'] = (_) => {'ok': true};
+        await commands.execute('intercomIncoming', {
+          'call': 'c1',
+          'kind': 'call',
+          'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+          'address': '192.168.1.70',
+          'token': tokenFor('c1'),
+        });
+        await pumpEventQueue();
+        expect(armed, [164]);
+        // A hang up gesture still leaves a ringing call alone.
+        bus.publish(const IntercomHangupRequested());
+        await pumpEventQueue();
+        expect(intercom.state, 'ringing');
+        bus.publish(const IntercomHangupRequested(button: true));
+        await settle(pick == 'answer' ? 200 : 20);
+        expect(intercom.state, outcome);
+        final told = sent.lastWhere((r) => r.url.path.endsWith('/call/c1'));
+        expect(jsonDecode(told.body)['action'], pick);
+        if (pick == 'answer') {
+          // Still armed: the next press hangs up.
+          expect(armed, [164]);
+          bus.publish(const IntercomHangupRequested(button: true));
+          await settle(20);
+          expect(intercom.state, 'ended');
+        }
+        expect(armed.last, 0);
+      });
+    }
 
     test('Disabled never arms the hang up button', () async {
       await build();
@@ -1040,6 +1181,50 @@ void main() {
       await settings.set(defs.intercomHangupKey, 'volume_mute');
       await pumpEventQueue();
       expect(armed, [164]);
+    });
+
+    test('the ESPHome actions answer and decline a ringing call', () async {
+      await build();
+      answers['POST /api/intercom/call/c1'] = (_) => {'ok': true};
+      answers['POST /api/intercom/call/c2'] = (_) => {'ok': true};
+      final surface = EspEntitySurface(bus, commands, log, settings);
+      await expectLater(
+        surface.handleService('intercom_answer', const {}),
+        throwsStateError,
+      );
+      await expectLater(
+        surface.handleService('intercom_decline', const {}),
+        throwsStateError,
+      );
+      await commands.execute('intercomIncoming', {
+        'call': 'c1',
+        'kind': 'call',
+        'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+        'address': '192.168.1.70',
+        'token': tokenFor('c1'),
+      });
+      expect(intercom.state, 'ringing');
+      expect(await surface.handleService('intercom_answer', const {}), {});
+      await settle(200);
+      expect(intercom.state, 'in_call');
+      final answered = sent.lastWhere((r) => r.url.path.endsWith('/call/c1'));
+      expect(jsonDecode(answered.body)['action'], 'answer');
+      await commands.execute('intercomHangup', const {});
+      await settle(400);
+
+      await commands.execute('intercomIncoming', {
+        'call': 'c2',
+        'kind': 'call',
+        'from': {'id': 'kitchen', 'name': 'Kitchen', 'port': 2324},
+        'address': '192.168.1.70',
+        'token': tokenFor('c2'),
+      });
+      expect(intercom.state, 'ringing');
+      expect(await surface.handleService('intercom_decline', const {}), {});
+      expect(intercom.state, 'ended');
+      expect(intercom.call?.reason, 'declined');
+      final declined = sent.lastWhere((r) => r.url.path.endsWith('/call/c2'));
+      expect(jsonDecode(declined.body)['action'], 'decline');
     });
 
     test('Answer automatically counts down and opens on its own', () async {
@@ -2045,8 +2230,10 @@ void main() {
             'chime': true,
             'chime_file': sound,
           });
-          final chime = audioArgs.lastWhere((a) => a.$1 == 'decode').$2;
-          expect(chime, [sound.trim() == 'custom.wav' ? 2 : 1]);
+          final chime = audioArgs.lastWhere((a) => a.$1 == 'decode').$2 as Map;
+          expect(chime['bytes'], [sound.trim() == 'custom.wav' ? 2 : 1]);
+          // At the words' rate, to share their track.
+          expect(chime['rate'], 16000);
           expect(audioCalls, isNot(contains('chimePcm')));
           await commands.execute('intercomHangup', const {});
           await commands.execute('intercomDismiss', const {});
@@ -2081,6 +2268,36 @@ void main() {
       });
       expect(paced.ok, isTrue, reason: paced.error);
       expect((paced.data as Map)['ms'], 2000 + 2500);
+      await commands.execute('intercomHangup', const {});
+    });
+
+    test('an announcement plays at the rate its file was made at', () async {
+      await build();
+      decodedRate = 24000;
+      answers['GET /a.mp3'] = (_) => http.Response.bytes([9], 200);
+      final r = await commands.execute('announce', {
+        'url': 'http://sounds.local/a.mp3',
+        'chime': true,
+      });
+      expect(r.ok, isTrue, reason: r.error);
+      expect((r.data as Map)['ms'], 1000);
+      // The words keep their 24 kHz, and the chime is made to match.
+      expect(audioArgs.firstWhere((a) => a.$1 == 'decode').$2, {
+        'bytes': [9],
+        'rate': 0,
+      });
+      expect(
+        (audioArgs.lastWhere((a) => a.$1 == 'chimePcm').$2 as Map)['rate'],
+        24000,
+      );
+      expect(
+        (audioArgs.lastWhere((a) => a.$1 == 'start').$2 as Map)['rate'],
+        24000,
+      );
+      await settle(300);
+      // 80 ms chunks at 24 kHz.
+      expect(audioWritten, isNotEmpty);
+      expect(audioWritten.first.length, 3840);
       await commands.execute('intercomHangup', const {});
     });
 

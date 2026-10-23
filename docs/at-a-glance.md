@@ -29,11 +29,11 @@ When you select **Entities**, a picker opens where you can search your Home Assi
 
 ## Where It Appears
 
-The At a Glance row is available on every screensaver mode *except* the Camera Streams grid (since a status row would obscure a live video feed):
+The At a Glance row is available on every screensaver mode *except* Calendar, which fills the screen, and the Camera Streams grid (since a status row would obscure a live video feed):
 
 * **Black:** The row is centered and takes up the entire display.
 * **Clock:** The row sits just under the date; the clock itself shrinks slightly to accommodate it.
-* **Photo and Web Modes** (Home Assistant Media, Local Media, Photo Gallery, Immich, Website): The row is pinned near the bottom of the screen, layered over whatever the mode is displaying.
+* **Photo and Web Modes** (Home Assistant Media, Local Media, Photo Gallery, Image URL, Immich, Website): The row is pinned near the bottom of the screen, layered over whatever the mode is displaying.
 
 On the Immich screensaver, if the [metadata overlay](screensavers.md#immich-media) occupies a bottom corner, the status row intelligently narrows into two columns and wraps, staying clear of the corners rather than overlapping them.
 
@@ -55,7 +55,7 @@ A colored circle always indicates activity. The text itself never changes color;
 
 Enabling **Hide names** removes the name text from every entity and enlarges the value text to fill the space. This is ideal for smaller screens read from across a room, where the icon alone provides enough context. (Your custom names are saved and will return if you toggle this setting off later).
 
-Enabling **Floating text style** reverts the row to its original, minimalist look: floating text in a single muted tone, without the chip background or state colors. On the Clock screensaver, this text matches the clock's digit color (Clock color for Digital; digit colors for Flip and Roller) to ensure readability against any background. However, over photos, this text-only style can be harder to read depending on the image behind it—which is exactly why the chip style is now the default.
+Enabling **Floating text style** reverts the row to its original, minimalist look: floating text in a single muted tone, without the chip background or state colors. On the Clock screensaver, this text matches the clock's digit color (Clock color for Digital and Hand; digit colors for Flip and Roller) to ensure readability against any background. However, over photos, this text-only style can be harder to read depending on the image behind it—which is exactly why the chip style is now the default.
 
 States are displayed exactly as they appear in Home Assistant, capitalized (e.g., `Open`, `Locked`, `Closed`), with the appropriate unit appended for numeric sensors.
 

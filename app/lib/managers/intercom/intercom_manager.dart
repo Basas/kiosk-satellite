@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../../core/permissions.dart';
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/kiosk_http_client.dart';
@@ -320,8 +321,8 @@ class IntercomManager extends Manager {
   };
   IntercomAudio audio = IntercomAudio();
   MicHub micHub = MicHub.instance;
-  Future<bool> Function() micPermission = () async =>
-      await Permission.microphone.request().isGranted;
+  Future<bool> Function() micPermission = () =>
+      ensureOsPermission(Permission.microphone);
   Random random = Random.secure();
 
   /// How long one call to another kiosk may take.
@@ -336,6 +337,10 @@ class IntercomManager extends Manager {
 
   /// A broadcast's card closes this long after the sender is done.
   Duration broadcastHold = const Duration(seconds: 5);
+
+  /// How much of a picked ring sound a short ring plays: enough to know
+  /// the sound, then out of the way of an announcement.
+  Duration shortRingSound = const Duration(seconds: 2);
 
   /// The state sensor reads missed for this long.
   Duration missedHold = const Duration(minutes: 1);
@@ -454,6 +459,16 @@ class IntercomManager extends Manager {
   Timer? _connectTimer;
   Timer? _missedTimer;
   Timer? _injectTimer;
+
+  /// The picked ring sound plays under this id, so the cadence finds it
+  /// still going and the end of the ringing can stop it.
+  static const _ringSoundId = 'intercom-ring';
+  bool _ringSoundPlaying = false;
+
+  /// Bumped by every stop, so a ring still looking up its file when the
+  /// call is answered stays quiet.
+  int _ringGeneration = 0;
+  Timer? _ringSoundCut;
   Timer? _limitTimer;
 
   /// The key code last handed to the kiosk manager for the hang up button.
@@ -521,6 +536,11 @@ class IntercomManager extends Manager {
     rosterVisible.addListener(_syncScreenShown);
     _subs.add(bus.on<FleetChanged>().listen((_) => _readFleet()));
     _subs.add(
+      bus.on<SoundEnded>().listen((e) {
+        if (e.id == _ringSoundId) _ringSoundPlaying = false;
+      }),
+    );
+    _subs.add(
       bus.on<TlsIdentityChanged>().listen((_) {
         _certificateChanged = true;
         unawaited(_syncListener());
@@ -544,7 +564,8 @@ class IntercomManager extends Manager {
         } else if (e.key == defs.intercomEnabled.key) {
           if (e.value != true) rosterVisible.value = false;
           unawaited(_onEnabledChanged());
-        } else if (e.key == defs.intercomHangupKey.key) {
+        } else if (e.key == defs.intercomHangupKey.key ||
+            e.key == defs.intercomHangupKeyRinging.key) {
           _syncHangupKey();
         } else if (e.key == defs.intercomVolume.key) {
           unawaited(audio.setVolume(_playbackGain()));
@@ -566,8 +587,17 @@ class IntercomManager extends Manager {
     // the call: the page holds the microphone exclusively.
     micHub.browserCapturing.addListener(_onBrowserCapture);
     _subs.add(
-      bus.on<IntercomHangupRequested>().listen((_) {
-        if (_hangupStates.contains(_state)) unawaited(hangup());
+      bus.on<IntercomHangupRequested>().listen((e) {
+        if (_hangupStates.contains(_state)) {
+          unawaited(hangup());
+        } else if (e.button && _state == 'ringing') {
+          switch (_settings.get(defs.intercomHangupKeyRinging)) {
+            case 'answer':
+              unawaited(_answer());
+            case 'decline':
+              unawaited(_decline());
+          }
+        }
       }),
     );
     await _readFleet();
@@ -1038,22 +1068,15 @@ class IntercomManager extends Manager {
       ..register(
         Command(
           name: 'intercomAnswer',
-          description: 'Answer the call ringing here (the kiosk screen only).',
+          description: 'Answer the call ringing here.',
           handler: (_) async => _answer(),
         ),
       )
       ..register(
         Command(
           name: 'intercomDecline',
-          description: 'Decline the call ringing here (the kiosk screen only).',
-          handler: (_) async {
-            if (_state != 'ringing') {
-              return const CommandResult.fail('nothing is ringing');
-            }
-            await _signalPeer('decline');
-            await _finish('declined');
-            return const CommandResult.ok();
-          },
+          description: 'Decline the call ringing here.',
+          handler: (_) async => _decline(),
         ),
       )
       ..register(
@@ -1533,17 +1556,19 @@ class IntercomManager extends Manager {
     _ => status,
   };
 
-  /// Sends [pcm] (16 kHz mono PCM16) in 80 ms chunks to every link, and
-  /// to this kiosk's own speaker when [local], on the clock a microphone
-  /// would keep. Resolves when the clip ran out or the call ended.
+  /// Sends [pcm] (mono PCM16 at [rate], 16 kHz for anything that goes
+  /// to a link) in 80 ms chunks to every link, and to this kiosk's own
+  /// speaker when [local], on the clock a microphone would keep. Resolves
+  /// when the clip ran out or the call ended.
   Future<void> _streamClip(
     IntercomCall c,
     Uint8List pcm, {
     bool local = false,
+    int rate = IntercomAudio.callRate,
   }) {
     _injectTimer?.cancel();
     var offset = 0;
-    const chunk = 2560;
+    final chunk = (rate * 2 * 80 ~/ 1000) & ~1;
     final done = Completer<void>();
     _injectTimer = Timer.periodic(const Duration(milliseconds: 80), (t) {
       if (_call != c || !_active || offset >= pcm.length) {
@@ -1599,10 +1624,13 @@ class IntercomManager extends Manager {
       }
       bytes = spoken;
     }
+    // At the file's own rate: it plays here alone, never on a link, and
+    // brought down to the intercom's 16 kHz it lost its top octave.
     final decoded = await audio.decode(bytes);
-    if (decoded == null || decoded.isEmpty) {
+    if (decoded == null || decoded.pcm.isEmpty) {
       return const CommandResult.fail('could not decode the audio');
     }
+    final rate = decoded.rate;
     // Repeat: the clip that many times with a short pause between, the
     // chime once before. Ten at most, the action's 0 means once.
     final asked = p['repeat'];
@@ -1616,7 +1644,9 @@ class IntercomManager extends Manager {
     final pauseMs = pauseAsked > 0
         ? (pauseAsked.clamp(0, 30) * 1000).round()
         : 600;
-    final pcm = repeat == 1 ? decoded : _repeated(decoded, repeat, pauseMs);
+    final pcm = repeat == 1
+        ? decoded.pcm
+        : _repeated(decoded.pcm, repeat, pauseMs, rate);
     // The chime rides the same track as the words, ahead of them: one
     // route, one gain and one pass through the platform's processing, so
     // the two play equally loud however Android routes the words (the
@@ -1625,9 +1655,9 @@ class IntercomManager extends Manager {
         ? p['chime'] as bool
         : _settings.get(defs.announcementsChime);
     final chimePcm = chime
-        ? await _announcementChime('${p['chime_file'] ?? ''}'.trim())
+        ? await _announcementChime('${p['chime_file'] ?? ''}'.trim(), rate)
         : null;
-    final clip = chimePcm == null ? pcm : _joined(chimePcm, pcm, 200);
+    final clip = chimePcm == null ? pcm : _joined(chimePcm, pcm, 200, rate);
     if (_busy) return const CommandResult.fail('in a call');
     _holdTimer?.cancel();
     _missedTimer?.cancel();
@@ -1655,20 +1685,21 @@ class IntercomManager extends Manager {
     final share = askedVolume > 0
         ? askedVolume.clamp(0.0, 1.0)
         : _settings.get(defs.mediaVolume).toDouble().clamp(0, 100) / 100;
-    await _startPlayback(volume: share * share);
+    await _startPlayback(volume: share * share, rate: rate);
     c.since = DateTime.now();
-    log.info(name, 'announcement from Home Assistant, ${pcm.length ~/ 32} ms');
+    final ms = pcm.length * 1000 ~/ (rate * 2);
+    log.info(name, 'announcement from Home Assistant, $ms ms at $rate Hz');
     unawaited(
-      _streamClip(c, clip, local: true).then((_) {
+      _streamClip(c, clip, local: true, rate: rate).then((_) {
         if (_call == c && _state == 'listening') _finish('broadcast_over');
       }),
     );
-    return CommandResult.ok({'ms': pcm.length ~/ 32});
+    return CommandResult.ok({'ms': ms});
   }
 
   /// [clip] [times] over with [pauseMs] of silence between, for repeat.
-  static Uint8List _repeated(Uint8List clip, int times, int pauseMs) {
-    final gap = (16000 * 2 * pauseMs ~/ 1000) & ~1;
+  static Uint8List _repeated(Uint8List clip, int times, int pauseMs, int rate) {
+    final gap = (rate * 2 * pauseMs ~/ 1000) & ~1;
     final out = Uint8List(clip.length * times + gap * (times - 1));
     var at = 0;
     for (var i = 0; i < times; i++) {
@@ -1679,19 +1710,24 @@ class IntercomManager extends Manager {
   }
 
   /// [first], [gapMs] of silence, then [second]: the chime and the words.
-  static Uint8List _joined(Uint8List first, Uint8List second, int gapMs) {
-    final gap = (16000 * 2 * gapMs ~/ 1000) & ~1;
+  static Uint8List _joined(
+    Uint8List first,
+    Uint8List second,
+    int gapMs,
+    int rate,
+  ) {
+    final gap = (rate * 2 * gapMs ~/ 1000) & ~1;
     final head = first.length & ~1;
     return Uint8List(head + gap + second.length)
       ..setRange(0, head, first)
       ..setRange(head + gap, head + gap + second.length, second);
   }
 
-  /// The chime before an announcement as 16 kHz PCM for the words' track:
+  /// The chime before an announcement as PCM at the words' [rate]:
   /// the picked sound file decoded like the words, else the built-in two
   /// note chime the native sink synthesizes. Null when neither could be
   /// had; the words play without it.
-  Future<Uint8List?> _announcementChime(String asked) async {
+  Future<Uint8List?> _announcementChime(String asked, int rate) async {
     var path = asked.isEmpty ? null : await NotificationSounds.resolve(asked);
     if (asked.isNotEmpty && path == null) {
       log.warn(
@@ -1707,14 +1743,17 @@ class IntercomManager extends Manager {
     if (path != null) {
       Uint8List? decoded;
       try {
-        decoded = await audio.decode(await File(path).readAsBytes());
+        decoded = (await audio.decode(
+          await File(path).readAsBytes(),
+          rate: rate,
+        ))?.pcm;
       } catch (e) {
         log.debug(name, 'read $path: $e');
       }
       if (decoded != null && decoded.isNotEmpty) return decoded;
       log.warn(name, 'could not decode $path, playing the built-in chime');
     }
-    return audio.chimePcm();
+    return audio.chimePcm(rate: rate);
   }
 
   /// Home Assistant's `tts.*` entities as `{entity_id, name}`, or null
@@ -2014,7 +2053,7 @@ class IntercomManager extends Manager {
       return const CommandResult.fail('nothing is ringing');
     }
     _cancelTimers();
-    await audio.stopRing();
+    await _stopRing();
     if (!await _openMic()) {
       // Answer anyway: listening is still worth it, the card says why
       // nothing goes out.
@@ -2032,6 +2071,15 @@ class IntercomManager extends Manager {
       return const CommandResult.fail('the caller did not answer');
     }
     _changed();
+    return const CommandResult.ok();
+  }
+
+  Future<CommandResult> _decline() async {
+    if (_state != 'ringing') {
+      return const CommandResult.fail('nothing is ringing');
+    }
+    await _signalPeer('decline');
+    await _finish('declined');
     return const CommandResult.ok();
   }
 
@@ -2303,11 +2351,15 @@ class IntercomManager extends Manager {
 
   bool get _handsFreeCall => _call?.kind == 'call' && talkMode == 'handsfree';
 
-  Future<void> _startPlayback({double? volume}) async {
-    if (audio.open) return;
+  Future<void> _startPlayback({
+    double? volume,
+    int rate = IntercomAudio.callRate,
+  }) async {
+    if (audio.open && audio.rate == rate) return;
     final ok = await audio.start(
       volume: volume ?? _playbackGain(),
       handsFree: _handsFreeCall,
+      rate: rate,
     );
     if (!ok) log.warn(name, 'playback could not open');
   }
@@ -2321,16 +2373,34 @@ class IntercomManager extends Manager {
 
   /// The ring: the picked sound file through the chime player, else the
   /// built-in telephone ring the native sink synthesizes (no asset). A
-  /// short ring is one burst: Answer automatically and a broadcast.
+  /// short ring is one burst: Answer automatically and a broadcast, which
+  /// cut a picked sound off after [shortRingSound]. A picked sound longer
+  /// than the cadence is left to finish before the next ring starts it
+  /// again.
   Future<void> _ring({bool short = false}) async {
+    final generation = _ringGeneration;
     final volume = _settings
         .get(defs.notificationsVolume)
         .toDouble()
         .clamp(0.0, 1.0);
     final sound = _settings.get(defs.intercomRingSound).trim();
     final path = sound.isEmpty ? null : await NotificationSounds.resolve(sound);
+    if (generation != _ringGeneration) return;
     if (path != null) {
-      await commands.execute('playChime', {'source': path, 'volume': volume});
+      if (_ringSoundPlaying) return;
+      _ringSoundPlaying = true;
+      final r = await commands.execute('playChime', {
+        'source': path,
+        'volume': volume,
+        'id': _ringSoundId,
+      });
+      if (!r.ok) {
+        _ringSoundPlaying = false;
+      } else if (short) {
+        _ringSoundCut = Timer(shortRingSound, () {
+          if (generation == _ringGeneration) unawaited(_stopRing());
+        });
+      }
       return;
     }
     final err = await audio.ring(volume: volume, short: short);
@@ -2339,6 +2409,17 @@ class IntercomManager extends Manager {
     } else {
       log.debug(name, 'ring${short ? ' (short)' : ''} at $volume');
     }
+  }
+
+  /// Silences the ring, whichever player has it.
+  Future<void> _stopRing() async {
+    _ringGeneration++;
+    _ringSoundCut?.cancel();
+    _ringSoundCut = null;
+    await audio.stopRing();
+    if (!_ringSoundPlaying) return;
+    _ringSoundPlaying = false;
+    await commands.execute('stopSound', const {'id': _ringSoundId});
   }
 
   static double _level(Uint8List pcm) {
@@ -2406,7 +2487,7 @@ class IntercomManager extends Manager {
     _connectTimer?.cancel();
     _injectTimer?.cancel();
     _injectTimer = null;
-    await audio.stopRing();
+    await _stopRing();
     for (final l in _links.values.toList()) {
       await l.close();
     }
@@ -2493,8 +2574,8 @@ class IntercomManager extends Manager {
   }
 
   /// The states the hang up button ends: a call being placed, a live call
-  /// and either end of a broadcast. A ringing call is answered or declined
-  /// on the screen.
+  /// and either end of a broadcast. A ringing call arms it only when Hang
+  /// up button while ringing picks Accept or Decline.
   static const _hangupStates = {
     'calling',
     'in_call',
@@ -2503,7 +2584,11 @@ class IntercomManager extends Manager {
   };
 
   void _syncHangupKey() {
-    final code = _hangupStates.contains(_state)
+    final armed =
+        _hangupStates.contains(_state) ||
+        (_state == 'ringing' &&
+            _settings.get(defs.intercomHangupKeyRinging) != 'ignore');
+    final code = armed
         ? defs.intercomHangupKeyCodes[_settings.get(defs.intercomHangupKey)] ??
               0
         : 0;

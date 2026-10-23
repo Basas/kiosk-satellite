@@ -5,7 +5,7 @@ import 'dart:math' show Random, max;
 import 'dart:typed_data' show BytesBuilder;
 
 import 'package:flutter/foundation.dart'
-    show Uint8List, ValueNotifier, mapEquals, visibleForTesting;
+    show Uint8List, ValueNotifier, mapEquals, setEquals, visibleForTesting;
 import 'package:flutter/services.dart';
 
 import '../../core/certificate_log.dart';
@@ -13,8 +13,10 @@ import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/logging.dart';
 import '../../core/manager.dart';
+import '../airplay/airplay_manager.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
+import 'airplay_player.dart';
 import 'ha_remote_player.dart';
 import 'artwork_cache.dart';
 import 'queue_artwork_cache.dart';
@@ -59,6 +61,18 @@ class SendspinManager extends Manager {
   bool _running = false;
   bool _playing = false;
   Map<String, Object?> _status = const {};
+
+  /// What Music Assistant knows this device as: the id of the player that
+  /// stands for it there and the server's identity. Resolved after the
+  /// player connects.
+  Map<String, Object?> _maIdentity = const {};
+  String _maIdentityKey = '';
+  int _maIdentityRun = 0;
+  String _playerSent = '';
+
+  /// Whether this device's own Sendspin player is playing, whichever player
+  /// the Now Playing surfaces follow. The status lights read it.
+  final localPlaying = ValueNotifier<bool>(false);
 
   /// Live now-playing snapshot for the floating player overlay: the merged
   /// status plus 'playing' and 'receivedAt' (epoch ms of the last metadata
@@ -117,8 +131,94 @@ class SendspinManager extends Manager {
   String _watchSig = '';
   Map<String, Object?>? _localQueueSnapshot;
 
-  /// When the local player last sent a seek, epoch ms: the re-base stands
-  /// down for a moment after it.
+  /// The Sendspin controller commands kept off the local player's
+  /// controls, the engine's included (see [withheldCommands]).
+  Set<String> _withheld = const {};
+
+  /// Each Sendspin controller command and what the watcher's snapshot
+  /// calls the ability it needs.
+  static const _commandAbility = {
+    'play': 'play',
+    'pause': 'pause',
+    'stop': 'stop',
+    'next': 'next',
+    'previous': 'previous',
+    'seek': 'seek',
+    'seek_relative': 'seek',
+    'repeat_off': 'repeat',
+    'repeat_one': 'repeat',
+    'repeat_all': 'repeat',
+    'shuffle': 'shuffle',
+    'unshuffle': 'shuffle',
+  };
+
+  /// The abilities Music Assistant's Sendspin controller applies to the
+  /// queue alone.
+  static const _queueAbilities = {'seek', 'repeat', 'shuffle'};
+
+  /// The Sendspin controller commands to keep off the local player's
+  /// controls. Music Assistant advertises the same full set to every
+  /// Sendspin controller whatever plays, so a source with no controls,
+  /// like its AirPlay Receiver, showed buttons that only raised errors.
+  /// The watcher's [snapshot] says what the source can do. Seek, repeat
+  /// and shuffle act on a queue there, so they also go while the source
+  /// plays without one ([queue] false). No snapshot withholds nothing and
+  /// the server's list stands.
+  @visibleForTesting
+  static Set<String> withheldCommands(
+    Map<String, Object?>? snapshot, {
+    required bool queue,
+  }) {
+    final allowed = snapshot?['supportedCommands'];
+    if (allowed is! List) return const {};
+    return {
+      for (final e in _commandAbility.entries)
+        if (!allowed.contains(e.value) ||
+            (!queue && _queueAbilities.contains(e.value)))
+          e.key,
+    };
+  }
+
+  /// [commands] without the withheld ones.
+  List<Object?> _offered(Object? commands) => [
+    if (commands is List)
+      for (final c in commands)
+        if (!_withheld.contains(c)) c,
+  ];
+
+  /// Work the withheld commands out again and tell the engine, which
+  /// keeps them off the media session and refuses them.
+  void _syncWithheld() {
+    final watcher = _watcher;
+    final next = _remote == null && watcher != null
+        ? withheldCommands(_localQueueSnapshot, queue: watcher.hasQueue)
+        : const <String>{};
+    if (setEquals(next, _withheld)) return;
+    _withheld = next;
+    unawaited(_pushWithheld(next.toList()));
+    // The card's list was cut by the last set. The engine's own list
+    // brings back what this one gives back.
+    final shown = nowPlaying.value;
+    if (_remote == null && shown != null) {
+      _setNowPlaying({
+        ...shown,
+        'supportedCommands': ?_status['supportedCommands'],
+      });
+    }
+  }
+
+  Future<void> _pushWithheld(List<String> commands) async {
+    try {
+      await _channel.invokeMethod<bool>('withholdCommands', {
+        'commands': commands,
+      });
+    } catch (e) {
+      log.warn(name, 'withholding commands failed: $e');
+    }
+  }
+
+  /// When the local player last sent a seek or a previous, epoch ms: the
+  /// re-base stands down for a moment after it.
   int _seekSentAt = 0;
 
   /// When the position was last taken from the server's queue time, epoch
@@ -246,6 +346,10 @@ class SendspinManager extends Manager {
     if (url.isEmpty) return null;
     // Another app's cover, kept by the media session bridge.
     if (url.startsWith('mediasession:')) return SessionPlayer.artwork(url);
+    // An AirPlay sender's, kept by the receiver.
+    if (url.startsWith(AirPlayPlayer.artworkScheme)) {
+      return AirPlayManager.artworkFor(url);
+    }
     HttpClient? client;
     try {
       final serverHost = Uri.parse(
@@ -305,6 +409,7 @@ class SendspinManager extends Manager {
     required void Function(Map<String, Object?>?) onSnapshot,
     required Logger log,
     String label,
+    bool showInputs,
   })
   remoteFactory = MaRemotePlayer.new;
 
@@ -353,9 +458,13 @@ class SendspinManager extends Manager {
   String get followedPlayerName => _remotePicked ? _pickedName : '';
 
   /// The pick's stored name, or for a media session followed as "any
-  /// app" the app that plays right now.
+  /// app" the app that plays right now, and for the AirPlay receiver the
+  /// sender playing to it.
   String get _pickedName {
     final remote = _remote;
+    if (remote is AirPlayPlayer && remote.clientName.isNotEmpty) {
+      return remote.clientName;
+    }
     if (remote is SessionPlayer &&
         remote.package == SessionPlayer.anyApp &&
         remote.appName.isNotEmpty) {
@@ -413,8 +522,27 @@ class SendspinManager extends Manager {
               _settings.get(defs.sendspinClientId).trim().isNotEmpty;
   }
 
-  /// The shown player's group and its candidates, for the chip's menu.
-  Future<RemoteGroup?> fetchGroup() async {
+  /// The shown player's group and its candidates, for the chip's menu,
+  /// down to the speakers the pill is set to offer.
+  Future<RemoteGroup?> fetchGroup() async =>
+      (await _fetchGroup())?.allowing(_pillAllowed());
+
+  /// The ids [defs.sendspinSpeakerPillPlayers] lets the menu offer, for
+  /// the source the menu reads from: a followed Sonos room lists Sonos
+  /// rooms, every other menu Music Assistant players. Picks made under
+  /// the other source are kept but do not count, so switching sources
+  /// never empties the menu.
+  Set<String> _pillAllowed() {
+    final prefix = _source.kind == PlayerSourceKind.sonos ? 'sonos:' : 'ma:';
+    return {
+      for (final id in defs.decodeSpeakerPillPlayers(
+        _settings.get(defs.sendspinSpeakerPillPlayers),
+      ))
+        if (id.startsWith(prefix)) id.substring(prefix.length),
+    };
+  }
+
+  Future<RemoteGroup?> _fetchGroup() async {
     final remote = _remote;
     if (remote != null) return remote.fetchGroup();
     if (!groupAvailable) return null;
@@ -525,9 +653,10 @@ class SendspinManager extends Manager {
           false);
 
   /// Whether the shown player plays out of this device, so its volume is
-  /// the device's media volume: the local player, or another app's media
-  /// session.
-  bool get _deviceVolume => _remote == null || _remote is SessionPlayer;
+  /// the device's media volume: the local player, another app's media
+  /// session or an AirPlay sender.
+  bool get _deviceVolume =>
+      _remote == null || _remote is SessionPlayer || _remote is AirPlayPlayer;
 
   /// Whether the view's volume slider and mute act on the whole group
   /// this device plays in (issue #867): the local player, grouped in
@@ -551,13 +680,19 @@ class SendspinManager extends Manager {
           ? _settings.get(defs.mediaVolume).toInt()
           : (nowPlaying.value?['volume'] as num?)?.toInt());
 
+  /// Whether the volume keys can steer something other than the device's
+  /// own volume: a followed player that takes a volume (issue #544) or
+  /// the Music Assistant group the local player plays in (issue #1032).
+  bool get _volumeKeysSteer =>
+      groupVolumeActive || (!_deviceVolume && volumeAvailable);
+
   /// Whether the hardware volume keys should steer the followed player
-  /// (issue #544), given whether the Now Playing view is on screen: the
-  /// setting's mode, for a player elsewhere that takes a volume. The
+  /// or this device's group, given whether the Now Playing view is on
+  /// screen: the setting's mode, while there is something to steer. The
   /// kiosk screen, which knows what is on screen, pushes the answer to
   /// the native side.
   bool volumeKeysWanted({required bool viewShown}) {
-    if (_deviceVolume || !volumeAvailable) return false;
+    if (!_volumeKeysSteer) return false;
     return switch (_settings.get(defs.sendspinVolumeKeys)) {
       'now_playing' => viewShown,
       'playing' => viewShown || nowPlaying.value?['playing'] == true,
@@ -577,13 +712,13 @@ class SendspinManager extends Manager {
   bool _volumeSending = false;
   bool _volumeDirty = false;
 
-  /// A volume key press (issue #544): move the followed player's volume
-  /// by [delta] percent. Presses arriving while a command is out are
+  /// A volume key press (issue #544): move the followed player's volume,
+  /// or the group's, by [delta] percent. Presses arriving while a command is out are
   /// folded into one trailing command at the latest target, so a held
   /// key, which repeats many times a second, sends the player one
   /// request at a time rather than a flood.
   Future<void> nudgeVolume(int delta) async {
-    if (_deviceVolume || !volumeAvailable) return;
+    if (!_volumeKeysSteer) return;
     final base = volumeLevel;
     if (base == null) return;
     _volumeTarget = (base + delta).clamp(0, 100);
@@ -617,7 +752,7 @@ class SendspinManager extends Manager {
       case 'down':
         unawaited(nudgeVolume(-_settings.get(defs.sendspinVolumeKeyStep)));
       case 'mute':
-        if (_deviceVolume || !volumeAvailable) return;
+        if (!_volumeKeysSteer) return;
         volumeNudge.value++;
         unawaited(toggleMute());
     }
@@ -711,8 +846,9 @@ class SendspinManager extends Manager {
 
   void _setNowPlaying(Map<String, Object?>? value) {
     if (_remote == null && value != null) {
-      // Sendspin omits chapters. Match the queue to the audible title so
-      // chapter metadata survives progress deltas and leaves with the book.
+      // Sendspin omits chapters and the source's audio format. Match the
+      // queue to the audible title so both survive progress deltas and
+      // leave with the track.
       final queue = _localQueueSnapshot;
       final matches = queue != null && queue['title'] == value['title'];
       // The engine's progress for a radio station counts from the moment
@@ -726,6 +862,9 @@ class SendspinManager extends Manager {
         'mediaType': matches ? queue['mediaType'] : null,
         'mediaUri': matches ? queue['mediaUri'] : null,
         'chapters': matches ? queue['chapters'] : null,
+        'audioQuality': matches ? queue['audioQuality'] : null,
+        if (value['supportedCommands'] != null)
+          'supportedCommands': _offered(value['supportedCommands']),
         // The group this device plays in, whatever the track.
         'groupVolume': queue?['groupVolume'],
         'groupMuted': queue?['groupMuted'],
@@ -896,6 +1035,7 @@ class SendspinManager extends Manager {
         case 'stateChanged':
           _status = {..._status, ...map};
           _remoteMediaChanged();
+          _playerChanged();
           log.info(
             name,
             'state: connected=${map['connected']} '
@@ -978,6 +1118,16 @@ class SendspinManager extends Manager {
           final playing = map['playing'] == true;
           if (playing != _playing) {
             _playing = playing;
+            localPlaying.value = playing;
+            // The position stood still while nothing played, and the
+            // native side reports playing once the music starts, so it
+            // runs on from here rather than from when it was stamped.
+            if (playing) {
+              _status = {
+                ..._status,
+                'receivedAt': DateTime.now().millisecondsSinceEpoch,
+              };
+            }
             _syncQueuePoll();
             if (!playing) unawaited(_watcher?.refresh());
             // Announce local playback outside full-screen player mode.
@@ -1042,6 +1192,14 @@ class SendspinManager extends Manager {
       _syncDucking();
     });
 
+    // The AirPlay receiver's sessions, for its follower while it is the
+    // pick.
+    bus.on<AirPlaySessionChanged>().listen((e) {
+      final remote = _remote;
+      if (remote is AirPlayPlayer) remote.handle(e.session);
+    });
+    AirPlayManager.albumCoverAdded.addListener(_onAirPlayCover);
+
     // The "Show the Sendspin player" gesture with nothing on screen to
     // show: the queue may still exist server-side, invisible to this app
     // since it restarted (issue #178) — go look for it.
@@ -1053,6 +1211,13 @@ class SendspinManager extends Manager {
       // The source sensor names the player, and a rename or the player
       // surface going away moves it without a snapshot.
       _publishMediaSummary();
+      if (e.key == defs.sendspinEnabled.key ||
+          e.key == defs.sendspinClientId.key ||
+          e.key == defs.sendspinLocalPlayerName.key ||
+          e.key == defs.sendspinMaUrl.key ||
+          e.key == defs.sendspinMaToken.key) {
+        _playerChanged();
+      }
       if (e.key == defs.sendspinDuckPercent.key) _syncDucking();
       // The card-surface flag rides the settings that decide it.
       if (e.key == defs.sendspinPlayer.key ||
@@ -1107,6 +1272,7 @@ class SendspinManager extends Manager {
           e.key == defs.sendspinSonosHosts.key ||
           e.key == defs.sendspinSonosGroupVolume.key ||
           e.key == defs.sendspinSonosInputs.key ||
+          e.key == defs.sendspinMaInputs.key ||
           e.key == defs.haUrl.key ||
           e.key == defs.haToken.key) {
         _syncRemote();
@@ -1135,10 +1301,14 @@ class SendspinManager extends Manager {
         'sendspin.fullscreen_controls',
         'sendspin.fullscreen_text_scale',
         'sendspin.fullscreen_button_scale',
-        'sendspin.fullscreen_horizontal',
+        'sendspin.fullscreen_layout',
         'sendspin.fullscreen_split',
         'sendspin.fullscreen_photo_fill',
         'sendspin.fullscreen_override_brightness',
+        // Where the dashboard lands after Now Playing: read at the
+        // screensaver's edges by the Home Assistant manager.
+        'sendspin.fullscreen_return',
+        'sendspin.fullscreen_return_view',
         'sendspin.fullscreen_queue',
         'sendspin.fullscreen_double_tap',
         'sendspin.fullscreen_on_play',
@@ -1157,6 +1327,7 @@ class SendspinManager extends Manager {
         'sendspin.ma_shortcut',
         'sendspin.ma_auto_close',
         'sendspin.ma_hide_close',
+        'sendspin.ma_zoom',
         'sendspin.player_shortcut',
         // Where the hardware volume keys go and how far they step: read
         // per press, nothing the audio client holds.
@@ -1171,7 +1342,9 @@ class SendspinManager extends Manager {
         'sendspin.sonos_group_volume',
         'sendspin.group_volume',
         'sendspin.sonos_inputs',
+        'sendspin.ma_inputs',
         'sendspin.speaker_pill',
+        'sendspin.speaker_pill_players',
         'sendspin.queue_art',
         'sendspin.lyrics_enabled',
         'sendspin.lyrics_source',
@@ -1216,6 +1389,17 @@ class SendspinManager extends Manager {
 
     commands.register(
       Command(
+        name: 'sendspinPlayer',
+        description:
+            'The local Sendspin player: whether it is on and connected, its '
+            'client id and name and the Music Assistant player and server '
+            'it maps to.',
+        handler: (_) async => CommandResult.ok(playerIdentity),
+      ),
+    );
+
+    commands.register(
+      Command(
         name: 'sendspinStatus',
         description:
             'The Sendspin player status: connection, server, playback state, '
@@ -1228,6 +1412,9 @@ class SendspinManager extends Manager {
             live = ((await _channel.invokeMethod<Map>('getStatus')) ?? const {})
                 .cast<String, Object?>();
           } catch (_) {}
+          final localCommands = _remote == null
+              ? live['supportedCommands'] ?? _status['supportedCommands']
+              : null;
           return CommandResult.ok({
             'enabled': _settings.get(defs.sendspinEnabled),
             'running': _running,
@@ -1240,6 +1427,8 @@ class SendspinManager extends Manager {
               'remotePlayer': _settings.get(defs.sendspinPlayerName),
             ..._status,
             ...live,
+            if (localCommands != null)
+              'supportedCommands': _offered(localCommands),
             // A followed player's track over the local client's, which
             // sits idle while another player is controlled: the shown
             // surfaces play from the snapshot, so the status says what
@@ -1412,10 +1601,13 @@ class SendspinManager extends Manager {
             'player and a note per group that could not be listed. With '
             'source set, only that group. With speakers true, the Home '
             'Assistant group keeps Music Assistant\'s own entities, for '
-            'pickers that play sounds on a player.',
+            'pickers that play sounds on a player. With rooms true, the '
+            'Sonos group lists every room on its own instead of one row '
+            'per group, the way the speaker selection pill lists them.',
         params: const {
           'source': 'ma | ha | sonos, default all',
           'speakers': 'true to keep Music Assistant entities in ha',
+          'rooms': 'true to list every Sonos room on its own',
         },
         handler: (p) async {
           final only = '${p['source'] ?? ''}'.trim();
@@ -1455,7 +1647,10 @@ class SendspinManager extends Manager {
           if (want('sonos')) {
             // The rooms of the speakers the Sonos page knows; the search
             // there finds new ones.
-            final sonos = await _sonosPlayers(discover: false);
+            final sonos = await _sonosPlayers(
+              discover: false,
+              rooms: p['rooms'] == true,
+            );
             if (sonos.isEmpty) {
               notes['sonos'] =
                   'No Sonos speakers known yet. Find or add one on the '
@@ -1475,8 +1670,9 @@ class SendspinManager extends Manager {
             'Follow a player: the source (device, home_assistant, '
             'music_assistant or sonos) and the player by name or id, the '
             'way the Media Player page picks one. The device source puts '
-            'this device back on its own Sendspin player, or with player '
-            'media_session on whichever app plays on the device.',
+            'this device back on its own Sendspin player, with player '
+            'media_session on whichever app plays on the device, or with '
+            'player airplay on its AirPlay receiver.',
         params: const {
           'source': 'device | home_assistant | music_assistant | sonos',
           'player': 'the player name, or its id',
@@ -1485,21 +1681,22 @@ class SendspinManager extends Manager {
           final source = sourceKey('${p['source'] ?? ''}');
           if (source == null) return const CommandResult.fail('unknown source');
           if (source.isEmpty) {
-            final session = isLocalSessionName('${p['player'] ?? ''}');
+            final player = '${p['player'] ?? ''}';
+            final session = isLocalSessionName(player);
+            final airplay = player.trim().toLowerCase() == airplayPick;
+            final (pick, id, name) = session
+                ? (localSessionPick, 'media_session', localSessionName)
+                : airplay
+                ? (airplayPick, airplayPick, airplayName)
+                : ('', '', '');
             await _settings.set(defs.sendspinPlayerSource, '');
             await Future<void>.delayed(Duration.zero);
-            await _settings.set(
-              defs.sendspinPlayer,
-              session ? localSessionPick : '',
-            );
-            await _settings.set(
-              defs.sendspinPlayerName,
-              session ? localSessionName : '',
-            );
+            await _settings.set(defs.sendspinPlayer, pick);
+            await _settings.set(defs.sendspinPlayerName, name);
             return CommandResult.ok({
               'source': 'device',
-              'id': session ? 'media_session' : '',
-              'name': session ? localSessionName : '',
+              'id': id,
+              'name': name,
             });
           }
           final wanted = '${p['player'] ?? ''}'.trim();
@@ -1687,12 +1884,33 @@ class SendspinManager extends Manager {
         ),
       );
 
+  /// Picker rows for every room of [groups] on its own, the rows the
+  /// speaker selection pill's menu shows for a followed Sonos room.
+  static List<Map<String, Object?>> _sonosRoomRows(List<SonosGroup> groups) =>
+      [
+        for (final g in groups)
+          for (final m in g.members)
+            {
+              'id': 'sonos:${m.uuid}',
+              'name': m.name,
+              'sub': m.host,
+              'group': 'sonos',
+              'available': true,
+            },
+      ]..sort(
+        (a, b) => '${a['name']}'.toLowerCase().compareTo(
+          '${b['name']}'.toLowerCase(),
+        ),
+      );
+
   /// The Sonos groups on the network: the households of every speaker
   /// this device knows, plus, with [discover], whatever answers a
   /// multicast search on the tablet's own VLAN. One topology read per
-  /// household answers for all its rooms.
+  /// household answers for all its rooms. With [rooms], a row per room
+  /// instead of per group.
   Future<List<Map<String, Object?>>> _sonosPlayers({
     required bool discover,
+    bool rooms = false,
   }) async {
     final hosts = <String>{
       for (final h in _sonosHosts.values)
@@ -1718,7 +1936,7 @@ class SendspinManager extends Manager {
       }
     }
     if (groups.isNotEmpty) await _rememberSonos(groups);
-    return _sonosRows(groups);
+    return rooms ? _sonosRoomRows(groups) : _sonosRows(groups);
   }
 
   /// Another source is picked, whether or not a player of it is yet, or
@@ -1740,9 +1958,11 @@ class SendspinManager extends Manager {
       _ => PlayerSourceKind.local,
     };
     if (picked.isLocal || picked.kind == kind) return;
-    // This device's other player: the apps playing on it.
+    // This device's other players: the apps playing on it and the
+    // AirPlay receiver.
     if (kind == PlayerSourceKind.local &&
-        picked.kind == PlayerSourceKind.mediaSession) {
+        (picked.kind == PlayerSourceKind.mediaSession ||
+            picked.kind == PlayerSourceKind.airplay)) {
       return;
     }
     await _settings.set(defs.sendspinPlayer, '');
@@ -1799,6 +2019,13 @@ class SendspinManager extends Manager {
 
   /// What the pick is called where it is stored and shown.
   static const localSessionName = 'Local Media Session';
+
+  /// The pick that plays what an iPhone, iPad or Mac sends to this
+  /// device's AirPlay receiver: the device source's third player.
+  static const airplayPick = 'airplay';
+
+  /// What that pick is called, a name no language translates.
+  static const airplayName = 'AirPlay';
 
   /// Whether an action's player names the local media session rather
   /// than the Sendspin player.
@@ -1912,6 +2139,9 @@ class SendspinManager extends Manager {
           .catchError((_) {}),
     );
     unawaited(_remoteDucker?.update(active: voiceActive.value, factor: factor));
+    // The AirPlay receiver plays out of this device like the local player
+    // and ducks on the same factor, whether or not a sender plays.
+    unawaited(AirPlayManager.duck(voiceActive.value ? factor : 1.0));
   }
 
   Future<void> _retireRemote(RemotePlayer remote, VolumeDucker? ducker) async {
@@ -1945,16 +2175,19 @@ class SendspinManager extends Manager {
         source.id.isNotEmpty && haUrl.isNotEmpty && haToken.isNotEmpty,
       PlayerSourceKind.sonos => source.id.isNotEmpty && sonosHost.isNotEmpty,
       PlayerSourceKind.mediaSession => source.id.isNotEmpty,
+      PlayerSourceKind.airplay => true,
     };
     final key = want
         ? switch (source.kind) {
             PlayerSourceKind.musicAssistant =>
-              'ma|${source.id}|$maUrl|$maToken',
+              'ma|${source.id}|$maUrl|$maToken|'
+                  '${_settings.get(defs.sendspinMaInputs)}',
             PlayerSourceKind.homeAssistant => 'ha|${source.id}|$haUrl|$haToken',
             PlayerSourceKind.sonos =>
               'sonos|${source.id}|$sonosHost|'
                   '${_settings.get(defs.sendspinSonosGroupVolume)}|${_settings.get(defs.sendspinSonosInputs)}',
             PlayerSourceKind.mediaSession => 'session|${source.id}',
+            PlayerSourceKind.airplay => 'airplay',
             _ => '',
           }
         : '';
@@ -2005,12 +2238,14 @@ class SendspinManager extends Manager {
         onSnapshot: snapshot,
         log: log,
       ),
+      PlayerSourceKind.airplay => AirPlayPlayer(onSnapshot: snapshot),
       _ => remoteFactory(
         baseUrl: maUrl,
         token: maToken,
         playerId: source.id,
         onSnapshot: snapshot,
         log: log,
+        showInputs: _settings.get(defs.sendspinMaInputs),
       ),
     };
     _remote = remote;
@@ -2071,8 +2306,15 @@ class SendspinManager extends Manager {
     unawaited(_refreshLyrics());
   }
 
+  /// An album cover came in after the panel listed the queue: list it
+  /// again, now with that album's rows drawn.
+  void _onAirPlayCover() {
+    if (_remote is AirPlayPlayer && queueOpen) unawaited(refreshQueue());
+  }
+
   @override
   Future<void> dispose() async {
+    AirPlayManager.albumCoverAdded.removeListener(_onAirPlayCover);
     nowPlaying.removeListener(_remoteMediaChanged);
     nowPlaying.removeListener(_publishMediaSummary);
     _restartDebounce?.cancel();
@@ -2160,6 +2402,7 @@ class SendspinManager extends Manager {
       command = nowPlaying.value?['playing'] == true ? 'pause' : 'play';
     }
     if (_remote case final remote?) return remote.control(command);
+    if (command == 'previous') _jumpSent();
     try {
       return await _channel.invokeMethod<bool>('control', {
             'command': command,
@@ -2171,6 +2414,15 @@ class SendspinManager extends Manager {
     }
   }
 
+  /// The local player asked the server to jump within the track. The
+  /// engine adopts the new position itself and its pushes carry it, so
+  /// they count again even right after a queue time was taken, and the
+  /// queue's own time stands aside until it has caught up.
+  void _jumpSent() {
+    _seekSentAt = DateTime.now().millisecondsSinceEpoch;
+    _maPositionAt = 0;
+  }
+
   bool get _maConfigured =>
       _settings.get(defs.sendspinMaUrl).trim().isNotEmpty &&
       _settings.get(defs.sendspinMaToken).trim().isNotEmpty;
@@ -2179,6 +2431,90 @@ class SendspinManager extends Manager {
     baseUrl: _settings.get(defs.sendspinMaUrl),
     token: _settings.get(defs.sendspinMaToken),
   );
+
+  /// The local player as plugins see it, through `getSendspinPlayer` and
+  /// the `sendspin.player` event. The Music Assistant fields are empty
+  /// until the player connects and the server names it.
+  Map<String, Object?> get playerIdentity {
+    final ma = _maConfigured ? _maIdentity : const <String, Object?>{};
+    final connected = _running && _status['connected'] == true;
+    return {
+      'enabled': _settings.get(defs.sendspinEnabled),
+      'running': _running,
+      'connected': connected,
+      'clientId': _settings.get(defs.sendspinClientId),
+      'playerName': _settings.get(defs.sendspinLocalPlayerName),
+      'serverName': connected ? '${_status['serverName'] ?? ''}' : '',
+      'maConfigured': _maConfigured,
+      'maPlayerId': '${ma['playerId'] ?? ''}',
+      'maServerId': '${ma['serverId'] ?? ''}',
+      'maServerName': '${ma['serverName'] ?? ''}',
+      'maServerVersion': '${ma['serverVersion'] ?? ''}',
+    };
+  }
+
+  /// Tell plugins when [playerIdentity] changed.
+  void _playerChanged() {
+    _syncMaIdentity();
+    final player = playerIdentity;
+    final signature = jsonEncode(player);
+    if (signature == _playerSent) return;
+    _playerSent = signature;
+    bus.publish(SendspinPlayerChanged(player));
+  }
+
+  /// Ask Music Assistant which player stands for this device, once per
+  /// connection to a server with a given address, token and client id.
+  void _syncMaIdentity() {
+    final clientId = _settings.get(defs.sendspinClientId).trim();
+    final connected = _running && _status['connected'] == true;
+    final key = connected && _maConfigured && clientId.isNotEmpty
+        ? '${_settings.get(defs.sendspinMaUrl)}|'
+              '${_settings.get(defs.sendspinMaToken)}|$clientId|'
+              '${_status['serverName'] ?? ''}'
+        : '';
+    if (key == _maIdentityKey) return;
+    _maIdentityKey = key;
+    final run = ++_maIdentityRun;
+    if (!_maConfigured) _maIdentity = const {};
+    if (key.isNotEmpty) unawaited(_resolveMaIdentity(run, clientId));
+  }
+
+  /// Music Assistant may list a player a moment after it connects, so a
+  /// miss is asked again twice.
+  Future<void> _resolveMaIdentity(int run, String clientId) async {
+    for (final wait in const [0, 3, 10]) {
+      if (wait > 0) await Future<void>.delayed(Duration(seconds: wait));
+      if (run != _maIdentityRun) return;
+      final res = await _api().call('players/all');
+      final players = res.result;
+      var playerId = res.ok && players is List
+          ? MusicAssistantApi.ownPlayerId(
+              {
+                for (final p in players)
+                  if (p is Map) '${p['player_id'] ?? ''}': p,
+              },
+              clientId,
+              ownName: _settings.get(defs.sendspinLocalPlayerName),
+            )
+          : '';
+      // The queue Music Assistant answers for the client id is the queue
+      // of the player that stands for this device, and shares its id.
+      if (playerId.isEmpty && res.ok) playerId = await _ownQueueId();
+      if (run != _maIdentityRun) return;
+      final info = res.serverInfo;
+      _maIdentity = res.ok
+          ? {
+              'playerId': playerId,
+              'serverId': '${info['server_id'] ?? ''}',
+              'serverName': '${info['name'] ?? ''}',
+              'serverVersion': '${info['server_version'] ?? ''}',
+            }
+          : const {};
+      _playerChanged();
+      if (playerId.isNotEmpty) return;
+    }
+  }
 
   /// The id of the queue Music Assistant answers for this device's client
   /// id, which is the id of the player that stands for it there; empty
@@ -2228,6 +2564,7 @@ class SendspinManager extends Manager {
     _watcher = null;
     _watchSig = '';
     _localQueueSnapshot = null;
+    _syncWithheld();
     if (old != null) unawaited(old.stop());
     _syncQueuePoll();
     if (!want) return;
@@ -2247,6 +2584,7 @@ class SendspinManager extends Manager {
   void _onWatchSnapshot(Map<String, Object?>? snapshot) {
     if (_watcher == null) return;
     _localQueueSnapshot = snapshot;
+    _syncWithheld();
     if (_remote == null && nowPlaying.value != null) {
       _setNowPlaying(nowPlaying.value);
     }
@@ -2573,7 +2911,7 @@ class SendspinManager extends Manager {
       'current': id.isNotEmpty && id == currentId,
       'played': index < currentIndex,
       // A row's thumbnail: the item's own image, small, through the
-      // server's proxy where it is not a plain URL.
+      // server's proxy.
       ...switch (queueImageUrl(
         it['image'] ??
             media['image'] ??
@@ -2581,7 +2919,7 @@ class SendspinManager extends Manager {
                 ? (media['metadata'] as Map)['images']
                 : null),
         webBase,
-        size: 128,
+        size: 160,
       )) {
         final url? => {'artworkUrl': url},
         null => const <String, Object?>{},
@@ -2602,6 +2940,70 @@ class SendspinManager extends Manager {
       args: {'queue_id': _queueId, 'index': queueItemId},
     );
     if (!res.ok) log.warn(name, 'play queue item failed: ${res.error}');
+    return res.ok;
+  }
+
+  /// Whether the shown queue can be changed from the library: reordered,
+  /// trimmed and cleared. Music Assistant's queues can (this device's own
+  /// and any player it drives), and so can a Sonos's own.
+  bool get queueEditable {
+    if (!queueAvailable) return false;
+    final remote = _remote;
+    return remote == null || remote is MaRemotePlayer || remote is SonosPlayer;
+  }
+
+  /// Take the item [id] out of the queue.
+  Future<bool> removeQueueItem(String id) async {
+    if (_remote case final SonosPlayer sonos) {
+      return sonos.removeQueueTrack(id);
+    }
+    return _queueCommand('player_queues/delete_item', {'item_id_or_index': id});
+  }
+
+  /// Move the item [id] from [from] to [to], both positions in the queue
+  /// as [queueItems] lists it. Music Assistant counts the move as a shift
+  /// from where it is; a Sonos by track number.
+  Future<bool> moveQueueItem(String id, int from, int to) async {
+    if (from == to) return true;
+    if (_remote case final SonosPlayer sonos) {
+      return sonos.moveQueueTrack(from + 1, to + 1);
+    }
+    return _queueCommand('player_queues/move_item', {
+      'queue_item_id': id,
+      'pos_shift': to - from,
+    });
+  }
+
+  /// Move the item [id] right after the playing one. Music Assistant does
+  /// that on a shift of zero; a Sonos is given the position.
+  Future<bool> playQueueItemNext(String id) async {
+    if (_remote case final SonosPlayer sonos) {
+      final rows = queueItems.value;
+      final from = rows.indexWhere((r) => r['id'] == id);
+      final current = rows.indexWhere((r) => r['current'] == true);
+      if (from < 0) return false;
+      return sonos.moveQueueTrack(from + 1, current < 0 ? 1 : current + 2);
+    }
+    return _queueCommand('player_queues/move_item', {
+      'queue_item_id': id,
+      'pos_shift': 0,
+    });
+  }
+
+  /// Empty the queue.
+  Future<bool> clearQueue() async {
+    if (_remote case final SonosPlayer sonos) return sonos.clearQueueTracks();
+    return _queueCommand('player_queues/clear', const {});
+  }
+
+  Future<bool> _queueCommand(String command, Map<String, Object?> args) async {
+    if (_queueId.isEmpty) await refreshQueue();
+    if (_queueId.isEmpty || !_maConfigured) return false;
+    final res = await _api().call(
+      command,
+      args: {'queue_id': _queueId, ...args},
+    );
+    if (!res.ok) log.warn(name, '$command failed: ${res.error}');
     return res.ok;
   }
 
@@ -2673,17 +3075,24 @@ class SendspinManager extends Manager {
     return true;
   }
 
+  /// Where a seek to [positionMs] lands. Music Assistant seeks its queue
+  /// in whole seconds and drops the fraction of the local player's
+  /// milliseconds, so a local seek goes whole and the bar shows the place
+  /// the music plays from.
+  int seekTarget(int positionMs) =>
+      _remote == null ? positionMs ~/ 1000 * 1000 : positionMs;
+
   /// Jump the playing track to [positionMs]: the Now Playing view's
   /// progress bar. Locally the controller role's seek command, which the
   /// server advertises like any other; for a followed player Music
   /// Assistant's own seek, in whole seconds.
   Future<bool> seek(int positionMs) async {
     if (_remote case final remote?) return remote.seek(positionMs);
-    _seekSentAt = DateTime.now().millisecondsSinceEpoch;
+    _jumpSent();
     try {
       return await _channel.invokeMethod<bool>('control', {
             'command': 'seek',
-            'value': positionMs,
+            'value': seekTarget(positionMs),
           }) ??
           false;
     } catch (e) {
@@ -2728,6 +3137,7 @@ class SendspinManager extends Manager {
       });
       _running = true;
       log.info(name, 'player started as "$playerName"');
+      _playerChanged();
       _syncWatcher();
       _remoteMediaChanged();
     } catch (e) {
@@ -2747,6 +3157,7 @@ class SendspinManager extends Manager {
     }
     if (_playing) {
       _playing = false;
+      localPlaying.value = false;
       bus.publish(
         const VoiceInteractionChanged(
           active: false,
@@ -2756,6 +3167,7 @@ class SendspinManager extends Manager {
       );
     }
     _status = const {};
+    _playerChanged();
     _idleGrace?.cancel();
     _idleGrace = null;
     _uiPlaying = false;

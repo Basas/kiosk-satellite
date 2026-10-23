@@ -34,6 +34,27 @@ Every method returns a `Promise`. To match the defensive coding style of Voice S
 | `screenOn()` / `screenOff()` | `boolean` | Controls real display power. Turning the screen on wakes a sleeping panel. Turning it off requires the device admin permission (refer to remote API docs). |
 | `isScreenOn()` | `boolean` | Returns the current screen power state. |
 
+### Theme and Kiosk State
+
+| Method | Returns | Description |
+|---|---|---|
+| `getTheme()` | `{app, homeAssistant}` | The app's and Home Assistant's light or dark state. `app` is `{mode, dark}`, where `mode` is the **App theme** setting (`light`, `dark` or `system`) and `dark` is what it resolves to now, Android's dark mode included for `system`. `homeAssistant` is `{mode, dark, scheduled, followsApp}`, where `mode` is the Home Assistant **Theme** setting (`auto`, `light` or `dark`), `dark` is the light or dark the kiosk sets on Home Assistant's frontend now (`null` while Home Assistant picks its own), `scheduled` is **Match theme to time of day** and `followsApp` is **Sync Home Assistant themes with Kiosk Satellite**. `kiosksatellite:theme` carries the same object whenever either moves. |
+| `getKioskState()` | Object | The kiosk's modes and overlays, see below. `kiosksatellite:kiosk-state` carries the same object whenever anything in it moves. |
+
+`getKioskState()` answers:
+
+| Field | Type | Description |
+|---|---|---|
+| `kioskMode` | `boolean` | **Enable kiosk mode** is on. |
+| `lockdownMode` | `boolean` | **Lockdown Mode** is on. |
+| `haKioskMode` | `{enabled, hideHeader, hideSidebar}` | Home Assistant kiosk mode and what it hides. It only acts on Home Assistant's own dashboards. |
+| `screensaver` | `{active, view}` | Whether the screensaver is up and what it shows (`clock`, `media`, `dashboard` and so on). `view` is `null` when none. |
+| `screenOn` | `boolean` | The screen power state. |
+| `holdMode` | `boolean` | Hold mode pins the current view. |
+| `rotation` | `boolean` | Dashboard view rotation is on. |
+| `cameraView` | `string \| null` | The id of the camera view on screen, `null` when none. |
+| `mediaPlayer` | `{state, title, artist, source, nowPlayingShown}` | The followed media player: `state` is `playing`, `paused` or `idle`, `source` names the player and `nowPlayingShown` is whether the full-screen Now Playing view is up. |
+
 ### Interactions
 
 | Method | Returns | Description |
@@ -86,6 +107,7 @@ Wake word configuration is strictly **inherited from Voice Satellite**. It is ne
   needsAppSettings: false,   // True if the microphone is blocked and requires OS settings to fix
   released: true,
   releaseReason: 'muted',
+  muted: true,               // The satellite is muted (releaseReason is 'muted')
   stopWord: 'Stop',
   nativePipeline: false,     // True if voice turns will run their transport natively (the card announced it via `nativePipeline: true` and the app accepted it)
   models: [{ id, wakeWord, manifestUrl, confidenceScale, cutoff }],
@@ -125,6 +147,48 @@ This delegation negotiates completely transparently, just like the wake word han
 | `pipelineStartSending(runId)` | `boolean` | Begins the upload process, transmitting buffered chunks first, followed by live audio. The app handles waiting out the `init` event internally. |
 | `pipelineStopSending()` | `boolean` | Pauses the active upload. The chime window utilizes this function. |
 
+### Home Assistant Connection
+
+`kioskSatellite.ha` gives a [custom page](custom-pages.md) its own Home Assistant websocket without a token in the page. The kiosk opens the connection to its Home Assistant URL, signs in with its long-lived access token and then passes messages through unchanged in both directions. The page owns the message ids, so the standard Home Assistant websocket API works as documented.
+
+It only works on a custom page, in Home Assistant's `/local/` or on another server, and only while **Share Home Assistant connection** is on in Settings > Home Assistant > Custom Pages. A socket belongs to the page that opened it: when the kiosk navigates away, the connection closes and Home Assistant drops its subscriptions. The page acts as the Home Assistant user that owns the kiosk's token.
+
+Credential and user management commands never reach Home Assistant through this connection: `auth/long_lived_access_token`, the other `auth/` commands except `auth/current_user` and `auth/sign_path`, and the `config/auth` user and password commands. The page gets Home Assistant's usual error result with the code `not_allowed` instead, so the kiosk's token cannot be copied into a token of the page's own.
+
+Unlike the rest of this API, these methods reject on failure. A rejection carries `{code, message}`: Home Assistant's own error for a command it refused, or one of these codes from the kiosk.
+
+| Code | Meaning |
+|---|---|
+| `not_allowed` | Share Home Assistant connection is off, or the page is not a custom page. |
+| `not_configured` | The kiosk has no Home Assistant URL or token. |
+| `auth_invalid` | Home Assistant refused the kiosk's token. |
+| `unreachable` | Home Assistant did not answer. |
+| `too_many` | The page already has 4 sockets open. |
+| `connection_lost` | The connection closed while the command waited. |
+
+| Method | Returns | Description |
+|---|---|---|
+| `ha.call(message)` | the result | Sends one command, such as `{type: 'get_states'}`, and resolves with its `result`. |
+| `ha.subscribe(message, callback)` | an unsubscribe function | Sends a subscription, such as `{type: 'subscribe_trigger', ...}`, and calls `callback` with each `event`. The subscription is sent again after a reconnect. |
+| `ha.createSocket()` | a socket | Only for pages built on [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket), which `call` and `subscribe` do not need. Pass it as `createConnection({createSocket: kioskSatellite.ha.createSocket})` and the library runs unchanged, including its reconnects. A `not_allowed`, `not_configured` or `auth_invalid` answer stops them with the library's `ERR_INVALID_AUTH`. |
+
+```javascript
+const states = await kioskSatellite.ha.call({ type: 'get_states' });
+const stop = await kioskSatellite.ha.subscribe(
+  { type: 'subscribe_trigger', trigger: { platform: 'state', entity_id: 'binary_sensor.door' } },
+  (event) => console.log(event.variables.trigger.to_state.state),
+);
+```
+
+With home-assistant-js-websocket:
+
+```javascript
+import { createConnection, subscribeEntities } from 'https://cdn.jsdelivr.net/npm/home-assistant-js-websocket@9.4.0/+esm';
+
+const conn = await createConnection({ createSocket: kioskSatellite.ha.createSocket });
+subscribeEntities(conn, (entities) => render(entities));
+```
+
 ## Events
 
 The API dispatches `CustomEvent`s directly on the `window` object:
@@ -138,12 +202,17 @@ The API dispatches `CustomEvent`s directly on the `window` object:
 | `kiosksatellite:person` | `{held}` | Someone is visible to the device's own person sensor (currently supported on Meta Portals) while Enable person sensor or Dismiss on person is on. Repeats every 2 seconds while they remain in view. `held` is `true` on repeat events and `false` upon arrival. |
 | `kiosksatellite:screenon` / `:screenoff` | `{}` | The screen power state changed. |
 | `kiosksatellite:screensaverstart` / `:screensaverstop` | `{}` | The screensaver state changed. |
+| `kiosksatellite:theme` | the `getTheme()` shape | The app's or Home Assistant's light or dark state changed. |
+| `kiosksatellite:kiosk-state` | the `getKioskState()` shape | Anything `getKioskState()` reports changed. |
 | `kiosksatellite:sound-started` | `{id}` | A `playSound` request actually began playing (audio is physically leaving the speaker). You should time stop word arming and UI state changes off this event, not off the `playSound` resolution. |
 | `kiosksatellite:sound-level` | `{id, level}` | Provides the playback level of a playing sound (the mean absolute amplitude from 0 to 1, updating at most ~20 times per second, with near duplicate samples skipped). This allows a page visualizer to animate to audio it never actually touches. Note: This is best-effort and will be absent on devices lacking a functional hardware `Visualizer`. |
 | `kiosksatellite:voice-chimes-changed` | `{filename: seconds}` | Selected local chime durations changed. Use these values for local microphone timing. Remote speakers continue to use Home Assistant sounds. |
 | `kiosksatellite:sound-ended` | `{id, error?}` | A `playSound` request naturally finished, failed (with the `error` string detailing why), or was manually stopped. This fires exactly once per sound. |
+| `kiosksatellite:voice-timers` | `{timers}` | Native Voice Satellite's timers changed. See [Native timers on a dashboard](#native-timers-on-a-dashboard). |
 | `kiosksatellite:intercom` | the `intercomStatus` shape | The intercom changed: a call placed, ringing, answered or ended, a broadcast coming in, the kiosks on the network. |
 | `kiosksatellite:intercom-mic` | `{hold}` | With `hold` true the intercom wants the microphone the page holds through `getUserMedia`, for a call or a broadcast, and waits two seconds for the page to stop its tracks before the call goes on listen only. With `hold` false the call is over and the page may open its capture again. Voice Satellite lets go of its own capture on this event and brings it back after. |
+| `kiosksatellite:ha-closed` | `{reason}` | The connection behind `ha.call` and `ha.subscribe` closed. Waiting commands reject with `connection_lost`. With subscriptions open, it reconnects and subscribes them again. |
+| `kiosksatellite:ha-ready` | `{}` | That connection came back after a drop and its subscriptions were sent again. |
 | `kiosksatellite:pipeline` | `{runId, message}` | Delivers one raw event verbatim from a delegated run's subscription. This includes the synthetic `init`, `run-start`, STT partials, `intent-progress` deltas, `tts-end`, and any errors. |
 | `kiosksatellite:pipeline-closed` | `{runId, reason}` | The delegated run's transport died mid-run (meaning the app's websocket abruptly closed). Because subscriptions cannot be resumed, the page must restart the turn entirely, just as the page's own reconnect recovery logic would. |
 | `kiosksatellite:pipeline-level` | `{level, levels?}` | Provides speech weighted microphone levels during a delegated turn, intended for the reactive visual bar. These are batched (~4 times a second). The `levels` array contains `[{o, v}]` where `o` is the millisecond offset from the batch's first entry. The page replays this locally so the bar animates smoothly at chunk cadence, sitting exactly one batch window behind live audio. A single `{level}` payload is processed immediately (used for the absolute zero a mute forces). The app uses the exact same band-split math the page applies to raw chunks, ensuring the visual bar renders identically. |
@@ -205,6 +274,29 @@ It requires an additional VS-side hook (sitting outside the current surface of t
 `setVoiceTimerAlert({entityId, timers, muted})` shows finished timers and plays the bundled Voice Satellite alert locally every three seconds unless muted. It uses the same timer shape. An empty array dismisses the alert and stops its sound. Alerts and countdowns are separate snapshots so finishing one timer does not remove the others. The integration keeps its interaction hold and stop word handling until dismissal.
 
 `kiosksatellite:timer-action` carries `{entityId, id, action}`. Actions are `pause`, `resume`, `cancel` and `dismiss`. The integration applies running timer actions to Home Assistant and sends the resulting snapshot. `dismiss` clears the finished alert. `voiceTimerActionFailed(entityId)` shows a local error if an action fails.
+
+### Native timers on a dashboard
+
+A dashboard running on the kiosk can show and control native Voice Satellite's timers without a round trip through Home Assistant. These are the same timers the [`vs_list_timers` action](voice-satellite.md#home-assistant-entities-and-actions) lists.
+
+| Method | Returns | Description |
+|---|---|---|
+| `getVoiceTimers()` | `{timers}` | The timers on the kiosk: running and paused ones, then ringing ones. Each has `timer_id`, `name`, `total_seconds`, `seconds_left`, `is_active`, `ends_at` and `finished`, the same fields `vs_list_timers` returns. |
+| `controlVoiceTimer(id, action, {hours, minutes, seconds})` | `boolean` | Changes the timer with that `timer_id`. `action` is `pause`, `resume`, `cancel`, `add` or `remove`, and `add` and `remove` take the duration. An empty `id` picks the kiosk's only timer. Resolves `false` when the change fails, with the same limits as the [timer actions](voice-satellite.md#home-assistant-entities-and-actions). |
+
+`kiosksatellite:voice-timers` carries `{timers}` in the same shape after every change: a timer starting, changing, being cancelled, finishing or its alert being dismissed. Call `getVoiceTimers()` when the page loads, then follow the event. `ends_at` lets the page count down on its own, since the event does not repeat while a timer runs.
+
+```javascript
+const ks = window.kioskSatellite;
+let timers = [];
+const draw = (detail) => { timers = detail.timers; /* render the list */ };
+window.addEventListener('kiosksatellite:voice-timers', (e) => draw(e.detail));
+ks.getVoiceTimers().then((r) => r && draw(r));
+
+// A "+1 min" button on the first timer.
+const addMinute = () =>
+  ks.controlVoiceTimer(timers[0].timer_id, 'add', { minutes: 1 });
+```
 
 Document replacement clears native timer presentation and stops alert audio. The new document restores countdowns from the satellite state. Timer positions remain stored per device.
 

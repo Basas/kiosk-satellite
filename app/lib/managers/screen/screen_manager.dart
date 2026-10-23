@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart'
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../core/headless.dart';
 import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
@@ -109,6 +110,13 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
 
   @override
   Future<void> init() async {
+    // No panel: nothing to keep awake, light or dim. The commands stay so
+    // their callers get answers instead of missing handlers.
+    if (Headless.active) {
+      _screenOn = false;
+      _registerCommands();
+      return;
+    }
     await _applyWakelock();
 
     // Reapplied every time the app reaches the foreground. The apply above
@@ -200,12 +208,13 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
       );
     } catch (_) {}
 
-    // The light sensor, for adaptive brightness: whether there is one and
-    // its last reading, from the device manager (up before this one). The
-    // factor is known before the default brightness below is written, so
-    // the first write of a session already lands dimmed.
-    await _probeLightSensor();
-    bus.on<LightLevelChanged>().listen((e) => _onLux(e.lux));
+    // The light level adaptive brightness follows, the device sensor's or
+    // a Home Assistant entity's, from the adaptive light manager (up
+    // before this one). The factor is known before the default brightness
+    // below is written, so the first write of a session already lands
+    // dimmed.
+    await _probeLight();
+    bus.on<AdaptiveLightChanged>().listen(_onLight);
     bus.on<ScreensaverStateChanged>().listen((e) => _onScreensaver(e.active));
     bus.on<FullscreenViewChanged>().listen((e) async {
       if (e.view == 'alarm' && e.shown != _alarmHold) {
@@ -260,6 +269,10 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
       }
     });
 
+    _registerCommands();
+  }
+
+  void _registerCommands() {
     commands
       ..register(
         Command(
@@ -491,11 +504,11 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
   /// adaptive brightness off.
   double _factor = 1.0;
 
-  bool _lightSensor = false;
   double? _lastLux;
 
   /// Whether [_lastLux] is this session's, or the last one's (the device
-  /// manager remembers it for drivers that emit nothing at registration).
+  /// manager remembers it for drivers that emit nothing at registration,
+  /// the adaptive light manager for an entity still connecting).
   bool _luxLive = false;
 
   /// The level this manager last wrote to the panel, whichever layer asked
@@ -515,8 +528,10 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
   /// a neighbor of the value asked for).
   static const _echoTolerance = 0.02;
 
-  bool get _adaptiveOn =>
-      _lightSensor && _settings.get(defs.adaptiveBrightness);
+  /// Not gated on the device's sensor (issue #911): a Home Assistant
+  /// entity can stand in for it, and with no reading at all the curve
+  /// holds the screen at Maximum brightness.
+  bool get _adaptiveOn => _settings.get(defs.adaptiveBrightness);
 
   /// The screensaver is showing, and whether it has taken the panel this
   /// session (a Dim or Black mode, its own brightness, a schedule entry's
@@ -605,6 +620,7 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
     defs.adaptivePoint2Level.key,
     defs.adaptivePoint3Position.key,
     defs.adaptivePoint3Level.key,
+    defs.adaptiveInverted.key,
   };
 
   /// The four-point curve from its settings. Its factor is the level over
@@ -622,6 +638,7 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
     point2Level: _settings.get(defs.adaptivePoint2Level).toDouble(),
     point3Position: _settings.get(defs.adaptivePoint3Position).toDouble(),
     point3Level: _settings.get(defs.adaptivePoint3Level).toDouble(),
+    inverted: _settings.get(defs.adaptiveInverted),
   );
 
   static String _formatLux(double lux) => lux == lux.roundToDouble()
@@ -638,20 +655,23 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
     );
   }
 
-  Future<void> _probeLightSensor() async {
+  Future<void> _probeLight() async {
     try {
-      final res = await commands.execute('getLightLevel', const {});
+      final res = await commands.execute('getAdaptiveLight', const {});
       if (!res.ok || res.data is! Map) return;
       final data = res.data as Map;
-      _lightSensor = data['present'] == true;
       _lastLux = (data['lux'] as num?)?.toDouble();
       _luxLive = data['live'] == true;
     } catch (_) {}
   }
 
-  void _onLux(double lux) {
+  /// A new reading, or a new source. A source with nothing to report yet
+  /// (an entity just picked) leaves the screen where it is until it does.
+  void _onLight(AdaptiveLightChanged e) {
+    final lux = e.lux;
+    if (lux == null) return;
     _lastLux = lux;
-    _luxLive = true;
+    _luxLive = e.live;
     if (!_adaptiveOn) return;
     unawaited(_moveFactor(_curve.factor(lux)));
   }
@@ -671,7 +691,6 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
   /// is. Off: the factor goes, and the panel goes back to Default
   /// brightness where that is set, else stays at the ceiling undimmed.
   Future<void> _onAdaptiveSwitch() async {
-    if (!_lightSensor) return;
     _adaptiveRetry?.cancel();
     _adaptiveRetry = null;
     if (_adaptiveOn) {
@@ -1023,6 +1042,7 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
   /// [activityOnly] skips the wake lock: the command's diagnostic, to tell
   /// on a device which of the two routes works.
   Future<void> screenOn({bool activityOnly = false}) async {
+    if (Headless.active) return;
     if (!activityOnly) {
       try {
         await _background.invokeMethod('wakeScreen');
@@ -1134,11 +1154,21 @@ class ScreenManager extends Manager with WidgetsBindingObserver {
           );
         }
       case 'secure':
-        log.warn(
-          name,
-          'the panel lit on a secured lock screen; the kiosk stays behind '
-          'it until the device is unlocked',
-        );
+        // Show over lock screen puts the kiosk on top of it instead
+        // (discussion #1105).
+        if (_settings.get(defs.screenShowOnLockScreen)) {
+          log.info(
+            name,
+            'the panel lit on a secured lock screen; showing over it',
+          );
+        } else {
+          log.warn(
+            name,
+            'the panel lit on a secured lock screen; the kiosk stays behind '
+            'it until the device is unlocked. Turn on Show over lock screen '
+            'to show it anyway',
+          );
+        }
       case 'no_overlay_grant':
         log.warn(
           name,

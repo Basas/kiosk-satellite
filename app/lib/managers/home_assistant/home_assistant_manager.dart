@@ -17,7 +17,9 @@ import '../../core/manager.dart';
 import '../browser/rotation_fade_script.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
+import 'custom_pages.dart';
 import 'dashboard_list.dart';
+import 'entity_list.dart';
 import 'plugin_entities.dart';
 import 'package:kiosk_satellite/core/lifecycle.dart';
 
@@ -193,6 +195,7 @@ class HomeAssistantManager extends Manager {
         // Another server may speak another language.
         _language = null;
         _stateTranslations.clear();
+        _stateLabels.clear();
       }
     });
     commands
@@ -283,13 +286,76 @@ class HomeAssistantManager extends Manager {
       )
       ..register(
         Command(
+          name: 'haListServices',
+          description:
+              'Every service once, for the service picker: name, domain '
+              'and its title, icon and the entity domains it acts on.',
+          params: const {
+            'icons':
+                'true to add icon_path, the SVG path of each icon, for '
+                "the remote admin's service picker",
+          },
+          handler: (p) async {
+            final services = await listServices();
+            if (services == null) {
+              return const CommandResult.fail('could not list services');
+            }
+            return CommandResult.ok(
+              p['icons'] == true ? await withIconPaths(services) : services,
+            );
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'haListEntities',
+          description:
+              'Every entity once, for the entity picker: name, formatted '
+              'state, icon, domain and its title, area.',
+          params: const {
+            'domains': 'optional list of domains to keep',
+            'device_class':
+                'optional device class to keep (illuminance also takes '
+                'readings in lux, occupancy also takes motion and presence '
+                'binary sensors)',
+            'icons':
+                'true to add icon_path, the SVG path of each icon, for '
+                "the remote admin's entity picker",
+          },
+          handler: (p) async {
+            final entities = await listEntities(
+              domains: [
+                if (p['domains'] is List)
+                  for (final d in p['domains'] as List) '$d',
+              ],
+              deviceClass: p['device_class'] as String?,
+            );
+            if (entities == null) {
+              return const CommandResult.fail('could not list entities');
+            }
+            return CommandResult.ok(
+              p['icons'] == true ? await withIconPaths(entities) : entities,
+            );
+          },
+        ),
+      )
+      ..register(
+        Command(
           name: 'haSearchEntities',
           description:
               'Search entities by id or friendly name, for the At a Glance '
               'picker. Returns at most 50, closest matches first.',
-          params: const {'query': 'text to match against id and name'},
+          params: const {
+            'query': 'text to match against id and name',
+            'filter':
+                'optional: illuminance keeps only light level sensors (an '
+                'empty query then lists them all)',
+          },
           handler: (p) async {
-            final matches = await searchEntities('${p['query'] ?? ''}');
+            final matches = await searchEntities(
+              '${p['query'] ?? ''}',
+              filter: p['filter'] as String?,
+            );
             return matches == null
                 ? const CommandResult.fail('could not list entities')
                 : CommandResult.ok(matches);
@@ -321,27 +387,91 @@ class HomeAssistantManager extends Manager {
             'source':
                 "'page' to read only the page's own registry, failing "
                 'rather than falling back to the websocket list',
+            'icons':
+                'true to add icon_path, the SVG path of each icon, for '
+                "the remote admin's dashboard picker",
           },
           handler: (p) async {
             final dashboards = await listDashboards(
               pageOnly: p['source'] == 'page',
             );
-            return dashboards == null
-                ? const CommandResult.fail('could not list dashboards')
-                : CommandResult.ok(dashboards);
+            if (dashboards == null) {
+              return const CommandResult.fail('could not list dashboards');
+            }
+            return CommandResult.ok(
+              p['icons'] == true ? await withIconPaths(dashboards) : dashboards,
+            );
           },
         ),
       )
       ..register(
         Command(
           name: 'haListDashboardViews',
-          description: "One dashboard's views, for the rotation picker",
-          params: const {'url_path': "the dashboard's url_path"},
+          description: "One dashboard's views, for the dashboard picker",
+          params: const {
+            'url_path': "the dashboard's url_path",
+            'icons': 'true to add icon_path, as haListDashboards does',
+          },
           handler: (p) async {
             final views = await listDashboardViews('${p['url_path'] ?? ''}');
-            return views == null
-                ? const CommandResult.fail('could not read the dashboard')
-                : CommandResult.ok(views);
+            if (views == null) {
+              return const CommandResult.fail('could not read the dashboard');
+            }
+            return CommandResult.ok(
+              p['icons'] == true ? await withIconPaths(views) : views,
+            );
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'haSaveCustomPage',
+          description:
+              'Add or change a custom page after checking that Home '
+              'Assistant or its own server serves it. Backs Save & Validate '
+              'in the Custom Pages editors on both settings surfaces.',
+          params: const {
+            'name': 'the name the pickers show',
+            'path':
+                'the path under /local/, such as /local/kitchen.html, or '
+                'the http or https URL of a page on another server',
+            'original':
+                'optional: the path of the page being changed, absent '
+                'for a new one',
+          },
+          handler: (p) async {
+            final error = await saveCustomPage(
+              name: '${p['name'] ?? ''}',
+              path: '${p['path'] ?? ''}',
+              original: p['original'] is String
+                  ? p['original'] as String
+                  : null,
+            );
+            return error == null
+                ? const CommandResult.ok()
+                : CommandResult.fail(error);
+          },
+        ),
+      )
+      ..register(
+        Command(
+          name: 'haRemoveCustomPage',
+          description: 'Remove a custom page from the list.',
+          params: const {'path': 'the stored path of the page'},
+          handler: (p) async {
+            final path = '${p['path'] ?? ''}';
+            final pages = customPages;
+            if (!pages.any((e) => e.path == path)) {
+              return const CommandResult.fail('no such page');
+            }
+            await _settings.setFromJson(
+              defs.haCustomPages.key,
+              encodeCustomPages([
+                for (final e in pages)
+                  if (e.path != path) e,
+              ]),
+            );
+            return const CommandResult.ok();
           },
         ),
       )
@@ -353,10 +483,7 @@ class HomeAssistantManager extends Manager {
               'screensaver and any overlays so the view is actually seen.',
           params: const {'path': 'the navigation path ("url_path/view-route")'},
           handler: (p) async {
-            final path = '${p['path'] ?? ''}'.trim().replaceAll(
-              RegExp(r'^/+|/+$'),
-              '',
-            );
+            final path = normalizeViewPath('${p['path'] ?? ''}');
             if (path.isEmpty) return const CommandResult.fail('no path');
             if (!configured) {
               return const CommandResult.fail('Home Assistant not configured');
@@ -390,13 +517,17 @@ class HomeAssistantManager extends Manager {
       )
       ..register(
         Command(
-          name: 'leaveScreensaverDashboard',
+          name: 'leaveScreensaver',
           description:
-              'Take the dashboard back to where it was before the Home '
-              'Assistant Dashboard screensaver moved it. Called by the '
-              'screensaver as it ends.',
-          handler: (_) async {
-            await leaveScreensaverDashboard();
+              'Move the dashboard to where the screensaver dismissal lands: '
+              'the Now Playing target, back from the Home Assistant '
+              'Dashboard screensaver, or home. Called by the screensaver as '
+              'it ends.',
+          params: const {
+            'nowPlaying': 'true when the session showed Now Playing',
+          },
+          handler: (p) async {
+            await leaveScreensaver(nowPlaying: p['nowPlaying'] == true);
             return const CommandResult.ok();
           },
         ),
@@ -788,21 +919,9 @@ class HomeAssistantManager extends Manager {
     bus.on<ScreensaverStateChanged>().listen((e) {
       _screensaverActive = e.active;
       if (e.active) {
-        // The screensaver reached idle first: do the return now, quietly
-        // behind the cover, so the wake reveals the home dashboard with no
-        // visible navigation. Only rendering is frozen under the pause
-        // optimization — JS pushed from Dart still executes — so this
-        // works with the dashboard WebView hidden.
         _returnHomeTimer?.cancel();
         _returnHomeTimer = null;
-        // The Home Assistant Dashboard screensaver has just moved the page
-        // to its own view, which is what must show now. The return lands
-        // on its way out instead (leaveScreensaverDashboard).
-        if (_returnHomeConfigured &&
-            !_holdActive &&
-            _saverDashboardPath == null) {
-          unawaited(_returnHome());
-        }
+        unawaited(_onScreensaverStart(nowPlaying: e.nowPlaying));
       } else {
         _configureReturnHome();
       }
@@ -1047,9 +1166,16 @@ class HomeAssistantManager extends Manager {
   /// it carries none (a bare origin has no view to soft-navigate to).
   /// Public: the settings UIs show it as the return target.
   String? homeViewPath() {
-    final uri = Uri.tryParse(_settings.get(defs.startUrl));
+    final start = _settings.get(defs.startUrl);
+    final uri = Uri.tryParse(start);
     if (uri == null) return null;
-    final path = uri.path.replaceAll(RegExp(r'^/+|/+$'), '');
+    // A start page on another server is one of the custom pages, or no
+    // view at all.
+    if (baseUrl.isNotEmpty && !start.startsWith('$baseUrl/')) {
+      final external = externalPageNavPath(start, customPages);
+      if (external != null) return external;
+    }
+    final path = navPathOfUri(uri);
     return path.isEmpty ? null : path;
   }
 
@@ -1110,10 +1236,111 @@ class HomeAssistantManager extends Manager {
   /// touches the screensaver (unlike haNavigate, which dismisses it — the
   /// behind-the-cover return must not wake the kiosk) and drops a
   /// forgotten link overlay on the way.
-  Future<void> _returnHome() async {
+  Future<void> _returnHome({bool awaitSelfHeal = true}) async {
     final path = homeViewPath();
     if (path == null) return;
-    await navigateToViewPath(path);
+    await navigateToViewPath(path, awaitSelfHeal: awaitSelfHeal);
+  }
+
+  // ── Where a screensaver dismissal lands ─────────────────────────────
+  // The screensaver reaching idle first does the return to the dashboard
+  // at its start, quietly behind the cover, so the wake reveals the home
+  // view with no visible navigation. Only rendering is frozen under the
+  // pause optimization (JS pushed from Dart still executes), so this works
+  // with the dashboard WebView hidden. Now Playing can ask for another
+  // landing (issue #899): the view the kiosk showed as the screensaver
+  // started, or a chosen one. A session that starts on Now Playing holds
+  // the return home back, and the dismissal settles the page while the
+  // overlay still covers it: the Now Playing target when the session ends
+  // on it, home otherwise.
+
+  /// Counts screensaver starts and dismissals, so a start still reading the
+  /// page when its dismissal lands stands down.
+  int _saverSeq = 0;
+
+  /// The view the page showed as the session started. Read for Last view
+  /// only.
+  String? _saverStartPath;
+
+  /// The session's start moved the page home.
+  bool _saverWentHome = false;
+
+  /// The session's start held the return home back for Now Playing.
+  bool _saverHomeHeld = false;
+
+  Future<void> _onScreensaverStart({required bool nowPlaying}) async {
+    final seq = ++_saverSeq;
+    _saverStartPath = null;
+    _saverWentHome = false;
+    _saverHomeHeld = false;
+    if (_settings.get(defs.sendspinFullscreenReturn) == 'last') {
+      // The Home Assistant Dashboard screensaver has already moved the
+      // page, and kept where it was.
+      _saverStartPath = _saverDashboardReturn ?? await _currentViewPath();
+      if (seq != _saverSeq) return;
+    }
+    // The Home Assistant Dashboard screensaver has just moved the page to
+    // its own view, which is what must show now. The return lands on its
+    // way out instead (leaveScreensaver).
+    if (!_returnHomeConfigured || _holdActive || _saverDashboardPath != null) {
+      return;
+    }
+    if (nowPlaying && _nowPlayingTarget() != null) {
+      _saverHomeHeld = true;
+      return;
+    }
+    _saverWentHome = true;
+    await _returnHome();
+  }
+
+  /// Where a dismissal that ends on Now Playing takes the page, or null to
+  /// leave it to Return to the dashboard.
+  String? _nowPlayingTarget() {
+    switch (_settings.get(defs.sendspinFullscreenReturn)) {
+      case 'last':
+        return _saverStartPath;
+      case 'custom':
+        final view = _settings
+            .get(defs.sendspinFullscreenReturnView)
+            .trim()
+            .replaceAll(RegExp(r'^/+|/+$'), '');
+        return view.isEmpty ? null : view;
+      default:
+        return null;
+    }
+  }
+
+  /// Settle the page as the screensaver ends, awaited by its dismissal
+  /// while the overlay still covers the dashboard.
+  Future<void> leaveScreensaver({required bool nowPlaying}) async {
+    _saverSeq++;
+    final target = nowPlaying ? _nowPlayingTarget() : null;
+    final wentHome = _saverWentHome;
+    final homeHeld = _saverHomeHeld;
+    _saverStartPath = null;
+    _saverWentHome = false;
+    _saverHomeHeld = false;
+    if (_saverDashboardPath != null) {
+      await leaveScreensaverDashboard(to: target);
+      return;
+    }
+    _saverDashboardUp = false;
+    _saverDashboardReturn = null;
+    if (!configured) return;
+    if (target != null) {
+      // Last view moves only a page the start moved: otherwise it is
+      // still where it was, and a link overlay up there stays.
+      if (_settings.get(defs.sendspinFullscreenReturn) == 'last' && !wentHome) {
+        return;
+      }
+      log.info(name, 'Now Playing dismissed; to "$target"');
+      await navigateToViewPath(target, awaitSelfHeal: false);
+      return;
+    }
+    if (homeHeld && _returnHomeConfigured && !_holdActive) {
+      log.info(name, 'screensaver ended; returning to the dashboard');
+      await _returnHome(awaitSelfHeal: false);
+    }
   }
 
   // ── The Home Assistant Dashboard screensaver ──────────────────────
@@ -1140,6 +1367,38 @@ class HomeAssistantManager extends Manager {
     return mapped.ok && mapped.data is String ? mapped.data as String : baseUrl;
   }
 
+  /// Page script: whether the page on screen is a custom page on another
+  /// server, by its origin. Such a page is the kiosk's own to leave, like
+  /// Home Assistant's, where any other site is not.
+  String _onExternalPageJs() =>
+      '${jsonEncode(externalPageOrigins(customPages).toList())}'
+      '.indexOf(location.origin) >= 0';
+
+  /// The view the page shows ("url_path/view-route"), or null when it is
+  /// not this Home Assistant.
+  Future<String?> _currentViewPath() async {
+    if (!configured || baseUrl.isEmpty) return null;
+    final base = await _pageBase();
+    final where = await commands.execute('evalJs', {
+      'code':
+          '''
+(function () {
+  if (!location.href.startsWith(${jsonEncode(base)})) {
+    return ${_onExternalPageJs()} ? location.href : 'off-origin';
+  }
+  return location.pathname + location.search + location.hash;
+})();
+''',
+    });
+    final page = '${where.data}';
+    if (!where.ok) return null;
+    if (page.contains('://')) return externalPageNavPath(page, customPages);
+    if (!page.startsWith('/')) return null;
+    final uri = Uri.tryParse(page);
+    final path = uri == null ? '' : navPathOfUri(uri);
+    return path.isEmpty ? null : path;
+  }
+
   /// Move the page to [viewPath] for the screensaver. An empty path, or a
   /// page that is not this Home Assistant, leaves the screen as it is.
   /// A mode that comes back within one session (a schedule swapping it
@@ -1147,23 +1406,10 @@ class HomeAssistantManager extends Manager {
   Future<void> showScreensaverDashboard(String viewPath) async {
     _saverDashboardUp = true;
     if (!configured || baseUrl.isEmpty || viewPath.isEmpty) return;
-    final base = await _pageBase();
-    final where = await commands.execute('evalJs', {
-      'code':
-          '''
-(function () {
-  if (!location.href.startsWith(${jsonEncode(base)})) return 'off-origin';
-  return location.pathname;
-})();
-''',
-    });
+    final current = await _currentViewPath();
     if (!_saverDashboardUp) return;
-    final page = '${where.data}';
-    final current = where.ok && page.startsWith('/')
-        ? page.replaceAll(RegExp(r'^/+|/+$'), '')
-        : '';
     if (_saverDashboardReturn == null) {
-      if (current.isEmpty) return;
+      if (current == null) return;
       _saverDashboardReturn = current;
     }
     _saverDashboardPath = viewPath;
@@ -1173,12 +1419,13 @@ class HomeAssistantManager extends Manager {
     await navigateToViewPath(viewPath, awaitSelfHeal: false);
   }
 
-  /// Take the page back as the screensaver ends: to the dashboard's home
-  /// view when Return to the dashboard is on (its return was handed to
-  /// this moment), otherwise to where it was. Only while the page still
-  /// shows the screensaver's view: a navigation from Home Assistant in the
-  /// meantime (browser_mod, a card) is where the person should land.
-  Future<void> leaveScreensaverDashboard() async {
+  /// Take the page back as the screensaver ends: to [to] when Now Playing
+  /// asks for a landing, else to the dashboard's home view when Return to
+  /// the dashboard is on (its return was handed to this moment), otherwise
+  /// to where it was. Only while the page still shows the screensaver's
+  /// view: a navigation from Home Assistant in the meantime (browser_mod,
+  /// a card) is where the person should land.
+  Future<void> leaveScreensaverDashboard({String? to}) async {
     _saverDashboardUp = false;
     final shown = _saverDashboardPath;
     final previous = _saverDashboardReturn;
@@ -1186,6 +1433,7 @@ class HomeAssistantManager extends Manager {
     _saverDashboardReturn = null;
     if (shown == null || previous == null) return;
     final back =
+        to ??
         (_returnHomeConfigured && !_holdActive ? homeViewPath() : null) ??
         previous;
     final base = await _pageBase();
@@ -1193,9 +1441,17 @@ class HomeAssistantManager extends Manager {
       'code':
           '''
 (function () {
+  // A page on another server is still up while its own URL is.
+  if (${jsonEncode(isExternalCustomPagePath(shown))}) {
+    return location.href === ${jsonEncode(viewPathUrl(base, shown))};
+  }
   if (!location.href.startsWith(${jsonEncode(base)})) return false;
   var shown = '/' + ${jsonEncode(shown)};
   var path = location.pathname;
+  // A custom page is told apart by its query and fragment too.
+  if (path.indexOf('/local/') === 0) {
+    return path + location.search + location.hash === shown;
+  }
   return path === shown || path.indexOf(shown + '/') === 0;
 })();
 ''',
@@ -1232,9 +1488,14 @@ class HomeAssistantManager extends Manager {
     // A path a soft navigation cannot resolve goes straight to a full load
     // (loadUrl drops the overlay itself). One-time discovery below.
     if (_hardLoadPaths.contains(viewPath)) {
-      await commands.execute('loadUrl', {'url': '$baseUrl/$viewPath'});
+      await commands.execute('loadUrl', {
+        'url': viewPathUrl(baseUrl, viewPath),
+      });
       return 'navigated';
     }
+    // A custom page is a document of its own, not a route in Home
+    // Assistant's app, so it never takes a soft navigation or the fade.
+    if (isCustomPagePath(viewPath)) return _navigateToCustomPage(viewPath);
     // With the secure context proxy on, the page lives on the loopback
     // origin, not baseUrl — guard against what is actually on screen.
     final effectiveBase = await _pageBase();
@@ -1263,11 +1524,20 @@ class HomeAssistantManager extends Manager {
         '''
 (function () {
   var base = ${jsonEncode(effectiveBase)};
-  if (!location.href.startsWith(base)) return 'off-origin';
+  // A custom page holds no Home Assistant app to route the path.
+  if (!location.href.startsWith(base)) {
+    return ${_onExternalPageJs()} ? 'load' : 'off-origin';
+  }
+  if (location.pathname.indexOf('/local/') === 0) return 'load';
   var path = '/' + ${jsonEncode(viewPath)};
+  var route = '/' + ${jsonEncode(viewRoute(viewPath))};
+  var rest = path.substring(route.length);
   // A child view is not the dashboard root requested by Go to home (#496).
-  if (location.pathname === path) return 'already';
-  history.pushState(null, '', path);
+  // A path with a query or fragment is there only when they match too.
+  if (location.pathname === route &&
+      (!rest || location.search + location.hash === rest)) return 'already';
+  // Around the URL Filter's check (urlFilterJs).
+  (history.__ksPushState || history.pushState).call(history, null, '', path);
   window.dispatchEvent(new CustomEvent('location-changed'));
   return 'navigated';
 })();
@@ -1275,6 +1545,12 @@ class HomeAssistantManager extends Manager {
     final nav = await commands.execute('evalJs', {'code': js});
     await commands.execute('hideOverlayPage', const {});
     final outcome = nav.ok ? '${nav.data}' : 'failed';
+    if (outcome == 'load') {
+      await commands.execute('loadUrl', {
+        'url': viewPathUrl(baseUrl, viewPath),
+      });
+      return 'navigated';
+    }
     if (outcome != 'navigated') {
       return outcome == 'already' || outcome == 'off-origin'
           ? outcome
@@ -1285,6 +1561,39 @@ class HomeAssistantManager extends Manager {
     } else {
       unawaited(_selfHeal(viewPath, seq));
     }
+    return 'navigated';
+  }
+
+  /// Move to a custom page. The same file under another fragment only
+  /// changes `location.hash`, which reloads nothing: one page with several
+  /// layouts switches between them in place and hears it as `hashchange`.
+  /// Anything else is a full load of the page.
+  Future<String> _navigateToCustomPage(String viewPath) async {
+    final base = await _pageBase();
+    final hop = await commands.execute('evalJs', {
+      'code':
+          '''
+(function () {
+  if (!location.href.startsWith(${jsonEncode(base)}) &&
+      !(${_onExternalPageJs()})) return 'off-origin';
+  var target = ${jsonEncode(viewPathUrl(base, viewPath))};
+  var cut = target.indexOf('#');
+  var file = cut < 0 ? target : target.slice(0, cut);
+  var hash = cut < 0 ? '' : target.slice(cut);
+  var here = location.href;
+  var at = here.indexOf('#');
+  if ((at < 0 ? here : here.slice(0, at)) !== file) return 'load';
+  if (location.hash === hash) return 'already';
+  location.hash = hash;
+  return 'navigated';
+})();
+''',
+    });
+    final outcome = hop.ok ? '${hop.data}' : 'load';
+    if (outcome == 'off-origin') return outcome;
+    await commands.execute('hideOverlayPage', const {});
+    if (outcome == 'already' || outcome == 'navigated') return outcome;
+    await commands.execute('loadUrl', {'url': viewPathUrl(baseUrl, viewPath)});
     return 'navigated';
   }
 
@@ -1302,7 +1611,7 @@ class HomeAssistantManager extends Manager {
           '''
 (function () {
   try {
-    if (location.pathname !== '/' + ${jsonEncode(viewPath)}) return false;
+    if (location.pathname !== '/' + ${jsonEncode(viewRoute(viewPath))}) return false;
     // A page loaded moments ago has no hui-root YET for a perfectly
     // resolvable path (the frontend is still booting), and a verdict
     // taken then mislearned ordinary views as hard loads for the rest of
@@ -1329,7 +1638,9 @@ class HomeAssistantManager extends Manager {
         '"$viewPath" needs a full load (strategy dashboard or '
         'alias); remembering for future passes',
       );
-      await commands.execute('loadUrl', {'url': '$baseUrl/$viewPath'});
+      await commands.execute('loadUrl', {
+        'url': viewPathUrl(baseUrl, viewPath),
+      });
     }
   }
 
@@ -1338,8 +1649,9 @@ class HomeAssistantManager extends Manager {
 
   /// The dark state last pushed to the page, so the minute tick only fires JS
   /// on an actual light↔dark transition. Cleared when the feature is off so
-  /// re-enabling always re-applies.
-  bool? _lastDark;
+  /// re-enabling always re-applies. Null means the dashboard picks its own
+  /// theme. The Music Assistant page follows it too (issue #907).
+  final dashboardDark = ValueNotifier<bool?>(null);
 
   /// Push the scheduled light/dark theme into the HA frontend when it changes.
   ///
@@ -1365,8 +1677,8 @@ class HomeAssistantManager extends Manager {
           await _settings.setFromJson(defs.uiTheme.key, want);
         }
       }
-      if (!force && pinned == _lastDark) return;
-      _lastDark = pinned;
+      if (!force && pinned == dashboardDark.value) return;
+      dashboardDark.value = pinned;
       await commands.execute('evalJs', {'code': _themeJs(pinned)});
       return;
     }
@@ -1384,8 +1696,8 @@ class HomeAssistantManager extends Manager {
         }
       }
       if (!matchApp) {
-        if (!force && dark == _lastDark) return;
-        _lastDark = dark;
+        if (!force && dark == dashboardDark.value) return;
+        dashboardDark.value = dark;
         await commands.execute('evalJs', {'code': _themeJs(dark)});
         return;
       }
@@ -1395,12 +1707,12 @@ class HomeAssistantManager extends Manager {
     // is System, which Android flips at its own sunset/sunrise.
     if (matchApp) {
       final dark = _effectiveAppDark();
-      if (!force && dark == _lastDark) return;
-      _lastDark = dark;
+      if (!force && dark == dashboardDark.value) return;
+      dashboardDark.value = dark;
       await commands.execute('evalJs', {'code': _themeJs(dark)});
       return;
     }
-    _lastDark = null;
+    dashboardDark.value = null;
   }
 
   /// Whether the app is effectively dark right now: the App theme setting,
@@ -1538,10 +1850,26 @@ class HomeAssistantManager extends Manager {
   /// extra frame rather than a second connection (issue #74). States arrive
   /// raw; without this the row shows 69.44 where the entity's own card,
   /// honoring the Display precision setting, shows 69.
+  ///
+  /// [onTranslations] receives Home Assistant's own wording for the states
+  /// of [translationDomain], in the user's language, fetched over the same
+  /// socket (issue #268). A lookup on a separate socket could fail while the
+  /// states still arrived, and the widget then spoke English for the rest of
+  /// the run (issue #900). Riding the subscription means every reconnect
+  /// retries until it lands. Empty means an English server: the built-in
+  /// labels already speak it.
+  ///
+  /// [onStateLabels] receives Home Assistant's wording for the entities'
+  /// states, in the user's language, so a window sensor reads "Closed"
+  /// rather than "Off" (issue #919). English is fetched too: device class
+  /// wording is a translation even there.
   Future<GlanceSubscription?> subscribeEntities(
     List<String> entityIds,
     void Function(String entityId, Map<String, Object?> state) onState, {
     void Function(Map<String, int> precisions)? onPrecision,
+    String? translationDomain,
+    void Function(Map<String, String> translations)? onTranslations,
+    void Function(EntityStateLabels labels)? onStateLabels,
   }) async {
     if (!configured || entityIds.isEmpty) return null;
     final wsBase = baseUrl
@@ -1555,6 +1883,100 @@ class HomeAssistantManager extends Manager {
       // so the future must not surface it again as an uncaught error.
       unawaited(channel.ready.catchError((_) {}));
       final subscription = GlanceSubscription._(channel).._expectSubscribed();
+      final domain = onTranslations != null ? translationDomain : null;
+      void askTranslations(String language) {
+        if (domain == null) return;
+        if (language.toLowerCase().startsWith('en')) {
+          onTranslations!(_stateTranslations[domain] = const {});
+          return;
+        }
+        channel.sink.add(
+          jsonEncode({
+            'id': 4,
+            'type': 'frontend/get_translations',
+            'language': language,
+            'category': 'entity_component',
+            'integration': [domain],
+          }),
+        );
+      }
+
+      // State labels need the registry (which integration and translation
+      // key each entity has) and the language before they can be asked
+      // for. Whatever is already cached is not asked again.
+      Map<String, (String, String)>? labelEntries;
+      String? labelLanguage;
+      // What each lookup asked for, so an integration with no wording at
+      // all still caches as empty instead of being asked every time.
+      final labelsAsked = <int, List<String>>{};
+      void deliverLabels() {
+        if (labelsAsked.isNotEmpty) return;
+        final resources = <String, String>{};
+        for (final id in entityIds) {
+          final cached =
+              _stateLabels['$labelLanguage/entity_component/${id.split('.').first}'];
+          if (cached != null) resources.addAll(cached);
+        }
+        for (final (platform, _) in labelEntries!.values) {
+          final cached = _stateLabels['$labelLanguage/entity/$platform'];
+          if (cached != null) resources.addAll(cached);
+        }
+        onStateLabels!(EntityStateLabels(resources, labelEntries!));
+      }
+
+      void askLabels() {
+        if (onStateLabels == null) return;
+        final language = labelLanguage;
+        if (language == null || labelEntries == null) return;
+        final domains = {for (final id in entityIds) id.split('.').first}
+            .where(
+              (d) => !_stateLabels.containsKey('$language/entity_component/$d'),
+            )
+            .toList();
+        final platforms = {for (final (p, _) in labelEntries!.values) p}
+            .where((p) => !_stateLabels.containsKey('$language/entity/$p'))
+            .toList();
+        for (final (id, category, integrations) in [
+          (5, 'entity_component', domains),
+          (6, 'entity', platforms),
+        ]) {
+          if (integrations.isEmpty) continue;
+          labelsAsked[id] = integrations;
+          channel.sink.add(
+            jsonEncode({
+              'id': id,
+              'type': 'frontend/get_translations',
+              'language': language,
+              'category': category,
+              'integration': integrations,
+            }),
+          );
+        }
+        deliverLabels();
+      }
+
+      void labelsArrived(int id, Object? result) {
+        final category = id == 5 ? 'entity_component' : 'entity';
+        final language = labelLanguage;
+        final integrations = labelsAsked.remove(id) ?? const [];
+        if (result != null && language != null) {
+          final parsed = parseStateLabels(result);
+          for (final integration in integrations) {
+            _stateLabels['$language/$category/$integration'] =
+                parsed[integration] ?? const {};
+          }
+        }
+        deliverLabels();
+      }
+
+      void languageKnown(String language) {
+        if (domain != null && !_stateTranslations.containsKey(domain)) {
+          askTranslations(language);
+        }
+        labelLanguage = language;
+        askLabels();
+      }
+
       channel.stream.listen(
         (raw) {
           try {
@@ -1575,7 +1997,7 @@ class HomeAssistantManager extends Manager {
                     'entity_ids': entityIds,
                   }),
                 );
-                if (onPrecision != null) {
+                if (onPrecision != null || onStateLabels != null) {
                   channel.sink.add(
                     jsonEncode({
                       'id': 2,
@@ -1584,6 +2006,28 @@ class HomeAssistantManager extends Manager {
                     }),
                   );
                 }
+                final cached = domain != null
+                    ? _stateTranslations[domain]
+                    : null;
+                if (cached != null) onTranslations!(cached);
+                if ((domain != null && cached == null) ||
+                    onStateLabels != null) {
+                  final language = _language;
+                  if (language != null) {
+                    languageKnown(language);
+                  } else {
+                    // The user's profile language comes first, as on the
+                    // dashboard. The server's own language only applies
+                    // when the user never picked one.
+                    channel.sink.add(
+                      jsonEncode({
+                        'id': 7,
+                        'type': 'frontend/get_user_data',
+                        'key': 'language',
+                      }),
+                    );
+                  }
+                }
               case 'auth_invalid':
                 log.warn(name, 'glance subscription rejected: bad token');
                 subscription.close();
@@ -1591,12 +2035,60 @@ class HomeAssistantManager extends Manager {
                 // The subscribe command confirms itself here too; only the
                 // registry lookup's reply carries anything to read. A failure
                 // (an old Home Assistant without get_entries) just leaves
-                // states unrounded, which is what the row always did.
-                if (msg['id'] == 1 && msg['success'] == true) {
-                  subscription._startHeartbeat();
+                // states unrounded, which is what the row always did. A
+                // failed translation lookup caches nothing, so the next
+                // connection asks again.
+                if (msg['success'] != true) {
+                  // Without the registry the labels still come, by device
+                  // class and domain. A failed label lookup delivers what
+                  // the other one brought.
+                  if (msg['id'] == 2 && onStateLabels != null) {
+                    labelEntries = const {};
+                    askLabels();
+                  } else if (msg['id'] == 5 || msg['id'] == 6) {
+                    labelsArrived(msg['id'] as int, null);
+                  } else if (msg['id'] == 7) {
+                    channel.sink.add(
+                      jsonEncode({'id': 3, 'type': 'get_config'}),
+                    );
+                  }
+                  break;
                 }
-                if (msg['id'] == 2 && msg['success'] == true) {
-                  onPrecision?.call(_displayPrecisions(msg['result']));
+                switch (msg['id']) {
+                  case 1:
+                    subscription._startHeartbeat();
+                  case 2:
+                    onPrecision?.call(_displayPrecisions(msg['result']));
+                    if (onStateLabels != null) {
+                      labelEntries = _translationKeys(msg['result']);
+                      askLabels();
+                    }
+                  case 3:
+                    final config = msg['result'];
+                    final language = config is Map
+                        ? '${config['language'] ?? ''}'.trim()
+                        : '';
+                    languageKnown(
+                      _language = language.isEmpty ? 'en' : language,
+                    );
+                  case 4:
+                    onTranslations!(
+                      _stateTranslations[domain!] = parseStateTranslations(
+                        msg['result'],
+                        domain,
+                      ),
+                    );
+                  case 5 || 6:
+                    labelsArrived(msg['id'] as int, msg['result']);
+                  case 7:
+                    final language = userLanguage(msg['result']);
+                    if (language != null) {
+                      languageKnown(_language = language);
+                    } else {
+                      channel.sink.add(
+                        jsonEncode({'id': 3, 'type': 'get_config'}),
+                      );
+                    }
                 }
               case 'pong':
                 subscription._pong();
@@ -1678,6 +2170,25 @@ class HomeAssistantManager extends Manager {
     return precisions;
   }
 
+  /// Each entity's integration and translation key out of a `get_entries`
+  /// reply, for the entities that have a translation key. Those are the
+  /// ones whose states the integration words itself ("idle" on a backup
+  /// sensor reads "Leerlauf").
+  static Map<String, (String, String)> _translationKeys(Object? result) {
+    final keys = <String, (String, String)>{};
+    if (result is! Map) return keys;
+    for (final entry in result.entries) {
+      final value = entry.value;
+      if (value is! Map) continue;
+      final platform = value['platform'];
+      final key = value['translation_key'];
+      if (platform is String && key is String && key.isNotEmpty) {
+        keys['${entry.key}'] = (platform, key);
+      }
+    }
+    return keys;
+  }
+
   /// Entities matching [query], for the At a Glance picker.
   ///
   /// `/api/states` is the whole instance in one response, which is why the
@@ -1687,7 +2198,13 @@ class HomeAssistantManager extends Manager {
   ///
   /// An exact id or a name that starts with the query sorts first, so
   /// typing "gara" puts Garage Door above Front Garage Light Sensor.
-  Future<List<Map<String, Object?>>?> searchEntities(String query) async {
+  ///
+  /// [filter] `illuminance` keeps only light level sensors, for adaptive
+  /// brightness's entity (issue #911).
+  Future<List<Map<String, Object?>>?> searchEntities(
+    String query, {
+    String? filter,
+  }) async {
     final states = await fetchStates();
     if (states == null) return null;
     final needle = query.trim().toLowerCase();
@@ -1696,6 +2213,7 @@ class HomeAssistantManager extends Manager {
       final id = '${state['entity_id'] ?? ''}';
       if (id.isEmpty) continue;
       final attributes = (state['attributes'] as Map?) ?? const {};
+      if (filter == 'illuminance' && !_isIlluminance(attributes)) continue;
       final name = '${attributes['friendly_name'] ?? _prettifyEntityId(id)}';
       if (needle.isNotEmpty &&
           !id.toLowerCase().contains(needle) &&
@@ -1720,6 +2238,269 @@ class HomeAssistantManager extends Manager {
     });
     return [for (final match in matches.take(50)) match.$3];
   }
+
+  /// Every entity, once, for the entity picker: id, name, the state as
+  /// Home Assistant formats it, icon (the entity's own, else the one Home
+  /// Assistant would draw), device class, unit, domain with its title in
+  /// Home Assistant's language, and area. Hidden entities stay out. Null
+  /// when Home Assistant cannot be reached.
+  ///
+  /// The page's own `hass` comes first: it already holds every state, the
+  /// registries the areas come from and Home Assistant's formatting. The
+  /// REST states and the websocket registries stand in when the page has
+  /// no hass yet.
+  Future<List<Map<String, Object?>>?> listEntities({
+    List<String> domains = const [],
+    String? deviceClass,
+  }) async {
+    final page = await _entitiesFromPage();
+    final entities = page?.$1 ?? await _entitiesFromRest();
+    if (entities == null) return null;
+    final titles = await _domainTitles(page?.$2 ?? 'en');
+    final filtered = filterEntities(
+      entities,
+      domains: domains,
+      deviceClass: deviceClass,
+    );
+    return [
+      for (final e in filtered)
+        {
+          ...withPickerState(e),
+          'domain_title':
+              titles['${e['domain']}'] ?? domainTitleFallback('${e['domain']}'),
+        },
+    ];
+  }
+
+  /// Every service Home Assistant offers, named in its language, for the
+  /// service picker. Null when Home Assistant cannot be reached.
+  Future<List<Map<String, Object?>>?> listServices() async {
+    final Object? services;
+    try {
+      services = await _wsCommand({'type': 'get_services'});
+    } catch (e) {
+      log.warn(name, 'services unavailable: $e');
+      return null;
+    }
+    if (services is! Map) return null;
+    final language = await _pageLanguage();
+    return serviceRows(
+      services,
+      names: await _serviceNames(language),
+      titles: await _domainTitles(language),
+    );
+  }
+
+  /// Home Assistant's language, from the page; English when it has none.
+  Future<String> _pageLanguage() async {
+    try {
+      final res = await commands.execute('evalJs', {
+        'code':
+            "(function () { var el = document.querySelector('home-assistant');"
+            " return (el && el.hass && el.hass.language) || 'en'; })()",
+      });
+      return res.ok && res.data is String && '${res.data}'.isNotEmpty
+          ? '${res.data}'
+          : 'en';
+    } catch (_) {
+      return 'en';
+    }
+  }
+
+  final Map<String, Map<String, String>> _serviceNamesByLanguage = {};
+
+  /// The services' names in [language], keyed `domain.service`, kept for
+  /// the session. Empty when they cannot be read.
+  Future<Map<String, String>> _serviceNames(String language) async {
+    final cached = _serviceNamesByLanguage[language];
+    if (cached != null) return cached;
+    try {
+      final result = await _wsCommand({
+        'type': 'frontend/get_translations',
+        'language': language,
+        'category': 'services',
+      });
+      final resources = result is Map ? result['resources'] : null;
+      final names = <String, String>{};
+      if (resources is Map) {
+        for (final entry in resources.entries) {
+          final match = RegExp(
+            r'^component\.([a-z0-9_]+)\.services\.([a-z0-9_]+)\.name$',
+          ).firstMatch('${entry.key}');
+          if (match != null) {
+            names['${match.group(1)}.${match.group(2)}'] = '${entry.value}';
+          }
+        }
+      }
+      return _serviceNamesByLanguage[language] = names;
+    } catch (e) {
+      log.warn(name, 'service names unavailable: $e');
+      return const {};
+    }
+  }
+
+  /// The entities from the page's hass, with Home Assistant's language.
+  Future<(List<Map<String, Object?>>, String)?> _entitiesFromPage() async {
+    const js = r'''
+(function () {
+  try {
+    var el = document.querySelector('home-assistant');
+    var hass = el && el.hass;
+    if (!hass || !hass.states) return 'null';
+    var ents = hass.entities || {}, devs = hass.devices || {}, areas = hass.areas || {};
+    var out = [];
+    Object.keys(hass.states).forEach(function (id) {
+      var s = hass.states[id], e = ents[id] || {};
+      if (e.hidden) return;
+      var a = s.attributes || {};
+      var areaId = e.area_id || (e.device_id && devs[e.device_id] && devs[e.device_id].area_id);
+      var state = s.state;
+      try { if (hass.formatEntityState) state = hass.formatEntityState(s); } catch (_) {}
+      out.push({
+        entity_id: id,
+        name: a.friendly_name || id,
+        state: String(state),
+        icon: a.icon || e.icon || null,
+        device_class: a.device_class || null,
+        unit: a.unit_of_measurement || null,
+        area: areaId && areas[areaId] ? areas[areaId].name : null
+      });
+    });
+    return JSON.stringify({ language: hass.language || 'en', entities: out });
+  } catch (e) {
+    return 'null';
+  }
+})()
+''';
+    try {
+      final res = await commands.execute('evalJs', {'code': js});
+      if (!res.ok) return null;
+      final decoded = jsonDecode(res.data as String);
+      if (decoded is! Map || decoded['entities'] is! List) return null;
+      return (
+        [
+          for (final e in (decoded['entities'] as List).cast<Map>())
+            _entityRow(e.cast<String, Object?>()),
+        ],
+        '${decoded['language'] ?? 'en'}',
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// The entities from the REST states, areas from the registries when
+  /// the websocket answers.
+  Future<List<Map<String, Object?>>?> _entitiesFromRest() async {
+    final states = await fetchStates();
+    if (states == null) return null;
+    final areas = <String, String>{};
+    final deviceAreas = <String, String>{};
+    final registry = <String, Map>{};
+    try {
+      final list = await _wsCommand({'type': 'config/area_registry/list'});
+      if (list is List) {
+        for (final a in list.whereType<Map>()) {
+          areas['${a['area_id']}'] = '${a['name']}';
+        }
+      }
+      final devices = await _wsCommand({'type': 'config/device_registry/list'});
+      if (devices is List) {
+        for (final d in devices.whereType<Map>()) {
+          if (d['area_id'] != null) {
+            deviceAreas['${d['id']}'] = '${d['area_id']}';
+          }
+        }
+      }
+      final entities = await _wsCommand({
+        'type': 'config/entity_registry/list',
+      });
+      if (entities is List) {
+        for (final e in entities.whereType<Map>()) {
+          registry['${e['entity_id']}'] = e;
+        }
+      }
+    } catch (e) {
+      log.warn(name, 'entity registries unavailable: $e');
+    }
+    return [
+      for (final state in states)
+        if ('${state['entity_id'] ?? ''}'.isNotEmpty &&
+            registry['${state['entity_id']}']?['hidden_by'] == null)
+          (() {
+            final id = '${state['entity_id']}';
+            final a = (state['attributes'] as Map?) ?? const {};
+            final reg = registry[id];
+            final areaId =
+                reg?['area_id'] ?? deviceAreas['${reg?['device_id']}'];
+            final unit = a['unit_of_measurement'] as String?;
+            return _entityRow({
+              'entity_id': id,
+              'name': '${a['friendly_name'] ?? _prettifyEntityId(id)}',
+              'state': formatStateFallback('${state['state'] ?? ''}', unit),
+              'icon': a['icon'] ?? reg?['icon'],
+              'device_class': a['device_class'],
+              'unit': unit,
+              'area': areaId == null ? null : areas['$areaId'],
+            });
+          })(),
+    ];
+  }
+
+  /// One list row: the fields as read, the domain, and an icon even when
+  /// the entity sets none.
+  static Map<String, Object?> _entityRow(Map<String, Object?> e) {
+    final id = '${e['entity_id']}';
+    final domain = id.split('.').first;
+    final deviceClass = e['device_class'] as String?;
+    final icon = e['icon'];
+    return {
+      ...e,
+      'domain': domain,
+      'icon': icon is String && icon.isNotEmpty
+          ? icon
+          : defaultEntityIcon(domain, deviceClass),
+    };
+  }
+
+  final Map<String, Map<String, String>> _titlesByLanguage = {};
+
+  /// Home Assistant's own names for the domains, in [language], kept for
+  /// the session. Empty when they cannot be read: the picker falls back
+  /// to the prettified domain.
+  Future<Map<String, String>> _domainTitles(String language) async {
+    final cached = _titlesByLanguage[language];
+    if (cached != null) return cached;
+    try {
+      final result = await _wsCommand({
+        'type': 'frontend/get_translations',
+        'language': language,
+        'category': 'title',
+      });
+      final resources = result is Map ? result['resources'] : null;
+      final titles = <String, String>{};
+      if (resources is Map) {
+        for (final entry in resources.entries) {
+          final key = '${entry.key}';
+          final match = RegExp(
+            r'^component\.([a-z0-9_]+)\.title$',
+          ).firstMatch(key);
+          if (match != null) titles[match.group(1)!] = '${entry.value}';
+        }
+      }
+      return _titlesByLanguage[language] = titles;
+    } catch (e) {
+      log.warn(name, 'domain titles unavailable: $e');
+      return const {};
+    }
+  }
+
+  /// A light level sensor (issue #911): the illuminance device class, or
+  /// a reading in lux from a template or custom sensor that sets the unit
+  /// and no class.
+  static bool _isIlluminance(Map attributes) =>
+      attributes['device_class'] == 'illuminance' ||
+      attributes['unit_of_measurement'] == 'lx';
 
   /// One entity's current attributes, or null when it (or Home Assistant)
   /// cannot be reached. For the At a Glance attribute picker: values ride
@@ -2061,23 +2842,109 @@ class HomeAssistantManager extends Manager {
     // offered that broken alias instead of the dashboard that actually
     // renders. Falls back to the WS list when the page has no hass yet.
     final page = await _dashboardsFromPage();
-    if (page != null || pageOnly) return page;
+    if (page != null || pageOnly) return _withCustomPagesEntry(page);
     try {
       final result = await _wsCommand({'type': 'lovelace/dashboards/list'});
       if (result is! List) return null;
       // YAML-mode dashboards included: they read over `lovelace/config`
       // the same as storage ones. Keeping only storage dashboards here
       // dropped every YAML dashboard from the view selects (issue #244).
-      return dashboardsFromWsList(result);
+      return _withCustomPagesEntry(dashboardsFromWsList(result));
     } catch (e) {
       log.warn(name, 'listDashboards failed: $e');
       return null;
     }
   }
 
+  /// The person's custom pages, in their order.
+  List<CustomPage> get customPages =>
+      parseCustomPages(_settings.get(defs.haCustomPages));
+
+  /// [dashboards] with the Custom Pages entry last, while there are pages
+  /// to list. Its views are the pages (see [listDashboardViews]), so every
+  /// reader of the list offers them without knowing they are not views.
+  List<Map<String, Object?>>? _withCustomPagesEntry(
+    List<Map<String, Object?>>? dashboards,
+  ) {
+    if (dashboards == null || customPages.isEmpty) return dashboards;
+    return [
+      ...dashboards,
+      {
+        'url_path': customPagesDashboardPath,
+        'title': 'Custom Pages',
+        'icon': customPagesIcon,
+        'custom': true,
+      },
+    ];
+  }
+
+  /// Add or change a custom page, once its server answers for it with a
+  /// 200. Null when it saved, otherwise why not: `name` (no name), `path`
+  /// (neither a file under /local/ nor an http or https URL), `duplicate`
+  /// (another page has the path), `not_found` (Home Assistant has no such
+  /// file), `status:<code>` (any other answer) or `unreachable`. A page on
+  /// another server answers with `url_not_found`, `url_status:<code>` and
+  /// `url_unreachable` instead, since Home Assistant is not the one asked.
+  /// [original] names the page being changed, which keeps its place in the
+  /// list.
+  Future<String?> saveCustomPage({
+    required String name,
+    required String path,
+    String? original,
+  }) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return 'name';
+    final normalized = normalizeCustomPagePath(path, haBase: baseUrl);
+    if (normalized == null) return 'path';
+    final pages = customPages;
+    if (pages.any((p) => p.path == normalized && p.path != original)) {
+      return 'duplicate';
+    }
+    final page = CustomPage(name: trimmed, path: normalized);
+    final prefix = page.external ? 'url_' : '';
+    if (!page.external && baseUrl.isEmpty) return 'unreachable';
+    try {
+      // /local/ needs no authorization, so no token goes with the check,
+      // and a page elsewhere never gets one.
+      final response = await http
+          .get(
+            Uri.parse(
+              page.external
+                  ? customPageFile(normalized)
+                  : '$baseUrl${customPageFile(normalized)}',
+            ),
+          )
+          .timeout(const Duration(seconds: 10));
+      if (response.statusCode == 404) return '${prefix}not_found';
+      if (response.statusCode != 200) {
+        return '${prefix}status:${response.statusCode}';
+      }
+    } catch (e) {
+      log.warn(this.name, 'custom page check failed for $normalized: $e');
+      return '${prefix}unreachable';
+    }
+    final at = original == null
+        ? -1
+        : pages.indexWhere((p) => p.path == original);
+    final next = [...pages];
+    if (at < 0) {
+      next.add(page);
+    } else {
+      next[at] = page;
+    }
+    await _settings.setFromJson(
+      defs.haCustomPages.key,
+      encodeCustomPages(next),
+    );
+    return null;
+  }
+
   /// The navigable dashboards from the page's `hass.panels`: every Lovelace
   /// dashboard plus the auto "Overview" default (panel component `home`),
-  /// each with the url the sidebar navigates to. Null when hass is not up.
+  /// then the sidebar panels of apps, each with the url the sidebar
+  /// navigates to. An app has no views (its `lovelace/config` read answers
+  /// config_not_found), so the pickers offer it whole. Null when hass is
+  /// not up.
   Future<List<Map<String, Object?>>?> _dashboardsFromPage() async {
     const js = r'''
 (function () {
@@ -2093,27 +2960,49 @@ class HomeAssistantManager extends Manager {
     var out = [];
     Object.keys(panels).forEach(function (k) {
       var p = panels[k];
+      // An app's sidebar panel (Music Assistant, Panalume, Node-RED) is
+      // listed too: Home Assistant renders its web UI on that path. The
+      // bare "app" panel without an add-on is the app store.
+      if (p.component_name === 'app') {
+        if (p.config && p.config.addon) {
+          out.push({
+            url_path: p.url_path,
+            title: p.title || p.url_path,
+            comp: 'app',
+            icon: p.icon || 'mdi:puzzle',
+          });
+        }
+        return;
+      }
       var isDash = p.component_name === 'lovelace' || p.component_name === 'home';
       if (!isDash) return;
       if (p.url_path === 'lovelace' && p.title == null && hasHome) return;
       var title = p.title
         ? ((hass.localize && hass.localize('panel.' + p.title)) || p.title)
         : (p.component_name === 'home' ? 'Overview' : p.url_path);
-      out.push({ url_path: p.url_path, title: title, comp: p.component_name });
+      out.push({
+        url_path: p.url_path,
+        title: title,
+        comp: p.component_name,
+        icon: p.icon || (p.component_name === 'home' ? 'mdi:home' : null),
+      });
     });
     // Default dashboard first, matching the sidebar: hass.defaultPanel when
-    // set, otherwise the auto "Overview" (component `home`). The rest keep
-    // their registration order.
+    // set, otherwise the auto "Overview" (component `home`). Apps come
+    // after the dashboards. The rest keep their registration order.
     out.sort(function (a, b) {
       function rank(d) {
         if (hass.defaultPanel && d.url_path === hass.defaultPanel) return 0;
         if (d.comp === 'home') return 1;
+        if (d.comp === 'app') return 3;
         return 2;
       }
       return rank(a) - rank(b);
     });
     return JSON.stringify(out.map(function (d) {
-      return { url_path: d.url_path, title: d.title };
+      var e = { url_path: d.url_path, title: d.title, icon: d.icon };
+      if (d.comp === 'app') e.app = true;
+      return e;
     }));
   } catch (e) {
     return 'null';
@@ -2127,7 +3016,12 @@ class HomeAssistantManager extends Manager {
       if (decoded is! List || decoded.isEmpty) return null;
       return [
         for (final d in decoded.cast<Map>())
-          {'url_path': d['url_path'], 'title': d['title']},
+          {
+            'url_path': d['url_path'],
+            'title': d['title'],
+            if (d['icon'] is String) 'icon': d['icon'],
+            if (d['app'] == true) 'app': true,
+          },
       ];
     } catch (_) {
       return null;
@@ -2136,11 +3030,20 @@ class HomeAssistantManager extends Manager {
 
   /// The views of one dashboard (`lovelace/config`). Each entry carries
   /// `title` and `route` — the path segment HA navigates by: the view's
-  /// declared path when it has one, its index otherwise. Null when the
+  /// declared path when it has one, its index otherwise — plus the view's
+  /// `icon` when it has one and `subview` when it is one. Null when the
   /// config cannot be read (auto-generated strategy dashboards store no
   /// view list).
   Future<List<Map<String, Object?>>?> listDashboardViews(String urlPath) async {
     if (!configured || urlPath.isEmpty) return null;
+    // The Custom Pages entry: its views are the pages, read from the
+    // settings rather than Home Assistant.
+    if (urlPath == customPagesDashboardPath) {
+      return [
+        for (final p in customPages)
+          {'title': p.name, 'route': p.route, 'icon': customPageIcon},
+      ];
+    }
     try {
       final result = await _wsCommand({
         'type': 'lovelace/config',
@@ -2157,6 +3060,8 @@ class HomeAssistantManager extends Manager {
           {
             'title': '${v['title'] ?? 'View ${i + 1}'}',
             'route': '${v['path'] ?? i}',
+            if (v['icon'] is String) 'icon': v['icon'],
+            if (v['subview'] == true) 'subview': true,
           },
       ];
     } catch (e) {
@@ -2414,67 +3319,21 @@ class HomeAssistantManager extends Manager {
     }
   }
 
-  /// The language Home Assistant itself is configured in ("it", "en-GB"),
-  /// from its core config. Cached for the run — it changes about as often
-  /// as the server moves house, and a failed read is not cached so the next
-  /// caller retries.
+  /// The language Home Assistant speaks to this token's user ("it",
+  /// "en-GB"): the profile language, or the server's own when the user
+  /// never picked one. Cached for the run once the server answers.
   String? _language;
 
   /// Per-domain state translations, keyed by domain. An empty map is a
   /// cached "nothing to translate" (an English server, or a domain Home
-  /// Assistant has no translations for), not a miss.
+  /// Assistant has no translations for), not a miss. Only an answer from
+  /// the server lands here, never a failed lookup.
   final _stateTranslations = <String, Map<String, String>>{};
 
-  Future<String> serverLanguage() async {
-    final cached = _language;
-    if (cached != null) return cached;
-    if (!configured) return 'en';
-    try {
-      final config = await _wsCommand({'type': 'get_config'});
-      final language = config is Map
-          ? '${config['language'] ?? ''}'.trim()
-          : '';
-      if (language.isEmpty) return 'en';
-      return _language = language;
-    } catch (e) {
-      log.debug(name, 'language lookup failed: $e');
-      return 'en';
-    }
-  }
-
-  /// Home Assistant's own translations for a domain's entity states, keyed
-  /// by state ("fog" -> "Nebbia"), in the server's language (issue #268).
-  /// This is exactly what the frontend renders states with, so a kiosk in a
-  /// Dutch or Italian house reads like the rest of the house.
-  ///
-  /// Empty when the server speaks English (the app's own wording already
-  /// is, and it is often the better wording), when the domain carries no
-  /// state translations, or when the lookup fails: every caller falls back
-  /// to its built-in labels.
-  Future<Map<String, String>> stateTranslations(String domain) async {
-    final cached = _stateTranslations[domain];
-    if (cached != null) return cached;
-    if (!configured) return const {};
-    final language = await serverLanguage();
-    if (language.toLowerCase().startsWith('en')) {
-      return _stateTranslations[domain] = const {};
-    }
-    try {
-      final result = await _wsCommand({
-        'type': 'frontend/get_translations',
-        'language': language,
-        'category': 'entity_component',
-        'integration': [domain],
-      });
-      return _stateTranslations[domain] = parseStateTranslations(
-        result,
-        domain,
-      );
-    } catch (e) {
-      log.debug(name, 'state translations for $domain failed: $e');
-      return const {};
-    }
-  }
+  /// State wording for the At a Glance entities (issue #919), keyed
+  /// `language/category/integration`. An empty map is a cached "nothing to
+  /// translate", the same as above.
+  final _stateLabels = <String, Map<String, String>>{};
 
   Future<Object?> _wsCommand(Map<String, Object?> command) async {
     final wsBase = baseUrl
@@ -2538,6 +3397,15 @@ class HomeAssistantManager extends Manager {
   }
 }
 
+/// The profile language out of a `frontend/get_user_data` reply for the
+/// `language` key, as the frontend saves it: `{value: {language: "nl"}}`.
+/// Null when the user never picked one and follows the server.
+String? userLanguage(Object? result) {
+  final value = result is Map ? result['value'] : null;
+  final language = value is Map ? '${value['language'] ?? ''}'.trim() : '';
+  return language.isEmpty ? null : language;
+}
+
 /// The state translations out of a `frontend/get_translations` result, keyed
 /// by bare state. Home Assistant answers with one flat map of dotted keys —
 /// `component.weather.entity_component._.state.fog` — where the segment
@@ -2558,6 +3426,61 @@ Map<String, String> parseStateTranslations(Object? result, String domain) {
     }
   }
   return out;
+}
+
+/// The state wording out of a `frontend/get_translations` reply, split by
+/// the integration each key belongs to so each one caches on its own.
+/// Attribute states (`state_attributes`) are left out: the row shows the
+/// state.
+Map<String, Map<String, String>> parseStateLabels(Object? result) {
+  final resources = result is Map ? result['resources'] : null;
+  final out = <String, Map<String, String>>{};
+  if (resources is! Map) return out;
+  for (final entry in resources.entries) {
+    final key = '${entry.key}';
+    final value = entry.value;
+    if (value is! String || value.isEmpty) continue;
+    if (!key.contains('.state.') || key.contains('.state_attributes.')) {
+      continue;
+    }
+    final parts = key.split('.');
+    if (parts.length < 2 || parts[0] != 'component') continue;
+    (out[parts[1]] ??= {})[key] = value;
+  }
+  return out;
+}
+
+/// Home Assistant's own wording for entity states (issue #919), picked the
+/// way its frontend picks it: the integration's wording for the entity's
+/// translation key first, then the domain's for its device class, then the
+/// domain's own. "off" on a window sensor reads "Closed".
+class EntityStateLabels {
+  const EntityStateLabels(this._resources, this._keys);
+
+  /// The translations, dotted the way Home Assistant sends them.
+  final Map<String, String> _resources;
+
+  /// Each entity's integration and translation key, for the entities that
+  /// have one.
+  final Map<String, (String, String)> _keys;
+
+  /// The wording for [state], or null when Home Assistant has none, which
+  /// is the case for every number.
+  String? label(String entityId, String? deviceClass, String state) {
+    final domain = entityId.split('.').first;
+    final key = _keys[entityId];
+    if (key != null) {
+      final text =
+          _resources['component.${key.$1}.entity.$domain.${key.$2}.state.$state'];
+      if (text != null) return text;
+    }
+    if (deviceClass != null && deviceClass.isNotEmpty) {
+      final text =
+          _resources['component.$domain.entity_component.$deviceClass.state.$state'];
+      if (text != null) return text;
+    }
+    return _resources['component.$domain.entity_component._.state.$state'];
+  }
 }
 
 /// An error Home Assistant itself answered with (a `result` frame carrying
@@ -2612,8 +3535,9 @@ class GlanceSubscription {
   final WebSocketChannel _channel;
   bool _closed = false;
   Timer? _heartbeat, _deadline, _connecting;
-  // Ids 1 and 2 are the subscribe and registry commands.
-  int _pingId = 3;
+  // Ids 1 to 6 are the subscribe, registry, config and translation
+  // commands.
+  int _pingId = 7;
 
   bool get isClosed => _closed;
 
@@ -2696,3 +3620,18 @@ class _PlatformBrightnessWatch with WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() => onChanged();
 }
+
+/// A navigation path without its outer slashes, "url_path/view-route",
+/// keeping a query or fragment after it ("cameras/0?camera=garage").
+String normalizeViewPath(String raw) {
+  final value = raw.trim();
+  final cut = value.indexOf(RegExp(r'[?#]'));
+  final route = (cut < 0 ? value : value.substring(0, cut)).replaceAll(
+    RegExp(r'^/+|/+$'),
+    '',
+  );
+  return cut < 0 || route.isEmpty ? route : route + value.substring(cut);
+}
+
+/// The route part of a navigation path, the part location.pathname shows.
+String viewRoute(String viewPath) => viewPath.split(RegExp(r'[?#]')).first;

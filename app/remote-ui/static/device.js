@@ -1,3 +1,5 @@
+import { isHeadless } from './headless.js';
+import { HEADLESS_ADB } from './permissions.js';
 import { deviceTextMessageIds } from './device_text_ids.js';
 import { supportTextMessageIds } from './support_text_ids.js';
 import { voiceText, deviceText, deviceOperationError, supportText, t } from './localization.js';
@@ -289,9 +291,12 @@ export async function loadDeviceInfo() {
     // uptime; Android does not tell an app when the router associated.
     [deviceText('Network uptime'), dur(info?.uptime?.network)],
     [deviceText('CPU usage'), info?.cpu == null ? '-' : `${Math.round(info.cpu)}%`],
+    [deviceText('CPU clock'), info?.cpuClock == null ? '-' : `${Math.round(info.cpuClock)} MHz`],
     [deviceText('CPU temperature'), info?.temp == null ? '-' : `${Math.round(info.temp)}°C`],
     [deviceText('Battery level'), info?.battery == null ? '-'
       : `${info.battery}%${info.charging ? ` (${deviceText('plugged')})` : ''}`],
+    [deviceText('Battery temperature'), info?.batteryTemp == null ? '-'
+      : `${info.batteryTemp.toFixed(1)}°C`],
     [deviceText('Screen brightness'), info?.brightness == null ? '-'
       : `${Math.round(info.brightness * 100)}% (${Math.round(info.brightness * 255)}/255)`],
     [deviceText('Screen status'), yn(screenOn)],
@@ -323,7 +328,7 @@ export async function loadDeviceInfo() {
   // same reason: its port is a setting in that pane and the admin address is
   // the Access card.
 
-  card('WebView', [
+  if (!isHeadless()) card('WebView', [
     // The system WebView, which updates itself independently of this app and
     // is the thing actually rendering the card.
     [deviceText('Provider'), or(det?.webview?.package)],
@@ -855,17 +860,23 @@ export async function loadPermissions() {
         ? 'Blocked. Android will not ask again, so allow it in the app settings.'
         : 'Without this nothing is listening for the wake word.'],
   ];
+  const headless = isHeadless();
+  // Without a screen there is nothing to come forward to, and the missing
+  // grants are given over adb.
+  if (headless) rows[0][3] = HEADLESS_ADB.microphone;
   if (p.background) {
-    rows.push(
+    if (!headless) rows.push(
       [deviceText('Display over other apps'), p.displayOverOtherApps,
         'Kiosk Satellite can come forward when it hears you.',
-        'Without this the wake word is heard and nothing happens.'],
+        'Without this the wake word is heard and nothing happens.']);
+    rows.push(
       [deviceText('Notifications'), p.notification,
         'The ongoing notification that enables background listening.',
         'Needed for background listening to work reliably.'],
       [deviceText('Unrestricted battery'), p.batteryUnrestricted,
         'Android will leave the listener running.',
-        'Without this the listener is stopped after a few hours.'],
+        headless ? HEADLESS_ADB.batteryUnrestricted
+          : 'Without this the listener is stopped after a few hours.'],
     );
   }
 
@@ -886,7 +897,7 @@ export async function loadPermissions() {
     card.appendChild(row);
   }
 
-  if (anyMissing) {
+  if (anyMissing && !headless) {
     // Say where to go, since it cannot be done from here.
     const note = document.createElement('div');
     note.className = 'desc';

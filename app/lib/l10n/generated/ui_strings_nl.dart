@@ -327,6 +327,183 @@ class UiStringsNl extends UiStrings {
   String get launcherEmpty => 'Geen apps gevonden die kunnen worden gestart.';
 
   @override
+  String get launcherSearchApps => 'Apps zoeken';
+
+  @override
+  String get calendarTitle => 'Agenda';
+
+  @override
+  String get calendarViewDay => 'Dag';
+
+  @override
+  String get calendarViewWeek => 'Week';
+
+  @override
+  String get calendarViewMonth => 'Maand';
+
+  @override
+  String get calendarViewSchedule => 'Overzicht';
+
+  @override
+  String get calendarToday => 'Vandaag';
+
+  @override
+  String get calendarTomorrow => 'Morgen';
+
+  @override
+  String get calendarPrevious => 'Vorige';
+
+  @override
+  String get calendarNext => 'Volgende';
+
+  @override
+  String get calendarAllDay => 'Hele dag';
+
+  @override
+  String calendarMore(String count) {
+    return '+$count meer';
+  }
+
+  @override
+  String get calendarUpNext => 'Hierna';
+
+  @override
+  String calendarStartsIn(String duration) {
+    return 'over $duration';
+  }
+
+  @override
+  String get calendarHappeningNow => 'Nu';
+
+  @override
+  String get calendarLaterToday => 'Later vandaag';
+
+  @override
+  String get calendarNothingElseToday => 'Verder niets vandaag';
+
+  @override
+  String get calendarNothingPlanned => 'Niets gepland';
+
+  @override
+  String get calendarNothingThisWeek => 'Niets gepland deze week';
+
+  @override
+  String get calendarEmptyTitle => 'Nog geen agenda\'s';
+
+  @override
+  String get calendarEmptyHint =>
+      'Voeg in Instellingen > Agenda de Home Assistant-agenda\'s toe die je wilt tonen.';
+
+  @override
+  String calendarOffline(String time) {
+    return 'Home Assistant is niet bereikbaar. Dit zijn de afspraken van $time.';
+  }
+
+  @override
+  String calendarTimeRange(String start, String end) {
+    return '$start tot $end';
+  }
+
+  @override
+  String calendarPeopleTwo(String first, String second) {
+    return '$first en $second';
+  }
+
+  @override
+  String get calendarRepeatsDaily => 'Elke dag';
+
+  @override
+  String get calendarRepeatsWeekly => 'Elke week';
+
+  @override
+  String get calendarRepeatsMonthly => 'Elke maand';
+
+  @override
+  String get calendarRepeatsYearly => 'Elk jaar';
+
+  @override
+  String get calendarRepeats => 'Herhaalt';
+
+  @override
+  String get calendarDone => 'Klaar';
+
+  @override
+  String get calendarCalendarsSection => 'Agenda\'s';
+
+  @override
+  String get calendarAdd => 'Agenda toevoegen';
+
+  @override
+  String get calendarAlreadyAdded => 'Die agenda staat al in de lijst.';
+
+  @override
+  String get calendarOpen => 'Agenda openen';
+
+  @override
+  String get calendarOpenHint => 'Toon de agenda op deze kiosk.';
+
+  @override
+  String get calendarEditName => 'Naam';
+
+  @override
+  String get calendarEditColor => 'Kleur';
+
+  @override
+  String get calendarEditPerson => 'Persoon';
+
+  @override
+  String get calendarEditPersonHint => 'Toont hun foto op de agendalabels.';
+
+  @override
+  String get calendarEditPersonNone => 'Geen';
+
+  @override
+  String get calendarPickCalendar => 'Kies een agenda';
+
+  @override
+  String get calendarPickPerson => 'Kies een persoon';
+
+  @override
+  String get calendarColorTeal => 'Petrol';
+
+  @override
+  String get calendarColorRust => 'Roest';
+
+  @override
+  String get calendarColorBlue => 'Blauw';
+
+  @override
+  String get calendarColorPlum => 'Pruim';
+
+  @override
+  String get calendarColorOchre => 'Oker';
+
+  @override
+  String get calendarColorSage => 'Salie';
+
+  @override
+  String get calendarColorRose => 'Roze';
+
+  @override
+  String get calendarColorSlate => 'Leisteen';
+
+  @override
+  String get calendarColorCustom => 'Aangepast';
+
+  @override
+  String get calendarWidgetEvents => 'Getoonde afspraken';
+
+  @override
+  String get calendarVoiceSection => 'Agenda via spraak';
+
+  @override
+  String get calendarVoiceManage => 'Agenda beheren met Voice Satellite';
+
+  @override
+  String get calendarVoiceHint =>
+      'Vereist de agendablauwdruk van Kiosk Satellite en een LLM-gespreksagent in Home Assistant.';
+
+  @override
   String get cameraViewerTitle => 'Cameraweergave';
 
   @override
@@ -528,6 +705,98 @@ class UiStringsNl extends UiStrings {
   String get commonSelectAll => 'Alles selecteren';
 
   @override
+  String get dashboardPickerSearch => 'Weergaven zoeken';
+
+  @override
+  String get dashboardPickerSearchAll => 'Dashboards en weergaven zoeken';
+
+  @override
+  String get dashboardPickerCurrent => 'Huidig';
+
+  @override
+  String get dashboardPickerDashboards => 'Dashboards';
+
+  @override
+  String get dashboardPickerSubviews => 'Subweergaven';
+
+  @override
+  String get dashboardPickerSubview => 'Subweergave';
+
+  @override
+  String get dashboardPickerWhole => 'Volledig dashboard';
+
+  @override
+  String get dashboardPickerBuildsOwn => 'Maakt eigen weergaven';
+
+  @override
+  String get dashboardPickerIngressPage => 'Ingress-pagina';
+
+  @override
+  String get dashboardPickerWholeHelp =>
+      'Dit dashboard maakt zijn eigen weergaven, dus de kiosk opent het in zijn geheel.';
+
+  @override
+  String dashboardPickerViewCount(String count) {
+    return '$count weergaven';
+  }
+
+  @override
+  String get dashboardPickerOneView => '1 weergave';
+
+  @override
+  String get dashboardPickerOffline => 'Kan Home Assistant niet bereiken';
+
+  @override
+  String get dashboardPickerOfflineHelp =>
+      'De dashboards laden zodra de verbinding terug is.';
+
+  @override
+  String get dashboardPickerTryAgain => 'Probeer opnieuw';
+
+  @override
+  String get dashboardPickerEmpty => 'Nog geen dashboards';
+
+  @override
+  String get dashboardPickerEmptyHelp =>
+      'Dashboards die je in Home Assistant toevoegt, verschijnen hier.';
+
+  @override
+  String get dashboardPickerNoMatch => 'Geen weergaven gevonden';
+
+  @override
+  String dashboardPickerSelected(String count) {
+    return '$count geselecteerd';
+  }
+
+  @override
+  String get dashboardPickerDone => 'Klaar';
+
+  @override
+  String get dashboardPickerShowing => 'Wordt getoond';
+
+  @override
+  String get dashboardPickerMissing =>
+      'Deze weergave bestaat niet meer in Home Assistant. Kies een andere.';
+
+  @override
+  String get dashboardPickerAddViews => 'Weergaven toevoegen';
+
+  @override
+  String get dashboardPickerDefault => 'Standaarddashboard';
+
+  @override
+  String get dashboardPickerDefaultHelp =>
+      'De weergave die de kiosk toont bij het starten.';
+
+  @override
+  String get dashboardPickerOnePage => '1 pagina';
+
+  @override
+  String dashboardPickerPageCount(String count) {
+    return '$count pagina\'s';
+  }
+
+  @override
   String get dlnaCannotDecode => 'Dit apparaat kan deze video niet decoderen.';
 
   @override
@@ -696,6 +965,42 @@ class UiStringsNl extends UiStrings {
   String get drawerNoReleaseNotes => 'Geen releaseopmerkingen.';
 
   @override
+  String get entityPickerNoArea => 'Geen ruimte';
+
+  @override
+  String get entityPickerAll => 'Alle';
+
+  @override
+  String get entityPickerChoose => 'Kies een entiteit';
+
+  @override
+  String get entityPickerNoMatch => 'Niets gevonden';
+
+  @override
+  String get entityPickerOfflineHelp =>
+      'De entiteiten laden zodra de verbinding terug is.';
+
+  @override
+  String get entityPickerMissing =>
+      'Deze entiteit bestaat niet meer in Home Assistant. Kies een andere.';
+
+  @override
+  String get entityPickerOrderHint =>
+      'Sleep of gebruik de pijlen om de volgorde te wijzigen.';
+
+  @override
+  String get entityPickerFull =>
+      'Verwijder er een om een andere toe te voegen.';
+
+  @override
+  String get entityPickerAdd => 'Entiteiten toevoegen';
+
+  @override
+  String entityPickerShowing(String count, String max) {
+    return '$count van $max getoond';
+  }
+
+  @override
   String get esphomeAllExposed => 'Alle beschikbare entiteiten worden getoond';
 
   @override
@@ -779,6 +1084,16 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get filesUploaded => 'Geüpload';
+
+  @override
+  String filesUploadingProgress(String current, String total) {
+    return 'Uploaden $current van $total…';
+  }
+
+  @override
+  String filesUploadedCount(String count) {
+    return '$count bestanden geüpload';
+  }
 
   @override
   String get filesPermissionMissing =>
@@ -1362,6 +1677,21 @@ class UiStringsNl extends UiStrings {
   String get fleetErrorOtherLeader => 'Die kiosk volgt al een andere leider.';
 
   @override
+  String fleetPluginsNames(String names) {
+    return 'Plug-ins: $names';
+  }
+
+  @override
+  String fleetCouldNotInstallNameReason(String name, String reason) {
+    return 'Kan $name niet installeren: $reason';
+  }
+
+  @override
+  String fleetReinstallNameOnThisKioskToSyncIt(String name) {
+    return 'Installeer $name opnieuw op deze kiosk om het te synchroniseren';
+  }
+
+  @override
   String get fleetSwitchKiosk => 'Kiosk wisselen';
 
   @override
@@ -1458,6 +1788,20 @@ class UiStringsNl extends UiStrings {
   String get fleetMcpServerToken => 'MCP-servertoken';
 
   @override
+  String get fleetPlugins => 'Plug-ins';
+
+  @override
+  String get fleetPluginSecrets => 'Geheimen van plug-ins';
+
+  @override
+  String get fleetNoPluginsInstalledOnThisKiosk =>
+      'Geen plug-ins geïnstalleerd op deze kiosk';
+
+  @override
+  String get fleetKiosksOnThisProfileInstallTheseAndTakeTheir =>
+      'Kiosken met dit profiel installeren deze en nemen hun instellingen over van deze kiosk.';
+
+  @override
   String get fleetUpdateTheFleet => 'De vloot bijwerken';
 
   @override
@@ -1511,6 +1855,12 @@ class UiStringsNl extends UiStrings {
   String get gestureIntercomHangup => 'Intercomgesprek beëindigen';
 
   @override
+  String get gestureIntercomAnswer => 'Intercomgesprek aannemen';
+
+  @override
+  String get gestureIntercomDecline => 'Intercomgesprek afwijzen';
+
+  @override
   String get gestureAlarmStop => 'Stop het alarm';
 
   @override
@@ -1524,6 +1874,9 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get gestureHoldMode => 'Wachtstand aan/uit';
+
+  @override
+  String get gestureRefresh => 'Dashboard vernieuwen';
 
   @override
   String get gestureMediaPlayPause => 'Media afspelen of pauzeren';
@@ -1542,6 +1895,12 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get gestureAndroidSettings => 'Android-instellingen openen';
+
+  @override
+  String get gestureOpenCalendar => 'Agenda openen';
+
+  @override
+  String get gestureOpenMusicLibrary => 'Muziekbibliotheek openen';
 
   @override
   String get gestureService => 'Een service aanroepen';
@@ -1581,19 +1940,6 @@ class UiStringsNl extends UiStrings {
   String get gestureUriError => 'Voer een volledige URI in.';
 
   @override
-  String get gestureNoDashboards => 'Geen dashboards';
-
-  @override
-  String get gestureDashboardsFailed => 'Kon dashboards niet ophalen';
-
-  @override
-  String get gestureHaConnected => 'Is Home Assistant verbonden?';
-
-  @override
-  String get gestureDashboardsHelp =>
-      'Kon dashboards niet ophalen. Is Home Assistant verbonden?';
-
-  @override
   String get gestureCameraTitle => 'Cameraweergave';
 
   @override
@@ -1610,6 +1956,16 @@ class UiStringsNl extends UiStrings {
   @override
   String get gestureIntercomEmpty =>
       'Er is nog geen kiosk op het netwerk gevonden.';
+
+  @override
+  String get gestureVoiceWake => 'Een spraakopdracht starten';
+
+  @override
+  String get gestureVoiceStop => 'De spraakassistent stoppen';
+
+  @override
+  String get gestureVoiceMute =>
+      'Voice Satellite dempen of het dempen opheffen';
 
   @override
   String gestureDescribeCornerTaps(String count, String corner) {
@@ -1715,6 +2071,21 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String gestureDescribeButtonPress(String button) {
+    return 'Op de knop $button drukken';
+  }
+
+  @override
+  String gestureDescribeButtonDouble(String button) {
+    return 'Twee keer op de knop $button drukken';
+  }
+
+  @override
+  String gestureDescribeButtonHold(String button) {
+    return 'De knop $button ingedrukt houden';
+  }
+
+  @override
   String get gestureValid => 'Ziet er goed uit.';
 
   @override
@@ -1747,9 +2118,6 @@ class UiStringsNl extends UiStrings {
   String get gestureAutomationEntity => 'Automatiseringsentiteit';
 
   @override
-  String get gestureDomain => 'Domein';
-
-  @override
   String get gestureEntityOptional => 'Entiteit (optioneel)';
 
   @override
@@ -1757,9 +2125,6 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get gestureServiceTitle => 'Een Home Assistant-service aanroepen';
-
-  @override
-  String get gestureServiceRequired => 'Domein en service zijn vereist.';
 
   @override
   String get gestureServiceJson =>
@@ -1780,6 +2145,15 @@ class UiStringsNl extends UiStrings {
   @override
   String get gestureEventJson =>
       'Gebeurtenisgegevens moeten een JSON-object zijn.';
+
+  @override
+  String get gestureServiceSearch => 'Services zoeken';
+
+  @override
+  String get gestureServiceChoose => 'Kies een service';
+
+  @override
+  String get gestureServiceNoEntity => 'Niet gebruikt door deze service';
 
   @override
   String get gestureTester => 'Handgebarentester';
@@ -2040,6 +2414,22 @@ class UiStringsNl extends UiStrings {
   @override
   String get gesturePluginTriggerHelp =>
       'Schakel eerst een plug-in met triggers in via Plug-inbeheer.';
+
+  @override
+  String get gestureButton => 'Knop';
+
+  @override
+  String get gesturePress => 'Drukken';
+
+  @override
+  String get gestureDoublePress => 'Dubbel drukken';
+
+  @override
+  String get gestureHoldPress => 'Ingedrukt houden';
+
+  @override
+  String get gestureButtonDefaults =>
+      'Een druk die geen gebaar gebruikt, houdt zijn eigen taak: Actie neemt op, stopt of negeert wat er overgaat en start anders een spraakopdracht, Microfoon dempt Voice Satellite en de volumeknoppen wijzigen het volume.';
 
   @override
   String get intercomCall => 'Oproep';
@@ -2464,6 +2854,298 @@ class UiStringsNl extends UiStrings {
   String get logsUnknown => 'onbekend';
 
   @override
+  String get libraryTitle => 'Muziekbibliotheek';
+
+  @override
+  String get librarySource => 'Bron';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Bibliotheek, zoeken en radio';
+
+  @override
+  String get librarySourceHaHint => 'Media van elke luidspreker';
+
+  @override
+  String get librarySourceSonosHint => 'Favorieten en afspeellijsten';
+
+  @override
+  String get libraryDiscover => 'Ontdekken';
+
+  @override
+  String get librarySearch => 'Zoeken';
+
+  @override
+  String get libraryBrowse => 'Bladeren';
+
+  @override
+  String get libraryLibrary => 'Bibliotheek';
+
+  @override
+  String get libraryArtists => 'Artiesten';
+
+  @override
+  String get libraryAlbums => 'Albums';
+
+  @override
+  String get libraryTracks => 'Nummers';
+
+  @override
+  String get libraryPlaylists => 'Afspeellijsten';
+
+  @override
+  String get libraryRadio => 'Radio';
+
+  @override
+  String get libraryPodcasts => 'Podcasts';
+
+  @override
+  String get libraryAudiobooks => 'Luisterboeken';
+
+  @override
+  String get libraryFavorites => 'Favorieten';
+
+  @override
+  String get librarySonosPlaylists => 'Sonos-afspeellijsten';
+
+  @override
+  String get libraryRecentlyPlayed => 'Recent afgespeeld';
+
+  @override
+  String get libraryRecentlyAdded => 'Recent toegevoegd';
+
+  @override
+  String get libraryMoreResults => 'Meer resultaten';
+
+  @override
+  String get libraryTopTracks => 'Populaire nummers';
+
+  @override
+  String get libraryKindArtist => 'Artiest';
+
+  @override
+  String get libraryKindAlbum => 'Album';
+
+  @override
+  String get libraryKindTrack => 'Nummer';
+
+  @override
+  String get libraryKindPlaylist => 'Afspeellijst';
+
+  @override
+  String get libraryKindRadio => 'Radio';
+
+  @override
+  String get libraryKindPodcast => 'Podcast';
+
+  @override
+  String get libraryKindEpisode => 'Aflevering';
+
+  @override
+  String get libraryKindAudiobook => 'Luisterboek';
+
+  @override
+  String get libraryOneTrack => '1 nummer';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count nummers';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours u $minutes min';
+  }
+
+  @override
+  String get librarySearchHint => 'Artiesten, albums, nummers';
+
+  @override
+  String get librarySearchClear => 'Zoekopdracht wissen';
+
+  @override
+  String get librarySearchAll => 'Alles';
+
+  @override
+  String get librarySearchPrompt =>
+      'Zoek naar artiesten, albums, nummers en meer.';
+
+  @override
+  String get libraryEmpty => 'Hier staat nog niets.';
+
+  @override
+  String get libraryLoadFailed => 'Kon niet worden geladen.';
+
+  @override
+  String get libraryNoSource =>
+      'Stel Music Assistant, Home Assistant of een Sonos-luidspreker in om muziek te bladeren.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Kies een luidspreker om de media te zien die hij kan afspelen.';
+
+  @override
+  String get libraryChooseSpeaker => 'Kies een luidspreker';
+
+  @override
+  String get libraryPickSpeakerHint =>
+      'Kies de luidspreker om op af te spelen.';
+
+  @override
+  String get libraryPlay => 'Afspelen';
+
+  @override
+  String get libraryOpenNowPlaying => 'Nu aan het afspelen openen';
+
+  @override
+  String get libraryNothingPlaying => 'Er wordt niets afgespeeld';
+
+  @override
+  String get libraryMore => 'Meer opties';
+
+  @override
+  String get libraryPlayNow => 'Nu afspelen';
+
+  @override
+  String get libraryPlayNext => 'Hierna afspelen';
+
+  @override
+  String get libraryAddToQueue => 'Aan wachtrij toevoegen';
+
+  @override
+  String get libraryStartRadio => 'Radio starten';
+
+  @override
+  String get libraryGoToArtist => 'Naar artiest';
+
+  @override
+  String get libraryAddFavorite => 'Aan favorieten toevoegen';
+
+  @override
+  String get libraryRemoveFavorite => 'Uit favorieten verwijderen';
+
+  @override
+  String get libraryAddedFavorite => 'Aan favorieten toegevoegd';
+
+  @override
+  String get libraryRemovedFavorite => 'Uit favorieten verwijderd';
+
+  @override
+  String get libraryFavoriteFailed => 'Favorieten konden niet worden gewijzigd';
+
+  @override
+  String get libraryPlaysNext => 'Wordt hierna afgespeeld';
+
+  @override
+  String get libraryAddedToQueue => 'Aan wachtrij toegevoegd';
+
+  @override
+  String get libraryView => 'Bekijken';
+
+  @override
+  String get libraryPlayFailed => 'Kon niet worden afgespeeld';
+
+  @override
+  String get librarySpeakers => 'Luidsprekers';
+
+  @override
+  String get libraryPlayingOn => 'Speelt af op';
+
+  @override
+  String get libraryOtherSpeakers => 'Andere luidsprekers';
+
+  @override
+  String get libraryNoOtherSpeakers => 'Geen andere luidsprekers.';
+
+  @override
+  String get libraryThisDevice => 'Dit apparaat';
+
+  @override
+  String get libraryUnavailable => 'Niet beschikbaar';
+
+  @override
+  String get libraryGroup => 'Groeperen';
+
+  @override
+  String get libraryGroupAll => 'Groep';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Groeperen met $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Gegroepeerde luidsprekers spelen dezelfde muziek synchroon af.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Voeg de optie Muziekbibliotheek toe aan het kioskmenu.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Muziek bladeren en afspelen op een luidspreker.';
+
+  @override
+  String get libraryPageHint =>
+      'Muziek bladeren en afspelen op een luidspreker';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'Waar de bibliotheek muziek vandaan haalt. Automatisch begint met de bron van de luidspreker die Nu aan het afspelen volgt.';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle =>
+      'Tonen in Nu aan het afspelen';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Voeg een knop Muziekbibliotheek toe naast de sluitknop.';
+
+  @override
+  String get libraryQueueTitle => 'Wachtrij';
+
+  @override
+  String get libraryCloseQueue => 'Wachtrij sluiten';
+
+  @override
+  String get libraryClear => 'Wissen';
+
+  @override
+  String get libraryClearQueueTitle => 'Wachtrij wissen?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'De muziek stopt en alle nummers verdwijnen uit de wachtrij.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Uit wachtrij verwijderen';
+
+  @override
+  String get libraryReorder => 'Sleep om de volgorde te wijzigen';
+
+  @override
+  String get libraryQueueFailed => 'De wachtrij kon niet worden gewijzigd';
+
+  @override
   String get offlineDashboard => 'Dashboard is niet beschikbaar';
 
   @override
@@ -2579,6 +3261,30 @@ class UiStringsNl extends UiStrings {
       'opdracht niet ondersteund of niet verzonden';
 
   @override
+  String get mediaAudioHiRes => 'Hi-Res';
+
+  @override
+  String get mediaAudioCdQuality => 'Cd-kwaliteit';
+
+  @override
+  String get mediaAudioLossy => 'Met verlies';
+
+  @override
+  String mediaAudioBitDepth(String bits) {
+    return '$bits-bit';
+  }
+
+  @override
+  String mediaAudioSampleRate(String rate) {
+    return '$rate kHz';
+  }
+
+  @override
+  String mediaAudioBitRate(String rate) {
+    return '$rate kbps';
+  }
+
+  @override
   String get mediaNothingQueued => 'Niets in de wachtrij';
 
   @override
@@ -2614,6 +3320,17 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get pluginScanTitle => 'Scan een code';
+
+  @override
+  String get pluginScanHelp => 'Houd de code binnen het kader.';
+
+  @override
+  String pluginScanSource(String name) {
+    return 'Aangevraagd door $name';
+  }
+
+  @override
   String get pluginActions => 'Acties';
 
   @override
@@ -2639,17 +3356,21 @@ class UiStringsNl extends UiStrings {
       'Voegt een knop toe aan het ESPHome-apparaat van de kiosk. Hiervoor zijn ESPHome en systeemeigen entiteiten vereist.';
 
   @override
-  String get pluginSelectAnEntity => 'Een entiteit selecteren';
-
-  @override
-  String pluginChooseName(String name) {
-    return 'Kies $name';
-  }
-
-  @override
   String pluginConfigureName(String name) {
     return '$name instellen';
   }
+
+  @override
+  String get pluginThePluginDidNotAnswerInTime =>
+      'De plug-in heeft niet op tijd geantwoord.';
+
+  @override
+  String get pluginNoChoicesYetRefreshToLookForThem =>
+      'Nog geen keuzes. Vernieuw om ernaar te zoeken.';
+
+  @override
+  String get pluginThisChoiceIsNoLongerListed =>
+      'Deze keuze staat niet meer in de lijst.';
 
   @override
   String get pluginPlugin => 'Plug-in';
@@ -2737,6 +3458,40 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get pluginShowPassword => 'Wachtwoord tonen';
+
+  @override
+  String get pluginHidePassword => 'Wachtwoord verbergen';
+
+  @override
+  String get pluginUntitled => 'Naamloos';
+
+  @override
+  String get pluginSearchIcons => 'Pictogrammen zoeken';
+
+  @override
+  String get pluginChooseIcon => 'Kies een pictogram';
+
+  @override
+  String get pluginSearchCameraViews => 'Cameraweergaven zoeken';
+
+  @override
+  String get pluginChooseCameraView => 'Kies een cameraweergave';
+
+  @override
+  String get pluginCameraViewGone =>
+      'Deze cameraweergave bestaat niet meer. Kies een andere.';
+
+  @override
+  String get pluginDragToReorder => 'Sleep om de volgorde te wijzigen';
+
+  @override
+  String get pluginDone => 'Klaar';
+
+  @override
+  String get pluginRequired => 'Verplicht';
+
+  @override
   String get pluginAddPlugin => 'Plug-in toevoegen';
 
   @override
@@ -2790,6 +3545,109 @@ class UiStringsNl extends UiStrings {
   @override
   String get pluginCouldNotReadTheSelectedZip =>
       'Kon de geselecteerde ZIP niet lezen';
+
+  @override
+  String get pluginBrowsePlugins => 'Plug-ins bekijken';
+
+  @override
+  String get pluginFindPluginsMadeByTheCommunity =>
+      'Vind plug-ins die de community heeft gemaakt';
+
+  @override
+  String get pluginSearchPlugins => 'Plug-ins zoeken';
+
+  @override
+  String get pluginUpdate => 'Bijwerken';
+
+  @override
+  String get pluginInstalled => 'Geïnstalleerd';
+
+  @override
+  String get pluginStars => 'Sterren';
+
+  @override
+  String get pluginDownloads => 'Downloads';
+
+  @override
+  String get pluginActiveInstalls => 'Actieve installaties';
+
+  @override
+  String get pluginNoPluginsMatchYourSearch =>
+      'Geen plug-ins gevonden voor je zoekopdracht.';
+
+  @override
+  String get pluginCommunityPluginsHasNoPluginsYet =>
+      'Communityplug-ins heeft nog geen plug-ins.';
+
+  @override
+  String get pluginSubmitYourPlugin => 'Je plug-in indienen';
+
+  @override
+  String get pluginListYourPluginInCommunityPlugins =>
+      'Zet je plug-in in Communityplug-ins.';
+
+  @override
+  String get pluginCouldNotReachCommunityPlugins =>
+      'Kan Communityplug-ins niet bereiken. Controleer de internetverbinding.';
+
+  @override
+  String get pluginCouldNotLoadCommunityPlugins =>
+      'Kan Communityplug-ins niet laden. Probeer het later opnieuw.';
+
+  @override
+  String get pluginTurnOn => 'Inschakelen';
+
+  @override
+  String get pluginTurnOnEnablePluginsToInstall =>
+      'Schakel ‘Plug-ins inschakelen’ in om deze plug-in te installeren.';
+
+  @override
+  String get pluginPreviousPage => 'Vorige pagina';
+
+  @override
+  String get pluginNextPage => 'Volgende pagina';
+
+  @override
+  String pluginPageOfPages(String page, String pages) {
+    return 'Pagina $page van $pages';
+  }
+
+  @override
+  String get pluginSortBy => 'Sorteren op';
+
+  @override
+  String get pluginSortMostStars => 'Meeste sterren';
+
+  @override
+  String get pluginSortRecentlyUpdated => 'Onlangs bijgewerkt';
+
+  @override
+  String get pluginSortNewest => 'Nieuwste';
+
+  @override
+  String get pluginSortName => 'Naam';
+
+  @override
+  String get pluginSortMostDownloads => 'Meeste downloads';
+
+  @override
+  String get pluginPluginsPerPage => 'Plug-ins per pagina';
+
+  @override
+  String pluginCountPerPage(String count) {
+    return '$count per pagina';
+  }
+
+  @override
+  String pluginByAuthor(String author) {
+    return 'door $author';
+  }
+
+  @override
+  String get pluginListedChip => 'Staat in Communityplug-ins';
+
+  @override
+  String get pluginNotListedChip => 'Staat niet in Communityplug-ins';
 
   @override
   String get pluginCharts => 'Grafieken';
@@ -2970,10 +3828,6 @@ class UiStringsNl extends UiStrings {
       'De releasecontrolesom moet overeenkomen met de SHA-256-digest van het GitHub-releasebestand';
 
   @override
-  String get pluginErrorTagRevision =>
-      'GitHub heeft de revisie van de releasetag niet teruggestuurd';
-
-  @override
   String get pluginErrorTrustAuthor =>
       'Bevestig dat je de auteur van de plug-in vertrouwt';
 
@@ -3052,10 +3906,6 @@ class UiStringsNl extends UiStrings {
       'Deze plug-in is niet correct gestopt. Start Kiosk Satellite opnieuw voordat je hem vervangt.';
 
   @override
-  String get pluginErrorPluginLimit =>
-      'Er kunnen maximaal 8 plug-ins worden geïnstalleerd';
-
-  @override
   String get pluginErrorAlreadyInstalled => 'Dit pakket is al geïnstalleerd';
 
   @override
@@ -3097,6 +3947,9 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get pluginErrorAndroidOld => 'De Android-versie is te oud';
+
+  @override
+  String get pluginErrorNeedsScreen => 'Deze plugin heeft een scherm nodig';
 
   @override
   String get pluginErrorNativeIntegrity =>
@@ -3249,6 +4102,36 @@ class UiStringsNl extends UiStrings {
   String get pluginErrorTriggerId => 'Ongeldige of dubbele trigger-ID';
 
   @override
+  String get pluginErrorListSetting => 'Ongeldige lijstinstelling';
+
+  @override
+  String get pluginErrorSettingCondition =>
+      'Ongeldige voorwaarde voor instelling';
+
+  @override
+  String get pluginErrorIcon => 'Er werd een MDI-pictogramnaam verwacht';
+
+  @override
+  String get pluginErrorDashboard => 'Er werd een dashboardpad verwacht';
+
+  @override
+  String get pluginErrorCameraView => 'Er werd een cameraweergave-ID verwacht';
+
+  @override
+  String get pluginErrorListValue => 'Er werd een lijstinstelling verwacht';
+
+  @override
+  String get pluginErrorListCount =>
+      'De lijst heeft te veel of te weinig items';
+
+  @override
+  String get pluginErrorRequiredField => 'Vul alle verplichte velden in';
+
+  @override
+  String get pluginErrorListSize =>
+      'Lijstinstellingen mogen maximaal 32 KB groot zijn';
+
+  @override
   String get remoteDisableTitle => 'Beheer op afstand uitschakelen?';
 
   @override
@@ -3369,6 +4252,16 @@ class UiStringsNl extends UiStrings {
   @override
   String overviewInstallHelp(String version) {
     return 'Kiosk Satellite $version kan worden geïnstalleerd. Bevestig de installatie op het tabletscherm.';
+  }
+
+  @override
+  String overviewInstallSilentHelp(String version) {
+    return 'Kiosk Satellite $version is klaar om te installeren. Het wordt zonder bevestiging op het apparaat geïnstalleerd.';
+  }
+
+  @override
+  String overviewInstallHeadlessHelp(String version) {
+    return 'Kiosk Satellite $version is klaar om te installeren. Dit apparaat heeft geen scherm om dit te bevestigen. Maak Kiosk Satellite daarom apparaateigenaar, gebruik Shizuku of installeer het via adb.';
   }
 
   @override
@@ -3671,6 +4564,12 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get overviewShowingCustomPages => 'Toont eigen pagina\'s';
+
+  @override
+  String get overviewHeadlessMode => 'Modus zonder scherm';
+
+  @override
   String get overviewNoScreenshot => 'Geen schermafdruk';
 
   @override
@@ -3703,21 +4602,6 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get overviewGoView => 'Ga naar weergave';
-
-  @override
-  String get overviewLoadingViews => 'Weergaven laden…';
-
-  @override
-  String get overviewPickView => 'Kies een dashboardweergave…';
-
-  @override
-  String get overviewDefaultView => 'Standaardweergave';
-
-  @override
-  String get overviewNoDashboards => 'Geen dashboards gevonden';
-
-  @override
-  String get overviewViewsUnavailable => 'Weergaven niet beschikbaar';
 
   @override
   String get screensaverNoPhotos =>
@@ -3763,6 +4647,13 @@ class UiStringsNl extends UiStrings {
   @override
   String get screensaverVideosTooLarge =>
       'Elke video in deze afspeellijst is te groot voor dit apparaat om af te spelen.';
+
+  @override
+  String get screensaverUrlNotSet =>
+      'Geen afbeeldings-URL ingesteld. Voeg er een toe in Instellingen.';
+
+  @override
+  String get screensaverUrlLoadFailed => 'Kon de afbeelding niet laden.';
 
   @override
   String get settingKioskAllowAlarmsTitle => 'Alarmen';
@@ -3914,6 +4805,13 @@ class UiStringsNl extends UiStrings {
       'Tijd zonder aanraking in de andere app voordat de kiosk terugkeert.';
 
   @override
+  String get settingLauncherAutoReturnMediaTitle => 'Wachten tijdens afspelen';
+
+  @override
+  String get settingLauncherAutoReturnMediaDescription =>
+      'Niet terugkeren zolang er video of muziek speelt.';
+
+  @override
   String get launcherOverlayHeld =>
       'Kiosk Satellite kan zichzelf weer naar de voorgrond brengen en aanrakingen in de andere app detecteren.';
 
@@ -3934,8 +4832,94 @@ class UiStringsNl extends UiStrings {
       'Android kan Kiosk Satellite achter de andere app pauzeren. Een gepauzeerde timer kan de kiosk niet terugbrengen. Het toestemmingsvenster verschijnt op de tablet.';
 
   @override
+  String get launcherNotificationAccessHeld =>
+      'De kiosk keert niet terug zolang een andere app video of muziek afspeelt.';
+
+  @override
+  String get launcherNotificationAccessMissing =>
+      'Zonder dit weet de kiosk niet wanneer er video of muziek speelt en keert hij toch terug.';
+
+  @override
+  String get launcherNotificationAccessRemote =>
+      'Zonder dit weet de kiosk niet wanneer er video of muziek speelt en keert hij toch terug. Het toestemmingsscherm verschijnt op de tablet.';
+
+  @override
   String get launcherPermissionsSearch =>
       'De toestemmingen die nodig zijn om automatisch terug te keren.';
+
+  @override
+  String get settingCalendarDefaultViewTitle => 'Standaardweergave';
+
+  @override
+  String get settingCalendarDefaultViewDescription =>
+      'De weergave waarmee de agenda opent.';
+
+  @override
+  String get settingCalendarWeekStartTitle => 'Week begint op';
+
+  @override
+  String get settingCalendarWeekStartDescription =>
+      'Volgt de taal van het apparaat, tenzij ingesteld.';
+
+  @override
+  String get settingCalendarWeatherEntityTitle => 'Weer';
+
+  @override
+  String get settingCalendarWeatherEntityDescription =>
+      'Voegt de weersverwachting aan elke dag toe.';
+
+  @override
+  String get settingCalendarMenuTitle => 'Toon in het kioskmenu';
+
+  @override
+  String get settingCalendarMenuDescription =>
+      'Voeg de optie Agenda toe aan het kioskmenu.';
+
+  @override
+  String get settingCalendarIdleCloseMinutesTitle => 'Sluiten bij inactiviteit';
+
+  @override
+  String get settingCalendarIdleCloseMinutesDescription =>
+      'Keert na zo lang zonder aanraking terug naar het dashboard.';
+
+  @override
+  String get settingKioskAllowCalendarTitle => 'Agenda';
+
+  @override
+  String get settingKioskAllowCalendarDescription =>
+      'Open de gezinsagenda vanuit het kioskmenu.';
+
+  @override
+  String get calendarWeekStartLocale => 'Volgens de taal';
+
+  @override
+  String get calendarWeekStartSunday => 'Zondag';
+
+  @override
+  String get calendarWeekStartMonday => 'Maandag';
+
+  @override
+  String get calendarWeekStartSaturday => 'Zaterdag';
+
+  @override
+  String get calendarIdleNever => 'Nooit';
+
+  @override
+  String get calendarIdle1Minute => '1 minuut';
+
+  @override
+  String get calendarIdle2Minutes => '2 minuten';
+
+  @override
+  String get settingsMenuCalendar => 'Agenda';
+
+  @override
+  String get settingsMenuCalendarSummary =>
+      'Gezinsagenda\'s uit Home Assistant';
+
+  @override
+  String get fleetTheCalendarsHiddenWithTheirChips =>
+      'de agenda\'s die met hun labels zijn verborgen';
 
   @override
   String get settingCameraEnabledTitle => 'Camera inschakelen';
@@ -4417,6 +5401,45 @@ class UiStringsNl extends UiStrings {
       'Andere cameraresoluties zijn niet beschikbaar met de huidige opnameconfiguratie.';
 
   @override
+  String get cameraMotionEventsHeading => 'Bewegingsgebeurtenissen';
+
+  @override
+  String get settingCameraOnvifEventsTitle =>
+      'Bewegingsgebeurtenissen versturen';
+
+  @override
+  String get settingCameraOnvifEventsDescription =>
+      'Laat ONVIF-clients zoals NVR\'s weten wanneer er beweging wordt gedetecteerd.';
+
+  @override
+  String get settingCameraOnvifEventsSourceTitle => 'Bewegingsbron';
+
+  @override
+  String get settingCameraOnvifEventsSourceDescription =>
+      'De sensor die de bewegingsgebeurtenissen verstuurt.';
+
+  @override
+  String get cameraOnvifEventsSourceCamera => 'Bewegingssensor van de camera';
+
+  @override
+  String get cameraOnvifEventsSourcePerson => 'Persoonssensor';
+
+  @override
+  String get cameraOnvifEventsSourceEntity => 'Home Assistant-sensor';
+
+  @override
+  String get cameraOnvifEventsMotionSensorOff =>
+      'De bewegingssensor van de camera staat uit. Schakel deze in bij Camera > Bewegingssensor.';
+
+  @override
+  String get cameraOnvifEventsAnalysisOff =>
+      'Bewegingsanalyse tijdens streaming staat uit, dus de camera kan geen beweging detecteren zolang er een kijker verbonden is.';
+
+  @override
+  String get cameraOnvifEventsPersonSensorOff =>
+      'De persoonssensor staat uit. Schakel deze in bij Camera > Persoonssensor.';
+
+  @override
   String get cameraOverlaysHeading => 'Beeldlagen';
 
   @override
@@ -4774,6 +5797,9 @@ class UiStringsNl extends UiStrings {
   String get cameraStreamsEditView => 'Weergave bewerken';
 
   @override
+  String get cameraStreamsViewId => 'Weergave-ID';
+
+  @override
   String get cameraStreamsShowNames => 'Cameranamen tonen';
 
   @override
@@ -5081,6 +6107,49 @@ class UiStringsNl extends UiStrings {
   String get deviceOpenSettingsDevice => 'Instellingen openen op apparaat';
 
   @override
+  String get deviceHardwareButtons => 'Hardwareknoppen';
+
+  @override
+  String get deviceHardwareButtonsHeld =>
+      'De knoppen van het apparaat bereiken gebaren en Voice Satellite.';
+
+  @override
+  String get deviceHardwareButtonsMissing =>
+      'De knoppen van het apparaat doen niets tot de knoppendienst is ingeschakeld.';
+
+  @override
+  String get deviceHeadlessAdbMicrophone =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.RECORD_AUDIO';
+
+  @override
+  String get deviceHeadlessAdbNotifications =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.POST_NOTIFICATIONS';
+
+  @override
+  String get deviceHeadlessAdbLocation =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.ACCESS_FINE_LOCATION';
+
+  @override
+  String get deviceHeadlessAdbBluetooth =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.BLUETOOTH_SCAN, en daarna hetzelfde voor BLUETOOTH_CONNECT';
+
+  @override
+  String get deviceHeadlessAdbBattery =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell dumpsys deviceidle whitelist +me.jxl.kiosk_satellite';
+
+  @override
+  String get deviceHeadlessAdbStorage =>
+      'Dit apparaat heeft geen scherm. Verleen het via adb: adb shell pm grant me.jxl.kiosk_satellite android.permission.READ_EXTERNAL_STORAGE, en daarna hetzelfde voor WRITE_EXTERNAL_STORAGE';
+
+  @override
+  String get deviceHeadlessAdbButtons =>
+      'Dit apparaat heeft geen scherm. Schakel het in via adb: adb shell settings put secure enabled_accessibility_services me.jxl.kiosk_satellite/.HeadlessKeyService, en daarna adb shell settings put secure accessibility_enabled 1';
+
+  @override
+  String get deviceHeadlessAdbButtonsRestart =>
+      'De knoppendienst staat aan maar is niet gestart. Start het apparaat opnieuw op om de dienst te starten: adb reboot';
+
+  @override
   String get deviceHardwarePage => 'Hardware';
 
   @override
@@ -5111,10 +6180,16 @@ class UiStringsNl extends UiStrings {
   String get deviceCpuUsage => 'CPU-gebruik';
 
   @override
+  String get deviceCpuClock => 'CPU-kloksnelheid';
+
+  @override
   String get deviceCpuTemp => 'CPU-temperatuur';
 
   @override
   String get deviceBatteryLevel => 'Batterijniveau';
+
+  @override
+  String get deviceBatteryTemp => 'Batterijtemperatuur';
 
   @override
   String get deviceScreenBrightness => 'Schermhelderheid';
@@ -5421,6 +6496,21 @@ class UiStringsNl extends UiStrings {
   @override
   String get settingRemoteFleetDiscoveryDescription =>
       'Maak dit apparaat vindbaar op het netwerk en toon andere kiosken in beheer op afstand, zodat je ertussen kunt wisselen.';
+
+  @override
+  String get settingRemoteAdminUrlTitle => 'Beheer-URL';
+
+  @override
+  String get settingRemoteAdminUrlDescription =>
+      'Adres dat andere kiosken openen via Kiosk wisselen om deze te bereiken, zoals de naam van een reverse proxy. Laat leeg om het netwerkadres te gebruiken.';
+
+  @override
+  String get deviceAdminUrlInvalid =>
+      'Voer een geldig adres in, bijvoorbeeld https://kiosk.example.com';
+
+  @override
+  String get deviceAdminUrlPath =>
+      'Voer alleen het adres in, zonder pad. Voorbeeld: https://kiosk.example.com';
 
   @override
   String get deviceRemotePage => 'Beheer op afstand';
@@ -6680,6 +7770,10 @@ class UiStringsNl extends UiStrings {
       'Locatie is uitgeschakeld in de apparaatinstellingen, waardoor de ontvanger geen gegevens levert.';
 
   @override
+  String get esphomeLocationApproximate =>
+      'Alleen de geschatte locatie is toegestaan en de GPS-ontvanger heeft de precieze locatie nodig.';
+
+  @override
   String get esphomeLocationGranted =>
       'De locatiesensoren kunnen de GPS-ontvanger lezen.';
 
@@ -6778,14 +7872,17 @@ class UiStringsNl extends UiStrings {
   String get settingClapStrictnessTitle => 'Klapdetectie';
 
   @override
-  String get settingClapStrictnessDescription =>
-      'Strikt vereist luider en gelijkmatiger handgeklap. Probeer dit als omgevingsgeluiden gebaren ten onrechte activeren.';
+  String get settingClapDetectionDescription =>
+      'Strikt vereist luider en gelijkmatiger handgeklap. Grote ruimte geeft handgeklap de tijd om weg te sterven in een galmende ruimte.';
 
   @override
   String get gestureStrictnessStandard => 'Standaard';
 
   @override
   String get gestureStrictnessStrict => 'Strikt';
+
+  @override
+  String get gestureStrictnessLargeRoom => 'Grote ruimte';
 
   @override
   String get gestureOff => 'Gebaren zijn uitgeschakeld';
@@ -6844,6 +7941,85 @@ class UiStringsNl extends UiStrings {
   @override
   String gestureHoldSeconds(String seconds) {
     return '$seconds s';
+  }
+
+  @override
+  String get haCustomPages => 'Eigen pagina\'s';
+
+  @override
+  String get haCustomPagesHintDashboard =>
+      'Je eigen HTML-pagina\'s als dashboard';
+
+  @override
+  String get settingHaCustomPagesSocketTitle =>
+      'Home Assistant-verbinding delen';
+
+  @override
+  String get settingHaCustomPagesSocketDescription =>
+      'Eigen pagina\'s praten met Home Assistant via de verbinding van de kiosk, zonder token in de pagina.';
+
+  @override
+  String get haCustomPagesAdd => 'Pagina toevoegen';
+
+  @override
+  String get haCustomPagesEmptyAnyServer =>
+      'Voeg HTML-pagina\'s uit de www-map van Home Assistant of van een andere server toe om ze als een dashboard te kiezen.';
+
+  @override
+  String get haCustomPagesGuide => 'Handleiding voor eigen pagina\'s';
+
+  @override
+  String get haCustomPagesGuideHint =>
+      'Zo bouw je een pagina die met Home Assistant praat.';
+
+  @override
+  String get haCustomPageAddTitle => 'Eigen pagina toevoegen';
+
+  @override
+  String get haCustomPageEditTitle => 'Eigen pagina bewerken';
+
+  @override
+  String get haCustomPageName => 'Naam';
+
+  @override
+  String get haCustomPageLocation => 'Pad of URL';
+
+  @override
+  String get haCustomPageLocationHint =>
+      'Een bestand in de www-map van Home Assistant, zoals /local/dashboard.html, of de URL van een pagina op een andere server.';
+
+  @override
+  String get haCustomPageNameMissing => 'Voer een naam in.';
+
+  @override
+  String get haCustomPageLocationInvalid =>
+      'Voer een pad onder /local/ of een http- of https-URL in.';
+
+  @override
+  String get haCustomPageDuplicate => 'Een andere pagina gebruikt dit pad al.';
+
+  @override
+  String get haCustomPageNotFound =>
+      'Home Assistant heeft geen bestand op dit pad.';
+
+  @override
+  String get haCustomPageUrlNotFound =>
+      'De server heeft geen pagina op deze URL.';
+
+  @override
+  String get haCustomPageUnreachable => 'Kan Home Assistant niet bereiken.';
+
+  @override
+  String get haCustomPageUrlUnreachable => 'Kan de server niet bereiken.';
+
+  @override
+  String haCustomPageStatus(String code) {
+    return 'Home Assistant antwoordde met HTTP $code.';
+  }
+
+  @override
+  String haCustomPageUrlStatus(String code) {
+    return 'De server antwoordde met HTTP $code.';
   }
 
   @override
@@ -6984,6 +8160,9 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get haCustomPageFilter => 'Niet gebruikt op eigen pagina\'s.';
+
+  @override
   String get settingHaReturnHomeEnabledTitle =>
       'Terugkeren naar de startweergave van het dashboard';
 
@@ -7056,9 +8235,6 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get haRotationHint => 'Weergaven doorlopen, weergaveduur en overgang';
-
-  @override
-  String get haDefaultView => 'Standaardweergave';
 
   @override
   String get haExternalPages => 'Externe pagina\'s';
@@ -7149,28 +8325,6 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get haChooseView => 'Een weergave kiezen';
-
-  @override
-  String get haLoadingDashboards => 'Dashboards laden…';
-
-  @override
-  String get haListFailed => 'Kon dashboards niet tonen';
-
-  @override
-  String get haRetryHint => 'Tik om het opnieuw te proberen.';
-
-  @override
-  String get haChangeView => 'Weergave wijzigen';
-
-  @override
-  String get haNoViews => 'Geen subweergaven';
-
-  @override
-  String get haNoViewsHelp =>
-      'Dit dashboard heeft geen selecteerbare subweergaven.';
-
-  @override
-  String get haNoDashboards => 'Geen dashboards gevonden';
 
   @override
   String get settingHaThemeTitle => 'Thema';
@@ -7607,6 +8761,23 @@ class UiStringsNl extends UiStrings {
   String get intercomOptionHangupHelp => 'Hulp';
 
   @override
+  String get settingIntercomHangupKeyRingingTitle =>
+      'Ophangknop tijdens overgaan';
+
+  @override
+  String get settingIntercomHangupKeyRingingDescription =>
+      'Wat de knop doet als hier een gesprek binnenkomt.';
+
+  @override
+  String get intercomOptionHangupRingingAnswer => 'Aannemen';
+
+  @override
+  String get intercomOptionHangupRingingDecline => 'Afwijzen';
+
+  @override
+  String get intercomOptionHangupRingingIgnore => 'Negeren';
+
+  @override
   String get intercomTalkSection => 'Praten';
 
   @override
@@ -7698,6 +8869,17 @@ class UiStringsNl extends UiStrings {
   @override
   String get kioskAllowedHelp =>
       'De snelle acties die in het kioskmenu beschikbaar zijn';
+
+  @override
+  String get settingKioskAllowedAppsTitle => 'Toegestane apps';
+
+  @override
+  String get settingKioskAllowedAppsDescription =>
+      'De apps van de appstarter die beschikbaar zijn terwijl de kioskmodus aan staat.';
+
+  @override
+  String get kioskAllowedAppsEmpty =>
+      'Voeg eerst apps toe in Instellingen > Appstarter.';
 
   @override
   String get settingKioskEnabledTitle => 'Kioskmodus inschakelen';
@@ -7824,6 +9006,220 @@ class UiStringsNl extends UiStrings {
   String get kioskOpenSettingsDevice => 'Instellingen openen op apparaat';
 
   @override
+  String get settingLedEnabledTitle => 'LED-bediening inschakelen';
+
+  @override
+  String get settingLedEnabledDescription =>
+      'Laat Kiosk Satellite de lampjes bedienen.';
+
+  @override
+  String get settingLedAnimationsTitle => 'Effecten animeren';
+
+  @override
+  String get settingLedAnimationsDescription =>
+      'Laat de bogen draaien en de pulsen vervagen. Zet dit uit om alle effecten stil te zetten.';
+
+  @override
+  String get settingLedIdleEnabledTitle => 'Branden bij inactiviteit';
+
+  @override
+  String get settingLedIdleEnabledDescription =>
+      'Blijft branden zolang er niets anders wordt getoond.';
+
+  @override
+  String get settingLedIdleBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedIdleBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedIdleLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedIdleLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedIdleStyleTitle => 'Effect';
+
+  @override
+  String get settingLedIdleStyleDescription =>
+      'Hoe de lampjes er bij inactiviteit uitzien.';
+
+  @override
+  String get settingLedIdleStyleOptionSolid => 'Vast';
+
+  @override
+  String get settingLedIdleStyleOptionBreathe => 'Ademend';
+
+  @override
+  String get settingLedVoiceEnabledTitle => 'Spraakactiviteit tonen';
+
+  @override
+  String get settingLedVoiceEnabledDescription =>
+      'Licht op terwijl Voice Satellite luistert, nadenkt en antwoordt.';
+
+  @override
+  String get settingLedVoiceBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedVoiceBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedVoiceLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedVoiceLightColorDescription =>
+      'Onder een boog die draait tijdens het luisteren, wisselt tijdens het nadenken en vervaagt tijdens het antwoorden.';
+
+  @override
+  String get settingLedVoiceAccentColorTitle => 'Accentkleur';
+
+  @override
+  String get settingLedVoiceAccentColorDescription =>
+      'De boog die rond de lampjes beweegt.';
+
+  @override
+  String get settingLedVoiceMutedTitle => 'Tonen als gedempt';
+
+  @override
+  String get settingLedVoiceMutedDescription =>
+      'Blijft branden zolang Voice Satellite gedempt is.';
+
+  @override
+  String get settingLedVoiceMutedColorTitle => 'Kleur bij dempen';
+
+  @override
+  String get settingLedVoiceMutedColorDescription =>
+      'De kleur van de lampjes als gedempt.';
+
+  @override
+  String get settingLedTimersEnabledTitle => 'Timers tonen';
+
+  @override
+  String get settingLedTimersEnabledDescription =>
+      'Pulseert terwijl een timer afgaat.';
+
+  @override
+  String get settingLedTimersBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedTimersBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedTimersLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedTimersLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedTimersCountdownTitle => 'Aftellen tonen';
+
+  @override
+  String get settingLedTimersCountdownDescription =>
+      'De lampjes gaan een voor een uit terwijl de volgende timer afloopt.';
+
+  @override
+  String get settingLedAlarmsEnabledTitle => 'Alarmen tonen';
+
+  @override
+  String get settingLedAlarmsEnabledDescription =>
+      'Pulseert terwijl een alarm afgaat.';
+
+  @override
+  String get settingLedAlarmsBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedAlarmsBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedAlarmsLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedAlarmsLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedIntercomEnabledTitle => 'Intercomgesprekken tonen';
+
+  @override
+  String get settingLedIntercomEnabledDescription =>
+      'Pulseert terwijl een gesprek overgaat en draait zolang het loopt.';
+
+  @override
+  String get settingLedIntercomBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedIntercomBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedIntercomLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedIntercomLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedNotificationsEnabledTitle => 'Meldingen tonen';
+
+  @override
+  String get settingLedNotificationsEnabledDescription =>
+      'Pulseert langzaam zolang er een melding wacht.';
+
+  @override
+  String get settingLedNotificationsBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedNotificationsBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedNotificationsLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedNotificationsLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedMediaEnabledTitle => 'Muziek tonen';
+
+  @override
+  String get settingLedMediaEnabledDescription =>
+      'Licht op terwijl er muziek speelt op dit apparaat.';
+
+  @override
+  String get settingLedMediaBrightnessTitle => 'Helderheid';
+
+  @override
+  String get settingLedMediaBrightnessDescription =>
+      'Hoe fel de lampjes hiervoor branden.';
+
+  @override
+  String get settingLedMediaLightColorTitle => 'Kleur';
+
+  @override
+  String get settingLedMediaLightColorDescription =>
+      'De kleur van de lampjes hiervoor.';
+
+  @override
+  String get settingLedMediaStyleTitle => 'Effect';
+
+  @override
+  String get settingLedMediaStyleDescription => 'Hoe de lampjes muziek tonen.';
+
+  @override
+  String get settingLedMediaStyleOptionSolid => 'Vast';
+
+  @override
+  String get settingLedMediaStyleOptionBreathe => 'Ademend';
+
+  @override
   String get settingLockdownEnabledTitle => 'Vergrendelingsmodus inschakelen';
 
   @override
@@ -7882,6 +9278,42 @@ class UiStringsNl extends UiStrings {
   @override
   String get lockdownPermissionsSearch =>
       'De toestemmingen waarop de beveiliging van de vergrendelingsmodus steunt.';
+
+  @override
+  String get settingAirplayEnabledTitle => 'AirPlay-ontvanger inschakelen';
+
+  @override
+  String get settingAirplayEnabledDescription =>
+      'Het apparaat verschijnt als AirPlay-luidspreker in het AirPlay-menu van een iPhone, iPad of Mac.';
+
+  @override
+  String get settingAirplayNameTitle => 'Naam van de luidspreker';
+
+  @override
+  String get settingAirplayNameDescription =>
+      'De naam in het AirPlay-menu. Leeg gebruikt de apparaatnaam.';
+
+  @override
+  String get settingAirplaySenderVolumeTitle => 'Volume van de afzender volgen';
+
+  @override
+  String get settingAirplaySenderVolumeDescription =>
+      'De volumeregeling van de iPhone, iPad of Mac verandert hoe luid dit apparaat speelt. Als dit uitstaat, telt alleen het volume van dit apparaat.';
+
+  @override
+  String get settingAirplaySyncOffsetDescription =>
+      'Een negatieve waarde laat dit apparaat eerder spelen, zodat het geluid gelijkloopt met video op de afzender. Wordt direct toegepast.';
+
+  @override
+  String get settingAirplayTakeoverTitle =>
+      'Een andere afzender laten overnemen';
+
+  @override
+  String get settingAirplayTakeoverDescription =>
+      'Een tweede iPhone, iPad of Mac kan overnemen terwijl er een speelt. Als dit uitstaat, moet die wachten tot de eerste de verbinding verbreekt.';
+
+  @override
+  String get mediaAirplayHint => 'Audio afspelen vanaf een iPhone, iPad of Mac';
 
   @override
   String get mediaCacheTitle => 'Cache voor albumhoezen';
@@ -7987,8 +9419,8 @@ class UiStringsNl extends UiStrings {
       'Volumeknoppen bedienen de speler';
 
   @override
-  String get settingSendspinVolumeKeysDescription =>
-      'De volumeknoppen van dit apparaat wijzigen het volume van de gevolgde speler in plaats van het eigen apparaatvolume. Dit gebeurt alleen wanneer Speelt nu zichtbaar is of wanneer de speler muziek afspeelt.';
+  String get settingSendspinVolumeKeysGroupDescription =>
+      'De volumeknoppen van dit apparaat wijzigen het volume van de gevolgde speler in plaats van het eigen apparaatvolume. Wanneer dit apparaat in een groep afspeelt, wijzigen ze het volume van de groep. Dit gebeurt alleen wanneer Speelt nu zichtbaar is of wanneer de speler muziek afspeelt.';
 
   @override
   String get settingSendspinVolumeKeyStepTitle => 'Stapgrootte van volumeknop';
@@ -8017,8 +9449,18 @@ class UiStringsNl extends UiStrings {
   String get mediaAnotherPlayer => 'een andere speler';
 
   @override
-  String mediaLocalOffline(String player) {
-    return 'De eigen Sendspin-speler van dit apparaat blijft offline terwijl $player wordt bediend.';
+  String mediaOfflineSendspin(String player) {
+    return 'De Sendspin-speler blijft offline zolang $player is gekozen.';
+  }
+
+  @override
+  String mediaOfflineAirplay(String player) {
+    return 'De AirPlay-ontvanger blijft uit zolang $player is gekozen.';
+  }
+
+  @override
+  String mediaOfflineBoth(String player) {
+    return 'De Sendspin-speler en de AirPlay-ontvanger blijven offline zolang $player is gekozen.';
   }
 
   @override
@@ -8100,6 +9542,10 @@ class UiStringsNl extends UiStrings {
       'De zwevende sluitknop kan bedieningselementen van Music Assistant bedekken, zoals het menu van Speelt nu. Zonder deze knop sluit je de pagina met de terugknop of via het kioskmenu.';
 
   @override
+  String get settingSendspinMaZoomDescription =>
+      'Past de schaal aan van de volledige Music Assistant-pagina.';
+
+  @override
   String get mediaMaHint => 'Server, token en snelkoppeling in het kioskmenu';
 
   @override
@@ -8171,11 +9617,20 @@ class UiStringsNl extends UiStrings {
       'Grootte van de afspeelknoppen en voortgangsbalk, onafhankelijk van de tekstgrootte. Geldt voor beide indelingen en naast de schermbeveiliging. De bediening past zich aan de beschikbare ruimte aan.';
 
   @override
-  String get settingSendspinFullscreenHorizontalTitle => 'Horizontale modus';
+  String get settingSendspinFullscreenLayoutTitle => 'Indelingsmodus';
 
   @override
-  String get settingSendspinFullscreenHorizontalDescription =>
-      'Verdeel de albumhoes en bediening over twee gelijke helften. Wanneer de songtekst of wachtrij geopend is, worden de nummergegevens onder de albumhoes geplaatst. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.';
+  String get settingSendspinFullscreenLayoutDescription =>
+      'Hoe Speelt nu de albumhoes, nummergegevens en bediening indeelt. Horizontaal verdeelt ze over een linker- en rechterhelft. Alleen albumhoes vult het scherm met de albumhoes en toont de nummergegevens en bediening een paar seconden na een tik, en schakelt naar Verticaal zolang de songtekst of wachtrij geopend is. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.';
+
+  @override
+  String get mediaLayoutVertical => 'Verticaal';
+
+  @override
+  String get mediaLayoutHorizontal => 'Horizontaal';
+
+  @override
+  String get mediaLayoutArtOnly => 'Alleen albumhoes';
 
   @override
   String get settingSendspinFullscreenDoubleTapTitle =>
@@ -8202,6 +9657,26 @@ class UiStringsNl extends UiStrings {
       'Laat beweging Speelt nu sluiten zoals bij een gewone schermbeveiliging. Als dit uitstaat, sluit alleen een aanraking de weergave en onderbreekt voorbijlopen de muziekweergave niet. Wordt genegeerd als Speelt nu naast een schermbeveiliging staat.';
 
   @override
+  String get settingSendspinFullscreenReturnTitle => 'Na het sluiten';
+
+  @override
+  String get settingSendspinFullscreenReturnDescription =>
+      'De dashboardweergave die verschijnt nadat Speelt nu is gesloten. Standaard volgt Terugkeren naar de startweergave van het dashboard.';
+
+  @override
+  String get mediaReturnLastView => 'Laatste weergave';
+
+  @override
+  String get mediaReturnChosenView => 'Gekozen weergave';
+
+  @override
+  String get settingSendspinFullscreenReturnViewTitle => 'Dashboardweergave';
+
+  @override
+  String get settingSendspinFullscreenReturnViewDescription =>
+      'De weergave die verschijnt nadat Speelt nu is gesloten.';
+
+  @override
   String get settingSendspinFullscreenShortcutTitle => 'Toon in het kioskmenu';
 
   @override
@@ -8214,6 +9689,24 @@ class UiStringsNl extends UiStrings {
   @override
   String get settingSendspinSpeakerPillDescription =>
       'Toon de luidsprekerkeuze 5 seconden nadat het scherm is aangeraakt. Voeg luidsprekers toe aan de huidige groep of verwijder ze eruit.';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersTitle =>
+      'Luidsprekerkeuze filteren';
+
+  @override
+  String get settingSendspinSpeakerPillPlayersDescription =>
+      'Alleen deze luidsprekers verschijnen in de luidsprekerkeuze. Luidsprekers die al in de groep zitten, verschijnen altijd.';
+
+  @override
+  String get settingSendspinAudioQualityTitle => 'Audiokwaliteit tonen';
+
+  @override
+  String get settingSendspinAudioQualityDescription =>
+      'Toont het formaat, de bitdiepte, de samplefrequentie, de bitrate en de bron van het huidige nummer onderaan Speelt nu. Vereist Music Assistant.';
+
+  @override
+  String get mediaAllSpeakers => 'Alle luidsprekers';
 
   @override
   String get settingSendspinQueueArtTitle => 'Albumhoezen in de wachtrij tonen';
@@ -8618,6 +10111,9 @@ class UiStringsNl extends UiStrings {
   String get settingsGroupMediaCameras => 'Media en camera\'s';
 
   @override
+  String get settingsGroupHousehold => 'Huishouden';
+
+  @override
   String get settingsGroupKiosk => 'Kiosk';
 
   @override
@@ -8644,11 +10140,67 @@ class UiStringsNl extends UiStrings {
   String get settingsMenuThemeAuto => 'Automatisch';
 
   @override
+  String get settingsMenuOverviewHeadlessSummary =>
+      'Status en snelle bediening';
+
+  @override
+  String get settingsMenuHomeAssistantHeadlessSummary => 'Verbinding';
+
+  @override
+  String get settingsMenuAudio => 'Audio';
+
+  @override
+  String get settingsMenuAudioSummary => 'Volume, microfoon';
+
+  @override
+  String get settingsGroupMedia => 'Media';
+
+  @override
+  String get settingsMenuDlnaHeadlessSummary => 'Audio op afstand afspelen';
+
+  @override
+  String get settingsMenuGesturesHeadlessSummary => 'Knop- en klapgebaren';
+
+  @override
+  String get settingsMenuLeds => 'LED-bediening';
+
+  @override
+  String get settingsMenuLedsSummary =>
+      'Kleuren en effecten van de statuslampjes';
+
+  @override
+  String get settingsLedTimers => 'Timers';
+
+  @override
+  String get settingsLedNotifications => 'Meldingen';
+
+  @override
+  String get settingsLedIdle => 'Inactief';
+
+  @override
+  String get settingsLedEffects => 'Effecten';
+
+  @override
   String get settingAdaptiveBrightnessTitle => 'Adaptieve helderheid';
 
   @override
   String get settingAdaptiveBrightnessDescription =>
       'Dim het scherm als de kamer donkerder wordt, met behulp van de omgevingslichtsensor.';
+
+  @override
+  String get settingAdaptiveUseEntityTitle =>
+      'Home Assistant-entiteit gebruiken';
+
+  @override
+  String get settingAdaptiveUseEntityDescription =>
+      'Lees het lichtniveau van de kamer uit een Home Assistant-sensor.';
+
+  @override
+  String get settingAdaptiveLightEntityTitle => 'Lichtsensor-entiteit';
+
+  @override
+  String get settingAdaptiveLightEntityDescription =>
+      'De Home Assistant-sensor die het lichtniveau in lux meldt.';
 
   @override
   String get settingAdaptiveMinBrightnessTitle => 'Minimale helderheid';
@@ -8874,6 +10426,28 @@ class UiStringsNl extends UiStrings {
       'Dwing het scherm in één stand. Gebruik dit op een apparaat zonder rotatiesensor of op een apparaat dat zo is gemonteerd dat de sensor de stand verkeerd bepaalt.';
 
   @override
+  String get settingScreenHideStatusBarTitle => 'Statusbalk verbergen';
+
+  @override
+  String get settingScreenHideStatusBarDescription =>
+      'Schakel dit uit om de klok en meldingspictogrammen boven aan het scherm te houden. De kioskmodus verbergt de statusbalk altijd.';
+
+  @override
+  String get settingScreenHideNavigationBarTitle => 'Navigatiebalk verbergen';
+
+  @override
+  String get settingScreenHideNavigationBarDescription =>
+      'Schakel dit uit om de navigatieknoppen op het scherm te houden, samen met de taakbalk op tablets. De kioskmodus verbergt de navigatiebalk altijd.';
+
+  @override
+  String get settingScreenShowOnLockScreenTitle =>
+      'Over vergrendelscherm tonen';
+
+  @override
+  String get settingScreenShowOnLockScreenDescription =>
+      'Toont het dashboard boven een vergrendelscherm met pincode, patroon of wachtwoord. De rest van het apparaat blijft vergrendeld.';
+
+  @override
   String get settingKeepScreenOnTitle => 'Scherm ingeschakeld houden';
 
   @override
@@ -8992,6 +10566,418 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get screensaverBlackSection => 'Zwarte schermbeveiliging';
+
+  @override
+  String get settingScreensaverCelestialLocationTitle => 'Locatie';
+
+  @override
+  String get settingScreensaverCelestialLocationDescription =>
+      'Waarvandaan de hemel wordt bekeken.';
+
+  @override
+  String get settingScreensaverCelestialEntityTitle => 'Entiteit';
+
+  @override
+  String get settingScreensaverCelestialEntityDescription =>
+      'Een persoon, apparaattracker of zone met een locatie.';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesTitle => 'Coördinaten';
+
+  @override
+  String get settingScreensaverCelestialCoordinatesDescription =>
+      'Breedte- en lengtegraad, zoals 40.71, -74.01.';
+
+  @override
+  String get settingScreensaverCelestialTerrainTitle => 'Landschap';
+
+  @override
+  String get settingScreensaverCelestialTerrainDescription =>
+      'Het terrein langs de horizon.';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceTitle =>
+      'Richt op de hemel';
+
+  @override
+  String get settingScreensaverCelestialFollowDeviceDescription =>
+      'Houd het apparaat omhoog en de hemel op het scherm draait mee, zodat je kunt zien waar je naar kijkt. Vereist een kompassensor.';
+
+  @override
+  String get settingScreensaverCelestialDaytimeTitle => 'Daghemel';
+
+  @override
+  String get settingScreensaverCelestialDaytimeDescription =>
+      'Maak de hemel lichter en laat de sterren vervagen zolang de zon op is. Zet uit om de hele dag de nachthemel te tonen.';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayTitle => 'Melkweg';
+
+  @override
+  String get settingScreensaverCelestialMilkyWayDescription =>
+      'Toon de gloed van ons sterrenstelsel aan de nachthemel.';
+
+  @override
+  String get settingScreensaverCelestialPlanetsTitle => 'Planeten';
+
+  @override
+  String get settingScreensaverCelestialPlanetsDescription =>
+      'Toon de planeten waar ze vannacht staan.';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyTitle =>
+      'Sterrenstelsels en nevels';
+
+  @override
+  String get settingScreensaverCelestialDeepSkyDescription =>
+      'Toon het Andromedastelsel, de Orionnevel en andere objecten die je zonder telescoop kunt zien.';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionTitle =>
+      'Lichtvervuiling';
+
+  @override
+  String get settingScreensaverCelestialLightPollutionDescription =>
+      'Simuleer de gloed van stadslichten. Hogere waarden verbergen de zwakkere sterren en de Melkweg.';
+
+  @override
+  String get settingScreensaverCelestialTwinkleTitle => 'Fonkelende sterren';
+
+  @override
+  String get settingScreensaverCelestialTwinkleDescription =>
+      'Laat de sterren fonkelen, het sterkst bij de horizon. Zet uit om energie te besparen.';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonTitle => 'Grotere maan';
+
+  @override
+  String get settingScreensaverCelestialLargeMoonDescription =>
+      'Teken de maan drie keer en de zon twee keer zo groot als in werkelijkheid, zodat de schijngestalte goed te zien is.';
+
+  @override
+  String get settingScreensaverCelestialLinesTitle => 'Sterrenbeeldlijnen';
+
+  @override
+  String get settingScreensaverCelestialLinesDescription =>
+      'Verbind de sterren van elk sterrenbeeld.';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesTitle =>
+      'Namen van sterrenbeelden';
+
+  @override
+  String get settingScreensaverCelestialConstellationNamesDescription =>
+      'Benoem de sterrenbeelden. Er verschijnen er meer als je inzoomt.';
+
+  @override
+  String get settingScreensaverCelestialNamesTitle =>
+      'Namen van sterren en planeten';
+
+  @override
+  String get settingScreensaverCelestialNamesDescription =>
+      'Benoem de zon, de maan, de planeten, de helderste sterren en de sterrenstelsels. Meer sterren krijgen een naam als je inzoomt.';
+
+  @override
+  String get settingScreensaverCelestialCompassTitle => 'Windrichtingen';
+
+  @override
+  String get settingScreensaverCelestialCompassDescription =>
+      'Markeer noord, oost, zuid en west op de horizon.';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleTitle => 'Labelgrootte';
+
+  @override
+  String get settingScreensaverCelestialLabelScaleDescription =>
+      'Schaal de labels aan de hemel van 50 tot 200 procent.';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesTitle => 'Positie';
+
+  @override
+  String get settingScreensaverCelestialControlCoordinatesDescription =>
+      'Toon de breedte- en lengtegraad van waaruit de hemel wordt gezien.';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthTitle => 'Azimut';
+
+  @override
+  String get settingScreensaverCelestialControlAzimuthDescription =>
+      'Toon de kompasrichting waar het midden van het scherm naar wijst.';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeTitle => 'Hoogte';
+
+  @override
+  String get settingScreensaverCelestialControlAltitudeDescription =>
+      'Toon hoe hoog boven de horizon het midden van het scherm is.';
+
+  @override
+  String get settingScreensaverCelestialControlFovTitle => 'Gezichtsveld';
+
+  @override
+  String get settingScreensaverCelestialControlFovDescription =>
+      'Toon hoeveel van de hemel het scherm beslaat, in graden.';
+
+  @override
+  String get settingScreensaverCelestialControlTimeTitle => 'Tijd';
+
+  @override
+  String get settingScreensaverCelestialControlTimeDescription =>
+      'Toon de tijd van de hemel, met een knop Nu na een timelapse.';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseTitle => 'Timelapse';
+
+  @override
+  String get settingScreensaverCelestialControlTimelapseDescription =>
+      'Versnel de tijd om de hemel te zien draaien. Tik om de snelheid te wijzigen.';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyTitle =>
+      'Schakelaar Richt op de hemel';
+
+  @override
+  String get settingScreensaverCelestialControlPointAtSkyDescription =>
+      'Zet Richt op de hemel aan en uit. Alleen zichtbaar op apparaten met een kompas.';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseTitle => 'Maanfase';
+
+  @override
+  String get settingScreensaverCelestialControlMoonPhaseDescription =>
+      'Toon de fase van de maan en hoeveel ervan verlicht is.';
+
+  @override
+  String get settingScreensaverCelestialControlScaleTitle =>
+      'Grootte van de bediening';
+
+  @override
+  String get settingScreensaverCelestialControlScaleDescription =>
+      'Schaal de bediening van 50 tot 200 procent.';
+
+  @override
+  String get screensaverModeCelestial => 'Sterrenhemel';
+
+  @override
+  String get screensaverCelestialTerrainHills => 'Heuvels';
+
+  @override
+  String get screensaverCelestialTerrainMountains => 'Bergen';
+
+  @override
+  String get screensaverCelestialTerrainPlains => 'Vlakte';
+
+  @override
+  String get screensaverCelestialTerrainNone => 'Geen';
+
+  @override
+  String get screensaverCelestialLocationGps => 'GPS';
+
+  @override
+  String get screensaverCelestialLocationHaHome => 'Thuis in Home Assistant';
+
+  @override
+  String get screensaverCelestialLocationHaEntity => 'Home Assistant-entiteit';
+
+  @override
+  String get screensaverCelestialLocationManual => 'Handmatig';
+
+  @override
+  String get screensaverCelestialCurrentLocation => 'Huidige locatie';
+
+  @override
+  String get screensaverCelestialNoGpsReceiver =>
+      'Dit apparaat heeft geen gps-ontvanger.';
+
+  @override
+  String get screensaverCelestialLocationPermission =>
+      'Locatietoestemming niet verleend.';
+
+  @override
+  String get screensaverCelestialNoGpsFix => 'Nog geen gps-positie.';
+
+  @override
+  String get screensaverCelestialNoHomeZone =>
+      'Home Assistant heeft geen thuiszone.';
+
+  @override
+  String get screensaverCelestialHaNotConnected =>
+      'Home Assistant is niet verbonden.';
+
+  @override
+  String get screensaverCelestialPickEntity =>
+      'Kies een entiteit met een locatie.';
+
+  @override
+  String get screensaverCelestialEntityNoLocation =>
+      'Deze entiteit heeft geen locatie.';
+
+  @override
+  String get screensaverCelestialPage => 'Sterrenhemel als schermbeveiliging';
+
+  @override
+  String get screensaverCelestialSummary =>
+      'Locatie, landschap, hemel, labels, bediening';
+
+  @override
+  String get screensaverCelestialSkyGroup => 'Hemel';
+
+  @override
+  String get screensaverCelestialLabelsGroup => 'Labels';
+
+  @override
+  String get screensaverCelestialControlsGroup => 'Bediening';
+
+  @override
+  String get screensaverCelestialLocationGrantMissing =>
+      'Zonder dit kan de GPS-ontvanger niet worden gelezen en heeft de hemel geen locatie.';
+
+  @override
+  String get screensaverCelestialLocationGrantReady =>
+      'De hemel kan de GPS-ontvanger volgen.';
+
+  @override
+  String get screensaverCelestialCoordinatesInvalid =>
+      'Voer een breedte- en lengtegraad in, zoals 40.71, -74.01';
+
+  @override
+  String get screensaverCelestialNoLocation =>
+      'Kies een locatie via Instellingen > Schermbeveiliging > Sterrenhemel.';
+
+  @override
+  String get screensaverCelestialWaitingForGps =>
+      'Wachten op een GPS-positie...';
+
+  @override
+  String get screensaverCelestialDoubleTapHint => 'Tik twee keer om te sluiten';
+
+  @override
+  String get screensaverCelestialCalibrate =>
+      'Beweeg het apparaat in een achtvorm om het kompas te kalibreren.';
+
+  @override
+  String get celestialSun => 'Zon';
+
+  @override
+  String get celestialMoon => 'Maan';
+
+  @override
+  String get celestialMercury => 'Mercurius';
+
+  @override
+  String get celestialVenus => 'Venus';
+
+  @override
+  String get celestialMars => 'Mars';
+
+  @override
+  String get celestialJupiter => 'Jupiter';
+
+  @override
+  String get celestialSaturn => 'Saturnus';
+
+  @override
+  String get celestialUranus => 'Uranus';
+
+  @override
+  String get celestialNeptune => 'Neptunus';
+
+  @override
+  String get celestialAndromedaGalaxy => 'Andromedastelsel';
+
+  @override
+  String get celestialTriangulumGalaxy => 'Driehoeknevel';
+
+  @override
+  String get celestialLargeMagellanicCloud => 'Grote Magelhaense Wolk';
+
+  @override
+  String get celestialSmallMagellanicCloud => 'Kleine Magelhaense Wolk';
+
+  @override
+  String get celestialOrionNebula => 'Orionnevel';
+
+  @override
+  String get celestialLagoonNebula => 'Lagunenevel';
+
+  @override
+  String get celestialCarinaNebula => 'Carinanevel';
+
+  @override
+  String get celestialPleiades => 'Plejaden';
+
+  @override
+  String get celestialBeehiveCluster => 'Kribbe';
+
+  @override
+  String get celestialDoubleCluster => 'Dubbele Sterrenhoop';
+
+  @override
+  String get celestialOmegaCentauri => 'Omega Centauri';
+
+  @override
+  String get celestialTucanae47 => '47 Tucanae';
+
+  @override
+  String get celestialCompassNorth => 'N';
+
+  @override
+  String get celestialCompassEast => 'O';
+
+  @override
+  String get celestialCompassSouth => 'Z';
+
+  @override
+  String get celestialCompassWest => 'W';
+
+  @override
+  String get celestialCompassNorthEast => 'NO';
+
+  @override
+  String get celestialCompassSouthEast => 'ZO';
+
+  @override
+  String get celestialCompassSouthWest => 'ZW';
+
+  @override
+  String get celestialCompassNorthWest => 'NW';
+
+  @override
+  String get celestialAzimuthShort => 'Az';
+
+  @override
+  String get celestialAltitudeShort => 'Hoogte';
+
+  @override
+  String get celestialFovShort => 'FOV';
+
+  @override
+  String get celestialNow => 'Nu';
+
+  @override
+  String get celestialMoonNew => 'Nieuwe maan';
+
+  @override
+  String get celestialMoonWaxingCrescent => 'Wassende sikkel';
+
+  @override
+  String get celestialMoonFirstQuarter => 'Eerste kwartier';
+
+  @override
+  String get celestialMoonWaxingGibbous => 'Wassende maan';
+
+  @override
+  String get celestialMoonFull => 'Volle maan';
+
+  @override
+  String get celestialMoonWaningGibbous => 'Afnemende maan';
+
+  @override
+  String get celestialMoonLastQuarter => 'Laatste kwartier';
+
+  @override
+  String get celestialMoonWaningCrescent => 'Afnemende sikkel';
 
   @override
   String get settingScreensaverClockStyleTitle => 'Stijl';
@@ -9114,6 +11100,34 @@ class UiStringsNl extends UiStrings {
       'De kleur achter de cijfers.';
 
   @override
+  String get settingScreensaverHandNumbersTitle => 'Cijfers';
+
+  @override
+  String get settingScreensaverHandNumbersDescription =>
+      'Welke uren de wijzerplaat als cijfer toont.';
+
+  @override
+  String get settingScreensaverHandSecondsTitle => 'Secondewijzer tonen';
+
+  @override
+  String get settingScreensaverHandSecondsDescription =>
+      'Teken een secondewijzer op de wijzerplaat.';
+
+  @override
+  String get settingScreensaverHandColorTitle => 'Klokkleur';
+
+  @override
+  String get settingScreensaverHandColorDescription =>
+      'De kleur van de wijzers, cijfers en streepjes.';
+
+  @override
+  String get settingScreensaverHandBgColorTitle => 'Achtergrondkleur';
+
+  @override
+  String get settingScreensaverHandBgColorDescription =>
+      'De kleur achter de klok.';
+
+  @override
   String get settingScreensaverClockNightTitle => 'Nachtmodus';
 
   @override
@@ -9181,6 +11195,15 @@ class UiStringsNl extends UiStrings {
   String get screensaverStyleRoller => 'Rolklok';
 
   @override
+  String get screensaverStyleHand => 'Wijzerklok';
+
+  @override
+  String get screensaverHandNumbersQuarters => '12, 3, 6 en 9';
+
+  @override
+  String get screensaverHandNumbersAll => 'Alle uren';
+
+  @override
   String get screensaverFontDefault => 'Standaard';
 
   @override
@@ -9219,6 +11242,25 @@ class UiStringsNl extends UiStrings {
   }
 
   @override
+  String get settingScreensaverClockAmPmTitle => 'AM/PM tonen';
+
+  @override
+  String get settingScreensaverClockAmPmDescription =>
+      'Toon AM of PM na de tijd.';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesTitle =>
+      'Scherm \'s nachts uitschakelen na';
+
+  @override
+  String get settingScreensaverClockNightTurnOffMinutesDescription =>
+      'Schakelt het scherm uit zodra de nachtmodus de ingestelde tijd actief is en weer in zodra het lichter wordt in de kamer. Stel 0 in om het scherm aan te laten. Hiervoor is toestemming voor apparaatbeheer vereist.';
+
+  @override
+  String get screensaverNightTurnOffWarning =>
+      'Zodra het scherm echt wordt uitgeschakeld, neemt het energiebeheer van de tablet het over. Veel Android-modellen gedragen zich dan onvoorspelbaar: wifi kan in de slaapstand gaan of wegvallen, Home Assistant-entiteiten kunnen onbeschikbaar worden, de cameratoegang kan worden ingetrokken en sommige modellen sluiten achtergrondapps af. Sommige lichtsensoren geven ook geen metingen meer door als het scherm uit is, waardoor het scherm misschien niet vanzelf weer aangaat als het lichter wordt in de kamer. Dit verschilt per fabrikant.\n\nEen betrouwbare optie is Een zwart scherm gebruiken. Het scherm ziet er dan net zo donker uit, terwijl de app de volledige controle behoudt.';
+
+  @override
   String get screensaverOverlayEntity => 'Entiteit';
 
   @override
@@ -9241,19 +11283,6 @@ class UiStringsNl extends UiStrings {
   String get screensaverOverlayEntityRequired => 'Kies een entiteit.';
 
   @override
-  String get screensaverOverlaySearchHint => 'Naam of entiteit-ID';
-
-  @override
-  String get screensaverOverlaySearchHintRemote =>
-      'Zoeken op naam of entiteit-id';
-
-  @override
-  String get screensaverOverlaySearchEmpty => 'Typ om entiteiten te zoeken.';
-
-  @override
-  String get screensaverOverlayNoMatches => 'Niets kwam overeen.';
-
-  @override
   String get screensaverOverlaySearching => 'Zoeken…';
 
   @override
@@ -9262,11 +11291,6 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get screensaverOverlayNoAnswer => 'Het apparaat reageerde niet.';
-
-  @override
-  String screensaverOverlaySearchError(String error) {
-    return 'Er kon niet naar entiteiten worden gezocht: $error';
-  }
 
   @override
   String get settingScreensaverDismissOnFaceTitle =>
@@ -9440,8 +11464,33 @@ class UiStringsNl extends UiStrings {
       'Schermbeveiliging tonen bij wekken';
 
   @override
-  String get settingScreensaverScreenOffWakeToScreensaverDescription =>
-      'Als na het uitschakelen van het scherm beweging, een gezicht of een persoon wordt gedetecteerd, of de nabijheidssensor wordt geactiveerd, verschijnt de schermbeveiliging opnieuw in plaats van het dashboard. De afteltijd voor \'Scherm uitschakelen na\' begint opnieuw. Aanraken opent nog steeds het dashboard.';
+  String get settingScreensaverScreenOffWakeToScreensaverDescriptionSources =>
+      'Kies wat na het uitschakelen van het scherm de schermbeveiliging terugbrengt in plaats van het dashboard. De afteltijd voor \'Scherm uitschakelen na\' begint opnieuw.';
+
+  @override
+  String get screensaverWakeSourcesAll => 'Alles';
+
+  @override
+  String get screensaverWakeSourceMotion => 'Beweging';
+
+  @override
+  String get screensaverWakeSourceFace => 'Gezicht';
+
+  @override
+  String get screensaverWakeSourceProximity => 'Nabijheid';
+
+  @override
+  String get screensaverWakeSourcePerson => 'Persoon';
+
+  @override
+  String get screensaverWakeSourcePower => 'Aan/uit-knop';
+
+  @override
+  String get screensaverWakeSourceTouch => 'Aanraken';
+
+  @override
+  String get screensaverWakeSourceTouchRequires =>
+      'Vereist zowel \'Scherm uitschakelen na\' als \'Een zwart scherm gebruiken\'.';
 
   @override
   String get screensaverModeDim => 'Dimmen';
@@ -9522,11 +11571,29 @@ class UiStringsNl extends UiStrings {
       'De Home Assistant-dashboardweergave die de schermbeveiliging toont.';
 
   @override
-  String get screensaverSelectDashboard => 'Selecteer dashboard';
+  String get settingScreensaverDashboardDoubleTapTitle =>
+      'Dubbele tik om af te sluiten';
+
+  @override
+  String get settingScreensaverDashboardDoubleTapDescription =>
+      'Enkele tikken werken met het dashboard en sluiten de schermbeveiliging niet af.';
 
   @override
   String get screensaverDashboardSection =>
       'Home Assistant-dashboard als schermbeveiliging';
+
+  @override
+  String get screensaverModeUrl => 'Afbeeldings-URL';
+
+  @override
+  String get screensaverCalendarSection => 'Agenda als schermbeveiliging';
+
+  @override
+  String get settingScreensaverCalendarViewTitle => 'Agendaweergave';
+
+  @override
+  String get settingScreensaverCalendarViewDescription =>
+      'De agendaweergave waarmee de schermbeveiliging opent.';
 
   @override
   String get settingScreensaverGlanceScaleTitle => 'Rij schalen';
@@ -9599,29 +11666,7 @@ class UiStringsNl extends UiStrings {
   String get screensaverOverlayShowing => 'Wordt getoond';
 
   @override
-  String get screensaverOverlayReorder =>
-      'Wordt getoond (sleep om de volgorde te wijzigen)';
-
-  @override
-  String get screensaverOverlayFull =>
-      'De rij kan niet meer entiteiten tonen. Verwijder er een om een andere toe te voegen.';
-
-  @override
-  String get screensaverOverlayPickerTitle =>
-      'Entiteiten voor \'In één oogopslag\'';
-
-  @override
-  String screensaverOverlayGlanceEmpty(String count) {
-    return 'Nog geen entiteiten. Je kunt er maximaal $count toevoegen.';
-  }
-
-  @override
   String get screensaverOverlayNone => 'Nog geen entiteiten';
-
-  @override
-  String screensaverOverlayLimit(String count) {
-    return 'Maximaal $count entiteiten.';
-  }
 
   @override
   String get screensaverOverlayGlancePage => 'In één oogopslag';
@@ -10263,12 +12308,65 @@ class UiStringsNl extends UiStrings {
       'Tik in het linker- of rechtervijfde van het scherm om de vorige of volgende afbeelding te tonen in plaats van de schermbeveiliging af te sluiten.';
 
   @override
+  String get settingScreensaverMediaMetadataTitle => 'Metadata tonen';
+
+  @override
+  String get settingScreensaverMediaMetadataDescription =>
+      'Toon de datum en cameragegevens over de foto.';
+
+  @override
+  String get settingScreensaverMediaMetadataDateTitle => 'Opnamedatum';
+
+  @override
+  String get settingScreensaverMediaMetadataDateDescription =>
+      'Laat zien wanneer de foto is genomen.';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraTitle => 'Cameragegevens';
+
+  @override
+  String get settingScreensaverMediaMetadataCameraDescription =>
+      'Toont brandpuntsafstand, diafragma en ISO.';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionTitle =>
+      'Positie van metagegevens';
+
+  @override
+  String get settingScreensaverMediaMetadataPositionDescription =>
+      'In welke hoek de details worden weergegeven.';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowTitle => 'Tekstschaduw';
+
+  @override
+  String get settingScreensaverMediaMetadataTextShadowDescription =>
+      'Voeg een schaduw toe aan de tekst met metagegevens zodat deze op foto\'s beter leesbaar is.';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleTitle => 'Tekstgrootte';
+
+  @override
+  String get settingScreensaverMediaMetadataScaleDescription =>
+      'Pas de grootte van de fotogegevens aan zodat deze beter op het scherm past.';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthTitle => 'Vignettesterkte';
+
+  @override
+  String get settingScreensaverMediaVignetteStrengthDescription =>
+      'Bepaalt hoe donker de schaduw achter de details is, zodat deze op lichte foto\'s leesbaar blijven. Stel 0 in om dit uit te schakelen.';
+
+  @override
+  String get screensaverMediaHaMetadata => 'Metadata van Home Assistant-media';
+
+  @override
   String get screensaverMediaHaPage =>
       'Home Assistant-media als schermbeveiliging';
 
   @override
-  String get screensaverMediaHaHint =>
-      'Mediabron, timing, willekeurige volgorde en schermvulling';
+  String get screensaverMediaHaPageHint =>
+      'Mediabron, timing, willekeurige volgorde, schermvulling en metadata';
 
   @override
   String get screensaverMediaChoose => 'Media kiezen';
@@ -10357,11 +12455,82 @@ class UiStringsNl extends UiStrings {
       'Tik in het linker- of rechtervijfde van het scherm om de vorige of volgende foto te tonen in plaats van de schermbeveiliging af te sluiten.';
 
   @override
+  String get settingScreensaverLocalMetadataTitle => 'Metadata tonen';
+
+  @override
+  String get settingScreensaverLocalMetadataDescription =>
+      'Toon de datum en cameragegevens over de foto.';
+
+  @override
+  String get settingScreensaverLocalMetadataDateTitle => 'Opnamedatum';
+
+  @override
+  String get settingScreensaverLocalMetadataDateDescription =>
+      'Laat zien wanneer de foto is genomen.';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraTitle => 'Cameragegevens';
+
+  @override
+  String get settingScreensaverLocalMetadataCameraDescription =>
+      'Toont brandpuntsafstand, diafragma en ISO.';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionTitle =>
+      'Positie van metagegevens';
+
+  @override
+  String get settingScreensaverLocalMetadataPositionDescription =>
+      'In welke hoek de details worden weergegeven.';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowTitle => 'Tekstschaduw';
+
+  @override
+  String get settingScreensaverLocalMetadataTextShadowDescription =>
+      'Voeg een schaduw toe aan de tekst met metagegevens zodat deze op foto\'s beter leesbaar is.';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleTitle => 'Tekstgrootte';
+
+  @override
+  String get settingScreensaverLocalMetadataScaleDescription =>
+      'Pas de grootte van de fotogegevens aan zodat deze beter op het scherm past.';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthTitle => 'Vignettesterkte';
+
+  @override
+  String get settingScreensaverLocalVignetteStrengthDescription =>
+      'Bepaalt hoe donker de schaduw achter de details is, zodat deze op lichte foto\'s leesbaar blijven. Stel 0 in om dit uit te schakelen.';
+
+  @override
+  String get screensaverMediaLocalMetadata => 'Metadata van lokale media';
+
+  @override
   String get screensaverMediaLocalPage => 'Lokale mediaschermbeveiliging';
 
   @override
-  String get screensaverMediaLocalHint =>
-      'Map, timing, willekeurige volgorde en overgangen';
+  String get screensaverMediaLocalPageHint =>
+      'Map, timing, willekeurige volgorde, overgangen en metadata';
+
+  @override
+  String get settingScreensaverUrlImageDescription =>
+      'Een afbeeldingsadres dat het apparaat voor elke dia opnieuw ophaalt.';
+
+  @override
+  String get settingScreensaverUrlIntervalDescription =>
+      'Hoelang elke foto wordt getoond voordat de volgende wordt opgehaald.';
+
+  @override
+  String get screensaverMediaUrlPage => 'Afbeeldings-URL-schermbeveiliging';
+
+  @override
+  String get screensaverMediaUrlPageHint =>
+      'URL, timing, overgangen en metadata';
+
+  @override
+  String get screensaverMediaUrlMetadata => 'Metadata van afbeeldings-URL';
 
   @override
   String get settingScreensaverDismissOnMotionTitle => 'Sluiten bij beweging';
@@ -10396,6 +12565,24 @@ class UiStringsNl extends UiStrings {
   @override
   String get screensaverDetectionMotionTuning =>
       'Bewegingsdetectie is ingesteld in de Camera-instellingen.';
+
+  @override
+  String get settingMotionUseEntityTitle => 'Home Assistant-entiteit gebruiken';
+
+  @override
+  String get settingMotionUseEntityDescription =>
+      'Detecteer beweging met een Home Assistant-sensor in plaats van de camera.';
+
+  @override
+  String get settingMotionEntityTitle => 'Bewegingssensor-entiteit';
+
+  @override
+  String get settingMotionEntityDescription =>
+      'De Home Assistant-sensor voor bezetting, beweging of aanwezigheid die gevolgd wordt.';
+
+  @override
+  String get screensaverDetectionExternalMotionHeading =>
+      'Externe bewegingssensor';
 
   @override
   String get settingScreensaverDismissOnPersonTitle =>
@@ -10982,6 +13169,19 @@ class UiStringsNl extends UiStrings {
   String get screensaverOverlayShowNameHelp => 'De naam onder de waarde.';
 
   @override
+  String get screensaverOverlayShowIcon => 'Pictogram tonen';
+
+  @override
+  String get screensaverOverlayShowIconHelp => 'Het pictogram naast de waarde.';
+
+  @override
+  String get screensaverOverlayVisibleStates => 'Zichtbare statussen';
+
+  @override
+  String get screensaverOverlayVisibleStatesHelp =>
+      'Toon de widget alleen als de waarde een van deze is, gescheiden door komma\'s. Laat leeg om hem altijd te tonen.';
+
+  @override
   String get screensaverOverlayFontSystem => 'Systeemlettertype';
 
   @override
@@ -11004,16 +13204,6 @@ class UiStringsNl extends UiStrings {
 
   @override
   String get screensaverOverlayWeatherEntity => 'Weerentiteit';
-
-  @override
-  String get screensaverOverlayNoWeather => 'Geen weerentiteiten';
-
-  @override
-  String get screensaverOverlayNoWeatherHelp =>
-      'Home Assistant heeft geen weerentiteiten gevonden.';
-
-  @override
-  String get screensaverOverlayPickWeather => 'Kies een weerentiteit…';
 
   @override
   String get screensaverOverlayWeatherRequired => 'Kies een weerentiteit.';
@@ -11248,6 +13438,10 @@ class UiStringsNl extends UiStrings {
       'Beschikbaar terwijl de kiosk je Home Assistant-dashboard toont.';
 
   @override
+  String get voiceSkinUnavailablePlugin =>
+      'Vormgeving van plug-in niet beschikbaar';
+
+  @override
   String get voiceSkinDefault => 'Standaardvormgeving';
 
   @override
@@ -11442,6 +13636,26 @@ class UiStringsNl extends UiStrings {
   @override
   String get settingVoiceWakeSoundDescription =>
       'De wek-, gereed- en foutgeluiden.';
+
+  @override
+  String get voiceChimeWakeVolumeTitle => 'Volume van het wekgeluid';
+
+  @override
+  String get voiceChimeDoneVolumeTitle => 'Volume van het gereedgeluid';
+
+  @override
+  String get voiceChimeErrorVolumeTitle => 'Volume van het foutgeluid';
+
+  @override
+  String get voiceChimeTimerVolumeTitle => 'Volume van het timergeluid';
+
+  @override
+  String get voiceChimeAnnounceVolumeTitle =>
+      'Volume van het aankondigingsgeluid';
+
+  @override
+  String get voiceChimeVolumeDescription =>
+      'Een aandeel van het assistentvolume.';
 
   @override
   String get settingVoiceShowCommandTitle => 'Tonen wat je hebt gezegd';
@@ -11680,8 +13894,8 @@ class UiStringsNl extends UiStrings {
   String get voiceWordAdded => 'Toegevoegd';
 
   @override
-  String get voiceHaAddHint =>
-      'Voeg deze kiosk toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat.';
+  String get voiceHaAddAgainHint =>
+      'Voeg deze kiosk toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat. Kende Home Assistant de kiosk al, dan vraagt het daar om de nieuwe Versleutelingssleutel van de ESPHome-pagina.';
 
   @override
   String get voiceHaEsphomeOff =>
@@ -12545,6 +14759,13 @@ class UiStringsNl extends UiStrings {
       'Hoelang er op de andere kiosken wordt gewacht. Verleng deze periode als een tragere kiosk verliest terwijl die dichterbij staat.';
 
   @override
+  String get settingVoiceWakeArbitrationOffsetTitle => 'Arbitragecorrectie';
+
+  @override
+  String get settingVoiceWakeArbitrationOffsetDescription =>
+      'Wordt opgeteld bij hoe luid deze kiosk het activeringswoord hoorde. Verhoog deze als deze kiosk verliest terwijl die dichterbij staat en verlaag deze als die van te ver weg antwoordt.';
+
+  @override
   String get voiceSectionWakeArbitration => 'Wekwoordarbitrage';
 
   @override
@@ -12640,6 +14861,16 @@ class UiStringsNl extends UiStrings {
   String voiceModelNoLoad(String error) {
     return 'Het model laadt niet: $error';
   }
+
+  @override
+  String get settingVoiceAmazonLocaleTitle => 'Taal van het wekwoord';
+
+  @override
+  String get settingVoiceAmazonLocaleDescription =>
+      'De taal van de wekwoordmodellen van Amazon. De wekwoordkeuzes bieden de wekwoorden van die taal aan.';
+
+  @override
+  String get voiceOptionAppLanguage => 'Taal van Kiosk Satellite';
 
   @override
   String get settingDisableCacheTitle => 'Cache uitschakelen';
@@ -12743,6 +14974,104 @@ class UiStringsNl extends UiStrings {
       '// Voorbeeld: zoom een site die het zoomniveau van het dashboard negeert\ndocument.documentElement.style.zoom = \'1.25\';';
 
   @override
+  String get urlFilterTitle => 'URL-filter';
+
+  @override
+  String get urlFilterHint =>
+      'Pagina\'s blokkeren of toestaan op adrespatroon of reguliere expressie';
+
+  @override
+  String get urlFilterIntroTitle => 'Bepalen welke pagina\'s openen';
+
+  @override
+  String get urlFilterIntroSub =>
+      'Links of pagina\'s die overeenkomen met een Blokkeren-regel laden niet. Voeg een Alleen toestaan-regel toe om alleen overeenkomende pagina\'s te laden.';
+
+  @override
+  String get urlFilterAdd => 'Regel toevoegen';
+
+  @override
+  String get urlFilterAddTitle => 'Filterregel toevoegen';
+
+  @override
+  String get urlFilterEditTitle => 'Filterregel bewerken';
+
+  @override
+  String get urlFilterName => 'Naam';
+
+  @override
+  String get urlFilterPattern => 'Patroon';
+
+  @override
+  String get urlFilterPatternWildcardHint =>
+      'Gebruik * voor willekeurige tekens. Een patroon dat met / begint, komt overeen met het pad op elke server, zoals /history*.';
+
+  @override
+  String get urlFilterPatternRegexHint =>
+      'Een reguliere expressie die overal in het adres wordt gezocht, ongeacht hoofdletters.';
+
+  @override
+  String get urlFilterType => 'Patroontype';
+
+  @override
+  String get urlFilterTypeWildcard => 'Jokerteken';
+
+  @override
+  String get urlFilterTypeRegex => 'Reguliere expressie';
+
+  @override
+  String get urlFilterAction => 'Actie';
+
+  @override
+  String get urlFilterActionBlock => 'Blokkeren';
+
+  @override
+  String get urlFilterActionAllow => 'Alleen toestaan';
+
+  @override
+  String get urlFilterActionAllowHint =>
+      'Waar deze regel geldt, laden alleen pagina\'s die overeenkomen met een Alleen toestaan-regel. Aanmelden bij Home Assistant en het startdashboard laden altijd.';
+
+  @override
+  String get urlFilterScope => 'Geldt voor';
+
+  @override
+  String get urlFilterScopeAll => 'Dashboard en externe pagina\'s';
+
+  @override
+  String get urlFilterScopeDashboard => 'Dashboard';
+
+  @override
+  String get urlFilterScopeExternal => 'Externe pagina\'s';
+
+  @override
+  String get urlFilterScopeHint =>
+      'Externe pagina\'s zijn links die vanaf het dashboard worden geopend en pagina\'s voor dashboardrotatie.';
+
+  @override
+  String get urlFilterErrorName => 'Voer een naam in.';
+
+  @override
+  String get urlFilterErrorPattern => 'Voer een patroon in.';
+
+  @override
+  String get urlFilterErrorRegex => 'Deze reguliere expressie is ongeldig.';
+
+  @override
+  String get urlFilterBlocked => 'Pagina geblokkeerd';
+
+  @override
+  String get urlFilterNotAllowed => 'Niet bij de toegestane pagina\'s';
+
+  @override
+  String get settingBrowserUrlFilterNoticeTitle =>
+      'Melding bij geblokkeerde pagina tonen';
+
+  @override
+  String get settingBrowserUrlFilterNoticeDescription =>
+      'Toon een korte melding met de naam van de regel wanneer een pagina wordt geblokkeerd.';
+
+  @override
   String get setupConnectHeading => 'Verbinden met Home Assistant';
 
   @override
@@ -12840,6 +15169,10 @@ class UiStringsNl extends UiStrings {
   @override
   String get setupSelectDashboardHelp =>
       'Kies het dashboard dat de kiosk moet weergeven. Je kunt dit later wijzigen via Instellingen.';
+
+  @override
+  String get setupHeadlessGrants =>
+      'Dit apparaat heeft geen scherm, dus Android kan er niet om vragen. Verleen ze elk via adb en rond dan hier af.';
 
   @override
   String get setupWelcome => 'Welkom';
@@ -13057,8 +15390,8 @@ class UiStringsNl extends UiStrings {
       'Maak van deze kiosk een spraakassistent voor Home Assistant. Alles kan later worden gewijzigd.';
 
   @override
-  String get setupVoiceAddHint =>
-      'Voeg deze kiosk na de installatie toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat.';
+  String get setupVoiceAddAgainHint =>
+      'Voeg deze kiosk na de installatie toe in Home Assistant via Instellingen → Apparaten en diensten. De kiosk verschijnt daar als ontdekt apparaat. Kende Home Assistant de kiosk al, dan vraagt het daar om de nieuwe Versleutelingssleutel van de ESPHome-pagina.';
 
   @override
   String get setupRecommendedWall =>

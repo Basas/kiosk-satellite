@@ -16,6 +16,7 @@ import android.os.Looper
 import android.util.Log
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.MethodChannel
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.thread
 import kotlin.math.max
@@ -88,6 +89,7 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
         )
 
         const val CHANNEL = "kiosk_satellite/mic"
+        const val LEVELS_CHANNEL = "kiosk_satellite/mic_levels"
         private const val TAG = "MicRecorder"
         @Volatile var rtspAudioTap: ((ByteArray, Long) -> Unit)? = null
         @Volatile var inputSelector: String? = null
@@ -105,6 +107,14 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
          * walking its formats again. A different pick is the user's to try.
          */
         @Volatile private var provenFallback: Pair<Int, Shape>? = null
+
+        /**
+         * Shapes whose capture went from zeros back to audio without a
+         * reopen: the HAL gates a quiet room to exact silence there (a
+         * Rockchip HAL's own gain control does), so silence on them is not
+         * a dead microphone and never walks the ladder again.
+         */
+        @Volatile private var gatingShapes: Set<Shape> = emptySet()
 
         private fun sourceName(source: Int): String = when (source) {
             MediaRecorder.AudioSource.MIC -> "mic"
@@ -160,6 +170,7 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
 
     private val appContext = context.applicationContext
     private val eventChannel = EventChannel(messenger, CHANNEL)
+    private val levelsChannel = MethodChannel(messenger, LEVELS_CHANNEL)
     private val mainHandler = Handler(Looper.getMainLooper())
 
     @Volatile private var recording = false
@@ -178,6 +189,15 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
 
     init {
         eventChannel.setStreamHandler(this)
+        // Wake word arbitration reads the levels before the noise
+        // suppressor here, not the cleaned audio the stream delivers.
+        levelsChannel.setMethodCallHandler { call, result ->
+            if (call.method == "recent") {
+                result.success(MicLevels.recent((call.argument<Number>("ms") ?: 3000).toInt()))
+            } else {
+                result.notImplemented()
+            }
+        }
     }
 
     override fun onListen(arguments: Any?, sink: EventChannel.EventSink?) {
@@ -256,6 +276,8 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
         silencePlatformEffects(opened, ladder[step].source)
         SoftwareEcho.setEnabled(wantSoftwareAec)
         SoftwareEcho.setNoiseSuppression(wantNs)
+        MicLevels.clear()
+        MicLevels.gainDb = gainDbOf(gain)
         // Four 80 ms chunks cover ordinary scheduling jitter. A stalled
         // platform thread must not retain an unlimited history of audio.
         val frames = PcmDelivery(
@@ -267,10 +289,13 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
         val channelIdx = wantChannel - 1
         worker = thread(name = "vsww-mic") {
             var cur = opened
-            val walk = CaptureWalk(ladder.size, step)
+            val walk = CaptureWalk(ladder.size, step, ladder.indices.filter { ladder[it] in gatingShapes }.toSet())
             var shape = ladder[walk.step]
             var decimator = if (shape.rateHz == HARDWARE_RATE) CaptureConvert.Decimator3() else null
             var announcedAudio = false
+            // Whether the picked source delivered audio. A fallback source
+            // is remembered only for a pick that never did.
+            var pickedAudible = gatingShapes.any { it.source == source }
             // Rolling, not since-open: a capture can emit a startup
             // transient before going silent, so any single nonzero frame
             // must not disarm the watchdog for good. Both runs count 16 kHz
@@ -488,21 +513,34 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
                     val limit = walk.zeroLimitBytes
                     if (zeroRun >= limit) {
                         zeroRun = 0
+                        if (walk.gating) {
+                            // Silence on a gating rung is a quiet room.
+                            // Reopening in place still frees a wedged record.
+                            tryOpen(walk.step)?.let {
+                                Log.i(TAG, "$shape read only zeros for ${limit / (SAMPLE_RATE * 2)}s; reopening it in place")
+                                swapTo(it, walk.step)
+                            }
+                            continue
+                        }
                         // Held off (a trusted rung in a quiet room inside
                         // the backoff): nothing to say, silence is not news.
                         advance("capture read only zeros for ${limit / (SAMPLE_RATE * 2)}s")
                         continue
                     }
                 } else {
-                    zeroRun = 0
                     if (!silent) {
-                        walk.audible()
-                        if (shape.source != source) provenFallback = source to shape
+                        if (walk.audible(zeroRun)) {
+                            gatingShapes = gatingShapes + shape
+                            Log.i(TAG, "$shape gates quiet audio to zeros; silence no longer walks the ladder from it")
+                        }
+                        if (shape.source == source) pickedAudible = true
+                        if (shape.source != source && !pickedAudible) provenFallback = source to shape
                         if (walk.step > 0 && !announcedAudio) {
                             announcedAudio = true
                             Log.i(TAG, "$shape capture is delivering audio")
                         }
                     }
+                    zeroRun = 0
                 }
                 val chunk = when {
                     decimator != null -> decimator!!.process(mono ?: buf, monoLen)
@@ -517,6 +555,8 @@ class MicRecorder(context: Context, messenger: BinaryMessenger) : EventChannel.S
                         chunk,
                         captureClock.heard(capturedFrames, shape.rateHz, System.nanoTime()),
                     )
+                } else {
+                    MicLevels.measure(chunk)
                 }
                 // Boost cleaned speech after cancellation. Boosting the speaker
                 // echo first can clip it and make nearby speech disappear.

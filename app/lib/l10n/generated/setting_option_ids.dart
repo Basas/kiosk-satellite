@@ -47,16 +47,30 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "media": "screensaverModeMedia",
     "local": "screensaverModeLocal",
     "gallery": "screensaverModeGallery",
+    "url": "screensaverModeUrl",
     "immich": "screensaverModeImmich",
     "website": "screensaverModeWebsite",
     "camera": "screensaverModeCamera",
     "weather_mood": "screensaverWeatherMood",
-    "dashboard": "screensaverModeDashboard"
+    "dashboard": "screensaverModeDashboard",
+    "celestial": "screensaverModeCelestial",
+    "calendar": "calendarTitle"
+  },
+  "screensaver.calendar_view": {
+    "day": "calendarViewDay",
+    "week": "calendarViewWeek",
+    "month": "calendarViewMonth",
+    "schedule": "calendarViewSchedule"
   },
   "screensaver.clock_style": {
     "digital": "screensaverStyleDigital",
     "flip": "screensaverStyleFlip",
-    "roller": "screensaverStyleRoller"
+    "roller": "screensaverStyleRoller",
+    "hand": "screensaverStyleHand"
+  },
+  "screensaver.hand_numbers": {
+    "quarters": "screensaverHandNumbersQuarters",
+    "all": "screensaverHandNumbersAll"
   },
   "screensaver.clock_font_weight": {
     "default": "screensaverFontDefault",
@@ -194,11 +208,21 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "compact": "mediaCompact",
     "large": "mediaLargeControls"
   },
+  "sendspin.fullscreen_layout": {
+    "vertical": "mediaLayoutVertical",
+    "horizontal": "mediaLayoutHorizontal",
+    "art_only": "mediaLayoutArtOnly"
+  },
   "sendspin.fullscreen_photo_fill": {
     "default": "mediaDefaultFill",
     "off": "mediaFillOff",
     "smart": "mediaFillSmart",
     "always": "mediaFillAlways"
+  },
+  "sendspin.fullscreen_return": {
+    "default": "mediaDefaultFill",
+    "last": "mediaReturnLastView",
+    "custom": "mediaReturnChosenView"
   },
   "intercom.answer_mode": {
     "ring": "intercomOptionAnswerRing",
@@ -234,6 +258,11 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "volume_mute": "intercomOptionHangupMute",
     "help": "intercomOptionHangupHelp"
   },
+  "intercom.hangup_key_ringing": {
+    "answer": "intercomOptionHangupRingingAnswer",
+    "decline": "intercomOptionHangupRingingDecline",
+    "ignore": "intercomOptionHangupRingingIgnore"
+  },
   "kiosk.exit_gesture": {
     "taps5": "kioskGestureTaps5",
     "taps7": "kioskGestureTaps7",
@@ -243,7 +272,8 @@ const settingOptionMessageIds = <String, Map<String, String>>{
   },
   "gestures.clap_strictness": {
     "standard": "gestureStrictnessStandard",
-    "strict": "gestureStrictnessStrict"
+    "strict": "gestureStrictnessStrict",
+    "large_room": "gestureStrictnessLargeRoom"
   },
   "lockdown.exit_gesture": {
     "taps5": "kioskGestureTaps5",
@@ -379,6 +409,94 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "low": "voiceRealtimeReasoningLow",
     "medium": "voiceRealtimeReasoningMedium",
     "high": "voiceRealtimeReasoningHigh"
+  },
+  "screensaver.media_metadata_position": {
+    "top_left": "screensaverMediaTopLeft",
+    "top_right": "screensaverMediaTopRight",
+    "bottom_left": "screensaverMediaBottomLeft",
+    "bottom_right": "screensaverMediaBottomRight"
+  },
+  "screensaver.local_metadata_position": {
+    "top_left": "screensaverMediaTopLeft",
+    "top_right": "screensaverMediaTopRight",
+    "bottom_left": "screensaverMediaBottomLeft",
+    "bottom_right": "screensaverMediaBottomRight"
+  },
+  "led.media.style": {
+    "solid": "settingLedMediaStyleOptionSolid",
+    "breathe": "settingLedMediaStyleOptionBreathe"
+  },
+  "led.idle.style": {
+    "solid": "settingLedIdleStyleOptionSolid",
+    "breathe": "settingLedIdleStyleOptionBreathe"
+  },
+  "screensaver.url_transition": {
+    "none": "screensaverMediaTransitionNone",
+    "fade": "screensaverMediaTransitionFade",
+    "slide": "screensaverMediaTransitionSlide",
+    "zoom": "screensaverMediaTransitionZoom",
+    "kenburns": "screensaverMediaTransitionKenBurns",
+    "random": "screensaverMediaTransitionRandom"
+  },
+  "screensaver.url_fill": {
+    "off": "screensaverMediaFillOff",
+    "smart": "screensaverMediaFillSmart",
+    "always": "screensaverMediaFillAlways"
+  },
+  "screensaver.url_metadata_position": {
+    "top_left": "screensaverMediaTopLeft",
+    "top_right": "screensaverMediaTopRight",
+    "bottom_left": "screensaverMediaBottomLeft",
+    "bottom_right": "screensaverMediaBottomRight"
+  },
+  "calendar.default_view": {
+    "day": "calendarViewDay",
+    "week": "calendarViewWeek",
+    "month": "calendarViewMonth",
+    "schedule": "calendarViewSchedule"
+  },
+  "calendar.week_start": {
+    "locale": "calendarWeekStartLocale",
+    "sunday": "calendarWeekStartSunday",
+    "monday": "calendarWeekStartMonday",
+    "saturday": "calendarWeekStartSaturday"
+  },
+  "calendar.idle_close_minutes": {
+    "0": "calendarIdleNever",
+    "1": "calendarIdle1Minute",
+    "2": "calendarIdle2Minutes",
+    "5": "alarmsOption5Minutes",
+    "10": "alarmsOption10Minutes"
+  },
+  "screensaver.celestial_terrain": {
+    "hills": "screensaverCelestialTerrainHills",
+    "mountains": "screensaverCelestialTerrainMountains",
+    "plains": "screensaverCelestialTerrainPlains",
+    "none": "screensaverCelestialTerrainNone"
+  },
+  "screensaver.celestial_location": {
+    "gps": "screensaverCelestialLocationGps",
+    "ha_home": "screensaverCelestialLocationHaHome",
+    "ha_entity": "screensaverCelestialLocationHaEntity",
+    "manual": "screensaverCelestialLocationManual"
+  },
+  "voice.amazon_locale": {
+    "": "voiceOptionAppLanguage"
+  },
+  "camera.onvif.events_source": {
+    "camera": "cameraOnvifEventsSourceCamera",
+    "person": "cameraOnvifEventsSourcePerson",
+    "entity": "cameraOnvifEventsSourceEntity"
+  },
+  "library.idle_close_minutes": {
+    "0": "calendarIdleNever",
+    "1": "calendarIdle1Minute",
+    "2": "calendarIdle2Minutes",
+    "5": "alarmsOption5Minutes",
+    "10": "alarmsOption10Minutes"
+  },
+  "library.source": {
+    "": "screenAudioAutomatic"
   }
 };
 const settingPlaceholderMessageIds = <String, String>{

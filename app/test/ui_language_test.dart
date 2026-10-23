@@ -45,9 +45,11 @@ void main() {
       expect(uiLanguage.optionLabels!['de'], 'Deutsch');
       expect(uiLanguage.optionLabels!['fr'], 'Français');
       expect(uiLanguage.optionLabels!['nl'], 'Nederlands');
+      expect(uiLanguage.optionLabels!['ru'], 'Русский');
       expect(uiLanguage.optionLabels!['uk'], 'Українська');
       expect(uiLanguage.optionLabels!['zh-CN'], '简体中文');
       expect(appLocaleForLanguage('nl'), const Locale('nl'));
+      expect(appLocaleForLanguage('ru'), const Locale('ru'));
       expect(appLocaleForLanguage('uk'), const Locale('uk'));
       expect(appLocaleForLanguage('zh-CN'), const Locale('zh', 'CN'));
       expect(appLocaleForLanguage('de'), const Locale('de'));
@@ -192,7 +194,7 @@ void main() {
         final row = tester.widget<DropdownRow<String>>(
           find.byType(DropdownRow<String>),
         );
-        row.onChanged('es');
+        row.onChanged!('es');
         await tester.pumpAndSettle();
         expectLanguage('es', deviceLocale);
         expect(container.settings.get(uiLanguage), 'es');

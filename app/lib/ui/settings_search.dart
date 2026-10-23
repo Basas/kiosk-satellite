@@ -63,6 +63,66 @@ class SettingsSearchEntry {
 /// "permissions" or "export" still lands somewhere. Mirrored in the remote
 /// admin's SEARCH_EXTRAS; keep the two lists in step.
 const List<SettingsSearchEntry> handBuiltSearchEntries = [
+  // No setting draws Custom Pages, so the page and its rows are listed
+  // here (remote: DEFLESS_SUBPAGES and SEARCH_EXTRAS).
+  SettingsSearchEntry(
+    category: 'Home Assistant',
+    title: 'Custom Pages',
+    description: 'Your custom HTML pages served as a dashboard',
+    anchorId: 'sub:Custom Pages',
+    isPage: true,
+  ),
+  SettingsSearchEntry(
+    category: 'Home Assistant',
+    title: 'Share Home Assistant connection',
+    description:
+        "Custom pages talk to Home Assistant through the kiosk's connection, "
+        'with no token in the page.',
+    subpage: 'Custom Pages',
+    anchorId: 'ha.custom_pages_socket',
+  ),
+  SettingsSearchEntry(
+    category: 'Home Assistant',
+    title: 'Add page',
+    description:
+        'Add HTML pages from the Home Assistant www folder or another server '
+        'to pick them like a dashboard.',
+    subpage: 'Custom Pages',
+    anchorId: 'x:custom_pages',
+  ),
+  SettingsSearchEntry(
+    category: 'Home Assistant',
+    title: 'Custom page guide',
+    description: 'How to build a page that talks to Home Assistant.',
+    subpage: 'Custom Pages',
+    anchorId: 'x:custom_pages_docs',
+  ),
+  // No setting draws the URL Filter either (remote: DEFLESS_SUBPAGES and
+  // SEARCH_EXTRAS).
+  SettingsSearchEntry(
+    category: 'Browser',
+    title: 'URL Filter',
+    description:
+        'Block or allow pages by address pattern or regular expression',
+    anchorId: 'sub:URL Filter',
+    isPage: true,
+  ),
+  SettingsSearchEntry(
+    category: 'Browser',
+    title: 'Add rule',
+    description:
+        "Links or pages that match a Block rule don't load. Add an Allow only rule to load only the pages it matches.",
+    subpage: 'URL Filter',
+    anchorId: 'x:url_filter',
+  ),
+  SettingsSearchEntry(
+    category: 'Browser',
+    title: 'Show blocked page notice',
+    description:
+        "Show a short notice with the rule's name when a page is blocked.",
+    subpage: 'URL Filter',
+    anchorId: 'browser.url_filter_notice',
+  ),
   SettingsSearchEntry(
     category: 'Device',
     title: 'TLS',
@@ -75,6 +135,12 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
     description:
         "Plugins add additional community developed features to Kiosk Satellite.",
     anchorId: "x:plugins:master",
+  ),
+  SettingsSearchEntry(
+    category: "Plugins",
+    title: "Browse plugins",
+    description: "Find plugins made by the community",
+    anchorId: "x:plugins:browse",
   ),
   SettingsSearchEntry(
     category: "Plugins",
@@ -94,6 +160,27 @@ const List<SettingsSearchEntry> handBuiltSearchEntries = [
     description:
         "Learn how to create plugins with the Hello World template and documentation.",
     anchorId: "x:plugins:create",
+  ),
+  SettingsSearchEntry(
+    category: "Calendar",
+    title: "Open calendar",
+    description: "Show the calendar on this kiosk.",
+    anchorId: "x:calendar_open",
+  ),
+  SettingsSearchEntry(
+    category: "Calendar",
+    title: "Add a calendar",
+    description:
+        "Add the Home Assistant calendars to show in Settings > Calendar.",
+    anchorId: "x:calendar_add",
+  ),
+  SettingsSearchEntry(
+    category: "Calendar",
+    title: "Manage the calendar using Voice Satellite",
+    description:
+        "Needs the Kiosk Satellite calendar blueprint and an LLM conversation "
+        "agent in Home Assistant.",
+    anchorId: "x:calendar_voice",
   ),
   SettingsSearchEntry(
     category: "Alarms",
@@ -631,9 +718,11 @@ List<SettingsSearchEntry> buildSettingsSearchIndex(
   String Function(String)? pluginTextFor,
   String Function(String)? intercomTextFor,
   String Function(String)? alarmsTextFor,
+  String Function(String)? calendarTextFor,
   String Function(String)? mediaTextFor,
   String Function(String)? cameraStreamsTextFor,
   String Function(String)? cameraTextFor,
+  String Function(String)? browserTextFor,
   String Function(SettingDef<Object>)? titleFor,
   String Function(SettingDef<Object>)? descriptionFor,
 }) {
@@ -719,12 +808,16 @@ List<SettingsSearchEntry> buildSettingsSearchIndex(
         ? intercomTextFor
         : entry.category == 'Alarms'
         ? alarmsTextFor
+        : entry.category == 'Calendar'
+        ? calendarTextFor
         : entry.category == 'Sendspin'
         ? mediaTextFor
         : entry.category == 'Cameras'
         ? cameraStreamsTextFor
         : entry.category == 'Camera'
         ? cameraTextFor
+        : entry.category == 'Browser'
+        ? browserTextFor
         : null;
     if (translate == null) return entry;
     return SettingsSearchEntry(
@@ -780,6 +873,14 @@ List<SettingsSearchEntry> pluginSettingsSearchEntries(
         description: '${raw['description'] ?? ''}',
         subpage: '${plugin['id']}',
         anchorId: 'plugin:${plugin['id']}:setting:${raw['key']}',
+      ),
+    for (final raw in (plugin['buttons'] as List? ?? const []).whereType<Map>())
+      SettingsSearchEntry(
+        category: 'Plugins',
+        title: '${raw['title']}',
+        description: '${raw['description'] ?? ''}',
+        subpage: '${plugin['id']}',
+        anchorId: 'plugin:${plugin['id']}:button:${raw['id']}',
       ),
     for (final raw
         in (plugin['commands'] as List? ?? const []).whereType<Map>())

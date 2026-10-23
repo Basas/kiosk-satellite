@@ -117,6 +117,7 @@ void main() {
           required onSnapshot,
           required log,
           String label = 'remote player',
+          bool showInputs = false,
         }) => create(playerId, onSnapshot);
     manager.haRemoteFactory =
         ({
@@ -165,7 +166,7 @@ void main() {
       expect(manager.volumeKeysWanted(viewShown: true), isTrue);
     });
 
-    test('this device as the source keeps the keys', () async {
+    test('this device alone keeps the keys', () async {
       await boot('');
       expect(manager.volumeKeysWanted(viewShown: true), isFalse);
     });

@@ -155,6 +155,12 @@ class _FakeRemote extends MaRemotePlayer {
     super.label,
   });
 
+  /// Whether the source plays from a Music Assistant queue.
+  bool queue = true;
+
+  @override
+  bool get hasQueue => queue;
+
   @override
   void start() {}
 
@@ -189,9 +195,11 @@ void main() {
         containsAll([
           defs.sendspinFullscreenOnPlay,
           defs.sendspinFullscreenControls,
-          defs.sendspinFullscreenHorizontal,
+          defs.sendspinFullscreenLayout,
           defs.sendspinFullscreenDoubleTap,
           defs.sendspinFullscreenMotion,
+          defs.sendspinFullscreenReturn,
+          defs.sendspinFullscreenReturnView,
           defs.sendspinFullscreenShortcut,
           defs.sendspinSpeakerPill,
           defs.sendspinQueueArt,
@@ -204,7 +212,7 @@ void main() {
         defs.sendspinFullscreenOverrideBrightness,
       ]);
       expect(defs.sendspinFullscreenSplit.defaultValue, isTrue);
-      expect(defs.sendspinFullscreenHorizontal.defaultValue, isFalse);
+      expect(defs.sendspinFullscreenLayout.defaultValue, 'vertical');
       expect(
         defs.sendspinFullscreenSplit.dependsOn,
         defs.sendspinFullscreen.key,
@@ -504,6 +512,7 @@ void main() {
             required onSnapshot,
             required log,
             String label = 'remote player',
+            bool showInputs = false,
           }) => fake = _FakeRemote(
             baseUrl: baseUrl,
             token: token,
@@ -518,6 +527,31 @@ void main() {
       await Future<void>.delayed(Duration.zero);
       addTearDown(sendspin.dispose);
     }
+
+    test('picking where Now Playing lands keeps the music going', () async {
+      // Issue #899: the two rows are read at the screensaver's edges, so
+      // changing them must not restart the player under the music.
+      await build(
+        extra: {
+          'ks.sendspin.player': '',
+          'ks.sendspin.player_source': '',
+          'ks.sendspin.enabled': true,
+          'ks.sendspin.client_id': 'abc123',
+        },
+      );
+      final calls = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            calls.add(call.method);
+            return null;
+          });
+      await settings.set(defs.sendspinFullscreenReturn, 'custom');
+      await settings.set(defs.sendspinFullscreenReturnView, 'lovelace/radio');
+      // Past the one second restart debounce.
+      await Future<void>.delayed(const Duration(milliseconds: 1300));
+      expect(calls, isNot(contains('stop')));
+      expect(calls, isNot(contains('start')));
+    });
 
     test(
       'the local player watches its queue for shuffle set elsewhere',
@@ -829,6 +863,278 @@ void main() {
     });
 
     test(
+      'the local controls follow what the playing source can do',
+      () async {
+        // Music Assistant advertises every command to a Sendspin
+        // controller, a source with no controls (its AirPlay Receiver)
+        // included. The watcher says what the source can do.
+        await build(
+          extra: {
+            'ks.sendspin.player': '',
+            'ks.sendspin.player_source': '',
+            'ks.sendspin.enabled': true,
+            'ks.sendspin.client_id': 'abc123',
+          },
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        final messenger =
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        final native = <MethodCall>[];
+        messenger.setMockMethodCallHandler(channel, (call) async {
+          native.add(call);
+          return call.method == 'getStatus' ? null : true;
+        });
+        const codec = StandardMethodCodec();
+        Future<void> fromNative(String method, Map<String, Object?> args) =>
+            messenger.handlePlatformMessage(
+              channel.name,
+              codec.encodeMethodCall(MethodCall(method, args)),
+              (_) {},
+            );
+        const all = [
+          'play',
+          'pause',
+          'stop',
+          'next',
+          'previous',
+          'volume',
+          'mute',
+          'repeat_off',
+          'repeat_one',
+          'repeat_all',
+          'shuffle',
+          'unshuffle',
+          'switch',
+          'seek',
+          'seek_relative',
+        ];
+        await fromNative('controllerChanged', {
+          'supportedCommands': all,
+          'shuffle': false,
+          'repeat': 'off',
+        });
+        await fromNative('metadataChanged', {'title': 'Song'});
+        await fromNative('playingChanged', {'playing': true});
+        List<Object?> shown() =>
+            sendspin.nowPlaying.value!['supportedCommands'] as List<Object?>;
+        Future<List<Object?>> status() async {
+          final res = await commands.execute('sendspinStatus', const {});
+          return (res.data as Map)['supportedCommands'] as List<Object?>;
+        }
+
+        List<Object?>? lastWithheld() {
+          final calls = native.where((c) => c.method == 'withholdCommands');
+          return calls.isEmpty
+              ? null
+              : (calls.last.arguments as Map)['commands'] as List<Object?>;
+        }
+
+        // A Music Assistant queue: everything stays.
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'supportedCommands': MaRemotePlayer.commands,
+        });
+        await Future<void>.delayed(Duration.zero);
+        expect(shown(), all);
+        expect(await status(), all);
+        expect(lastWithheld(), isNull);
+
+        // A source with no controls: stop and volume, and the rest the
+        // controller has that are not transport.
+        fake!.queue = false;
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'supportedCommands': ['stop', 'volume'],
+        });
+        await Future<void>.delayed(Duration.zero);
+        const bare = ['stop', 'volume', 'mute', 'switch'];
+        expect(shown(), bare);
+        expect(await status(), bare);
+        expect(
+          lastWithheld(),
+          unorderedEquals([
+            'play',
+            'pause',
+            'next',
+            'previous',
+            'seek',
+            'seek_relative',
+            'repeat_off',
+            'repeat_one',
+            'repeat_all',
+            'shuffle',
+            'unshuffle',
+          ]),
+        );
+        // The engine's next word on the controller keeps the cut.
+        await fromNative('controllerChanged', {
+          'supportedCommands': all,
+          'shuffle': false,
+          'repeat': 'off',
+        });
+        expect(shown(), bare);
+
+        // A source with transport of its own and a seek bar: Music
+        // Assistant's controller seeks, repeats and shuffles a queue only.
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'supportedCommands': [
+            'stop',
+            'play',
+            'pause',
+            'next',
+            'previous',
+            'seek',
+            'volume',
+          ],
+        });
+        await Future<void>.delayed(Duration.zero);
+        const transport = [
+          'play',
+          'pause',
+          'stop',
+          'next',
+          'previous',
+          'volume',
+          'mute',
+          'switch',
+        ];
+        expect(shown(), transport);
+        expect(await status(), transport);
+
+        // Back on the queue, everything comes back.
+        fake!.queue = true;
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'supportedCommands': MaRemotePlayer.commands,
+        });
+        await Future<void>.delayed(Duration.zero);
+        expect(shown(), all);
+        expect(await status(), all);
+        expect(lastWithheld(), isEmpty);
+
+        // No word from the watcher leaves the server's list alone.
+        fake!.queue = false;
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'supportedCommands': ['stop'],
+        });
+        await Future<void>.delayed(Duration.zero);
+        fake!.onSnapshot(null);
+        await Future<void>.delayed(Duration.zero);
+        expect(shown(), all);
+        expect(lastWithheld(), isEmpty);
+      },
+    );
+
+    test(
+      'a previous lets the engine restart the bar after a re-base',
+      () async {
+        await build(
+          extra: {
+            'ks.sendspin.player': '',
+            'ks.sendspin.player_source': '',
+            'ks.sendspin.enabled': true,
+            'ks.sendspin.client_id': 'abc123',
+          },
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        final messenger =
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        final native = <MethodCall>[];
+        messenger.setMockMethodCallHandler(channel, (call) async {
+          native.add(call);
+          return true;
+        });
+        const codec = StandardMethodCodec();
+        Future<void> fromNative(String method, Map<String, Object?> args) =>
+            messenger.handlePlatformMessage(
+              channel.name,
+              codec.encodeMethodCall(MethodCall(method, args)),
+              (_) {},
+            );
+        await fromNative('metadataChanged', {
+          'title': 'Song',
+          'positionMs': 150000,
+          'durationMs': 180000,
+        });
+        await fromNative('playingChanged', {'playing': true});
+        final now = DateTime.now().millisecondsSinceEpoch;
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'positionMs': 99000,
+          'receivedAt': now,
+          'timeFresh': true,
+        });
+        await Future<void>.delayed(Duration.zero);
+        expect(native.where((c) => c.method == 'rebasePosition'), hasLength(1));
+        // Issue #915: Music Assistant restarts the track with no progress
+        // report, and the engine puts its own position back to 0.
+        expect(await sendspin.control('previous'), isTrue);
+        await fromNative('metadataChanged', {'positionMs': 0});
+        final restarted = sendspin.nowPlaying.value?['positionMs'] as int;
+        expect(restarted, inInclusiveRange(0, 500));
+        // The queue can still report the old place for a moment.
+        fake!.onSnapshot({
+          'title': 'Song',
+          'playing': true,
+          'positionMs': 101000,
+          'receivedAt': DateTime.now().millisecondsSinceEpoch,
+          'timeFresh': true,
+        });
+        await Future<void>.delayed(Duration.zero);
+        expect(native.where((c) => c.method == 'rebasePosition'), hasLength(1));
+        final held = sendspin.nowPlaying.value?['positionMs'] as int;
+        expect(held, inInclusiveRange(0, 500));
+      },
+    );
+
+    test('a resume runs the paused position on from the music start', () async {
+      await build(
+        extra: {
+          'ks.sendspin.player': '',
+          'ks.sendspin.player_source': '',
+          'ks.sendspin.enabled': true,
+          'ks.sendspin.client_id': 'abc123',
+        },
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(channel, (call) async => true);
+      const codec = StandardMethodCodec();
+      Future<void> fromNative(String method, Map<String, Object?> args) =>
+          messenger.handlePlatformMessage(
+            channel.name,
+            codec.encodeMethodCall(MethodCall(method, args)),
+            (_) {},
+          );
+      await fromNative('metadataChanged', {
+        'title': 'Song',
+        'positionMs': 30000,
+        'durationMs': 180000,
+      });
+      await fromNative('playingChanged', {'playing': true});
+      await fromNative('playingChanged', {'playing': false});
+      // Paused at 30 s.
+      await fromNative('metadataChanged', {'positionMs': 30000});
+      final pausedAt = sendspin.nowPlaying.value?['receivedAt'] as int?;
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      await fromNative('playingChanged', {'playing': true});
+      final now = sendspin.nowPlaying.value!;
+      expect(now['positionMs'], 30000);
+      // Stamped at the start of playback, not at the paused report, so
+      // the bar does not jump by the time it stood still.
+      expect(now['receivedAt'] as int, greaterThan(pausedAt! + 250));
+    });
+
+    test(
       'local chapter metadata follows the audible book and clears on a song',
       () async {
         await build(
@@ -873,6 +1179,51 @@ void main() {
         });
         expect(sendspin.nowPlaying.value?['chapters'], isNull);
         expect(sendspin.nowPlaying.value?['mediaType'], isNull);
+      },
+    );
+
+    test(
+      'local audio quality follows the audible track and clears on a song',
+      () async {
+        await build(
+          extra: {
+            'ks.sendspin.player': '',
+            'ks.sendspin.player_source': '',
+            'ks.sendspin.enabled': true,
+            'ks.sendspin.client_id': 'abc123',
+          },
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        final messenger =
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        Future<void> native(String method, Map<String, Object?> args) =>
+            messenger.handlePlatformMessage(
+              channel.name,
+              const StandardMethodCodec().encodeMethodCall(
+                MethodCall(method, args),
+              ),
+              (_) {},
+            );
+        const quality = {
+          'codec': 'FLAC',
+          'sampleRate': 96000,
+          'bitDepth': 24,
+          'lossless': true,
+        };
+        fake!.onSnapshot({'title': 'Song A', 'audioQuality': quality});
+        await native('metadataChanged', {
+          'title': 'Song A',
+          'durationMs': 200000,
+        });
+        await native('playingChanged', {'playing': true});
+        expect(sendspin.nowPlaying.value?['audioQuality'], quality);
+        await native('metadataChanged', {'positionMs': 5000});
+        expect(sendspin.nowPlaying.value?['audioQuality'], quality);
+        await native('metadataChanged', {
+          'title': 'Song B',
+          'durationMs': 180000,
+        });
+        expect(sendspin.nowPlaying.value?['audioQuality'], isNull);
       },
     );
 
@@ -1216,7 +1567,7 @@ void main() {
       for (final entry in {
         'sendspin.fullscreen_text_scale': 150,
         'sendspin.fullscreen_button_scale': 200,
-        'sendspin.fullscreen_horizontal': true,
+        'sendspin.fullscreen_layout': 'art_only',
         'sendspin.fullscreen_split': false,
         'sendspin.fullscreen_photo_fill': 'off',
         'sendspin.fullscreen_override_brightness': true,
@@ -1273,6 +1624,8 @@ void main() {
       final seek = calls.singleWhere((c) => c.arguments['command'] == 'seek');
       final ms = seek.arguments['value'] as int;
       expect(ms, inInclusiveRange(140000, 160000));
+      // Whole seconds: Music Assistant drops the fraction.
+      expect(ms % 1000, 0);
       // The bar shows the target before the server reports back.
       expect(find.textContaining(RegExp(r'^2:[2-3]\d$')), findsOneWidget);
     });
@@ -1298,7 +1651,7 @@ void main() {
             ),
           )
           .color;
-      expect(shuffleColor(), Colors.white38);
+      expect(shuffleColor(), Colors.white70);
       await tester.tap(find.byIcon(Icons.shuffle_rounded));
       await tester.pump();
       expect(calls.last.arguments['command'], 'shuffle');
@@ -1339,6 +1692,15 @@ void main() {
       for (var i = 0; i < 6; i++) {
         await tester.pump(const Duration(milliseconds: 50));
       }
+    }
+
+    // Album art only keeps its controls hidden until a touch, which the
+    // kiosk screen reports on every pointer down.
+    Future<void> reveal(WidgetTester tester) async {
+      container.bus.publish(const ActivityDetected(source: 'touch'));
+      // The bus delivers on a microtask, after the first frame.
+      await tester.pump();
+      await tester.pump();
     }
 
     void showBook({int position = 125000, bool playing = false}) {
@@ -1532,16 +1894,17 @@ void main() {
       },
     );
 
-    for (final horizontal in [false, true]) {
+    for (final layout in ['vertical', 'horizontal', 'art_only']) {
       for (final shared in [false, true]) {
-        testWidgets('queue text scales horizontal=$horizontal shared=$shared', (
+        testWidgets('queue text scales layout=$layout shared=$shared', (
           tester,
         ) async {
           await pump(
             tester,
             alongsideScreensaver: shared,
-            settings: {...ma, 'ks.sendspin.fullscreen_horizontal': horizontal},
+            settings: {...ma, 'ks.sendspin.fullscreen_layout': layout},
           );
+          await reveal(tester);
           await tester.tap(find.byIcon(Icons.queue_music_rounded));
           await settle(tester);
           final queue = find.byType(ListView);
@@ -1570,18 +1933,21 @@ void main() {
       }
     }
 
-    for (final size in [
-      const Size(1280, 800),
-      const Size(800, 480),
-      const Size(360, 800),
+    for (final (layout, size) in [
+      for (final layout in ['horizontal'])
+        for (final size in [
+          const Size(1280, 800),
+          const Size(800, 480),
+          const Size(360, 800),
+        ])
+          (layout, size),
     ]) {
-      testWidgets('secondary controls have separate touch targets at $size', (
-        tester,
-      ) async {
+      testWidgets('secondary controls have separate touch targets '
+          'layout=$layout at $size', (tester) async {
         await pump(
           tester,
           size: size,
-          settings: {...ma, 'ks.sendspin.fullscreen_horizontal': true},
+          settings: {...ma, 'ks.sendspin.fullscreen_layout': layout},
         );
         final row = find.byKey(
           const ValueKey('now-playing-secondary-controls'),
@@ -1606,6 +1972,7 @@ void main() {
           }
           expect(tester.takeException(), isNull);
         }
+        await reveal(tester);
         await tester.tap(find.byIcon(Icons.queue_music_rounded));
         await settle(tester);
         expect(find.byType(ListView), findsOneWidget);
@@ -1613,20 +1980,18 @@ void main() {
       });
     }
 
-    for (final horizontal in [false, true]) {
+    for (final layout in ['vertical', 'horizontal', 'art_only']) {
       for (final size in [
         const Size(1280, 800),
         const Size(960, 480),
         const Size(480, 320),
         const Size(360, 800),
       ]) {
-        testWidgets('scales fit horizontal=$horizontal at $size', (
-          tester,
-        ) async {
+        testWidgets('scales fit layout=$layout at $size', (tester) async {
           await pump(
             tester,
             size: size,
-            settings: {...ma, 'ks.sendspin.fullscreen_horizontal': horizontal},
+            settings: {...ma, 'ks.sendspin.fullscreen_layout': layout},
           );
           container.sendspin.nowPlaying.value = {
             ...container.sendspin.nowPlaying.value!,
@@ -1663,6 +2028,7 @@ void main() {
               );
             }
           }
+          await reveal(tester);
           await tester.tap(find.byIcon(Icons.skip_next_rounded));
           await tester.pump();
           expect(calls.last.arguments['command'], 'next');
@@ -1674,6 +2040,7 @@ void main() {
           ];
           await settle(tester);
           expect(tester.takeException(), isNull);
+          await reveal(tester);
           await tester.tap(find.byIcon(Icons.queue_music_rounded));
           await settle(tester);
           expect(tester.takeException(), isNull);
@@ -1681,50 +2048,46 @@ void main() {
         });
       }
 
-      testWidgets(
-        'text and buttons scale independently horizontal=$horizontal',
-        (tester) async {
-          await pump(
-            tester,
-            settings: {'ks.sendspin.fullscreen_horizontal': horizontal},
-          );
-          final title = find.text('Song');
-          final play = find.byIcon(Icons.pause_circle_filled_rounded);
-          final initialTitle = tester.getRect(title).size;
-          final initialPlay = tester.getRect(play).size;
-          await container.settings.set(defs.sendspinFullscreenTextScale, 150);
-          await settle(tester);
-          expect(
-            tester.getRect(title).size.height,
-            closeTo(initialTitle.height * 1.5, 1),
-          );
-          expect(tester.getRect(play).size, initialPlay);
-          final scaledTitle = tester.getRect(title).size;
-          await container.settings.set(defs.sendspinFullscreenButtonScale, 150);
-          await settle(tester);
-          expect(
-            tester.getRect(play).size.height,
-            closeTo(initialPlay.height * 1.5, 1),
-          );
-          expect(tester.getRect(title).size, scaledTitle);
-          await container.settings.set(defs.sendspinLyrics, true);
-          await settle(tester);
-          container.sendspin.lyrics.value = const [
-            LyricLine(Duration.zero, 'First lyric'),
-          ];
-          await settle(tester);
-          final lyrics = tester.widget<LyricsView>(find.byType(LyricsView));
-          expect(lyrics.fontSize, 26 * 1.5);
-          await container.settings.set(defs.sendspinFullscreenTextScale, 200);
-          await settle(tester);
-          expect(
-            tester.widget<LyricsView>(find.byType(LyricsView)).fontSize,
-            26 * 2,
-          );
-          expect(tester.takeException(), isNull);
-          await tester.pump(const Duration(seconds: 2));
-        },
-      );
+      testWidgets('text and buttons scale independently layout=$layout', (
+        tester,
+      ) async {
+        await pump(tester, settings: {'ks.sendspin.fullscreen_layout': layout});
+        final title = find.text('Song');
+        final play = find.byIcon(Icons.pause_circle_filled_rounded);
+        final initialTitle = tester.getRect(title).size;
+        final initialPlay = tester.getRect(play).size;
+        await container.settings.set(defs.sendspinFullscreenTextScale, 150);
+        await settle(tester);
+        expect(
+          tester.getRect(title).size.height,
+          closeTo(initialTitle.height * 1.5, 1),
+        );
+        expect(tester.getRect(play).size, initialPlay);
+        final scaledTitle = tester.getRect(title).size;
+        await container.settings.set(defs.sendspinFullscreenButtonScale, 150);
+        await settle(tester);
+        expect(
+          tester.getRect(play).size.height,
+          closeTo(initialPlay.height * 1.5, 1),
+        );
+        expect(tester.getRect(title).size, scaledTitle);
+        await container.settings.set(defs.sendspinLyrics, true);
+        await settle(tester);
+        container.sendspin.lyrics.value = const [
+          LyricLine(Duration.zero, 'First lyric'),
+        ];
+        await settle(tester);
+        final lyrics = tester.widget<LyricsView>(find.byType(LyricsView));
+        expect(lyrics.fontSize, 26 * 1.5);
+        await container.settings.set(defs.sendspinFullscreenTextScale, 200);
+        await settle(tester);
+        expect(
+          tester.widget<LyricsView>(find.byType(LyricsView)).fontSize,
+          26 * 2,
+        );
+        expect(tester.takeException(), isNull);
+        await tester.pump(const Duration(seconds: 2));
+      });
     }
 
     for (final size in [
@@ -1739,7 +2102,7 @@ void main() {
           await pump(
             tester,
             size: size,
-            settings: {...ma, 'ks.sendspin.fullscreen_horizontal': true},
+            settings: {...ma, 'ks.sendspin.fullscreen_layout': 'horizontal'},
           );
           container.sendspin.nowPlaying.value = {
             ...container.sendspin.nowPlaying.value!,
@@ -1816,16 +2179,26 @@ void main() {
     }
 
     testWidgets(
-      'horizontal mode switches live and is ignored alongside a screensaver',
+      'layout mode switches live and is ignored alongside a screensaver',
       (tester) async {
         await pump(tester);
         final horizontal = find.byKey(
           const ValueKey('horizontal-artwork-half'),
         );
+        final artOnly = find.byKey(const ValueKey('art-only-cover'));
         expect(horizontal, findsNothing);
-        await container.settings.set(defs.sendspinFullscreenHorizontal, true);
+        expect(artOnly, findsNothing);
+        await container.settings.set(
+          defs.sendspinFullscreenLayout,
+          'horizontal',
+        );
         await settle(tester);
         expect(horizontal, findsOneWidget);
+        expect(artOnly, findsNothing);
+        await container.settings.set(defs.sendspinFullscreenLayout, 'art_only');
+        await settle(tester);
+        expect(horizontal, findsNothing);
+        expect(artOnly, findsOneWidget);
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -1838,13 +2211,151 @@ void main() {
         );
         await settle(tester);
         expect(horizontal, findsNothing);
+        expect(artOnly, findsNothing);
         expect(
-          container.settings.get(defs.sendspinFullscreenHorizontal),
-          isTrue,
+          container.settings.get(defs.sendspinFullscreenLayout),
+          'art_only',
         );
         await tester.pump(const Duration(seconds: 2));
       },
     );
+
+    for (final size in [
+      const Size(1280, 800),
+      const Size(800, 1280),
+      const Size(800, 480),
+      const Size(360, 800),
+    ]) {
+      testWidgets('album art only shows the cover alone, brings details and '
+          'controls up on a touch and steps aside for panels at $size', (
+        tester,
+      ) async {
+        await pump(
+          tester,
+          size: size,
+          settings: {...ma, 'ks.sendspin.fullscreen_layout': 'art_only'},
+        );
+        container.sendspin.nowPlaying.value = {
+          ...container.sendspin.nowPlaying.value!,
+          'album': 'Album name',
+        };
+        await settle(tester);
+        final cover = find.byKey(const ValueKey('art-only-cover'));
+        final visibility = find.byKey(
+          const ValueKey('art-only-controls-visibility'),
+        );
+        final details = find.byKey(const ValueKey('art-only-track-details'));
+        final play = find.byIcon(Icons.pause_circle_filled_rounded);
+        final close = find.byIcon(Icons.close);
+        final coverRect = tester.getRect(cover);
+        expect(coverRect.width, coverRect.height);
+        expect(coverRect.center.dx, closeTo(size.width / 2, 0.1));
+        expect(coverRect.center.dy, closeTo(size.height / 2, 0.1));
+        // The cover takes the whole of its short side less the padding.
+        expect(coverRect.width, greaterThan(size.shortestSide - 100));
+
+        // Hidden: nothing to press, and a tap on the hidden next button
+        // does not skip.
+        expect(tester.widget<AnimatedOpacity>(visibility).opacity, 0);
+        expect(play.hitTestable(), findsNothing);
+        expect(close.hitTestable(), findsNothing);
+        await tester.tap(
+          find.byIcon(Icons.skip_next_rounded),
+          warnIfMissed: false,
+        );
+        await tester.pump();
+        expect(calls.where((c) => c.arguments?['command'] == 'next'), isEmpty);
+
+        await reveal(tester);
+        expect(tester.widget<AnimatedOpacity>(visibility).opacity, 1);
+        expect(play.hitTestable(), findsOneWidget);
+        expect(close.hitTestable(), findsOneWidget);
+        final detailsRect = tester.getRect(details);
+        final playRect = tester.getRect(play);
+        for (final rect in [detailsRect, playRect]) {
+          expect(rect.left, greaterThanOrEqualTo(coverRect.left));
+          expect(rect.right, lessThanOrEqualTo(coverRect.right));
+          expect(rect.bottom, lessThanOrEqualTo(size.height));
+        }
+        expect(detailsRect.bottom, lessThanOrEqualTo(playRect.top));
+        // The transport docks to the bottom of the screen: the padding
+        // plus half the inset, no more.
+        final block = tester.getRect(
+          find.byKey(const ValueKey('art-only-track-controls')),
+        );
+        expect(size.height - block.bottom, lessThanOrEqualTo(24 + 16));
+        expect(find.text('Album name'), findsOneWidget);
+        final title = tester.widget<Text>(
+          find.descendant(of: details, matching: find.text('Song')),
+        );
+        expect(title.style?.shadows, isNotEmpty);
+        expect(tester.widget<Icon>(play).shadows, isNotEmpty);
+        expect(tester.takeException(), isNull);
+        await tester.tap(find.byIcon(Icons.skip_next_rounded));
+        await tester.pump();
+        expect(calls.last.arguments['command'], 'next');
+
+        // Gone again a few seconds after the last touch.
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(tester.widget<AnimatedOpacity>(visibility).opacity, 0);
+        expect(play.hitTestable(), findsNothing);
+
+        await reveal(tester);
+        await tester.tap(find.byIcon(Icons.queue_music_rounded));
+        await settle(tester);
+        expect(cover, findsNothing);
+        expect(find.byType(ListView), findsOneWidget);
+        // The vertical layout keeps its controls and close button up.
+        await tester.pump(const Duration(seconds: 6));
+        expect(play.hitTestable(), findsOneWidget);
+        expect(close.hitTestable(), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await tester.tap(find.byIcon(Icons.queue_music_rounded));
+        await settle(tester);
+        expect(cover, findsOneWidget);
+        await container.settings.set(defs.sendspinLyrics, true);
+        await settle(tester);
+        container.sendspin.lyrics.value = const [
+          LyricLine(Duration.zero, 'First lyric'),
+          LyricLine(Duration(seconds: 60), 'Second lyric'),
+        ];
+        await settle(tester);
+        expect(cover, findsNothing);
+        expect(find.byType(LyricsView), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        await tester.pump(const Duration(seconds: 6));
+      });
+    }
+
+    testWidgets('a stored Horizontal mode switch becomes its layout', (
+      tester,
+    ) async {
+      for (final (stored, layout) in [
+        (true, 'horizontal'),
+        (false, 'vertical'),
+      ]) {
+        await pump(
+          tester,
+          settings: {'ks.sendspin.fullscreen_horizontal': stored},
+        );
+        expect(container.settings.get(defs.sendspinFullscreenLayout), layout);
+        final prefs = await SharedPreferences.getInstance();
+        expect(prefs.get('ks.sendspin.fullscreen_horizontal'), isNull);
+        expect(
+          await container.settings.setFromJson(
+            'sendspin.fullscreen_horizontal',
+            !stored,
+          ),
+          isTrue,
+        );
+        expect(
+          container.settings.get(defs.sendspinFullscreenLayout),
+          stored ? 'vertical' : 'horizontal',
+        );
+        await tester.pump(const Duration(seconds: 2));
+      }
+    });
 
     testWidgets('without a Music Assistant server the heart and queue '
         'stay out', (tester) async {
@@ -1868,7 +2379,7 @@ void main() {
             ),
           )
           .color;
-      expect(heartColor(Icons.favorite_border_rounded), Colors.white38);
+      expect(heartColor(Icons.favorite_border_rounded), Colors.white70);
       await tester.tap(find.byIcon(Icons.favorite_border_rounded));
       await settle(tester);
       expect(_FakeApi.calls, contains('music/favorites/add_item'));
@@ -1890,7 +2401,7 @@ void main() {
             ),
           )
           .color;
-      expect(repeatColor(Icons.repeat_rounded), Colors.white38);
+      expect(repeatColor(Icons.repeat_rounded), Colors.white70);
       await tester.tap(find.byIcon(Icons.repeat_rounded));
       await tester.pump();
       expect(repeatColor(Icons.repeat_rounded), Colors.white);
@@ -1899,7 +2410,7 @@ void main() {
       expect(find.byIcon(Icons.repeat_one_rounded), findsOneWidget);
       await tester.tap(find.byIcon(Icons.repeat_one_rounded));
       await tester.pump();
-      expect(repeatColor(Icons.repeat_rounded), Colors.white38);
+      expect(repeatColor(Icons.repeat_rounded), Colors.white70);
       await settle(tester);
     });
 

@@ -73,8 +73,15 @@ class BrightnessChanged extends AppEvent {
 // ── Screensaver ────────────────────────────────────────────────────────
 
 class ScreensaverStateChanged extends AppEvent {
-  const ScreensaverStateChanged({required this.active});
+  const ScreensaverStateChanged({
+    required this.active,
+    this.nowPlaying = false,
+  });
   final bool active;
+
+  /// The session starts with Now Playing up, so the return to the dashboard
+  /// can make way for the Now Playing dismissal target (issue #899).
+  final bool nowPlaying;
 
   @override
   String get wireName => active ? 'screensaverstart' : 'screensaverstop';
@@ -133,6 +140,35 @@ class ScreensaverViewChanged extends AppEvent {
   final String? view;
 }
 
+/// The app's and Home Assistant's light or dark state moved (the page
+/// state the JS API reports, see PageStateManager). [state] is what
+/// `kioskSatellite.getTheme()` answers.
+class ThemeStateChanged extends AppEvent {
+  const ThemeStateChanged(this.state);
+  final Map<String, Object?> state;
+
+  @override
+  String get wireName => 'theme';
+
+  @override
+  Map<String, Object?> toJson() => state;
+}
+
+/// Something `kioskSatellite.getKioskState()` reports moved: kiosk mode,
+/// Lockdown Mode, Home Assistant kiosk mode, the screensaver, the screen,
+/// hold mode, rotation, the camera view or the media player. [state] is
+/// the whole snapshot.
+class KioskStateChanged extends AppEvent {
+  const KioskStateChanged(this.state);
+  final Map<String, Object?> state;
+
+  @override
+  String get wireName => 'kiosk-state';
+
+  @override
+  Map<String, Object?> toJson() => state;
+}
+
 /// A full screen view came up or went: the Now Playing view in the
 /// screensaver slot (`nowPlaying`) or the intercom's roster or call screen
 /// (`intercom`). Internal: the remote admin labels its screenshot by it and
@@ -173,6 +209,24 @@ class VolumeChanged extends AppEvent {
 class LightLevelChanged extends AppEvent {
   const LightLevelChanged({required this.lux});
   final double lux;
+}
+
+/// The light level adaptive brightness follows moved, or its source did
+/// (issue #911): the device's own sensor, or a Home Assistant entity in
+/// its place. [lux] is null while the source has nothing to report yet,
+/// [live] false while it is the last session's reading. Internal-only.
+class AdaptiveLightChanged extends AppEvent {
+  const AdaptiveLightChanged({
+    required this.source,
+    required this.lux,
+    required this.live,
+  });
+
+  /// `sensor`, `entity` or `none` (the device sensor picked on a device
+  /// without one).
+  final String source;
+  final double? lux;
+  final bool live;
 }
 
 /// A GPS fix arrived (issue #363): the location manager relays the native
@@ -319,6 +373,21 @@ class MicLevelSample extends AppEvent {
   final double rms;
 }
 
+/// The room's noise level moved by 2 dB or more, froze, thawed, came or went
+/// (issue #910). [dbfs] is a whole number averaged over 5 seconds, null
+/// while unavailable. [held] keeps the last value through a voice turn or
+/// the kiosk's own sound. Internal: the ESPHome sensor and plugins read it.
+class NoiseLevelChanged extends AppEvent {
+  const NoiseLevelChanged({
+    required this.available,
+    required this.dbfs,
+    required this.held,
+  });
+  final bool available;
+  final int? dbfs;
+  final bool held;
+}
+
 /// A playback level sample from a native sound (mean |amplitude|, 0..1, at
 /// most ~20/s). Wire event: the page's reactive bar animates to audio it
 /// never touches.
@@ -417,8 +486,27 @@ class VoiceInteractionChanged extends AppEvent {
 /// states: idle, listening, processing or responding. Covers Assist turns
 /// and realtime conversations alike.
 class VoiceSatelliteStateChanged extends AppEvent {
-  const VoiceSatelliteStateChanged(this.state);
+  const VoiceSatelliteStateChanged(this.state, {this.announcement = false});
   final String state;
+
+  /// Responding to an announcement rather than answering a turn. Home
+  /// Assistant calls both responding, the VS_ broadcasts tell them apart.
+  final bool announcement;
+}
+
+/// Native Voice Satellite's timers changed: one started, changed, was
+/// cancelled, finished or had its alert dismissed. Carries the whole
+/// `voiceTimers` list so the ESPHome sensors and the page's
+/// `kiosksatellite:voice-timers` listeners redraw from the event alone.
+class VoiceTimersChanged extends AppEvent {
+  const VoiceTimersChanged(this.timers);
+  final List<Map<String, Object?>> timers;
+
+  @override
+  String get wireName => 'voice-timers';
+
+  @override
+  Map<String, Object?> toJson() => {'timers': timers};
 }
 
 // ── Alarms ─────────────────────────────────────────────────────────────
@@ -455,19 +543,23 @@ class IntercomStateChanged extends AppEvent {
 }
 
 /// The hardware button that hangs up the intercom call, as an Android
-/// key code, or 0 for none. Published while a call is placed or live and
-/// set back to 0 when it ends, so the button keeps its usual job the rest
-/// of the time. The kiosk manager hands it to the native key handler.
+/// key code, or 0 for none. Published while a call is placed or live, or
+/// while one rings here when Hang up button while ringing picks Accept or
+/// Decline, and set back to 0 when it ends, so the button keeps its usual
+/// job the rest of the time. The kiosk manager hands it to the native key
+/// handler.
 class IntercomHangupKeyArmed extends AppEvent {
   const IntercomHangupKeyArmed(this.keyCode);
   final int keyCode;
 }
 
-/// The armed hang up button was pressed or a hang up gesture fired. Only
-/// a call being placed, a live call or an announcement ends: a ringing
-/// call is answered or declined on the screen.
+/// The armed hang up button was pressed or a hang up gesture fired. A
+/// call being placed, a live call or an announcement ends. A ringing call
+/// is left alone unless [button] says the press came from the hang up
+/// button, which then does what Hang up button while ringing picks.
 class IntercomHangupRequested extends AppEvent {
-  const IntercomHangupRequested();
+  const IntercomHangupRequested({this.button = false});
+  final bool button;
 }
 
 /// The intercom wants the microphone the page holds, or is done with it.
@@ -501,6 +593,23 @@ class MotionDetected extends AppEvent {
 
   @override
   String get wireName => 'motion';
+}
+
+/// The Home Assistant motion entity picked in the camera's place (issue
+/// #973) reads detected: [held] false when it just turned on, true for
+/// the repeats while it stays on. The screensaver consumes it as motion,
+/// with the person sensor's rule: an arrival dismisses, a held one only
+/// postpones. Internal: Home Assistant already has the entity.
+class ExternalMotionDetected extends AppEvent {
+  const ExternalMotionDetected({this.held = false});
+  final bool held;
+}
+
+/// The motion entity's state moved (issue #973), for the settings rows:
+/// [detected] null while it has not reported or reads unavailable.
+class ExternalMotionChanged extends AppEvent {
+  const ExternalMotionChanged({required this.detected});
+  final bool? detected;
 }
 
 /// Someone is looking at the kiosk (issue #304): the motion camera's face
@@ -812,6 +921,15 @@ class AssistOverlayVisibility extends AppEvent {
   final bool pauses;
 }
 
+/// The calendar opened, closed or moved to another view: the view it shows
+/// (day, week, month or schedule), or null once it closed. Internal: the
+/// ESPHome Calendar view select follows it.
+class CalendarViewChanged extends AppEvent {
+  const CalendarViewChanged(this.view);
+
+  final String? view;
+}
+
 class CameraViewStateChanged extends AppEvent {
   const CameraViewStateChanged({
     required this.viewId,
@@ -933,6 +1051,24 @@ class SendspinNowPlayingChanged extends AppEvent {
   const SendspinNowPlayingChanged({required this.active, this.playing = false});
   final bool active;
   final bool playing;
+}
+
+/// The local Sendspin player's identity or connection changed: whether
+/// it is on and connected, its Sendspin client id and name and the Music
+/// Assistant player and server it maps to. Plugins hear it as
+/// `sendspin.player`.
+class SendspinPlayerChanged extends AppEvent {
+  const SendspinPlayerChanged(this.player);
+  final Map<String, Object?> player;
+}
+
+/// An AirPlay session started, changed or ended: the snapshot the
+/// receiver pushes (the sender's name, whether it plays, the track, its
+/// progress and cover), or null once no sender is connected. The Now
+/// Playing surfaces follow it while a session lasts.
+class AirPlaySessionChanged extends AppEvent {
+  const AirPlaySessionChanged(this.session);
+  final Map<String, Object?>? session;
 }
 
 /// The followed player's state, title, artist or source moved (issue

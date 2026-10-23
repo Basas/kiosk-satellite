@@ -120,6 +120,7 @@ class _FakeRemote extends MaRemotePlayer {
     required super.onSnapshot,
     required super.log,
     super.label,
+    super.showInputs,
   });
 
   final sent = <String>[];
@@ -163,18 +164,24 @@ void main() {
       expect(snap['positionMs'], 12500);
       expect(snap['positionAtMs'], 1700000000000);
       expect(snap['state'], 'playing');
-      // Remotely accessible artwork is used as-is, not proxied.
-      expect(snap['artworkUrl'], 'https://img.example/cover.jpg');
+      // Remotely accessible artwork goes through the server's proxy too,
+      // so a kiosk without internet access still loads a streaming
+      // service's cover.
+      expect(
+        snap['artworkUrl'],
+        'https://ma.local:8095/imageproxy/abc?size=512&fmt=jpg',
+      );
     });
 
-    test('proxies artwork that is not remotely accessible', () {
+    test('uses a plain web image as it is with no proxy route', () {
       final queue = _queue();
-      ((queue['current_item'] as Map)['image'] as Map)['remotely_accessible'] =
-          false;
+      ((queue['current_item'] as Map)['image'] as Map).remove('proxy_id');
       final snap = queueTrackSnapshot(queue, webBase: 'https://ma.local:8095');
+      expect(snap!['artworkUrl'], 'https://img.example/cover.jpg');
+      // Nor without a server address to proxy through.
       expect(
-        snap!['artworkUrl'],
-        'https://ma.local:8095/imageproxy/abc?size=512&fmt=jpg',
+        queueTrackSnapshot(_queue())!['artworkUrl'],
+        'https://img.example/cover.jpg',
       );
     });
 
@@ -295,6 +302,25 @@ void main() {
       expect(snap.containsKey('state'), isFalse);
       expect(snap.containsKey('positionAtMs'), isFalse);
       expect(snap['receivedAt'], isNotNull);
+    });
+
+    test('a followed player carries the audio quality', () {
+      final queue = _queue();
+      (queue['current_item'] as Map)['streamdetails'] = {
+        'provider': 'tidal--1',
+        'audio_format': {
+          'content_type': 'flac',
+          'sample_rate': 44100,
+          'bit_depth': 16,
+        },
+      };
+      remote.publishQueue(queue);
+      expect(emitted.last!['audioQuality'], {
+        'codec': 'FLAC',
+        'sampleRate': 44100,
+        'bitDepth': 16,
+        'lossless': true,
+      });
     });
 
     test('a leading player carries its group volume (issue #867)', () {
@@ -488,6 +514,7 @@ void main() {
             required onSnapshot,
             required log,
             String label = 'remote player',
+            bool showInputs = false,
           }) => fake = _FakeRemote(
             baseUrl: baseUrl,
             token: token,
@@ -495,6 +522,7 @@ void main() {
             onSnapshot: onSnapshot,
             log: log,
             label: label,
+            showInputs: showInputs,
           );
       await sendspin.init();
       await Future<void>.delayed(Duration.zero);
@@ -611,6 +639,19 @@ void main() {
         expect(sendspin.lyrics.value, isEmpty);
         expect(_FakeLrclib.asks, 0);
       });
+    });
+
+    test('Show TV and line-in rebuilds the follower with it', () async {
+      await build();
+      final first = fake!;
+      expect(first.showInputs, isFalse);
+
+      await settings.set(defs.sendspinMaInputs, true);
+      await Future<void>.delayed(Duration.zero);
+      expect(first.stopped, isTrue);
+      expect(fake, isNot(same(first)));
+      expect(fake!.showInputs, isTrue);
+      expect(fake!.playerId, 'p1');
     });
 
     test('clearing the pick returns the card to the local player', () async {
@@ -738,9 +779,10 @@ void main() {
       expect(row['current'], isTrue);
       expect(
         row['artworkUrl'],
-        'https://ma.local:8095/imageproxy/abc?size=128&fmt=jpg',
+        'https://ma.local:8095/imageproxy/abc?size=160&fmt=jpg',
       );
-      // A plain web image is used as it is; no image is no key.
+      // A plain web image with no proxy id is used as it is; no image is
+      // no key.
       expect(
         SendspinManager.queueRow(
           {
@@ -794,7 +836,7 @@ void main() {
           '',
           'https://ma.local:8095',
         )['artworkUrl'],
-        'https://ma.local:8095/imageproxy/th?size=128&fmt=jpg',
+        'https://ma.local:8095/imageproxy/th?size=160&fmt=jpg',
       );
     });
 
@@ -930,6 +972,66 @@ void main() {
       // hiding.
       expect((data['notes'] as Map)['ha'], isNotNull);
     });
+
+    test(
+      'the pill menu offers only the picked speakers (issue #974)',
+      () async {
+        await build(player: '', enabled: false);
+        sendspin.apiFactory = ({required baseUrl, required token}) => _FakeApi([
+          {
+            'player_id': 'abc123',
+            'display_name': 'Kitchen Tablet',
+            'provider': 'sendspin--1',
+            'type': 'player',
+            'group_members': ['bedroom'],
+            'can_group_with': ['sendspin--1', 'sonos--1'],
+          },
+          {
+            'player_id': 'bedroom',
+            'display_name': 'Bedroom',
+            'provider': 'sonos--1',
+            'type': 'player',
+            'synced_to': 'abc123',
+          },
+          {
+            'player_id': 'kids',
+            'display_name': 'Kids Room',
+            'provider': 'sonos--1',
+            'type': 'player',
+          },
+          {
+            'player_id': 'lounge',
+            'display_name': 'Lounge',
+            'provider': 'sonos--1',
+            'type': 'player',
+          },
+          {
+            'player_id': 'garden',
+            'display_name': 'Garden Room',
+            'provider': 'sendspin--1',
+            'type': 'player',
+          },
+        ]);
+        Future<List<String>> menu() async =>
+            (await sendspin.fetchGroup())!.members.map((m) => m.id).toList();
+
+        expect(await menu(), ['bedroom', 'garden', 'kids', 'lounge']);
+        // A Sonos room's id belongs to a followed Sonos room's menu, not to
+        // Music Assistant's.
+        await settings.set(
+          defs.sendspinSpeakerPillPlayers,
+          '["ma:lounge","ma:garden","sonos:RINCON_KIDS"]',
+        );
+        // Bedroom is in the group already, so it stays to be taken out.
+        expect(await menu(), ['bedroom', 'garden', 'lounge']);
+        // Picks made only for the other source leave the menu whole.
+        await settings.set(
+          defs.sendspinSpeakerPillPlayers,
+          '["sonos:RINCON_KIDS"]',
+        );
+        expect(await menu(), ['bedroom', 'garden', 'kids', 'lounge']);
+      },
+    );
 
     test('forgetting the picked Sonos room clears the pick', () async {
       await build(player: 'sonos:RINCON_A');

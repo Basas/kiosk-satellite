@@ -86,6 +86,8 @@ Detection is engineered to be CPU efficient and to work effectively in the dark.
 
 **Startup delay** solves a specific hardware problem: devices whose camera physically moves as it opens (like a phone with a motorized pop up module). As the lens travels into position, that sweeping movement registers as a massive change across the whole frame, rather than a simple lighting shift. None of the standard discounting algorithms can filter it out, which causes the kiosk to immediately dismiss the screensaver that just started the camera. The delay counts from the very first frame and applies to every single path that starts the camera, not just screensavers. Schedule boundaries, the screen turning on, or a tuning change all trigger the same lens deployment. Frames are still tracked as a baseline while the delay runs, ensuring detection is fully sensitive the very second the delay expires. Leave it at 0 on a device with a fixed camera; a few seconds is usually enough for the hardware that requires it.
 
+A Home Assistant occupancy, motion or presence sensor can stand in for the camera on the screensaver's motion settings. See [External Motion Sensor](screensavers.md#external-motion-sensor).
+
 Two related switches are located elsewhere: with **Allow screensaver** turned on under [Lockdown Mode](kiosk.md), Dismiss on motion remains deactivated until the lock lifts. Additionally, the Sendspin player's full screen view only reacts to motion if its own **Dismiss "Now Playing" on motion** setting is enabled.
 
 ## Person Sensor
@@ -116,7 +118,23 @@ Resolution stays local to each device because cameras in a fleet can support dif
 
 Use RTSP over TCP in your viewer. The stream contains H.264 video and optional AAC microphone audio. For go2rtc, add the URL as a stream source. Frigate can record the H.264 stream without transcoding it. Authentication uses RTSP Digest. Enter the credentials in your client or use `rtsp://USERNAME:PASSWORD@DEVICE_IP:8554/camera`, with URL encoding for special characters.
 
-Choose **ONVIF** to let compatible clients discover the camera on your local network. The page shows the **ONVIF URL**, `http://DEVICE_IP:8080/onvif/device_service`. Use the selected port if you changed it. ONVIF exposes device information and a read-only media profile that points to the same RTSP stream. Configure video and audio in Kiosk Satellite settings. ONVIF requests use WS-Security UsernameToken authentication with the same credentials when authentication is enabled. Discovery uses WS-Discovery on multicast UDP port 3702. The camera announces when streaming starts and withdraws when it stops. ONVIF device information, discovery and stream profiles use the configured **Device name**. In Home Assistant, add the ONVIF integration and enable its automatic device search. This search uses WS-Discovery while the kiosk's `.local` name uses mDNS. Automatic discovery requires the client and camera to share a subnet or a WS-Discovery relay between their VLANs. An mDNS relay does not forward WS-Discovery traffic. If multicast discovery is unavailable, connect with the ONVIF URL. PTZ, ONVIF events and ONVIF snapshots are not provided.
+Choose **ONVIF** to let compatible clients discover the camera on your local network. The page shows the **ONVIF URL**, `http://DEVICE_IP:8080/onvif/device_service`. Use the selected port if you changed it. ONVIF exposes device information and a read-only media profile that points to the same RTSP stream. Configure video and audio in Kiosk Satellite settings. ONVIF requests use WS-Security UsernameToken authentication with the same credentials when authentication is enabled. Discovery uses WS-Discovery on multicast UDP port 3702. The camera announces when streaming starts and withdraws when it stops. ONVIF device information, discovery and stream profiles use the configured **Device name**. In Home Assistant, add the ONVIF integration and enable its automatic device search. This search uses WS-Discovery while the kiosk's `.local` name uses mDNS. Automatic discovery requires the client and camera to share a subnet or a WS-Discovery relay between their VLANs. An mDNS relay does not forward WS-Discovery traffic. If multicast discovery is unavailable, connect with the ONVIF URL. PTZ and ONVIF snapshots are not provided.
+
+### Motion Events
+
+**Motion Events** appears when the protocol is ONVIF. It reports motion to ONVIF clients, so NVRs such as UniFi Protect can record on motion instead of all the time.
+
+| Setting | Default | Notes |
+| --- | --- | --- |
+| Send motion events | off | Report motion to ONVIF clients. |
+| Motion source | Camera motion sensor | The sensor that reports motion: **Camera motion sensor**, **Person sensor** or **Home Assistant sensor**. Person sensor is listed only on devices that have one, such as the Meta Portal. |
+| Motion sensor entity | none | Shown for **Home Assistant sensor**. Pick an occupancy, motion or presence sensor. Motion lasts while it reads on. |
+
+Picking a source does not turn its sensor on. Turn on **Motion sensor** under **Camera > Motion Sensor** for the camera. Turn on **Enable person sensor** under **Camera > Person Sensor** for the person sensor. A note under **Motion source** says when the picked sensor is off. Camera motion clears after the motion sensor's **Clear after** delay, the same as its Home Assistant sensor.
+
+An NVR keeps the stream open, so the camera only sees motion with **Motion analysis while streaming** on. A note under **Motion source** says when it is off.
+
+Clients receive motion through ONVIF PullPoint subscriptions on two topics, `tns1:RuleEngine/CellMotionDetector/Motion` and `tns1:VideoSource/MotionAlarm`. The event service is listed in GetServices and GetCapabilities only while **Send motion events** is on. If a client added the camera before you turned it on, add the camera again so the client finds the event service.
 
 One H.264 encoder serves up to four connected viewers. Hardware encoding is preferred. If no compatible hardware encoder can start, the app tries software encoding, which can use more CPU. It starts when the first authenticated viewer requests video and stops shortly after the last viewer disconnects. Enabling the listener alone does not open the camera or encode video. A recorder that stays connected keeps the encoder running. Slow viewers are disconnected instead of blocking the camera or growing an unlimited queue.
 
@@ -160,6 +178,8 @@ To display the RTSP video in Home Assistant, add the [Generic Camera integration
 
 Android gives one session camera access at a time. Motion detection, snapshots and RTSP share that session so taking a snapshot does not reopen the camera or reset exposure.
 
+Plugins with the `camera` capability receive frames from the same session. One plugin holds the camera at a time, and motion detection and the other camera features keep running while it does. A plugin with the `barcode` capability opens a full screen scanner that takes the camera for itself. Motion detection, face detection, hand gestures and RTSP pause while it is open, and snapshots fail. They resume when it closes. Both capabilities need **Enable camera** on. See [Camera and barcodes](https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/camera.md) in the plugin SDK.
+
 A few extremely low end devices cannot run motion analysis and JPEG capture in the same session. On those devices, motion wins, and snapshots will report the camera as busy while motion is running. If another app entirely is holding the camera open, captures will fail until that app lets go.
 
 ## Hardware Notes
@@ -174,6 +194,7 @@ The remote admin's Camera tab mirrors every setting available on the device and 
 ## Privacy
 
 * Motion analysis happens entirely locally on the device. Motion frames are never stored or transmitted; only the fact that motion occurred leaves the app.
+* A plugin with the `camera` capability receives camera frames and can do anything with them that its code does. Install only plugins you trust. The barcode scanner names the plugin that opened it.
 * Snapshots go to Home Assistant over ESPHome and to authorized remote admin clients. RTSP video is available only when enabled and requested by a viewer. Plain RTSP traffic is not encrypted, even with authentication enabled. Enable **Encrypt stream** to use RTSPS.
 * The **Enable webcam access** setting located under Web Content is completely unrelated. That setting governs whether the dashboard web page itself may use the camera, not this specific feature.
 

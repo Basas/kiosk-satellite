@@ -77,6 +77,7 @@ void main() {
   /// The second-level pages the Home Assistant page opens, in the order its
   /// entry rows appear.
   const haPages = [
+    'Custom Pages',
     'User Interface',
     'Theme',
     'Dashboard View Rotation',
@@ -188,6 +189,90 @@ void main() {
       final cards = [for (final page in haPages) cardOf(page)];
       expect(cards.toSet(), hasLength(cards.length));
 
+      await drain(tester);
+    });
+
+    testWidgets('Custom Pages lists the pages and opens the editor', (
+      tester,
+    ) async {
+      await boot();
+      await container.settings.setFromJson(
+        haCustomPages.key,
+        '[{"name":"Wall","path":"/local/wall.html#den"}]',
+      );
+      await openHa(tester, size: const Size(500, 1400));
+
+      await tester.tap(find.widgetWithText(ListTile, 'Custom Pages'));
+      await settle(tester);
+      expect(find.text('Wall'), findsOneWidget);
+      expect(find.text('/local/wall.html#den'), findsOneWidget);
+      expect(find.text('Custom page guide'), findsOneWidget);
+
+      await tester.tap(find.text('Add page'));
+      await settle(tester);
+      expect(find.text('Add custom page'), findsOneWidget);
+      expect(find.text('/local/'), findsOneWidget);
+      await tester.tap(find.text('Cancel'));
+      await settle(tester);
+
+      await tester.tap(find.text('Wall'));
+      await settle(tester);
+      expect(find.text('Edit custom page'), findsOneWidget);
+      await tester.tap(find.text('Cancel'));
+      await settle(tester);
+
+      await drain(tester);
+    });
+
+    testWidgets('URL Filter lists the rules and saves a new one', (
+      tester,
+    ) async {
+      await boot();
+      // Registers the rule commands the editor saves through.
+      await container.browser.init();
+      await container.settings.setFromJson(
+        browserUrlFilter.key,
+        '[{"name":"History","pattern":"/history*","scope":"dashboard"}]',
+      );
+      tester.view.physicalSize = const Size(500, 1400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+        MaterialApp(home: SettingsScreen(container: container)),
+      );
+      await settle(tester);
+      await tester.tap(find.text('Web Browsing'));
+      await settle(tester);
+
+      final entry = find.widgetWithText(ListTile, 'URL Filter');
+      await tester.ensureVisible(entry);
+      await settle(tester);
+      await tester.tap(entry);
+      await settle(tester);
+      expect(find.text('Control which pages open'), findsOneWidget);
+      expect(find.text('Show blocked page notice'), findsOneWidget);
+      expect(find.text('History'), findsOneWidget);
+      expect(find.text('/history*'), findsOneWidget);
+      expect(find.text('Dashboard'), findsOneWidget);
+
+      await tester.tap(find.text('Add rule'));
+      await settle(tester);
+      expect(find.text('Add filter rule'), findsOneWidget);
+      await tester.tap(find.text('Save'));
+      await settle(tester);
+      expect(find.text('Enter a name.'), findsOneWidget);
+      final fields = find.byType(TextField);
+      await tester.enterText(fields.at(0), 'Logbook');
+      await tester.enterText(fields.at(1), '/logbook');
+      await tester.tap(find.text('Save'));
+      await settle(tester);
+      expect(find.text('Add filter rule'), findsNothing);
+      expect(find.text('Logbook'), findsOneWidget);
+      expect(
+        container.settings.get(browserUrlFilter),
+        contains('"pattern":"/logbook"'),
+      );
+      await container.browser.dispose();
       await drain(tester);
     });
 
@@ -927,7 +1012,7 @@ void main() {
   group('Screen & Audio', () {
     Future<void> openScreenAudio(WidgetTester tester) async {
       await boot();
-      tester.view.physicalSize = const Size(500, 2400);
+      tester.view.physicalSize = const Size(500, 2800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
       await tester.pumpWidget(

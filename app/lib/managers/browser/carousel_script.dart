@@ -193,8 +193,14 @@ const dashboardCarouselScript = '''
       var n = path[i];
       if (!(n instanceof Element)) continue;
       var name = n.localName || '';
+      // Some cards build sliders from plain divs and only name them in
+      // the class (Bubble Card's `bubble-range-slider` inside a
+      // `slider-container`), so the class and ARIA role count too.
+      var cls = n.getAttribute('class') || '';
       if (BLOCK.test(name) ||
           name.indexOf('slider') !== -1 ||
+          cls.indexOf('slider') !== -1 ||
+          n.getAttribute('role') === 'slider' ||
           name.indexOf('dialog') !== -1 ||
           name.indexOf('-map') !== -1) {
         return true;
@@ -296,7 +302,8 @@ const dashboardCarouselScript = '''
     host.id = '__ksCarouselDots';
     host.style.cssText =
       'position:fixed;left:50%;' +
-      'bottom:calc(18px + env(safe-area-inset-bottom, 0px));' +
+      // Home Assistant's own inset, so the dots also clear a plugin's bar.
+      'bottom:calc(18px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));' +
       'transform:translateX(-50%);z-index:2147483647;display:flex;' +
       'gap:7px;align-items:center;padding:7px 11px;border-radius:999px;' +
       'background:rgba(0,0,0,.38);pointer-events:none;opacity:0;' +
@@ -352,7 +359,8 @@ const dashboardCarouselScript = '''
   }
 
   function navigate(urlPath, key) {
-    history.pushState(null, '',
+    // Around the URL Filter's check (urlFilterJs).
+    (history.__ksPushState || history.pushState).call(history, null, '',
       '/' + urlPath + '/' + encodeURIComponent(key));
     window.dispatchEvent(new CustomEvent('location-changed'));
   }

@@ -1,9 +1,9 @@
+import { tabHidden } from './headless.js';
 import { navigationText, t, settingsPageText, pluginText } from './localization.js';
-import { readRoute } from './routes.js';
 import { $, depSatisfied, state } from './core.js';
 import { permissionSpecs } from './permissions.js';
 import { loadPlugins, pluginSearchState, refreshPluginSearchState } from './plugins.js';
-import { TABS, TAB_TITLES, currentPath, setNav, showTab } from './tabs.js';
+import { TABS, TAB_TITLES, currentPath, followRoute, setNav, showTab } from './tabs.js';
 import { REALTIME_PROVIDERS, providerKeys } from './vs_native.js';
 
 /* ---- Settings search ---- */
@@ -16,20 +16,36 @@ export const SEARCH_CATEGORY_TABS = {
   'Launcher': 'launcher', 'Home': 'home', 'Screen & Audio': 'screenaudio',
   'Screensaver': 'screensaver', 'Camera': 'camera',
   'Home Assistant': 'homeassistant', 'Voice Satellite': 'voicesatellite',
-  'Sendspin': 'sendspin', 'DLNA': 'dlna', 'Intercom': 'intercom', 'Alarms': 'alarms',
+  'Sendspin': 'sendspin', 'DLNA': 'dlna', 'Intercom': 'intercom', 'Alarms': 'alarms', 'Calendar': 'calendar',
   'ESPHome': 'esphome',
   'Device': 'device', 'Cameras': 'cameras', 'Gestures': 'gestures',
-  'Fleet': 'fleet', 'Plugins': 'plugins',
+  'Fleet': 'fleet', 'Plugins': 'plugins', 'LED Control': 'leds',
 };
 // Second-level pages no setting declares: their rows come from the Voice
 // Satellite integration, not from the definitions, so the page that draws
 // them names them. Mirrors the two pages VsControlsSection places on the
 // device.
-export const DEFLESS_SUBPAGES = [['voicesatellite', 'Appearance'],
+export const DEFLESS_SUBPAGES = [['homeassistant', 'Custom Pages'],
+  ['browser', 'URL Filter'],
+  ['voicesatellite', 'Appearance'],
   ['device', 'Hardware'], ['device', 'Home Assistant'], ['device', 'WebView']];
 export const SEARCH_EXTRAS = [
+  { tab: 'homeassistant', title: 'Share Home Assistant connection', sub: 'Custom Pages',
+    anchor: 'ha.custom_pages_socket',
+    desc: "Custom pages talk to Home Assistant through the kiosk's connection, with no token in the page." },
+  { tab: 'homeassistant', title: 'Add page', sub: 'Custom Pages', anchor: 'x:custom_pages',
+    desc: 'Add HTML pages from the Home Assistant www folder or another server to pick them like a dashboard.' },
+  { tab: 'homeassistant', title: 'Custom page guide', sub: 'Custom Pages', anchor: 'x:custom_pages_docs',
+    desc: 'How to build a page that talks to Home Assistant.' },
+  { tab: 'browser', title: 'Add rule', sub: 'URL Filter', anchor: 'x:url_filter',
+    desc: "Links or pages that match a Block rule don't load. Add an Allow only rule to load only the pages it matches." },
+  { tab: 'browser', title: 'Show blocked page notice', sub: 'URL Filter',
+    anchor: 'browser.url_filter_notice',
+    desc: "Show a short notice with the rule's name when a page is blocked." },
   { tab: 'plugins', title: 'Enable Plugins',
     desc: 'Plugins add additional community developed features to Kiosk Satellite.', anchor: 'x:plugins:master' },
+  { tab: 'plugins', title: 'Browse plugins',
+    desc: 'Find plugins made by the community', anchor: 'x:plugins:browse' },
   { tab: 'plugins', title: 'Add plugin',
     desc: 'Install from a GitHub repository', anchor: 'x:plugins:add' },
   { tab: 'plugins', title: 'Install from ZIP',
@@ -37,6 +53,10 @@ export const SEARCH_EXTRAS = [
   { tab: 'plugins', title: 'Create a plugin',
     desc: 'Learn how to create plugins with the Hello World template and documentation.', anchor: 'x:plugins:create' },
   { tab: 'device', title: 'TLS', sub: 'TLS', desc: 'Connection encryption and certificates' },
+  { tab: 'calendar', title: 'Add a calendar',
+    desc: 'Add the Home Assistant calendars to show in Settings > Calendar.', anchor: 'x:calendar_add' },
+  { tab: 'calendar', title: 'Manage the calendar using Voice Satellite',
+    desc: 'Needs the Kiosk Satellite calendar blueprint and an LLM conversation agent in Home Assistant.', anchor: 'x:calendar_voice' },
   { tab: 'alarms', title: 'Manage alarms using Voice Satellite',
     desc: 'Needs the Kiosk Satellite alarms blueprint and an LLM conversation agent in Home Assistant.', anchor: 'x:alarms_voice' },
   { tab: 'device', title: 'Learn how we process your data',
@@ -206,6 +226,8 @@ function pluginSearchEntries() {
     ...(plugin.capabilities?.includes('shizuku') ? [{tab:'plugins', sub:plugin.id, title:pluginText('Shizuku access'), desc:'', englishAlias:'Shizuku access', anchor:`plugin:${plugin.id}:shizuku`}] : []),
     ...(plugin.settings || []).map(setting => ({tab:'plugins', sub:plugin.id,
       title:setting.title, desc:setting.description || '', anchor:`plugin:${plugin.id}:setting:${setting.key}`})),
+    ...(plugin.buttons || []).map(button => ({tab:'plugins', sub:plugin.id,
+      title:button.title, desc:button.description || '', anchor:`plugin:${plugin.id}:button:${button.id}`})),
     ...(plugin.commands || []).map(action => ({tab:'plugins', sub:plugin.id,
       title:action.title, desc:[pluginText('Gestures'), plugin.actionOptions?.[action.id]?.drawer && pluginText('Kiosk drawer'),
         plugin.actionOptions?.[action.id]?.homeAssistant && pluginText('Home Assistant')].filter(Boolean).join(' · '),
@@ -242,6 +264,8 @@ export function searchSettingsIndex(query) {
     ? 'native' : 'dashboard';
   [...SEARCH_PAGES.map(page => ({...page, title: navigationText(page.title), desc: navigationText(page.desc), englishAlias: `${page.title} ${page.desc}`})), ...subs, ...defs, ...SEARCH_EXTRAS, ...pluginSearchEntries()].forEach((raw, order) => {
     if (typeof raw.title !== 'string' || !raw.title.trim()) return;
+    if (tabHidden(raw.tab)
+      || document.querySelector(`#tabs button[data-tab="${raw.tab}"]`)?.classList.contains('hidden')) return;
     const e = {...raw, desc: typeof raw.desc === 'string' ? raw.desc : ''};
     if (SEARCH_EXTRAS.includes(raw) || subs.includes(raw)) {
       e.englishAlias = `${e.englishAlias || ''} ${e.title} ${e.desc}`;
@@ -452,6 +476,5 @@ $('#tabs').addEventListener('click', (e) => {
 document.querySelectorAll('[data-home]').forEach((el) =>
   el.addEventListener('click', () => { showTab('dashboard'); setNav(false); }));
 
-// Back/forward, and an address typed by hand.
-window.addEventListener('hashchange', () =>
-  showTab(readRoute(), { push: false }));
+window.addEventListener('popstate', followRoute);
+window.addEventListener('hashchange', followRoute);

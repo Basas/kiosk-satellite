@@ -69,19 +69,19 @@ When Home Assistant runs the integration, onboarding offers the same migration i
 | Realtime | Providers | A row per provider with its status. **Configure** opens its API key, model, voice and endpoint, plus **Reasoning effort** for OpenAI and Gemini, xAI's **Web Search** and **X Search** switches and Gemini's **Google Search** and **Ignore talk not meant for it** switches, and **Save & Validate** stores them once the provider connects. |
 | | Instructions, End after silence, Speech speed, Session duration, Talk over answers | How the conversation behaves, sounds, ends and carries over, for every provider. |
 | | Tools | What the model can control. See [Realtime conversations](#realtime-conversations). |
-| Wake Word | Wake word engine | vsWakeWord (default), microWakeWord or openWakeWord. All models ship with the app. |
+| Wake Word | Wake word engine | vsWakeWord (default), microWakeWord or openWakeWord. All models ship with the app. The Echo Dot also offers Amazon's engine. See [Wake Word](echo-dot.md#wake-word) in the Echo Dot docs. |
 | | Wake word 1 and 2 | Home Assistant's selects. Wake word 2 is answered by Assistant 2. |
 | | Wake word sensitivity, Wake word noise gate | How easily the wake word triggers. The noise gate skips inference while the room is quiet to save CPU. |
 | | Stop word interruption | Say "stop" to cut off an answer, a timer alert or an announcement. It also closes a result panel. |
 | | Wake Word Arbitration | When several kiosks hear the wake word, only the closest one answers. See [Wake word arbitration](#wake-word-arbitration). |
 | | Custom Models | Your own wake word models. See [Custom wake word models](custom-wake-words.md). |
-| Appearance | Skin | Kiosk Satellite, Default, Google Home, Home Assistant, Alexa, Siri, Retro Terminal, Waveform, Lens Flares, Ink Blobs or Voice Only. Voice Only shows no text, only the Kiosk Satellite logo with its bars moving to your voice and the answer, for screens too small to read. **Preview** shows it for five seconds. |
+| Appearance | Skin | Kiosk Satellite, Default, Google Home, Home Assistant, Alexa, Siri, Retro Terminal, Waveform, Lens Flares, Ink Blobs, Jarvis, KITT, HAL 9000 or Voice Only. Jarvis draws a holographic HUD reactor that turns and pulses with your voice and the answer, and docked it floats above the conversation's text. KITT shows the voice box from Knight Rider's dash, three columns of red blocks that light outward from their middle with your voice and the answer, placed the same way. HAL 9000 shows HAL's eye from 2001: A Space Odyssey, a fisheye lens in a chrome ring whose red light flares with your voice and the answer, also placed the same way. Voice Only shows no text, only the Kiosk Satellite logo with its bars moving to your voice and the answer, for screens too small to read. Installed plugins that offer a [voice skin](https://github.com/jxlarrea/kiosk-satellite-plugins/blob/main/docs/voice-skins.md) follow under their own names. With one picked, the plugin draws the turn and KS shows only results such as images and weather. If the plugin stops, the overlay falls back to the Kiosk Satellite skin. **Preview** shows it for five seconds. |
 | | Theme, Background, Text size, Reactive activity bar | Light or dark, how much of the dashboard shows through, the text size and the bar that follows your voice and the answer. |
 | Conversation | Show what you said, Show the answer, Show tool use, Hide sentiment tags | What the overlay shows. |
 | | Keep the answer on screen, Keep results on screen, Announcement time | How long each stays. Results at 0 stay until dismissed. |
 | Timers | Show timer pills, Show the timer name, Timer pill scale | Running timers float over the screen. Drag them anywhere. |
 | | Show finished timer pills, Mute timer alerts, Show the name on the alert, Speak when a timer ends | What a finished timer does. Without its pill, the stop word still ends the alert. |
-| Chimes | Play chimes, per-event sounds | The wake, done, error, timer and announcement sounds, built in or from the sounds folder. |
+| Chimes | Play chimes, per-event sounds and volumes | The wake, done, error, timer and announcement sounds, built in or from the sounds folder, each with its own volume under the assistant volume. |
 
 The **Wake Word Tester** and **Wake word diagnostics** are covered in [Microphone settings](microphone.md).
 
@@ -91,14 +91,15 @@ Kiosks in the same room or in open spaces often hear the same wake word. Without
 
 Home Assistant only settles duplicates for Assist pipelines. A wake word that starts a [realtime conversation](#realtime-conversations) goes straight to the provider, so without arbitration every kiosk that heard it opens its own conversation.
 
-When a kiosk hears the wake word, it broadcasts how loud the wake word reached it over its own background noise and waits for the **Arbitration window**. If another kiosk heard the same wake word louder, it goes back to listening without a chime or anything on screen. The loudest one answers. Each kiosk compares against its own noise floor, so a hot microphone does not win just for being loud, but very different microphones can still favor one model over another.
+When a kiosk hears the wake word, it broadcasts how loud the wake word reached it over its own background noise and waits for the **Arbitration window**. If another kiosk heard the same wake word louder, it goes back to listening without a chime or anything on screen. The loudest one answers. Each kiosk compares against its own noise floor, so a hot microphone does not win just for being loud. The level is measured before **Noise suppression**, so turning it on does not make a kiosk win either. Hardware that processes its microphone itself, such as a Portal Go's microphone array, can still hear a wake word much louder than a plain microphone at the same distance. **Arbitration offset** evens that out.
 
 | Setting | What it does |
 | --- | --- |
 | Enable wake word arbitration | Takes part in arbitration with the other kiosks on the network. |
 | Arbitration window | How long a kiosk waits to hear from the others, 100 to 500 ms (400 by default). It has to cover how much later a slow device detects the wake word plus the trip over Wi-Fi, where access points can hold broadcast traffic for a few hundred milliseconds. Raise it if a closer kiosk sometimes loses or both answer. Every wake waits this long, and nothing you say during the wait is lost. |
+| Arbitration offset | Added to how loud this kiosk heard the wake word, -30 to 30 dB (0 by default). Raise it on a kiosk that loses when you speak right next to it, or lower it on one that answers from across the room. The log shows each kiosk's level on every wake, under the `wake_word` tag, which tells you how far apart two kiosks are. It is not synced through Fleet Management, since it describes the kiosk's own hardware. |
 
-The kiosks talk over UDP broadcast on port 2330 and need nothing else turned on: no fleet, intercom or remote admin. They have to be on the same network segment, and an access point that blocks broadcast traffic between wireless clients stops arbitration. When a claim does not arrive, each kiosk answers as it would without arbitration. A muted kiosk does not take part.
+The kiosks talk over UDP on port 2330 and need nothing else turned on: no fleet, intercom or remote admin. Each claim is broadcast, and also sent directly to every kiosk heard from before, since Wi-Fi delivers a direct packet more reliably and to a sleeping device sooner. Kiosks say hello when arbitration starts and every five minutes, so they know each other before the first wake word. They have to be on the same network segment, and an access point that blocks broadcast traffic between wireless clients stops arbitration. When a claim does not arrive, each kiosk answers as it would without arbitration. A louder claim that arrives just after a kiosk's window closed, from a kiosk that detected the wake word later, still ends the first kiosk's turn, so only one of them answers. A muted kiosk does not take part.
 
 ## Realtime conversations
 
@@ -195,7 +196,9 @@ With **Expose kiosk entities** on under **Settings > ESPHome**, the kiosk adds i
 
 The kiosk also adds a **Voice Satellite** text sensor. It reads `idle`, `listening`, `processing` or `responding`, the same states as the Assist satellite entity, and it follows realtime conversations too. A realtime conversation runs no Home Assistant pipeline, so the Assist satellite entity stays idle through it. Check the sensor instead when an automation or script needs to know which kiosk is talking.
 
-And four actions, named after the kiosk's [node name](esphome.md#node-name):
+Two more sensors follow the kiosk's timers. **VS Timers** counts the timers that are running or paused. **VS Next timer** is a timestamp of when the soonest running timer ends, so a tile or entity card counts down to it on its own. It reads unknown while no timer runs.
+
+And these actions, named after the kiosk's [node name](esphome.md#node-name):
 
 ```yaml
 # Listen as if the wake word fired. Slot 2 runs Assistant 2.
@@ -233,9 +236,74 @@ data:
   seconds: 0
 ```
 
+```yaml
+# List the kiosk's timers.
+action: esphome.kitchen_tablet_vs_list_timers
+response_variable: result
+```
+
+The response holds a `timers` list with one entry per timer: running and paused ones first, then any that are ringing.
+
+```yaml
+timers:
+  - timer_id: 01K6...
+    name: pasta
+    total_seconds: 600
+    seconds_left: 412
+    is_active: true
+    ends_at: "2026-10-08T22:42:10.000Z"
+    finished: false
+```
+
+`seconds_left` is the time left when the action ran. `ends_at` is when a running timer ends, in UTC, and is null while it is paused or ringing. `finished` is true while a timer rings and until its alert is dismissed.
+
+ESPHome entities cannot carry attributes, so the list comes from the action. To keep it on an entity for a dashboard card, refresh a template sensor from the [timer event](#timer-events):
+
+```yaml
+template:
+  - triggers:
+      - trigger: homeassistant
+        event: start
+      - trigger: event
+        event_type: esphome.kiosk_satellite_timer
+    actions:
+      - action: esphome.kitchen_tablet_vs_list_timers
+        response_variable: result
+    sensor:
+      - name: Kitchen timers
+        state: "{{ result.timers | length }}"
+        attributes:
+          timers: "{{ result.timers }}"
+```
+
+The event fires for every kiosk, so a sensor for one kiosk can add `event_data` with that kiosk's `device_id` to skip the others.
+
+```yaml
+# Pause, resume or cancel a timer by its ID.
+action: esphome.kitchen_tablet_vs_pause_timer
+data:
+  timer_id: 01K6...
+```
+
+```yaml
+# Add time to a timer. vs_remove_time takes the same fields.
+action: esphome.kitchen_tablet_vs_add_time
+data:
+  timer_id: 01K6...
+  hours: 0
+  minutes: 5
+  seconds: 0
+```
+
+`vs_pause_timer`, `vs_resume_timer`, `vs_cancel_timer`, `vs_add_time` and `vs_remove_time` take the `timer_id` from `vs_list_timers` or from the [timer event](#timer-events). An empty `timer_id` picks the kiosk's only timer and fails when it has several. Pausing a paused timer or resuming a running one does nothing.
+
+Home Assistant's timer intents do the change, and they cannot find a timer by its ID. The kiosk looks the timer up and asks for it by name, or by the duration it started with when it has no name. Two timers on the same kiosk with the same name, or two unnamed timers that started with the same duration, look the same to Home Assistant, and the action fails with an error that says so. Give timers names to keep them apart.
+
 The entities and actions appear only while Voice Satellite runs natively and is on.
 
 ## Timer events
+
+Voice turns fire their own `esphome.kiosk_satellite_voice` event as they start, change and end. See [Home Assistant Events](events.md#voice-satellite).
 
 Every timer on the kiosk fires an `esphome.kiosk_satellite_timer` event on the Home Assistant bus when it starts, changes, is cancelled, finishes or its alert is dismissed. That covers spoken timers, timers from a realtime conversation and timers from `vs_start_timer`. Use it to flash a light or announce a kitchen timer in another room. Home Assistant only fires device events under `esphome.`, hence the prefix.
 
@@ -301,6 +369,8 @@ adb shell am broadcast -a me.jxl.kiosk_satellite.action.VOICE_CANCEL
 ```
 
 `slot` is optional and defaults to 1. The broadcasts work while Kiosk Satellite is running, even with another app in front, and do nothing while Voice Satellite is off.
+
+Kiosk Satellite also sends broadcasts of its own as a turn starts, changes and ends, so another app can come back the moment it is over. See [Android Broadcasts](android-broadcasts.md).
 
 ## Fleets
 

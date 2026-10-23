@@ -1,3 +1,4 @@
+import { isHeadless } from './headless.js';
 import { renderTlsSettings } from './tls.js';
 import { localizeSetting, voiceText, esphomeError, esphomeDeviceIdentity, esphomeText, launcherText, kioskText, intercomText, intercomError, cameraText, cameraError, cameraResolutionNotice, screensaverText, deviceText, haText, screenAudioText, haConnectionError, settingsPageText, setupImportError, t } from './localization.js';
 import { preserveDraft } from './drafts.js';
@@ -12,7 +13,7 @@ import {
 import { MIC_GROUP_NOTE, cameraAction, exportFileName } from './cameras.js';
 import { $, api, cacheSettings, cmd, depSatisfied, state } from './core.js';
 import { readOnlyRow, renderAnalyticsIntro, renderUpdateHelper, renderUpdateSourceDocs } from './device.js';
-import { permissionSpecs } from './permissions.js';
+import { adbHint, permissionSpecs } from './permissions.js';
 import { renderServicePage } from './service.js';
 import { renderShizukuPage } from './shizuku.js';
 import { CATEGORY_TABS } from './gestures.js';
@@ -43,21 +44,26 @@ import {
 import { applyManagedBanners, renderFleetPage } from './fleetsync.js';
 import { decorateAnnouncementsPage, renderIntercomPage } from './intercom.js';
 import { renderAlarmsPage } from './alarms.js';
+import { renderCalendarPage } from './calendar.js';
+import { renderCustomPagesPage } from './custom_pages.js';
+import { renderUrlFilterPage } from './url_filter.js';
+import { renderPluginScreensaverEntry } from './plugins.js';
 import { askImportOptions } from './pickers.js';
 import { settingRow, syncGatedRows } from './rows.js';
 import { applySubpageView, currentPath, setCurrentPath, subpageEntry, refreshNavigationText } from './tabs.js';
+import { showScanDiagnostic, showWatchedEntities } from './views.js';
 import {
-  fetchViews,
-  pickView,
-  radioRow,
-  showScanDiagnostic,
-  showWatchedEntities,
-  viewPath,
-} from './views.js';
+  dashboardPathOfUrl,
+  viewPathUrl,
+  dashboardViewListRow,
+  dashboardViewRow,
+  loadDashboards,
+  pickDashboard,
+} from './dashboard_picker.js';
 import { loadVsPermissions, renderVsControls } from './vs.js';
 import { REALTIME_PROVIDER_SETTINGS, VS_SELECT_SETTINGS, renderNativeVs, vsMigrationNotice } from './vs_native.js';
 import { mountWakeActivations } from './wake_activations.js';
-import { banner, copyBox, messageBox, showToast } from './widgets.js';
+import { banner, copyBox, hintRow, messageBox, showToast } from './widgets.js';
 
 // A sound setting's row as a dropdown over the device's sounds folder,
 // filled from the device's own listing so this page and the tablet always
@@ -202,23 +208,37 @@ const layoutSettings = new Set([
   'screen.adaptive_brightness', 'screensaver.clock_night',
   'camera.rtsp.enabled', 'camera.rtsp.protocol', 'camera.onvif.port',
   'camera.rtsp.port', 'btproxy.nearby_sort', 'esphome.real_mac',
-  'esphome.mac_override', 'ha.rotation_enabled', 'esphome.node_name',
+  'esphome.mac_override', 'esphome.node_name',
   'btproxy.connections', 'home.keep_pinning', 'browser.start_url',
 ]);
 // Runtime state the device keeps in settings and no page draws. A wake word
 // that wakes the screensaver writes the saved brightness; rebuilding the
 // settings pages for that re-rendered whatever page was open, on every
 // trigger.
+// The rotation's view and page lists repaint in place on the ks-settings
+// event (the rotation page below): a save echoed back from the device, or
+// a change from another admin, never rebuilds the tab.
+const rotationListSettings = new Set(['ha.rotation_dashboards', 'ha.rotation_urls']);
+// The Dashboard View Rotation and Return to home cards draw these
+// themselves and repaint in place when one changes (the HA tab below): the
+// device's echo of every save there used to rebuild the whole tab.
+const rotationCardSettings = new Set(['ha.rotation_enabled', 'ha.rotation_seconds',
+  'ha.rotation_pause_seconds', 'ha.rotation_crossfade', 'ha.rotation_fade_seconds',
+  'ha.return_home_enabled', 'ha.return_home_seconds']);
 const runtimeStateSettings = new Set([
   'screensaver.saved_brightness', 'voice.timer_position', 'sendspin.player_pos',
   // The alarms and their ring state: the Alarms page redraws from the
   // alarms event, not from a settings rebuild.
   'alarms.list', 'alarms.runtime',
+  // The Calendar page redraws its Calendars card itself.
+  'calendar.calendars', 'calendar.hidden',
 ]);
-// The Announcements and Alarms text to speech rows, each a picker that
-// repaints itself (intercom.js).
+// The Announcements and Alarms text to speech rows and Voice Satellite's
+// Play sounds on, each a picker that repaints itself (intercom.js,
+// vs_native.js).
 const ttsPickerSettings = new Set(['announcements', 'alarms']
-  .flatMap(prefix => ['engine', 'language', 'voice'].map(k => `${prefix}.tts_${k}`)));
+  .flatMap(prefix => ['engine', 'language', 'voice'].map(k => `${prefix}.tts_${k}`))
+  .concat('voice.tts_output'));
 let liveSettingsTimer = null;
 let liveSettingsRendering = false;
 let settingsRenders = 0;
@@ -256,7 +276,10 @@ async function flushSettingsUpdates() {
     const rows = [...document.querySelectorAll(`[data-key="${setting.key}"]`)];
     const previous = JSON.parse(renderedSettings.get(setting.key) || '{}');
     renderedSettings.set(setting.key, JSON.stringify(setting));
-    if (runtimeStateSettings.has(setting.key)) continue;
+    if (runtimeStateSettings.has(setting.key)) {
+      if (setting.key === 'calendar.calendars') renderCalendarPage();
+      continue;
+    }
     const shapeChanged = JSON.stringify({ ...previous, value: null })
       !== JSON.stringify({ ...setting, value: null });
     const hasDependants = state.settings.some(s => s.dependsOn === setting.key || s.alsoDependsOn === setting.key);
@@ -277,13 +300,72 @@ async function flushSettingsUpdates() {
         continue;
       }
     }
-    // The text to speech pickers repaint themselves, and the engine's
-    // Language and Voice rows come and go in place (intercom.js), so a pick
-    // echoed back from the device does not rebuild every page.
+    // Use Home Assistant entity reveals one row in its own card (issue
+    // #911): the device's echo of a local save, or a flip on the device,
+    // places it in place rather than rebuilding the page.
+    if (!shapeChanged && setting.key === 'screen.adaptive_use_entity') {
+      const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
+      if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
+          && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        updateAdaptiveBrightnessRows({ reprobe: true });
+        continue;
+      }
+    }
+    // Hang up call when pressing this button reveals Hang up button while
+    // ringing in its own card (issue #991), in place like the switches
+    // above.
+    if (!shapeChanged && setting.key === 'intercom.hangup_key') {
+      const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
+      if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
+          && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        continue;
+      }
+    }
+    // The same for the external motion sensor's switch (issue #973), which
+    // also frees Dismiss on motion from the camera on the Screensaver tab.
+    if (!shapeChanged && setting.key === 'motion.use_entity') {
+      const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
+      if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
+          && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        updateMotionCameraRows();
+        continue;
+      }
+    }
+    // The text to speech pickers repaint themselves, and the rows they
+    // gate (the engine's Language and Voice, Play sounds on's Play as) come
+    // and go in place, so a pick echoed back from the device does not
+    // rebuild every page.
     if (!shapeChanged && ttsPickerSettings.has(setting.key)) {
       const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
       if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
           && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        continue;
+      }
+    }
+    // The Player source and pick swap whole pages (the Sendspin Player page
+    // for the AirPlay one, or neither for the Local Media Session): the
+    // rows repaint themselves and the pages come and go in place, so a
+    // change echoed back from the device does not rebuild every tab.
+    if (!shapeChanged && ['sendspin.player_source', 'sendspin.player'].includes(setting.key)
+        && rows.length
+        && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row))) {
+      updatePlayerRow();
+      continue;
+    }
+    // The wake word engine reveals Amazon's Wake word language in its own
+    // card, in place like the text to speech pickers, and the language
+    // only changes what the wake word selects offer: neither rebuilds the
+    // page.
+    if (!shapeChanged && ['voice.wake_word_engine', 'voice.amazon_locale'].includes(setting.key)) {
+      const byKey = Object.fromEntries(state.settings.map(s => [s.key, s]));
+      if ((!rows.length && !depSatisfied(setting, byKey)) || (rows.length
+          && rows.every(row => row.updateSetting?.() && syncGatedRows(setting.key, row)))) {
+        // A revealed language goes back by schema order, in front of
+        // Sensitivity, past the wake word selects it decides: it belongs
+        // right under the engine (vs_native.js).
+        const engineRow = document.querySelector('[data-key="voice.wake_word_engine"]');
+        const localeRow = document.querySelector('[data-key="voice.amazon_locale"]');
+        if (engineRow && localeRow && engineRow.nextElementSibling !== localeRow) engineRow.after(localeRow);
         continue;
       }
     }
@@ -295,6 +377,12 @@ async function flushSettingsUpdates() {
     // its dialog, which repaint and read them themselves: a save or a new
     // model list never rebuilds the page.
     if (!hasDependants && REALTIME_PROVIDER_SETTINGS.has(setting.key)) continue;
+    if (!shapeChanged && !hasDependants && rotationListSettings.has(setting.key)) continue;
+    if (!shapeChanged && rotationCardSettings.has(setting.key)) continue;
+    // The Custom Pages list repaints itself (custom_pages.js).
+    if (!shapeChanged && setting.key === 'ha.custom_pages') continue;
+    // So does the URL Filter (url_filter.js).
+    if (!shapeChanged && setting.key === 'browser.url_filter') continue;
     // Only the choices of a dropdown moved (a provider's model list came
     // in): its row refreshes them in place rather than the page rebuilding
     // under whatever is being typed elsewhere on it.
@@ -332,6 +420,162 @@ async function flushSettingsUpdates() {
     liveSettingsRendering = false;
     if (liveSettings.size) flushSettingsUpdates();
   }
+}
+
+// The cards of a tab, or with `subpage` of one of its second-level pages,
+// from `list` (the visible settings by category). One UI shape, mirroring
+// the device's settings panes: a small heading floats above each rounded
+// card, and settings sharing a `section` get a card of their own (e.g. the
+// motion controls under "Motion Detection"). A `subpage` goes one further
+// and takes its settings off this page. Module scope so a single page can
+// be drawn in place (syncSubpages) exactly as the full render draws it.
+function renderCardsInto(target, cats, list, tab, { subpage = null } = {}) {
+  for (const cat of cats) {
+    const base = cat === cats[0] ? null : cat;
+    let heading = base;
+    let rows = [];
+    // Whether the last thing emitted was a page entry. Each one is a
+    // destination of its own, so it gets its own card: stacking unrelated
+    // destinations in one card reads as a group of related settings.
+    let entryRun = false;
+    const flush = () => {
+      if (!rows.length) return;
+      // A page whose only group repeats its own title says it twice; the
+      // page title already carries the name, so the heading goes.
+      if (heading && !(heading === subpage && !target.children.length)) {
+        const h = document.createElement('h2');
+        h.className = 'card-title';
+        h.textContent = settingsPageText(cat, heading);
+        target.appendChild(h);
+      }
+      const card = document.createElement('div');
+      card.className = 'card';
+      rows.forEach((r) => card.appendChild(r));
+      target.appendChild(card);
+      rows = [];
+    };
+    const seen = new Set();
+    (list[cat] || []).forEach((s) => {
+      const sub = s.subpage || null;
+      if (sub !== subpage) {
+        // Off to its own page: the first setting of each subpage leaves
+        // the entry row standing where the group used to be.
+        if (sub && tab && !subpage && !seen.has(sub)) {
+          seen.add(sub);
+          flush();
+          heading = null;
+          entryRun = true;
+          rows.push(subpageEntry(tab, sub));
+        }
+        return;
+      }
+      const want = s.section || base;
+      if (entryRun || want !== heading) { flush(); entryRun = false; heading = want; }
+      rows.push(settingRow(s));
+    });
+    flush();
+  }
+}
+
+// How each generic tab was last rendered (its categories and render
+// options), so syncSubpages draws a page the same way.
+const renderedTabs = new Map();
+
+// A flip that adds or takes away whole second-level pages, drawn in place
+// instead of re-rendering every tab: picking another player under Player
+// swaps the Sendspin Player page for the AirPlay one, and the full render
+// that took (a fetch, every tab, every decorator) blanked the picker for
+// seconds. `rows` are the settings whose presence changes, all on pages of
+// one tab. A page left with nothing to show loses its entry row and panel,
+// a page that comes back gets them where the full render puts them, and a
+// page that stays is redrawn. False when the change is not of that shape
+// (a page the tab builds by hand, a row on the tab itself), for the caller
+// to fall back to the full render.
+export function syncSubpages(rows) {
+  const category = rows[0]?.category;
+  const found = [...renderedTabs.entries()].find(([, r]) => r.cats.includes(category));
+  if (!found) return false;
+  const [tabId, { cats, opts }] = found;
+  if (opts?.entryRoot) return false;
+  const tabEl = document.getElementById(tabId);
+  if (!tabEl) return false;
+  const tab = tabId.replace(/^tab-/, '');
+  const fixed = [...(opts?.handBuilt || []), ...(opts?.extra || [])];
+  const subs = [...new Set(rows.map((o) => o.subpage || ''))];
+  if (rows.some((o) => !cats.includes(o.category))) return false;
+  if (subs.some((sub) => !sub || fixed.includes(sub))) return false;
+  const all = state.settings || [];
+  const byKey = Object.fromEntries(all.map((o) => [o.key, o]));
+  const byCat = {};
+  all.filter((o) => !o.hidden && depSatisfied(o, byKey))
+    .forEach((o) => (byCat[o.category] ??= []).push(o));
+  const entryOf = (sub) => [...tabEl.querySelectorAll(':scope > .card [data-subpage-entry]')]
+    .find((e) => e.dataset.subpageEntry === sub);
+  const panelOf = (sub) => [...tabEl.querySelectorAll(':scope > .subpage')]
+    .find((p) => p.dataset.subpage === sub);
+  // The order the full render emits the tab in: a marker per entry row and
+  // per row on the tab itself.
+  const order = [];
+  for (const cat of cats) {
+    for (const o of byCat[cat] || []) {
+      const marker = o.subpage ? `sub:${o.subpage}` : `key:${o.key}`;
+      if (!order.includes(marker)) order.push(marker);
+    }
+  }
+  const onTab = (marker) => marker.startsWith('sub:')
+    ? entryOf(marker.slice(4))?.closest('.card')
+    : tabEl.querySelector(`:scope > .card [data-key="${CSS.escape(marker.slice(4))}"]`)?.closest('.card');
+  // Where a new entry card goes: before the card of the next marker on
+  // screen (and its heading), else after the card of the previous one.
+  const placeFor = (sub) => {
+    const at = order.indexOf(`sub:${sub}`);
+    for (let i = at + 1; i < order.length; i++) {
+      const card = onTab(order[i]);
+      if (!card) continue;
+      const heading = card.previousElementSibling;
+      const target = heading?.matches('h2.card-title') ? heading : card;
+      return (entry) => target.before(entry);
+    }
+    for (let i = at - 1; i >= 0; i--) {
+      const card = onTab(order[i]);
+      if (card) return (entry) => card.after(entry);
+    }
+    return null;
+  };
+  // Decide everything before touching the page, so a page that cannot be
+  // placed leaves it as it was for the full render.
+  const plan = subs.map((sub) => {
+    const shown = cats.some((cat) => (byCat[cat] || []).some((o) => o.subpage === sub));
+    const place = shown && !entryOf(sub) ? placeFor(sub) : null;
+    return { sub, shown, place };
+  });
+  if (plan.some((p) => p.shown && !entryOf(p.sub) && !p.place)) return false;
+  for (const { sub, shown, place } of plan) {
+    const panel = panelOf(sub);
+    const open = !!panel?.classList.contains('open');
+    if (!shown) {
+      entryOf(sub)?.closest('.card')?.remove();
+      panel?.remove();
+      if (open) {
+        applySubpageView(tab, '');
+        setCurrentPath(tab);
+      }
+      continue;
+    }
+    const fresh = document.createElement('div');
+    fresh.className = 'subpage';
+    fresh.dataset.subpage = sub;
+    renderCardsInto(fresh, cats, byCat, tab, { subpage: sub });
+    fresh.classList.toggle('open', open);
+    if (panel) panel.replaceWith(fresh); else tabEl.appendChild(fresh);
+    if (place) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.appendChild(subpageEntry(tab, sub));
+      place(card);
+    }
+  }
+  return true;
 }
 
 export async function loadSettings(options = {}) {
@@ -403,58 +647,7 @@ async function renderSettings({ cached = false } = {}) {
     // settings between two hand-built cards).
     const tabEl = root.closest('.tab');
     const tab = tabEl ? tabEl.id.replace(/^tab-/, '') : null;
-    // One UI shape, mirroring the device's settings panes: a small heading
-    // floats above each rounded card, and settings sharing a `section` get a
-    // card of their own (e.g. the motion controls under "Motion Detection").
-    // A `subpage` goes one further and takes its settings off this page.
-    const renderInto = (target, list, { subpage = null } = {}) => {
-      for (const cat of cats) {
-        const base = cat === cats[0] ? null : cat;
-        let heading = base;
-        let rows = [];
-        // Whether the last thing emitted was a page entry. Each one is a
-        // destination of its own, so it gets its own card: stacking unrelated
-        // destinations in one card reads as a group of related settings.
-        let entryRun = false;
-        const flush = () => {
-          if (!rows.length) return;
-          // A page whose only group repeats its own title says it twice; the
-          // page title already carries the name, so the heading goes.
-          if (heading && !(heading === subpage && !target.children.length)) {
-            const h = document.createElement('h2');
-            h.className = 'card-title';
-            h.textContent = settingsPageText(cat, heading);
-            target.appendChild(h);
-          }
-          const card = document.createElement('div');
-          card.className = 'card';
-          rows.forEach((r) => card.appendChild(r));
-          target.appendChild(card);
-          rows = [];
-        };
-        const seen = new Set();
-        (list[cat] || []).forEach((s) => {
-          const sub = s.subpage || null;
-          if (sub !== subpage) {
-            // Off to its own page: the first setting of each subpage leaves
-            // the entry row standing where the group used to be.
-            if (sub && tab && !subpage && !seen.has(sub)) {
-              seen.add(sub);
-              flush();
-              heading = null;
-              entryRun = true;
-              rows.push(subpageEntry(tab, sub));
-            }
-            return;
-          }
-          const want = s.section || base;
-          if (entryRun || want !== heading) { flush(); entryRun = false; heading = want; }
-          rows.push(settingRow(s));
-        });
-        flush();
-      }
-    };
-    renderInto(root, byCat);
+    renderCardsInto(root, cats, byCat, tab);
     // `entryRoot` gathers this tab's page entry rows somewhere else (the
     // Device page wants all of them together, just above the grants). It is
     // not this render's root, so it is cleared here, and the rows the
@@ -490,7 +683,7 @@ async function renderSettings({ cached = false } = {}) {
       panel.className = 'subpage';
       panel.dataset.subpage = sub;
       if (!handBuilt.includes(sub) && !extra.includes(sub)) {
-        renderInto(panel, byCat, { subpage: sub });
+        renderCardsInto(panel, cats, byCat, tab, { subpage: sub });
       }
       tabEl.appendChild(panel);
       panels.set(sub, panel);
@@ -512,12 +705,19 @@ async function renderSettings({ cached = false } = {}) {
     return panels;
   };
 
+  // LED Control exists only where the device has lights to drive: its
+  // settings come back hidden everywhere else.
+  document.querySelector('#tabs button[data-tab="leds"]')?.classList.toggle('hidden',
+    !settings.some((s) => s.category === 'LED Control' && !s.hidden));
+
   for (const [tabId, cats, opts] of CATEGORY_TABS) {
     if (tabId === 'tab-homeassistant') continue; // custom render below
     if (tabId === 'tab-voicesatellite') continue; // custom render below
     const helperPage = tabId === 'device-settings' && helperStatus?.nativeSilent === false;
-    const panels = render(document.getElementById(tabId), cats.filter((c) => byCat[c]),
-      tabId === 'device-settings' ? { ...opts, handBuilt: ['Shizuku'], extra: ['TLS', ...(helperPage ? ['Optional update helper'] : []), ...(opts?.extra || [])] } : opts);
+    const tabOpts = tabId === 'device-settings' ? { ...opts, handBuilt: ['Shizuku'], extra: ['TLS', ...(helperPage ? ['Optional update helper'] : []), ...(opts?.extra || []).filter((page) => page !== 'WebView' || !isHeadless())] } : opts;
+    const tabCats = cats.filter((c) => byCat[c]);
+    renderedTabs.set(tabId, { cats: tabCats, opts: tabOpts });
+    const panels = render(document.getElementById(tabId), tabCats, tabOpts);
     if (tabId === 'device-settings') {
       renderShizukuPage(panels.get('Shizuku'));
       const adminEntry = document.querySelector('#device-pages [data-subpage-entry="Remote Administration"]');
@@ -538,6 +738,8 @@ async function renderSettings({ cached = false } = {}) {
       renderUpdateSourceDocs(panels.get('Updates'));
     }
     if (helperPage) renderUpdateHelper(panels.get('Optional update helper'), helperStatus);
+    if (tabId === 'tab-browser') renderUrlFilterPage(panels.get('URL Filter'));
+    if (tabId === 'tab-screensaver') renderPluginScreensaverEntry(document.getElementById(tabId), byKey['screensaver.mode']?.value);
   }
 
   // ── Required system permissions (Kiosk and Lockdown tabs) ────────────
@@ -555,6 +757,13 @@ async function renderSettings({ cached = false } = {}) {
       { method: 'POST', body: '{}' }).then((r) => r.json())
       .then((res) => res.data ? res.data.batteryUnrestricted === true : null)
       .catch(() => null);
+    const pollNotifications = () => api('/api/commands/getSystemPermissions',
+      { method: 'POST', body: '{}' }).then((r) => r.json())
+      .then((res) => res.data ? res.data.notificationAccess === true : null)
+      .catch(() => null);
+    const grantNotifications = () => api('/api/commands/requestOsPermissions',
+      { method: 'POST',
+        body: JSON.stringify({ which: ['notificationAccess'] }) });
     const grantBattery = () => api('/api/commands/requestOsPermissions',
       { method: 'POST',
         body: JSON.stringify({ which: ['batteryOptimizations'] }) });
@@ -638,6 +847,13 @@ async function renderSettings({ cached = false } = {}) {
     // the toggles in place rather than through a re-render, the same as
     // the device page.
     {
+      // Wait while media plays reads other apps' media sessions (issue
+      // #1055), which Android shows to no one without Notification access.
+      const mediaRow = permRow('Notification access',
+        'The kiosk stays away while video or music plays in another app.',
+        'Without this the kiosk cannot tell when video or music is playing '
+          + 'and comes back anyway. The grant screen appears on the tablet.',
+        'Grant on device', grantNotifications, pollNotifications);
       const launcherGroup = group('tab-launcher', [
         permRow('Display over other apps',
           'Kiosk Satellite can bring itself back in the foreground and '
@@ -653,6 +869,7 @@ async function renderSettings({ cached = false } = {}) {
             + 'clock never brings the kiosk back. The grant dialog appears '
             + 'on the tablet.',
           'Grant on device', grantBattery, pollBattery),
+        mediaRow,
       ]);
       const tab = document.getElementById('tab-launcher');
       const on = (key) => {
@@ -663,12 +880,14 @@ async function renderSettings({ cached = false } = {}) {
       const sync = () => {
         const show = on('launcher.enabled') && on('launcher.auto_return');
         launcherGroup.forEach((el) => el.classList.toggle('hidden', !show));
+        mediaRow.classList.toggle('hidden', !on('launcher.auto_return_media'));
       };
       // Delegated: the auto-return row comes and goes with the master
       // switch (dependsOn), so a listener on the row itself would be lost.
       tab.addEventListener('change', (e) => {
         const key = e.target.closest?.('[data-key]')?.dataset.key;
-        if (key === 'launcher.enabled' || key === 'launcher.auto_return') {
+        if (key === 'launcher.enabled' || key === 'launcher.auto_return'
+          || key === 'launcher.auto_return_media') {
           setTimeout(sync, 50);
         }
       });
@@ -950,6 +1169,8 @@ async function renderSettings({ cached = false } = {}) {
         info.querySelector('.desc').textContent = ok === null
           ? esphomeText('Status unavailable.')
           : ok ? esphomeText('The location sensors can read the GPS receiver.')
+          : p.location !== true && p.locationApproximate === true
+            ? esphomeText('Only approximate location is allowed, and the GPS receiver needs precise location.')
           : p.location !== true
             ? esphomeText('Without this the GPS receiver cannot be read and the location sensors stay unknown.')
             : esphomeText('Location is off in the device settings, so the receiver delivers nothing.');
@@ -987,7 +1208,11 @@ async function renderSettings({ cached = false } = {}) {
   }
 
   updatePersonSensorRows();
+  updateClockNightAdminRows();
+  updateCelestialPermissionRows();
   updateRtspRows();
+  updateOnvifEventsRows();
+  updateCelestialLocationRow();
 
   // ── Bluetooth Proxy nearby devices ───────────────────────────────────
   // The live list the device shows under the lookup toggle, same data:
@@ -1456,6 +1681,9 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
   // The Alarms tab: the list and the Set an alarm button over the
   // Defaults rows, from the alarmsStatus command, and the tone picker.
   await renderAlarmsPage();
+  // The Calendar tab: Open on the kiosk and the Calendars card over the
+  // Display and Kiosk rows.
+  renderCalendarPage();
 
   const tlsPanel = document.querySelector('#tab-device .subpage[data-subpage="TLS"]');
   if (tlsPanel) renderTlsSettings(tlsPanel);
@@ -1529,6 +1757,13 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
         const g = await cmd('hasUiGuard');
         out.uiGuard = g.data === true;
       } catch (_) {}
+      if (isHeadless()) {
+        try {
+          const b = await cmd('getHardwareButtons');
+          out.hardwareButtons = b.data?.listening === true;
+          out.hardwareButtonsOn = b.data?.switchedOn === true;
+        } catch (_) {}
+      }
       return out;
     };
 
@@ -1574,10 +1809,12 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
         const text = (t) => deviceText(typeof t === 'function' ? t(all) : t);
         // The device has no screen for the grant: the adb command stands
         // in for the button, and the row is not an error nobody can fix.
-        const noScreen = !ok && spec.requestable && all[spec.requestable] === false;
+        const noScreen = !ok && (isHeadless()
+          ? !!spec.adb
+          : spec.requestable && all[spec.requestable] === false);
         info.querySelector('.desc').textContent = unknownState
           ? deviceText('Status unavailable.')
-          : noScreen ? deviceText(spec.adb)
+          : noScreen ? deviceText(adbHint(spec, all))
           : text(ok ? spec.held : (spec.needed ? spec.missing : spec.idle));
         state.textContent = unknownState ? ''
           : ok ? deviceText('Granted') : noScreen ? deviceText('Not offered')
@@ -1766,7 +2003,8 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
     // from the URL scheme (https needs no proxy, so it sits disabled and
     // off; plain http enables it, validation turns it on with a modal).
     const spSetting = settings.find((s) => s.key === 'browser.secure_proxy');
-    {
+    // A device without a screen has no page that needs a secure context.
+    if (!isHeadless()) {
       const urlVal = (ha.find((s) => s.key === 'ha.url')?.value || '').trim();
       const spu = (() => { try { return new URL(urlVal); } catch (_) { return null; } })();
       const spHttp = spu && spu.protocol === 'http:'
@@ -1838,12 +2076,16 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
       vbtn.disabled = true; vbtn.textContent = haText('Checking\u2026');
       const out = await (await api('/api/commands/haCheckConnection', { method: 'POST', body: '{}' })).json().catch(() => ({}));
       vbtn.disabled = false; vbtn.textContent = haText('Validate');
-      if (out.ok) { state.dashboardsCache = null; await loadSettings(); await loadVsPermissions(); loadViewJump(); }
+      if (out.ok) { state.dashboardsCache = null; loadDashboards(); await loadSettings(); await loadVsPermissions(); loadViewJump(); }
       else vdesc.textContent = out.error ? haConnectionError(out.error) : haText('Could not connect.');
     });
 
     if (!state.haConnected) {
       vdesc.textContent = haText('Not validated yet. The settings below unlock once the connection checks out.');
+    } else if (isHeadless()) {
+      // Everything past the connection is the dashboard, which a device
+      // without a screen does not have.
+      vdesc.textContent = haText('Connected.');
     } else {
       vdesc.textContent = haText('Connected.');
       // Dashboard picker: what the kiosk shows. Radio rows; picking one sets
@@ -1859,70 +2101,24 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
       const dcard = document.createElement('div');
       dcard.className = 'card';
       root.appendChild(dcard);
-      let dashList = [];
-      try {
-        // Cached across re-renders: a dependant toggle elsewhere on the tab
-        // triggers loadSettings(), and re-fetching the dashboard list from
-        // Home Assistant every time blanked the pane for seconds - the
-        // "whole page refreshed" feel. Validate clears the cache.
-        if (!state.dashboardsCache) {
-          state.dashboardsCache = (await cmd('haListDashboards', {}, { timeoutMs: 10000 })).data || [];
-        }
-        const dashboards = state.dashboardsCache;
-        dashList = dashboards;
-        const rawBase = (byKey['ha.url']?.value || '').trim().replace(/\/$/, '');
-        const current = byKey['browser.start_url']?.value || '';
-        // Which dashboard + view route the stored start URL points at.
-        let selDash = null, selRoute = '';
-        for (const d of dashboards) {
-          const url = `${rawBase}/${d.url_path}`;
-          if (current === url) { selDash = d.url_path; selRoute = ''; }
-          else if (current.startsWith(url + '/')) {
-            selDash = d.url_path; selRoute = current.slice(url.length + 1);
-          }
-        }
-        const applyStart = async (url) => {
+      // One Default dashboard row whose field opens the dashboard picker.
+      // The pick becomes the start URL and the kiosk goes there at once,
+      // since picking a view and not seeing it would read as a failed tap.
+      const rawBase = (byKey['ha.url']?.value || '').trim().replace(/\/$/, '');
+      const startPath = dashboardPathOfUrl(byKey['browser.start_url']?.value || '', rawBase) || '';
+      dcard.appendChild(dashboardViewRow({
+        name: haText('Default dashboard'),
+        desc: haText('The view the kiosk shows when it starts.'),
+        value: startPath,
+        onPick: async (path) => {
+          const url = viewPathUrl(rawBase, path);
           await api('/api/settings', { method: 'PATCH',
             body: JSON.stringify({ 'browser.start_url': url }) });
           await api('/api/commands/loadUrl', { method: 'POST',
             body: JSON.stringify({ url }) });
           await loadSettings();
-        };
-        for (const d of dashboards) {
-          const selected = selDash === d.url_path;
-          const sub = selected ? viewPath(d.url_path, selRoute) : d.url_path;
-          const row = radioRow(d.title || d.url_path, sub, selected, async () => {
-            if (selected) return;
-            // Land on the dashboard's first view.
-            const views = await fetchViews(d.url_path);
-            const route = (views && views.length) ? String(views[0].route) : '';
-            await applyStart(route ? `${rawBase}/${d.url_path}/${route}` : `${rawBase}/${d.url_path}`);
-          });
-          if (selected) {
-            // "Change view": pick another of this dashboard's views.
-            const btn = document.createElement('button');
-            btn.className = 'btn-ghost';
-            btn.textContent = haText('Change view');
-            btn.style.cssText = 'margin-left:8px; flex-shrink:0;';
-            btn.addEventListener('click', async (e) => {
-              e.stopPropagation();
-              const views = await fetchViews(d.url_path);
-              if (!views || !views.length) {
-                messageBox({ title: haText('No sub views'), message: haText('This dashboard has no selectable sub views.') });
-                return;
-              }
-              const route = await pickView(d.url_path, views, selRoute);
-              if (route == null) return;
-              await applyStart(route ? `${rawBase}/${d.url_path}/${route}` : `${rawBase}/${d.url_path}`);
-            });
-            row.appendChild(btn);
-          }
-          dcard.appendChild(row);
-        }
-        if (!dashboards.length) dcard.appendChild(readOnlyRow(haText('No dashboards found'), '', ''));
-      } catch (_) {
-        dcard.appendChild(readOnlyRow(haText('Could not list dashboards'), '', ''));
-      }
+        },
+      }));
       // The rest of the Home Assistant settings, through the same
       // section-aware renderer as every other tab. Almost all of them
       // declare a `subpage`, so what lands here is the row that opens each
@@ -1940,11 +2136,19 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
       const haPanels = render(
         restRoot,
         ['Home Assistant'].filter((c) => (byCat[c] || []).length),
-        { handBuilt: HAND_BUILT_PAGES });
+        { handBuilt: HAND_BUILT_PAGES, extra: ['Custom Pages'] });
       byCat['Home Assistant'] = savedHa;
       // Each hand-built group goes on the page its entry row opens. No
       // heading with it: the page title already carries the name.
       const panelFor = (sub) => haPanels.get(sub) || root;
+
+      // Custom Pages, which no setting draws: its entry row sits right
+      // under the Default dashboard card, as on the device.
+      {
+        const entry = restRoot.querySelector('[data-subpage-entry="Custom Pages"]');
+        if (entry) dcard.after(entry.closest('.card'));
+        renderCustomPagesPage(haPanels.get('Custom Pages'));
+      }
 
       // Theme, hand-built: the toggles re-render only this card, showing
       // or hiding their dependent rows in place.
@@ -1990,20 +2194,52 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
       // rotation).
       let renderReturnCard = () => {};
 
-      // Dashboard view rotation: toggle, then each dashboard as a plain
-      // header with a checkbox per view beneath it, and the dwell time,
-      // mirroring the device's card. Selection entries are navigation
+      // Dashboard view rotation: the settings card, then Views to rotate
+      // (the picked views and Add views) and External pages, each under its
+      // own heading, mirroring the device. Selection entries are navigation
       // paths ("url_path/view-route").
       const rotEnabled = byKey['ha.rotation_enabled'];
       if (rotEnabled) {
         const rcard = document.createElement('div');
         rcard.className = 'card';
         panelFor('Dashboard View Rotation').appendChild(rcard);
+        // Views to rotate and External pages: each its own heading and
+        // card under the settings, the device's layout.
+        const rlists = document.createElement('div');
+        panelFor('Dashboard View Rotation').appendChild(rlists);
         // The card re-renders itself in place on toggle, like the Theme
         // and Return-home cards: the shared settingRow save would reload
         // the whole tab.
+        // What the card shows, so a change made elsewhere (the device,
+        // another admin) repaints it and the echo of its own save does not.
+        const rotationKeys = ['ha.rotation_enabled', 'ha.rotation_seconds',
+          'ha.rotation_pause_seconds', 'ha.rotation_crossfade', 'ha.rotation_fade_seconds'];
+        const rotationShown = () => JSON.stringify(rotationKeys.map((k) => byKey[k]?.value));
+        let shownRotation = '';
+        const onRotationSettings = (e) => {
+          if (!rcard.isConnected) {
+            document.removeEventListener('ks-settings', onRotationSettings);
+            return;
+          }
+          if (!(e.detail || []).some((k) => rotationKeys.includes(k))) return;
+          if (rotationShown() === shownRotation) return;
+          renderRotationCard();
+          renderReturnCard();
+        };
+        document.addEventListener('ks-settings', onRotationSettings);
         const renderRotationCard = async () => {
+        shownRotation = rotationShown();
         rcard.innerHTML = '';
+        rlists.replaceChildren();
+        const section = (title) => {
+          const h = document.createElement('h2');
+          h.className = 'card-title';
+          h.textContent = title;
+          const card = document.createElement('div');
+          card.className = 'card';
+          rlists.append(h, card);
+          return card;
+        };
         rcard.appendChild(toggleRow(rotEnabled.title, rotEnabled.description,
           rotEnabled.value === true, async (on) => {
             rotEnabled.value = on;
@@ -2035,6 +2271,8 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
             secInp.addEventListener('change', () => {
               const v = Math.max(5, Number(secInp.value) || 30);
               secInp.value = v;
+              if (byKey['ha.rotation_seconds']) byKey['ha.rotation_seconds'].value = v;
+              shownRotation = rotationShown();
               api('/api/settings', { method: 'PATCH',
                 body: JSON.stringify({ 'ha.rotation_seconds': v }) });
             });
@@ -2058,6 +2296,8 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
             pInp.addEventListener('change', () => {
               const v = Math.max(0, Number(pInp.value) || 0);
               pInp.value = v;
+              if (byKey['ha.rotation_pause_seconds']) byKey['ha.rotation_pause_seconds'].value = v;
+              shownRotation = rotationShown();
               api('/api/settings', { method: 'PATCH',
                 body: JSON.stringify({ 'ha.rotation_pause_seconds': v }) });
             });
@@ -2078,6 +2318,7 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
             rcard.appendChild(toggleRow(rotFade.title, rotFade.description,
               rotFade.value === true, async (on) => {
                 rotFade.value = on;
+                shownRotation = rotationShown();
                 await api('/api/settings', { method: 'PATCH',
                   body: JSON.stringify({ 'ha.rotation_crossfade': on }) });
                 renderFadeSettings();
@@ -2085,51 +2326,43 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
             renderFadeSettings();
             rcard.appendChild(fadeSettings);
           }
+          // The picked views in rotation order, each with a remove button,
+          // then the row that opens the picker to add more. Saved in place:
+          // no full re-render, the page stays put.
           let sel = [];
           try { sel = JSON.parse(byKey['ha.rotation_dashboards']?.value || '[]'); } catch (_) {}
           if (!Array.isArray(sel)) sel = [];
-          const viewLists = await Promise.all(dashList.map(async (d) => {
-            try {
-              const r = await cmd('haListDashboardViews',
-                { url_path: d.url_path }, { timeoutMs: 10000 });
-              if (r.ok && Array.isArray(r.data) && r.data.length) return r.data;
-            } catch (_) {}
-            // Auto-generated dashboards store no view list; the whole
-            // dashboard still rotates via its first view.
-            // Unreadable (strategy) dashboards rotate via their bare path:
-            // an empty route navigated as /<url_path>, which resolves the
-            // default view. A synthetic /0 would spin.
-            return [{ title: haText('Default view'), route: '' }];
-          }));
-          dashList.forEach((d, i) => {
-            const hdr = document.createElement('div');
-            hdr.style.cssText = 'padding:12px 0 2px; font-size:13px; font-weight:600;'
-              + 'color:var(--primary)';
-            hdr.textContent = d.title || d.url_path;
-            rcard.appendChild(hdr);
-            viewLists[i].forEach((v) => {
-              const path = v.route ? `${d.url_path}/${v.route}` : d.url_path;
-              // A real checkbox (accent-colored by the global input rule),
-              // saved in place: no full re-render, the page stays put.
-              const row = readOnlyRow(v.title || v.route, path, '', false);
-              row.querySelector('span').remove();
-              row.style.paddingLeft = '14px';
-              const cb = document.createElement('input');
-              cb.type = 'checkbox';
-              cb.checked = sel.includes(path);
-              cb.style.cssText = 'width:19px; height:19px; flex:none; cursor:pointer';
-              cb.addEventListener('change', async () => {
-                sel = cb.checked ? sel.concat(path) : sel.filter((p) => p !== path);
-                await api('/api/settings', { method: 'PATCH',
-                  body: JSON.stringify({ 'ha.rotation_dashboards': JSON.stringify(sel) }) });
-              });
-              row.appendChild(cb);
-              row.style.cursor = 'pointer';
-              row.addEventListener('click', (e) => { if (e.target !== cb) cb.click(); });
-              rcard.appendChild(row);
+          const saveSel = (next) => { sel = next; return api('/api/settings',
+            { method: 'PATCH',
+              body: JSON.stringify({ 'ha.rotation_dashboards': JSON.stringify(next) }) }); };
+          const rotDef = byKey['ha.rotation_dashboards'];
+          const vlist = section(rotDef?.title || haText('Views to rotate'));
+          const renderSel = () => {
+            vlist.replaceChildren();
+            sel.forEach((path) => {
+              const rm = cameraAction(haText('Remove'), async () => {
+                await saveSel(sel.filter((x) => x !== path));
+                renderSel();
+              }, false, 'delete');
+              vlist.appendChild(dashboardViewListRow(path, rm));
             });
-          });
-          if (!dashList.length) rcard.appendChild(readOnlyRow(haText('No dashboards found'), '', ''));
+            const add = document.createElement('button');
+            add.className = 'dp-add-row';
+            add.type = 'button';
+            add.textContent = haText('Add views');
+            add.addEventListener('click', async () => {
+              const picked = await pickDashboard({
+                title: rotDef?.title || haText('Views to rotate'),
+                selected: sel,
+                mode: 'several',
+              });
+              if (!picked) return;
+              await saveSel(picked);
+              renderSel();
+            });
+            vlist.appendChild(add);
+          };
+          renderSel();
 
           // External pages: shown in their own overlay during rotation, so
           // the dashboard (and Voice Satellite) stays loaded underneath.
@@ -2141,19 +2374,14 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
           const saveUrls = (next) => { urls = next; return api('/api/settings',
             { method: 'PATCH',
               body: JSON.stringify({ 'ha.rotation_urls': JSON.stringify(next) }) }); };
-          const uhdr = document.createElement('div');
-          uhdr.style.cssText = 'padding:12px 0 2px; font-size:13px; font-weight:600;'
-            + 'color:var(--primary)';
-          uhdr.textContent = haText('External pages');
-          rcard.appendChild(uhdr);
+          const ucard = section(haText('External pages'));
           const ulist = document.createElement('div');
-          rcard.appendChild(ulist);
+          ucard.appendChild(ulist);
           const renderUrls = () => {
             ulist.innerHTML = '';
             urls.forEach((u) => {
               const row = readOnlyRow(u, '', '', false);
               row.querySelector('span').remove();
-              row.style.paddingLeft = '14px';
               const rm = cameraAction(haText('Remove'), async () => {
                 await saveUrls(urls.filter((x) => x !== u));
                 renderUrls();
@@ -2163,15 +2391,14 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
             });
           };
           renderUrls();
+          // The field and its button are one control, so a phone row
+          // keeps them side by side instead of stacking them over each other.
           const addRow = document.createElement('div');
-          addRow.className = 'row';
-          addRow.style.paddingLeft = '14px';
+          addRow.className = 'row rotation-url-add';
           const inp = document.createElement('input');
           inp.type = 'url';
+          inp.className = 'field';
           inp.placeholder = 'https://example.com';
-          inp.style.cssText = 'flex:1; background:var(--surface-2);'
-            + 'border:1px solid var(--border); border-radius:var(--radius-sm);'
-            + 'color:var(--text); padding:9px 12px; margin-right:8px';
           const add = document.createElement('button');
           add.className = 'btn-ghost'; add.textContent = haText('Add');
           const doAdd = async () => {
@@ -2183,8 +2410,38 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
           };
           add.addEventListener('click', doAdd);
           inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') doAdd(); });
-          addRow.append(inp, add);
-          rcard.appendChild(addRow);
+          // A change from the device or another admin repaints the lists
+          // in place. The echo of this page's own save matches and is
+          // skipped.
+          const parse = (key) => {
+            try {
+              const v = JSON.parse(byKey[key]?.value || '[]');
+              return Array.isArray(v) ? v : [];
+            } catch (_) { return []; }
+          };
+          const onSettings = (e) => {
+            if (!rlists.isConnected) {
+              document.removeEventListener('ks-settings', onSettings);
+              return;
+            }
+            const keys = e.detail || [];
+            if (keys.includes('ha.rotation_dashboards')) {
+              const next = parse('ha.rotation_dashboards');
+              if (JSON.stringify(next) !== JSON.stringify(sel)) { sel = next; renderSel(); }
+            }
+            if (keys.includes('ha.rotation_urls')) {
+              const next = parse('ha.rotation_urls');
+              if (JSON.stringify(next) !== JSON.stringify(urls)) { urls = next; renderUrls(); }
+            }
+          };
+          document.removeEventListener('ks-settings', rlists.onSettings || (() => {}));
+          rlists.onSettings = onSettings;
+          document.addEventListener('ks-settings', onSettings);
+          const controls = document.createElement('div');
+          controls.className = 'rotation-url-controls';
+          controls.append(inp, add);
+          addRow.appendChild(controls);
+          ucard.appendChild(addRow);
         }
         };
         await renderRotationCard();
@@ -2205,7 +2462,21 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
           // settingRow's save would loadSettings() (the seconds row gates
           // on the switch), and on this tab that re-fetches every
           // dashboard — a full-page flash for one checkbox.
+          const returnKeys = ['ha.return_home_enabled', 'ha.return_home_seconds',
+            'ha.rotation_enabled'];
+          const returnShown = () => JSON.stringify(returnKeys.map((k) => byKey[k]?.value));
+          let shownReturn = '';
+          const onReturnSettings = (e) => {
+            if (!hcard.isConnected) {
+              document.removeEventListener('ks-settings', onReturnSettings);
+              return;
+            }
+            if (!(e.detail || []).some((k) => returnKeys.includes(k))) return;
+            if (returnShown() !== shownReturn) renderReturnCard();
+          };
+          document.addEventListener('ks-settings', onReturnSettings);
           renderReturnCard = () => {
+            shownReturn = returnShown();
             hcard.innerHTML = '';
             if (byKey['ha.rotation_enabled']?.value === true) {
               hcard.appendChild(toggleRow(rhEnabled.title,
@@ -2332,6 +2603,13 @@ kioskText('Lockdown Mode makes the dashboard non-interactive, arms every ' +
                   if (!st || !st.mode || st.mode === 'boot') {
                     hist.length = 0;
                     telemetryText.textContent = haText('Waiting for the dashboard to load…');
+                    return;
+                  }
+                  // The person's own page under /local/: nothing of Home
+                  // Assistant's to filter.
+                  if (st.mode === 'custom-page') {
+                    hist.length = 0;
+                    telemetryText.textContent = haText('Not used on custom pages.');
                     return;
                   }
                   if (st.mode === 'passthrough') {
@@ -2556,6 +2834,194 @@ const PERSON_SENSOR_PAGES = [
   { tab: 'tab-camera', subpage: 'Person Sensor', key: 'person.sensor' },
 ];
 
+// Where the Celestial sky's location source places it, or why it cannot,
+// mirroring the device's CelestialLocationStatusRow: under the Location
+// select for the GPS and the home zone, under the entity picker for an
+// entity. Manual shows its own field.
+export function updateCelestialLocationRow() {
+  const panel = document.getElementById('tab-screensaver')
+    ?.querySelector('.subpage[data-subpage="Celestial screensaver"]');
+  if (!panel) return;
+  for (const stale of panel.querySelectorAll('.celestial-location')) stale.remove();
+  const source = (state.settings || [])
+    .find((o) => o.key === 'screensaver.celestial_location')?.value;
+  const key = source === 'ha_entity' ? 'screensaver.celestial_entity'
+    : source === 'gps' || source === 'ha_home' ? 'screensaver.celestial_location' : null;
+  const row = key && panel.querySelector(`[data-key="${key}"]`);
+  if (!row) return;
+  const status = readOnlyRow(screensaverText('Current location'),
+    screensaverText('Checking...'), '', false);
+  status.classList.add('celestial-location');
+  row.insertAdjacentElement('afterend', status);
+  // A GPS without a recent fix asks the receiver for one, which can take
+  // up to half a minute.
+  cmd('getCelestialLocation', { source }, { timeoutMs: 40000 })
+    .then((r) => r.data || null)
+    .catch(() => null)
+    .then((st) => {
+      if (!status.isConnected) return;
+      status.querySelector('.desc').textContent = !st
+        ? screensaverText('Status unavailable.')
+        : st.available
+          ? `${st.latitude.toFixed(4)}, ${st.longitude.toFixed(4)}`
+          : screensaverText(st.message || 'Status unavailable.');
+    });
+}
+
+/* The Celestial screensaver's Required system permissions group while the
+   GPS is the location source, mirroring the device's: the Location grant
+   with the system location switch, right after the group holding the
+   Location select. Grant on device runs the dialog on the tablet, and the
+   Current location row asks again once it is granted. */
+export function updateCelestialPermissionRows() {
+  const panel = document.getElementById('tab-screensaver')
+    ?.querySelector('.subpage[data-subpage="Celestial screensaver"]');
+  if (!panel) return;
+  for (const stale of panel.querySelectorAll('.celestial-permission')) stale.remove();
+  const byKey = Object.fromEntries((state.settings || []).map((s) => [s.key, s]));
+  const source = byKey['screensaver.celestial_location'];
+  if (!source || source.value !== 'gps' || !depSatisfied(source, byKey)) return;
+  const card = panel.querySelector('[data-key="screensaver.celestial_location"]')?.closest('.card');
+  if (!card) return;
+  const h = document.createElement('h2');
+  h.className = 'card-title celestial-permission';
+  h.textContent = screensaverText('Required system permissions');
+  const permCard = document.createElement('div');
+  permCard.className = 'card celestial-permission';
+  const permRow = document.createElement('div');
+  permRow.className = 'row';
+  const info = document.createElement('div');
+  info.className = 'info';
+  info.innerHTML = '<div class="name"></div><div class="desc"></div>';
+  info.querySelector('.name').textContent = esphomeText('Location');
+  info.querySelector('.desc').textContent = screensaverText('Checking...');
+  permRow.appendChild(info);
+  const stateEl = document.createElement('span');
+  stateEl.style.whiteSpace = 'nowrap';
+  permRow.appendChild(stateEl);
+  permCard.appendChild(permRow);
+  card.insertAdjacentElement('afterend', h);
+  h.insertAdjacentElement('afterend', permCard);
+  const readPerm = () => cmd('getSystemPermissions')
+    .then((r) => r.data || null).catch(() => null);
+  const paint = (p) => {
+    const ok = p === null ? null
+      : p.location === true && p.locationServicesOn === true;
+    info.querySelector('.desc').textContent = ok === null
+      ? screensaverText('Status unavailable.')
+      : ok ? screensaverText('The sky can follow the GPS receiver.')
+      : p.location !== true && p.locationApproximate === true
+        ? esphomeText('Only approximate location is allowed, and the GPS receiver needs precise location.')
+      : p.location !== true
+        ? screensaverText('Without this the GPS receiver cannot be read and the sky has no location.')
+        : esphomeText('Location is off in the device settings, so the receiver delivers nothing.');
+    stateEl.textContent = ok === null ? '' : ok ? screensaverText('Granted') : screensaverText('Missing');
+    stateEl.style.color = ok ? 'var(--ok)' : 'var(--error)';
+    permRow.querySelector('button')?.remove();
+    if (ok !== false) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn-ghost';
+    btn.textContent = screensaverText('Grant on device');
+    btn.style.cssText = 'flex-shrink:0;';
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        // The device runs the whole flow: the dialog, then the location
+        // settings screen when the system switch is off.
+        await api('/api/commands/requestOsPermissions', { method: 'POST',
+          body: JSON.stringify({ which: ['location'] }) });
+      } catch (_) {}
+      for (let i = 0; i < 30 && permCard.isConnected; i++) {
+        await new Promise((r) => setTimeout(r, 2500));
+        const now = await readPerm();
+        if (now && now.location === true && now.locationServicesOn === true) {
+          paint(now);
+          updateCelestialLocationRow();
+          return;
+        }
+      }
+      btn.disabled = false;
+    });
+    permRow.appendChild(btn);
+  };
+  readPerm().then((p) => { if (permCard.isConnected) paint(p); });
+}
+
+/* The Clock screensaver's Required system permissions group while Turn
+   screen off at night really powers the panel off, mirroring the device's
+   _NightScreenOffAdminTile: the Device admin grant, with Grant on device
+   while it is missing. Idempotent: the Night mode switches' save path and
+   their live updates re-run it. */
+const CLOCK_NIGHT_ADMIN_KEYS = ['screensaver.clock_night', 'screensaver.clock_night_turn_off_minutes',
+  'screensaver.clock_night_turn_off_black'];
+export function updateClockNightAdminRows() {
+  const panel = document.getElementById('tab-screensaver')
+    ?.querySelector('.subpage[data-subpage="Clock screensaver"]');
+  if (!panel) return;
+  for (const stale of panel.querySelectorAll('.clock-night-admin')) stale.remove();
+  const byKey = Object.fromEntries((state.settings || []).map((s) => [s.key, s]));
+  const slider = byKey['screensaver.clock_night_turn_off_minutes'];
+  if (!slider || !(Number(slider.value) > 0) || !depSatisfied(slider, byKey)
+      || byKey['screensaver.clock_night_turn_off_black']?.value === true) return;
+  const h = document.createElement('h2');
+  h.className = 'card-title clock-night-admin';
+  h.textContent = screensaverText('Required system permissions');
+  const permCard = document.createElement('div');
+  permCard.className = 'card clock-night-admin';
+  const permRow = document.createElement('div');
+  permRow.className = 'row';
+  const info = document.createElement('div');
+  info.className = 'info';
+  info.innerHTML = '<div class="name"></div><div class="desc"></div>';
+  info.querySelector('.name').textContent = screensaverText('Device admin');
+  info.querySelector('.desc').textContent = screensaverText('Checking...');
+  permRow.appendChild(info);
+  const stateEl = document.createElement('span');
+  stateEl.style.whiteSpace = 'nowrap';
+  permRow.appendChild(stateEl);
+  permCard.appendChild(permRow);
+  panel.append(h, permCard);
+  const readGranted = () => cmd('getSystemPermissions')
+    .then((r) => (r.data ? !!r.data.deviceAdmin : null)).catch(() => null);
+  const paint = (granted) => {
+    info.querySelector('.desc').textContent = granted === null
+      ? screensaverText('Status unavailable.')
+      : granted ? deviceText('Allows the app to turn the screen off.')
+      : screensaverText('Not granted, so the screen cannot turn off.');
+    stateEl.textContent = granted === null ? '' : granted ? screensaverText('Granted') : screensaverText('Missing');
+    stateEl.style.color = granted ? 'var(--ok)' : 'var(--error)';
+    permRow.querySelector('button')?.remove();
+    if (granted !== false) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn-ghost';
+    btn.textContent = screensaverText('Grant on device');
+    btn.style.cssText = 'flex-shrink:0;';
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        await api('/api/commands/requestOsPermissions', { method: 'POST',
+          body: JSON.stringify({ which: ['deviceAdmin'] }) });
+      } catch (_) {}
+      // Android's grant screen is on the tablet: watch for the answer.
+      for (let i = 0; i < 30 && permCard.isConnected; i++) {
+        await new Promise((r) => setTimeout(r, 2000));
+        if (await readGranted()) { paint(true); return; }
+      }
+      btn.disabled = false;
+    });
+    permRow.appendChild(btn);
+  };
+  readGranted().then((granted) => { if (permCard.isConnected) paint(granted); });
+}
+
+document.addEventListener('ks-settings', (e) => {
+  if ((e.detail || []).some((key) => CLOCK_NIGHT_ADMIN_KEYS.includes(key))) updateClockNightAdminRows();
+  if ((e.detail || []).some((key) => key === 'screensaver.celestial_location'
+      || key === 'screensaver.mode')) {
+    updateCelestialPermissionRows();
+  }
+});
+
 export function updatePersonSensorRows() {
   PERSON_SENSOR_PAGES.forEach(personSensorPage);
 }
@@ -2657,6 +3123,27 @@ function personSensorPage({ tab, subpage, key }) {
   paint();
 }
 
+
+/* Under the ONVIF motion events source (issue #1098), mirroring the
+   device: picking a sensor does not turn it on, so say where to.
+   Idempotent, so the save path re-runs it when any of its inputs flip. */
+export function updateOnvifEventsRows() {
+  const panel = document.querySelector('#tab-camera .subpage[data-subpage="RTSP & ONVIF Streaming"]');
+  panel?.querySelector('.onvif-events-notice')?.remove();
+  const anchor = panel?.querySelector('[data-key="camera.onvif.events_source"]');
+  if (!anchor) return;
+  const value = (key) => state.settings.find((s) => s.key === key)?.value;
+  const text = value('camera.onvif.events_source') === 'camera'
+    ? (!value('motion.sensor')
+      ? 'The camera motion sensor is off. Turn it on in Camera > Motion Sensor.'
+      : !value('camera.rtsp.analysis')
+        ? 'Motion analysis while streaming is off, so the camera cannot detect motion while a viewer is connected.'
+        : null)
+    : value('camera.onvif.events_source') === 'person' && !value('person.sensor')
+      ? 'The person sensor is off. Turn it on in Camera > Person Sensor.'
+      : null;
+  if (text) anchor.after(hintRow(cameraText(text), { warn: true, className: 'onvif-events-notice' }));
+}
 
 export function updateRtspRows() {
   clearInterval(window.__rtspTimer);

@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterView
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodChannel
@@ -66,7 +67,10 @@ class MainActivity : FlutterActivity() {
         // after super, where it is legal, and a finished Activity skips
         // the rest of its lifecycle so the system re-resolves HOME on its
         // next dispatch.
-        val fuseTripped = HomeFuse.noteBootAttempt(this)
+        // A device without a screen never draws the frame that resets the
+        // fuse, so its launches stay out of the count.
+        val headless = Headless.active(this)
+        val fuseTripped = !headless && HomeFuse.noteBootAttempt(this)
         super.onCreate(savedInstanceState)
         // The master volume stays on the media stream during assistant speech.
         volumeControlStream = android.media.AudioManager.STREAM_MUSIC
@@ -77,6 +81,13 @@ class MainActivity : FlutterActivity() {
         // engine, camera session and all (see BackgroundBridge.restartProcess).
         BackgroundBridge.cancelRestartAlarm(this)
         if (fuseTripped) {
+            finish()
+            return
+        }
+        // Nothing to show on a device without a screen. A launch (adb, a
+        // stray recovery path) still did its job by starting the process,
+        // whose Application brings the service and the engine up.
+        if (headless) {
             finish()
             return
         }
@@ -100,8 +111,29 @@ class MainActivity : FlutterActivity() {
         // shared_preferences mirror here means the window never flashes the
         // wrong shape.
         val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        // Which bars stay hidden decides the content padding below (issues
+        // #1076 and #1102): the Hide status bar and Hide navigation bar
+        // settings, overruled by kiosk mode and lockdown, as hidesStatusBar
+        // in kiosk_manager.dart has it. Until Dart migrates it on the first
+        // launch after the update, the old Full screen switch stands in.
+        val kioskHides = prefs.getBoolean("flutter.ks.kiosk.enabled", false) ||
+            prefs.getBoolean("flutter.ks.lockdown.enabled", false)
+        val fullScreen = prefs.getBoolean("flutter.ks.screen.full_screen", true)
+        SystemBars.hideStatus = kioskHides ||
+            prefs.getBoolean("flutter.ks.screen.hide_status_bar", fullScreen)
+        SystemBars.hideNavigation = kioskHides ||
+            prefs.getBoolean("flutter.ks.screen.hide_navigation_bar", fullScreen)
+        // Show over lock screen (discussion #1105): an Activity recreated
+        // while the device is locked comes back over the lock screen, not
+        // behind it, before Dart has pushed anything.
+        if (prefs.getBoolean("flutter.ks.screen.show_on_lock_screen", false)) {
+            KioskLock.showWhenLocked(this, true)
+        }
         val mode = prefs.getString("flutter.ks.browser.cutout_mode", null) ?: "always"
         CutoutLayout.apply(this, mode)
+        findViewById<View>(FLUTTER_VIEW_ID)?.let {
+            if (it is FlutterView) CutoutLayout.withholdCaptionBar(it)
+        }
         // Same story for the forced orientation (screen.orientation): a
         // device without a rotation sensor would otherwise draw its first
         // frame the way Android booted, then turn (issue #541).
@@ -240,6 +272,8 @@ class MainActivity : FlutterActivity() {
         screenCapture = ScreenCapture(this, messenger)
         kioskLock = KioskLock(this, messenger)
         webViewFreeze = WebViewFreeze(this, messenger)
+        // Home Assistant's HLS playlists get a deadline (see the class).
+        HlsPlaylistGuard.install()
         webViewRecovery = WebViewRecovery(flutterEngine)
         webViewBackdrop = WebViewBackdrop(this)
         provisionChannel = MethodChannel(messenger, "kiosk_satellite/provision")

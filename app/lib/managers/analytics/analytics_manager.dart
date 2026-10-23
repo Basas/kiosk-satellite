@@ -12,6 +12,9 @@ import '../../core/command_registry.dart';
 import '../../core/events.dart';
 import '../../core/manager.dart';
 import '../alarms/alarm_model.dart';
+import '../browser/url_filter.dart';
+import '../calendar/calendar_model.dart';
+import '../home_assistant/custom_pages.dart';
 import '../settings/definitions.dart' as defs;
 import '../settings/settings_manager.dart';
 import '../update/update_http_client.dart';
@@ -441,26 +444,7 @@ class AnalyticsManager extends Manager {
       }
     } catch (_) {}
 
-    // Which plugins are installed, by the id their manifest declares: a
-    // public name from the repository the plugin came from, never a
-    // setting or a value the plugin holds. Sorted, so two installs with
-    // the same plugins read the same.
-    var pluginIds = <String>[];
-    var pluginsEnabled = false;
-    try {
-      final r = await commands.execute('getPluginState', const {});
-      final data = r.data;
-      if (data is Map) {
-        pluginsEnabled = data['enabled'] == true;
-        final list = data['plugins'];
-        if (list is List) {
-          pluginIds = [
-            for (final item in list)
-              if (item is Map && item['id'] is String) item['id'] as String,
-          ]..sort();
-        }
-      }
-    } catch (_) {}
+    final plugins = await _plugins();
 
     // What Voice Satellite is listening for and with: the wake word
     // manager's state. Names only; a model name is a catalog label, not
@@ -538,9 +522,29 @@ class AnalyticsManager extends Manager {
     // How often each one answered since the last snapshot, and how often
     // arbitration settled a wake other kiosks heard too.
     final arbitration = nativeOn && s.get(defs.voiceWakeArbitration);
+    final calendars = decodeCalendars(s.get(defs.calendarCalendars));
+    final calendarHidden = decodeHidden(s.get(defs.calendarHidden));
+    final calendarStatus = calendars.isEmpty
+        ? null
+        : await commands.execute('calendarStatus', const {});
+    final calendarSource =
+        calendarStatus != null &&
+            calendarStatus.ok &&
+            calendarStatus.data is Map
+        ? (calendarStatus.data as Map)['source']
+        : null;
     final counts = UsageCounters.read(s);
+    final pages = parseCustomPages(s.get(defs.haCustomPages));
+    final rules = parseUrlFilter(s.get(defs.browserUrlFilter));
     _reportedCounts = {
       'duraspeed_blocked': counts['duraspeed_blocked'] ?? 0,
+      for (final k in pluginActivity) k: counts[k] ?? 0,
+      if (pages.isNotEmpty)
+        for (final k in ['custom_page_loads', 'custom_page_ha_sockets'])
+          k: counts[k] ?? 0,
+      if (rules.isNotEmpty)
+        'url_filter_blocked': counts['url_filter_blocked'] ?? 0,
+      if (calendars.isNotEmpty) 'calendar_opens': counts['calendar_opens'] ?? 0,
       if (nativeOn)
         for (final k in [
           'vs_turns_assist',
@@ -660,9 +664,12 @@ class AnalyticsManager extends Manager {
     } catch (_) {}
 
     return {
-      'screensaver': s.get(defs.screensaverEnabled)
-          ? s.get(defs.screensaverMode)
-          : 'off',
+      // A plugin's screensaver counts as 'plugin', without its id.
+      'screensaver': !s.get(defs.screensaverEnabled)
+          ? 'off'
+          : defs.isPluginScreensaver(s.get(defs.screensaverMode))
+          ? 'plugin'
+          : s.get(defs.screensaverMode),
       'screensaver_schedule': s.get(defs.screensaverScheduleEnabled),
       'glance': s.get(defs.screensaverGlanceEnabled),
       'widgets': widgets.toList()..sort(),
@@ -707,6 +714,30 @@ class AnalyticsManager extends Manager {
       'alarms_snooze_minutes': s.get(defs.alarmsSnoozeMinutes),
       'alarms_silence_after_minutes': s.get(defs.alarmsSilenceAfterMinutes),
       'alarms_sunrise_minutes': s.get(defs.alarmsSunriseMinutes),
+      // Calendar: counts and picks only, never the calendars, their names
+      // or the people.
+      'calendars': calendars.where((c) => c.on).length,
+      if (calendars.isNotEmpty) ...{
+        'calendars_off': calendars.where((c) => !c.on).length,
+        'calendars_hidden': calendars
+            .where((c) => c.on && calendarHidden.contains(c.entity))
+            .length,
+        'calendar_people': calendars.where((c) => c.person.isNotEmpty).length,
+        'calendar_custom_colors': calendars
+            .where((c) => !calendarPalette.any((p) => p.rgb == c.color))
+            .length,
+        'calendar_weather': s.get(defs.calendarWeatherEntity).trim().isNotEmpty,
+        'calendar_default_view': s.get(defs.calendarDefaultView),
+        'calendar_week_start': s.get(defs.calendarWeekStart),
+        'calendar_menu': s.get(defs.calendarMenu),
+        'calendar_idle_close_minutes': s.get(defs.calendarIdleCloseMinutes),
+        'calendar_source': calendarSource is String
+            ? calendarSource
+            : 'unknown',
+        'calendar_opens': UsageCounters.bucket(
+          _reportedCounts['calendar_opens'] ?? 0,
+        ),
+      },
       'esphome': s.get(defs.esphomeEnabled),
       'bluetooth_proxy': s.get(defs.btproxyEnabled),
       'gps_sensor': s.get(defs.locationEnabled),
@@ -718,6 +749,11 @@ class AnalyticsManager extends Manager {
           : s.get(defs.sendspinPlayerSource),
       'lyrics': s.get(defs.sendspinLyricsEnabled),
       'dlna': s.get(defs.dlnaEnabled),
+      // The receiver serves only while it is the Media Player pick.
+      'airplay':
+          s.get(defs.airplayEnabled) &&
+          s.get(defs.sendspinPlayerSource).isEmpty &&
+          s.get(defs.sendspinPlayer) == 'airplay',
       'device_camera': s.get(defs.cameraEnabled),
       'rtsp_stream': s.get(defs.cameraEnabled) && s.get(defs.cameraRtspEnabled),
       'camera_streams': cameraViews > 0,
@@ -734,6 +770,32 @@ class AnalyticsManager extends Manager {
       'ha_kiosk_mode': s.get(defs.haKioskMode),
       'dashboard_carousel': s.get(defs.haDashboardCarousel),
       'dashboard_rotation': s.get(defs.haRotationEnabled),
+      // Custom pages: how many, where they live and where the kiosk shows
+      // them. Their names and addresses stay on the kiosk.
+      'custom_pages': pages.length,
+      if (pages.isNotEmpty) ...{
+        'custom_pages_local': pages.where((p) => !p.external).length,
+        'custom_pages_external': pages.where((p) => p.external).length,
+        if (pages.any((p) => p.external))
+          'custom_pages_socket': s.get(defs.haCustomPagesSocket),
+        'custom_page_start': _customPageStart(pages),
+        if (s.get(defs.haRotationEnabled))
+          'custom_page_rotation': _rotationPaths().any(isCustomPagePath),
+        for (final k in ['custom_page_loads', 'custom_page_ha_sockets'])
+          k: UsageCounters.bucket(_reportedCounts[k] ?? 0),
+      },
+      // URL Filter: how many rules of which kind. The patterns and names
+      // stay on the kiosk.
+      'url_filter_rules': rules.length,
+      if (rules.isNotEmpty) ...{
+        'url_filter_allow_rules': rules.where((r) => r.isAllow).length,
+        'url_filter_regex_rules': rules.where((r) => r.isRegex).length,
+        'url_filter_scopes': {for (final r in rules) r.scope}.toList()..sort(),
+        'url_filter_notice': s.get(defs.browserUrlFilterNotice),
+        'url_filter_blocked': UsageCounters.bucket(
+          _reportedCounts['url_filter_blocked'] ?? 0,
+        ),
+      },
       'secure_proxy': s.get(defs.secureProxy),
       'opt_disable_suspend': s.get(defs.disableSuspend),
       'opt_freeze_on_screensaver': s.get(defs.freezeOnScreensaver),
@@ -753,11 +815,31 @@ class AnalyticsManager extends Manager {
       'shizuku_updates': s.get(defs.shizukuInstallUpdates),
       'update_installer': installer,
       'update_helper': helper,
-      'plugins_enabled': pluginsEnabled,
-      'plugins': pluginIds.length,
-      'plugin_ids': pluginIds,
+      ...plugins,
+      for (final k in pluginActivity)
+        k: UsageCounters.bucket(_reportedCounts[k] ?? 0),
+      'plugin_screensaver':
+          s.get(defs.screensaverEnabled) &&
+          defs.isPluginScreensaver(s.get(defs.screensaverMode)),
       'theme': s.get(defs.uiTheme),
     };
+  }
+
+  /// Whether the start URL opens one of the custom [pages]: a file under
+  /// Home Assistant's /local/ or a page on another server.
+  bool _customPageStart(List<CustomPage> pages) {
+    final start = _settings.get(defs.startUrl).trim();
+    if (Uri.tryParse(start)?.path.startsWith('/local/') ?? false) return true;
+    return externalPageNavPath(start, pages) != null;
+  }
+
+  /// The navigation paths the dashboard rotation cycles through.
+  List<String> _rotationPaths() {
+    try {
+      final raw = jsonDecode(_settings.get(defs.haRotationDashboards));
+      if (raw is List) return [for (final p in raw) '$p'];
+    } catch (_) {}
+    return const [];
   }
 
   /// How this kiosk does voice: 'native' (the app's own satellite, turned
@@ -774,7 +856,13 @@ class AnalyticsManager extends Manager {
     final s = _settings;
     if (s.get(defs.voiceRuntime) == 'native') {
       return s.get(defs.voiceEnabled)
-          ? (state: 'native', skin: s.get(defs.voiceSkin))
+          // A plugin's skin counts as 'plugin', without its id.
+          ? (
+              state: 'native',
+              skin: defs.isPluginVoiceSkin(s.get(defs.voiceSkin))
+                  ? 'plugin'
+                  : s.get(defs.voiceSkin),
+            )
           : (state: 'off', skin: '');
     }
     Map? page;
@@ -802,6 +890,131 @@ class AnalyticsManager extends Manager {
       }
     }
     return (state: 'off', skin: skin);
+  }
+
+  /// The plugin installs, updates, removals and failed installs people
+  /// asked for, counted since the last snapshot (PluginManager.onActivity).
+  static const pluginActivity = [
+    'plugin_installs_directory',
+    'plugin_installs_github',
+    'plugin_installs_zip',
+    'plugin_updates',
+    'plugin_removals',
+    'plugin_install_failures',
+  ];
+
+  /// What is installed, where it came from and how it is doing. A plugin
+  /// is named, by id and version, only when it comes from Community
+  /// Plugins: those names are public. Every other plugin, a ZIP or a
+  /// private repository, only adds to the counts.
+  Future<Map<String, Object?>> _plugins() async {
+    var enabled = false;
+    var list = <Map>[];
+    try {
+      final r = await commands.execute('getPluginState', const {});
+      final data = r.data;
+      if (data is Map) {
+        enabled = data['enabled'] == true;
+        if (data['plugins'] is List) {
+          list = (data['plugins'] as List).whereType<Map>().toList();
+        }
+      }
+    } catch (_) {}
+    bool fromRepository(Map p) {
+      final source = p['source'];
+      return source is Map && source['repository'] is String;
+    }
+
+    // Community Plugins' own view of what is installed: listed, from the
+    // same repository and whether a newer release waits. Only read when a
+    // plugin came from a repository, and null when the list cannot be read.
+    Map<String, Map>? listed;
+    if (list.any((p) => p['fleetManaged'] != true && fromRepository(p))) {
+      try {
+        final r = await commands.execute('getPluginDirectory', const {});
+        final data = r.data;
+        if (r.ok && data is Map && data['plugins'] is List) {
+          listed = {
+            for (final e in (data['plugins'] as List).whereType<Map>())
+              if (e['installed'] == true && e['sameSource'] == true)
+                '${e['id']}': e,
+          };
+        }
+      } catch (_) {}
+    }
+    final sources = {
+      'directory': 0,
+      'github': 0,
+      'zip': 0,
+      'fleet': 0,
+      'unknown': 0,
+    };
+    final ids = <String>[];
+    final versions = <String>[];
+    var updates = 0;
+    for (final p in list) {
+      final id = '${p['id']}';
+      final String kind;
+      if (p['fleetManaged'] == true) {
+        kind = 'fleet';
+      } else if (!fromRepository(p)) {
+        kind = 'zip';
+      } else if (listed == null) {
+        kind = 'unknown';
+      } else if (listed.containsKey(id)) {
+        kind = 'directory';
+      } else {
+        kind = 'github';
+      }
+      sources[kind] = sources[kind]! + 1;
+      if (kind != 'directory') continue;
+      ids.add(id);
+      final pair = '$id@${p['version'] ?? ''}';
+      if (pair.length <= 64) versions.add(pair);
+      if (listed![id]!['updateAvailable'] == true) updates++;
+    }
+    bool hasError(Map p) =>
+        '${p['error'] ?? ''}'.isNotEmpty || p['statusError'] == true;
+    final on = list.where((p) => p['enabled'] == true).toList();
+    var menuActions = 0;
+    var haActions = 0;
+    for (final p in list) {
+      final options = p['actionOptions'];
+      if (options is! Map) continue;
+      for (final o in options.values.whereType<Map>()) {
+        if (o['drawer'] == true) menuActions++;
+        if (o['homeAssistant'] == true) haActions++;
+      }
+    }
+    return {
+      'plugins_enabled': enabled,
+      'plugins': list.length,
+      'plugin_ids': ids..sort(),
+      if (list.isNotEmpty) ...{
+        'plugin_versions': versions..sort(),
+        'plugins_update_available': updates,
+        for (final e in sources.entries)
+          e.key == 'unknown'
+                  ? 'plugins_source_unknown'
+                  : 'plugins_from_${e.key}':
+              e.value,
+        'plugins_on': on.length,
+        'plugins_running': list.where((p) => p['running'] == true).length,
+        'plugins_errors': list.where(hasError).length,
+        // Switched on with plugins running, yet not running, and no error
+        // to say why.
+        'plugins_stalled': enabled
+            ? on.where((p) => p['running'] != true && !hasError(p)).length
+            : 0,
+        'plugin_capabilities': {
+          for (final p in on)
+            for (final c in (p['capabilities'] as List? ?? const []))
+              if (c is String && c.isNotEmpty && c.length <= 64) c,
+        }.toList()..sort(),
+        'plugin_menu_actions': menuActions,
+        'plugin_ha_actions': haActions,
+      },
+    };
   }
 
   /// The native journal's text, or nothing where there is no journal (a

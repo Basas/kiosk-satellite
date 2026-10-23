@@ -6,13 +6,15 @@ The device's native local player is [Sendspin](https://www.sendspin-audio.com/),
 
 The interface can also follow another app playing on the device itself, such as a Spotify Connect receiver, through its Android media session.
 
+The device can also be an AirPlay speaker instead. An iPhone, iPad or Mac plays to it from its AirPlay menu, and the floating player and Now Playing view show what it plays.
+
 Alternatively, the on screen interface can mirror a player located elsewhere: any Music Assistant player, any Home Assistant media player, or a Sonos speaker directly. This accommodates wall mounted displays intended to monitor and steer external speakers without generating local audio output.
 
-Media browsing and queue management occur in Music Assistant (or via its dashboard card), while voice control operates through Voice Satellite.
+Browse music and build the queue from the kiosk in the [Music Library](music-library.md), which plays on the player this page follows. Voice control operates through Voice Satellite.
 
 ## Setup
 
-Navigate to **Settings > Media Player** on the device or the matching tab in the remote admin. The page features settings across several categories: Player selection, Sendspin Player, Music Assistant, Sonos, Floating Player, and Now Playing.
+Navigate to **Settings > Media Player** on the device or the matching tab in the remote admin. The page features settings across several categories: Player selection, Sendspin Player, AirPlay, Music Assistant, Sonos, Floating Player, and Now Playing.
 
 A core rule applies to all media sources: both the floating player card and the full screen "Now Playing" view appear only when the selected player has an active track playing or a queue loaded. When nothing is playing or queued, neither interface element is displayed.
 
@@ -21,9 +23,9 @@ A core rule applies to all media sources: both the floating player card and the 
 | Setting | Default | Notes |
 | --- | --- | --- |
 | Player source | This device | Selects what the floating player and Now Playing view display and control: a player on this device, or an external player from Home Assistant, Music Assistant, or a Sonos household. Selecting an external source takes the local Sendspin player offline. |
-| Player | Sendspin Player | With "This device" as the source: **Sendspin Player**, the native Sendspin player, or **Local Media Session**, whichever other app plays on the device (see [Local Media Session](#local-media-session)). For external sources, this dropdown populates with players available from that specific provider. |
+| Player | Sendspin Player | With "This device" as the source: **Sendspin Player**, the native Sendspin player, **AirPlay**, an iPhone, iPad or Mac playing to the device (see [AirPlay](#airplay)), or **Local Media Session**, whichever other app plays on the device (see [Local Media Session](#local-media-session)). For external sources, this dropdown populates with players available from that specific provider. |
 | Duck volume during voice interactions | 10% | Lowers the selected player to this percentage of its current volume during voice interactions and intercom calls, then restores its previous volume. Applies to every source with volume control. Capped at 10% so the microphone still hears you over the music. |
-| Volume buttons control the player | Off | Routes the device's hardware volume buttons to the followed player, either only while the Now Playing view is on screen or whenever the player is playing. Shown for Home Assistant, Music Assistant and Sonos only. With "This device" as the source the buttons keep changing the device's own volume. The mute button mutes the player. While the Now Playing view is up, a press shows its volume slider for a moment. Lockdown and "Disable volume buttons" under Kiosk still leave the buttons dead. |
+| Volume buttons control the player | Off | Routes the device's hardware volume buttons to the followed player, either only while the Now Playing view is on screen or whenever the player is playing. With "This device" as the source and the Sendspin player picked, the buttons control the Music Assistant group while this device plays in one and **Adjust the group volume** is on, so each room keeps its balance. Playing alone, the buttons keep changing the device's own volume. Not shown for the Local Media Session or the AirPlay receiver. The mute button mutes the player or the group. While the Now Playing view is up, a press shows its volume slider for a moment. Lockdown and "Disable volume buttons" under Kiosk still leave the buttons dead. |
 | Volume button step | 5% | How far one press of a volume button moves the followed player, from 1% to 10%. Shown only while the buttons are routed to the player. A sensitive amplifier or a bedroom at night wants a smaller step. |
 | Album art cache | Automatic | Shows the disk space used by queue thumbnails and offers a Clear button. Covers are resized to at most 256 pixels and stored across app restarts, with a 100 MB limit. Older entries are evicted automatically. Clearing also removes thumbnails from memory. |
 | Expose ESPHome entities | Off | Adds **Media play**, **Media pause**, **Media next** and **Media previous** buttons and **Media state**, **Media title**, **Media artist** and **Media source** sensors to the kiosk's [ESPHome](esphome.md#controls) device. They act on whichever player the page follows: the Sendspin player, an external player or the Local Media Session. Turning it on or off re-registers the device. |
@@ -38,7 +40,7 @@ Configures the kiosk as a synchronized Music Assistant audio player. These setti
 | Server | empty | The `host:port` address of the Sendspin server (Music Assistant listens on port 8927). Leave empty for automatic mDNS discovery. Specify the address manually if the kiosk and server reside on different subnets, as mDNS does not cross subnet boundaries. |
 | Preferred audio codec | FLAC | Selects between FLAC (lossless), Opus (efficient), or PCM (uncompressed). The server selects the final format based on device capabilities. |
 | Audio sync offset | 0 ms | Adjusts audio timing in milliseconds. Use negative values if local output lags behind other speakers in a group (e.g., when outputting to Bluetooth). Applies live. |
-| Adjust the group volume | on | While this device plays in a Music Assistant group, the Now Playing volume slider and mute button control the whole group, the way Music Assistant's own group slider does. Each room keeps its balance with the others. Off, they control only this device. Needs the Music Assistant page's server address and token. |
+| Adjust the group volume | on | While this device plays in a Music Assistant group, the Now Playing volume slider and mute button control the whole group, the way Music Assistant's own group slider does. So do the volume buttons with **Volume buttons control the player** on. Each room keeps its balance with the others. Off, they control only this device. Needs the Music Assistant page's server address and token. |
 
 Music Assistant includes native Sendspin support enabled by default, and players register automatically upon connection without requiring server side setup.
 
@@ -50,6 +52,18 @@ For manual adjustment, a negative **Audio sync offset** in Kiosk Satellite makes
 
 The `sendspinStatus` remote command includes timing diagnostics under `stats`. `sinkLatencyMs` estimates the delay from the smoothed playback head to Android's presentation reference. It is not an acoustic measurement. `timing.clockSource` reports `timestamp`, `playback_head` or `warming_up`. `timing.fallbackReason` explains why timestamps were rejected. `audioTrackUnderruns` counts buffer underruns for the current AudioTrack, including its previous streams when the track is reused. A connected or time-synced player alone does not confirm that its sound reaches the speaker at the correct time.
 
+### AirPlay
+
+Shown while **AirPlay** is the picked player. See [AirPlay](#airplay).
+
+| Setting | Default | Notes |
+| --- | --- | --- |
+| Enable AirPlay receiver | off | The device shows up as an AirPlay speaker in the AirPlay menu of an iPhone, iPad or Mac. |
+| Speaker name | empty | The name in the AirPlay menu. Empty uses the device name. |
+| Follow the sender's volume | on | The volume control on the sender changes how loud the device plays, on top of the device's own media volume. Off, the sender's volume control does nothing here. |
+| Audio sync offset | 0 ms | Moves playback against the sender's clock. Negative plays the device earlier, to line the sound up with video playing on the sender or to make up for a Bluetooth speaker's delay. Applies live. |
+| Let another sender take over | on | A second iPhone, iPad or Mac can take the speaker while one plays. Off, it is turned away until the first one disconnects. |
+
 ### Music Assistant
 
 The Sendspin protocol transmits audio data along with basic track name, artist, and album metadata. Extended information—including synchronized lyrics, queue management, player lists, and kiosk menu shortcuts—is fetched separately from Music Assistant's REST API.
@@ -59,6 +73,7 @@ The Sendspin protocol transmits audio data along with basic track name, artist, 
 | Server address | empty | The web interface address of the Music Assistant server (typically HTTPS on port 8095). Self-signed SSL certificates are accepted. |
 | Auth token | empty | A long-lived access token generated in Music Assistant under **Settings > Users**. Read-only permissions suffice for lyrics, while menu shortcuts browse using the privileges of the token owner. |
 | Validate connection | button | Authenticates against the server API to verify credentials and port settings. |
+| Show TV and line-in | off | The floating player and Now Playing while a followed Music Assistant player, such as a Sonos soundbar, plays its TV (HDMI ARC or optical) or line-in input, named as such with stop and volume. Off, the room reads as idle while one plays, so a soundbar under a television leaves the screensaver in place. Music Assistant's own streams to the same speaker always show. |
 | Show in the kiosk menu | on | Toggles the Music Assistant web shortcut in the kiosk drawer menu. |
 | Open directly to Now Playing | off | Opens Music Assistant's full-screen player from the drawer shortcut or the Open Music Assistant gesture. |
 | Close after inactivity | 0s | Inactivity timer (in seconds) before the opened Music Assistant web overlay automatically closes and returns to the dashboard. Setting this to `0s` keeps the view open until closed manually. |
@@ -91,15 +106,19 @@ Configures direct integration with local Sonos hardware.
 | Setting | Default | Notes |
 | --- | --- | --- |
 | Launch Now Playing when music starts playing | on | Instantly launches the full screen view when playback starts rather than waiting for the idle screensaver timeout. |
-| Text scale | 100% | Scales the track title, artist, album, lyrics and queue text from 50% to 200%. Applies in vertical mode, horizontal mode and alongside a screensaver. Artwork adjusts to leave room for the text. |
+| Text scale | 100% | Scales the track title, artist, album, lyrics and queue text from 50% to 200%. Applies in every layout mode and alongside a screensaver. Artwork adjusts to leave room for the text. |
 | Button scale | 100% | Scales playback buttons and the progress bar from 50% to 200%, independently of text. Controls adjust to the available space and move onto separate rows in narrow panels. |
-| Horizontal mode | off | Splits standalone Now Playing into equal artwork and controls halves. Track details move below the artwork when lyrics or the queue open. Ignored while shown alongside a screensaver. |
+| Layout mode | Vertical | Vertical stacks artwork, track details and controls. Horizontal splits standalone Now Playing into equal artwork and controls halves. Album art only fills the screen with artwork and shows track details and controls for a few seconds after a tap. Ignored while shown alongside a screensaver. |
 | Show media controls | on | Displays transport buttons and a progress bar over the background artwork. When enabled, a top-right close button appears and paused tracks remain on screen until the paused timeout expires. |
 | Double tap to dismiss | off | Allows a double tap anywhere on the standalone Now Playing view to dismiss it, removing the close button. Taps on controls or queue rows do not trigger dismissal. Ignored while shown alongside a screensaver. |
 | Dismiss "Now Playing" on motion | off | When disabled, motion events will not dismiss the standalone music display. Ignored while Now Playing is shown alongside a screensaver. Shared layouts follow the screensaver's detection settings. |
+| After dismissing | Default | The dashboard view to show after Now Playing is dismissed. **Default** follows **Return to home dashboard view**. **Last view** goes back to the view the kiosk showed when the screensaver started. **Chosen view** opens the view picked in **Dashboard view**. |
+| Dashboard view | none | Shown with **Chosen view**. The view to open after Now Playing is dismissed, picked from your Home Assistant dashboards. |
 | Show in the kiosk menu | off | Adds a menu shortcut to open the full screen view directly. Remains hidden if no media is playing or queued. |
 | Show album art in the queue | on | A cover on every row of the queue panel, the server's or the speaker's own thumbnail, fetched as the rows come into view. Off, the rows tighten back up. |
 | Show speaker selection pill | on | Floats in the top left corner without reserving space. Appears for 5 seconds after a touch or navigation key press, then fades out. Names the player and opens the speaker group menu. Off, the view shows neither. |
+| Filter the speaker selection pill | all speakers | Shown with the pill on and a source that has a group menu. Pick the speakers the menu offers to join the group. Speakers already in the group always show so they can be taken out. Leave it empty to offer every speaker. See [Speaker groups](#speaker-groups). |
+| Show audio quality | off | Pills along the bottom edge of the view show the current track's audio format, bit depth, sample rate, bitrate and source. Requires Music Assistant. See [Audio quality](#audio-quality). |
 
 **Screensaver**
 
@@ -109,6 +128,18 @@ Configures direct integration with local Sonos hardware.
 | Show alongside screensaver | on | Keeps the screensaver on the left and Now Playing on the right. Portrait screens stack the two views. Small screens keep the full screen player. |
 | Fill the screen | Always | Overrides photo filling while sharing the display with Now Playing. Default follows each screensaver's setting. Off, Smart and Always use the same rules as the photo screensavers. |
 | Override screensaver brightness | off | Uses normal brightness while Now Playing is shown alongside a screensaver, overriding its brightness and any scheduled brightness. |
+
+### Audio quality
+
+With **Show audio quality** on, a row of pills along the bottom edge of the Now Playing view shows the audio Music Assistant streams for the current track, in every layout and alongside a screensaver:
+
+* **Hi-Res** for lossless audio above 16 bits or 48 kHz, **CD quality** for lossless audio at 16 bits and 44.1 or 48 kHz, or **Lossy** for compressed audio such as AAC, Vorbis or MP3.
+* The codec, such as FLAC, ALAC, AAC, Vorbis or MP3.
+* The bit depth. For lossy audio this is the depth Music Assistant decodes the stream to.
+* The sample rate and the bitrate, when Music Assistant knows them.
+* The source, the name of the Music Assistant provider the track streams from, such as Qobuz, Tidal or Spotify.
+
+The pills describe the source as Music Assistant reads it from the provider, before Music Assistant converts it for the player. They work for this device's own player and for any player the kiosk follows through Music Assistant, and need the server address and token on the Music Assistant page. A Sonos followed directly or a Home Assistant media player reports none of this, so the row stays empty for them. Music Assistant fills in the details once the stream starts, so the pills can arrive a moment after a new track.
 
 ### Lyrics
 
@@ -141,6 +172,7 @@ Capabilities vary slightly by player source:
 | Home Assistant media player | Supported | Supported | Not supported |
 | Sonos (Direct UPnP) | Supported | Supported | Supported |
 | Local Media Session | Supported | Supported | Not supported |
+| AirPlay | Supported | Supported | Supported, from the sender's Up Next |
 
 Unsupported controls are hidden automatically. For example, if a Home Assistant player does not report position seeking, the progress bar thumb is removed.
 
@@ -155,6 +187,18 @@ With **Player source** on "This device", the **Player** dropdown also offers **L
 The app offers the transport buttons its session allows, with a seek bar when it reports a track length. Volume is the device's media volume, since the app plays through the device. Shuffle, repeat, the heart and the queue are not offered: Android's media session API gives no way to read them back.
 
 Android only lists other apps' sessions to an app with **Notification access**, so the page shows a **Required system permissions** group with that grant while Local Media Session is picked. Kiosk Satellite reads no notifications with it.
+
+## AirPlay
+
+With **Player source** on "This device", the **Player** dropdown also offers **AirPlay**. With it picked and **Enable AirPlay receiver** on, the device appears in the AirPlay menu of an iPhone, iPad or Mac under the device name, like any AirPlay speaker. Pick it there and the audio plays out of the device. It is audio only: AirPlay video and screen mirroring are not supported. The Sendspin player goes offline while AirPlay is picked, the same as with an external player, so the two never play at once.
+
+While a sender plays, the floating player and Now Playing view show its track, artist, album, cover art and progress, and the chip names the sender. When the sender stops or picks another speaker, the view hides until the next one plays.
+
+Play, pause, next and previous go back to the sender as remote commands, the way the buttons on an AirPlay speaker do. The buttons appear once the device has found the sender's remote control on the network, usually within a second or two. Dragging the progress bar asks the sender to jump there, which not every sender supports. Shuffle and repeat show while the sender allows them for what it plays, and follow it whichever side changes them. The queue panel lists the sender's Up Next, and tapping a song plays it there. A sender only shares the playing song's cover, so a queued song shows its cover once a song from the same album has played.
+
+What the remote control takes depends on the sender. A Mac's Music app takes all of the above. An iPhone or iPad takes play, pause, next and previous only, so the progress bar cannot be dragged and there is no shuffle, repeat or queue while one plays. The volume slider sets the device's media volume, and the sender's own volume control scales the audio on top of it unless **Follow the sender's volume** is off. Music ducks during voice interactions like every other source.
+
+The receiver speaks AirPlay 1, the original protocol, so it does not join AirPlay 2 multi-room groups.
 
 ## The Music Assistant Shortcut
 
@@ -190,17 +234,23 @@ When enabled, the full screen "Now Playing" view activates during active playbac
 
 **Show alongside screensaver**, enabled by default under **Settings > Media Player > Now Playing > Screensaver**, lets you keep photos, clocks or other screensaver content visible while music plays. In landscape, the screensaver takes about two thirds of the display and Now Playing fills the right panel. In portrait, the screensaver fills the top half and the player fills the bottom half. Screens smaller than 700 logical pixels along the split direction keep the full screen player. The Dim screensaver uses a black panel beside Now Playing and keeps its configured dim level.
 
-Enable **Horizontal mode** under **Now Playing > User Interface** for a standalone layout with artwork in the left half and track details above the transport controls in the right half. The title, artist and album name appear on separate lines. With the queue and lyrics closed, the details and controls are centered together on the right. Opening either panel moves track details beneath the artwork and places the controls at the bottom right, leaving the space above them for the queue or lyrics. This setting is off by default and is ignored while Now Playing is shown alongside a screensaver.
+**Layout mode** under **Now Playing > User Interface** picks how the standalone view is arranged. It defaults to **Vertical** and is ignored while Now Playing is shown alongside a screensaver.
+
+- **Vertical** stacks the artwork, track details and controls from top to bottom.
+- **Horizontal** puts the artwork in the left half and track details above the transport controls in the right half. The title, artist and album name appear on separate lines. With the queue and lyrics closed, the details and controls are centered together on the right. Opening either panel moves track details beneath the artwork and places the controls at the bottom right, leaving the space above them for the queue or lyrics.
+- **Album art only** shows just the artwork, centered and as large as the screen allows. Tap the screen or press a key to dim the view and bring up the title, artist and album name, the transport controls and the close button. The controls dock to the bottom of the screen with the details right above them, and everything fades out again 5 seconds after the last touch, like the speaker pill. Opening the queue or lyrics switches to the Vertical layout until the panel closes.
 
 **Fill the screen** in the same group defaults to **Always**, so photos fill the smaller panel. Choose **Default** to follow each photo screensaver's saved fill setting or select **Off** or **Smart** for a shared override. The override applies only while Now Playing shares the display and leaves each screensaver's saved setting unchanged.
 
 Each [scheduled screensaver](screensavers.md#schedule) also has a **Show Now Playing next to the screensaver** override. **Default** follows the global layout setting, **On** requests the shared layout when Now Playing is enabled and **Off** hides Now Playing during those hours. Use **Off** for a nighttime screensaver to keep its brightness and prevent automatic launches when music starts. Playback continues normally.
 
-**Text scale** and **Button scale** under **Now Playing > User Interface** adjust text and controls independently in 5% steps, from 50% to 200%. Both default to 100% and update the view immediately in vertical mode, horizontal mode and alongside a screensaver. Text scale affects the title, artist, album, lyrics and queue text. Button scale affects playback buttons, the progress bar and its time labels. Shared screensaver layouts start with full-size controls at 100% Button scale. When space is tight, artwork and spacing shrink and controls fit the available panel.
+**Text scale** and **Button scale** under **Now Playing > User Interface** adjust text and controls independently in 5% steps, from 50% to 200%. Both default to 100% and update the view immediately in every layout mode and alongside a screensaver. Text scale affects the title, artist, album, lyrics and queue text. Button scale affects playback buttons, the progress bar and its time labels. Shared screensaver layouts start with full-size controls at 100% Button scale. When space is tight, artwork and spacing shrink and controls fit the available panel.
 
 Artwork, track text and controls adapt to the player panel. Narrow panels put playback controls and secondary buttons on separate rows. Lyrics and the queue use the artwork space when the panel cannot fit both. Screensaver widgets stay inside the screensaver panel. When Now Playing closes after playback ends, the screensaver expands to fill the display.
 
 When the views share the display, tap the screensaver panel to dismiss them. Slideshow edge taps still change photos when enabled. The player panel has no close button and ignores double-tap dismissal, regardless of that setting. The screensaver's configured motion, face, person and proximity dismissal rules also apply. Shared layouts respect screensaver brightness, including the active schedule's override. Enable **Override screensaver brightness** in **Now Playing > Screensaver** to use normal brightness instead. The toggle is off by default and applies immediately. Dismissing the shared view restores normal brightness.
+
+**After dismissing** in **Now Playing > User Interface** decides which dashboard view you see after Now Playing goes away. With **Return to home dashboard view** on, the kiosk normally goes home as soon as the screensaver starts, so dismissing Now Playing shows the home view. **Last view** returns to the view the kiosk showed when the screensaver started, such as a music view where someone just started a playlist. **Chosen view** always opens one view, which helps when playback starts from another kiosk, the Music Assistant app or a voice command. Both apply whenever the session ends on Now Playing, even if it started as another screensaver. They also apply when Now Playing opened because music started and then closes because the music stopped. A session that ends on a regular screensaver keeps the usual return to the home view.
 
 When **Launch Now Playing when music starts playing** is enabled, the view opens immediately upon track start rather than waiting for the idle timeout. Pausing playback returns the display to the standard screensaver once the pause timeout expires.
 
@@ -226,6 +276,8 @@ For Music Assistant players, every player in the group also gets a volume slider
 | Sonos, direct | Every other room of the household, over the speakers' own interface. |
 | Home Assistant media player | No menu: grouping stays with the integration behind the entity. |
 
+**Filter the speaker selection pill** limits which players the menu offers, for example to keep bedroom speakers out of a kitchen tablet's menu. The picker lists Music Assistant players and Sonos rooms together, under a heading for each, with **All**, **Music Assistant** and **Sonos** chips to show one source at a time. Without any Sonos speakers set up it is a plain list of Music Assistant players. Each pick counts only for its own source: Music Assistant picks filter the menu for this device and for a followed Music Assistant player, Sonos picks filter it for a Sonos room followed directly. A Sonos speaker that Music Assistant drives appears under both, so pick it under the source the kiosk follows it through. The filter is per kiosk and never synced by Fleet Management.
+
 ### Lyrics
 
 Enabling the lyrics toggle splits the screen to display synchronized lyric lines alongside album artwork. The active line highlights and auto-scrolls in sync with audio playback. For the local Sendspin player, timing relies on Sendspin position timestamps. For external players, timing relies on progress data reported by Music Assistant or Home Assistant.
@@ -238,7 +290,7 @@ The **Lyrics timing** setting applies a global offset (defaulting to +0.3 second
 
 The selected media player works with the voice assistant:
 
-* **Audio Ducking**: Music drops to the configured percentage during voice turns, announcements, questions, timers and intercom calls. It returns to its previous volume after the last interaction ends. Local Sendspin playback uses audio gain without changing the system volume. Music Assistant, Home Assistant and Sonos use temporary volume commands to the selected player. Changing players restores the previous player before closing its connection.
+* **Audio Ducking**: Music drops to the configured percentage during voice turns, announcements, questions, timers and intercom calls. It returns to its previous volume after the last interaction ends. Local Sendspin and AirPlay playback use audio gain without changing the system volume. Music Assistant, Home Assistant and Sonos use temporary volume commands to the selected player. Changing players restores the previous player before closing its connection.
 * **Stop Command**: Saying the wake word followed by "stop" silences active music or alerts.
 * **Screensaver Management**: Active audio playback suppresses standard screensavers. Dashboard view rotation and home return timers continue operating in the background unless Hold Mode is engaged.
 
@@ -252,6 +304,8 @@ External player tracking uses dedicated connections:
 * **Sonos**: Polled directly via local UPnP services on port 1400.
 * **Local Media Session**: Read through Android's `MediaSessionManager`, which pushes every metadata and playback change. Commands go through the session's own transport controls.
 
+The AirPlay receiver is written for Kiosk Satellite and adds no libraries. It implements AirPlay 1 (RAOP): an RTSP server, RSA and AES stream decryption, an Apple Lossless decoder, RTP with resend requests and a playout clock synced to the sender's. It announces itself over mDNS as `_raop._tcp` and sends transport commands to the sender over DACP. Audio goes through the same output path as the Sendspin player, including the software echo canceller's reference.
+
 The Sendspin client implementation is adapted from [SendspinDroid](https://github.com/chrisuthe/SendspinDroid) (MIT License).
 
 ## Troubleshooting
@@ -261,4 +315,6 @@ The Sendspin client implementation is adapted from [SendspinDroid](https://githu
 * **Audio dropouts on Wi-Fi**: Switch the **Preferred audio codec** to Opus to reduce network bandwidth consumption.
 * **Sonos speakers not discovered**: Automatic discovery uses local network multicast. If speakers reside on a separate VLAN, add them manually by IP address using **Add by address**.
 * **Local Media Session shows nothing**: Grant **Notification access** under **Required system permissions** on the Media Player page. On Android 13 and newer a sideloaded app first needs **Allow restricted settings** from its App info menu. Devices without the Notification access screen (Android TV, some Fire OS and LineageOS builds) can grant it over adb: `adb shell cmd notification allow_listener me.jxl.kiosk_satellite/.MediaSessionListener`. The app must publish a media session, which most players do once they start playing.
+* **The device does not appear in the AirPlay menu**: The iPhone and the kiosk must be on the same network, or on networks joined by an mDNS reflector. Check the app logs for `AirPlay receiver on port`. Some Wi-Fi networks block multicast between clients. The receiver answers queries directly to the asking device to get around that, but a network that drops all multicast hides it.
+* **AirPlay plays but the buttons are missing**: The sender's remote control was not found on the network. Pause and skip from the sender instead.
 * **Home Assistant player shows no metadata**: The target `media_player` entity must publish a valid `media_title` attribute. Inputs lacking title metadata (such as line-in or TV sources) will display an empty card until media with metadata is played.
