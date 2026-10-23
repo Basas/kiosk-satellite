@@ -2452,4 +2452,24 @@ const settingMessageIds = <String, Map<String, String>>{
     "title": "settingVoiceAmazonLocaleTitle",
     "description": "settingVoiceAmazonLocaleDescription",
   },
+  "library.menu": {
+    "title": "settingCalendarMenuTitle",
+    "description": "settingLibraryMenuDescription",
+  },
+  "library.idle_close_minutes": {
+    "title": "settingCalendarIdleCloseMinutesTitle",
+    "description": "settingCalendarIdleCloseMinutesDescription",
+  },
+  "kiosk.allow_music_library": {
+    "title": "libraryTitle",
+    "description": "settingKioskAllowMusicLibraryDescription",
+  },
+  "library.source": {
+    "title": "librarySource",
+    "description": "settingLibrarySourceDescription",
+  },
+  "library.now_playing_button": {
+    "title": "settingLibraryNowPlayingButtonTitle",
+    "description": "settingLibraryNowPlayingButtonDescription",
+  },
 };

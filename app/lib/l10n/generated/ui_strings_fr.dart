@@ -2860,6 +2860,302 @@ class UiStringsFr extends UiStrings {
   String get logsUnknown => 'inconnu';
 
   @override
+  String get libraryTitle => 'Bibliothèque musicale';
+
+  @override
+  String get librarySource => 'Source';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Bibliothèque, recherche et radio';
+
+  @override
+  String get librarySourceHaHint => 'Médias de chaque enceinte';
+
+  @override
+  String get librarySourceSonosHint => 'Favoris et playlists';
+
+  @override
+  String get libraryDiscover => 'Découvrir';
+
+  @override
+  String get librarySearch => 'Rechercher';
+
+  @override
+  String get libraryBrowse => 'Parcourir';
+
+  @override
+  String get libraryLibrary => 'Bibliothèque';
+
+  @override
+  String get libraryArtists => 'Artistes';
+
+  @override
+  String get libraryAlbums => 'Albums';
+
+  @override
+  String get libraryTracks => 'Titres';
+
+  @override
+  String get libraryPlaylists => 'Playlists';
+
+  @override
+  String get libraryRadio => 'Radio';
+
+  @override
+  String get libraryPodcasts => 'Podcasts';
+
+  @override
+  String get libraryAudiobooks => 'Livres audio';
+
+  @override
+  String get libraryFavorites => 'Favoris';
+
+  @override
+  String get librarySonosPlaylists => 'Playlists Sonos';
+
+  @override
+  String get libraryRecentlyPlayed => 'Écoutés récemment';
+
+  @override
+  String get libraryRecentlyAdded => 'Ajoutés récemment';
+
+  @override
+  String get libraryMoreResults => 'Autres résultats';
+
+  @override
+  String get libraryTopTracks => 'Titres populaires';
+
+  @override
+  String get libraryKindArtist => 'Artiste';
+
+  @override
+  String get libraryKindAlbum => 'Album';
+
+  @override
+  String get libraryKindTrack => 'Titre';
+
+  @override
+  String get libraryKindPlaylist => 'Playlist';
+
+  @override
+  String get libraryKindRadio => 'Radio';
+
+  @override
+  String get libraryKindPodcast => 'Podcast';
+
+  @override
+  String get libraryKindEpisode => 'Épisode';
+
+  @override
+  String get libraryKindAudiobook => 'Livre audio';
+
+  @override
+  String get libraryOneTrack => '1 titre';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count titres';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String get librarySearchHint => 'Artistes, albums, titres';
+
+  @override
+  String get librarySearchClear => 'Effacer la recherche';
+
+  @override
+  String get librarySearchAll => 'Tout';
+
+  @override
+  String get librarySearchPrompt =>
+      'Recherchez des artistes, des albums, des titres et plus encore.';
+
+  @override
+  String get libraryEmpty => 'Rien ici pour l’instant.';
+
+  @override
+  String get libraryLoadFailed => 'Impossible de charger ce contenu.';
+
+  @override
+  String get libraryNoSource =>
+      'Configurez Music Assistant, Home Assistant ou une enceinte Sonos pour parcourir de la musique.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Choisissez une enceinte pour voir les médias qu’elle peut lire.';
+
+  @override
+  String get libraryChooseSpeaker => 'Choisir une enceinte';
+
+  @override
+  String get libraryPickSpeakerHint => 'Choisissez l’enceinte de lecture.';
+
+  @override
+  String get libraryPlay => 'Lire';
+
+  @override
+  String get libraryOpenNowPlaying => 'Ouvrir En cours de lecture';
+
+  @override
+  String get libraryNothingPlaying => 'Aucune lecture en cours';
+
+  @override
+  String get libraryMore => 'Plus d’options';
+
+  @override
+  String get libraryPlayNow => 'Lire maintenant';
+
+  @override
+  String get libraryPlayNext => 'Lire ensuite';
+
+  @override
+  String get libraryAddToQueue => 'Ajouter à la file d’attente';
+
+  @override
+  String get libraryStartRadio => 'Lancer la radio';
+
+  @override
+  String get libraryGoToArtist => 'Aller à l’artiste';
+
+  @override
+  String get libraryAddFavorite => 'Ajouter aux favoris';
+
+  @override
+  String get libraryRemoveFavorite => 'Retirer des favoris';
+
+  @override
+  String get libraryAddedFavorite => 'Ajouté aux favoris';
+
+  @override
+  String get libraryRemovedFavorite => 'Retiré des favoris';
+
+  @override
+  String get libraryFavoriteFailed => 'Impossible de modifier les favoris';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return 'Lecture sur $speaker';
+  }
+
+  @override
+  String get libraryPlaysNext => 'Lu ensuite';
+
+  @override
+  String get libraryAddedToQueue => 'Ajouté à la file d’attente';
+
+  @override
+  String get libraryView => 'Afficher';
+
+  @override
+  String get libraryPlayFailed => 'Impossible de lancer la lecture';
+
+  @override
+  String get librarySpeakers => 'Enceintes';
+
+  @override
+  String get libraryPlayingOn => 'Lecture sur';
+
+  @override
+  String get libraryOtherSpeakers => 'Autres enceintes';
+
+  @override
+  String get libraryNoOtherSpeakers => 'Aucune autre enceinte.';
+
+  @override
+  String get libraryThisDevice => 'Cet appareil';
+
+  @override
+  String get libraryUnavailable => 'Indisponible';
+
+  @override
+  String get libraryGroup => 'Grouper';
+
+  @override
+  String get libraryGroupAll => 'Groupe';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Grouper avec $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Les enceintes groupées lisent la même musique de façon synchronisée.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Ajoute une entrée Bibliothèque musicale au menu du kiosque.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Parcourir la musique et la lire sur une enceinte.';
+
+  @override
+  String get libraryPageHint =>
+      'Parcourir la musique et la lire sur une enceinte';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'D’où la bibliothèque liste la musique. Automatique commence par la source de l’enceinte suivie par En cours de lecture.';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle =>
+      'Afficher dans En cours de lecture';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Ajoute un bouton Bibliothèque musicale à côté du bouton de fermeture.';
+
+  @override
+  String get libraryQueueTitle => 'File d’attente';
+
+  @override
+  String get libraryCloseQueue => 'Fermer la file d’attente';
+
+  @override
+  String get libraryClear => 'Vider';
+
+  @override
+  String get libraryClearQueueTitle => 'Vider la file d’attente ?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'La musique s’arrête et tous les titres quittent la file d’attente.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Retirer de la file d’attente';
+
+  @override
+  String get libraryReorder => 'Faites glisser pour réorganiser';
+
+  @override
+  String get libraryQueueFailed => 'Impossible de modifier la file d’attente';
+
+  @override
   String get offlineDashboard => 'Tableau de bord indisponible';
 
   @override

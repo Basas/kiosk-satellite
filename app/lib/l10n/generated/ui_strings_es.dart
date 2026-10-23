@@ -2861,6 +2861,300 @@ class UiStringsEs extends UiStrings {
   String get logsUnknown => 'desconocido';
 
   @override
+  String get libraryTitle => 'Biblioteca musical';
+
+  @override
+  String get librarySource => 'Fuente';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Biblioteca, búsqueda y radio';
+
+  @override
+  String get librarySourceHaHint => 'Contenido de cada altavoz';
+
+  @override
+  String get librarySourceSonosHint => 'Favoritos y listas de reproducción';
+
+  @override
+  String get libraryDiscover => 'Descubrir';
+
+  @override
+  String get librarySearch => 'Buscar';
+
+  @override
+  String get libraryBrowse => 'Explorar';
+
+  @override
+  String get libraryLibrary => 'Biblioteca';
+
+  @override
+  String get libraryArtists => 'Artistas';
+
+  @override
+  String get libraryAlbums => 'Álbumes';
+
+  @override
+  String get libraryTracks => 'Canciones';
+
+  @override
+  String get libraryPlaylists => 'Listas de reproducción';
+
+  @override
+  String get libraryRadio => 'Radio';
+
+  @override
+  String get libraryPodcasts => 'Pódcasts';
+
+  @override
+  String get libraryAudiobooks => 'Audiolibros';
+
+  @override
+  String get libraryFavorites => 'Favoritos';
+
+  @override
+  String get librarySonosPlaylists => 'Listas de Sonos';
+
+  @override
+  String get libraryRecentlyPlayed => 'Escuchado recientemente';
+
+  @override
+  String get libraryRecentlyAdded => 'Añadido recientemente';
+
+  @override
+  String get libraryMoreResults => 'Más resultados';
+
+  @override
+  String get libraryTopTracks => 'Canciones populares';
+
+  @override
+  String get libraryKindArtist => 'Artista';
+
+  @override
+  String get libraryKindAlbum => 'Álbum';
+
+  @override
+  String get libraryKindTrack => 'Canción';
+
+  @override
+  String get libraryKindPlaylist => 'Lista de reproducción';
+
+  @override
+  String get libraryKindRadio => 'Radio';
+
+  @override
+  String get libraryKindPodcast => 'Pódcast';
+
+  @override
+  String get libraryKindEpisode => 'Episodio';
+
+  @override
+  String get libraryKindAudiobook => 'Audiolibro';
+
+  @override
+  String get libraryOneTrack => '1 canción';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count canciones';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String get librarySearchHint => 'Artistas, álbumes, canciones';
+
+  @override
+  String get librarySearchClear => 'Borrar búsqueda';
+
+  @override
+  String get librarySearchAll => 'Todo';
+
+  @override
+  String get librarySearchPrompt => 'Busca artistas, álbumes, canciones y más.';
+
+  @override
+  String get libraryEmpty => 'Aún no hay nada aquí.';
+
+  @override
+  String get libraryLoadFailed => 'No se pudo cargar.';
+
+  @override
+  String get libraryNoSource =>
+      'Configura Music Assistant, Home Assistant o un altavoz Sonos para explorar música.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Elige un altavoz para ver el contenido que puede reproducir.';
+
+  @override
+  String get libraryChooseSpeaker => 'Elige un altavoz';
+
+  @override
+  String get libraryPickSpeakerHint => 'Elige el altavoz en el que reproducir.';
+
+  @override
+  String get libraryPlay => 'Reproducir';
+
+  @override
+  String get libraryOpenNowPlaying => 'Abrir Reproduciendo ahora';
+
+  @override
+  String get libraryNothingPlaying => 'No se reproduce nada';
+
+  @override
+  String get libraryMore => 'Más opciones';
+
+  @override
+  String get libraryPlayNow => 'Reproducir ahora';
+
+  @override
+  String get libraryPlayNext => 'Reproducir a continuación';
+
+  @override
+  String get libraryAddToQueue => 'Añadir a la cola';
+
+  @override
+  String get libraryStartRadio => 'Iniciar radio';
+
+  @override
+  String get libraryGoToArtist => 'Ir al artista';
+
+  @override
+  String get libraryAddFavorite => 'Añadir a favoritos';
+
+  @override
+  String get libraryRemoveFavorite => 'Quitar de favoritos';
+
+  @override
+  String get libraryAddedFavorite => 'Añadido a favoritos';
+
+  @override
+  String get libraryRemovedFavorite => 'Quitado de favoritos';
+
+  @override
+  String get libraryFavoriteFailed => 'No se pudieron cambiar los favoritos';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return 'Reproduciendo en $speaker';
+  }
+
+  @override
+  String get libraryPlaysNext => 'Se reproduce a continuación';
+
+  @override
+  String get libraryAddedToQueue => 'Añadido a la cola';
+
+  @override
+  String get libraryView => 'Ver';
+
+  @override
+  String get libraryPlayFailed => 'No se pudo reproducir';
+
+  @override
+  String get librarySpeakers => 'Altavoces';
+
+  @override
+  String get libraryPlayingOn => 'Reproduciendo en';
+
+  @override
+  String get libraryOtherSpeakers => 'Otros altavoces';
+
+  @override
+  String get libraryNoOtherSpeakers => 'No hay otros altavoces.';
+
+  @override
+  String get libraryThisDevice => 'Este dispositivo';
+
+  @override
+  String get libraryUnavailable => 'No disponible';
+
+  @override
+  String get libraryGroup => 'Agrupar';
+
+  @override
+  String get libraryGroupAll => 'Grupo';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Agrupar con $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Los altavoces agrupados reproducen la misma música sincronizada.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Añade la opción Biblioteca musical al menú del kiosko.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Explorar música y reproducirla en un altavoz.';
+
+  @override
+  String get libraryPageHint => 'Explora música y reprodúcela en un altavoz';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'Dónde lista música la biblioteca. Automático empieza con la fuente del altavoz que sigue Reproduciendo ahora.';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle =>
+      'Mostrar en Reproduciendo ahora';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Añade un botón de Biblioteca musical junto al botón de cerrar.';
+
+  @override
+  String get libraryQueueTitle => 'Cola';
+
+  @override
+  String get libraryCloseQueue => 'Cerrar cola';
+
+  @override
+  String get libraryClear => 'Vaciar';
+
+  @override
+  String get libraryClearQueueTitle => '¿Vaciar la cola?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'La música se detiene y todas las canciones salen de la cola.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Quitar de la cola';
+
+  @override
+  String get libraryReorder => 'Arrastra para reordenar';
+
+  @override
+  String get libraryQueueFailed => 'No se pudo cambiar la cola';
+
+  @override
   String get offlineDashboard => 'Panel de control no disponible';
 
   @override

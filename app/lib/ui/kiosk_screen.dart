@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'alarm_ring_overlay.dart';
 import 'alarms_overlay.dart';
 import 'calendar_overlay.dart';
+import 'music_library_overlay.dart';
 import '../core/permissions.dart';
 
 import '../app_container.dart';
@@ -204,6 +205,7 @@ class _KioskScreenState extends State<KioskScreen>
         !c.intercom.rosterVisible.value &&
         !c.alarms.visible.value &&
         !c.calendar.visible.value &&
+        !c.musicLibrary.visible.value &&
         c.camera.activeViewId.value == null &&
         !c.kiosk.lockdownActive &&
         (c.plugins.windows.value.isNotEmpty || c.plugins.backOverlay != null)) {
@@ -227,7 +229,8 @@ class _KioskScreenState extends State<KioskScreen>
           c.launcher.visible.value ||
           c.intercom.rosterVisible.value ||
           c.alarms.visible.value ||
-          c.calendar.visible.value,
+          c.calendar.visible.value ||
+          c.musicLibrary.visible.value,
       overlayUp: c.browser.overlayUrl.value != null,
       cameraViewUp: c.camera.activeViewId.value != null,
       cameraFocused: c.camera.focusedCameraId.value != null,
@@ -251,10 +254,16 @@ class _KioskScreenState extends State<KioskScreen>
         unawaited(_performBack());
         _backArmedUntil = DateTime.now().add(_backAgainWindow);
       case BackAction.hideLauncher:
+        // The library steps back out of an opened album first.
+        if (c.musicLibrary.visible.value &&
+            (c.musicLibrary.backHandler?.call() ?? false)) {
+          break;
+        }
         c.launcher.visible.value = false;
         c.intercom.rosterVisible.value = false;
         c.alarms.visible.value = false;
         c.calendar.visible.value = false;
+        c.musicLibrary.visible.value = false;
       case BackAction.dismissOverlay:
         // A link or rotation page covers the dashboard: back uncovers it.
         c.browser.dismissOverlay();
@@ -357,7 +366,10 @@ class _KioskScreenState extends State<KioskScreen>
         (c.settings.get(defs.kioskAllowAlarms) &&
             c.settings.get(defs.alarmsMenu)) ||
         (c.settings.get(defs.kioskAllowCalendar) &&
-            c.settings.get(defs.calendarMenu));
+            c.settings.get(defs.calendarMenu)) ||
+        (c.settings.get(defs.kioskAllowMusicLibrary) &&
+            c.settings.get(defs.libraryMenu) &&
+            c.musicLibrary.available.isNotEmpty);
   }
 
   /// Pull-to-refresh as the user experiences it: the Web Browsing toggle,
@@ -628,6 +640,7 @@ class _KioskScreenState extends State<KioskScreen>
         c.intercom.rosterVisible.value = false;
         c.alarms.visible.value = false;
         c.calendar.visible.value = false;
+        c.musicLibrary.visible.value = false;
       }
       return;
     }
@@ -661,6 +674,8 @@ class _KioskScreenState extends State<KioskScreen>
         e.key == defs.alarmsMenu.key ||
         e.key == defs.kioskAllowCalendar.key ||
         e.key == defs.calendarMenu.key ||
+        e.key == defs.kioskAllowMusicLibrary.key ||
+        e.key == defs.libraryMenu.key ||
         e.key == defs.remoteEnabled.key ||
         e.key == defs.remoteFleetDiscovery.key) {
       setState(() {});
@@ -851,6 +866,7 @@ class _KioskScreenState extends State<KioskScreen>
       c.intercom.rosterVisible.value = false;
       c.alarms.visible.value = false;
       c.calendar.visible.value = false;
+      c.musicLibrary.visible.value = false;
       if (c.browser.overlayUrl.value != null) c.browser.dismissOverlay();
       if (c.camera.activeViewId.value != null) {
         c.camera.hideView(returnToPreviousApp: false);
@@ -868,6 +884,7 @@ class _KioskScreenState extends State<KioskScreen>
     c.intercom.rosterVisible.addListener(_onOverlayChanged);
     c.alarms.visible.addListener(_onOverlayChanged);
     c.calendar.visible.addListener(_onOverlayChanged);
+    c.musicLibrary.visible.addListener(_onOverlayChanged);
     c.plugins.windows.addListener(_onOverlayChanged);
     c.plugins.installed.addListener(_onOverlayChanged);
     c.homeLauncher.roleHeld.addListener(_onOverlayChanged);
@@ -1287,6 +1304,7 @@ class _KioskScreenState extends State<KioskScreen>
         c.intercom.rosterVisible.value ||
         c.alarms.visible.value ||
         c.calendar.visible.value ||
+        c.musicLibrary.visible.value ||
         c.camera.activeViewId.value != null ||
         c.plugins.windows.value.isNotEmpty;
     if (capture == _lastNavCapture) return;
@@ -1400,6 +1418,7 @@ class _KioskScreenState extends State<KioskScreen>
           c.intercom.rosterVisible.value ||
           c.alarms.visible.value ||
           c.calendar.visible.value ||
+          c.musicLibrary.visible.value ||
           c.browser.overlayUrl.value != null ||
           c.camera.activeViewId.value != null,
       // Any route above this one: settings, and every dialog — the exit
@@ -1557,6 +1576,7 @@ class _KioskScreenState extends State<KioskScreen>
     c.intercom.rosterVisible.removeListener(_onOverlayChanged);
     c.alarms.visible.removeListener(_onOverlayChanged);
     c.calendar.visible.removeListener(_onOverlayChanged);
+    c.musicLibrary.visible.removeListener(_onOverlayChanged);
     c.plugins.windows.removeListener(_onOverlayChanged);
     c.plugins.installed.removeListener(_onOverlayChanged);
     c.homeLauncher.roleHeld.removeListener(_onOverlayChanged);
@@ -1791,6 +1811,10 @@ class _KioskScreenState extends State<KioskScreen>
                   // The family calendar, the launcher's twin as well:
                   // full screen, below the screensaver.
                   CalendarOverlay(container: c),
+                  // The music library, the same kind of page: full
+                  // screen, below the screensaver, so Now Playing opened
+                  // from its player bar comes up over it.
+                  MusicLibraryOverlay(container: c),
                   // The screensaver covers both planes — it owns the whole
                   // display, drawer open or not.
                   // Paused under the native voice overlay, which

@@ -2851,6 +2851,303 @@ class UiStringsNl extends UiStrings {
   String get logsUnknown => 'onbekend';
 
   @override
+  String get libraryTitle => 'Muziekbibliotheek';
+
+  @override
+  String get librarySource => 'Bron';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Bibliotheek, zoeken en radio';
+
+  @override
+  String get librarySourceHaHint => 'Media van elke luidspreker';
+
+  @override
+  String get librarySourceSonosHint => 'Favorieten en afspeellijsten';
+
+  @override
+  String get libraryDiscover => 'Ontdekken';
+
+  @override
+  String get librarySearch => 'Zoeken';
+
+  @override
+  String get libraryBrowse => 'Bladeren';
+
+  @override
+  String get libraryLibrary => 'Bibliotheek';
+
+  @override
+  String get libraryArtists => 'Artiesten';
+
+  @override
+  String get libraryAlbums => 'Albums';
+
+  @override
+  String get libraryTracks => 'Nummers';
+
+  @override
+  String get libraryPlaylists => 'Afspeellijsten';
+
+  @override
+  String get libraryRadio => 'Radio';
+
+  @override
+  String get libraryPodcasts => 'Podcasts';
+
+  @override
+  String get libraryAudiobooks => 'Luisterboeken';
+
+  @override
+  String get libraryFavorites => 'Favorieten';
+
+  @override
+  String get librarySonosPlaylists => 'Sonos-afspeellijsten';
+
+  @override
+  String get libraryRecentlyPlayed => 'Recent afgespeeld';
+
+  @override
+  String get libraryRecentlyAdded => 'Recent toegevoegd';
+
+  @override
+  String get libraryMoreResults => 'Meer resultaten';
+
+  @override
+  String get libraryTopTracks => 'Populaire nummers';
+
+  @override
+  String get libraryKindArtist => 'Artiest';
+
+  @override
+  String get libraryKindAlbum => 'Album';
+
+  @override
+  String get libraryKindTrack => 'Nummer';
+
+  @override
+  String get libraryKindPlaylist => 'Afspeellijst';
+
+  @override
+  String get libraryKindRadio => 'Radio';
+
+  @override
+  String get libraryKindPodcast => 'Podcast';
+
+  @override
+  String get libraryKindEpisode => 'Aflevering';
+
+  @override
+  String get libraryKindAudiobook => 'Luisterboek';
+
+  @override
+  String get libraryOneTrack => '1 nummer';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count nummers';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours u $minutes min';
+  }
+
+  @override
+  String get librarySearchHint => 'Artiesten, albums, nummers';
+
+  @override
+  String get librarySearchClear => 'Zoekopdracht wissen';
+
+  @override
+  String get librarySearchAll => 'Alles';
+
+  @override
+  String get librarySearchPrompt =>
+      'Zoek naar artiesten, albums, nummers en meer.';
+
+  @override
+  String get libraryEmpty => 'Hier staat nog niets.';
+
+  @override
+  String get libraryLoadFailed => 'Kon niet worden geladen.';
+
+  @override
+  String get libraryNoSource =>
+      'Stel Music Assistant, Home Assistant of een Sonos-luidspreker in om muziek te bladeren.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Kies een luidspreker om de media te zien die hij kan afspelen.';
+
+  @override
+  String get libraryChooseSpeaker => 'Kies een luidspreker';
+
+  @override
+  String get libraryPickSpeakerHint =>
+      'Kies de luidspreker om op af te spelen.';
+
+  @override
+  String get libraryPlay => 'Afspelen';
+
+  @override
+  String get libraryOpenNowPlaying => 'Nu aan het afspelen openen';
+
+  @override
+  String get libraryNothingPlaying => 'Er wordt niets afgespeeld';
+
+  @override
+  String get libraryMore => 'Meer opties';
+
+  @override
+  String get libraryPlayNow => 'Nu afspelen';
+
+  @override
+  String get libraryPlayNext => 'Hierna afspelen';
+
+  @override
+  String get libraryAddToQueue => 'Aan wachtrij toevoegen';
+
+  @override
+  String get libraryStartRadio => 'Radio starten';
+
+  @override
+  String get libraryGoToArtist => 'Naar artiest';
+
+  @override
+  String get libraryAddFavorite => 'Aan favorieten toevoegen';
+
+  @override
+  String get libraryRemoveFavorite => 'Uit favorieten verwijderen';
+
+  @override
+  String get libraryAddedFavorite => 'Aan favorieten toegevoegd';
+
+  @override
+  String get libraryRemovedFavorite => 'Uit favorieten verwijderd';
+
+  @override
+  String get libraryFavoriteFailed => 'Favorieten konden niet worden gewijzigd';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return 'Speelt af op $speaker';
+  }
+
+  @override
+  String get libraryPlaysNext => 'Wordt hierna afgespeeld';
+
+  @override
+  String get libraryAddedToQueue => 'Aan wachtrij toegevoegd';
+
+  @override
+  String get libraryView => 'Bekijken';
+
+  @override
+  String get libraryPlayFailed => 'Kon niet worden afgespeeld';
+
+  @override
+  String get librarySpeakers => 'Luidsprekers';
+
+  @override
+  String get libraryPlayingOn => 'Speelt af op';
+
+  @override
+  String get libraryOtherSpeakers => 'Andere luidsprekers';
+
+  @override
+  String get libraryNoOtherSpeakers => 'Geen andere luidsprekers.';
+
+  @override
+  String get libraryThisDevice => 'Dit apparaat';
+
+  @override
+  String get libraryUnavailable => 'Niet beschikbaar';
+
+  @override
+  String get libraryGroup => 'Groeperen';
+
+  @override
+  String get libraryGroupAll => 'Groep';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Groeperen met $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Gegroepeerde luidsprekers spelen dezelfde muziek synchroon af.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Voeg de optie Muziekbibliotheek toe aan het kioskmenu.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Muziek bladeren en afspelen op een luidspreker.';
+
+  @override
+  String get libraryPageHint =>
+      'Muziek bladeren en afspelen op een luidspreker';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'Waar de bibliotheek muziek vandaan haalt. Automatisch begint met de bron van de luidspreker die Nu aan het afspelen volgt.';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle =>
+      'Tonen in Nu aan het afspelen';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Voeg een knop Muziekbibliotheek toe naast de sluitknop.';
+
+  @override
+  String get libraryQueueTitle => 'Wachtrij';
+
+  @override
+  String get libraryCloseQueue => 'Wachtrij sluiten';
+
+  @override
+  String get libraryClear => 'Wissen';
+
+  @override
+  String get libraryClearQueueTitle => 'Wachtrij wissen?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'De muziek stopt en alle nummers verdwijnen uit de wachtrij.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Uit wachtrij verwijderen';
+
+  @override
+  String get libraryReorder => 'Sleep om de volgorde te wijzigen';
+
+  @override
+  String get libraryQueueFailed => 'De wachtrij kon niet worden gewijzigd';
+
+  @override
   String get offlineDashboard => 'Dashboard is niet beschikbaar';
 
   @override

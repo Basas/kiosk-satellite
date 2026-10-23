@@ -5049,6 +5049,552 @@ abstract class UiStrings {
   /// **'unknown'**
   String get logsUnknown;
 
+  /// Name of the Music Library feature: the kiosk menu entry, the overlay's eyebrow and the Allowed Actions switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Library'**
+  String get libraryTitle;
+
+  /// Label of the picker for where the library lists music from: Music Assistant, Home Assistant or Sonos.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get librarySource;
+
+  /// Source name.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Assistant'**
+  String get librarySourceMa;
+
+  /// Source name.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Assistant'**
+  String get librarySourceHa;
+
+  /// Source name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonos'**
+  String get librarySourceSonos;
+
+  /// What the Music Assistant source offers, under its name in the source picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Library, search and radio'**
+  String get librarySourceMaHint;
+
+  /// What the Home Assistant source offers: the media the picked speaker's integration lists.
+  ///
+  /// In en, this message translates to:
+  /// **'Media from each speaker'**
+  String get librarySourceHaHint;
+
+  /// What the Sonos source offers: My Sonos favorites, Sonos playlists and the indexed music library.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites and playlists'**
+  String get librarySourceSonosHint;
+
+  /// Navigation entry and page title: recommendations and recently played music.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get libraryDiscover;
+
+  /// Navigation entry: search the source.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get librarySearch;
+
+  /// Navigation entry and page title: the source's own folders.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse'**
+  String get libraryBrowse;
+
+  /// Navigation entry and sidebar heading over the library lists (artists, albums and so on).
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get libraryLibrary;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists'**
+  String get libraryArtists;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Albums'**
+  String get libraryAlbums;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracks'**
+  String get libraryTracks;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlists'**
+  String get libraryPlaylists;
+
+  /// Library list and search filter: radio stations.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio'**
+  String get libraryRadio;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Podcasts'**
+  String get libraryPodcasts;
+
+  /// Library list and search filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Audiobooks'**
+  String get libraryAudiobooks;
+
+  /// Sonos library list: My Sonos favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get libraryFavorites;
+
+  /// Sonos library list: playlists saved in the Sonos app.
+  ///
+  /// In en, this message translates to:
+  /// **'Sonos playlists'**
+  String get librarySonosPlaylists;
+
+  /// Discover shelf title.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently played'**
+  String get libraryRecentlyPlayed;
+
+  /// Discover shelf title.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently added'**
+  String get libraryRecentlyAdded;
+
+  /// Search results shelf for entries of other kinds.
+  ///
+  /// In en, this message translates to:
+  /// **'More results'**
+  String get libraryMoreResults;
+
+  /// Heading over an artist's most played tracks.
+  ///
+  /// In en, this message translates to:
+  /// **'Top tracks'**
+  String get libraryTopTracks;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Artist'**
+  String get libraryKindArtist;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get libraryKindAlbum;
+
+  /// What a search result is.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get libraryKindTrack;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Playlist'**
+  String get libraryKindPlaylist;
+
+  /// What a search result is: a radio station.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio'**
+  String get libraryKindRadio;
+
+  /// What a search result or page is.
+  ///
+  /// In en, this message translates to:
+  /// **'Podcast'**
+  String get libraryKindPodcast;
+
+  /// What a search result is: a podcast episode.
+  ///
+  /// In en, this message translates to:
+  /// **'Episode'**
+  String get libraryKindEpisode;
+
+  /// What a search result is.
+  ///
+  /// In en, this message translates to:
+  /// **'Audiobook'**
+  String get libraryKindAudiobook;
+
+  /// Album facts: an album with one track.
+  ///
+  /// In en, this message translates to:
+  /// **'1 track'**
+  String get libraryOneTrack;
+
+  /// Album facts: how many tracks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} tracks'**
+  String libraryTrackCount(String count);
+
+  /// Album facts: total length under an hour.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String libraryMinutes(String minutes);
+
+  /// Album facts: total length of an hour or more.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h {minutes} min'**
+  String libraryHoursMinutes(String hours, String minutes);
+
+  /// Placeholder of the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Artists, albums, tracks'**
+  String get librarySearchHint;
+
+  /// Tooltip of the button that empties the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get librarySearchClear;
+
+  /// Search filter chip: every kind of result.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get librarySearchAll;
+
+  /// Shown before anything is typed in the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for artists, albums, tracks and more.'**
+  String get librarySearchPrompt;
+
+  /// A list, folder or search with no entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet.'**
+  String get libraryEmpty;
+
+  /// A list or page failed to load. The error follows on the next line.
+  ///
+  /// In en, this message translates to:
+  /// **'This could not be loaded.'**
+  String get libraryLoadFailed;
+
+  /// No source is configured on this device.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up Music Assistant, Home Assistant or a Sonos speaker to browse music.'**
+  String get libraryNoSource;
+
+  /// Home Assistant source with no speaker picked: the media tree belongs to the speaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a speaker to see the media it can play.'**
+  String get libraryHaPickSpeaker;
+
+  /// Speaker pill label and button when no speaker of the source is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a speaker'**
+  String get libraryChooseSpeaker;
+
+  /// Prompt over the Speakers sheet when a play needs a speaker first.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the speaker to play on.'**
+  String get libraryPickSpeakerHint;
+
+  /// Button: play the album, playlist or artist, replacing the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get libraryPlay;
+
+  /// Player bar button.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Now Playing'**
+  String get libraryOpenNowPlaying;
+
+  /// Player bar with no track.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing playing'**
+  String get libraryNothingPlaying;
+
+  /// Tooltip of the menu button on a row or a page.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get libraryMore;
+
+  /// Menu action: play now, keeping the rest of the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Play now'**
+  String get libraryPlayNow;
+
+  /// Menu action: play after the current track.
+  ///
+  /// In en, this message translates to:
+  /// **'Play next'**
+  String get libraryPlayNext;
+
+  /// Menu action: add to the end of the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to queue'**
+  String get libraryAddToQueue;
+
+  /// Menu action and button: play and keep going with similar music.
+  ///
+  /// In en, this message translates to:
+  /// **'Start radio'**
+  String get libraryStartRadio;
+
+  /// Menu action.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to artist'**
+  String get libraryGoToArtist;
+
+  /// Menu action.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favorites'**
+  String get libraryAddFavorite;
+
+  /// Menu action.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get libraryRemoveFavorite;
+
+  /// Toast after Add to favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites'**
+  String get libraryAddedFavorite;
+
+  /// Toast after Remove from favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get libraryRemovedFavorite;
+
+  /// Toast when the favorite change failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites could not be changed'**
+  String get libraryFavoriteFailed;
+
+  /// Toast after a play.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing on {speaker}'**
+  String libraryPlayingOnSpeaker(String speaker);
+
+  /// Toast after Play next.
+  ///
+  /// In en, this message translates to:
+  /// **'Plays next'**
+  String get libraryPlaysNext;
+
+  /// Toast after Add to queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to queue'**
+  String get libraryAddedToQueue;
+
+  /// Toast action: open Now Playing with the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get libraryView;
+
+  /// Toast when a play failed. The error follows.
+  ///
+  /// In en, this message translates to:
+  /// **'This could not be played'**
+  String get libraryPlayFailed;
+
+  /// Title of the Speakers sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Speakers'**
+  String get librarySpeakers;
+
+  /// Label over the name of the speaker the music plays on, in the Speakers sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing on'**
+  String get libraryPlayingOn;
+
+  /// Heading over the speakers that can be picked instead.
+  ///
+  /// In en, this message translates to:
+  /// **'Other speakers'**
+  String get libraryOtherSpeakers;
+
+  /// The source has no other speakers to pick.
+  ///
+  /// In en, this message translates to:
+  /// **'No other speakers.'**
+  String get libraryNoOtherSpeakers;
+
+  /// Under the name of this device's own player in the Speakers sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get libraryThisDevice;
+
+  /// Under the name of a speaker that is offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get libraryUnavailable;
+
+  /// Button that opens the list of speakers to group with the playing one.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get libraryGroup;
+
+  /// Label of the volume slider for the whole group.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get libraryGroupAll;
+
+  /// Title of the grouping dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Group with {speaker}'**
+  String libraryGroupWith(String speaker);
+
+  /// Text in the grouping dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Grouped speakers play the same music in sync.'**
+  String get libraryGroupHint;
+
+  /// A group's name: the leading speaker and how many others play with it.
+  ///
+  /// In en, this message translates to:
+  /// **'{speaker} + {count}'**
+  String libraryGroupName(String speaker, String count);
+
+  /// Setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Music Library entry to the kiosk menu.'**
+  String get settingLibraryMenuDescription;
+
+  /// Allowed Actions switch description.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse music and play it on a speaker.'**
+  String get settingKioskAllowMusicLibraryDescription;
+
+  /// Hint under the Music Library entry on the Media Player settings page.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse music and play it on a speaker'**
+  String get libraryPageHint;
+
+  /// Setting description. Automatic is the first choice of the Source setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the library lists music from. Automatic starts with the source of the speaker Now Playing follows.'**
+  String get settingLibrarySourceDescription;
+
+  /// Setting label: the Music Library button on the Now Playing view.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on Now Playing'**
+  String get settingLibraryNowPlayingButtonTitle;
+
+  /// Setting description. The close button is the one on the Now Playing view.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Music Library button next to the close button.'**
+  String get settingLibraryNowPlayingButtonDescription;
+
+  /// Title of the queue panel in the Music Library.
+  ///
+  /// In en, this message translates to:
+  /// **'Queue'**
+  String get libraryQueueTitle;
+
+  /// Tooltip of the button that closes the queue panel.
+  ///
+  /// In en, this message translates to:
+  /// **'Close queue'**
+  String get libraryCloseQueue;
+
+  /// Button that empties the queue, and the confirm button of its dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get libraryClear;
+
+  /// Title of the dialog that confirms emptying the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear the queue?'**
+  String get libraryClearQueueTitle;
+
+  /// Text of the dialog that confirms emptying the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'The music stops and every track leaves the queue.'**
+  String get libraryClearQueueMessage;
+
+  /// Menu action on a queue row.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from queue'**
+  String get libraryRemoveFromQueue;
+
+  /// Accessibility label of the handle that moves a queue row.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder'**
+  String get libraryReorder;
+
+  /// Toast when moving, removing or clearing failed.
+  ///
+  /// In en, this message translates to:
+  /// **'The queue could not be changed'**
+  String get libraryQueueFailed;
+
   /// Heading when the device has a network but the dashboard failed to load.
   ///
   /// In en, this message translates to:

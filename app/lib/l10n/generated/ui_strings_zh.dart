@@ -2768,6 +2768,293 @@ class UiStringsZh extends UiStrings {
   String get logsUnknown => '未知';
 
   @override
+  String get libraryTitle => '音乐库';
+
+  @override
+  String get librarySource => '来源';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => '音乐库、搜索和电台';
+
+  @override
+  String get librarySourceHaHint => '每个扬声器的媒体';
+
+  @override
+  String get librarySourceSonosHint => '收藏和播放列表';
+
+  @override
+  String get libraryDiscover => '发现';
+
+  @override
+  String get librarySearch => '搜索';
+
+  @override
+  String get libraryBrowse => '浏览';
+
+  @override
+  String get libraryLibrary => '音乐库';
+
+  @override
+  String get libraryArtists => '艺人';
+
+  @override
+  String get libraryAlbums => '专辑';
+
+  @override
+  String get libraryTracks => '曲目';
+
+  @override
+  String get libraryPlaylists => '播放列表';
+
+  @override
+  String get libraryRadio => '电台';
+
+  @override
+  String get libraryPodcasts => '播客';
+
+  @override
+  String get libraryAudiobooks => '有声书';
+
+  @override
+  String get libraryFavorites => '收藏';
+
+  @override
+  String get librarySonosPlaylists => 'Sonos 播放列表';
+
+  @override
+  String get libraryRecentlyPlayed => '最近播放';
+
+  @override
+  String get libraryRecentlyAdded => '最近添加';
+
+  @override
+  String get libraryMoreResults => '更多结果';
+
+  @override
+  String get libraryTopTracks => '热门曲目';
+
+  @override
+  String get libraryKindArtist => '艺人';
+
+  @override
+  String get libraryKindAlbum => '专辑';
+
+  @override
+  String get libraryKindTrack => '曲目';
+
+  @override
+  String get libraryKindPlaylist => '播放列表';
+
+  @override
+  String get libraryKindRadio => '电台';
+
+  @override
+  String get libraryKindPodcast => '播客';
+
+  @override
+  String get libraryKindEpisode => '单集';
+
+  @override
+  String get libraryKindAudiobook => '有声书';
+
+  @override
+  String get libraryOneTrack => '1 首曲目';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count 首曲目';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes 分钟';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours 小时 $minutes 分钟';
+  }
+
+  @override
+  String get librarySearchHint => '艺人、专辑、曲目';
+
+  @override
+  String get librarySearchClear => '清除搜索';
+
+  @override
+  String get librarySearchAll => '全部';
+
+  @override
+  String get librarySearchPrompt => '搜索艺人、专辑、曲目等。';
+
+  @override
+  String get libraryEmpty => '这里还没有内容。';
+
+  @override
+  String get libraryLoadFailed => '无法加载。';
+
+  @override
+  String get libraryNoSource =>
+      '设置 Music Assistant、Home Assistant 或 Sonos 扬声器后即可浏览音乐。';
+
+  @override
+  String get libraryHaPickSpeaker => '选择一个扬声器以查看它可以播放的媒体。';
+
+  @override
+  String get libraryChooseSpeaker => '选择扬声器';
+
+  @override
+  String get libraryPickSpeakerHint => '选择用于播放的扬声器。';
+
+  @override
+  String get libraryPlay => '播放';
+
+  @override
+  String get libraryOpenNowPlaying => '打开“正在播放”';
+
+  @override
+  String get libraryNothingPlaying => '没有正在播放的内容';
+
+  @override
+  String get libraryMore => '更多选项';
+
+  @override
+  String get libraryPlayNow => '立即播放';
+
+  @override
+  String get libraryPlayNext => '下一首播放';
+
+  @override
+  String get libraryAddToQueue => '添加到队列';
+
+  @override
+  String get libraryStartRadio => '开始电台';
+
+  @override
+  String get libraryGoToArtist => '前往艺人';
+
+  @override
+  String get libraryAddFavorite => '添加到收藏';
+
+  @override
+  String get libraryRemoveFavorite => '从收藏中移除';
+
+  @override
+  String get libraryAddedFavorite => '已添加到收藏';
+
+  @override
+  String get libraryRemovedFavorite => '已从收藏中移除';
+
+  @override
+  String get libraryFavoriteFailed => '无法更改收藏';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return '正在 $speaker 上播放';
+  }
+
+  @override
+  String get libraryPlaysNext => '将在下一首播放';
+
+  @override
+  String get libraryAddedToQueue => '已添加到队列';
+
+  @override
+  String get libraryView => '查看';
+
+  @override
+  String get libraryPlayFailed => '无法播放';
+
+  @override
+  String get librarySpeakers => '扬声器';
+
+  @override
+  String get libraryPlayingOn => '正在播放于';
+
+  @override
+  String get libraryOtherSpeakers => '其他扬声器';
+
+  @override
+  String get libraryNoOtherSpeakers => '没有其他扬声器。';
+
+  @override
+  String get libraryThisDevice => '此设备';
+
+  @override
+  String get libraryUnavailable => '不可用';
+
+  @override
+  String get libraryGroup => '编组';
+
+  @override
+  String get libraryGroupAll => '播放组';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return '与 $speaker 编组';
+  }
+
+  @override
+  String get libraryGroupHint => '编组的扬声器会同步播放同一音乐。';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription => '在 Kiosk 菜单中添加“音乐库”入口。';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription => '浏览音乐并在扬声器上播放。';
+
+  @override
+  String get libraryPageHint => '浏览音乐并在扬声器上播放';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      '音乐库从哪里列出音乐。“自动”从“正在播放”所跟随扬声器的来源开始。';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle => '在“正在播放”中显示';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription => '在关闭按钮旁添加“音乐库”按钮。';
+
+  @override
+  String get libraryQueueTitle => '队列';
+
+  @override
+  String get libraryCloseQueue => '关闭队列';
+
+  @override
+  String get libraryClear => '清空';
+
+  @override
+  String get libraryClearQueueTitle => '清空队列？';
+
+  @override
+  String get libraryClearQueueMessage => '音乐将停止，所有曲目都会移出队列。';
+
+  @override
+  String get libraryRemoveFromQueue => '从队列中移除';
+
+  @override
+  String get libraryReorder => '拖动以重新排序';
+
+  @override
+  String get libraryQueueFailed => '无法更改队列';
+
+  @override
   String get offlineDashboard => '仪表盘不可用';
 
   @override
@@ -17139,6 +17426,293 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get logsUnknown => '未知';
+
+  @override
+  String get libraryTitle => '音乐库';
+
+  @override
+  String get librarySource => '来源';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => '音乐库、搜索和电台';
+
+  @override
+  String get librarySourceHaHint => '每个扬声器的媒体';
+
+  @override
+  String get librarySourceSonosHint => '收藏和播放列表';
+
+  @override
+  String get libraryDiscover => '发现';
+
+  @override
+  String get librarySearch => '搜索';
+
+  @override
+  String get libraryBrowse => '浏览';
+
+  @override
+  String get libraryLibrary => '音乐库';
+
+  @override
+  String get libraryArtists => '艺人';
+
+  @override
+  String get libraryAlbums => '专辑';
+
+  @override
+  String get libraryTracks => '曲目';
+
+  @override
+  String get libraryPlaylists => '播放列表';
+
+  @override
+  String get libraryRadio => '电台';
+
+  @override
+  String get libraryPodcasts => '播客';
+
+  @override
+  String get libraryAudiobooks => '有声书';
+
+  @override
+  String get libraryFavorites => '收藏';
+
+  @override
+  String get librarySonosPlaylists => 'Sonos 播放列表';
+
+  @override
+  String get libraryRecentlyPlayed => '最近播放';
+
+  @override
+  String get libraryRecentlyAdded => '最近添加';
+
+  @override
+  String get libraryMoreResults => '更多结果';
+
+  @override
+  String get libraryTopTracks => '热门曲目';
+
+  @override
+  String get libraryKindArtist => '艺人';
+
+  @override
+  String get libraryKindAlbum => '专辑';
+
+  @override
+  String get libraryKindTrack => '曲目';
+
+  @override
+  String get libraryKindPlaylist => '播放列表';
+
+  @override
+  String get libraryKindRadio => '电台';
+
+  @override
+  String get libraryKindPodcast => '播客';
+
+  @override
+  String get libraryKindEpisode => '单集';
+
+  @override
+  String get libraryKindAudiobook => '有声书';
+
+  @override
+  String get libraryOneTrack => '1 首曲目';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count 首曲目';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes 分钟';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours 小时 $minutes 分钟';
+  }
+
+  @override
+  String get librarySearchHint => '艺人、专辑、曲目';
+
+  @override
+  String get librarySearchClear => '清除搜索';
+
+  @override
+  String get librarySearchAll => '全部';
+
+  @override
+  String get librarySearchPrompt => '搜索艺人、专辑、曲目等。';
+
+  @override
+  String get libraryEmpty => '这里还没有内容。';
+
+  @override
+  String get libraryLoadFailed => '无法加载。';
+
+  @override
+  String get libraryNoSource =>
+      '设置 Music Assistant、Home Assistant 或 Sonos 扬声器后即可浏览音乐。';
+
+  @override
+  String get libraryHaPickSpeaker => '选择一个扬声器以查看它可以播放的媒体。';
+
+  @override
+  String get libraryChooseSpeaker => '选择扬声器';
+
+  @override
+  String get libraryPickSpeakerHint => '选择用于播放的扬声器。';
+
+  @override
+  String get libraryPlay => '播放';
+
+  @override
+  String get libraryOpenNowPlaying => '打开“正在播放”';
+
+  @override
+  String get libraryNothingPlaying => '没有正在播放的内容';
+
+  @override
+  String get libraryMore => '更多选项';
+
+  @override
+  String get libraryPlayNow => '立即播放';
+
+  @override
+  String get libraryPlayNext => '下一首播放';
+
+  @override
+  String get libraryAddToQueue => '添加到队列';
+
+  @override
+  String get libraryStartRadio => '开始电台';
+
+  @override
+  String get libraryGoToArtist => '前往艺人';
+
+  @override
+  String get libraryAddFavorite => '添加到收藏';
+
+  @override
+  String get libraryRemoveFavorite => '从收藏中移除';
+
+  @override
+  String get libraryAddedFavorite => '已添加到收藏';
+
+  @override
+  String get libraryRemovedFavorite => '已从收藏中移除';
+
+  @override
+  String get libraryFavoriteFailed => '无法更改收藏';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return '正在 $speaker 上播放';
+  }
+
+  @override
+  String get libraryPlaysNext => '将在下一首播放';
+
+  @override
+  String get libraryAddedToQueue => '已添加到队列';
+
+  @override
+  String get libraryView => '查看';
+
+  @override
+  String get libraryPlayFailed => '无法播放';
+
+  @override
+  String get librarySpeakers => '扬声器';
+
+  @override
+  String get libraryPlayingOn => '正在播放于';
+
+  @override
+  String get libraryOtherSpeakers => '其他扬声器';
+
+  @override
+  String get libraryNoOtherSpeakers => '没有其他扬声器。';
+
+  @override
+  String get libraryThisDevice => '此设备';
+
+  @override
+  String get libraryUnavailable => '不可用';
+
+  @override
+  String get libraryGroup => '编组';
+
+  @override
+  String get libraryGroupAll => '播放组';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return '与 $speaker 编组';
+  }
+
+  @override
+  String get libraryGroupHint => '编组的扬声器会同步播放同一音乐。';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription => '在 Kiosk 菜单中添加“音乐库”入口。';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription => '浏览音乐并在扬声器上播放。';
+
+  @override
+  String get libraryPageHint => '浏览音乐并在扬声器上播放';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      '音乐库从哪里列出音乐。“自动”从“正在播放”所跟随扬声器的来源开始。';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle => '在“正在播放”中显示';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription => '在关闭按钮旁添加“音乐库”按钮。';
+
+  @override
+  String get libraryQueueTitle => '队列';
+
+  @override
+  String get libraryCloseQueue => '关闭队列';
+
+  @override
+  String get libraryClear => '清空';
+
+  @override
+  String get libraryClearQueueTitle => '清空队列？';
+
+  @override
+  String get libraryClearQueueMessage => '音乐将停止，所有曲目都会移出队列。';
+
+  @override
+  String get libraryRemoveFromQueue => '从队列中移除';
+
+  @override
+  String get libraryReorder => '拖动以重新排序';
+
+  @override
+  String get libraryQueueFailed => '无法更改队列';
 
   @override
   String get offlineDashboard => '仪表盘不可用';

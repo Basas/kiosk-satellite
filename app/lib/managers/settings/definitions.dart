@@ -281,6 +281,7 @@ const Map<String, String> subpageHints = {
   'AirPlay': 'Play audio from an iPhone, iPad or Mac',
   'Floating Player': 'The small card over the dashboard',
   'Now Playing': 'Full-screen view while music plays',
+  'Music Library': 'Browse music and play it on a speaker',
   'Lyrics': 'Synchronized lyrics, their source and timing',
   // ESPHome.
   'Notifications': 'Transparency, blur, notification sound, test notification',
@@ -1178,6 +1179,18 @@ const kioskAllowCalendar = SettingDef<bool>(
   defaultValue: true,
   title: 'Calendar',
   description: 'Open the family calendar from the kiosk menu.',
+  category: 'Kiosk',
+  section: 'Allowed Actions',
+  subpage: 'Allowed Actions',
+  dependsOn: 'kiosk.allow_drawer',
+);
+
+const kioskAllowMusicLibrary = SettingDef<bool>(
+  key: 'kiosk.allow_music_library',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Music Library',
+  description: 'Browse music and play it on a speaker.',
   category: 'Kiosk',
   section: 'Allowed Actions',
   subpage: 'Allowed Actions',
@@ -9981,6 +9994,77 @@ const sendspinLyricsOffset = SettingDef<num>(
   unit: 's',
 );
 
+// ── Music Library ─────────────────────────────────────────────────────
+// Browse and play music from Music Assistant, a Home Assistant speaker's
+// media or a Sonos household, on the player Now Playing follows.
+
+/// The Music Library entry in the kiosk menu. The restricted menu also
+/// needs Music Library under Kiosk Mode's Allowed Actions.
+const libraryMenu = SettingDef<bool>(
+  key: 'library.menu',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show in the kiosk menu',
+  description: 'Add a Music Library entry to the kiosk menu.',
+  category: 'Sendspin',
+  subpage: 'Music Library',
+  section: 'Music Library',
+);
+
+const libraryIdleCloseMinutes = SettingDef<String>(
+  key: 'library.idle_close_minutes',
+  type: SettingType.select,
+  defaultValue: '2',
+  title: 'Close when idle',
+  description: 'Returns to the dashboard after no touch for this long.',
+  category: 'Sendspin',
+  subpage: 'Music Library',
+  section: 'Music Library',
+  options: ['0', '1', '2', '5', '10'],
+  optionLabels: {
+    '0': 'Never',
+    '1': '1 minute',
+    '2': '2 minutes',
+    '5': '5 minutes',
+    '10': '10 minutes',
+  },
+);
+
+/// The source the library opens on: ma, ha or sonos. Empty starts with
+/// the source of the player Now Playing follows, else the first one set
+/// up. Switching the source in the library writes it here too.
+const librarySource = SettingDef<String>(
+  key: 'library.source',
+  type: SettingType.select,
+  defaultValue: '',
+  title: 'Source',
+  description:
+      'Where the library lists music from. Automatic starts with the '
+      'source of the speaker Now Playing follows.',
+  category: 'Sendspin',
+  subpage: 'Music Library',
+  section: 'Music Library',
+  options: ['', 'ma', 'ha', 'sonos'],
+  optionLabels: {
+    '': 'Automatic',
+    'ma': 'Music Assistant',
+    'ha': 'Home Assistant',
+    'sonos': 'Sonos',
+  },
+);
+
+/// The library button beside the close button on the Now Playing view.
+const libraryNowPlayingButton = SettingDef<bool>(
+  key: 'library.now_playing_button',
+  type: SettingType.boolean,
+  defaultValue: true,
+  title: 'Show on Now Playing',
+  description: 'Add a Music Library button next to the close button.',
+  category: 'Sendspin',
+  subpage: 'Music Library',
+  section: 'Music Library',
+);
+
 /// Timer group position as "x,y" fractions of the free area.
 /// Saved by dragging and kept local to this device.
 const voiceTimerPosition = SettingDef<String>(
@@ -12748,6 +12832,7 @@ const List<SettingDef<Object>> allSettings = [
   kioskAllowIntercom,
   kioskAllowAlarms,
   kioskAllowCalendar,
+  kioskAllowMusicLibrary,
   kioskAllowMusic,
   kioskAllowSendspinPlayer,
   kioskAllowScreensaver,
@@ -13248,6 +13333,10 @@ const List<SettingDef<Object>> allSettings = [
   sendspinMaZoom,
   sendspinSonosGroupVolume,
   sendspinSonosInputs,
+  librarySource,
+  libraryMenu,
+  libraryNowPlayingButton,
+  libraryIdleCloseMinutes,
   sendspinSonosHosts,
   sendspinShowPlayer,
   sendspinPlayerSize,

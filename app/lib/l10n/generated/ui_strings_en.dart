@@ -2832,6 +2832,300 @@ class UiStringsEn extends UiStrings {
   String get logsUnknown => 'unknown';
 
   @override
+  String get libraryTitle => 'Music Library';
+
+  @override
+  String get librarySource => 'Source';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Library, search and radio';
+
+  @override
+  String get librarySourceHaHint => 'Media from each speaker';
+
+  @override
+  String get librarySourceSonosHint => 'Favorites and playlists';
+
+  @override
+  String get libraryDiscover => 'Discover';
+
+  @override
+  String get librarySearch => 'Search';
+
+  @override
+  String get libraryBrowse => 'Browse';
+
+  @override
+  String get libraryLibrary => 'Library';
+
+  @override
+  String get libraryArtists => 'Artists';
+
+  @override
+  String get libraryAlbums => 'Albums';
+
+  @override
+  String get libraryTracks => 'Tracks';
+
+  @override
+  String get libraryPlaylists => 'Playlists';
+
+  @override
+  String get libraryRadio => 'Radio';
+
+  @override
+  String get libraryPodcasts => 'Podcasts';
+
+  @override
+  String get libraryAudiobooks => 'Audiobooks';
+
+  @override
+  String get libraryFavorites => 'Favorites';
+
+  @override
+  String get librarySonosPlaylists => 'Sonos playlists';
+
+  @override
+  String get libraryRecentlyPlayed => 'Recently played';
+
+  @override
+  String get libraryRecentlyAdded => 'Recently added';
+
+  @override
+  String get libraryMoreResults => 'More results';
+
+  @override
+  String get libraryTopTracks => 'Top tracks';
+
+  @override
+  String get libraryKindArtist => 'Artist';
+
+  @override
+  String get libraryKindAlbum => 'Album';
+
+  @override
+  String get libraryKindTrack => 'Track';
+
+  @override
+  String get libraryKindPlaylist => 'Playlist';
+
+  @override
+  String get libraryKindRadio => 'Radio';
+
+  @override
+  String get libraryKindPodcast => 'Podcast';
+
+  @override
+  String get libraryKindEpisode => 'Episode';
+
+  @override
+  String get libraryKindAudiobook => 'Audiobook';
+
+  @override
+  String get libraryOneTrack => '1 track';
+
+  @override
+  String libraryTrackCount(String count) {
+    return '$count tracks';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String get librarySearchHint => 'Artists, albums, tracks';
+
+  @override
+  String get librarySearchClear => 'Clear search';
+
+  @override
+  String get librarySearchAll => 'All';
+
+  @override
+  String get librarySearchPrompt =>
+      'Search for artists, albums, tracks and more.';
+
+  @override
+  String get libraryEmpty => 'Nothing here yet.';
+
+  @override
+  String get libraryLoadFailed => 'This could not be loaded.';
+
+  @override
+  String get libraryNoSource =>
+      'Set up Music Assistant, Home Assistant or a Sonos speaker to browse music.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Choose a speaker to see the media it can play.';
+
+  @override
+  String get libraryChooseSpeaker => 'Choose a speaker';
+
+  @override
+  String get libraryPickSpeakerHint => 'Choose the speaker to play on.';
+
+  @override
+  String get libraryPlay => 'Play';
+
+  @override
+  String get libraryOpenNowPlaying => 'Open Now Playing';
+
+  @override
+  String get libraryNothingPlaying => 'Nothing playing';
+
+  @override
+  String get libraryMore => 'More options';
+
+  @override
+  String get libraryPlayNow => 'Play now';
+
+  @override
+  String get libraryPlayNext => 'Play next';
+
+  @override
+  String get libraryAddToQueue => 'Add to queue';
+
+  @override
+  String get libraryStartRadio => 'Start radio';
+
+  @override
+  String get libraryGoToArtist => 'Go to artist';
+
+  @override
+  String get libraryAddFavorite => 'Add to favorites';
+
+  @override
+  String get libraryRemoveFavorite => 'Remove from favorites';
+
+  @override
+  String get libraryAddedFavorite => 'Added to favorites';
+
+  @override
+  String get libraryRemovedFavorite => 'Removed from favorites';
+
+  @override
+  String get libraryFavoriteFailed => 'Favorites could not be changed';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return 'Playing on $speaker';
+  }
+
+  @override
+  String get libraryPlaysNext => 'Plays next';
+
+  @override
+  String get libraryAddedToQueue => 'Added to queue';
+
+  @override
+  String get libraryView => 'View';
+
+  @override
+  String get libraryPlayFailed => 'This could not be played';
+
+  @override
+  String get librarySpeakers => 'Speakers';
+
+  @override
+  String get libraryPlayingOn => 'Playing on';
+
+  @override
+  String get libraryOtherSpeakers => 'Other speakers';
+
+  @override
+  String get libraryNoOtherSpeakers => 'No other speakers.';
+
+  @override
+  String get libraryThisDevice => 'This device';
+
+  @override
+  String get libraryUnavailable => 'Unavailable';
+
+  @override
+  String get libraryGroup => 'Group';
+
+  @override
+  String get libraryGroupAll => 'Group';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Group with $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Grouped speakers play the same music in sync.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Add a Music Library entry to the kiosk menu.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Browse music and play it on a speaker.';
+
+  @override
+  String get libraryPageHint => 'Browse music and play it on a speaker';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'Where the library lists music from. Automatic starts with the source of the speaker Now Playing follows.';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle => 'Show on Now Playing';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Add a Music Library button next to the close button.';
+
+  @override
+  String get libraryQueueTitle => 'Queue';
+
+  @override
+  String get libraryCloseQueue => 'Close queue';
+
+  @override
+  String get libraryClear => 'Clear';
+
+  @override
+  String get libraryClearQueueTitle => 'Clear the queue?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'The music stops and every track leaves the queue.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Remove from queue';
+
+  @override
+  String get libraryReorder => 'Drag to reorder';
+
+  @override
+  String get libraryQueueFailed => 'The queue could not be changed';
+
+  @override
   String get offlineDashboard => 'Dashboard unavailable';
 
   @override

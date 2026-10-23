@@ -2845,6 +2845,301 @@ class UiStringsRu extends UiStrings {
   String get logsUnknown => 'неизвестно';
 
   @override
+  String get libraryTitle => 'Музыкальная библиотека';
+
+  @override
+  String get librarySource => 'Источник';
+
+  @override
+  String get librarySourceMa => 'Music Assistant';
+
+  @override
+  String get librarySourceHa => 'Home Assistant';
+
+  @override
+  String get librarySourceSonos => 'Sonos';
+
+  @override
+  String get librarySourceMaHint => 'Библиотека, поиск и радио';
+
+  @override
+  String get librarySourceHaHint => 'Медиа каждого динамика';
+
+  @override
+  String get librarySourceSonosHint => 'Избранное и плейлисты';
+
+  @override
+  String get libraryDiscover => 'Обзор';
+
+  @override
+  String get librarySearch => 'Поиск';
+
+  @override
+  String get libraryBrowse => 'Обзор папок';
+
+  @override
+  String get libraryLibrary => 'Библиотека';
+
+  @override
+  String get libraryArtists => 'Исполнители';
+
+  @override
+  String get libraryAlbums => 'Альбомы';
+
+  @override
+  String get libraryTracks => 'Треки';
+
+  @override
+  String get libraryPlaylists => 'Плейлисты';
+
+  @override
+  String get libraryRadio => 'Радио';
+
+  @override
+  String get libraryPodcasts => 'Подкасты';
+
+  @override
+  String get libraryAudiobooks => 'Аудиокниги';
+
+  @override
+  String get libraryFavorites => 'Избранное';
+
+  @override
+  String get librarySonosPlaylists => 'Плейлисты Sonos';
+
+  @override
+  String get libraryRecentlyPlayed => 'Недавно прослушанное';
+
+  @override
+  String get libraryRecentlyAdded => 'Недавно добавленное';
+
+  @override
+  String get libraryMoreResults => 'Другие результаты';
+
+  @override
+  String get libraryTopTracks => 'Популярные треки';
+
+  @override
+  String get libraryKindArtist => 'Исполнитель';
+
+  @override
+  String get libraryKindAlbum => 'Альбом';
+
+  @override
+  String get libraryKindTrack => 'Трек';
+
+  @override
+  String get libraryKindPlaylist => 'Плейлист';
+
+  @override
+  String get libraryKindRadio => 'Радио';
+
+  @override
+  String get libraryKindPodcast => 'Подкаст';
+
+  @override
+  String get libraryKindEpisode => 'Эпизод';
+
+  @override
+  String get libraryKindAudiobook => 'Аудиокнига';
+
+  @override
+  String get libraryOneTrack => '1 трек';
+
+  @override
+  String libraryTrackCount(String count) {
+    return 'Треков: $count';
+  }
+
+  @override
+  String libraryMinutes(String minutes) {
+    return '$minutes мин';
+  }
+
+  @override
+  String libraryHoursMinutes(String hours, String minutes) {
+    return '$hours ч $minutes мин';
+  }
+
+  @override
+  String get librarySearchHint => 'Исполнители, альбомы, треки';
+
+  @override
+  String get librarySearchClear => 'Очистить поиск';
+
+  @override
+  String get librarySearchAll => 'Все';
+
+  @override
+  String get librarySearchPrompt =>
+      'Ищите исполнителей, альбомы, треки и многое другое.';
+
+  @override
+  String get libraryEmpty => 'Здесь пока ничего нет.';
+
+  @override
+  String get libraryLoadFailed => 'Не удалось загрузить.';
+
+  @override
+  String get libraryNoSource =>
+      'Настройте Music Assistant, Home Assistant или динамик Sonos, чтобы просматривать музыку.';
+
+  @override
+  String get libraryHaPickSpeaker =>
+      'Выберите динамик, чтобы увидеть медиа, которые он может воспроизвести.';
+
+  @override
+  String get libraryChooseSpeaker => 'Выберите динамик';
+
+  @override
+  String get libraryPickSpeakerHint => 'Выберите динамик для воспроизведения.';
+
+  @override
+  String get libraryPlay => 'Воспроизвести';
+
+  @override
+  String get libraryOpenNowPlaying => 'Открыть «Сейчас играет»';
+
+  @override
+  String get libraryNothingPlaying => 'Ничего не воспроизводится';
+
+  @override
+  String get libraryMore => 'Другие действия';
+
+  @override
+  String get libraryPlayNow => 'Воспроизвести сейчас';
+
+  @override
+  String get libraryPlayNext => 'Воспроизвести следующим';
+
+  @override
+  String get libraryAddToQueue => 'Добавить в очередь';
+
+  @override
+  String get libraryStartRadio => 'Запустить радио';
+
+  @override
+  String get libraryGoToArtist => 'Перейти к исполнителю';
+
+  @override
+  String get libraryAddFavorite => 'Добавить в избранное';
+
+  @override
+  String get libraryRemoveFavorite => 'Удалить из избранного';
+
+  @override
+  String get libraryAddedFavorite => 'Добавлено в избранное';
+
+  @override
+  String get libraryRemovedFavorite => 'Удалено из избранного';
+
+  @override
+  String get libraryFavoriteFailed => 'Не удалось изменить избранное';
+
+  @override
+  String libraryPlayingOnSpeaker(String speaker) {
+    return 'Воспроизводится на $speaker';
+  }
+
+  @override
+  String get libraryPlaysNext => 'Воспроизведётся следующим';
+
+  @override
+  String get libraryAddedToQueue => 'Добавлено в очередь';
+
+  @override
+  String get libraryView => 'Показать';
+
+  @override
+  String get libraryPlayFailed => 'Не удалось воспроизвести';
+
+  @override
+  String get librarySpeakers => 'Динамики';
+
+  @override
+  String get libraryPlayingOn => 'Воспроизводится на';
+
+  @override
+  String get libraryOtherSpeakers => 'Другие динамики';
+
+  @override
+  String get libraryNoOtherSpeakers => 'Других динамиков нет.';
+
+  @override
+  String get libraryThisDevice => 'Это устройство';
+
+  @override
+  String get libraryUnavailable => 'Недоступен';
+
+  @override
+  String get libraryGroup => 'Группировать';
+
+  @override
+  String get libraryGroupAll => 'Группа';
+
+  @override
+  String libraryGroupWith(String speaker) {
+    return 'Группировать с $speaker';
+  }
+
+  @override
+  String get libraryGroupHint =>
+      'Сгруппированные динамики синхронно воспроизводят одну и ту же музыку.';
+
+  @override
+  String libraryGroupName(String speaker, String count) {
+    return '$speaker + $count';
+  }
+
+  @override
+  String get settingLibraryMenuDescription =>
+      'Добавить пункт «Музыкальная библиотека» в меню киоска.';
+
+  @override
+  String get settingKioskAllowMusicLibraryDescription =>
+      'Просматривать музыку и воспроизводить её на динамике.';
+
+  @override
+  String get libraryPageHint => 'Просмотр музыки и воспроизведение на динамике';
+
+  @override
+  String get settingLibrarySourceDescription =>
+      'Откуда библиотека берёт музыку. «Автоматически» начинает с источника динамика, за которым следит «Сейчас играет».';
+
+  @override
+  String get settingLibraryNowPlayingButtonTitle =>
+      'Показывать в «Сейчас играет»';
+
+  @override
+  String get settingLibraryNowPlayingButtonDescription =>
+      'Добавить кнопку «Музыкальная библиотека» рядом с кнопкой закрытия.';
+
+  @override
+  String get libraryQueueTitle => 'Очередь';
+
+  @override
+  String get libraryCloseQueue => 'Закрыть очередь';
+
+  @override
+  String get libraryClear => 'Очистить';
+
+  @override
+  String get libraryClearQueueTitle => 'Очистить очередь?';
+
+  @override
+  String get libraryClearQueueMessage =>
+      'Музыка остановится, а все треки будут удалены из очереди.';
+
+  @override
+  String get libraryRemoveFromQueue => 'Удалить из очереди';
+
+  @override
+  String get libraryReorder => 'Перетащите, чтобы изменить порядок';
+
+  @override
+  String get libraryQueueFailed => 'Не удалось изменить очередь';
+
+  @override
   String get offlineDashboard => 'Панель недоступна';
 
   @override

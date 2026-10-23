@@ -487,6 +487,16 @@ const settingOptionMessageIds = <String, Map<String, String>>{
     "camera": "cameraOnvifEventsSourceCamera",
     "person": "cameraOnvifEventsSourcePerson",
     "entity": "cameraOnvifEventsSourceEntity"
+  },
+  "library.idle_close_minutes": {
+    "0": "calendarIdleNever",
+    "1": "calendarIdle1Minute",
+    "2": "calendarIdle2Minutes",
+    "5": "alarmsOption5Minutes",
+    "10": "alarmsOption10Minutes"
+  },
+  "library.source": {
+    "": "screenAudioAutomatic"
   }
 };
 const settingPlaceholderMessageIds = <String, String>{

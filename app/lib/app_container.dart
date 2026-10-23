@@ -44,6 +44,7 @@ import 'managers/fleet/fleet_sync_manager.dart';
 import 'managers/intercom/intercom_manager.dart';
 import 'managers/alarms/alarm_manager.dart';
 import 'managers/calendar/calendar_manager.dart';
+import 'managers/music_library/music_library_manager.dart';
 import 'managers/analytics/analytics_manager.dart';
 import 'managers/analytics/usage_counters.dart';
 import 'managers/broadcasts/event_broadcast_manager.dart';
@@ -224,6 +225,14 @@ class AppContainer {
     alarms = AlarmManager(bus, commands, log, settings)
       ..screensaverModeOverride = () => screensaver.modeOverride.value;
     calendar = CalendarManager(bus, commands, log, settings);
+    musicLibrary = MusicLibraryManager(bus, commands, log, settings);
+    // The library is opaque and full screen too.
+    musicLibrary.visible.addListener(
+      () => browser.setCovered(
+        'music library',
+        covered: musicLibrary.visible.value,
+      ),
+    );
     voiceRequests = VoiceRequestsManager(bus, commands, log, settings);
     // It follows what the managers above are doing, through the bus and
     // the media players' own states.
@@ -307,6 +316,7 @@ class AppContainer {
   late final IntercomManager intercom;
   late final AlarmManager alarms;
   late final CalendarManager calendar;
+  late final MusicLibraryManager musicLibrary;
   late final VoiceRequestsManager voiceRequests;
   late final LedManager leds;
   late final PageStateManager pageState;
@@ -392,6 +402,9 @@ class AppContainer {
     alarms,
     // Nothing reaches Home Assistant until a screen watches some days.
     calendar,
+    // Nothing connects until the library opens. Its plays go through the
+    // Sendspin manager's commands.
+    musicLibrary,
     // After intercom and alarms: it runs their commands.
     voiceRequests,
     // Before the remote admin's first request reads its hidden settings,

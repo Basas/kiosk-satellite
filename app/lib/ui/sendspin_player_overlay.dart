@@ -283,6 +283,13 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
     final showPlayerChip =
         c.settings.get(defs.sendspinSpeakerPill) &&
         c.sendspin.playerChipName.isNotEmpty;
+    // The way into the music library, beside the close button.
+    final showLibrary =
+        controls &&
+        !widget.alongsideScreensaver &&
+        c.settings.get(defs.libraryNowPlayingButton) &&
+        c.settings.get(defs.kioskAllowMusicLibrary) &&
+        c.musicLibrary.available.isNotEmpty;
     // The queue panel (controls only: its button lives there) and the
     // lyrics share one slot, the queue winning while it is open. Either
     // takes whatever spare axis the panel has: a second column on a
@@ -871,7 +878,12 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
                 visibilityKey: const ValueKey('speaker-pill-visibility'),
                 child: _PlayerChip(
                   container: c,
-                  maxWidth: max(80, screen.width - (showClose ? 80 : 24)),
+                  maxWidth: max(
+                    80,
+                    screen.width -
+                        (showClose ? 80 : 24) -
+                        (showLibrary ? 58 : 0),
+                  ),
                   // It follows the text up but never shrinks below its
                   // touch target.
                   scale: max(1.0, textScale),
@@ -883,6 +895,38 @@ class _SendspinFullscreenViewState extends State<SendspinFullscreenView> {
         // explicit: the same floating close the page overlays wear. It
         // reports its own source so the manager can tell it from the
         // touches it is holding.
+        if (showLibrary)
+          Positioned(
+            top: 12,
+            right: showClose ? 70 : 12,
+            child: SafeArea(
+              child: transientInArtOnly(
+                _ControlTouch(
+                  container: c,
+                  child: Material(
+                    color: Colors.black45,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      focusColor: Colors.white24,
+                      onTap: () => unawaited(
+                        c.commands.execute('openMusicLibrary', const {}),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Icon(
+                          Icons.library_music_outlined,
+                          color: Colors.white,
+                          size: 24,
+                          semanticLabel: l10n(context).libraryTitle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         if (showClose)
           Positioned(
             top: 12,
