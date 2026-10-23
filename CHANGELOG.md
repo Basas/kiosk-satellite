@@ -2,6 +2,11 @@
 
 All notable changes to Kiosk Satellite are documented here. Full release notes for each version are available on the [releases page](https://github.com/jxlarrea/kiosk-satellite/releases).
 
+## Unreleased
+
+### Changed
+- **The speaker pill follows Text scale.** The speaker selection pill on the Now Playing view grows with **Text scale** under **Media Player > Now Playing**, along with its icon, padding and touch area. The speaker group menu it opens grows too, at a slightly slower rate so the list keeps room for more speakers. Below 100% both stay at their normal size (#1109).
+
 ## v2026.10.37 - 2026-10-22
 
 ### Added
