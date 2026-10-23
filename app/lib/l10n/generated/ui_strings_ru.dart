@@ -3040,11 +3040,6 @@ class UiStringsRu extends UiStrings {
   String get libraryFavoriteFailed => 'Не удалось изменить избранное';
 
   @override
-  String libraryPlayingOnSpeaker(String speaker) {
-    return 'Воспроизводится на $speaker';
-  }
-
-  @override
   String get libraryPlaysNext => 'Воспроизведётся следующим';
 
   @override

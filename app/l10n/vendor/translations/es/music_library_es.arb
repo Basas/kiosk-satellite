@@ -61,7 +61,6 @@
   "libraryAddedFavorite": "Añadido a favoritos",
   "libraryRemovedFavorite": "Quitado de favoritos",
   "libraryFavoriteFailed": "No se pudieron cambiar los favoritos",
-  "libraryPlayingOnSpeaker": "Reproduciendo en {speaker}",
   "libraryPlaysNext": "Se reproduce a continuación",
   "libraryAddedToQueue": "Añadido a la cola",
   "libraryView": "Ver",

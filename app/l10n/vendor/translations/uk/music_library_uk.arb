@@ -61,7 +61,6 @@
   "libraryAddedFavorite": "Додано до улюбленого",
   "libraryRemovedFavorite": "Вилучено з улюбленого",
   "libraryFavoriteFailed": "Не вдалося змінити улюблене",
-  "libraryPlayingOnSpeaker": "Відтворюється на {speaker}",
   "libraryPlaysNext": "Відтвориться наступним",
   "libraryAddedToQueue": "Додано до черги",
   "libraryView": "Переглянути",

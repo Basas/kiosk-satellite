@@ -5421,12 +5421,6 @@ abstract class UiStrings {
   /// **'Favorites could not be changed'**
   String get libraryFavoriteFailed;
 
-  /// Toast after a play.
-  ///
-  /// In en, this message translates to:
-  /// **'Playing on {speaker}'**
-  String libraryPlayingOnSpeaker(String speaker);
-
   /// Toast after Play next.
   ///
   /// In en, this message translates to:

@@ -3027,11 +3027,6 @@ class UiStringsEn extends UiStrings {
   String get libraryFavoriteFailed => 'Favorites could not be changed';
 
   @override
-  String libraryPlayingOnSpeaker(String speaker) {
-    return 'Playing on $speaker';
-  }
-
-  @override
   String get libraryPlaysNext => 'Plays next';
 
   @override

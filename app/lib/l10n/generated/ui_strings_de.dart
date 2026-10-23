@@ -3071,11 +3071,6 @@ class UiStringsDe extends UiStrings {
   String get libraryFavoriteFailed => 'Favoriten konnten nicht geändert werden';
 
   @override
-  String libraryPlayingOnSpeaker(String speaker) {
-    return 'Wird auf $speaker abgespielt';
-  }
-
-  @override
   String get libraryPlaysNext => 'Wird als Nächstes abgespielt';
 
   @override

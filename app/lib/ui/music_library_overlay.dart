@@ -297,16 +297,16 @@ class _MusicLibraryScreenState extends State<MusicLibraryScreen> {
       );
       return;
     }
-    final queued = mode == PlayMode.next || mode == PlayMode.add;
+    // Music starting is its own confirmation: the player bar picks it up.
+    // Queuing changes nothing on screen, so it still says what happened.
+    if (mode != PlayMode.next && mode != PlayMode.add) return;
     showToast(
       context,
-      title: queued
-          ? (mode == PlayMode.next ? s.libraryPlaysNext : s.libraryAddedToQueue)
-          : s.libraryPlayingOnSpeaker(c.sendspin.playerChipName),
+      title: mode == PlayMode.next ? s.libraryPlaysNext : s.libraryAddedToQueue,
       message: item.title,
       kind: ToastKind.success,
-      actionLabel: queued && c.sendspin.queueAvailable ? s.libraryView : null,
-      onAction: queued && c.sendspin.queueAvailable ? _openQueue : null,
+      actionLabel: c.sendspin.queueAvailable ? s.libraryView : null,
+      onAction: c.sendspin.queueAvailable ? _openQueue : null,
     );
   }
 

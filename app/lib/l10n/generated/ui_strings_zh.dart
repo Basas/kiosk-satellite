@@ -2961,11 +2961,6 @@ class UiStringsZh extends UiStrings {
   String get libraryFavoriteFailed => '无法更改收藏';
 
   @override
-  String libraryPlayingOnSpeaker(String speaker) {
-    return '正在 $speaker 上播放';
-  }
-
-  @override
   String get libraryPlaysNext => '将在下一首播放';
 
   @override
@@ -17622,11 +17617,6 @@ class UiStringsZhCn extends UiStringsZh {
 
   @override
   String get libraryFavoriteFailed => '无法更改收藏';
-
-  @override
-  String libraryPlayingOnSpeaker(String speaker) {
-    return '正在 $speaker 上播放';
-  }
 
   @override
   String get libraryPlaysNext => '将在下一首播放';

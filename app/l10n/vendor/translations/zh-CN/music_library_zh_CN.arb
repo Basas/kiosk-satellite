@@ -61,7 +61,6 @@
   "libraryAddedFavorite": "已添加到收藏",
   "libraryRemovedFavorite": "已从收藏中移除",
   "libraryFavoriteFailed": "无法更改收藏",
-  "libraryPlayingOnSpeaker": "正在 {speaker} 上播放",
   "libraryPlaysNext": "将在下一首播放",
   "libraryAddedToQueue": "已添加到队列",
   "libraryView": "查看",

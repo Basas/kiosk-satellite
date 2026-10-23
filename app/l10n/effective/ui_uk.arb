@@ -11639,22 +11639,6 @@
       ]
     }
   },
-  "libraryPlayingOnSpeaker": "Відтворюється на {speaker}",
-  "@libraryPlayingOnSpeaker": {
-    "context": "Music Library",
-    "description": "Toast after a play.",
-    "x-locations": {
-      "device": [
-        "Kiosk menu > Music Library"
-      ]
-    },
-    "placeholders": {
-      "speaker": {
-        "type": "String",
-        "description": "The speaker's name."
-      }
-    }
-  },
   "libraryPlaysNext": "Відтвориться наступним",
   "@libraryPlaysNext": {
     "context": "Music Library",

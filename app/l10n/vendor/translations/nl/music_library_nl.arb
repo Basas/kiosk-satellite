@@ -61,7 +61,6 @@
   "libraryAddedFavorite": "Aan favorieten toegevoegd",
   "libraryRemovedFavorite": "Uit favorieten verwijderd",
   "libraryFavoriteFailed": "Favorieten konden niet worden gewijzigd",
-  "libraryPlayingOnSpeaker": "Speelt af op {speaker}",
   "libraryPlaysNext": "Wordt hierna afgespeeld",
   "libraryAddedToQueue": "Aan wachtrij toegevoegd",
   "libraryView": "Bekijken",
