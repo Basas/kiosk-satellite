@@ -447,6 +447,24 @@ The page has the same footing as any other link the kiosk opens: it follows the 
 
 On the [remote API](remote-api.md) the same two are the `showLinkPage` and `hideOverlayPage` commands, `showLinkPage` with the same `hold` flag.
 
+## Run a Shizuku command
+
+`esphome.<node name>_shizuku_command` runs a shell command on the kiosk through [Shizuku](shizuku.md), the same way `adb shell` would. It is listed with **Expose kiosk entities** and needs Shizuku running with Kiosk Satellite allowed under **Settings > Device > Shizuku**. The command runs as the user Shizuku runs as, which is Android's shell user when Shizuku was started over ADB and root when it was started as root.
+
+```yaml
+- action: esphome.kitchen_tablet_shizuku_command
+  data:
+    command: settings put system screen_off_timeout 600000
+    timeout: 0
+  response_variable: result
+```
+
+`command` is one command line and can use pipes, `&&` and redirects. `timeout` is how many seconds to wait for it, up to 25. Set it to 0 for the default of 10. A command that runs past its timeout is stopped.
+
+The action answers through `response_variable` with `exit_code`, `stdout`, `stderr`, `timed_out` and `truncated`. A command that runs and fails still answers, so check `exit_code` in the automation. Output longer than about 48 KB is cut and `truncated` is true. The action reports an error to Home Assistant when the command could not run at all: Shizuku is not installed, not running, older than version 13 or Kiosk Satellite is not allowed in it. Commands run one at a time in the order they arrive.
+
+Anyone who can run actions on this device in Home Assistant can run commands on the kiosk with the same access as `adb shell`. Turn off **Expose kiosk entities** or revoke Kiosk Satellite in the Shizuku app if that is more access than you want to give Home Assistant. On the [remote API](remote-api.md), the equivalent command is `runShizukuCommand` with the same `command` and `timeout` arguments.
+
 ## Ambient Noise
 
 The **Ambient noise** sensor reports how loud the room is as one number in dBFS. A typical use is an automation that lowers the assistant's volume when the house is quiet at night and raises it when the TV is on. Plugins that declare the `noise` capability read the same level.

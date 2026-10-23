@@ -1608,6 +1608,19 @@ class EspEntitySurface {
     },
     // Drops that page, whoever put it up; nothing up is not an error.
     {'name': 'close_url', 'supportsResponse': true, 'args': []},
+    // A shell command line through Shizuku, as adb shell would run it.
+    // Answers with exit_code, stdout and stderr; a command that ran and
+    // failed is still a success, and only one that could not run (no
+    // Shizuku, no grant) is an error. timeout is in seconds, 0 is 10 and
+    // 25 is the most, since Home Assistant stops waiting at 30.
+    {
+      'name': 'shizuku_command',
+      'supportsResponse': true,
+      'args': [
+        {'name': 'command', 'type': 'string'},
+        {'name': 'timeout', 'type': 'int'},
+      ],
+    },
     {
       'name': 'set_brightness',
       'supportsResponse': true,
@@ -1838,6 +1851,13 @@ class EspEntitySurface {
         final result = await commands.execute('hideOverlayPage', const {});
         if (!result.ok) throw StateError(result.error ?? 'refused');
         return const {};
+      case 'shizuku_command':
+        final result = await commands.execute('runShizukuCommand', {
+          'command': '${args['command'] ?? ''}',
+          'timeout': args['timeout'] ?? 0,
+        });
+        if (!result.ok) throw StateError(result.error ?? 'refused');
+        return fitCommandResponse((result.data as Map).cast<String, Object?>());
       default:
         log.warn('esphome', 'unknown action $name');
         return null;
@@ -3111,4 +3131,43 @@ class EspEntitySurface {
     // Every completed poll IS a sighting.
     await _send('last_seen', DateTime.now().toUtc().toIso8601String());
   }
+}
+
+/// A command's answer cut to fit one ESPHome frame, which holds at most
+/// 64 KB: stdout and stderr can each be 32 KB and JSON escaping grows
+/// them further. stderr keeps its head and stdout gives up the rest, with
+/// truncated set whenever anything was cut.
+Map<String, Object?> fitCommandResponse(
+  Map<String, Object?> response, {
+  int limit = 48000,
+}) {
+  int size(Map<String, Object?> value) => utf8.encode(jsonEncode(value)).length;
+  var fitted = Map<String, Object?>.of(response);
+  final stderr = '${fitted['stderr'] ?? ''}';
+  if (stderr.length > 4096) {
+    fitted = {
+      ...fitted,
+      'stderr': stderr.substring(0, 4096),
+      'truncated': true,
+    };
+  }
+  final stdout = '${fitted['stdout'] ?? ''}';
+  if (size(fitted) <= limit) return fitted;
+  // The longest head of stdout that fits. Escaping makes the byte cost of
+  // a character anywhere from 1 to 6, so search rather than estimate.
+  Map<String, Object?> cut(int length) => {
+    ...fitted,
+    'stdout': stdout.substring(0, length),
+    'truncated': true,
+  };
+  var low = 0, high = stdout.length;
+  while (low < high) {
+    final mid = (low + high + 1) ~/ 2;
+    if (size(cut(mid)) <= limit) {
+      low = mid;
+    } else {
+      high = mid - 1;
+    }
+  }
+  return cut(low);
 }
