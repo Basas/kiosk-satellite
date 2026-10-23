@@ -7,6 +7,9 @@ All notable changes to Kiosk Satellite are documented here. Full release notes f
 ### Changed
 - **The speaker pill follows Text scale.** The speaker selection pill on the Now Playing view grows with **Text scale** under **Media Player > Now Playing**, along with its icon, padding and touch area. The speaker group menu it opens grows too, at a slightly slower rate so the list keeps room for more speakers. Below 100% both stay at their normal size (#1109).
 
+### Fixed
+- **Quiet rooms no longer move the microphone to another capture format.** Some audio drivers, such as the Rockchip driver on many PoE wall panels, turn a quiet room into exact silence, and every 30 seconds of it walked capture down the format ladder. Each walk paused wake word detection, and capture could end up on **Voice communication** while **Capture mode** was set to **Raw microphone**. If silence ends in audio without the capture being reopened, the format is now treated as gating, not dead, and silence no longer moves capture off it. After ten minutes of silence it is only reopened on the same format and source. A fallback source is only remembered if the picked capture mode never delivered audio. The microphone docs now explain why wake word range is short on these panels and that a USB microphone avoids the driver (#1110).
+
 ## v2026.10.37 - 2026-10-22
 
 ### Added
