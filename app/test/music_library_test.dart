@@ -278,6 +278,8 @@ void main() {
         'ks.sendspin.ma_url': 'ma.local:8095',
         'ks.sendspin.ma_token': 'token',
         'ks.sendspin.client_id': 'tablet',
+        // Now Playing on, so the player bar draws its every button.
+        'ks.sendspin.fullscreen': true,
       });
       final c = AppContainer();
       await c.settings.init();

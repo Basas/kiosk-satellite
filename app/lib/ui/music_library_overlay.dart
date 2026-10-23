@@ -740,161 +740,190 @@ class _MusicLibraryScreenState extends State<MusicLibraryScreen> {
     );
     Widget item(IconData icon, String label, bool on, VoidCallback onTap) =>
         _NavItem(icon: icon, label: label, selected: on, onTap: onTap);
-    return EdgeFade(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 12, 16),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 14),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: _eyebrow(LibraryLayout.roomy),
-            ),
-          ),
-          if (c.musicLibrary.available.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Material(
-                color: theme.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(Ks.radiusRow),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: c.musicLibrary.available.length > 1
-                      ? _pickSource
-                      : null,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.secondaryContainer,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: _SourceMark(
-                              source: key,
-                              size: 20,
-                              color: theme.colorScheme.onSecondaryContainer,
+    final children = <Widget>[
+      // The source box starts level with the content: the header's 76
+      // and the list's 4, less the 20 above and the eyebrow's 28.
+      Padding(
+        padding: const EdgeInsets.only(left: 4, bottom: 32),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: _eyebrow(LibraryLayout.roomy),
+        ),
+      ),
+      if (c.musicLibrary.available.isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Material(
+            color: theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(Ks.radiusRow),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: c.musicLibrary.available.length > 1 ? _pickSource : null,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.secondaryContainer,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: _SourceMark(
+                          source: key,
+                          size: 20,
+                          color: theme.colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            s.librarySource,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                s.librarySource,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              Text(
-                                _sourceName(s, key),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            _sourceName(s, key),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontSize: 15,
+                            ),
                           ),
-                        ),
-                        if (c.musicLibrary.available.length > 1)
-                          Icon(
-                            Icons.expand_more_rounded,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                    if (c.musicLibrary.available.length > 1)
+                      Icon(
+                        Icons.expand_more_rounded,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                  ],
                 ),
               ),
             ),
-          if (source != null) ...[
-            if (source.hasDiscover)
-              item(
-                Icons.explore_outlined,
-                s.libraryDiscover,
-                _place.nav == 'discover',
-                () => _go(_Place('discover')),
-              ),
-            if (source.hasSearch)
-              item(
-                Icons.search_rounded,
-                s.librarySearch,
-                _place.nav == 'search',
-                () => _go(_Place('search')),
-              ),
-            if (source.hasBrowse && source is! HaLibrarySource)
-              item(
-                Icons.folder_outlined,
-                s.libraryBrowse,
-                _place.nav == 'browse',
-                () => _go(_Place('browse')),
-              ),
-            if (source is HaLibrarySource)
-              FutureBuilder<LibraryPage>(
-                future: _roots,
-                builder: (context, snap) =>
-                    (snap.data?.items ?? const <LibraryItem>[]).isEmpty
-                    ? const SizedBox.shrink()
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
-                            child: Text(
-                              s.libraryBrowse.toUpperCase(),
-                              style: heading,
-                            ),
-                          ),
-                          for (final root
-                              in snap.data?.items ?? const <LibraryItem>[])
-                            item(
-                              Icons.folder_outlined,
-                              root.title,
-                              _place.nav == 'node' &&
-                                  _place.node?.id == root.id,
-                              () => _go(_Place('node', node: root)),
-                            ),
-                        ],
-                      ),
-              )
-            else
-              FutureBuilder<List<LibraryCategory>>(
-                future: _categories,
-                builder: (context, snap) {
-                  final categories = snap.data ?? const <LibraryCategory>[];
-                  if (categories.isEmpty) return const SizedBox.shrink();
-                  return Column(
+          ),
+        ),
+      if (source != null) ...[
+        if (source.hasDiscover)
+          item(
+            Icons.explore_outlined,
+            s.libraryDiscover,
+            _place.nav == 'discover',
+            () => _go(_Place('discover')),
+          ),
+        if (source.hasSearch)
+          item(
+            Icons.search_rounded,
+            s.librarySearch,
+            _place.nav == 'search',
+            () => _go(_Place('search')),
+          ),
+        if (source.hasBrowse && source is! HaLibrarySource)
+          item(
+            Icons.folder_outlined,
+            s.libraryBrowse,
+            _place.nav == 'browse',
+            () => _go(_Place('browse')),
+          ),
+        if (source is HaLibrarySource)
+          FutureBuilder<LibraryPage>(
+            future: _roots,
+            builder: (context, snap) =>
+                (snap.data?.items ?? const <LibraryItem>[]).isEmpty
+                ? const SizedBox.shrink()
+                : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
                         child: Text(
-                          s.libraryLibrary.toUpperCase(),
+                          s.libraryBrowse.toUpperCase(),
                           style: heading,
                         ),
                       ),
-                      for (final cat in categories)
+                      for (final root
+                          in snap.data?.items ?? const <LibraryItem>[])
                         item(
-                          _categoryIcon(cat.key),
-                          _categoryName(s, cat.key),
-                          _place.nav == 'library' &&
-                              _place.category?.key == cat.key,
-                          () => _go(_Place('library', category: cat)),
+                          Icons.folder_outlined,
+                          root.title,
+                          _place.nav == 'node' && _place.node?.id == root.id,
+                          () => _go(_Place('node', node: root)),
                         ),
                     ],
-                  );
-                },
+                  ),
+          )
+        else
+          FutureBuilder<List<LibraryCategory>>(
+            future: _categories,
+            builder: (context, snap) {
+              final categories = snap.data ?? const <LibraryCategory>[];
+              if (categories.isEmpty) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
+                    child: Text(s.libraryLibrary.toUpperCase(), style: heading),
+                  ),
+                  for (final cat in categories)
+                    item(
+                      _categoryIcon(cat.key),
+                      _categoryName(s, cat.key),
+                      _place.nav == 'library' &&
+                          _place.category?.key == cat.key,
+                      () => _go(_Place('library', category: cat)),
+                    ),
+                ],
+              );
+            },
+          ),
+      ],
+    ];
+    // The eyebrow and the source stay put over the list on a tall screen.
+    // A shorter one scrolls them away with it, so the list keeps the room.
+    final header = children
+        .take(c.musicLibrary.available.isNotEmpty ? 2 : 1)
+        .toList();
+    final nav = children.skip(header.length).toList();
+    return LayoutBuilder(
+      builder: (context, box) {
+        if (box.maxHeight < 560) {
+          return EdgeFade(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 12, 16),
+              children: children,
+            ),
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 12, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: header,
               ),
+            ),
+            Expanded(
+              child: EdgeFade(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 12, 16),
+                  children: nav,
+                ),
+              ),
+            ),
           ],
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -2297,7 +2326,14 @@ class _QuickTiles extends StatelessWidget {
   final Future<void> Function(LibraryItem item, {LibraryItem? within}) onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => LayoutBuilder(
+    // Two to a row where three would break their names, such as a tablet
+    // in portrait.
+    builder: (context, box) =>
+        _tiles(context, box.maxWidth < 640 ? 2 : columns),
+  );
+
+  Widget _tiles(BuildContext context, int columns) {
     final scheme = Theme.of(context).colorScheme;
     final rows = (items.length / columns).ceil();
     return Column(
@@ -3049,6 +3085,12 @@ class _MiniPlayerState extends State<_MiniPlayer> {
         : null;
     final level =
         _volumeDrag ?? c.sendspin.volumeLevel?.toDouble().clamp(0.0, 100.0);
+    // The bar spans the screen. The middle takes a share of it; each side
+    // gets half of what is left, and the volume slider shows only where
+    // the right side has room for it next to its buttons.
+    final width = MediaQuery.sizeOf(context).width;
+    final middle = (width * 0.4).clamp(300.0, 520.0);
+    final slider = roomy && (width - middle) / 2 >= 320;
     final muted = c.sendspin.muted;
     final extras = <Widget>[
       if (c.sendspin.queueAvailable)
@@ -3063,13 +3105,13 @@ class _MiniPlayerState extends State<_MiniPlayer> {
         button(
           muted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
           muted ? s.mediaUnmute : s.mediaMute,
-          // A short panel has no room for the slider: the Speakers sheet
-          // carries it.
-          roomy ? () => c.sendspin.toggleMute() : widget.onSpeakers,
+          // Without room for the slider (a short panel, a tablet in
+          // portrait) the Speakers sheet carries it.
+          slider ? () => c.sendspin.toggleMute() : widget.onSpeakers,
           color: off,
           size: 22,
         ),
-        if (roomy)
+        if (slider)
           SizedBox(
             width: 112,
             child: SliderTheme(
@@ -3116,7 +3158,6 @@ class _MiniPlayerState extends State<_MiniPlayer> {
             child: Row(
               children: [
                 Expanded(
-                  flex: 3,
                   child: Row(
                     children: [
                       Flexible(child: track),
@@ -3125,8 +3166,8 @@ class _MiniPlayerState extends State<_MiniPlayer> {
                   ),
                 ),
                 if (roomy)
-                  Expanded(
-                    flex: 4,
+                  SizedBox(
+                    width: middle,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -3142,7 +3183,6 @@ class _MiniPlayerState extends State<_MiniPlayer> {
                 else
                   transport,
                 Expanded(
-                  flex: 3,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: extras,
