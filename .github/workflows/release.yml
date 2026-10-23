@@ -10,6 +10,8 @@ name: Release
 # revision. Without release_tag, dispatch on the tag itself as before.
 
 on:
+  push:
+    branches: [test]
   release:
     types: [published]
   workflow_dispatch:
@@ -34,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: refs/tags/${{ env.RELEASE_TAG }}
+          ref: ${{ github.event_name == 'push' && github.ref || format('refs/tags/{0}', env.RELEASE_TAG) }}
 
       - name: Check out release scripts from the workflow revision
         uses: actions/checkout@v4
@@ -56,6 +58,7 @@ jobs:
           cache: true
 
       - name: Restore the signing identity
+        id: signing
         working-directory: app
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -63,7 +66,18 @@ jobs:
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No Android upload keystore configured; building a debug-signed APK for testing only. It will not be attached to the GitHub release."
+            exit 0
+          fi
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+          if ! keytool -list -keystore android/app/upload-keystore.jks \
+            -storepass "$STORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error::The decoded Android keystore is invalid or its store password/key alias does not match. Recreate ANDROID_KEYSTORE_BASE64 from the original upload keystore and verify the related signing secrets."
+            exit 1
+          fi
+          echo "signed=true" >> "$GITHUB_OUTPUT"
           cat > android/key.properties <<EOF
           storePassword=$STORE_PASSWORD
           keyPassword=$KEY_PASSWORD
@@ -75,12 +89,18 @@ jobs:
         working-directory: app
         run: |
           VERSION="${RELEASE_TAG#v}"
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            VERSION="$(sed -n 's/^version: *//p' pubspec.yaml | cut -d+ -f1)"
+          fi
           # The build number comes from pubspec.yaml, NOT the workflow run
           # counter: dev builds side-loaded during testing carry the pubspec
           # number, and a release with a lower versionCode is a downgrade
           # Android refuses to install over them.
           BUILD_NUMBER="$(sed -n 's/^version:.*+//p' pubspec.yaml)"
           flutter pub get
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            flutter test
+          fi
           flutter build apk --release --split-per-abi \
             --build-name="$VERSION" \
             --build-number="$BUILD_NUMBER"
@@ -93,7 +113,18 @@ jobs:
                "kiosk-satellite-${RELEASE_TAG}.${ABI}.apk"
           done
 
+      - name: Upload APK build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiosk-satellite-${{ env.RELEASE_TAG }}-apk
+          path: app/kiosk-satellite-${{ env.RELEASE_TAG }}*.apk
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Attach the APKs to the release
+        if: >-
+          steps.signing.outputs.signed == 'true' &&
+          (github.event_name == 'release' || github.ref_type == 'tag' || inputs.release_tag != '')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
