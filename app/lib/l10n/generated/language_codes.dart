@@ -10,8 +10,5 @@ const messageLanguageOptions = <String>[
   'zh-CN',
   'lt',
 ];
-<<<<<<< HEAD
-const messageLanguageLabels = <String, String>{"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français", "nl": "Nederlands", "uk": "Українська", "zh-CN": "简体中文", "lt": "lt"};
-=======
-const messageLanguageLabels = <String, String>{"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français", "nl": "Nederlands", "ru": "Русский", "uk": "Українська", "zh-CN": "简体中文"};
->>>>>>> df61e9fd4d4d830f0ec8d845378590fce2a25526
+const messageLanguageLabels = <String, String>{"en": "English", "de": "Deutsch", "es": "Español", "fr": "Français", "nl": "Nederlands", "uk": "Українська", "ru": "Українська", "zh-CN": "简体中文", "lt": "lt"};
+
